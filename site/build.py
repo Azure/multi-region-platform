@@ -89,6 +89,8 @@ def render_md(text, store):
         store.append(h)
         return f"\n\nRAWBLOCK{len(store) - 1}END\n\n"
 
+    # website-only blocks: keep the content, drop the markers (site/tools/export_caf.py removes the whole block)
+    text = re.sub(r"^[ \t]*<!--\s*site-only:(start|end)\s*-->[ \t]*\n?", "", text, flags=re.M)
     lines = text.split("\n")
     out, i = [], 0
     while i < len(lines):
@@ -260,6 +262,8 @@ def build():
     shutil.copytree(os.path.join(SITE, "assets"), os.path.join(OUT, "assets"), dirs_exist_ok=True)
     os.remove(os.path.join(OUT, "assets", "sprite.svg"))
     shutil.copytree(os.path.join(CONTENT, "media"), os.path.join(OUT, "media"), dirs_exist_ok=True)
+    if os.path.isdir(os.path.join(SITE, "media")):   # website-only images (not part of the CAF article set)
+        shutil.copytree(os.path.join(SITE, "media"), os.path.join(OUT, "media"), dirs_exist_ok=True)
     open(os.path.join(OUT, ".nojekyll"), "w").close()
 
     dl_items = "".join(

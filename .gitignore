@@ -6,6 +6,7 @@ whitepaper/whitepaper.html
 whitepaper/executive.html
 decks/out/
 site/tools/shots/
+art/out/
 # tooling
 node_modules/
 __pycache__/
