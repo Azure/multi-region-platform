@@ -28,8 +28,6 @@ SITE_SUB = "Adaptable multi-region Azure platform"
 DOWNLOADS = [
     ("Full technical guidance (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform.pdf", "pdf", "45 pages"),
     ("Executive brief (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf", "pdf", "13 pages"),
-    ("Full deck (PPTX)", "downloads/Adaptable-Multi-Region-Azure-Platform-Full.pptx", "pptx", "42 slides"),
-    ("Executive deck (PPTX)", "downloads/Adaptable-Multi-Region-Azure-Platform-Executive.pptx", "pptx", "13 slides"),
 ]
 
 
@@ -291,7 +289,8 @@ def build():
         crumb_html = " <span>/</span> ".join(html.escape(c) for c in crumbs)
         date = str(meta.get("ms.date", ""))
         try:
-            date = datetime.datetime.strptime(date, "%m/%d/%Y").strftime("%B %-d, %Y")
+            fmt = "%B %#d, %Y" if os.name == "nt" else "%B %-d, %Y"
+            date = datetime.datetime.strptime(date, "%m/%d/%Y").strftime(fmt)
         except ValueError:
             pass
         is_home = pg["href"] == "index.md"
