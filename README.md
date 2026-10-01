@@ -1,5 +1,7 @@
 # Adaptable multi-region Azure platform
 
+> **Live guidance site:** [https://azure.github.io/multi-region-platform/](https://azure.github.io/multi-region-platform/)
+
 Source for the multi-region platform guidance and every format it ships in:
 
 | Deliverable | Source of truth | Built output |
