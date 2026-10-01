@@ -10,8 +10,6 @@ Source for the multi-region platform guidance and every format it ships in:
 | CAF article set (future) | `content/*.md` + `content/toc.yml` + `content/media/` | submitted as-is to the CAF repo |
 | Whitepaper PDF (45 pages) + single-file HTML | `whitepaper/pages/*.html` | `dist/Adaptable-Multi-Region-Azure-Platform.pdf` / `.html` |
 | Executive brief PDF (13 pages) + HTML | `whitepaper/exec/pages/*.html` | `dist/…-Executive-Brief.pdf` / `.html` |
-| Full deck (42 slides) | `decks/full/f1.js` – `f5.js` | `dist/…-Full.pptx` |
-| Executive deck (13 slides) | `decks/exec/e.js` | `dist/…-Executive.pptx` |
 
 The Markdown in `content/` is written in Microsoft Learn syntax, so the same files drive the website now and the Cloud Adoption Framework (CAF) later. Diagrams are drawn once, in the whitepaper, and extracted for the other formats.
 
@@ -50,8 +48,6 @@ pip install -r requirements.txt && python3 -m playwright install chromium
 3. The site is served at `https://<account>.github.io/<repo>/`. `docs/.nojekyll` is already in place, and all links are relative, so a custom domain or a subpath works without changes.
 
 The site is desktop-first. Below 960 px wide it shows a download panel (both PDFs and both decks) instead of the article layout. The downloads come from `docs/downloads/`, which `./build.sh` refreshes.
-
-> Visibility: the pages carry the Microsoft logo and a Microsoft copyright footer. Publish to a public repository only when that is approved. Otherwise use a private repository with Pages restricted to your organization (GitHub Enterprise), or remove the branding in `site/templates/page.html`.
 
 ## Making a content change
 
