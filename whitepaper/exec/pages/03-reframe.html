@@ -1,0 +1,89 @@
+<section class="page" data-section="01 · Reframe the objective">
+<style>
+  .f1 { display: grid; grid-template-columns: 330px 70px 1fr; height: 296px; }
+  .f1 .panel { border-radius: 12px; padding: 14px 16px 14px; position: relative; }
+  .f1 .pl { background: var(--wash); }
+  .f1 .pr { background: linear-gradient(180deg, var(--b50), #F6FAFE); }
+  .f1 .ph { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .f1 .ph .cap { color: var(--muted); }
+  .f1 .ph b { font-size: 13px; color: var(--ink); font-weight: 650; }
+  .rg { border: 1.2px dashed var(--b300); border-radius: 9px; padding: 22px 6px 6px; position: relative; background: #fff; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; }
+  .rg .rl { position: absolute; top: 5px; left: 7px; right: 5px; display: flex; gap: 3px; align-items: center; font-size: 8.8px; font-weight: 700; color: var(--b700); letter-spacing: .02em; white-space: nowrap; }
+  .rg .rl svg { width: 10px; height: 10px; color: var(--b600); flex: none; }
+  .blk { border-radius: 5px; font-size: 9px; font-weight: 650; text-align: center; padding: 5px 2px; line-height: 1.2; }
+  .blk.hub { background: var(--b600); color: #fff; }
+  .blk.ss { background: var(--b100); color: var(--b800); }
+  .blk.wl { background: var(--t600); color: #fff; }
+  .blk.wl2 { background: var(--t100); color: var(--t700); }
+  .rg.cand { border-color: var(--b500); background: rgba(255,255,255,.55); justify-content: center; align-items: center; }
+  .f1 .found { position: absolute; left: 16px; right: 16px; bottom: 14px; height: 50px; border-radius: 8px; background: var(--s800); color: #fff; padding: 8px 14px; }
+  .f1 .found .ft { font-size: 11.4px; font-weight: 650; }
+  .f1 .found .fs { font-size: 9.6px; color: #C9D4E2; margin-top: 1px; letter-spacing: .02em; }
+  .f1 .press { display: flex; flex-wrap: wrap; gap: 5px; }
+  .f1 .rlabel { font-size: 8.8px; color: var(--muted); text-align: center; line-height: 1.25; margin-top: 5px; white-space: nowrap; }
+</style>
+<div class="inner">
+  <div class="open-band" id="x1">
+    <div class="num">01</div>
+    <div style="flex:1">
+      <div class="eyebrow">Reframe the objective</div>
+      <h1 class="sec-title mt8" style="max-width:600px;font-size:30px">An operating model that keeps working as the environment changes</h1>
+    </div>
+    <p class="standfirst" style="width:300px;font-size:14px;padding-bottom:2px">The architecture should not depend on the regions we pick today staying the right answer.</p>
+  </div>
+
+  <div class="g2 mt12" style="gap:34px">
+    <p>Azure landing zones have usually been established in a particular region — often a primary and a disaster-recovery region — with a fairly complete set of networking, security, management, and shared services around them. That works well while the regions an organization wants to use stay relatively static.</p>
+    <p>The challenge now is different. Regulatory requirements and power availability can change across European countries, even as Microsoft continues to invest in and grow capacity across Europe. For regulated organizations, the question becomes how to <strong>de-risk continued growth</strong> in an industry-wide dynamic that keeps changing.</p>
+  </div>
+
+  <div class="figure mt16" id="fig1">
+    <div class="dg f1">
+      <!-- left: fixed pair -->
+      <div class="panel pl">
+        <div class="ph"><b>A fixed regional pair</b><span class="cap">Traditional model</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px;height:124px;position:relative">
+          <div class="rg node" id="f1a"><div class="rl"><svg><use href="#i-pin"/></svg>Primary region</div>
+            <div class="blk wl">Workloads</div><div class="blk ss">Shared services</div><div class="blk hub">Hub &amp; connectivity</div></div>
+          <div class="rg node" id="f1b"><div class="rl"><svg><use href="#i-pin"/></svg>DR region</div>
+            <div class="blk wl">Workloads</div><div class="blk ss">Shared services</div><div class="blk hub">Hub &amp; connectivity</div></div>
+          <div style="position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);font-size:8.6px;font-weight:700;color:var(--muted);background:var(--wash);padding:2px 0;z-index:3;writing-mode:vertical-rl;letter-spacing:.08em">MIRRORED</div>
+        </div>
+        <div class="cap mt12" style="color:var(--w600)">Evolving regional conditions</div>
+        <div class="press mt4">
+          <span class="chip warm">Regulatory change</span><span class="chip warm">Power and energy supply</span>
+          <span class="chip warm">Service &amp; AI availability</span><span class="chip warm">Business expansion</span>
+        </div>
+        <div class="small muted mt8" style="font-size:10px;line-height:1.4">Works while demand and placement remain predictable; becomes less adaptable as conditions evolve.</div>
+      </div>
+
+      <!-- middle transition -->
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
+        <svg width="46" height="20" viewBox="0 0 46 20"><path d="M2 10h38" stroke="#0F6CBD" stroke-width="1.6"/><path d="M36 4l7 6-7 6" fill="none" stroke="#0F6CBD" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div style="font-size:9.4px;font-weight:700;color:var(--b700);text-align:center;line-height:1.25">Extend,<br>not<br>replicate</div>
+      </div>
+
+      <!-- right: adaptable platform -->
+      <div class="panel pr">
+        <div class="ph"><b>An adaptable multi-region platform</b><span class="cap" style="color:var(--b600)">Regions as qualified options</span></div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;height:172px;align-items:end">
+          <div><div class="rg" style="height:150px"><div class="rl"><svg><use href="#i-pin"/></svg>Region A</div><div class="blk wl">Workloads</div><div class="blk ss">Shared</div><div class="blk hub">Full hub</div></div></div>
+          <div><div class="rg" style="height:150px"><div class="rl"><svg><use href="#i-pin"/></svg>Region B</div><div class="blk wl">Workloads</div><div class="blk ss">Shared</div><div class="blk hub">Full hub</div></div></div>
+          <div><div class="rg" style="height:118px"><div class="rl"><svg><use href="#i-pin"/></svg>Region C</div><div class="blk wl">Workloads</div><div class="blk ss" style="background:#fff;border:1px solid var(--b300)">Minimal hub</div></div></div>
+          <div><div class="rg" style="height:92px"><div class="rl"><svg><use href="#i-pin"/></svg>Region D</div><div class="blk wl">Spokes</div><div class="blk" style="font-size:8.4px;color:var(--b700);padding:2px">↔ remote hub</div></div></div>
+          <div><div class="rg" style="height:70px"><div class="rl"><svg><use href="#i-pin"/></svg>Region E</div><div class="blk wl2">Isolated spokes</div></div></div>
+          <div><div class="rg cand" style="height:56px"><div class="rl" style="color:var(--b600)"><svg><use href="#i-pin"/></svg>Region F</div><span style="font-size:8.8px;font-weight:650;color:var(--b600);margin-top:10px">Candidate</span></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">
+          <div class="rlabel">Strategic hub</div><div class="rlabel">Strategic hub</div><div class="rlabel">Minimal hub</div><div class="rlabel">Remote hub</div><div class="rlabel">Disconnected</div><div class="rlabel">Not enabled</div>
+        </div>
+        <div class="found">
+          <div class="ft">One consistent, governed Azure landing-zone foundation</div>
+          <div class="fs">Identity · Connectivity · Security · Management · Application delivery</div>
+        </div>
+      </div>
+    </div>
+    <div class="figcap"><span class="fn">Figure 1</span><span class="ft"><b>From a fixed regional pair to governed regional options.</b> Instead of mirroring a complete footprint in each new region, the platform extends one governed foundation and gives each region only the capability its workloads require. Regional capability is a spectrum, not a copy.</span></div>
+  </div>
+</div>
+</section>

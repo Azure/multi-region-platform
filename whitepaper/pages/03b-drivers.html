@@ -1,0 +1,55 @@
+<section class="page" data-section="01 · Introduction">
+<style>
+  .drv { width: 100%; border-collapse: separate; border-spacing: 0; }
+  .drv th { text-align: left; font-size: 9.4px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--muted); padding: 0 12px 8px 0; }
+  .drv td { vertical-align: middle; padding: 11px 14px 11px 0; border-top: 1px solid var(--line-soft); font-size: 12px; line-height: 1.45; }
+  .drv td.g { width: 330px; }
+  .drv td.g .gw { display: flex; gap: 10px; align-items: center; }
+  .drv td.g .gi { width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; flex: none; }
+  .drv td.g .gi svg { width: 18px; height: 18px; color: #fff; }
+  .drv td.g b { font-size: 12.2px; color: var(--ink); line-height: 1.25; display: block; }
+  .drv td.e { color: var(--text); }
+  .drv td.f { width: 270px; }
+  .drv .fw { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+</style>
+<div class="inner">
+  <div class="row" style="gap:40px;align-items:flex-end">
+    <div style="flex:1.2">
+      <div class="eyebrow">01 · What starts the conversation</div>
+      <h2 class="title mt8">Common drivers of multi-region platform discussions</h2>
+    </div>
+    <p class="muted" style="flex:1;font-size:12.2px">Multi-region platform work rarely starts as an architecture initiative. It usually starts with a change in the business, regulation, workload requirements, service availability, or risk. These drivers open the discussion; they do not determine the regional architecture or workload-placement outcome.</p>
+  </div>
+
+  <div class="figure mt16" id="figDrivers">
+    <table class="drv">
+      <thead><tr><th>Driver</th><th>Typical triggers</th></tr></thead>
+      <tbody>
+        <tr><td class="g"><div class="gw"><span class="gi" style="background:var(--b600)"><svg><use href="#i-users"/></svg></span><b>Business growth and proximity</b></div></td>
+          <td class="e">Expansion into new markets or geographies; acquisitions or divestitures that introduce estates in other regions; digital products that must be closer to customers; user-latency requirements.</td></tr>
+        <tr><td class="g"><div class="gw"><span class="gi" style="background:var(--w600)"><svg><use href="#i-lock"/></svg></span><b>Data residency, sovereignty, and regulation</b></div></td>
+          <td class="e">New or changing data-residency laws; industry requirements for operational resilience or concentration risk; customer contracts; public-sector requirements.</td></tr>
+        <tr><td class="g"><div class="gw"><span class="gi" style="background:#8661C5"><svg><use href="#i-gauge"/></svg></span><b>Service, AI model, SKU, and quota availability</b></div></td>
+          <td class="e">AI models, GPU SKUs, or Azure services available only in selected regions; quota constraints; availability-zone requirements.</td></tr>
+        <tr><td class="g"><div class="gw"><span class="gi" style="background:var(--b800)"><svg><use href="#i-shield"/></svg></span><b>Resiliency and concentration risk</b></div></td>
+          <td class="e">RTO or RPO requirements that the existing regional design cannot satisfy; concentration-risk concerns; paired or nonpaired-region considerations; audit or regulatory findings; lessons from incidents.</td></tr>
+        <tr><td class="g"><div class="gw"><span class="gi" style="background:var(--s800)"><svg><use href="#i-building"/></svg></span><b>Datacenter and connectivity events</b></div></td>
+          <td class="e">Datacenter or colocation exits; migration waves; office or datacenter moves; network-provider changes; a new Azure region opening within the required geography.</td></tr>
+        <tr><td class="g" style="border-bottom:1px solid var(--line-soft)"><div class="gw"><span class="gi" style="background:var(--t600)"><svg><use href="#i-layers"/></svg></span><b>Cost and operating model</b></div></td>
+          <td class="e" style="border-bottom:1px solid var(--line-soft)">Regional price differences and cross-region transfer cost; landing-zone redesigns or platform refreshes; opportunities to reduce unnecessary regional infrastructure; sustainability objectives.</td></tr>
+      </tbody>
+    </table>
+    <div class="figcap"><span class="fn">Figure</span><span class="ft"><b>Common drivers of multi-region platform discussions.</b> Typical patterns observed across enterprise estates; each one opens a discussion rather than determining a predetermined outcome.</span></div>
+  </div>
+
+  <div class="row mt16" style="gap:28px;align-items:stretch">
+    <div style="flex:1.7;background:linear-gradient(135deg,var(--b700),var(--b600));border-radius:12px;padding:14px 20px;color:#fff;display:flex;align-items:center">
+      <p style="font-size:15px;line-height:1.4;font-weight:500;color:#fff">Drivers open the discussion; they do not determine the regional architecture or the workload-placement outcome.</p>
+    </div>
+    <div class="note" style="flex:1;padding:12px 14px">
+      <h4>Scope of this paper</h4>
+      <p class="small" style="font-size:10.8px;color:var(--ink)">Azure public-cloud regions. Sovereign cloud offerings and Azure Local have their own constraints and are not covered, although the same qualification logic can inform them.</p>
+    </div>
+  </div>
+</div>
+</section>

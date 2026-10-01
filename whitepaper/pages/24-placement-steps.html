@@ -1,0 +1,57 @@
+<section class="page" data-section="06 · Workload placement">
+<style>
+  .st8 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px 22px; }
+  .st8 > div { padding-top: 9px; border-top: 2px solid var(--line); }
+  .st8 .h { display: flex; gap: 8px; align-items: baseline; }
+  .st8 .h b { font-size: 16px; font-weight: 300; }
+  .st8 .h span { font-size: 11.8px; font-weight: 700; color: var(--ink); line-height: 1.25; }
+  .st8 p { font-size: 10.8px; line-height: 1.4; margin-top: 4px; }
+  .st8 .w { border-top-color: var(--t600); } .st8 .w .h b { color: var(--t600); }
+  .st8 .b { border-top-color: var(--b600); } .st8 .b .h b { color: var(--b600); }
+  .st8 .g { border-top-color: var(--s800); } .st8 .g .h b { color: var(--s800); }
+</style>
+<div class="inner">
+  <div class="eyebrow" style="color:var(--t600)">The eight placement steps</div>
+  <div class="st8 mt12">
+    <div class="w"><div class="h"><b>01</b><span>Define the placement objective</span></div><p>Is the workload new, staying where it is, or moving or expanding to another region?</p></div>
+    <div class="w"><div class="h"><b>02</b><span>Identify the Application Landing Zone archetype</span></div><p>Assess the workload’s connectivity, shared-service, data, security, operational, and dependency characteristics and pick the closest-fitting archetype. Record any material requirements it doesn’t cover as explicit additions to it.</p></div>
+    <div class="w"><div class="h"><b>03</b><span>Establish mandatory requirements</span></div><p>Confirm data-location restrictions, required Azure services and features, availability-zone requirements, latency thresholds, expected scale, connectivity, resiliency requirements, and critical dependencies.</p></div>
+    <div class="b"><div class="h"><b>04</b><span>Review the qualified regional options</span></div><p>Consider regions previously assessed against the relevant workload requirements. Review their supported capabilities, connectivity profiles, known constraints, when each was last assessed, and any outstanding validations.</p></div>
+    <div class="b"><div class="h"><b>05</b><span>Validate current regional suitability</span></div><p>Qualification was an earlier planning assessment, so <strong>re-check the target region before onboarding</strong>, whether the workload is new or moving. Confirm that the services, SKUs, AI models, regional access, quota, and dependencies it needs are available now. Quota allows deployment but doesn’t guarantee capacity; if the workload needs guaranteed capacity, decide here whether to reserve it.</p></div>
+    <div class="b"><div class="h"><b>06</b><span>Select the supporting connectivity profile</span></div><p>Confirm that an available regional connectivity profile satisfies the workload’s requirements. If additional platform capabilities are required, treat their introduction as a separate governed platform decision rather than allowing the workload team to redefine the regional profile independently.</p></div>
+    <div class="g"><div class="h"><b>07</b><span>Determine the resiliency role separately</span></div><p>Define whether the region supports the workload as its primary location, recovery location, or part of a multi-region active deployment. Apply workload-specific availability, RTO, RPO, replication, data-consistency, and failover requirements.</p></div>
+    <div class="g"><div class="h"><b>08</b><span>Record and govern the decision</span></div><p>Document the selected region, archetype, connectivity profile, placement and resiliency outcomes, assumptions, constraints, owners, and revalidation triggers. Feed new regional requirements or platform gaps back into regional qualification.</p></div>
+  </div>
+
+  <div class="figure mt12" id="fig18b">
+    <div style="display:grid;grid-template-columns:1fr 130px 1fr;align-items:stretch">
+      <div style="border-radius:11px;background:var(--b50);padding:12px 16px">
+        <div class="cap" style="color:var(--b600)">Platform · qualification</div>
+        <div style="font-size:13px;font-weight:650;color:var(--ink);margin-top:3px">Is this region a viable option for these requirements?</div>
+        <div style="font-size:10.8px;line-height:1.42;color:var(--text);margin-top:4px">Specific to defined requirements and dated. Answered in advance where requirements are known, from current evidence.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:9.6px;font-weight:700;text-align:center;line-height:1.25">
+        <div style="color:var(--b700)">qualified options<br><svg width="96" height="12"><path d="M2 6h88M84 1l7 5-7 5" fill="none" stroke="#0F6CBD" stroke-width="1.5"/></svg></div>
+        <div style="color:var(--t700)"><svg width="96" height="12"><path d="M94 6H8M12 1L5 6l7 5" fill="none" stroke="#04807A" stroke-width="1.5" stroke-dasharray="4 3"/></svg><br>new findings</div>
+      </div>
+      <div style="border-radius:11px;background:var(--t50);padding:12px 16px">
+        <div class="cap" style="color:var(--t600)">Workload · placement</div>
+        <div style="font-size:13px;font-weight:650;color:var(--ink);margin-top:3px">Where, and in what role, does this workload run?</div>
+        <div style="font-size:10.8px;line-height:1.42;color:var(--text);margin-top:4px">Decided when the actual workload is sufficiently understood, with decision-time validation.</div>
+      </div>
+    </div>
+    <div class="figcap"><span class="fn">Figure 18</span><span class="ft"><b>Qualification versus placement.</b> The platform qualifies regions against defined requirements; each workload decides where and how it actually runs. Each informs the other.</span></div>
+  </div>
+
+  <div class="row mt16" style="gap:34px;align-items:stretch">
+    <div style="flex:1;font-size:11.4px;line-height:1.45">
+      <p>Regional adaptability still operates within the established landing-zone guardrails and qualified regional options.</p>
+      <p>Workload onboarding can reveal new regional requirements, constraints, or platform gaps. Use these findings to update regional qualification and determine whether an option should remain qualified, become conditional, require additional platform capabilities, or be removed from consideration for the affected workload requirements.</p>
+    </div>
+    <div style="width:300px;background:linear-gradient(135deg,var(--t700),var(--t600));border-radius:12px;padding:16px 20px;color:#fff;display:flex;flex-direction:column;justify-content:center">
+      <div class="cap" style="color:#BFE6E2">Principle</div>
+      <p style="font-size:17px;line-height:1.3;font-weight:500;color:#fff;margin-top:6px">Regional adaptability does not mean arbitrary placement.</p>
+    </div>
+  </div>
+</div>
+</section>

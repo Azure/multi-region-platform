@@ -1,0 +1,54 @@
+<section class="page" data-section="Contents">
+<style>
+  .tocg { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(7, auto); grid-auto-flow: column; gap: 0 30px; }
+  .tocg .e { padding: 8px 0 9px; border-top: 1px solid var(--line-soft); display: grid; grid-template-columns: 62px 1fr; gap: 10px; align-items: start; }
+  .tocg .e .pg { font-size: 22px; font-weight: 300; color: var(--b600); line-height: 1; letter-spacing: -.01em; }
+  .tocg .e .pg::after { content: " /"; color: var(--b300); }
+  .tocg .e .sn { font-size: 9.2px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: var(--faint); }
+  .tocg .e .tt { font-size: 12.4px; font-weight: 650; color: var(--ink); line-height: 1.28; margin-top: 2px; }
+  .tocg .e .dd { font-size: 10.2px; color: var(--muted); line-height: 1.38; margin-top: 3px; }
+  .tocg .e.t .pg { color: var(--t600); } .tocg .e.t .pg::after { color: var(--t300); }
+  .tools { position: absolute; left: 30px; right: 30px; bottom: 30px; background: #fff; border-radius: 14px; padding: 16px 18px; }
+  .tools .tr { display: grid; grid-template-columns: 26px 1fr 26px; gap: 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line-soft); font-size: 11.6px; color: var(--ink); font-weight: 600; }
+  .tools .tr svg { width: 20px; height: 20px; color: var(--b600); }
+  .tools .tr span:last-child { text-align: right; color: var(--b600); font-weight: 700; }
+</style>
+<div class="inner">
+  <div style="position:absolute;left:0;top:0;width:560px;bottom:0">
+    <h1 class="sec-title" style="font-size:38px;font-weight:300;color:var(--b600)">Contents</h1>
+    <div class="tocg mt16">
+      <div class="e "><span class="pg" data-toc="sexec"></span><div><div class="sn">Overview</div><div class="tt">Executive summary</div><div class="dd">The model on one page</div></div></div>
+      <div class="e "><span class="pg" data-toc="s1"></span><div><div class="sn">Section 01</div><div class="tt">Introduction</div><div class="dd">Drivers, and extending Azure landing zones</div></div></div>
+      <div class="e "><span class="pg" data-toc="s2"></span><div><div class="sn">Section 02</div><div class="tt">Multi-region platform and multi-region workload</div><div class="dd">Two layers, two decisions</div></div></div>
+      <div class="e "><span class="pg" data-toc="s3"></span><div><div class="sn">Section 03</div><div class="tt">Regional Qualification Framework</div><div class="dd">Five dimensions, readiness, and a decision tree</div></div></div>
+      <div class="e t"><span class="pg" data-toc="s4"></span><div><div class="sn">Section 04</div><div class="tt">Application Landing Zone Archetypes</div><div class="dd">What applications require</div></div></div>
+      <div class="e "><span class="pg" data-toc="s5"></span><div><div class="sn">Section 05</div><div class="tt">Regional Platform Connectivity Profiles</div><div class="dd">What the platform provides</div></div></div>
+      <div class="e t"><span class="pg" data-toc="s6"></span><div><div class="sn">Section 06</div><div class="tt">Workload placement using qualified options</div><div class="dd">Eight steps from option to placement</div></div></div>
+      <div class="e "><span class="pg" data-toc="s7"></span><div><div class="sn">Section 07</div><div class="tt">A consistent operating model, adaptable by region</div><div class="dd">What stays consistent and what adapts</div></div></div>
+      <div class="e t"><span class="pg" data-toc="s8"></span><div><div class="sn">Section 08</div><div class="tt">Customer scenarios</div><div class="dd">Four scenarios from driver to placement</div></div></div>
+      <div class="e "><span class="pg" data-toc="s9"></span><div><div class="sn">Section 09</div><div class="tt">Putting it into practice</div><div class="dd">Misconceptions and getting started</div></div></div>
+      <div class="e "><span class="pg" data-toc="s10"></span><div><div class="sn">Section 10</div><div class="tt">Conclusion</div><div class="dd">Design for continuing regional choice</div></div></div>
+      <div class="e "><span class="pg" data-toc="sA"></span><div><div class="sn">Appendix A</div><div class="tt">Regional dependencies and resiliency</div><div class="dd">Paired vs. nonpaired, Storage, Backup, Key Vault</div></div></div>
+      <div class="e "><span class="pg" data-toc="sref"></span><div><div class="sn">Resources</div><div class="tt">References and further reading</div><div class="dd">Microsoft Learn and Azure resources</div></div></div>
+    </div>
+  </div>
+
+  <div style="position:absolute;left:600px;right:0;top:0;bottom:0;border-radius:18px;overflow:hidden">
+    <svg width="340" height="700" viewBox="0 0 340 700" style="position:absolute;left:0;top:0">
+      {{PY:art.defs('ct')}}
+      {{PY:art.background('ct', 0, 0, 340, 700)}}
+      {{PY:art.discs('ct', 170, 200, n=5, r0=18, step=26)}}
+      <g transform="translate(170,200)"><circle r="22" fill="#fff"/><circle r="9" fill="#0F6CBD"/></g>
+      <path d="M-20,390 C80,350 220,430 360,360" fill="none" stroke="url(#ctswoosh)" stroke-width="2.2"/>
+    </svg>
+    <div style="position:absolute;left:30px;right:30px;top:28px" class="cap"><span style="color:#DDEBF9">Multi-Region Platform Whitepaper</span></div>
+    <div class="tools">
+      <h4 style="margin-bottom:6px">Tools in this paper</h4>
+      <div class="tr"><svg><use href="#i-search"/></svg><span>Regional qualification decision tree</span><span data-toc="figQualTree"></span></div>
+      <div class="tr"><svg><use href="#i-hub"/></svg><span>Connectivity profile selection tree</span><span data-toc="figProfileTree"></span></div>
+      <div class="tr"><svg style="color:var(--t600)"><use href="#i-route"/></svg><span>Workload placement flow</span><span data-toc="figPlacement"></span></div>
+      <div class="tr"><svg style="color:var(--s600)"><use href="#i-check"/></svg><span>Platform readiness checklist</span><span data-toc="figReadiness"></span></div>
+    </div>
+  </div>
+</div>
+</section>

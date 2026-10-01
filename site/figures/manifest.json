@@ -1,0 +1,117 @@
+{
+ "fixed-pair-to-governed-options": {
+  "w": 940,
+  "h": 296,
+  "source": "fig1"
+ },
+ "three-planning-constructs": {
+  "w": 940,
+  "h": 312,
+  "source": "fig2"
+ },
+ "progressive-adoption-journey": {
+  "w": 940,
+  "h": 427,
+  "source": "fig3"
+ },
+ "platform-and-workload-layers": {
+  "w": 940,
+  "h": 344,
+  "source": "fig4"
+ },
+ "regional-qualification-framework": {
+  "w": 940,
+  "h": 446,
+  "source": "fig5"
+ },
+ "dimensions-1-2-filter": {
+  "w": 940,
+  "h": 141,
+  "source": "fig6"
+ },
+ "workloads-to-platform-requirements": {
+  "w": 940,
+  "h": 204,
+  "source": "fig7"
+ },
+ "zones-and-pairing": {
+  "w": 435,
+  "h": 469,
+  "source": "fig8"
+ },
+ "programmatic-regional-evaluation": {
+  "w": 940,
+  "h": 282,
+  "source": "figEval"
+ },
+ "connectivity-planning-layers": {
+  "w": 940,
+  "h": 164,
+  "source": "fig9"
+ },
+ "assessment-outcome-example": {
+  "w": 464,
+  "h": 391,
+  "source": "fig10"
+ },
+ "regional-qualification-decision-tree": {
+  "w": 940,
+  "h": 588,
+  "source": "figQualTree"
+ },
+ "application-landing-zone-archetypes": {
+  "w": 940,
+  "h": 373,
+  "source": "fig12"
+ },
+ "archetype-profile-matrix": {
+  "w": 940,
+  "h": 411,
+  "source": "fig13"
+ },
+ "connectivity-profile-spectrum": {
+  "w": 940,
+  "h": 339,
+  "source": "fig14"
+ },
+ "profile-cost-tradeoff": {
+  "w": 470,
+  "h": 408,
+  "source": "figCost"
+ },
+ "hub-implementations": {
+  "w": 436,
+  "h": 363,
+  "source": "figHubs"
+ },
+ "profiles-coexisting-estate": {
+  "w": 480,
+  "h": 532,
+  "source": "fig15"
+ },
+ "connectivity-profile-decision-tree": {
+  "w": 940,
+  "h": 448,
+  "source": "figProfileTree"
+ },
+ "workload-placement-flow": {
+  "w": 940,
+  "h": 380,
+  "source": "figPlacement"
+ },
+ "qualification-versus-placement": {
+  "w": 940,
+  "h": 97,
+  "source": "fig18b"
+ },
+ "operating-model-consistent-adaptable": {
+  "w": 940,
+  "h": 284,
+  "source": "fig18"
+ },
+ "key-vault-regional-pattern": {
+  "w": 474,
+  "h": 506,
+  "source": "figKVPattern"
+ }
+}

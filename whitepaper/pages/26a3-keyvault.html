@@ -1,0 +1,28 @@
+<section class="page" data-section="Appendix A · Regional dependencies and resiliency">
+<style>
+  .ax-kv { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .ax-kv .c { border-radius: 12px; background: #fff; border: 1px solid var(--line); padding: 22px 22px; display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; }
+  .ax-kv .c .i { width: 44px; height: 44px; border-radius: 11px; background: var(--b50); display: grid; place-items: center; }
+  .ax-kv .c .i svg { width: 22px; height: 22px; color: var(--b600); }
+  .ax-kv .c b { font-size: 15.5px; color: var(--ink); font-weight: 650; display: block; }
+  .ax-kv .c p { font-size: 12.6px; line-height: 1.55; margin-top: 4px; color: var(--text); }
+</style>
+<div class="inner">
+  <div class="eyebrow" style="color:var(--s600)">Appendix A · Key Vault</div>
+  <h2 class="title mt8">Key Vault is a workload-specific dependency</h2>
+
+  <div class="mt20" style="border-radius:16px;background:linear-gradient(135deg,#0B2E57,#0F548C);padding:32px 30px;display:flex;gap:22px;align-items:center">
+    <span style="width:60px;height:60px;border-radius:14px;background:#50E6FF;display:grid;place-items:center;flex:none"><svg style="width:32px;height:32px;color:#0B2E57"><use href="#i-lock"/></svg></span>
+    <p style="font-size:26px;line-height:1.25;font-weight:300;color:#fff;font-style:italic">“Data can be recoverable while the application <b style="font-weight:650;color:#50E6FF">still cannot start.</b>”</p>
+  </div>
+
+  <div class="ax-kv mt24" id="figKV">
+    <div class="c"><span class="i"><svg><use href="#i-app"/></svg></span><div><b>A runtime dependency</b><p>Applications can require keys, secrets, certificates, DNS resolution, and private connectivity simply to initialize. Recovered data is insufficient if runtime dependencies are unavailable in the recovery region.</p></div></div>
+    <div class="c"><span class="i"><svg><use href="#i-layers"/></svg></span><div><b>Keys, secrets, and certificates are not interchangeable</b><p>Each needs its own recovery analysis. Secrets and certificates can often be provisioned into regional vaults through controlled deployment processes; customer-managed keys have additional constraints.</p></div></div>
+    <div class="c"><span class="i" style="background:#FBF4EE"><svg style="color:var(--w600)"><use href="#i-clock"/></svg></span><div><b>Managed failover may not meet the objective</b><p>Microsoft controls paired-region failover and describes it as best effort. A prolonged outage can mean hours before failover, and the secondary operates with restrictions (read-only).</p></div></div>
+    <div class="c"><span class="i"><svg><use href="#i-shield"/></svg></span><div><b>Managed HSM addresses a different requirement</b><p>Optional two-region replication of key material, roles, and permissions, with both regions serving requests — for <strong>keys</strong>, not secrets or certificates, at a higher cost profile. Not every region can be an extended region.</p></div></div>
+  </div>
+
+  <div class="figcap" style="margin-top:14px"><span class="fn">Note</span><span class="ft">Microsoft documents custom multi-region Key Vault approaches for nonpaired regions, paired regions without Microsoft-managed replication, and workloads whose recovery objectives cannot be met by built-in failover.</span></div>
+</div>
+</section>

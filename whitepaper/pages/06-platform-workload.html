@@ -1,0 +1,99 @@
+<section class="page" data-section="02 · Platform and workload">
+<style>
+  .f4 { display: grid; grid-template-columns: 430px 1fr 430px; height: 300px; gap: 0; }
+  .f4 .pn { border-radius: 12px; padding: 14px 16px; position: relative; }
+  .f4 .pa { background: linear-gradient(180deg, var(--b50), #F7FBFE); border: 1px solid var(--b100); }
+  .f4 .pb { background: linear-gradient(180deg, var(--t50), #F8FCFB); border: 1px solid var(--t100); }
+  .f4 .pt { font-size: 16px; font-weight: 700; line-height: 1.2; }
+  .f4 .ps { font-size: 11.4px; margin-top: 2px; }
+  .f4 .caps { position: absolute; left: 16px; right: 16px; bottom: 14px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+  .f4 .caps div { text-align: center; font-size: 9.6px; font-weight: 650; color: var(--b800); line-height: 1.25; }
+  .f4 .caps svg { width: 24px; height: 24px; color: var(--b600); display: block; margin: 0 auto 4px; }
+  .f4 .mid { display: flex; align-items: center; justify-content: center; }
+  .f4 .oc { position: absolute; width: 70px; text-align: center; font-size: 9.6px; font-weight: 650; color: var(--t700); line-height: 1.25; }
+  .f4 .oc .bx { width: 40px; height: 40px; border-radius: 10px; background: #fff; border: 1.2px solid var(--t300); margin: 0 auto 5px; display: grid; place-items: center; position: relative; z-index: 2; }
+  .f4 .oc .bx svg { width: 22px; height: 22px; color: var(--t600); }
+  .axis2 { margin-top: 10px; height: 34px; border-radius: 9px; background: linear-gradient(90deg, var(--b50), var(--t50)); display: flex; align-items: center; padding: 0 16px; gap: 16px; }
+  .axis2 .l { color: var(--b700); } .axis2 .r { color: var(--t600); }
+  .axis2 .ar { flex: 1; height: 2px; background: linear-gradient(90deg, var(--b500), var(--t600)); position: relative; }
+  .axis2 .ar::after { content: ""; position: absolute; right: -2px; top: -4.5px; border-left: 9px solid var(--t600); border-top: 5.5px solid transparent; border-bottom: 5.5px solid transparent; }
+</style>
+<div class="inner">
+  <div class="open-band" id="s2">
+    <div class="num">02</div>
+    <div style="flex:1">
+      <div class="eyebrow">Two layers, two decisions</div>
+      <h1 class="sec-title mt8" style="font-size:30px;max-width:600px">Multi-region platform and <span style="white-space:nowrap">multi-region</span> workload</h1>
+    </div>
+    <p class="standfirst" style="width:330px;font-size:14.2px">The <strong>platform</strong> creates governed regional choices for the estate; the <strong>workload</strong> applies one or more of those choices to a specific application.</p>
+  </div>
+
+  <div class="row mt16" style="gap:30px">
+    <div style="flex:1.45">
+      <p class="lead" style="font-size:13.4px">A multi-region platform and a multi-region workload operate at different layers. The platform creates governed regional choices for the customer estate; the workload applies one or more of those choices to a specific workload. Keeping these concepts separate prevents multi-region strategy from being treated as an automatic requirement for a new landing zone, workload migration, active-active high availability, or active/passive disaster recovery.</p>
+    </div>
+    <div class="note warm" style="flex:1;padding:12px 15px;align-self:flex-start">
+      <h4>Platform readiness does not imply</h4>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin-top:6px;font-size:11.2px;color:var(--ink);font-weight:600">
+        <span><b style="color:var(--w600);margin-right:6px">×</b>A new landing zone</span><span><b style="color:var(--w600);margin-right:6px">×</b>Workload migration</span>
+        <span><b style="color:var(--w600);margin-right:6px">×</b>Active-active HA</span><span><b style="color:var(--w600);margin-right:6px">×</b>Active/passive DR</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="figure mt20" id="fig4">
+    <div class="f4">
+      <div class="pn pa">
+        <div class="pt" style="color:var(--b700)">Multi-region platform</div>
+        <div class="ps" style="color:var(--b700)">Creates governed regional choices</div>
+        <svg width="398" height="118" viewBox="0 0 398 118" style="position:absolute;left:16px;top:58px">
+          <g fill="none" stroke="#8CC0EE" stroke-width="1.3" stroke-dasharray="3 3">
+            <path d="M80 70 C140 40, 180 40, 204 72"/><path d="M204 72 C250 30, 290 30, 322 42"/><path d="M80 70 C160 100, 260 100, 322 42"/>
+          </g>
+          <g>
+            <ellipse cx="80" cy="84" rx="32" ry="8" fill="#DDEBF9"/><ellipse cx="204" cy="86" rx="32" ry="8" fill="#DDEBF9"/><ellipse cx="322" cy="56" rx="32" ry="8" fill="#DDEBF9"/>
+          </g>
+          <g color="#0F6CBD"><use href="#i-pin" x="62" y="44" width="36" height="36"/><use href="#i-pin" x="186" y="46" width="36" height="36"/><use href="#i-pin" x="304" y="16" width="36" height="36"/></g>
+          <g font-family="Pub Sans" font-size="9.4" font-weight="700" fill="#0B3A63" text-anchor="middle">
+            <text x="80" y="108">Region</text><text x="204" y="110">Region</text><text x="322" y="80">Region</text>
+          </g>
+        </svg>
+        <div class="caps">
+          <div><svg><use href="#i-shield"/></svg>Governance</div>
+          <div><svg><use href="#i-id"/></svg>Identity &amp; security</div>
+          <div><svg><use href="#i-monitor"/></svg>Monitoring</div>
+          <div><svg><use href="#i-network"/></svg>Connectivity patterns</div>
+          <div><svg><use href="#i-gear"/></svg>Deployment automation</div>
+          <div><svg><use href="#i-gauge"/></svg>Quota planning</div>
+        </div>
+      </div>
+      <div class="mid">
+        <svg width="80" height="130" viewBox="0 0 80 130">
+          <defs><linearGradient id="f4g" x1="0" x2="1"><stop offset="0" stop-color="#DDEBF9"/><stop offset="1" stop-color="#D6EFEC"/></linearGradient></defs>
+          <path d="M4 40 H50 V18 L76 65 L50 112 V90 H4 Z" fill="url(#f4g)"/>
+          <text x="38" y="61" text-anchor="middle" font-family="Pub Sans" font-size="9.4" font-weight="700" fill="#0B3A63">Qualified</text>
+          <text x="38" y="73" text-anchor="middle" font-family="Pub Sans" font-size="9.4" font-weight="700" fill="#0B3A63">regional</text>
+          <text x="38" y="85" text-anchor="middle" font-family="Pub Sans" font-size="9.4" font-weight="700" fill="#0B3A63">options</text>
+        </svg>
+      </div>
+      <div class="pn pb dg">
+        <div class="pt" style="color:var(--t700)">Multi-region workload</div>
+        <div class="ps" style="color:var(--t700)">Selects one or more qualified regions for a specific outcome</div>
+        <div class="node" id="wl" style="position:absolute;left:166px;top:70px;width:98px;height:44px;border-radius:10px;background:var(--t600);color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:700;font-size:11px"><svg style="width:18px;height:18px;color:#fff"><use href="#i-app"/></svg>Workload</div>
+        <div class="oc" style="left:10px;top:160px"><div class="bx node" id="o1"><svg><use href="#i-pin"/></svg></div>Net-new placement</div>
+        <div class="oc" style="left:92px;top:160px"><div class="bx node" id="o2"><svg><use href="#i-route"/></svg></div>Selective relocation</div>
+        <div class="oc" style="left:174px;top:160px"><div class="bx node" id="o3"><svg><use href="#i-shield"/></svg></div>Active/passive recovery</div>
+        <div class="oc" style="left:256px;top:160px"><div class="bx node" id="o4"><svg><use href="#i-layers"/></svg></div>Active-active distribution</div>
+        <div class="oc" style="left:338px;top:160px"><div class="bx node" id="o5" style="border-style:dashed"><svg><use href="#i-pin"/></svg></div>Continued single-region</div>
+        <i class="ln" data-from="wl" data-to="o1" data-s="b" data-e="t" data-k="teal" data-mid=".5"></i>
+        <i class="ln" data-from="wl" data-to="o2" data-s="b" data-e="t" data-k="teal" data-mid=".5"></i>
+        <i class="ln" data-from="wl" data-to="o3" data-s="b" data-e="t" data-k="teal" data-mid=".5"></i>
+        <i class="ln" data-from="wl" data-to="o4" data-s="b" data-e="t" data-k="teal" data-mid=".5"></i>
+        <i class="ln" data-from="wl" data-to="o5" data-s="b" data-e="t" data-k="teal" data-mid=".5"></i>
+      </div>
+    </div>
+    <div class="axis2"><span class="cap l">Platform readiness</span><span class="ar"></span><span class="cap r">Selective workload use</span></div>
+    <div class="figcap"><span class="fn">Figure 4</span><span class="ft"><b>Multi-region platform and multi-region workload operate at different layers.</b> Platform capabilities make regions available as qualified options; each workload then selects its own outcome — which can legitimately be continued operation in a single region.</span></div>
+  </div>
+</div>
+</section>

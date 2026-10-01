@@ -1,0 +1,10 @@
+const pptxgen = require('pptxgenjs');
+const { makeLib } = require('./lib');
+const pres = new pptxgen();
+pres.layout = 'LAYOUT_WIDE';
+pres.title = 'The Adaptable Multi-Region Azure Platform — Executive Briefing';
+pres.company = 'Microsoft';
+pres.subject = 'Multi-Region Platform — executive briefing deck';
+const L = makeLib(pres, { brand: 'Multi-Region Platform · Executive Briefing' });
+require('./exec/e')(pres, L);
+pres.writeFile({ fileName: 'out/Adaptable-Multi-Region-Azure-Platform-Executive.pptx' }).then(f => console.log('wrote', f, L.n, 'slides'));

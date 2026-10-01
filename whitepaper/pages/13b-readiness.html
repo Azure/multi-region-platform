@@ -1,0 +1,64 @@
+<section class="page" data-section="03 · Regional qualification">
+<style>
+  .ck4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }
+  .ck4 .cc { border-radius: 12px; background: var(--wash); padding: 14px 15px; }
+  .ck4 .ch { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+  .ck4 .ch .ci { width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; flex: none; }
+  .ck4 .ch .ci svg { width: 18px; height: 18px; color: #fff; }
+  .ck4 .ch b { font-size: 13px; color: var(--ink); line-height: 1.2; }
+  .ck4 .it { display: grid; grid-template-columns: 16px 1fr; gap: 8px; padding: 7px 0; border-top: 1px solid var(--line); }
+  .ck4 .it .bx { width: 14px; height: 14px; border-radius: 4px; border: 1.5px solid var(--b500); background: #fff; margin-top: 2px; }
+  .ck4 .it b { font-size: 11.2px; color: var(--ink); display: block; line-height: 1.3; }
+  .ck4 .it span { font-size: 10.2px; color: var(--muted); line-height: 1.38; display: block; margin-top: 1px; }
+  .ck4 .it.key .bx { border-color: var(--w600); }
+</style>
+<div class="inner">
+  <div class="row" style="gap:40px;align-items:flex-end">
+    <div style="flex:1.2">
+      <div class="eyebrow">03 · Dimension 5 · Before workloads arrive</div>
+      <h2 class="title mt8">Platform readiness checklist for a new region</h2>
+    </div>
+    <p class="muted" style="flex:1;font-size:12.2px">These are the platform items that most often stall a new region after it has been qualified. Most are inexpensive to plan early and expensive to retrofit. Apply only those the region’s connectivity profile and workload requirements call for.</p>
+  </div>
+
+  <div class="figure mt16" id="figReadiness">
+    <div class="ck4">
+      <div class="cc">
+        <div class="ch"><span class="ci" style="background:var(--b600)"><svg><use href="#i-network"/></svg></span><b>Network foundation</b></div>
+        <div class="it key"><i class="bx"></i><div><b>IP address planning</b><span>Reserve non-overlapping address space for future regions and profiles. The most common blocker.</span></div></div>
+        <div class="it"><i class="bx"></i><div><b>Private DNS across regions</b><span>Resolution for private endpoints and hybrid names, wherever the workload runs.</span></div></div>
+        <div class="it"><i class="bx"></i><div><b>Routing and inspection paths</b><span>How traffic reaches hubs and firewalls without asymmetric paths.</span></div></div>
+        <div class="it"><i class="bx"></i><div><b>Hybrid connectivity</b><span>Reuse existing circuits or add paths, per Dimension 5.</span></div></div>
+      </div>
+      <div class="cc">
+        <div class="ch"><span class="ci" style="background:var(--s800)"><svg><use href="#i-shield"/></svg></span><b>Governance and automation</b></div>
+        <div class="it key"><i class="bx"></i><div><b>Region settings in policy</b><span>Allowed-locations and region parameters that admit the new region only for its qualified workload requirements.</span></div></div>
+        <div class="it"><i class="bx"></i><div><b>Region-aware infrastructure as code</b><span>Modules, naming, and tagging parameterized by region — no hard-coded locations.</span></div></div>
+        <div class="it"><i class="bx"></i><div><b>Landing-zone provisioning</b><span>Subscription or landing-zone vending can place workloads in the region.</span></div></div>
+      </div>
+      <div class="cc">
+        <div class="ch"><span class="ci" style="background:var(--t600)"><svg><use href="#i-monitor"/></svg></span><b>Operations and data</b></div>
+        <div class="it key"><i class="bx"></i><div><b>Where logs and telemetry live</b><span>Workspace location and residency for monitoring and security data.</span></div></div>
+        <div class="it"><i class="bx"></i><div><b>Backup placement</b><span>Vaults and valid restore targets for the region — see Appendix A.</span></div></div>
+        <div class="it"><i class="bx"></i><div><b>Runbooks and support</b><span>Incident, on-call, and support procedures include the region.</span></div></div>
+      </div>
+      <div class="cc">
+        <div class="ch"><span class="ci" style="background:#8661C5"><svg><use href="#i-gauge"/></svg></span><b>Capacity and security</b></div>
+        <div class="it key"><i class="bx"></i><div><b>Quota and specific capacity</b><span>Quota for the required SKUs and models requested ahead of onboarding; capacity reservations where justified.</span></div></div>
+        <div class="it"><i class="bx"></i><div><b>Key Vault placement</b><span>Workload vaults per region rather than cross-region dependency — see Appendix A.</span></div></div>
+        <div class="it"><i class="bx"></i><div><b>Security coverage</b><span>Security posture, threat detection, and privileged access paths extend to the region.</span></div></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:18px;margin-top:10px;font-size:10px;color:var(--muted);align-items:center">
+      <span style="display:flex;gap:6px;align-items:center"><i style="width:12px;height:12px;border-radius:3px;border:1.5px solid var(--w600);display:inline-block"></i>Most common blockers — plan before qualification completes</span>
+      <span style="display:flex;gap:6px;align-items:center"><i style="width:12px;height:12px;border-radius:3px;border:1.5px solid var(--b500);display:inline-block"></i>Confirm as the capability set is enabled</span>
+    </div>
+    <div class="figcap"><span class="fn">Figure</span><span class="ft"><b>Platform readiness checklist.</b> Hub and shared-service implementations differ between organizations; the checklist names what must be true, not how a specific hub is built.</span></div>
+  </div>
+
+  <div class="note mt16" style="padding:12px 16px;display:flex;gap:16px;align-items:center">
+    <svg style="width:22px;height:22px;color:var(--g600);flex:none"><use href="#i-check"/></svg>
+    <p style="font-size:12.2px;color:var(--ink)"><b>Ready for workloads</b> means the region is qualified for its workload requirements, the required capability set is in place through standard automation, and workloads can onboard without platform exceptions.</p>
+  </div>
+</div>
+</section>

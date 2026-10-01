@@ -1,0 +1,76 @@
+<section class="page" data-section="06 · Why this creates agility">
+<style>
+  .ag2 { display: grid; grid-template-columns: 1fr 40px 1fr; align-items: stretch; }
+  .ag2 .pn { border-radius: 13px; padding: 14px 18px 16px; }
+  .ag2 .pn .cap { margin-bottom: 8px; }
+  .ag2 .pn b.t { display: block; font-size: 15px; color: var(--ink); line-height: 1.25; }
+  .ag2 .pn p { font-size: 11.4px; line-height: 1.46; color: var(--text); margin-top: 6px; }
+  .ag2 .ar { display: grid; place-items: center; }
+  .ag2 .code { margin-top: 10px; font-family: "Cascadia Code", Consolas, monospace; font-size: 11.2px; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; color: var(--ink); }
+  .ag2 .code .k { color: var(--b600); font-weight: 700; }
+  .ag2 .code .v { color: var(--t700); }
+  .ag2 .code .x { color: var(--w600); }
+  .trg { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)) 36px 1.15fr; gap: 12px; align-items: stretch; }
+  .trg .c { border-radius: 12px; background: var(--wash); padding: 13px 15px; }
+  .trg .c .i { width: 32px; height: 32px; border-radius: 9px; display: grid; place-items: center; }
+  .trg .c .i svg { width: 17px; height: 17px; color: #fff; }
+  .trg .c b { display: block; font-size: 12.8px; color: var(--ink); line-height: 1.3; margin-top: 9px; }
+  .trg .c p { font-size: 10.8px; line-height: 1.42; color: var(--text); margin-top: 5px; }
+  .trg .ar { display: grid; place-items: center; }
+  .trg .out { border-radius: 12px; background: linear-gradient(135deg, var(--t700), var(--t600)); color: #fff; padding: 15px 18px; display: flex; flex-direction: column; justify-content: center; }
+  .trg .out b { font-size: 15px; line-height: 1.3; }
+  .trg .out p { font-size: 11px; line-height: 1.45; color: #D6F0EC; margin-top: 6px; }
+  .trg .out .rs { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; }
+  .trg .out .rs span { font-size: 9.6px; font-weight: 700; padding: 3px 8px; border-radius: 10px; background: rgba(255,255,255,.18); }
+</style>
+<div class="inner">
+  <div class="open-band" id="x6">
+    <div class="num">06</div>
+    <div style="flex:1">
+      <div class="eyebrow">Why this creates agility</div>
+      <h1 class="sec-title mt8" style="font-size:28px">Region becomes a deployment parameter</h1>
+    </div>
+    <p class="standfirst" style="width:320px;font-size:13.4px">Strategic hubs remain deliberate choices. Workloads stop inheriting those choices automatically.</p>
+  </div>
+
+  <div class="figure mt20" id="xfAgility">
+    <div class="ag2">
+      <div class="pn" style="background:#FBF4EE">
+        <div class="cap" style="color:var(--w600)">Today</div>
+        <b class="t">Region as a permanent architectural dependency</b>
+        <p>Every workload inherits the same regional pair and its full platform footprint, whether or not its requirements need it.</p>
+        <div class="code"><span class="k">region</span> = <span class="x">"primary"</span> <span style="color:var(--faint)">// fixed for every workload</span></div>
+      </div>
+      <div class="ar"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M4 13h16M14 6l7 7-7 7" fill="none" stroke="#0F6CBD" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="pn" style="background:var(--t50)">
+        <div class="cap" style="color:var(--t600)">With this model</div>
+        <b class="t">Region as a deployment parameter</b>
+        <p>Each workload selects from qualified regional options that fit its archetype and requirements, validated at decision time.</p>
+        <div class="code"><span class="k">region</span> = <span class="v">qualified_option(archetype, requirements)</span></div>
+      </div>
+    </div>
+
+    <div class="cap mt20" style="color:var(--muted)">When circumstances change</div>
+    <div class="trg mt8">
+      <div class="c"><span class="i" style="background:#8661C5"><svg><use href="#i-gauge"/></svg></span><b>Capacity is available somewhere else</b><p>A qualified region with the required SKUs and quota can take the next deployment.</p></div>
+      <div class="c"><span class="i" style="background:var(--b600)"><svg><use href="#i-layers"/></svg></span><b>A required service is stronger in another region</b><p>AI models, services, or zone support can favor a different qualified option.</p></div>
+      <div class="c"><span class="i" style="background:var(--w600)"><svg><use href="#i-flag"/></svg></span><b>The regulatory or energy environment changes</b><p>Placement can adapt within the governed geography instead of waiting for a redesign.</p></div>
+      <div class="ar"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M4 13h16M14 6l7 7-7 7" fill="none" stroke="#04807A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="out"><b>More options for where the next workload can go</b><p>Existing workloads can stay put; new and movable ones use the best qualified option available.</p>
+        <div class="rs"><span>Region A</span><span>Region B</span><span>Region C</span><span>Region E</span><span>+ qualified options</span></div></div>
+    </div>
+    <div class="figcap"><span class="fn">Figure</span><span class="ft"><b>Regional optionality.</b> Placement is revalidated at decision time for services, SKUs, AI models, regional access, and quota; capacity remains a deployment-time condition. Staying in the current region is always a valid outcome.</span></div>
+  </div>
+
+  <div style="position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div style="border-radius:12px;background:var(--s800);padding:15px 20px;display:flex;gap:14px;align-items:center">
+      <svg style="width:24px;height:24px;color:#A9C7E8;flex:none"><use href="#i-hub"/></svg>
+      <p style="font-size:13px;line-height:1.4;color:#fff"><b>Deliberate where it matters:</b> where the major strategic hubs live.</p>
+    </div>
+    <div style="border-radius:12px;background:var(--t50);border:1px solid var(--t300);padding:15px 20px;display:flex;gap:14px;align-items:center">
+      <svg style="width:24px;height:24px;color:var(--t600);flex:none"><use href="#i-app"/></svg>
+      <p style="font-size:13px;line-height:1.4;color:var(--ink)"><b>Adaptable where it helps:</b> which regions individual applications consume.</p>
+    </div>
+  </div>
+</div>
+</section>

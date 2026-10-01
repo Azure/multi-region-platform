@@ -1,0 +1,84 @@
+<section class="page" data-section="03 · Regional qualification">
+<style>
+  .f5 { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 12px; }
+  .f5 .dc { border: 1px solid var(--line); border-radius: 11px; background: #fff; display: flex; flex-direction: column; position: relative; }
+  .f5 .dc .acc { height: 4px; border-radius: 11px 11px 0 0; margin: -1px -1px 0; }
+  .f5 .dc .bd { padding: 12px 13px 0; flex: 1; }
+  .f5 .dh { display: flex; gap: 9px; align-items: center; }
+  .f5 .dn { width: 28px; height: 28px; border-radius: 50%; background: var(--b600); color: #fff; font-weight: 700; font-size: 13px; display: grid; place-items: center; flex: none; }
+  .f5 .dt { font-size: 12.2px; font-weight: 700; color: var(--ink); line-height: 1.22; }
+  .f5 .dq { font-size: 11px; font-weight: 600; color: var(--b700); line-height: 1.35; margin: 7px 0 6px; min-height: 30px; }
+  .f5 ul { list-style: none; font-size: 10.2px; line-height: 1.28; color: var(--text); }
+  .f5 li { padding-left: 11px; position: relative; margin-bottom: 2px; }
+  .f5 li::before { content: ""; position: absolute; left: 1px; top: .52em; width: 4px; height: 4px; border-radius: 50%; background: var(--b500); }
+  .f5 .sub { border-top: 1px dashed var(--line); padding-top: 6px; margin-top: 6px; }
+  .f5 .sub b { font-size: 10.2px; color: var(--b800); display: block; }
+  .f5 .sub span { font-size: 10.2px; line-height: 1.35; color: var(--muted); display: block; }
+  .f5 .dd { margin-top: 10px; background: var(--b50); border-top: 1px solid var(--b100); border-radius: 0 0 11px 11px; padding: 7px 13px 8px; min-height: 58px; }
+  .f5 .dd .cap { color: var(--b600); font-size: 8.8px; }
+  .f5 .dd p { font-size: 10.6px; line-height: 1.36; color: var(--ink); font-weight: 600; margin-top: 2px; }
+  .f5 .chev { position: absolute; right: -11px; top: 44px; z-index: 3; width: 10px; }
+  .fout { margin-top: 10px; display: grid; grid-template-columns: 180px 1fr 1fr 1fr 1fr; gap: 8px; align-items: stretch; background: var(--wash); border-radius: 11px; padding: 10px 12px; }
+  .fout .oc { background: #fff; border-radius: 8px; padding: 7px 10px; display: flex; gap: 9px; align-items: center; border: 1px solid var(--line-soft); }
+  .fout .oc .ic { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; flex: none; }
+  .fout .oc .ic svg { width: 14px; height: 14px; }
+  .fout .oc b { font-size: 11px; display: block; line-height: 1.2; }
+  .fout .oc span { font-size: 9.6px; color: var(--muted); line-height: 1.3; display: block; }
+</style>
+<div class="inner">
+  <div class="open-band" id="s3">
+    <div class="num">03</div>
+    <div style="flex:1">
+      <div class="eyebrow">Multi-region platform</div>
+      <h1 class="sec-title mt8" style="font-size:30px">Regional Qualification Framework</h1>
+    </div>
+    <p class="standfirst" style="width:330px;font-size:14.2px">Which Azure regions should be <strong>prepared</strong> to support workload requirements — not whether an individual workload should use multiple regions.</p>
+  </div>
+
+  <p class="mt12" style="max-width:900px">This framework determines which Azure regions should be prepared to support workload requirements. It does not determine whether an individual workload should use multiple regions or define its multi-region architecture. Those are workload-specific design decisions. Use the following five dimensions to evaluate candidate regions consistently.</p>
+
+  <div class="figure mt8" id="fig5">
+    <div class="f5">
+      <div class="dc"><div class="acc" style="background:var(--b300)"></div><div class="bd">
+        <div class="dh"><span class="dn">1</span><span class="dt">Business and geography</span></div>
+        <div class="dq">Where do we need Azure presence?</div>
+        <ul><li>Markets and users</li><li>Datacenter and partner locations</li><li>Planned launches or migrations</li><li>Anticipated growth and proximity</li><li>Geographic concentration risk</li></ul></div>
+        <div class="dd"><div class="cap">Decision</div><p>Confirm sufficient business value to justify deeper assessment.</p></div>
+        <svg class="chev" height="18" viewBox="0 0 10 18"><path d="M2 2l6 7-6 7" fill="none" stroke="#2B88D8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="dc"><div class="acc" style="background:var(--b500)"></div><div class="bd">
+        <div class="dh"><span class="dn">2</span><span class="dt">Data and compliance</span></div>
+        <div class="dq">Are we allowed to operate here?</div>
+        <ul><li>Data residency and sovereignty</li><li>Regulatory and industry requirements</li><li>Company policy and customer commitments</li><li>Support access and encryption</li><li>Restrictions on data movement or operational control</li></ul></div>
+        <div class="dd" style="background:#FBF4EE;border-top-color:var(--w100)"><div class="cap" style="color:var(--w600)">Decision</div><p>Exclude the region when it cannot satisfy a mandatory requirement.</p></div>
+        <svg class="chev" height="18" viewBox="0 0 10 18"><path d="M2 2l6 7-6 7" fill="none" stroke="#2B88D8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="dc" style="border-color:var(--t300)"><div class="acc" style="background:var(--t600)"></div><div class="bd">
+        <div class="dh"><span class="dn" style="background:var(--t600)">3</span><span class="dt">Workload requirements and dependencies</span></div>
+        <div class="dq" style="color:var(--t700)">What workload requirements and dependencies must the region support?</div>
+        <ul class="teal"><li>Existing and future workloads, including moves</li><li>Closest-fitting Application Landing Zone archetype</li><li>Data, connectivity, and shared services</li><li>Security, resiliency, and scale</li><li>Required Azure services</li></ul></div>
+        <div class="dd" style="background:var(--t50);border-top-color:var(--t100)"><div class="cap" style="color:var(--t600)">Decision</div><p>Identify the workload-driven platform requirements to validate.</p></div>
+        <svg class="chev" height="18" viewBox="0 0 10 18"><path d="M2 2l6 7-6 7" fill="none" stroke="#2B88D8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="dc"><div class="acc" style="background:var(--b600)"></div><div class="bd">
+        <div class="dh"><span class="dn">4</span><span class="dt">Regional capability and availability</span></div>
+        <div class="dq">Which regions can support the identified workload requirements?</div>
+        <ul><li>Services, models, and SKUs</li><li>Availability zones and pairing</li><li>Latency, pricing, and scale</li><li>Regional access and quota</li><li>Service-specific cross-region behavior</li></ul></div>
+        <div class="dd"><div class="cap">Decision</div><p>Qualify candidates, documenting conditions, constraints, and unresolved validations.</p></div>
+        <svg class="chev" height="18" viewBox="0 0 10 18"><path d="M2 2l6 7-6 7" fill="none" stroke="#2B88D8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="dc"><div class="acc" style="background:var(--b800)"></div><div class="bd">
+        <div class="dh"><span class="dn" style="background:var(--b800)">5</span><span class="dt">Platform enablement and connectivity</span></div>
+        <div class="dq">What must the platform enable for the identified workload requirements?</div>
+        <div class="sub" style="border-top:0;margin-top:0;padding-top:0"><b>Platform enablement</b><span>Local, remote, or centralized services</span></div>
+        <div class="sub"><b>Resilient hybrid connectivity</b><span>Reachability and resilience to Azure</span></div>
+        <div class="sub"><b>Regional platform connectivity</b><span>Most efficient regional profile</span></div></div>
+        <div class="dd"><div class="cap">Decision</div><p>Most efficient capability set and connectivity profile.</p></div></div>
+    </div>
+    <div class="fout">
+      <div style="display:flex;flex-direction:column;justify-content:center;padding-left:4px"><b style="font-size:11.6px;color:var(--ink)">Framework output</b><span style="font-size:9.6px;color:var(--muted);line-height:1.35">Each regional option is classified against <b style="color:var(--ink)">defined workload requirements</b>, with evidence.</span></div>
+      <div class="oc"><span class="ic" style="background:var(--w100);color:var(--w600)"><svg><use href="#i-x"/></svg></span><div><b style="color:var(--w600)">Excluded</b><span>A mandatory requirement cannot be satisfied.</span></div></div>
+      <div class="oc"><span class="ic" style="border:1.4px dashed var(--b600);color:var(--b600)"><svg><use href="#i-clock"/></svg></span><div><b style="color:var(--b700)">Candidate</b><span>Potentially viable; more discovery or platform enablement first.</span></div></div>
+      <div class="oc"><span class="ic" style="background:#FFF1CC;border:1.4px solid #C98A00;color:#8A5A00"><svg><use href="#i-flag"/></svg></span><div><b style="color:#8A5A00">Conditional</b><span>Supported if documented conditions are resolved.</span></div></div>
+      <div class="oc"><span class="ic" style="background:var(--g100);color:var(--g600)"><svg><use href="#i-check"/></svg></span><div><b style="color:var(--g600)">Qualified</b><span>As of the assessment date; onboarding revalidation still required.</span></div></div>
+    </div>
+    <div class="figcap"><span class="fn">Figure 5</span><span class="ft"><b>Five dimensions — the recommended platform-adoption sequence.</b> Outcomes are specific to defined workload requirements, never a blanket certification; workload resiliency requirements are identified during workload design.</span></div>
+  </div>
+</div>
+</section>

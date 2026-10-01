@@ -1,0 +1,57 @@
+<section class="page" data-section="07 · Operating model">
+<style>
+  .om { position: relative; }
+  .om .lab { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .om .row6 { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 10px; }
+  .om .ad { background: #fff; border: 1.2px solid var(--t300); border-radius: 10px; padding: 11px 12px; min-height: 76px; font-size: 11.4px; line-height: 1.38; color: var(--t700); font-weight: 650; display: flex; gap: 8px; }
+  .om .ad svg { width: 18px; height: 18px; color: var(--t600); flex: none; }
+  .om .fd { background: var(--s800); border-radius: 0; padding: 12px 12px; min-height: 76px; font-size: 11.4px; line-height: 1.38; color: #fff; font-weight: 650; display: flex; gap: 8px; }
+  .om .fd svg { width: 18px; height: 18px; color: #A9B6C6; flex: none; }
+  .om .row6.f { gap: 1px; background: #3A5070; border-radius: 12px; overflow: hidden; }
+  .om .brd { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 10px; height: 34px; }
+  .om .brd div { display: flex; justify-content: center; }
+  .om .brd i { width: 1.5px; height: 100%; background: repeating-linear-gradient(var(--s300) 0 3px, transparent 3px 6px); display: block; }
+</style>
+<div class="inner">
+  <div class="open-band" id="s7">
+    <div class="num">07</div>
+    <div style="flex:1">
+      <div class="eyebrow">Operating model</div>
+      <h1 class="sec-title mt8" style="font-size:28px">A consistent operating model, adaptable by region</h1>
+    </div>
+    <p class="standfirst" style="width:290px;font-size:13.6px">Not a different operating model for every region — one model, with governed room to adapt.</p>
+  </div>
+
+  <p class="mt12" style="max-width:900px">A multi-region platform should use one operating model across the estate. Keep governance and architecture standards stable, while regional implementation and workload placement adapt to business, application, and regulatory requirements.</p>
+
+  <div class="figure mt16 om" id="fig18">
+    <div class="lab"><span class="cap" style="color:var(--t600)">Allow to adapt by region and workload</span><span class="cap" style="color:var(--faint)">Adapts within the foundation’s guardrails</span></div>
+    <div class="row6">
+      <div class="ad"><svg><use href="#i-pin"/></svg>Application regional placement</div>
+      <div class="ad"><svg><use href="#i-lock"/></svg>Controls required to satisfy regional or data-boundary requirements</div>
+      <div class="ad"><svg><use href="#i-hub"/></svg>Regional platform connectivity profile</div>
+      <div class="ad"><svg><use href="#i-gear"/></svg>Regional service, SKU, and configuration parameters</div>
+      <div class="ad"><svg><use href="#i-layers"/></svg>Local shared-services footprint</div>
+      <div class="ad"><svg><use href="#i-gauge"/></svg>Workload scale, latency, dependency, and resiliency decisions</div>
+    </div>
+    <div class="brd"><div><i></i></div><div><i></i></div><div><i></i></div><div><i></i></div><div><i></i></div><div><i></i></div></div>
+    <div class="row6 f">
+      <div class="fd"><svg><use href="#i-shield"/></svg>Governance guardrails and policy intent</div>
+      <div class="fd"><svg><use href="#i-id"/></svg>Identity, security, and compliance baselines</div>
+      <div class="fd"><svg><use href="#i-network"/></svg>Architecture principles and approved patterns</div>
+      <div class="fd"><svg><use href="#i-gear"/></svg>Deployment automation and infrastructure as code</div>
+      <div class="fd"><svg><use href="#i-monitor"/></svg>Monitoring, support, and operational standards</div>
+      <div class="fd"><svg><use href="#i-users"/></svg>Ownership, approval, and lifecycle processes</div>
+    </div>
+    <div class="lab mt8"><span class="cap" style="color:var(--s800)">Keep consistent across the Azure estate</span><span class="cap" style="color:var(--faint)">One foundation for every region and profile</span></div>
+    <div class="figcap"><span class="fn">Figure 19</span><span class="ft"><b>What stays consistent and what adapts.</b> Each adaptable decision sits on a consistent foundation: placement varies, governance does not; profiles vary, approved patterns do not.</span></div>
+  </div>
+
+  <div class="row mt20" style="gap:36px;align-items:center">
+    <div style="flex:0 0 400px">
+      <div class="pull" style="border-left-width:4px"><p style="font-size:24px;line-height:1.2;font-weight:600">Region-agnostic does not mean region-random.</p></div>
+    </div>
+    <p style="flex:1">Regional adaptability operates within a governed framework. Workloads select from qualified regional options based on their requirements, their Application Landing Zone archetype, and each region’s current capabilities and qualification status. Regional qualification should be reassessed as workload requirements and Azure capabilities change.</p>
+  </div>
+</div>
+</section>

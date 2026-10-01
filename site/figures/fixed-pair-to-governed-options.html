@@ -1,0 +1,49 @@
+<!-- extracted from whitepaper #fig1; regenerate with site/tools/extract_figures.py -->
+<div class="wpf" data-w="940" data-h="296" style="width:940px"><div class="figure mt16">
+    <div class="dg f1">
+      <!-- left: fixed pair -->
+      <div class="panel pl">
+        <div class="ph"><b>A fixed regional pair</b><span class="cap">Traditional model</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px;height:124px;position:relative">
+          <div class="rg node" id="fixed-pair-to-governed-options--f1a"><div class="rl"><svg><use href="#i-pin"></use></svg>Primary region</div>
+            <div class="blk wl">Workloads</div><div class="blk ss">Shared services</div><div class="blk hub">Hub &amp; connectivity</div></div>
+          <div class="rg node" id="fixed-pair-to-governed-options--f1b"><div class="rl"><svg><use href="#i-pin"></use></svg>DR region</div>
+            <div class="blk wl">Workloads</div><div class="blk ss">Shared services</div><div class="blk hub">Hub &amp; connectivity</div></div>
+          <div style="position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);font-size:8.6px;font-weight:700;color:var(--muted);background:var(--wash);padding:2px 0;z-index:3;writing-mode:vertical-rl;letter-spacing:.08em">MIRRORED</div>
+        </div>
+        <div class="cap mt12" style="color:var(--w600)">Evolving regional conditions</div>
+        <div class="press mt4">
+          <span class="chip warm">Business expansion</span><span class="chip warm">Data boundaries</span>
+          <span class="chip warm">Service &amp; AI availability</span><span class="chip warm">Latency requirements</span>
+        </div>
+        <div class="small muted mt8" style="font-size:10px;line-height:1.4">Works while demand and placement remain predictable; becomes less adaptable as conditions evolve.</div>
+      </div>
+
+      <!-- middle transition -->
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
+        <svg width="46" height="20" viewBox="0 0 46 20"><path d="M2 10h38" stroke="#0F6CBD" stroke-width="1.6"></path><path d="M36 4l7 6-7 6" fill="none" stroke="#0F6CBD" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <div style="font-size:9.4px;font-weight:700;color:var(--b700);text-align:center;line-height:1.25">Extend,<br>not<br>replicate</div>
+      </div>
+
+      <!-- right: adaptable platform -->
+      <div class="panel pr">
+        <div class="ph"><b>An adaptable multi-region platform</b><span class="cap" style="color:var(--b600)">Regions as qualified options</span></div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;height:172px;align-items:end">
+          <div><div class="rg" style="height:150px"><div class="rl"><svg><use href="#i-pin"></use></svg>Region A</div><div class="blk wl">Workloads</div><div class="blk ss">Shared</div><div class="blk hub">Full hub</div></div></div>
+          <div><div class="rg" style="height:150px"><div class="rl"><svg><use href="#i-pin"></use></svg>Region B</div><div class="blk wl">Workloads</div><div class="blk ss">Shared</div><div class="blk hub">Full hub</div></div></div>
+          <div><div class="rg" style="height:118px"><div class="rl"><svg><use href="#i-pin"></use></svg>Region C</div><div class="blk wl">Workloads</div><div class="blk ss" style="background:#fff;border:1px solid var(--b300)">Minimal hub</div></div></div>
+          <div><div class="rg" style="height:92px"><div class="rl"><svg><use href="#i-pin"></use></svg>Region D</div><div class="blk wl">Spokes</div><div class="blk" style="font-size:8.4px;color:var(--b700);padding:2px">↔ remote hub</div></div></div>
+          <div><div class="rg" style="height:70px"><div class="rl"><svg><use href="#i-pin"></use></svg>Region E</div><div class="blk wl2">Isolated spokes</div></div></div>
+          <div><div class="rg cand" style="height:56px"><div class="rl" style="color:var(--b600)"><svg><use href="#i-pin"></use></svg>Region F</div><span style="font-size:8.8px;font-weight:650;color:var(--b600);margin-top:10px">Candidate</span></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">
+          <div class="rlabel">Strategic hub</div><div class="rlabel">Strategic hub</div><div class="rlabel">Minimal hub</div><div class="rlabel">Remote hub</div><div class="rlabel">Disconnected</div><div class="rlabel">Not enabled</div>
+        </div>
+        <div class="found">
+          <div class="ft">One consistent, governed Azure landing-zone foundation</div>
+          <div class="fs">Identity · Connectivity · Security · Management · Application delivery</div>
+        </div>
+      </div>
+    </div>
+    
+  </div></div>

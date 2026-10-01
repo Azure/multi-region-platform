@@ -1,0 +1,72 @@
+<section class="page" data-section="05 · Application Landing Zone archetypes">
+<style>
+  .xa4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }
+  .xa4 .c { border: 1px solid var(--line); border-radius: 13px; background: #fff; overflow: hidden; display: flex; flex-direction: column; }
+  .xa4 .top { height: 5px; }
+  .xa4 .hd { padding: 13px 15px 0; display: flex; gap: 10px; align-items: flex-start; }
+  .xa4 .hd .n { width: 28px; height: 28px; border-radius: 50%; color: #fff; font-weight: 700; font-size: 13px; display: grid; place-items: center; flex: none; }
+  .xa4 .hd b { font-size: 13.8px; color: var(--ink); line-height: 1.25; }
+  .xa4 .d { padding: 8px 15px 0; font-size: 11.2px; line-height: 1.45; color: var(--text); }
+  .xa4 .pat { margin: 10px 15px 0; padding-top: 8px; border-top: 1px solid var(--line-soft); }
+  .xa4 .pat .k { font-size: 8.8px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--b600); }
+  .xa4 .pat p { font-size: 11px; line-height: 1.42; color: var(--ink); margin-top: 3px; }
+  .xa4 .afoot { margin-top: auto; padding: 10px 15px 12px; background: var(--wash); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .xa4 .afoot .pr { font-size: 10.4px; font-weight: 700; color: var(--b700); line-height: 1.25; }
+  .xa4 .fx { display: flex; gap: 3px; }
+  .xa4 .fx i { width: 9px; height: 9px; border-radius: 2px; background: var(--line); display: block; }
+  .xa4 .fx i.on { background: var(--t600); }
+  .xa4 .gl { display: grid; place-items: center; padding: 14px 0 4px; }
+  .xa4 .chips { display: flex; flex-wrap: wrap; gap: 4px; }
+</style>
+<div class="inner">
+  <div class="open-band" id="x5">
+    <div class="num" style="color:var(--t600)">05</div>
+    <div style="flex:1">
+      <div class="eyebrow" style="color:var(--t600)">Classify workloads by archetype</div>
+      <h1 class="sec-title mt8" style="font-size:28px">Four Application Landing Zone archetypes</h1>
+    </div>
+    <p class="standfirst" style="width:320px;font-size:13.4px">Archetypes describe <strong>what applications require</strong>; connectivity profiles describe what the platform provides. The mapping is not one-to-one.</p>
+  </div>
+
+  <div class="xa4 mt20" id="xfArch">
+    <div class="c"><div class="top" style="background:var(--b700)"></div>
+      <div class="hd"><span class="n" style="background:var(--b700)">1</span><b>Hybrid-connected applications</b></div>
+      <div class="gl"><svg width="150" height="54" viewBox="0 0 150 54"><g color="#243A57"><use href="#i-building" x="14" y="8" width="38" height="38"/></g><path d="M60 27h34" stroke="#04807A" stroke-width="1.6"/><path d="M64 22l-5 5 5 5M90 22l5 5-5 5" fill="none" stroke="#04807A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="100" y="10" width="34" height="34" rx="8" fill="#EDF8F6" stroke="#7CC9C3"/><rect x="109" y="19" width="16" height="16" rx="3.5" fill="#04807A"/></svg></div>
+      <div class="d">Traditional line-of-business applications with tight dependencies on on-premises environments.</div>
+      <div class="pat"><div class="k">Typical pattern</div><p>Deploy in strategic hub regions, where the complete geographic landing zone exists.</p></div>
+      <div class="afoot"><span class="chips"><span class="chip blue">Full hub</span><span class="chip blue">Minimal hub</span><span class="chip blue">Remote hub</span></span><span class="fx" title="Regional flexibility"><i class="on"></i><i></i><i></i><i></i></span></div></div>
+    <div class="c"><div class="top" style="background:var(--t600)"></div>
+      <div class="hd"><span class="n" style="background:var(--t600)">2</span><b>Isolated cloud-native or AI applications</b></div>
+      <div class="gl"><svg width="150" height="54" viewBox="0 0 150 54"><rect x="30" y="4" width="90" height="46" rx="10" fill="none" stroke="#7CC9C3" stroke-dasharray="4 3"/><rect x="44" y="15" width="22" height="22" rx="5" fill="#04807A"/><rect x="74" y="15" width="22" height="22" rx="5" fill="#04807A" opacity=".7"/><rect x="100" y="24" width="12" height="12" rx="3" fill="#04807A" opacity=".45"/></svg></div>
+      <div class="d">Largely self-contained; only their application endpoints need secure exposure back into the geographic landing zones.</div>
+      <div class="pat"><div class="k">Typical pattern</div><p>Deploy where required services and capacity are available; expose endpoints through Private Endpoints.</p></div>
+      <div class="afoot"><span class="chips"><span class="chip teal">Disconnected spokes</span><span class="chip out">Connected, where justified</span></span><span class="fx"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></div></div>
+    <div class="c"><div class="top" style="background:var(--t700)"></div>
+      <div class="hd"><span class="n" style="background:var(--t700)">3</span><b>Connected cloud-native or AI applications</b></div>
+      <div class="gl"><svg width="150" height="54" viewBox="0 0 150 54"><rect x="14" y="10" width="34" height="34" rx="8" fill="#EDF8F6" stroke="#7CC9C3"/><rect x="23" y="19" width="16" height="16" rx="3.5" fill="#04807A"/><path d="M52 27h44" stroke="#0F6CBD" stroke-width="1.8" stroke-dasharray="2 4" stroke-linecap="round"/><g color="#0F6CBD"><use href="#i-data" x="100" y="8" width="38" height="38"/></g></svg></div>
+      <div class="d">Need more than endpoint exposure, but do not justify recreating a complete regional hub.</div>
+      <div class="pat"><div class="k">Typical pattern</div><p>Private connectivity back to the geographic hubs — for example, Global VNet Peering.</p></div>
+      <div class="afoot"><span class="chips"><span class="chip blue">Remote hub</span><span class="chip blue">Minimal hub</span><span class="chip blue">Full hub</span></span><span class="fx"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></div></div>
+    <div class="c"><div class="top" style="background:#8661C5"></div>
+      <div class="hd"><span class="n" style="background:#8661C5">4</span><b>Interconnected application portfolios</b></div>
+      <div class="gl"><svg width="150" height="54" viewBox="0 0 150 54"><circle cx="75" cy="27" r="21" fill="none" stroke="#7CC9C3" stroke-width="1.4"/><rect x="45" y="17" width="18" height="18" rx="4" fill="#04807A"/><rect x="87" y="17" width="18" height="18" rx="4" fill="#04807A"/><rect x="66" y="1" width="18" height="14" rx="4" fill="#04807A" opacity=".7"/><rect x="66" y="39" width="18" height="14" rx="4" fill="#04807A" opacity=".7"/></svg></div>
+      <div class="d">A portfolio in another region needing east-west connectivity between applications and north-south connectivity to the rest of the estate.</div>
+      <div class="pat"><div class="k">Typical pattern</div><p>A minimally viable regional hub with only the dependencies and connectivity the portfolio needs.</p></div>
+      <div class="afoot"><span class="chips"><span class="chip blue">Minimal hub</span><span class="chip blue">Remote hub</span><span class="chip blue">Full hub</span></span><span class="fx"><i class="on"></i><i class="on"></i><i></i><i></i></span></div></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:9.8px;color:var(--muted)">
+    <span>Chips show the typical connectivity profiles, most common first; actual dependencies and requirements decide.</span>
+    <span style="display:flex;gap:6px;align-items:center"><span style="display:inline-flex;gap:3px"><i style="width:9px;height:9px;border-radius:2px;background:var(--t600);display:block"></i><i style="width:9px;height:9px;border-radius:2px;background:var(--line);display:block"></i></span>Regional flexibility (indicative)</span>
+  </div>
+
+  <div style="position:absolute;left:0;right:0;bottom:0;border-radius:14px;overflow:hidden;display:grid;grid-template-columns:330px 1fr">
+    <div style="background:var(--s800);padding:22px 26px;display:flex;align-items:center">
+      <p style="font-size:22px;line-height:1.22;font-weight:600;color:#fff">Region-agnostic does not mean <span style="color:#50E6FF">region-random.</span></p>
+    </div>
+    <div style="background:var(--b50);padding:16px 24px">
+      <div class="cap" style="color:var(--b600)">Governance moves up a level</div>
+      <p style="font-size:12px;line-height:1.5;color:var(--ink);margin-top:5px">Governance is not removed; it moves into policies that do not depend on particular regions. Instead of prescribing one regional architecture for every application, define a governed operating model and a small number of approved archetypes. Each application selects the <strong>lightest-weight pattern</strong> that satisfies its connectivity, resiliency, data, security, and service requirements.</p>
+    </div>
+  </div>
+</div>
+</section>

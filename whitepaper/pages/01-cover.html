@@ -1,0 +1,43 @@
+<section class="page cover nofolio">
+  <svg class="bleed" width="1056" height="816" viewBox="0 0 1056 816" style="position:absolute;left:0;top:0">
+    {{PY:art.defs('cv')}}
+    <defs>
+      <clipPath id="cvClip"><path d="M548,0 H1056 V816 H500 C500,816 500,120 548,0 Z"/></clipPath>
+      <linearGradient id="cvBand" x1="0" x2="1"><stop offset="0" stop-color="#0F6CBD"/><stop offset=".45" stop-color="#1AA5D6"/><stop offset=".75" stop-color="#2BC7B4"/><stop offset="1" stop-color="#8661C5"/></linearGradient>
+    </defs>
+    <rect width="1056" height="816" fill="#fff"/>
+    <g clip-path="url(#cvClip)">
+      {{PY:art.background('cv', 480, 0, 576, 816)}}
+      {{PY:art.discs('cv', 1010, 70, n=4, r0=30, step=40)}}
+      {{PY:art.estate('cv', 736, 372, 35)}}
+      <path d="M470,700 C640,640 820,720 1060,610" fill="none" stroke="url(#cvswoosh)" stroke-width="2.4"/>
+    </g>
+    <path d="M40,760 C200,745 360,760 500,712" fill="none" stroke="url(#cvswoosh)" stroke-width="2" opacity=".85"/>
+    <rect x="0" y="808" width="1056" height="8" fill="url(#cvBand)"/>
+    {{PY:art.ms_logo(64, 52, sq=10.5, gap=1.7, size=18)}}
+  </svg>
+
+  <div style="position:absolute;right:56px;top:54px;color:#fff;font-size:14px;font-weight:600;letter-spacing:.01em">White paper</div>
+
+  <div style="position:absolute;left:64px;top:176px;width:410px">
+    <div style="display:flex;gap:8px;align-items:center">
+      <span class="chip blue" style="font-size:10px;padding:3px 10px;letter-spacing:.08em;text-transform:uppercase">Azure architecture</span>
+      <span class="chip teal" style="font-size:10px;padding:3px 10px;letter-spacing:.08em;text-transform:uppercase">Platform strategy</span>
+    </div>
+    <h1 style="margin-top:22px;font-size:48px">The adaptable <b style="color:var(--b600)">multi-region</b> Azure platform</h1>
+    <p style="font-size:16.5px;line-height:1.5;color:var(--s600);margin-top:20px;max-width:390px">
+      Extending Azure landing zones for adaptable regional placement — qualifying regions, planning by workload archetype, and right-sizing regional platform connectivity.
+    </p>
+  </div>
+
+  <div style="position:absolute;left:64px;bottom:96px;width:390px">
+    <div class="cap" style="color:var(--faint);margin-bottom:10px">Three planning constructs</div>
+    <div style="display:grid;gap:8px;font-size:12.4px;color:var(--ink);font-weight:600">
+      <div style="display:flex;gap:10px;align-items:center"><span style="width:22px;height:4px;border-radius:2px;background:var(--b600)"></span>Regional Qualification and Enablement Framework</div>
+      <div style="display:flex;gap:10px;align-items:center"><span style="width:22px;height:4px;border-radius:2px;background:var(--t600)"></span>Application Landing Zone Archetypes</div>
+      <div style="display:flex;gap:10px;align-items:center"><span style="width:22px;height:4px;border-radius:2px;background:#8661C5"></span>Regional Platform Connectivity Profiles</div>
+    </div>
+  </div>
+  <div style="position:absolute;left:64px;bottom:34px;font-size:10.5px;color:var(--muted);letter-spacing:.04em">September 2026</div>
+
+</section>

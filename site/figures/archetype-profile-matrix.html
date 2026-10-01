@@ -1,0 +1,36 @@
+<!-- extracted from whitepaper #fig13; regenerate with site/tools/extract_figures.py -->
+<div class="wpf" data-w="940" data-h="411" style="width:940px"><div class="figure mt16">
+    <div style="display:flex;margin-left:214px;margin-bottom:6px">
+      <div style="width:448px;border-bottom:2px solid var(--b600);padding-bottom:4px" class="cap"><span style="color:var(--b600)">Regional platform connectivity profiles · what the platform provides</span></div>
+    </div>
+    <table class="mx">
+      <thead><tr>
+        <th style="text-align:left;vertical-align:bottom;padding-bottom:10px"><span class="cap" style="color:var(--t600);line-height:1.6">Archetypes<br>What applications require</span></th>
+        <th class="pf"><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"></rect><rect x="9" y="10" width="11" height="11" rx="2.5" fill="#04807A"></rect><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"></rect></svg>Disconnected spokes</th>
+        <th class="pf"><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"></rect><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"></rect><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"></path><circle cx="40" cy="15" r="5" fill="#0F6CBD"></circle></svg>Remote-hub-connected spokes</th>
+        <th class="pf"><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"></rect><circle cx="14" cy="15" r="6" fill="#fff" stroke="#2B88D8" stroke-width="1.5"></circle><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"></rect></svg>Minimal regional hub</th>
+        <th class="pf"><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"></rect><circle cx="14" cy="15" r="7" fill="#0F6CBD"></circle><circle cx="14" cy="15" r="2.4" fill="#fff"></circle><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"></rect></svg>Full regional hub</th>
+        <th class="dr">What drives the choice</th>
+      </tr></thead>
+      <tbody>
+        <tr><th><span class="n">1</span><span class="t">Hybrid-Connected Applications</span></th>
+          <td class="c"><span class="mk none">—</span></td><td class="c alt"><span class="mk full"><i></i>Typical</span></td><td class="c"><span class="mk full"><i></i>Typical</span></td><td class="c alt"><span class="mk full"><i></i>Typical</span></td>
+          <td class="dr">Dependency latency, resiliency, regulatory, operational, and shared-service requirements.</td></tr>
+        <tr><th><span class="n">2</span><span class="t">Isolated Cloud-Native or AI Applications</span></th>
+          <td class="c"><span class="mk full"><i></i>Often</span></td><td class="c alt"><span class="mk cond"><i></i>Where justified</span></td><td class="c"><span class="mk cond"><i></i>Where justified</span></td><td class="c alt"><span class="mk cond"><i></i>Where justified</span></td>
+          <td class="dr">Often disconnected spokes. A connected profile where private management, security, data access, or centralized services justify connectivity.</td></tr>
+        <tr><th><span class="n">3</span><span class="t">Connected Cloud-Native or AI Applications</span></th>
+          <td class="c"><span class="mk none">—</span></td><td class="c alt"><span class="mk full"><i></i>Typical</span></td><td class="c"><span class="mk full"><i></i>Typical</span></td><td class="c alt"><span class="mk full"><i></i>Typical</span></td>
+          <td class="dr">Private connectivity to selected dependencies; dependency latency, traffic patterns, resiliency, security, and operational requirements decide which profile.</td></tr>
+        <tr><th style="border-bottom:1px solid #fff"><span class="n">4</span><span class="t">Interconnected Application Portfolios</span></th>
+          <td class="c" style="border-bottom:1px solid var(--line-soft)"><span class="mk cond"><i></i>Spoke-to-spoke</span></td><td class="c alt" style="border-bottom:1px solid var(--line-soft)"><span class="mk cond"><i></i>Where acceptable</span></td><td class="c" style="border-bottom:1px solid var(--line-soft)"><span class="mk cond"><i></i>When justified</span></td><td class="c alt" style="border-bottom:1px solid var(--line-soft)"><span class="mk cond"><i></i>When justified</span></td>
+          <td class="dr" style="border-bottom:1px solid var(--line-soft)">Aggregate portfolio connectivity, shared-service, resiliency, scale, and operational requirements.</td></tr>
+      </tbody>
+    </table>
+    <div style="display:flex;gap:22px;margin-top:10px;font-size:10.4px;color:var(--muted);align-items:center">
+      <span class="mk full" style="flex-direction:row;gap:6px;color:var(--muted)"><i style="width:11px;height:11px"></i>Typical fit</span>
+      <span class="mk cond" style="flex-direction:row;gap:6px;color:var(--muted)"><i style="width:11px;height:11px"></i>When specific requirements justify it</span>
+      <span style="display:flex;gap:6px;align-items:center"><b style="color:var(--line)">—</b>Not indicated as typical</span>
+    </div>
+    
+  </div></div>

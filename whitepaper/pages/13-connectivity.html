@@ -1,0 +1,58 @@
+<section class="page" data-section="03 · Regional qualification">
+<style>
+  .lt { display: inline-flex; align-items: center; gap: 8px; font-size: 9.4px; letter-spacing: .12em; font-weight: 700; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; }
+  .mq { height: 150px; }
+  .mq .qn { position: absolute; left: 0; right: 0; top: 0; height: 62px; background: var(--b50); border: 1.2px solid var(--b200); border-radius: 10px; padding: 8px 12px; font-size: 11px; line-height: 1.38; color: var(--ink); font-weight: 600; }
+  .mq .an { position: absolute; top: 96px; width: 47%; height: 54px; border-radius: 9px; padding: 7px 11px; font-size: 10.6px; line-height: 1.35; }
+  .prof4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0 4px; }
+  .prof4 div { border-radius: 9px; border: 1px solid var(--line); padding: 8px 6px 7px; text-align: center; font-size: 9.8px; font-weight: 650; color: var(--b800); line-height: 1.25; background: #fff; }
+  .prof4 svg { display: block; margin: 0 auto 5px; }
+</style>
+<div class="inner">
+  <div class="g2" style="gap:40px">
+    <div>
+      <span class="lt" style="background:var(--s100);color:var(--s800)">Layer 1</span>
+      <h2 class="title mt8" style="font-size:21px">Resilient hybrid connectivity</h2>
+      <div class="question mt8" style="font-size:13.4px">Does the operating geography have resilient hybrid connectivity to Azure that satisfies the identified workload requirements?</div>
+      <p style="font-size:12.2px">Evaluate existing hybrid connectivity against datacenter and user locations, data boundaries, provider and peering-location diversity, latency, bandwidth, routing, and failure-domain requirements. Enabling an additional Azure region does not inherently require another ExpressRoute circuit. Determine whether existing ExpressRoute, VPN, or other hybrid connectivity provides the required reachability and resilience.</p>
+      <div class="dg mq mt8">
+        <div class="qn node" id="hq"><span class="cap" style="color:var(--b600);display:block;margin-bottom:2px">The deciding factor</span>Are additional circuits, peering locations, gateways, or paths needed for diversity, failure-domain isolation, latency, bandwidth, routing, or resiliency?</div>
+        <div class="an node" id="ha1" style="left:0;background:#fff;border:1px solid var(--line)"><b style="color:var(--ink)">Existing connectivity can remain sufficient</b> — reuse the current hybrid foundation.</div>
+        <div class="an node" id="ha2" style="right:0;background:var(--b600);color:#fff"><b>Change the foundation</b> — reachability, resiliency, diversity, scale, or ownership.</div>
+        <i class="ln" data-from="hq" data-to="ha1" data-s="b@0.25" data-e="t" data-k="slate" data-label="No" data-lp=".5"></i>
+        <i class="ln" data-from="hq" data-to="ha2" data-s="b@0.75" data-e="t" data-k="blue" data-label="Yes" data-lp=".5"></i>
+      </div>
+      <div class="decision mt12"><div class="dl">Decision</div><p style="font-size:12px">Confirm the hybrid connectivity foundation and identify any required changes to reachability, resiliency, diversity, scale, or ownership.</p></div>
+      <div class="refs"><div class="rl">Reference link</div><a href="https://learn.microsoft.com/en-us/azure/expressroute/designing-for-disaster-recovery-with-expressroute-privatepeering">Designing for disaster recovery with ExpressRoute private peering</a></div>
+    </div>
+
+    <div class="vr">
+      <span class="lt" style="background:var(--b50);color:var(--b700)">Layers 2 – 3</span>
+      <h2 class="title mt8" style="font-size:21px">Regional platform connectivity</h2>
+      <div class="question mt8" style="font-size:13.4px">What is the most efficient regional platform design that supports the identified scenarios?</div>
+      <p style="font-size:12.2px">Determine how workloads in the region will reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments. Select the profile based on those connectivity and dependency requirements:</p>
+      <div class="prof4">
+        <div><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="9" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>Disconnected spokes</div>
+        <div><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"/><circle cx="40" cy="15" r="5" fill="#0F6CBD"/></svg>Remote-hub-connected spokes</div>
+        <div><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="6" fill="#fff" stroke="#2B88D8" stroke-width="1.5"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>Minimal regional hub</div>
+        <div><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="7" fill="#0F6CBD"/><circle cx="14" cy="15" r="2.4" fill="#fff"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>Full regional hub</div>
+      </div>
+      <p class="small" style="font-size:11px;margin-top:4px">Choose the profile that meets the requirements without unnecessary infrastructure. Adoption growth alone does not justify moving toward a Full Regional Hub; expand local capabilities when shared-service placement, resiliency, scale, connectivity, or operational requirements change. Profiles are described in Section 05.</p>
+      <div class="decision mt12"><div class="dl">Decision</div><p style="font-size:12px">Select the most efficient regional platform connectivity profile that satisfies the identified requirements and can evolve as regional adoption changes.</p></div>
+      <ul class="refs"><div class="rl">Reference links</div>
+        <li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/design-area/network-topology-and-connectivity">Network topology and connectivity</a></li>
+        <li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/define-an-azure-network-topology">Define an Azure network topology</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:250px 1fr;gap:30px;align-items:center;border-top:1px solid var(--line);padding-top:18px">
+    <div style="display:flex;gap:10px;align-items:center">
+      <span class="lt" style="background:var(--s100);color:var(--s800)">Hybrid</span>
+      <span style="font-size:18px;color:var(--faint);font-weight:300">≠</span>
+      <span class="lt" style="background:var(--b50);color:var(--b700)">Regional</span>
+    </div>
+    <div class="pull" style="border-left-color:var(--b600)"><p style="font-size:16px">Geographic hybrid connectivity and workload connectivity remain related but distinct decisions. Enabling another region does not automatically require duplicating the existing connectivity platform.</p></div>
+  </div>
+</div>
+</section>

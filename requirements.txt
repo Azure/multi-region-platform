@@ -1,0 +1,6 @@
+# Python tooling for the whitepaper, figures, and website
+playwright>=1.40
+markdown>=3.5
+PyYAML>=6.0
+tinycss2>=1.2
+Pillow>=10.0

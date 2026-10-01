@@ -1,0 +1,99 @@
+<section class="page" data-section="03 · Decouple connectivity">
+<style>
+  .cx3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
+  .cx3 .c { border-radius: 12px; background: var(--wash); padding: 13px 16px; }
+  .cx3 .c .h { display: flex; gap: 10px; align-items: center; }
+  .cx3 .c .h span { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; flex: none; }
+  .cx3 .c .h svg { width: 17px; height: 17px; color: #fff; }
+  .cx3 .c .h b { font-size: 13.2px; color: var(--ink); line-height: 1.25; }
+  .cx3 .c p { font-size: 11.2px; line-height: 1.46; color: var(--text); margin-top: 7px; }
+  svg.cxd text { font-family: "Pub Sans", "Segoe UI", sans-serif; }
+</style>
+<div class="inner">
+  <div class="open-band" id="x3">
+    <div class="num">03</div>
+    <div style="flex:1">
+      <div class="eyebrow">Decouple connectivity from individual regions</div>
+      <h1 class="sec-title mt8" style="font-size:28px">Plan hybrid connectivity once, for the geography</h1>
+    </div>
+    <p class="standfirst" style="width:320px;font-size:13.4px">Instead of rebuilding the full networking stack every time another Azure region is adopted, treat connectivity as a geographic design.</p>
+  </div>
+
+  <p class="mt12" style="max-width:920px">Establish redundant connectivity into the Azure backbone through strategically located ExpressRoute or ExpressRoute Direct peering locations. That provides route diversity and lets connectivity be planned for the geography rather than independently for every region. <strong>Enabling an additional Azure region does not by itself require another ExpressRoute circuit</strong>; add circuits, peering locations, gateways, or paths only where reachability, diversity, failure-domain isolation, latency, bandwidth, routing, or resiliency requirements justify them.</p>
+
+  <div class="figure mt12" id="xfConn">
+    <svg class="cxd" width="940" height="262" viewBox="0 0 940 262">
+      <!-- on-premises -->
+      <rect x="0" y="16" width="170" height="230" rx="12" fill="#F4F6F9"/>
+      <text x="14" y="36" font-size="9.4" font-weight="700" fill="#4A5B72" letter-spacing="1.1">ON-PREMISES</text>
+      <g>
+        <rect x="14" y="52" width="142" height="62" rx="9" fill="#243A5E"/>
+        <use href="#i-building" x="26" y="64" width="18" height="18" color="#A9C7E8"/>
+        <text x="52" y="78" font-size="11" font-weight="650" fill="#fff">Datacenter 1</text>
+        <text x="26" y="100" font-size="9" fill="#C9D4E2">and connected sites</text>
+      </g>
+      <g>
+        <rect x="14" y="160" width="142" height="62" rx="9" fill="#243A5E"/>
+        <use href="#i-building" x="26" y="172" width="18" height="18" color="#A9C7E8"/>
+        <text x="52" y="186" font-size="11" font-weight="650" fill="#fff">Datacenter 2</text>
+        <text x="26" y="208" font-size="9" fill="#C9D4E2">and connected sites</text>
+      </g>
+      <!-- circuits: crossed for diversity -->
+      <g fill="none" stroke="#4A5B72" stroke-width="1.6">
+        <path d="M156 76 C200 76 210 76 250 76"/>
+        <path d="M156 92 C210 92 205 180 250 184"/>
+        <path d="M156 176 C210 176 205 92 250 88"/>
+        <path d="M156 196 C200 196 210 196 250 196"/>
+      </g>
+      <!-- peering locations -->
+      <g>
+        <rect x="250" y="56" width="176" height="52" rx="26" fill="#fff" stroke="#0F6CBD" stroke-width="1.6"/>
+        <text x="338" y="78" text-anchor="middle" font-size="11" font-weight="700" fill="#0F548C">Peering location 1</text>
+        <text x="338" y="94" text-anchor="middle" font-size="8.8" fill="#5B6778">ExpressRoute or ExpressRoute Direct</text>
+        <rect x="250" y="164" width="176" height="52" rx="26" fill="#fff" stroke="#0F6CBD" stroke-width="1.6"/>
+        <text x="338" y="186" text-anchor="middle" font-size="11" font-weight="700" fill="#0F548C">Peering location 2</text>
+        <text x="338" y="202" text-anchor="middle" font-size="8.8" fill="#5B6778">ExpressRoute or ExpressRoute Direct</text>
+      </g>
+      <text x="338" y="240" text-anchor="middle" font-size="9" font-weight="700" fill="#4A5B72">Redundant circuits · diverse paths</text>
+      <g fill="none" stroke="#0F6CBD" stroke-width="2.2">
+        <path d="M426 82 H470"/><path d="M426 190 H470"/>
+      </g>
+      <!-- backbone -->
+      <rect x="470" y="16" width="46" height="230" rx="10" fill="#0F6CBD"/>
+      <text transform="translate(498,131) rotate(-90)" text-anchor="middle" font-size="10.4" font-weight="700" fill="#fff" letter-spacing=".6">Azure backbone</text>
+      <path d="M516 131 H548" stroke="#0F6CBD" stroke-width="2.6"/>
+      <path d="M542 125 l8 6 -8 6" fill="none" stroke="#0F6CBD" stroke-width="2"/>
+      <!-- geography -->
+      <rect x="552" y="16" width="388" height="230" rx="12" fill="#F3F8FD" stroke="#8CC0EE" stroke-dasharray="5 4"/>
+      <text x="568" y="36" font-size="9.4" font-weight="700" fill="#0F548C" letter-spacing="1.1">GEOGRAPHY · FOR EXAMPLE, EUROPE</text>
+      <g font-size="10.4" font-weight="700">
+        <rect x="568" y="50" width="176" height="54" rx="9" fill="#0F6CBD"/>
+        <use href="#i-pin" x="578" y="60" width="12" height="12" color="#fff"/><text x="594" y="70" fill="#fff">Region A</text>
+        <text x="578" y="92" font-size="9" font-weight="400" fill="#DDEBF9">Strategic hub · gateways</text>
+        <rect x="752" y="50" width="176" height="54" rx="9" fill="#0F548C"/>
+        <use href="#i-pin" x="762" y="60" width="12" height="12" color="#fff"/><text x="778" y="70" fill="#fff">Region B</text>
+        <text x="762" y="92" font-size="9" font-weight="400" fill="#DDEBF9">Strategic hub · gateways</text>
+        <rect x="568" y="114" width="176" height="54" rx="9" fill="#fff" stroke="#2B88D8"/>
+        <use href="#i-pin" x="578" y="124" width="12" height="12" color="#0F6CBD"/><text x="594" y="134" fill="#0F548C">Region C</text>
+        <text x="578" y="156" font-size="9" font-weight="400" fill="#5B6778">Minimal hub · reuses existing circuits</text>
+        <rect x="752" y="114" width="176" height="54" rx="9" fill="#fff" stroke="#2B88D8"/>
+        <use href="#i-pin" x="762" y="124" width="12" height="12" color="#0F6CBD"/><text x="778" y="134" fill="#0F548C">Region D</text>
+        <text x="762" y="156" font-size="9" font-weight="400" fill="#5B6778">Spokes reach on-premises via a hub</text>
+        <rect x="568" y="178" width="176" height="54" rx="9" fill="#fff" stroke="#7CC9C3"/>
+        <use href="#i-pin" x="578" y="188" width="12" height="12" color="#04807A"/><text x="594" y="198" fill="#03615F">Region E</text>
+        <text x="578" y="220" font-size="9" font-weight="400" fill="#5B6778">Self-contained · no hybrid path</text>
+        <rect x="752" y="178" width="176" height="54" rx="9" fill="none" stroke="#2B88D8" stroke-dasharray="4 3"/>
+        <use href="#i-pin" x="762" y="188" width="12" height="12" color="#0F6CBD"/><text x="778" y="198" fill="#0F548C">Region F</text>
+        <text x="762" y="220" font-size="9" font-weight="400" fill="#5B6778">Candidate · no new circuit assumed</text>
+      </g>
+    </svg>
+    <div class="figcap"><span class="fn">Figure</span><span class="ft"><b>Geographic hybrid connectivity.</b> Diverse paths through strategically located peering locations reach the Azure backbone once; regions consume that foundation through their hubs or a strategic hub. Reachability depends on circuit type — for example, Standard circuits reach regions in the same geopolitical region, Premium extends globally — so validate it per design. Locations and roles are illustrative.</span></div>
+  </div>
+
+  <div class="cx3 mt12">
+    <div class="c"><div class="h"><span style="background:var(--b600)"><svg><use href="#i-route"/></svg></span><b>Route diversity</b></div><p>Redundant circuits across separate peering locations remove single points of failure for the whole geography.</p></div>
+    <div class="c"><div class="h"><span style="background:var(--s800)"><svg><use href="#i-network"/></svg></span><b>Decoupled from each region</b></div><p>Hybrid connectivity, hub placement, and application connectivity are separate decisions with separate tradeoffs.</p></div>
+    <div class="c"><div class="h"><span style="background:var(--t600)"><svg><use href="#i-gauge"/></svg></span><b>Sustainable economics</b></div><p>A complete footprint in every additional region is expensive and hard to sustain; reuse what already meets the requirements.</p></div>
+  </div>
+</div>
+</section>

@@ -1,0 +1,75 @@
+<section class="page" data-section="03 · Regional qualification">
+<style>
+  .f9 { position: relative; height: 164px; }
+  .f9 .lay { position: absolute; top: 0; height: 30px; border-bottom: 2px solid; display: flex; align-items: flex-end; padding-bottom: 5px; }
+  .f9 .lay span { font-size: 9.2px; letter-spacing: .08em; font-weight: 700; text-transform: uppercase; }
+  .f9 .col { position: absolute; top: 40px; height: 128px; border-radius: 10px; padding: 11px 12px; }
+  .f9 .col .ct { font-size: 12px; font-weight: 700; line-height: 1.25; }
+  .f9 .col .cs { font-size: 10.2px; line-height: 1.38; margin-top: 5px; }
+  .f9 .col svg.ic { width: 22px; height: 22px; margin-bottom: 6px; }
+  .f9 .inp { position: absolute; top: 182px; height: 56px; border-radius: 9px; padding: 8px 12px; background: #fff; border: 1px dashed var(--t300); }
+  .f9 .inp b { font-size: 11px; color: var(--t700); display: block; }
+  .f9 .inp span { font-size: 10px; color: var(--muted); line-height: 1.35; display: block; margin-top: 2px; }
+</style>
+<div class="inner">
+  <div class="dimnav">
+    <span class="done"><b>1</b>Business and geography</span><span class="done"><b>2</b>Data and compliance</span><span class="done"><b>3</b>Workload requirements</span><span class="done"><b>4</b>Regional capability</span><span class="on"><b>5</b>Platform and connectivity</span>
+  </div>
+
+  <div class="row mt16" style="gap:36px">
+    <div style="flex:1">
+      <div class="dimhead"><span class="dn" style="background:var(--b800)">5</span><h2 style="font-size:19.5px">Platform enablement and connectivity</h2></div>
+      <h3 class="mt12" style="color:var(--b700)">Platform enablement</h3>
+      <div class="question" style="font-size:13.4px;margin-top:3px">What platform capabilities must be enabled to support the identified workload requirements?</div>
+      <p style="font-size:12px">Determine which shared services and operational capabilities must be provided in the region, consumed from another region, or remain centralized. Consider identity and access, policy and security controls, deployment automation, monitoring and logging, backup and recovery, key and secret management, operational support, platform resiliency, ownership, and cost.</p>
+      <p style="font-size:12px">Qualifying a region does not require recreating the full platform footprint used elsewhere. Enable only the regional capabilities required by expected workloads, and document which services remain centralized or are consumed remotely. Define the conditions that would trigger future expansion.</p>
+      <div class="decision" style="margin-top:6px"><div class="dl">Decision</div><p style="font-size:12px">Define the most efficient platform capability set, where each capability will be provided, who will operate it, and what requirements would trigger future expansion.</p></div>
+      <div class="refs"><div class="rl">Reference link</div><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/design-areas">Azure landing zone design areas and conceptual architecture</a></div>
+    </div>
+    <div class="vr" style="flex:1">
+      <h3 style="color:var(--b700);margin-top:4px">Connectivity</h3>
+      <p class="mt4" style="font-size:12.2px">Connectivity planning separates three decisions: <strong>resilient hybrid connectivity</strong> to Azure, placement of <strong>geographic hubs and shared services</strong>, and <strong>application-specific connectivity</strong>. They influence one another, but each has different requirements and tradeoffs. Archetypes can inform the assessment, but the design should follow each workload’s actual dependencies and requirements.</p>
+      <ul class="bul" style="font-size:12px">
+        <li>For <strong>existing workloads</strong>, particularly those with legacy or hybrid dependencies, use validated application, network, datacenter, and shared-service dependencies to determine whether existing geographic hubs can continue to support them or additional regional capabilities are required.</li>
+        <li>For <strong>new workloads</strong>, derive connectivity needs from the intended architecture and known dependencies, using the archetypes as a planning aid. Reuse existing hubs, shared services, and platform capabilities where they meet those needs; a new region does not automatically require a new platform footprint.</li>
+        <li>Existing and new workloads follow the same rule: <strong>requirements and dependencies determine the regional connectivity profile</strong>. Validate workload-specific fit during onboarding and add regional capabilities only when justified.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="figure mt8" id="fig9">
+    <div class="dg f9">
+      <div class="lay" style="left:0;width:392px;border-color:var(--s600)"><span style="color:var(--s600)">1 · Resilient hybrid connectivity</span></div>
+      <div class="lay" style="left:410px;width:262px;border-color:var(--b600)"><span style="color:var(--b600)">2 · Geographic hubs and shared services</span></div>
+      <div class="lay" style="left:678px;width:262px;border-color:var(--t600)"><span style="color:var(--t600)">3 · Application-specific requirements</span></div>
+
+      <div class="col node" id="k1" style="left:0;width:164px;background:var(--s800);color:#fff">
+        <svg class="ic" style="color:#C9D4E2"><use href="#i-building"/></svg>
+        <div class="ct">On-premises datacenters and users</div>
+        <div class="cs" style="color:#C9D4E2">Locations, latency, bandwidth, and failure domains</div>
+      </div>
+      <div class="col node" id="k2" style="left:228px;width:164px;background:linear-gradient(135deg,var(--b700),var(--b600));color:#fff">
+        <svg class="ic" style="color:#DDEBF9"><use href="#i-network"/></svg>
+        <div class="ct">Azure backbone in the selected geography</div>
+        <div class="cs" style="color:#DDEBF9">Reached through existing or additional private paths</div>
+      </div>
+      <div class="col node" id="k3" style="left:410px;width:250px;background:var(--b50);border:1.2px solid var(--b200);color:var(--b800)">
+        <svg class="ic" style="color:var(--b600)"><use href="#i-hub"/></svg>
+        <div class="ct">Strategic geographic hubs and shared services</div>
+        <div class="cs" style="color:var(--muted)">Reused where they satisfy requirements; placement assessed from validated dependencies</div>
+      </div>
+      <div class="col node" id="k4" style="left:678px;width:262px;background:var(--t50);border:1.2px solid var(--t300);color:var(--t700)">
+        <svg class="ic" style="color:var(--t600)"><use href="#i-spoke"/></svg>
+        <div class="ct">Application landing zones</div>
+        <div class="cs" style="color:var(--muted)">Supported by the regional platform connectivity profile — selected by dependencies and requirements</div>
+      </div>
+      <div style="position:absolute;left:164px;width:64px;top:74px;text-align:center;font-size:8.8px;font-weight:700;color:var(--s600);line-height:1.2">ExpressRoute<br>or VPN</div>
+      <i class="ln" data-from="k1" data-to="k2" data-s="r" data-e="l" data-k="slate" data-both></i>
+      <i class="ln" data-from="k2" data-to="k3" data-s="r" data-e="l" data-k="blue"></i>
+      <i class="ln" data-from="k3" data-to="k4" data-s="r" data-e="l" data-k="blue" data-both></i>
+
+    </div>
+    <div class="figcap"><span class="fn">Figure 9</span><span class="ft"><b>Three connectivity planning layers</b> — related, but not the same design decision. The next page examines layer 1 and layers 2–3 separately.</span></div>
+  </div>
+</div>
+</section>

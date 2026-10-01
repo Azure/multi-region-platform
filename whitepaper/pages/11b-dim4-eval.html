@@ -1,0 +1,68 @@
+<section class="page" data-section="03 · Regional qualification">
+<style>
+  .pe { height: 250px; }
+  .pe .in { position: absolute; left: 0; top: 0; width: 250px; height: 250px; border-radius: 12px; background: var(--wash); padding: 14px 16px; }
+  .pe .in .cap { color: var(--b600); }
+  .pe .in ul { list-style: none; margin-top: 8px; }
+  .pe .in li { font-size: 11.2px; color: var(--ink); padding: 5px 0 5px 22px; position: relative; border-top: 1px solid var(--line); }
+  .pe .in li:first-child { border-top: 0; }
+  .pe .in li svg { position: absolute; left: 0; top: 6px; width: 14px; height: 14px; color: var(--b600); }
+  .pe .en { position: absolute; left: 320px; top: 55px; width: 200px; height: 140px; border-radius: 12px; background: var(--b600); color: #fff; padding: 16px; display: flex; flex-direction: column; justify-content: center; }
+  .pe .mr { position: absolute; left: 320px; top: 212px; width: 200px; height: 38px; border-radius: 10px; border: 1.3px dashed var(--s300); display: flex; align-items: center; justify-content: center; font-size: 10.6px; font-weight: 650; color: var(--s600); text-align: center; line-height: 1.25; }
+  .pe .out { position: absolute; left: 590px; width: 350px; height: 52px; border-radius: 10px; padding: 7px 14px; display: flex; flex-direction: column; justify-content: center; }
+  .pe .out b { font-size: 11.8px; }
+  .pe .out span { font-size: 10.2px; color: var(--muted); line-height: 1.3; }
+</style>
+<div class="inner">
+  <div class="dimnav">
+    <span class="done"><b>1</b>Business and geography</span><span class="done"><b>2</b>Data and compliance</span><span class="done"><b>3</b>Workload requirements</span><span class="on"><b>4</b>Regional capability</span><span><b>5</b>Platform and connectivity</span>
+  </div>
+
+  <div class="row mt20" style="gap:36px;align-items:flex-start">
+    <div style="flex:1">
+      <div class="eyebrow">Dimension 4 · continued</div>
+      <h2 class="title mt8" style="font-size:21px">Access, quota, and evidence-based evaluation</h2>
+      <p class="mt12" style="font-size:12px">Validate whether the intended subscription and offer types can deploy in the region, and identify any regional access restrictions or approvals that must be resolved before deployment. Assess required quota based on expected workload scale and identify any increases that may be required.</p>
+    </div>
+    <div class="note warm" style="flex:0 0 330px;padding:12px 15px;margin-top:6px">
+      <h4>Quota is not capacity</h4>
+      <p class="small" style="color:var(--ink);font-size:11.2px">Quota should not be treated as an indication or guarantee of Azure capacity, which remains subject to availability at deployment time.</p>
+    </div>
+  </div>
+
+  <div class="figure mt16" id="figEval">
+    <div class="fighead"><span class="fttl">Evaluate objective regional characteristics programmatically, where possible</span></div>
+    <div class="dg pe">
+      <div class="in node" id="pein"><div class="cap">Inputs</div>
+        <ul><li><svg><use href="#i-layers"/></svg>Required services and SKUs</li><li><svg><use href="#i-shield"/></svg>Zone requirements</li><li><svg><use href="#i-gauge"/></svg>Latency targets</li><li><svg><use href="#i-doc"/></svg>Pricing considerations</li><li><svg><use href="#i-network"/></svg>Expected scale</li><li><svg><use href="#i-lock"/></svg>Access eligibility and quota</li></ul></div>
+      <div class="en node" id="peen"><div class="cap" style="color:#BCD9F5">Regional assessment</div><div style="font-size:14px;font-weight:650;margin-top:6px;line-height:1.3">Candidate regions compared against workload requirements</div></div>
+      <div class="mr node" id="pemr">Manual review for what can’t be determined reliably</div>
+      <div class="out node" id="po1" style="top:0;background:var(--g100)"><b style="color:var(--g600)">Candidate regions</b><span>Regions that meet the identified requirements</span></div>
+      <div class="out node" id="po2" style="top:66px;background:#FBF4EE"><b style="color:var(--w600)">Unmet requirements</b><span>Gaps that exclude a region or need workload design</span></div>
+      <div class="out node" id="po3" style="top:132px;background:var(--b50)"><b style="color:var(--b700)">Conditional constraints</b><span>Conditions under which a region can be used</span></div>
+      <div class="out node" id="po4" style="top:198px;background:#fff;border:1.3px dashed var(--b500)"><b style="color:var(--b700)">Items requiring validation</b><span>Open questions, owners, and follow-up</span></div>
+      <i class="ln" data-from="pein" data-to="peen" data-s="r@0.5" data-e="l@0.5" data-k="blue"></i>
+      <i class="ln" data-from="peen" data-to="po1" data-s="r@0.2" data-e="l" data-k="green" data-mid=".45"></i>
+      <i class="ln" data-from="peen" data-to="po2" data-s="r@0.4" data-e="l" data-k="warm" data-mid=".45"></i>
+      <i class="ln" data-from="peen" data-to="po3" data-s="r@0.6" data-e="l" data-k="blue" data-mid=".45"></i>
+      <i class="ln" data-from="peen" data-to="po4" data-s="r@0.8" data-e="l" data-k="blue" data-mid=".45" data-dash="3 3"></i>
+      <i class="ln" data-from="pemr" data-to="peen" data-s="t" data-e="b" data-k="slate" data-dash="3 3"></i>
+    </div>
+    <div class="figcap"><span class="fn">Figure</span><span class="ft"><b>Programmatic regional evaluation.</b> Published and programmatically available information narrows the options; manual review covers considerations that cannot be determined reliably that way.</span></div>
+  </div>
+
+  <div class="row mt12" style="gap:28px;align-items:stretch">
+    <p style="flex:1;font-size:11.8px">If a requirement that could materially affect regional suitability is unresolved, retain the region as a <strong>conditional candidate</strong> until it is validated. Evaluate requirements that do not affect regional qualification later during workload onboarding or reassessment.</p>
+    <div class="decision" style="flex:1;margin-top:0"><div class="dl">Decision</div><p style="font-size:12px">Qualify candidate regions against identified workload requirements, documenting conditions, constraints, and unresolved validations while preserving viable options for future workloads.</p></div>
+  </div>
+
+  <ul class="refs" style="position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:2px 22px;border-top:1px solid var(--line-soft);padding-top:8px">
+    <div class="rl" style="width:100%">Reference links</div>
+    <li><a href="https://learn.microsoft.com/en-us/azure/reliability/regions-paired">Azure region pairs and nonpaired regions</a></li>
+    <li><a href="https://learn.microsoft.com/en-us/azure/reliability/regions-multiregion-support?tabs=built-in-multiregion-support">Azure services that support multiple regions</a></li>
+    <li><a href="https://learn.microsoft.com/en-us/azure/reliability/availability-zones-service-support">Azure services that support availability zones</a></li>
+    <li><a href="https://learn.microsoft.com/en-us/azure/reliability/availability-zones-zonal-resource-resiliency">Zonal resources and zone resiliency</a></li>
+    <li><a href="https://learn.microsoft.com/en-us/azure/reliability/availability-zones-enable-zone-resiliency">Enable zone resiliency for Azure workloads</a></li>
+  </ul>
+</div>
+</section>

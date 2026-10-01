@@ -1,0 +1,94 @@
+<section class="page" data-section="01 · Introduction">
+<style>
+  .jr { display: grid; grid-template-columns: minmax(0,1fr) 18px minmax(0,1fr) 18px minmax(0,1fr) 18px minmax(0,1fr); align-items: stretch; }
+  .jr .jcard { background: linear-gradient(180deg, #F3F8FD, #FFFFFF 60%); border: 1px solid var(--line-soft); border-radius: 12px; padding: 14px 15px 0; display: flex; flex-direction: column; }
+  .jr .sh { display: flex; gap: 10px; align-items: center; }
+  .jr .sn { width: 30px; height: 30px; border-radius: 50%; background: var(--b100); color: var(--b700); font-weight: 700; font-size: 14px; display: grid; place-items: center; flex: none; }
+  .jr .stt { font-size: 14px; font-weight: 700; color: var(--ink); line-height: 1.2; }
+  .jr .sd { font-size: 11.8px; color: var(--text); margin-top: 8px; line-height: 1.45; min-height: 70px; }
+  .jr .gl { height: 104px; display: grid; place-items: center; margin: 4px 0 2px; }
+  .jr ul { list-style: none; font-size: 11.4px; line-height: 1.4; }
+  .jr li { padding-left: 13px; position: relative; margin-bottom: 4px; }
+  .jr li::before { content: ""; position: absolute; left: 1px; top: .55em; width: 5px; height: 5px; border-radius: 50%; background: var(--b600); }
+  .jr .sf { margin: auto -15px 0; padding: 9px 15px; border-top: 1px solid var(--line-soft); font-size: 9.6px; letter-spacing: .12em; font-weight: 700; color: var(--b700); text-transform: uppercase; background: var(--b50); border-radius: 0 0 12px 12px; }
+  .jr .chev { display: grid; place-items: center; }
+  .axis { position: relative; height: 34px; margin-top: 14px; }
+  .axis .bar { position: absolute; left: 6px; right: 10px; top: 6px; height: 3px; border-radius: 2px; background: linear-gradient(90deg, var(--b300), var(--b600) 55%, var(--t600)); }
+  .axis .dot { position: absolute; left: 0; top: 1px; width: 13px; height: 13px; border-radius: 50%; background: var(--b300); }
+  .axis .hd { position: absolute; right: 0; top: 0; width: 0; height: 0; border-left: 11px solid var(--t600); border-top: 7.5px solid transparent; border-bottom: 7.5px solid transparent; }
+  .axis .l, .axis .r { position: absolute; top: 18px; font-size: 9.6px; letter-spacing: .16em; font-weight: 700; text-transform: uppercase; }
+  .axis .l { left: 0; color: var(--b600); } .axis .r { right: 0; color: var(--t600); }
+</style>
+<div class="inner">
+  <div class="row" style="gap:40px">
+    <div style="flex:1">
+      <div class="eyebrow">Progressive adoption journey</div>
+      <h2 class="title mt8">Establish regional options first — then use and expand them as workload needs justify</h2>
+    </div>
+    <div style="flex:1.25">
+      <p>Together, these constructs create governed regional options without predetermining workload placement. During onboarding, teams revalidate the region against the workload’s current dependencies and requirements, then decide whether to stay put, deploy net-new, relocate, recover elsewhere, or operate across regions.</p>
+      <p>Migration and resiliency remain workload-specific. The framework makes later regional adoption easier without trying to predict the final estate up front. The journey below shows the recommended sequence for adopting regional options. It is <strong>not a mandatory maturity path</strong>; platform capabilities and workload use evolve only when business and application requirements justify them.</p>
+    </div>
+  </div>
+
+  <div class="figure mt24" id="fig3">
+    <div class="jr">
+      <div class="jcard">
+        <div class="sh"><span class="sn">1</span><span class="stt">Extend the platform</span></div>
+        <div class="sd">Qualify additional regions and establish the lightest required platform capabilities.</div>
+        <div class="gl"><svg width="190" height="83" viewBox="0 0 170 74">
+          <g font-family="Pub Sans" font-size="9" font-weight="650" fill="#0B3A63">
+          <rect x="20" y="4" width="130" height="19" rx="5" fill="#fff" stroke="#BCD9F5"/><use href="#i-pin" x="26" y="7" width="13" height="13" color="#0F6CBD"/><text x="44" y="16.8">Region 1</text><circle cx="138" cy="13.5" r="4.5" fill="#107C41"/>
+          <rect x="20" y="28" width="130" height="19" rx="5" fill="#fff" stroke="#BCD9F5"/><use href="#i-pin" x="26" y="31" width="13" height="13" color="#0F6CBD"/><text x="44" y="40.8">Region 2</text><circle cx="138" cy="37.5" r="4.5" fill="#107C41"/>
+          <rect x="20" y="52" width="130" height="19" rx="5" fill="#fff" stroke="#0F6CBD" stroke-dasharray="3 2.5"/><use href="#i-pin" x="26" y="55" width="13" height="13" color="#0F6CBD"/><text x="44" y="64.8">Region 3</text><circle cx="138" cy="61.5" r="4" fill="#fff" stroke="#0F6CBD" stroke-dasharray="2 1.6"/>
+          </g></svg></div>
+        <ul><li>Assess regional suitability</li><li>Establish connectivity options</li><li>Enable foundational services</li></ul>
+        <div class="sf">Create regional options</div>
+      </div>
+      <div class="chev"><svg width="12" height="22"><path d="M2 2l8 9-8 9" fill="none" stroke="#8CC0EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="jcard">
+        <div class="sh"><span class="sn">2</span><span class="stt">Place net-new growth</span></div>
+        <div class="sd">Direct suitable new workloads and deployment waves to qualified regions.</div>
+        <div class="gl"><svg width="190" height="83" viewBox="0 0 170 74">
+          <rect x="72" y="0" width="26" height="22" rx="5" fill="#EDF8F6" stroke="#7CC9C3"/><use href="#i-app" x="76" y="2" width="18" height="18" color="#04807A"/>
+          <path d="M85 22v10M35 32h100M35 32v12M85 32v12M135 32v12" fill="none" stroke="#7CC9C3" stroke-width="1.4" stroke-dasharray="3 2.5"/>
+          <g color="#0F6CBD"><use href="#i-pin" x="24" y="44" width="22" height="22"/><use href="#i-pin" x="74" y="44" width="22" height="22"/><use href="#i-pin" x="124" y="44" width="22" height="22"/></g>
+          <rect x="18" y="68" width="34" height="4" rx="2" fill="#BCD9F5"/><rect x="68" y="68" width="34" height="4" rx="2" fill="#BCD9F5"/><rect x="118" y="68" width="34" height="4" rx="2" fill="#BCD9F5"/>
+          </svg></div>
+        <ul><li>Prioritize new workloads</li><li>Use qualified regions</li><li>Deploy in waves</li></ul>
+        <div class="sf">Grow with intent</div>
+      </div>
+      <div class="chev"><svg width="12" height="22"><path d="M2 2l8 9-8 9" fill="none" stroke="#8CC0EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="jcard">
+        <div class="sh"><span class="sn">3</span><span class="stt">Selectively rebalance</span></div>
+        <div class="sd">Redeploy movable workloads when doing so creates a clear portfolio benefit.</div>
+        <div class="gl"><svg width="190" height="83" viewBox="0 0 170 74">
+          <path d="M48 26 C70 4, 104 4, 122 24" fill="none" stroke="#0F6CBD" stroke-width="1.8"/><path d="M114 22l9 3 -1-9" fill="none" stroke="#0F6CBD" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <g color="#4A5B72"><use href="#i-pin" x="26" y="30" width="30" height="30"/></g>
+          <g color="#0F6CBD"><use href="#i-pin" x="114" y="30" width="30" height="30"/></g>
+          <rect x="18" y="64" width="46" height="5" rx="2.5" fill="#E8EDF3"/><rect x="106" y="64" width="46" height="5" rx="2.5" fill="#BCD9F5"/>
+          <rect x="66" y="40" width="36" height="14" rx="7" fill="#fff" stroke="#D3DBE4"/><text x="84" y="50" text-anchor="middle" font-family="Pub Sans" font-size="8" font-weight="700" fill="#5B6778">SELECT</text>
+          </svg></div>
+        <ul><li>Identify eligible workloads</li><li>Migrate or relocate selectively</li><li>Optimize cost, performance, or compliance</li></ul>
+        <div class="sf">Optimize where it makes sense</div>
+      </div>
+      <div class="chev"><svg width="12" height="22"><path d="M2 2l8 9-8 9" fill="none" stroke="#8CC0EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="jcard">
+        <div class="sh"><span class="sn">4</span><span class="stt">Improve workload resiliency</span></div>
+        <div class="sd">Use the regional foundation for active/passive recovery and, where justified, active-active architectures.</div>
+        <div class="gl"><svg width="190" height="83" viewBox="0 0 170 74">
+          <path d="M42 34 C60 12, 110 12, 128 34" fill="none" stroke="#8CC0EE" stroke-width="1.5" stroke-dasharray="3 3"/>
+          <g color="#0F6CBD"><use href="#i-pin" x="26" y="30" width="30" height="30"/></g>
+          <g color="#04807A"><use href="#i-pin" x="114" y="30" width="30" height="30"/></g>
+          <circle cx="85" cy="16" r="12" fill="#fff" stroke="#BCD9F5"/><g color="#0F6CBD"><use href="#i-shield" x="76" y="7" width="18" height="18"/></g>
+          <rect x="18" y="64" width="46" height="5" rx="2.5" fill="#BCD9F5"/><rect x="106" y="64" width="46" height="5" rx="2.5" fill="#D6EFEC"/>
+          </svg></div>
+        <ul><li>Implement recovery deployments</li><li>Adopt active-active where needed</li><li>Leverage regional capabilities</li></ul>
+        <div class="sf">Add resiliency when required</div>
+      </div>
+    </div>
+    <div class="axis"><span class="dot"></span><span class="bar"></span><span class="hd"></span><span class="l">Platform readiness</span><span class="r">Selective workload use</span></div>
+    <div class="figcap"><span class="fn">Figure 3</span><span class="ft"><b>A progressive journey for multi-region adoption.</b> Regional options are created first and consumed selectively. Each step is justified by business and application need; a platform can stop at any step that continues to meet requirements.</span></div>
+  </div>
+</div>
+</section>

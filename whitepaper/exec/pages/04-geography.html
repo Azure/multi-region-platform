@@ -1,0 +1,66 @@
+<section class="page" data-section="02 · Geography mindset">
+<style>
+  .geo { position: relative; border-radius: 16px; background: linear-gradient(180deg, var(--b50), #F7FBFE); border: 1.4px solid var(--b200); padding: 16px 20px 18px; }
+  .geo .gh { display: flex; justify-content: space-between; align-items: baseline; }
+  .geo .gh b { font-size: 14px; color: var(--b800); }
+  .geo .const { margin-top: 12px; border-radius: 11px; background: var(--s800); color: #fff; padding: 11px 16px; display: grid; grid-template-columns: 150px repeat(4, minmax(0,1fr)); gap: 12px; align-items: center; }
+  .geo .const .lb { font-size: 9.4px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: #A9C7E8; line-height: 1.35; }
+  .geo .const .it { display: flex; gap: 8px; align-items: center; font-size: 11.8px; font-weight: 650; line-height: 1.25; }
+  .geo .const .it svg { width: 17px; height: 17px; color: #50E6FF; flex: none; }
+  .geo .regs { margin-top: 14px; display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 10px; }
+  .geo .grg { border-radius: 10px; background: #fff; border: 1.2px dashed var(--b300); padding: 10px 11px; min-height: 118px; display: flex; flex-direction: column; }
+  .geo .grg.hub { border: 0; background: var(--b600); color: #fff; }
+  .geo .grg .grl { display: flex; gap: 5px; align-items: center; font-size: 10.4px; font-weight: 700; color: var(--b700); }
+  .geo .grg.hub .grl { color: #fff; }
+  .geo .grg .grl svg { width: 11px; height: 11px; }
+  .geo .grg .gpt { margin-top: auto; font-size: 10.8px; line-height: 1.3; color: var(--muted); }
+  .geo .grg.hub .gpt { color: #DDEBF9; }
+  .geo .grg .gtg { display: inline-block; margin-top: 6px; font-size: 9px; font-weight: 700; padding: 2px 7px; border-radius: 10px; background: var(--t50); color: var(--t700); align-self: flex-start; }
+  .geo .grg.hub .gtg { background: rgba(255,255,255,.18); color: #fff; }
+  .geo .grg.cand { background: transparent; }
+  .geo .gfoot { margin-top: 10px; display: flex; justify-content: space-between; font-size: 9.4px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; }
+</style>
+<div class="inner">
+  <div class="open-band" id="x2">
+    <div class="num">02</div>
+    <div style="flex:1">
+      <div class="eyebrow">From a region mindset to a geography mindset</div>
+      <h1 class="sec-title mt8" style="font-size:28px">Define the landing zone by geography, not by region</h1>
+    </div>
+    <p class="standfirst" style="width:300px;font-size:13.6px">Broaden the architectural boundary. The individual regions underneath become adaptable deployment locations.</p>
+  </div>
+
+  <div class="g2 mt12" style="gap:34px">
+    <p>Rather than defining the cloud architecture around a small number of permanently designated Azure regions, define the overarching landing zone in geographic terms — for a European estate, a boundary such as the EU Data Boundary, governed by common security, operational, and compliance policies across multiple regions.</p>
+    <p>At that level, policies, security controls, operational rigor, and compliance requirements are the constants. The Azure regions underneath become qualified deployment options, and regional implementation adapts only where business, workload, or regulatory requirements call for it.</p>
+  </div>
+
+  <div class="figure mt16" id="xfGeo">
+    <div class="geo">
+      <div class="gh"><b>Geographic landing zone · for example, Europe</b><span class="cap" style="color:var(--b600)">One governed operating model</span></div>
+      <div class="const">
+        <div class="lb">Constants across the geography</div>
+        <div class="it"><svg><use href="#i-doc"/></svg>Policies</div>
+        <div class="it"><svg><use href="#i-shield"/></svg>Security controls</div>
+        <div class="it"><svg><use href="#i-gear"/></svg>Operational rigor</div>
+        <div class="it"><svg><use href="#i-lock"/></svg>Compliance requirements</div>
+      </div>
+      <div class="regs">
+        <div class="grg hub"><div class="grl"><svg><use href="#i-pin"/></svg>Region A</div><span class="gtg">Strategic hub</span><div class="gpt">Full networking, security, management, and shared services</div></div>
+        <div class="grg hub" style="background:var(--b700)"><div class="grl"><svg><use href="#i-pin"/></svg>Region B</div><span class="gtg">Strategic hub</span><div class="gpt">Full networking, security, management, and shared services</div></div>
+        <div class="grg"><div class="grl"><svg><use href="#i-pin"/></svg>Region C</div><span class="gtg">Qualified</span><div class="gpt">Minimal regional hub for a portfolio</div></div>
+        <div class="grg"><div class="grl"><svg><use href="#i-pin"/></svg>Region D</div><span class="gtg">Qualified</span><div class="gpt">Spokes connected to a strategic hub</div></div>
+        <div class="grg"><div class="grl"><svg><use href="#i-pin"/></svg>Region E</div><span class="gtg">Qualified</span><div class="gpt">Self-contained AI workloads</div></div>
+        <div class="grg cand"><div class="grl"><svg><use href="#i-pin"/></svg>Region F</div><span class="gtg" style="background:var(--b50);color:var(--b700)">Candidate</span><div class="gpt">Assessed; not yet enabled</div></div>
+      </div>
+      <div class="gfoot"><span style="color:var(--s800)">Consistent: governance, security, compliance, operations</span><span style="color:var(--t600)">Adaptable: which regions each application consumes</span></div>
+    </div>
+    <div class="figcap"><span class="fn">Figure</span><span class="ft"><b>A geographic landing zone.</b> The operating model is standardized across the geography; regions underneath are adaptable deployment locations with only the capabilities their workloads need. Region names and roles are illustrative.</span></div>
+  </div>
+
+  <div style="position:absolute;left:0;right:0;bottom:0;border-radius:14px;background:linear-gradient(120deg,var(--b800),var(--b600));padding:20px 28px;display:flex;align-items:center;gap:22px">
+    <svg style="width:28px;height:28px;color:#50E6FF;flex:none"><use href="#i-layers"/></svg>
+    <p style="font-size:21px;line-height:1.3;font-weight:300;color:#fff"><b style="font-weight:650">Standardize the operating model,</b> not necessarily the regional footprint.</p>
+  </div>
+</div>
+</section>

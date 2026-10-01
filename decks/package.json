@@ -1,0 +1,15 @@
+{
+  "name": "multi-region-platform-decks",
+  "private": true,
+  "description": "PowerPoint decks for the Adaptable Multi-Region Azure Platform (full and executive).",
+  "scripts": {
+    "build": "node build_full.js && node build_exec.js",
+    "icons": "node icons.js"
+  },
+  "dependencies": {
+    "pptxgenjs": "^4.0.1"
+  },
+  "optionalDependencies": {
+    "sharp": "^0.33.0"
+  }
+}

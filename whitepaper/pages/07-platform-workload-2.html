@@ -1,0 +1,47 @@
+<section class="page" data-section="02 · Platform and workload">
+<style>
+  .pw-col h3 { display: flex; align-items: center; gap: 9px; margin-bottom: 6px; }
+  .pw-col h3 i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+  table.cmp th.pl { color: var(--b700); background: var(--b50); border-radius: 8px 0 0 0; }
+  table.cmp th.wk { color: var(--t700); background: var(--t50); border-radius: 0 8px 0 0; }
+  table.cmp th.blank { background: transparent; }
+  table.cmp td.pl { background: #FAFCFE; }
+  table.cmp td.wk { background: #FAFDFC; }
+  table.cmp tr:last-child td { border-bottom: 1px solid var(--line-soft); }
+</style>
+<div class="inner">
+  <div class="g2" style="gap:36px">
+    <div class="pw-col">
+      <h3><i style="background:var(--b600)"></i>A multi-region platform</h3>
+      <p>Qualifies additional regions through the existing landing-zone operating model, approved connectivity patterns, deployment automation, and quota planning. It does not require a separate connectivity landing zone or identical shared services in every region; workload requirements determine the cross-region design.</p>
+    </div>
+    <div class="pw-col">
+      <h3><i style="background:var(--t600)"></i>A multi-region workload</h3>
+      <p>Targets the requirements of a specific workload or component. Depending on workload requirements and regional suitability, the outcome might be net-new placement in another region, selective relocation, active/passive recovery, active-active distribution, or continued operation in one region.</p>
+    </div>
+  </div>
+
+  <div class="mt20" id="tbl1">
+    <div class="fighead"><span class="fttl">Two layers compared</span><span class="fn">Table 1</span></div>
+    <table class="pub cmp">
+      <thead><tr><th class="blank" style="width:150px"></th><th class="pl">Multi-region platform</th><th class="wk">Multi-region workload</th></tr></thead>
+      <tbody>
+        <tr><td class="rh">Purpose</td><td class="pl">Enable placement flexibility across qualified Azure regions</td><td class="wk">Meet <strong>workload-specific objectives</strong> and requirements such as availability, disaster recovery, user proximity, or regulatory requirements</td></tr>
+        <tr><td class="rh">Focus</td><td class="pl">Regional readiness and consistency of shared platform capabilities</td><td class="wk">Application architecture, data, dependencies, traffic, availability, and recovery</td></tr>
+        <tr><td class="rh">Design driven by</td><td class="pl">The needs of the portfolio of workloads the platform is expected to support</td><td class="wk">The specific workload’s requirements, such as availability, resiliency, RTO/RPO, latency, or data requirements</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="row mt24" style="gap:36px;align-items:stretch">
+    <div style="flex:1.35;background:linear-gradient(135deg,var(--b700),var(--b600));border-radius:12px;padding:20px 24px;color:#fff">
+      <div class="cap" style="color:#BCD9F5">Default posture</div>
+      <p style="font-size:17px;line-height:1.42;font-weight:500;margin-top:8px;color:#fff">Reuse the existing Azure landing-zone operating model by default. Extend regional policy parameters, connectivity, shared services, automation, and operations <span style="color:#BFE6F2">only where documented workload requirements justify them.</span></p>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center">
+      <p>Multi-region platform readiness establishes the shared capabilities needed to support workloads across selected Azure regions.</p>
+      <p>Regional suitability depends on service and SKU fit, dependencies, quota, latency, cost, and data constraints; <strong>actual capacity remains a deployment-time condition</strong>.</p>
+    </div>
+  </div>
+</div>
+</section>

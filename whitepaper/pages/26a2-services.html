@@ -1,0 +1,56 @@
+<section class="page" data-section="Appendix A · Regional dependencies and resiliency">
+<style>
+  .ax-sv { width: calc(100% + 24px); border-collapse: separate; border-spacing: 12px 0; margin: 0 -12px; }
+  .ax-sv td { vertical-align: top; }
+  .ax-sv .hd { border-radius: 12px 12px 0 0; background: var(--b50); padding: 11px 16px; }
+  .ax-sv .hd .w { display: flex; gap: 12px; align-items: center; }
+  .ax-sv .hd .i { width: 40px; height: 40px; border-radius: 10px; background: var(--b600); display: grid; place-items: center; flex: none; }
+  .ax-sv .hd .i svg { width: 22px; height: 22px; color: #fff; }
+  .ax-sv .hd b { font-size: 17px; color: var(--ink); font-weight: 650; }
+  .ax-sv .cl { padding: 13px 16px; border-left: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft); }
+  .ax-sv .cl.last { border-bottom: 1px solid var(--line-soft); border-radius: 0 0 12px 12px; }
+  .ax-sv .cl .k { font-size: 9.2px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
+  .ax-sv .cl ul { list-style: none; }
+  .ax-sv .cl li { position: relative; padding-left: 12px; font-size: 11.2px; line-height: 1.44; margin-bottom: 5px; color: var(--text); }
+  .ax-sv .cl li::before { content: ""; position: absolute; left: 1px; top: .6em; width: 4px; height: 4px; border-radius: 50%; background: var(--b500); }
+  .ax-sv .cl.rc li::before { background: var(--t600); }
+  .ax-sv .cl.rc { background: #FBFDFC; }
+  .ax-sv .cl.tk { background: var(--wash); }
+  .ax-sv .cl.tk p { font-size: 11.8px; line-height: 1.45; color: var(--ink); font-weight: 600; }
+</style>
+<div class="inner">
+  <div class="row" style="gap:40px;align-items:flex-end">
+    <div style="flex:1.2">
+      <div class="eyebrow" style="color:var(--s600)">Appendix A · Service-level detail</div>
+      <h2 class="title mt8">Three services that need special attention</h2>
+    </div>
+    <p class="muted" style="flex:1;font-size:12.2px">These three services illustrate why regional qualification cannot stop at “the service exists in both regions.” Cross-region behavior can differ significantly by service and regional combination.</p>
+  </div>
+
+  <div class="figure mt16" id="figServices">
+    <table class="ax-sv">
+      <tr>
+        <td><div class="hd"><div class="w"><span class="i"><svg><use href="#i-data"/></svg></span><b>Storage</b></div></div></td>
+        <td><div class="hd"><div class="w"><span class="i"><svg><use href="#i-loop"/></svg></span><b>Backup and restore</b></div></div></td>
+        <td><div class="hd"><div class="w"><span class="i"><svg><use href="#i-lock"/></svg></span><b>Key Vault</b></div></div></td>
+      </tr>
+      <tr>
+        <td class="cl"><div class="k" style="color:var(--b600)">Paired region</div><ul><li>GRS and GZRS replicate data asynchronously to the service-defined secondary region.</li><li>Built-in geo-redundancy and failover behavior must be evaluated separately from workload-level recoverability; customer-managed failover is available, Microsoft-managed failover is a last resort.</li></ul></td>
+        <td class="cl"><div class="k" style="color:var(--b600)">Paired region</div><ul><li>Cross Region Restore uses the paired region for supported data sources when vault replication and configuration are enabled.</li><li>Support and behavior differ by backup workload and configuration.</li></ul></td>
+        <td class="cl"><div class="k" style="color:var(--b600)">Paired region</div><ul><li>In most paired regions, vault contents replicate asynchronously to the paired region.</li><li>Failover is Microsoft-initiated, best effort, and can take hours; afterward the vault operates with restrictions, including read-only management.</li></ul></td>
+      </tr>
+      <tr>
+        <td class="cl rc"><div class="k" style="color:var(--t600)">Region of choice</div><ul><li>Object replication asynchronously replicates <strong>block blobs</strong> between selected accounts and regions — not append or page blobs, and not accounts with a hierarchical namespace (Data Lake Storage).</li><li>Requires change feed on the source and blob versioning on both; at most two destination accounts.</li><li>Shifts monitoring and failover to you; otherwise, application-level copy.</li></ul></td>
+        <td class="cl rc"><div class="k" style="color:var(--t600)">Region of choice</div><ul><li>Determine which backup technologies and restore targets support the intended recovery region.</li><li>Azure Site Recovery supports Azure VM disaster recovery between Azure regions, subject to its support matrix; restricted-access regions can require explicit access approval.</li><li>Place backup vaults deliberately for the recovery region.</li></ul></td>
+        <td class="cl rc"><div class="k" style="color:var(--t600)">Region of choice</div><ul><li>No Microsoft-managed replication or failover in nonpaired regions — nor in Brazil South, Brazil Southeast, or West US 3.</li><li>Use separate regional vaults or another supported custom multi-region design; keys, secrets, and certificates each need their own recovery analysis.</li><li>Managed HSM offers optional two-region replication for keys, both regions active, with its own regional support and cost.</li></ul></td>
+      </tr>
+      <tr>
+        <td class="cl tk last"><p>Replicated data does not by itself make the workload recoverable. Validate the application recovery path end to end.</p></td>
+        <td class="cl tk last"><p>Demonstrate RTO and RPO through recovery testing, not configuration alone.</p></td>
+        <td class="cl tk last"><p>Often a runtime dependency: data can be recoverable while the application still cannot start. See the next two pages.</p></td>
+      </tr>
+    </table>
+    <div class="figcap"><span class="fn">Figure</span><span class="ft"><b>Service behavior differs by regional combination.</b> Built-in replication for all three services targets the paired region; region-of-choice designs need explicit replication, restore, and secret-management patterns. Confirm current capabilities on Microsoft Learn at decision time.</span></div>
+  </div>
+</div>
+</section>

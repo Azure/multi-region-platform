@@ -1,0 +1,84 @@
+<section class="page" data-section="Executive summary">
+<style>
+  .es { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px 22px; }
+  .es .c { border-radius: 12px; padding: 16px 18px 16px; background: var(--wash); position: relative; }
+  .es .c .ic { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; margin-bottom: 10px; }
+  .es .c .ic svg { width: 19px; height: 19px; color: #fff; }
+  .es .c h3 { font-size: 14px; margin-bottom: 6px; }
+  .es .c p { font-size: 11.6px; line-height: 1.52; margin-bottom: 6px; }
+  .es .c p:last-child { margin-bottom: 0; }
+</style>
+<div class="inner">
+  <div class="row" id="sexec" style="gap:40px;align-items:flex-end">
+    <div style="flex:1.15">
+      <div class="eyebrow">Executive summary</div>
+      <h1 class="sec-title mt8" style="font-size:29px">Make regional choice a governed platform capability — not a one-time prediction</h1>
+    </div>
+    <div style="flex:1">
+      <p class="standfirst" style="font-size:14px">Many Azure estates are designed around a fixed primary and disaster-recovery region pair. This paper describes a different approach: extend Azure landing-zone principles so that additional regions become <strong>qualified options that workloads can use selectively</strong>, without creating separate governance models or reproducing an identical platform footprint in every region.</p>
+    </div>
+  </div>
+
+  <div class="pull mt20" style="max-width:860px">
+    <p style="font-size:16px">The objective is not to prebuild every capability everywhere. It is to establish a consistent operating model, qualify regional options against known business and workload requirements, and enable only the platform capabilities that each region needs.</p>
+  </div>
+
+  <div class="es mt24">
+    <div class="c"><span class="ic" style="background:var(--b600)"><svg><use href="#i-layers"/></svg></span>
+      <h3>Extend, do not replicate</h3>
+      <p>The landing-zone operating model stays consistent across the Azure estate. New regions add only the <strong>most efficient platform capabilities</strong> required by the workloads expected to use them, rather than replicating an existing regional footprint.</p></div>
+    <div class="c"><span class="ic" style="background:var(--b700)"><svg><use href="#i-search"/></svg></span>
+      <h3>Qualify regions against defined requirements</h3>
+      <p>Regional qualification evaluates business and geographic needs, data and compliance constraints, workload requirements and dependencies, regional capabilities, and platform enablement considerations. A region can remain excluded, conditional, or qualified based on documented evidence, constraints, owners, and revalidation triggers.</p>
+      <p>Qualification creates a <strong>governed regional option</strong>; it does not permanently approve the region for every workload.</p></div>
+    <div class="c" style="background:var(--t50)"><span class="ic" style="background:var(--t600)"><svg><use href="#i-app"/></svg></span>
+      <h3>Plan by workload requirements, not individual applications</h3>
+      <p>Application Landing Zone archetypes provide a planning abstraction for recurring connectivity and dependency requirements. They help platform teams anticipate what future workloads may require without attempting to predict every application in advance.</p>
+      <p>Archetypes describe <strong>what applications require</strong>. Regional connectivity profiles describe <strong>what the platform provides</strong>. The relationship is intentionally not one-to-one.</p></div>
+  </div>
+</div>
+</section>
+
+<section class="page" data-section="Executive summary">
+<style>
+  .es2 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px 22px; }
+  .es2 .c { border-radius: 12px; padding: 16px 18px 16px; background: var(--wash); }
+  .es2 .c .ic { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; margin-bottom: 10px; }
+  .es2 .c .ic svg { width: 19px; height: 19px; color: #fff; }
+  .es2 .c h3 { font-size: 14px; margin-bottom: 6px; }
+  .es2 .c p { font-size: 11.6px; line-height: 1.52; margin-bottom: 6px; }
+  .es2 .c p:last-child { margin-bottom: 0; }
+</style>
+<div class="inner">
+  <div class="eyebrow">Executive summary · continued</div>
+  <div class="es2 mt16">
+    <div class="c"><span class="ic" style="background:#8661C5"><svg><use href="#i-hub"/></svg></span>
+      <h3>Right-size regional connectivity</h3>
+      <p>Regional Platform Connectivity Profiles range from <strong>Disconnected Spokes</strong> through <strong>Remote Hub Connected</strong> and <strong>Minimal Regional Hub</strong> to a <strong>Full Regional Hub</strong>.</p>
+      <p>These profiles are not maturity stages. Select the <strong>most efficient profile</strong> for current workload and platform requirements. Add local capabilities only when a measurable need for connectivity, latency, resiliency, security, data handling, or operations justifies them.</p>
+      <p>Strategic geographic hubs and shared services can continue to support other regions where dependencies and service characteristics permit, avoiding unnecessary duplication.</p></div>
+    <div class="c" style="background:var(--t50)"><span class="ic" style="background:var(--t700)"><svg><use href="#i-route"/></svg></span>
+      <h3>Keep platform readiness and workload placement separate</h3>
+      <p>Regional qualification determines whether a region can become a viable platform option. Actual workload placement occurs later, when a specific workload and its current requirements are known.</p>
+      <p>During onboarding, validate current Azure service and SKU availability, regional access, quota, dependencies, connectivity, and resiliency requirements. Placement, relocation, recovery, and multi-region operation remain <strong>workload-specific decisions</strong>.</p>
+      <p>New workload findings can also feed back into regional qualification and trigger platform expansion, additional validation, or reassessment.</p></div>
+    <div class="c"><span class="ic" style="background:var(--s800)"><svg><use href="#i-shield"/></svg></span>
+      <h3>Keep the operating model consistent while allowing regional adaptation</h3>
+      <p>The operating model stays consistent across regions; implementation can vary where business, workload, or regulatory requirements call for it.</p>
+      <p>Workload placement, connectivity profiles, local shared-service footprints, Azure services and SKUs, resiliency choices, and other regional parameters can adapt to current requirements.</p>
+      <p><strong>Region-agnostic does not mean region-random.</strong> Regional choice operates within a governed framework of qualified options, documented constraints, and current evidence.</p></div>
+  </div>
+
+  <div style="position:absolute;left:0;right:0;bottom:0;height:128px;border-radius:16px;overflow:hidden">
+    <svg width="940" height="128" viewBox="0 0 940 128" style="position:absolute;left:0;top:0">
+      {{PY:art.defs('es')}}
+      {{PY:art.background('es', 0, 0, 940, 128)}}
+      <path d="M560,120 C680,70 800,126 960,46" fill="none" stroke="url(#esswoosh)" stroke-width="2"/>
+    </svg>
+    <div style="position:absolute;left:30px;right:120px;top:0;bottom:0;display:flex;align-items:center;gap:26px">
+      <div class="cap" style="color:#BCD9F5;white-space:nowrap">The goal</div>
+      <p style="font-size:20px;line-height:1.3;font-weight:300;color:#fff">The goal is not to select the perfect two regions. <b style="font-weight:650">It is to make additional regions significantly easier to adopt when business and workload requirements justify them.</b></p>
+    </div>
+  </div>
+</div>
+</section>
