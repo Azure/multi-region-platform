@@ -27,7 +27,7 @@ The objective is not to prebuild every capability everywhere. It is to establish
    :::column:::
       **Plan by workload requirements, not individual applications**
 
-      Application Landing Zone archetypes provide a planning abstraction for recurring connectivity and dependency requirements. Archetypes describe what applications require. Regional connectivity profiles describe what the platform provides.
+      Workload Landing Zone archetypes provide a planning abstraction for recurring connectivity and dependency requirements. Archetypes describe what applications require. Regional connectivity profiles describe what the platform provides.
    :::column-end:::
 :::row-end:::
 :::row:::
@@ -81,10 +81,10 @@ Multi-region platform work rarely starts as an architecture initiative. It usual
 Because platform teams cannot predict every future workload, this guidance uses three planning constructs.
 
 - The **[Regional Qualification and Enablement Framework](./regional-qualification.md)** provides a repeatable way to assess candidate regions. It evaluates business and geographic need, data and compliance boundaries, workload requirements and dependencies, regional capabilities, and required platform enablement. The result is an excluded, candidate, conditional, or qualified regional option, backed by current evidence, known constraints, ownership, and review triggers.
-- **[Application Landing Zone archetypes](./application-landing-zone-archetypes.md)** group recurring dependency and connectivity characteristics so platform teams can plan before every workload is known. The four archetypes are Hybrid-Connected Applications, Isolated Cloud-Native or AI Applications, Connected Cloud-Native or AI Applications, and Interconnected Application Portfolios. Use known requirements for advance planning; defer implementation details that do not affect regional qualification to workload onboarding.
+- **[Workload Landing Zone archetypes](./application-landing-zone-archetypes.md)** group recurring dependency and connectivity characteristics so platform teams can plan before every workload is known. The four archetypes are Hybrid-Connected Applications, Isolated Cloud-Native or AI Applications, Connected Cloud-Native or AI Applications, and Interconnected Application Portfolios. Use known requirements for advance planning; defer implementation details that do not affect regional qualification to workload onboarding.
 - **[Regional Platform Connectivity Profiles](./connectivity-profiles.md)** describe what the platform provides. A region can use Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, or Full Regional Hub. The most efficient profile can remain the target as long as it continues to satisfy requirements; add local capabilities only when those requirements change. Hybrid connectivity and regional workload connectivity are related but separate decisions, so adopting another region does not by itself require duplicating the existing connectivity platform.
 
-:::image type="content" source="./media/three-planning-constructs.png" alt-text="Diagram showing the three constructs — Regional Qualification and Enablement Framework, Application Landing Zone archetypes, and Regional Platform Connectivity Profiles — converging into governed regional options, which workloads revalidate at onboarding to remain in place, deploy net-new, relocate, recover elsewhere, or operate across active regions." lightbox="./media/three-planning-constructs.png":::
+:::image type="content" source="./media/three-planning-constructs.png" alt-text="Diagram showing the three constructs — Regional Qualification and Enablement Framework, Workload Landing Zone archetypes, and Regional Platform Connectivity Profiles — converging into governed regional options, which workloads revalidate at onboarding to remain in place, deploy net-new, relocate, recover elsewhere, or operate across active regions." lightbox="./media/three-planning-constructs.png":::
 
 *How the three constructs connect. Archetypes (application requirements) and connectivity profiles (platform capability) stay distinct; together with regional qualification they produce governed options.*
 
@@ -162,7 +162,7 @@ No organization can predict which Azure regions will offer the best mix of servi
 
 - **Consistent operating model:** Keep the landing-zone guardrails and operating standards stable across the Azure estate.
 - **Adaptable regional platform:** Strategic geographic hubs, resilient hybrid connectivity, and regional connectivity profiles allow capabilities to be distributed according to workload requirements without requiring an identical platform footprint in every region.
-- **Workload-led placement:** Qualified regional options, Application Landing Zone archetypes, and current workload requirements allow applications to use the regional and platform capabilities appropriate to their needs.
+- **Workload-led placement:** Qualified regional options, Workload Landing Zone archetypes, and current workload requirements allow applications to use the regional and platform capabilities appropriate to their needs.
 
 This framework extends Azure landing-zone principles rather than replacing them. Regional adoption, workload placement, platform expansion, and resiliency can evolve without redesigning the broader platform for every new region.
 

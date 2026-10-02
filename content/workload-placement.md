@@ -20,13 +20,13 @@ Placement ends in one of these outcomes: place the workload in a qualified regio
 For each workload or related application portfolio:
 
 1. **Define the placement objective.** Is the workload new, staying where it is, or moving or expanding to another region?
-1. **Identify the Application Landing Zone archetype.** Assess the workload's connectivity, shared-service, data, security, operational, and dependency characteristics and pick the closest-fitting archetype. Record any material requirements it doesn't cover as explicit additions to it.
+1. **Identify the Workload Landing Zone archetype.** Assess the workload's connectivity, shared-service, data, security, operational, and dependency characteristics and pick the closest-fitting archetype. Record any material requirements it doesn't cover as explicit additions to it.
 1. **Establish mandatory requirements.** Confirm data-location restrictions, required Azure services and features, availability-zone requirements, latency thresholds, expected scale, connectivity, resiliency requirements, and critical dependencies.
 1. **Review qualified regional options.** Consider regions previously assessed against the relevant workload requirements. Review their supported capabilities, connectivity profiles, known constraints, when each was last assessed, and any outstanding validations.
 1. **Validate current regional suitability.** Qualification was an earlier planning assessment, so re-check the target region before onboarding, whether the workload is new or moving. Confirm that the services, SKUs, AI models, regional access, quota, and dependencies it needs are available now. Quota allows deployment but doesn't guarantee capacity. If the workload needs guaranteed capacity, decide here whether to reserve it.
 1. **Select the supporting connectivity profile.** Confirm that an available regional connectivity profile satisfies the workload's requirements. If additional platform capabilities are required, treat their introduction as a separate governed platform decision rather than allowing the workload team to redefine the regional profile independently.
 1. **Determine the resiliency role separately.** Define whether the region will support the workload as its primary location, recovery location, or as part of a multi-region active deployment. Apply workload-specific availability, RTO, RPO, replication, data-consistency, and failover requirements.
-1. **Record and govern the decision.** Document the selected region, Application Landing Zone archetype, connectivity profile, placement and resiliency outcomes, assumptions, constraints, owners, and revalidation triggers. Feed newly identified regional requirements or platform gaps back into the regional qualification process.
+1. **Record and govern the decision.** Document the selected region, Workload Landing Zone archetype, connectivity profile, placement and resiliency outcomes, assumptions, constraints, owners, and revalidation triggers. Feed newly identified regional requirements or platform gaps back into the regional qualification process.
 
 ## Qualification versus placement
 

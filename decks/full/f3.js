@@ -15,7 +15,7 @@ module.exports = (pres, L) => {
   // ───────────────────────── 17 · Archetypes
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, '04 · What applications require', 'Application Landing Zone Archetypes', { ec: C.t600, tw: 8, lede: 'A planning abstraction for grouping recurring connectivity and dependency requirements. It does not replace the Azure landing-zone hierarchy or prescribe a specific connectivity profile.', lx: 8.6, lw: 4.13 });
+    L.header(s, '04 · What applications require', 'Workload Landing Zone Archetypes', { ec: C.t600, tw: 8, lede: 'A planning abstraction for grouping recurring connectivity and dependency requirements. It does not replace the Azure landing-zone hierarchy or prescribe a specific connectivity profile.', lx: 8.6, lw: 4.13 });
     const A = [
       ['building', 'Hybrid-Connected Applications', 'Significant dependencies on on-premises environments, enterprise networks, or centralized shared services that require persistent private connectivity.', ['Remote hub', 'Minimal hub', 'Full hub'], 'Profile set by dependency latency, resiliency, regulation, and operations. Common in migrations.'],
       ['layers', 'Isolated Cloud-Native or AI Applications', 'Self-contained workloads that can operate without persistent private connectivity to enterprise or centralized dependencies.', ['Disconnected spokes', 'Connected, where justified'], 'Flexible placement across regions; connected only where platform requirements justify it.'],
@@ -36,7 +36,7 @@ module.exports = (pres, L) => {
       L.txt(s, drv, x + 0.2, y + 3.37 + (cy - (y + 2.97)), w - 0.4, 0.75, { fontSize: 9.5, color: C.muted });
     });
     L.caption(s, 'Figure', 'Grouped by the platform connectivity and dependency capabilities each requires. Assign the closest-fitting archetype and record material requirements that fall outside it.', 0.6, 6.5, 12.1);
-    L.footer(s, 0, '04 · APPLICATION LANDING ZONE ARCHETYPES');
+    L.footer(s, 0, '04 · Workload Landing Zone ARCHETYPES');
     s.addNotes('Use known workload requirements and application portfolios to anticipate the capabilities that candidate regions may need to support. Where future requirements are not yet sufficiently defined, use the archetypes to establish planning guardrails without unnecessarily constraining future placement decisions. Archetypes describe what applications require; connectivity profiles describe what the platform provides. The mapping is not one-to-one. Use archetypes during regional qualification to surface recurring requirements; placement happens later.');
   }
 
@@ -80,7 +80,7 @@ module.exports = (pres, L) => {
     L.oval(s, x0 + 1.5, ly + 0.04, 0.16, { fill: 'FFFFFF', line: C.b500, lw: 1.75 }); L.txt(s, 'When specific requirements justify it', x0 + 1.74, ly, 3, 0.24, { fontSize: 9.5, bold: true, color: C.muted, valign: 'middle' });
     L.box(s, x0 + 4.55, ly + 0.115, 0.2, 0.015, { fill: C.line, r: 0 }); L.txt(s, 'Not indicated as typical', x0 + 4.85, ly, 2.5, 0.24, { fontSize: 9.5, color: C.muted, valign: 'middle' });
     L.caption(s, 'Figure', 'Many-to-many. Where significant east-west traffic exists, evaluate direct spoke-to-spoke connectivity or a regional hub rather than routing through a remote hub.', 0.6, 6.55, 12.1);
-    L.footer(s, 0, '04 · APPLICATION LANDING ZONE ARCHETYPES');
+    L.footer(s, 0, '04 · Workload Landing Zone ARCHETYPES');
     s.addNotes('Each row is a set of options, not an assignment. Interconnected portfolios: direct spoke-to-spoke connectivity may suit a few tightly coupled workloads; a Minimal or Full Regional Hub fits broader routing, inspection, resiliency, or operational needs. Because a portfolio’s combined dependencies can require capabilities beyond any single application, select its profile from aggregate requirements — not from a single workload.');
   }
 

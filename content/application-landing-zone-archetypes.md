@@ -1,19 +1,17 @@
 ---
-title: Application Landing Zone archetypes
+title: Workload Landing Zone archetypes
 description: Four archetypes that group recurring application connectivity and dependency requirements, so platform teams can plan regional capability before every workload is known.
 ms.date: 09/30/2026
 ms.topic: conceptual
 ---
 
-# Application Landing Zone archetypes
+# Workload Landing Zone archetypes
 
-**Application Landing Zone archetypes provide a planning abstraction for grouping recurring application connectivity and dependency requirements.** In this guidance, an Application Landing Zone archetype describes what an application or application portfolio requires from the platform; it does not replace the existing Azure landing-zone hierarchy or prescribe a specific regional connectivity profile.
+Application Landing Zone archetypes are a planning abstraction that groups recurring application connectivity and dependency requirements. An archetype describes what an application or application portfolio requires from the platform. It doesn't replace the existing Azure landing-zone hierarchy.
 
-Use known workload requirements and application portfolios to anticipate the capabilities that candidate regions may need to support. Where future workload requirements are not yet sufficiently defined, use the archetypes to establish planning guardrails without unnecessarily constraining future placement decisions.
+Archetypes describe what applications require; connectivity profiles describe what the platform provides. The mapping isn't one-to-one: one archetype can use different profiles, and one profile can support multiple archetypes. Assign each workload the closest-fitting archetype and record any material requirements that fall outside it. Portfolio-level dependencies can also affect the platform capabilities needed across several workloads.
 
-Archetypes describe what applications require; connectivity profiles describe what the platform provides. The mapping is not one-to-one. One archetype can use different profiles, and one profile can support multiple archetypes. For planning, assign the closest-fitting archetype and record material requirements that fall outside it. Portfolio-level dependencies can also affect the platform capabilities needed across several workloads.
-
-Use archetypes during regional qualification to surface recurring requirements that a candidate region may need to support. Placement still happens later, when the workload's current requirements, regional capabilities, and platform readiness are known.
+Use archetypes during regional qualification to anticipate the capabilities a candidate region may need to support. Where future workload requirements aren't yet defined, they give you planning guardrails without constraining later placement, which happens once the workload's current requirements, regional capabilities, and platform readiness are known.
 
 :::image type="content" source="./media/application-landing-zone-archetypes.png" alt-text="Four archetype cards — hybrid-connected applications, isolated cloud-native or AI applications, connected cloud-native or AI applications, and interconnected application portfolios — each with its defining characteristics and typical connectivity profiles." lightbox="./media/application-landing-zone-archetypes.png":::
 

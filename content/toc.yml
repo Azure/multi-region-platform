@@ -23,7 +23,7 @@ items:
 - name: 2. Platform architecture
   href: platform-architecture.md
   items:
-  - name: Application landing zone archetypes
+  - name: Workload Landing Zone archetypes
     href: application-landing-zone-archetypes.md
   - name: Regional platform connectivity profiles
     href: connectivity-profiles.md

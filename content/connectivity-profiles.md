@@ -7,13 +7,13 @@ ms.topic: conceptual
 
 # Regional platform connectivity profiles
 
-Enabling an additional Azure region does not require changing or duplicating the full platform footprint of an existing geographic landing zone. Instead, establish the most efficient regional platform connectivity profile that supports the workload requirements expected to consume the region.
+Enabling an additional Azure region doesn't require changing or duplicating the full platform footprint of an existing geographic hub. Instead, choose the most efficient regional connectivity profile that supports the workloads expected to use the region.
 
-Connectivity profiles describe platform capabilities, not workload designs. The mapping to Application Landing Zone archetypes is not one-to-one; the right profile depends on actual dependencies, latency, resiliency, security, data, and operational requirements.
+An organization can maintain a small number of strategic geographic hubs that provide resilient hybrid connectivity and common enterprise services. Other Azure regions can use lighter profiles and consume capabilities from those hubs when workload requirements permit.
 
-An organization can maintain a small number of strategic geographic hubs that provide resilient hybrid connectivity and common enterprise services. Other Azure regions can use different regional profiles and consume capabilities from those hubs when workload requirements permit.
+Regional enablement is a spectrum: from Disconnected Spokes, with no dependency on a geographic hub, through Remote Hub Connected and Minimal Regional Hub, to a Full Regional Hub with greater local capability and independence. These profiles aren't maturity stages. A profile can remain the right target for a region as long as it continues to satisfy workload and platform requirements.
 
-Regional enablement is a spectrum, from application spokes with no dependency on a geographic hub, through Remote Hub Connected and Minimal Regional Hub profiles, to a Full Regional Hub with greater local capability and independence. These profiles are not maturity stages. A profile can remain the appropriate target architecture for a region as long as it continues to satisfy workload and platform requirements.
+Connectivity profiles describe platform capabilities, not workload designs. An Application Landing Zone archetype doesn't dictate a profile; choose the profile from the workloads' actual dependencies, latency, resiliency, security, data, and operational requirements.
 
 :::image type="content" source="./media/connectivity-profile-spectrum.png" alt-text="Spectrum of four profiles from no dependency on a geographic hub to greater local capability. Disconnected spokes have no hub or gateway; remote-hub-connected spokes connect privately to a hub region; a minimal regional hub hosts selected shared services such as private DNS, a virtual network gateway, and Azure Monitor; a full regional hub adds comprehensive shared services including Azure Firewall." lightbox="./media/connectivity-profile-spectrum.png":::
 

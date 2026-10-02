@@ -16,7 +16,7 @@ module.exports = (pres, L) => {
     ], 0.6, 2.3, 5.9, 2.2, { fontSize: 46, lineSpacingMultiple: 0.92 });
     L.txt(s, 'Extending Azure landing zones for adaptable regional placement — qualifying regions, planning by workload archetype, and right-sizing regional platform connectivity.', 0.6, 4.55, 5.4, 0.9, { fontSize: 14, color: C.s600, lineSpacingMultiple: 1.1 });
     L.txt(s, 'THREE PLANNING CONSTRUCTS', 0.6, 5.65, 4, 0.22, { fontSize: 9, bold: true, color: C.faint, charSpacing: 3 });
-    [['Regional Qualification and Enablement Framework', C.b600], ['Application Landing Zone Archetypes', C.t600], ['Regional Platform Connectivity Profiles', C.v600]].forEach(([t, c], i) => {
+    [['Regional Qualification and Enablement Framework', C.b600], ['Workload Landing Zone Archetypes', C.t600], ['Regional Platform Connectivity Profiles', C.v600]].forEach(([t, c], i) => {
       L.box(s, 0.6, 6.02 + i * 0.3, 0.26, 0.06, { fill: c, r: 0.03 });
       L.txt(s, t, 0.98, 5.93 + i * 0.3, 5, 0.25, { fontSize: 11.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
     });
@@ -32,7 +32,7 @@ module.exports = (pres, L) => {
       ['01', 'Introduction', 'Drivers, constructs, and the adoption journey'],
       ['02', 'Multi-region platform and workload', 'Two layers, two decisions'],
       ['03', 'Regional Qualification Framework', 'Five dimensions, readiness, and a decision tree'],
-      ['04', 'Application Landing Zone Archetypes', 'What applications require'],
+      ['04', 'Workload Landing Zone Archetypes', 'What applications require'],
       ['05', 'Regional Platform Connectivity Profiles', 'What the platform provides'],
       ['06', 'Workload placement', 'Eight steps from option to placement'],
       ['07', 'A consistent operating model', 'What stays consistent and what adapts'],
@@ -71,7 +71,7 @@ module.exports = (pres, L) => {
     const cards = [
       ['layers', C.b600, C.wash, 'Extend, do not replicate', 'The landing-zone operating model stays consistent across the Azure estate. New regions add only the most efficient platform capabilities required by the workloads expected to use them, rather than replicating an existing regional footprint.'],
       ['search', C.b700, C.wash, 'Qualify regions against defined requirements', 'Business and geography, data and compliance, workload requirements and dependencies, regional capabilities, and platform enablement. Qualification creates a governed regional option; it does not permanently approve the region for every workload.'],
-      ['app', C.t600, C.t50, 'Plan by workload requirements, not individual applications', 'Application Landing Zone archetypes anticipate recurring connectivity and dependency requirements. Archetypes describe what applications require; connectivity profiles describe what the platform provides.'],
+      ['app', C.t600, C.t50, 'Plan by workload requirements, not individual applications', 'Workload Landing Zone archetypes anticipate recurring connectivity and dependency requirements. Archetypes describe what applications require; connectivity profiles describe what the platform provides.'],
     ];
     cards.forEach(([ic, c, bg, t, d], i) => {
       const x = 0.6 + i * 4.1, y = 3.1, w = 3.93, h = 2.75;
@@ -202,7 +202,7 @@ module.exports = (pres, L) => {
     L.txt(s, 'PLATFORM READINESS · ADVANCE PLANNING', 0.6, 1.72, 6, 0.22, { fontSize: 9, bold: true, color: C.b600, charSpacing: 2 });
     const cards = [
       ['search', C.b600, 'Regional Qualification and Enablement Framework', 'Evaluates candidate regions against five dimensions for defined workload requirements.', [['Excluded', C.w100, C.w600], ['Candidate', 'FFFFFF', C.b700, C.b500], ['Conditional', 'FFF1CC', '8A5A00'], ['Qualified', C.g100, C.g600]]],
-      ['app', C.t600, 'Application Landing Zone Archetypes', 'Describe what applications require — recurring dependency and connectivity characteristics.', [['Hybrid', C.t100, C.t700], ['Isolated', C.t100, C.t700], ['Connected', C.t100, C.t700], ['Portfolios', C.t100, C.t700]]],
+      ['app', C.t600, 'Workload Landing Zone Archetypes', 'Describe what applications require — recurring dependency and connectivity characteristics.', [['Hybrid', C.t100, C.t700], ['Isolated', C.t100, C.t700], ['Connected', C.t100, C.t700], ['Portfolios', C.t100, C.t700]]],
       ['hub', C.v600, 'Regional Platform Connectivity Profiles', 'Describe what the platform provides to support those archetypes in a region.', [['Disconnected', C.b100, C.b700], ['Remote hub', C.b100, C.b700], ['Minimal', C.b100, C.b700], ['Full', C.b100, C.b700]]],
     ];
     cards.forEach(([ic, c, t, d, chips], i) => {
@@ -225,7 +225,7 @@ module.exports = (pres, L) => {
     let cx = 4.35; ['Remain in place', 'Net-new in another region', 'Relocate', 'Recover elsewhere', 'Operate across active regions'].forEach(t => { cx += L.chip(s, t, cx, 5.84, { fill: 'FFFFFF', color: C.t700, line: C.t300, size: 9 }) + 0.1; });
     L.caption(s, 'Figure', 'Archetypes (application requirements) and profiles (platform capability) stay distinct. Migration and resiliency remain workload-specific decisions.', 0.6, 6.5, 12.1);
     L.footer(s, 0, '01 · INTRODUCTION');
-    s.addNotes('Regional Qualification and Enablement Framework: a repeatable way to assess candidate regions — business and geographic need, data and compliance boundaries, workload requirements and dependencies, regional capabilities, and required platform enablement. The result is an excluded, candidate, conditional, or qualified regional option, backed by current evidence, known constraints, ownership, and review triggers. Application Landing Zone Archetypes group workloads by recurring dependency and connectivity characteristics. Regional Platform Connectivity Profiles describe what the platform provides: Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, or Full Regional Hub. The most efficient profile can remain the target as long as it continues to satisfy requirements. Hybrid connectivity and regional workload connectivity are related but separate decisions. During onboarding, teams revalidate options against the application and decide whether it remains in place, uses another region for net-new deployment, relocates, recovers elsewhere, or operates across active regions.');
+    s.addNotes('Regional Qualification and Enablement Framework: a repeatable way to assess candidate regions — business and geographic need, data and compliance boundaries, workload requirements and dependencies, regional capabilities, and required platform enablement. The result is an excluded, candidate, conditional, or qualified regional option, backed by current evidence, known constraints, ownership, and review triggers. Workload Landing Zone Archetypes group workloads by recurring dependency and connectivity characteristics. Regional Platform Connectivity Profiles describe what the platform provides: Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, or Full Regional Hub. The most efficient profile can remain the target as long as it continues to satisfy requirements. Hybrid connectivity and regional workload connectivity are related but separate decisions. During onboarding, teams revalidate options against the application and decide whether it remains in place, uses another region for net-new deployment, relocates, recovers elsewhere, or operates across active regions.');
   }
 
   // ───────────────────────── 6 · Progressive adoption journey

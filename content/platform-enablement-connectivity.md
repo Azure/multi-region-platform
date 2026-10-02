@@ -25,14 +25,14 @@ For the items that most often stall a new region, see the [platform readiness ch
 
 Connectivity planning separates three decisions: resilient hybrid connectivity to Azure, placement of geographic hubs and shared services, and application-specific connectivity. They influence one another, but each has different requirements and tradeoffs.
 
-:::image type="content" source="./media/connectivity-planning-layers.png" alt-text="Three connectivity planning layers: resilient hybrid connectivity from on-premises datacenters and users to the Azure backbone through ExpressRoute or VPN; strategic geographic hubs and shared services; and application landing zones supported by the regional connectivity profile." lightbox="./media/connectivity-planning-layers.png":::
+:::image type="content" source="./media/connectivity-planning-layers.png" alt-text="Three connectivity planning layers: resilient hybrid connectivity from on-premises datacenters and users to the Azure backbone through ExpressRoute or VPN; strategic geographic hubs and shared services; and Workload Landing Zones supported by the regional connectivity profile." lightbox="./media/connectivity-planning-layers.png":::
 
 *Three connectivity planning layers: related, but not the same design decision.*
 
-Use the workload requirements identified earlier to determine how workloads should consume regional and centralized platform capabilities. Application Landing Zone archetypes can help inform the assessment, but the resulting connectivity design should be based on the actual dependencies and requirements of each workload.
+Use the workload requirements identified earlier to determine how workloads should consume regional and centralized platform capabilities. Workload Landing Zone archetypes can help inform the assessment, but the resulting connectivity design should be based on the actual dependencies and requirements of each workload.
 
 - For existing workloads, particularly those with legacy or hybrid dependencies, use validated application, network, datacenter, and shared-service dependencies to determine whether existing geographic hubs can continue to support the workload or whether additional regional capabilities are required.
-- For new workloads, derive connectivity needs from the intended architecture and known dependencies, using the Application Landing Zone archetypes as a planning aid. Reuse existing geographic hubs, shared services, and platform capabilities where they meet those needs; a new region does not automatically require a new platform footprint.
+- For new workloads, derive connectivity needs from the intended architecture and known dependencies, using the Workload Landing Zone archetypes as a planning aid. Reuse existing geographic hubs, shared services, and platform capabilities where they meet those needs; a new region does not automatically require a new platform footprint.
 
 Existing and new workloads follow the same rule: requirements and dependencies determine the regional connectivity profile. Known requirements can shape platform planning in advance; validate workload-specific fit during onboarding and add regional capabilities only when justified.
 
@@ -40,9 +40,7 @@ Existing and new workloads follow the same rule: requirements and dependencies d
 
 **Question:** Does the operating geography have resilient hybrid connectivity to Azure that satisfies the identified workload requirements?
 
-Evaluate existing hybrid connectivity against datacenter and user locations, data boundaries, provider and peering-location diversity, latency, bandwidth, routing, and failure-domain requirements. Determine whether the existing ExpressRoute, VPN, or other hybrid connectivity foundation provides the required reachability and resilience.
-
-Enabling an additional Azure region does not inherently require another ExpressRoute circuit. Determine whether existing connectivity provides the required reachability and whether additional circuits, peering locations, gateways, or connectivity paths are needed for geographic diversity, failure-domain isolation, latency, bandwidth, routing, or resiliency.
+Enabling an additional Azure region doesn't by itself require another ExpressRoute circuit. Evaluate the existing ExpressRoute, VPN, SD-WAN, or other hybrid connectivity against datacenter and user locations, latency, bandwidth, and routing requirements. Add circuits, peering locations, gateways, or more connectivity paths only where the existing foundation can't provide the required reachability, diversity, or resilience required.
 
 **Decision:** Confirm the hybrid connectivity foundation and identify any required changes to reachability, resiliency, diversity, scale, or ownership.
 

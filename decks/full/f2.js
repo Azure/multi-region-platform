@@ -175,7 +175,7 @@ module.exports = (pres, L) => {
     L.box(s, 0.6, 6.05, 12.13, 0.6, { fill: C.w50, r: 0.1 });
     L.txt(s, [{ text: 'SCOPE BOUNDARY   ', options: { bold: true, color: C.w600, fontSize: 9, charSpacing: 2 } }, { text: 'This phase identifies the regional and platform capabilities workloads require. It does not approve relocation or define migration execution; relocation readiness, sequencing, recovery design, and multi-region operation remain workload-specific.', options: { color: C.ink, fontSize: 10.5 } }], 0.8, 6.05, 11.8, 0.6, { valign: 'middle' });
     L.footer(s, 0, SEC);
-    s.addNotes('Regional qualification should reflect the requirements of workloads expected to consume the region — existing workloads in Azure, on-premises, or another cloud (including those that would move into the region), and future workloads. Review architecture, connectivity, data, shared-service, security, resiliency, scale, and operational requirements and dependencies. Where useful, map each workload to the closest-fitting Application Landing Zone archetype; record requirements beyond it as explicit additions rather than forcing multiple classifications.');
+    s.addNotes('Regional qualification should reflect the requirements of workloads expected to consume the region — existing workloads in Azure, on-premises, or another cloud (including those that would move into the region), and future workloads. Review architecture, connectivity, data, shared-service, security, resiliency, scale, and operational requirements and dependencies. Where useful, map each workload to the closest-fitting Workload Landing Zone archetype; record requirements beyond it as explicit additions rather than forcing multiple classifications.');
   }
 
   // ───────────────────────── Dimension 3 · terminology
@@ -191,15 +191,15 @@ module.exports = (pres, L) => {
       ['Architecture style', 'The fundamental structural organization of an application', 'Microservices, N-tier, event-driven, web-queue-worker, big compute', 'Application architecture'],
       ['Architecture / design pattern', 'A reusable solution to a recurring technical problem', 'Circuit Breaker, Retry, CQRS, Strangler Fig, Competing Consumers', 'Design technique'],
       ['Workload pattern', 'A recurring workload behavior or set of operational characteristics that can influence platform requirements', 'Latency-sensitive, data-intensive, batch-oriented, globally distributed, hybrid-dependent', 'Workload characteristics'],
-      ['Application Landing Zone archetype', 'A classification of a workload based on the platform connectivity and dependency capabilities it requires', 'Hybrid-Connected, Connected Cloud-Native or AI, Isolated Cloud-Native or AI, Interconnected Application Portfolios', 'Platform-consumption model'],
+      ['Workload Landing Zone archetype', 'A classification of a workload based on the platform connectivity and dependency capabilities it requires', 'Hybrid-Connected, Connected Cloud-Native or AI, Isolated Cloud-Native or AI, Interconnected Application Portfolios', 'Platform-consumption model'],
     ];
     const data = [[cell('TERM', H), cell('WHAT IT DESCRIBES', H), cell('EXAMPLES', H), cell('LEVEL', H)]];
     rows.forEach((r, i) => { const hi = i === 3; data.push([cell(r[0], { bold: true, color: hi ? C.t700 : C.ink, fill: hi ? { color: C.t50 } : undefined }), cell(r[1], { fill: hi ? { color: C.t50 } : undefined }), cell(r[2], { color: C.muted, fill: hi ? { color: C.t50 } : undefined }), cell(r[3], { bold: true, fontSize: 10, color: hi ? C.t700 : C.b700, fill: hi ? { color: C.t50 } : undefined })]); });
     s.addTable(data, { x: 0.6, y: 2.0, w: 12.13, colW: [2.6, 3.9, 3.8, 1.83], rowH: [0.4, 0.62, 0.62, 0.75, 0.75] });
-    L.card(s, 0.6, 5.35, 5.95, 1.35, { icon: 'layers', ic: C.s600, title: 'Not the built-in landing-zone archetypes', body: 'The Azure landing zones reference architecture uses archetypes to define what must be true for a landing zone at a given scope. Application Landing Zone archetypes describe what a workload requires from the platform.', bs: 10 });
+    L.card(s, 0.6, 5.35, 5.95, 1.35, { icon: 'layers', ic: C.s600, title: 'Not the built-in landing-zone archetypes', body: 'The Azure landing zones reference architecture uses archetypes to define what must be true for a landing zone at a given scope. Workload Landing Zone archetypes describe what a workload requires from the platform.', bs: 10 });
     L.card(s, 6.78, 5.35, 5.95, 1.35, { icon: 'check', ic: C.t600, fill: C.t50, title: 'One archetype per workload', body: 'Classify each workload by its closest-fitting archetype. Record requirements beyond it as explicit additions rather than forcing multiple classifications.', bs: 10 });
     L.footer(s, 0, SEC);
-    s.addNotes('Only the Application Landing Zone archetype describes what a workload needs from the platform; it is the concept used in regional qualification. References: Architecture styles; Built-in Azure landing zone archetypes; Evaluate a cloud workload for relocation; Relocate cloud workloads.');
+    s.addNotes('Only the Workload Landing Zone archetype describes what a workload needs from the platform; it is the concept used in regional qualification. References: Architecture styles; Built-in Azure landing zone archetypes; Evaluate a cloud workload for relocation; Relocate cloud workloads.');
   }
 
   // ───────────────────────── 12 · Dimension 4
@@ -297,7 +297,7 @@ module.exports = (pres, L) => {
     L.line(s, 8.72, 4.62, 8.86, 4.62, { color: C.b600, both: true });
     L.box(s, 8.88, 3.9, 3.85, 1.45, { fill: C.t50, line: C.t300, r: 0.1 });
     L.icon(s, 'spoke', 9.05, 4.02, 0.3, 't');
-    L.txt(s, [{ text: 'Application landing zones', options: { fontFace: F.semi, fontSize: 11.5, color: C.t700, breakLine: true } }, { text: 'Supported by the regional connectivity profile — selected by dependencies and requirements', options: { fontSize: 9.5, color: C.muted } }], 9.05, 4.4, 3.55, 0.9);
+    L.txt(s, [{ text: 'Workload Landing Zones', options: { fontFace: F.semi, fontSize: 11.5, color: C.t700, breakLine: true } }, { text: 'Supported by the regional connectivity profile — selected by dependencies and requirements', options: { fontSize: 9.5, color: C.muted } }], 9.05, 4.4, 3.55, 0.9);
     L.box(s, 0.6, 5.55, 4.0, 0.85, { fill: C.wash, r: 0.1 });
     L.txt(s, [{ text: 'Principle: ', options: { bold: true, color: C.b700 } }, { text: 'existing and new workloads follow the same rule — requirements and dependencies determine the regional connectivity profile.' }], 0.78, 5.55, 3.7, 0.85, { fontSize: 10, color: C.ink, valign: 'middle' });
     [[4.85, 'Existing workloads', 'Validated dependencies show whether existing hubs still suffice.'], [8.88, 'New workloads', 'Derive needs from intended architecture; a new region needs no new footprint by default.']].forEach(([x, t, d]) => {

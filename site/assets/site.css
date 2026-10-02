@@ -18,6 +18,8 @@
   --green: #107C41; --green-soft: #E9F6EE;
   --nav-bg: #F7F9FB; --nav-hover: #EAEFF5; --nav-active: #DDEBF9; --nav-active-ink: #0B3A63;
   --fig-bg: #FFFFFF; --fig-line: #E1E6ED;
+  --matrix-bg: #FFFFFF; --matrix-head: #F5F8FB; --matrix-text: #28323E;
+  --matrix-heading: #03615F; --matrix-region: #0F548C; --matrix-muted: #5B6778; --matrix-border: #D3DBE4;
   --shadow: 0 1px 2px rgba(10,35,64,.06), 0 6px 24px rgba(10,35,64,.06);
   --top-h: 56px; --side-w: 300px; --rail-w: 240px; --prose-w: 760px; --wide-w: 980px;
 }
@@ -32,6 +34,8 @@
   --green: #5FC98B; --green-soft: #173024;
   --nav-bg: #1C1F24; --nav-hover: #262A31; --nav-active: #243548; --nav-active-ink: #CFE4FA;
   --fig-bg: #FFFFFF; --fig-line: #2E343C;
+  --matrix-bg: #1C1F24; --matrix-head: #252A31; --matrix-text: #D5DCE5;
+  --matrix-heading: #75D2CC; --matrix-region: #8CC4F5; --matrix-muted: #A2ADBB; --matrix-border: #39414B;
   --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.35);
 }
 @media (prefers-color-scheme: dark) {
@@ -46,6 +50,8 @@
     --green: #5FC98B; --green-soft: #173024;
     --nav-bg: #1C1F24; --nav-hover: #262A31; --nav-active: #243548; --nav-active-ink: #CFE4FA;
     --fig-bg: #FFFFFF; --fig-line: #2E343C;
+    --matrix-bg: #1C1F24; --matrix-head: #252A31; --matrix-text: #D5DCE5;
+    --matrix-heading: #75D2CC; --matrix-region: #8CC4F5; --matrix-muted: #A2ADBB; --matrix-border: #39414B;
     --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.35);
   }
 }
@@ -227,6 +233,25 @@ blockquote.pull p { margin: 0; font-size: 21px; line-height: 1.4; font-weight: 3
 .fig img { display: block; max-width: 100%; margin: 0 auto; }
 .fig figcaption { margin: 16px -22px 0; padding: 12px 22px 14px; border-top: 1px solid #E8EDF3; font-size: 13.5px; line-height: 1.5; color: #5B6778; background: #FAFBFD; border-radius: 0 0 14px 14px; }
 :root[data-theme="dark"] .fig figcaption { background: #F3F6F9; }
+.outcome-matrix { background-color: var(--matrix-bg) !important; border-color: var(--matrix-border) !important; color: var(--matrix-text); color-scheme: light; }
+.outcome-matrix .pm { background-color: var(--matrix-bg); color: var(--matrix-text); }
+.outcome-matrix .pm th { background-color: var(--matrix-head); color: var(--matrix-heading); }
+.outcome-matrix .pm th.rgn { color: var(--matrix-region); }
+.outcome-matrix .pm tbody tr,
+.outcome-matrix .pm td { background-color: var(--matrix-bg); border-color: var(--matrix-border); }
+.outcome-matrix .pm td.rgn { color: var(--matrix-text); }
+.outcome-matrix .pm td.rgn span { color: var(--matrix-muted); }
+.outcome-legend { color: var(--matrix-muted) !important; }
+:root[data-theme="dark"] .prose .wpf .mx thead th { background: #252A31; color: #D5DCE5; }
+:root[data-theme="dark"] .prose .wpf .mx thead th.pf { color: #8CC4F5; }
+:root[data-theme="dark"] .prose .wpf .mx thead th:first-child .cap { color: #75D2CC !important; }
+:root[data-theme="dark"] .prose .wpf .mx thead th.dr { color: #A2ADBB; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .prose .wpf .mx thead th { background: #252A31; color: #D5DCE5; }
+  :root:not([data-theme="light"]) .prose .wpf .mx thead th.pf { color: #8CC4F5; }
+  :root:not([data-theme="light"]) .prose .wpf .mx thead th:first-child .cap { color: #75D2CC !important; }
+  :root:not([data-theme="light"]) .prose .wpf .mx thead th.dr { color: #A2ADBB; }
+}
 .fig-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; opacity: 0; transition: opacity .15s; z-index: 2; }
 .fig:hover .fig-tools, .fig:focus-within .fig-tools { opacity: 1; }
 .fig-tools button, .fig-tools a { width: 30px; height: 30px; border-radius: 7px; border: 1px solid #D3DBE4; background: #fff; color: #0F548C; display: grid; place-items: center; cursor: pointer; }

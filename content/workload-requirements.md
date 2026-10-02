@@ -9,9 +9,9 @@ ms.topic: conceptual
 
 **Question:** What workload requirements and dependencies must the region support?
 
-Regional qualification should reflect the requirements of workloads expected to consume the region. These requirements may be identified from existing applications, net-new workload plans, or workloads being considered for relocation between Azure regions.
+Regional qualification should reflect the requirements of the workloads expected to use the region. These come from two sources: existing workloads, including any that would move into the region, and future workloads that are planned but not yet built.
 
-Review the architecture, connectivity, data, shared-service, security, resiliency, scale, and operational requirements and dependencies of workloads expected to consume the region. Where useful, map each workload to the closest-fitting [Application Landing Zone archetype](./application-landing-zone-archetypes.md) based on its platform connectivity and dependency requirements. If a workload has requirements beyond its primary archetype, record them as explicit additions to that archetype rather than forcing the workload into multiple classifications.
+Review the architecture, connectivity, data, shared-service, security, resiliency, scale, and operational requirements and dependencies of workloads expected to consume the region. Where useful, map the key workloads you expect to move to or deploy in the new region, whether existing or new, to the closest-fitting [Workload Landing Zone archetype](./application-landing-zone-archetypes.md) based on its platform connectivity and dependency requirements. If a workload has requirements beyond its primary archetype, record them as explicit additions to that archetype rather than forcing the workload into multiple classifications.
 
 :::image type="content" source="./media/workloads-to-platform-requirements.png" alt-text="Flow from two workload sources — existing workloads, including those moving into the region, and future workloads — into a review of requirements and dependencies, which produces workload-driven platform requirements; requirements that affect suitability go to dimension 4 and implementation details are deferred to onboarding." lightbox="./media/workloads-to-platform-requirements.png":::
 
@@ -39,15 +39,15 @@ Architecture concepts can help identify and organize these requirements, but the
 | Architecture style | The fundamental structural organization of an application | Microservices, N-tier, event-driven, web-queue-worker, big compute | Application architecture |
 | Architecture or design pattern | A reusable solution to a recurring technical problem | Circuit Breaker, Retry, CQRS, Strangler Fig, Competing Consumers | Design technique |
 | Workload pattern | A recurring workload behavior or set of operational characteristics that can influence platform requirements | Latency-sensitive, data-intensive, batch-oriented, globally distributed, hybrid-dependent | Workload characteristics |
-| Application Landing Zone archetype | A classification of a workload based on the platform connectivity and dependency capabilities it requires | Hybrid-Connected, Connected Cloud-Native or AI, Isolated Cloud-Native or AI, Interconnected Application Portfolios | Platform-consumption model |
+| Workload Landing Zone archetype | A classification of a workload based on the platform connectivity and dependency capabilities it requires | Hybrid-Connected, Connected Cloud-Native or AI, Isolated Cloud-Native or AI, Interconnected Application Portfolios | Platform-consumption model |
 
 > [!NOTE]
-> The Azure landing zones reference architecture also uses *archetypes*: built-in definitions of what must be true for a landing zone to meet environment and compliance requirements at a given scope. Application Landing Zone archetypes in this guidance describe what a workload requires from the platform, which is a different concept.
+> The Azure landing zones reference architecture also uses *archetypes*: built-in definitions of what must be true for a landing zone to meet environment and compliance requirements at a given scope. Workload Landing Zone archetypes in this guidance describe what a workload requires from the platform, which is a different concept.
 
 ## Reference links
 
 - [Architecture styles](https://learn.microsoft.com/azure/architecture/guide/architecture-styles/) — Supports the discussion of workload architecture, including N-tier, microservices, and event-driven approaches.
-- [Built-in application landing zone archetypes](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/tailoring-alz#built-in-archetypes-for-the-azure-landing-zone-reference-architecture) — Describes what needs to be true for a landing zone to meet the expected environment and compliance requirements at a specific scope.
+- [Built-in Workload Landing Zone archetypes](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/tailoring-alz#built-in-archetypes-for-the-azure-landing-zone-reference-architecture) — Describes what needs to be true for a landing zone to meet the expected environment and compliance requirements at a specific scope.
 - [Evaluate a cloud workload for relocation](https://learn.microsoft.com/azure/azure-resource-manager/management/relocate-evaluate) — Dependency discovery, workload ownership, acceptable disruption, and target-region supportability.
 - [Relocate cloud workloads](https://learn.microsoft.com/azure/azure-resource-manager/management/relocate-index) — The broader Azure-to-Azure relocation process, which distinguishes assessment from migration and cutover.
 

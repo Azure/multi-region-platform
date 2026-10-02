@@ -1,24 +1,28 @@
 ---
 title: Platform readiness checklist for a new region
 description: The platform items that most often stall a newly qualified Azure region — network foundation, governance and automation, operations and data, capacity and security.
-ms.date: 09/30/2026
+ms.date: 10/02/2026
 ms.topic: conceptual
 ---
 
-# Platform readiness checklist
+# Platform readiness checklist for a new region
 
-These are the platform items that most often stall a new region after it has been qualified. Most are inexpensive to plan early and expensive to retrofit. Apply only those the region's connectivity profile and workload requirements call for.
+These are the platform items that most often stall a new region after it has been qualified. Most are inexpensive to plan early and expensive to retrofit. Get these right once, and each later region becomes mostly configuration instead of a new project. Apply only those the region's connectivity profile and workload requirements call for.
 
 Hub and shared-service implementations differ between organizations. The checklist names what must be true, not how a specific hub is built. Items marked as **common blockers** should be planned before qualification completes; confirm the others as the capability set is enabled.
 
 ## Network foundation
+
+Private DNS across regions, routing and inspection paths, and hybrid connectivity apply only to connected profiles. Everything else on this page applies to every profile, including Disconnected Spokes.
 
 | Item | What must be true |
 |---|---|
 | **IP address planning** (common blocker) | Reserve non-overlapping address space for future regions and profiles. |
 | Private DNS across regions | Private endpoints and hybrid names resolve wherever the workload runs. |
 | Routing and inspection paths | Traffic reaches hubs and firewalls without asymmetric paths. |
-| Hybrid connectivity | Existing circuits are reused, or paths are added, per [dimension 5](./platform-enablement-connectivity.md#resilient-hybrid-connectivity). |
+| Hybrid connectivity | Existing circuits are reused, or paths are added. See [resilient hybrid connectivity](./platform-enablement-connectivity.md#resilient-hybrid-connectivity). |
+| Firewall and partner allow-lists | On-premises firewalls and third-party allow-lists include the new region's address ranges. |
+| Identity services | The directory and identity services that workloads depend on are reachable from the region. |
 
 ## Governance and automation
 
@@ -27,6 +31,7 @@ Hub and shared-service implementations differ between organizations. The checkli
 | **Region settings in policy** (common blocker) | Allowed-locations and region parameters admit the new region only for its qualified workload requirements. |
 | Region-aware infrastructure as code | Modules, naming, and tagging are parameterized by region, with no hard-coded locations. |
 | Landing-zone provisioning | Subscription or landing-zone vending can place workloads in the region. |
+| Regional access | Subscriptions have access to the region where access is restricted. |
 
 ## Operations and data
 
