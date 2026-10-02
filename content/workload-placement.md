@@ -41,4 +41,4 @@ Workload onboarding can reveal new regional requirements, constraints, or platfo
 ## Next step
 
 > [!div class="nextstepaction"]
-> [Multi-region workload design](./workload-design.md)
+> [Regional dependencies and resiliency](./workload-design.md)

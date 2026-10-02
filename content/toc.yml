@@ -35,7 +35,7 @@ items:
   href: operating-model.md
 - name: 4. Workload placement
   href: workload-placement.md
-- name: Multi-region workload design
+- name: Regional dependencies and resiliency
   href: workload-design.md
   items:
   - name: Paired and nonpaired regions
