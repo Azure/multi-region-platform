@@ -62,10 +62,7 @@ svg { display: block; }
 /* ───────── header */
 .top { position: sticky; top: 0; z-index: 50; height: var(--top-h); display: flex; align-items: center; gap: 24px; padding: 0 20px 0 24px; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: saturate(1.4) blur(10px); border-bottom: 1px solid var(--line); }
 .brand { display: flex; align-items: center; gap: 12px; color: var(--ink); text-decoration: none !important; flex: none; }
-.ms-logo { display: grid; grid-template-columns: 9px 9px; gap: 2px; }
-.ms-logo i { width: 9px; height: 9px; display: block; }
-.ms-logo i:nth-child(1) { background: #F25022; } .ms-logo i:nth-child(2) { background: #7FBA00; }
-.ms-logo i:nth-child(3) { background: #00A4EF; } .ms-logo i:nth-child(4) { background: #FFB900; }
+.guidance-logo { width: 28px; height: 28px; flex: none; }
 .brand-sep { width: 1px; height: 22px; background: var(--line-strong); }
 .brand-name { font-weight: 600; font-size: 16px; letter-spacing: -.005em; }
 .brand-tag { font-size: 12px; color: var(--muted); padding: 2px 8px; border: 1px solid var(--line); border-radius: 20px; }
@@ -267,6 +264,7 @@ blockquote.pull p { margin: 0; font-size: 21px; line-height: 1.4; font-weight: 3
   body > *:not(.small-screen) { display: none !important; }
   .small-screen { display: grid; place-items: center; min-height: 100vh; padding: 32px 20px; background: linear-gradient(160deg, #0B3A63, #0F6CBD); }
   .ss-in { max-width: 460px; background: #fff; color: #28323E; border-radius: 16px; padding: 28px 22px; }
+  .ss-in .guidance-logo { width: 36px; height: 36px; }
   .ss-in h1 { font-size: 24px; line-height: 1.25; color: #0A2340; margin: 16px 0 8px; font-weight: 600; }
   .ss-in p { margin: 0 0 16px; font-size: 15px; }
   .ss-dl .dl-item { border: 1px solid #E1E6ED; margin-bottom: 8px; color: #28323E; }
