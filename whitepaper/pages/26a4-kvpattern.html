@@ -19,9 +19,6 @@
         <div class="ax-ck"><span class="b"><svg><use href="#i-check"/></svg></span><p><b>Do not make failover the synchronization strategy</b> — populate and validate runtime dependencies before an outage, not by creating or restoring a vault after the primary region has failed.</p></div>
         <div class="ax-ck" style="border-bottom:1px solid var(--line-soft)"><span class="b"><svg><use href="#i-check"/></svg></span><p><b>Design cryptographic keys separately</b> — customer-managed keys cannot always be reproduced like secrets. Choose a key-resiliency pattern: Key Vault backup/restore within its constraints, Managed HSM multi-region, or a workload-specific design.</p></div>
       </div>
-      <div class="mt12" style="background:var(--s800);border-radius:12px;padding:12px 18px">
-        <p style="font-size:12.2px;line-height:1.45;color:#fff"><b style="color:#50E6FF">DR in practice:</b> when the workload activates in the recovery region, the required vault and runtime dependencies are already available and validated there.</p>
-      </div>
       <p class="small muted mt12" style="font-size:10.6px">Microsoft Learn also documents backup and restore between vaults; backups can only be restored within the same subscription and Azure geography. Learn: <a href="https://learn.microsoft.com/en-us/azure/reliability/reliability-key-vault#custom-multiregion-solutions-for-resiliency">Custom multi-region solutions for resiliency</a>.</p>
     </div>
 
@@ -66,7 +63,7 @@
           </g>
         </svg>
       </div>
-      <div class="figcap"><span class="fn">Figure</span><span class="ft"><b>Pre-provisioned regional vaults.</b> Applies to secrets and certificates. Design customer-managed keys (for example, SQL TDE) separately — see Scenario R3.</span></div>
+      <div class="figcap"><span class="fn">Figure</span><span class="ft"><b>Pre-provisioned regional vaults.</b> Applies to secrets and certificates. Design customer-managed keys (for example, SQL TDE) separately; see the customer-managed keys scenario on the next page.</span></div>
     </div>
   </div>
 </div>

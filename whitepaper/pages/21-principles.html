@@ -19,14 +19,13 @@
     <div class="eyebrow">Profile selection</div>
     <h2 class="title mt8" style="font-size:23px">Principles for choosing and evolving a profile</h2>
     <ol class="prin mt12">
-      <li>Start with the <strong>workload requirements and dependencies</strong> identified during regional qualification, including application-portfolio dependencies and relevant architecture characteristics.</li>
-      <li>Use Workload Landing Zone archetypes as a planning abstraction to identify recurring connectivity and shared-service requirements; validate the selected profile against actual workload requirements.</li>
-      <li>Select the <strong>most efficient regional connectivity profile</strong> that satisfies the identified requirements.</li>
-      <li>Keep capabilities remote when latency, dependency, data, security, resiliency, availability, and operational characteristics permit. Deploy capabilities locally only when a measurable workload or platform requirement justifies the additional footprint.</li>
-      <li>Consider direct spoke-to-spoke connectivity where workloads require significant east-west communication and a hub transit path is unnecessary. Introduce regional routing, inspection, or shared services when broader requirements justify them.</li>
-      <li style="border-bottom:1px solid var(--line-soft)">Allow different profiles to coexist across the estate. Profiles evolve only when workload and platform requirements change, not because a region is expected to progress through a predefined maturity path.</li>
+      <li>Start with the <strong>workload requirements and dependencies</strong> identified during regional qualification, including portfolio-level dependencies.</li>
+      <li>Use Workload Landing Zone archetypes to spot recurring connectivity and shared-service needs, then validate the profile against the actual workloads.</li>
+      <li>Select the <strong>most efficient profile</strong> that satisfies those requirements.</li>
+      <li>Keep capabilities remote when latency, dependency, data, security, resiliency, and operational requirements permit. Add local capabilities only when a measurable requirement justifies the larger regional footprint.</li>
+      <li>Consider direct spoke-to-spoke connectivity where workloads have significant east-west traffic and a hub transit path is unnecessary. Add regional routing, inspection, or shared services when broader requirements justify them.</li>
+      <li style="border-bottom:1px solid var(--line-soft)">Different profiles can coexist across the estate. A region’s profile changes only when workload and platform requirements change, not because regions are expected to progress along a maturity path.</li>
     </ol>
-    <div class="note mt12" style="padding:11px 14px"><p class="small" style="color:var(--ink)">A connectivity profile defines the platform capabilities available in a region. <strong>Workload placement, profile evolution, and future qualification remain separate decisions.</strong></p></div>
   </div>
 
   <div style="position:absolute;left:460px;right:0;top:0;bottom:0">

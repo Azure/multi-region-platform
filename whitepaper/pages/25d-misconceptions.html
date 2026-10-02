@@ -1,13 +1,13 @@
 <section class="page" data-section="09 · Putting it into practice">
 <style>
-  .mc4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }
+  .mc4 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 11px 14px; }
   .mc4 .mc { border-radius: 12px; overflow: hidden; border: 1px solid var(--line); display: flex; flex-direction: column; }
-  .mc4 .mcq { background: #FBF4EE; padding: 14px 15px; display: flex; gap: 9px; align-items: flex-start; min-height: 78px; }
+  .mc4 .mcq { background: #FBF4EE; padding: 9px 14px; display: flex; gap: 9px; align-items: flex-start; }
   .mc4 .mcq svg { width: 15px; height: 15px; color: var(--w600); flex: none; margin-top: 2px; }
-  .mc4 .mcq span { font-size: 13px; font-weight: 650; color: var(--ink); line-height: 1.32; }
-  .mc4 .mca { padding: 14px 15px; display: flex; gap: 9px; align-items: flex-start; flex: 1; background: #fff; }
+  .mc4 .mcq span { font-size: 12.4px; font-weight: 650; color: var(--ink); line-height: 1.32; }
+  .mc4 .mca { padding: 9px 14px 10px; display: flex; gap: 9px; align-items: flex-start; flex: 1; background: #fff; }
   .mc4 .mca svg { width: 15px; height: 15px; color: var(--g600); flex: none; margin-top: 2px; }
-  .mc4 .mca span { font-size: 12px; color: var(--text); line-height: 1.45; }
+  .mc4 .mca span { font-size: 11.2px; color: var(--text); line-height: 1.42; }
 </style>
 <div class="inner">
   <div class="open-band" id="s9">
@@ -16,21 +16,22 @@
       <div class="eyebrow">Putting it into practice</div>
       <h1 class="sec-title mt8" style="font-size:28px">Common misconceptions</h1>
     </div>
-    <p class="standfirst" style="width:330px;font-size:13.6px">Multi-region programs often become more complex than necessary when teams start from assumptions instead of workload and platform requirements.</p>
+    <p class="standfirst" style="width:400px;font-size:13px">Multi-region programs often become more complex than necessary when teams start from assumptions instead of workload and platform requirements. The corrections follow the order of the framework: qualification, platform, governance, placement, and resiliency.</p>
   </div>
 
-  <div class="mc4 mt24">
-    <div class="mc"><div class="mcq"><svg><use href="#i-x"/></svg><span>“Every new region needs a Full Regional Hub.”</span></div><div class="mca"><svg><use href="#i-check"/></svg><span>Select the <strong>most efficient profile</strong> that satisfies the identified requirements. Profiles are not maturity stages; any profile can remain the long-term target while it continues to meet them.</span></div></div>
-    <div class="mc"><div class="mcq"><svg><use href="#i-x"/></svg><span>“A paired region is our disaster recovery.”</span></div><div class="mca"><svg><use href="#i-check"/></svg><span>Region pairing supports specific Azure platform and service behaviors; it does not automatically provide workload recovery. Recovery must still be designed and validated per workload.</span></div></div>
-    <div class="mc"><div class="mcq"><svg><use href="#i-x"/></svg><span>“Qualified means approved for any workload.”</span></div><div class="mca"><svg><use href="#i-check"/></svg><span>Qualification is scoped to defined requirements and evidence at a point in time. Each workload revalidates regional suitability during onboarding.</span></div></div>
-    <div class="mc"><div class="mcq"><svg><use href="#i-x"/></svg><span>“A multi-region platform means active-active.”</span></div><div class="mca"><svg><use href="#i-check"/></svg><span>The platform creates regional options. Whether a workload is single-region, primary/recovery, or active across regions is a separate workload-specific resiliency decision.</span></div></div>
-    <div class="mc"><div class="mcq"><svg><use href="#i-x"/></svg><span>“Enabling a region means migrating workloads.”</span></div><div class="mca"><svg><use href="#i-check"/></svg><span>Regional qualification and platform readiness are not workload placement. Remaining in the existing region can be the appropriate outcome.</span></div></div>
-    <div class="mc"><div class="mcq"><svg><use href="#i-x"/></svg><span>“Another Azure region requires another ExpressRoute circuit.”</span></div><div class="mca"><svg><use href="#i-check"/></svg><span>An additional region does not by itself require another circuit. Add hybrid connectivity where reachability, diversity, failure-domain, latency, routing, or bandwidth requirements justify it.</span></div></div>
-    <div class="mc"><div class="mcq"><svg><use href="#i-x"/></svg><span>“Each region needs its own governance model.”</span></div><div class="mca"><svg><use href="#i-check"/></svg><span>Reuse the existing Azure landing-zone governance and operating model; vary regional implementation only where requirements justify it.</span></div></div>
+  <div class="mc4 mt16">
+    <div class="mc"><div class="mcq"><svg><use href="#i-x"/></svg><span>“Adding a region means another landing-zone project.”</span></div><div class="mca"><svg><use href="#i-check"/></svg><span>The landing zone you already run is reused: governance, identity, policy, and automation stay the same. A new region adds regional configuration and only the connectivity profile its workloads need.</span></div></div>
     <div class="mc"><div class="mcq"><svg><use href="#i-x"/></svg><span>“We must choose the perfect regions up front.”</span></div><div class="mca"><svg><use href="#i-check"/></svg><span>Regional requirements and Azure capabilities change. Design the platform so additional qualified options can be introduced without redesigning the broader operating model.</span></div></div>
+    <div class="mc"><div class="mcq"><svg><use href="#i-x"/></svg><span>“Qualified means approved for any workload.”</span></div><div class="mca"><svg><use href="#i-check"/></svg><span>Qualification is scoped to defined requirements and evidence at a point in time. Each workload revalidates regional suitability during onboarding.</span></div></div>
+    <div class="mc"><div class="mcq"><svg><use href="#i-x"/></svg><span>“Every new region needs a Full Regional Hub.”</span></div><div class="mca"><svg><use href="#i-check"/></svg><span>Select the <strong>most efficient profile</strong> that satisfies the identified requirements. Profiles are not maturity stages; any profile can remain the long-term target while it continues to meet those requirements.</span></div></div>
+    <div class="mc"><div class="mcq"><svg><use href="#i-x"/></svg><span>“Another Azure region requires another ExpressRoute circuit.”</span></div><div class="mca"><svg><use href="#i-check"/></svg><span>An additional region does not by itself require another circuit. Additional hybrid connectivity should be introduced where reachability, diversity, failure-domain, latency, routing, or bandwidth requirements justify it.</span></div></div>
+    <div class="mc"><div class="mcq"><svg><use href="#i-x"/></svg><span>“Each region needs its own governance model.”</span></div><div class="mca"><svg><use href="#i-check"/></svg><span>Reuse the existing Azure landing-zone governance and operating model; vary regional implementation only where requirements justify it.</span></div></div>
+    <div class="mc"><div class="mcq"><svg><use href="#i-x"/></svg><span>“Enabling a region means migrating workloads.”</span></div><div class="mca"><svg><use href="#i-check"/></svg><span>Regional qualification and platform readiness are not workload placement. Remaining in the existing region can be the appropriate outcome.</span></div></div>
+    <div class="mc"><div class="mcq"><svg><use href="#i-x"/></svg><span>“A paired region is our disaster recovery.”</span></div><div class="mca"><svg><use href="#i-check"/></svg><span>Region pairing supports specific Azure platform and service behaviors; it does not automatically provide workload recovery. Recovery must still be designed and validated per workload.</span></div></div>
+    <div class="mc"><div class="mcq"><svg><use href="#i-x"/></svg><span>“A multi-region platform means active-active.”</span></div><div class="mca"><svg><use href="#i-check"/></svg><span>The platform creates regional options. Whether a workload is single-region, primary/recovery, or active across regions is a separate workload-specific resiliency decision.</span></div></div>
   </div>
 
-  <div class="note mt20" style="padding:12px 16px;display:flex;gap:14px;align-items:center">
+  <div class="note mt12" style="padding:10px 16px;display:flex;gap:14px;align-items:center">
     <svg style="width:22px;height:22px;color:var(--b600);flex:none"><use href="#i-search"/></svg>
     <p style="font-size:12px;color:var(--ink)">Each correction maps to the framework: profiles (Section 05), zones and pairing (Dimension 4 and Appendix A), qualification and placement (Sections 03 and 06), hybrid connectivity (Dimension 5), and the operating model (Section 07).</p>
   </div>

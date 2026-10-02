@@ -3,14 +3,20 @@
   .om { position: relative; }
   .om .lab { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
   .om .row6 { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 10px; }
-  .om .ad { background: #fff; border: 1.2px solid var(--t300); border-radius: 10px; padding: 11px 12px; min-height: 76px; font-size: 11.4px; line-height: 1.38; color: var(--t700); font-weight: 650; display: flex; gap: 8px; }
+  .om .ad { background: #fff; border: 1.2px solid var(--t300); border-radius: 10px; padding: 11px 12px; min-height: 62px; font-size: 11.4px; line-height: 1.38; color: var(--t700); font-weight: 650; display: flex; gap: 8px; }
   .om .ad svg { width: 18px; height: 18px; color: var(--t600); flex: none; }
-  .om .fd { background: var(--s800); border-radius: 0; padding: 12px 12px; min-height: 76px; font-size: 11.4px; line-height: 1.38; color: #fff; font-weight: 650; display: flex; gap: 8px; }
+  .om .fd { background: var(--s800); border-radius: 0; padding: 11px 12px; min-height: 62px; font-size: 11.4px; line-height: 1.38; color: #fff; font-weight: 650; display: flex; gap: 8px; }
   .om .fd svg { width: 18px; height: 18px; color: #A9B6C6; flex: none; }
   .om .row6.f { gap: 1px; background: #3A5070; border-radius: 12px; overflow: hidden; }
-  .om .brd { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 10px; height: 34px; }
-  .om .brd div { display: flex; justify-content: center; }
-  .om .brd i { width: 1.5px; height: 100%; background: repeating-linear-gradient(var(--s300) 0 3px, transparent 3px 6px); display: block; }
+  .om .brd { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 10px; }
+  .om .brd div { display: flex; flex-direction: column; align-items: center; font-size: 9.6px; line-height: 1.36; color: var(--text); text-align: center; padding: 0 4px; }
+  .om .brd div b { display: block; font-size: 7.6px; letter-spacing: .1em; text-transform: uppercase; color: var(--faint); font-weight: 700; margin-bottom: 1px; }
+  .om .brd i { width: 1.5px; height: 7px; flex: none; background: repeating-linear-gradient(var(--s300) 0 3px, transparent 3px 6px); display: block; margin: 2px 0; }
+  .om .brd i:last-child { margin-top: auto; }
+  .wd { display: grid; grid-template-columns: 1.7fr 1fr 1fr; gap: 16px; }
+  .wd > div { border-top: 2px solid var(--b300); padding-top: 7px; }
+  .wd h4 { font-size: 12px; color: var(--ink); margin-bottom: 2px; }
+  .wd p { font-size: 10.8px; line-height: 1.42; color: var(--text); }
 </style>
 <div class="inner">
   <div class="open-band" id="s7">
@@ -24,17 +30,17 @@
 
   <p class="mt12" style="max-width:900px">A multi-region platform should use one operating model across the estate. Keep governance and architecture standards stable, while regional implementation and workload placement adapt to business, application, and regulatory requirements.</p>
 
-  <div class="figure mt16 om" id="fig18">
+  <div class="figure mt12 om" id="fig18">
     <div class="lab"><span class="cap" style="color:var(--t600)">Allow to adapt by region and workload</span><span class="cap" style="color:var(--faint)">Adapts within the foundation’s guardrails</span></div>
     <div class="row6">
       <div class="ad"><svg><use href="#i-pin"/></svg>Application regional placement</div>
-      <div class="ad"><svg><use href="#i-lock"/></svg>Controls required to satisfy regional or data-boundary requirements</div>
+      <div class="ad"><svg><use href="#i-lock"/></svg>Controls for regional or data-boundary requirements</div>
       <div class="ad"><svg><use href="#i-hub"/></svg>Regional platform connectivity profile</div>
       <div class="ad"><svg><use href="#i-gear"/></svg>Regional service, SKU, and configuration parameters</div>
       <div class="ad"><svg><use href="#i-layers"/></svg>Local shared-services footprint</div>
       <div class="ad"><svg><use href="#i-gauge"/></svg>Workload scale, latency, dependency, and resiliency decisions</div>
     </div>
-    <div class="brd"><div><i></i></div><div><i></i></div><div><i></i></div><div><i></i></div><div><i></i></div><div><i></i></div></div>
+    <div class="brd"><div><i></i><b>Example</b>Same policy set everywhere; the allowed-locations setting differs per landing zone<i></i></div><div><i></i><b>Example</b>Same baseline; an added data-residency control only where a regulation requires it<i></i></div><div><i></i><b>Example</b>Same approved hub design; one region is a Full Regional Hub, another is Remote Hub Connected<i></i></div><div><i></i><b>Example</b>Same modules and pipelines; region and SKU are passed in as parameters<i></i></div><div><i></i><b>Example</b>Same alerting and runbooks; local DNS or firewall only where needed<i></i></div><div><i></i><b>Example</b>Same approval path; each workload team decides its own recovery design<i></i></div></div>
     <div class="row6 f">
       <div class="fd"><svg><use href="#i-shield"/></svg>Governance guardrails and policy intent</div>
       <div class="fd"><svg><use href="#i-id"/></svg>Identity, security, and compliance baselines</div>
@@ -44,14 +50,23 @@
       <div class="fd"><svg><use href="#i-users"/></svg>Ownership, approval, and lifecycle processes</div>
     </div>
     <div class="lab mt8"><span class="cap" style="color:var(--s800)">Keep consistent across the Azure estate</span><span class="cap" style="color:var(--faint)">One foundation for every region and profile</span></div>
-    <div class="figcap"><span class="fn">Figure 19</span><span class="ft"><b>What stays consistent and what adapts.</b> Each adaptable decision sits on a consistent foundation: placement varies, governance does not; profiles vary, approved patterns do not.</span></div>
+    <div class="figcap"><span class="fn">Figure 19</span><span class="ft"><b>What stays consistent and what adapts.</b> Placement varies, governance does not; profiles vary, approved patterns do not.</span></div>
   </div>
 
-  <div class="row mt20" style="gap:36px;align-items:center">
-    <div style="flex:0 0 400px">
-      <div class="pull" style="border-left-width:4px"><p style="font-size:24px;line-height:1.2;font-weight:600">Region-agnostic does not mean region-random.</p></div>
+  <div class="row" style="gap:28px;align-items:flex-start;margin-top:8px">
+    <div style="flex:0 0 150px"><h3 style="font-size:15px;color:var(--ink);line-height:1.2">Who decides what</h3><p class="small muted mt4" style="font-size:10.4px">Each qualified option has a named owner, an assessment date, and revalidation triggers.</p></div>
+    <div class="wd" style="flex:1">
+      <div><h4>The platform team</h4><p>Owns regional qualification, the connectivity profile for each region, and the decision register. Adding platform capability to a region is a platform decision, not something a workload team changes on its own.</p></div>
+      <div><h4>Security and compliance</h4><p>Own the mandatory gates: data residency, sovereignty, and policy requirements.</p></div>
+      <div><h4>Workload teams</h4><p>Own placement and resiliency decisions for their workloads, within the qualified options.</p></div>
     </div>
-    <p style="flex:1">Regional adaptability operates within a governed framework. Workloads select from qualified regional options based on their requirements, their Workload Landing Zone archetype, and each region’s current capabilities and qualification status. Regional qualification should be reassessed as workload requirements and Azure capabilities change.</p>
+  </div>
+
+  <div class="row" style="gap:26px;align-items:center;margin-top:10px">
+    <div style="flex:0 0 250px">
+      <div class="pull" style="border-left-width:4px"><p style="font-size:16px;line-height:1.2;font-weight:600">Region-agnostic does not mean region-random.</p></div>
+    </div>
+    <p style="flex:1;font-size:11.4px;line-height:1.45">Regional adaptability operates within a governed framework. Workloads select from qualified regional options based on their requirements, their Workload Landing Zone archetype, and each region’s current capabilities and qualification status. Regional qualification should be reassessed as workload requirements and Azure capabilities change.</p>
   </div>
 </div>
 </section>

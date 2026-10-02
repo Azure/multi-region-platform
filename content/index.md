@@ -1,15 +1,41 @@
 ---
 title: Multi-region adoption strategy
 description: Extend Azure landing-zone principles so that additional Azure regions become qualified options that workloads can use selectively, without separate governance models or an identical platform footprint in every region.
-ms.date: 09/30/2026
+ms.date: 10/02/2026
 ms.topic: conceptual
 ---
 
 # Multi-region adoption strategy
 
-Many Azure estates are designed around a fixed primary and disaster-recovery region pair. This guidance describes a different approach: extend Azure landing-zone principles so that additional regions become **qualified options that workloads can use selectively**, without creating separate governance models or reproducing an identical platform footprint in every region.
+Adding an Azure region shouldn't mean starting another landing-zone project. If you already run Azure landing zones, most of what a new region needs already exists: the governance, identity, policy, automation, and operating model. This guidance shows how to reuse that foundation so that additional regions become **qualified options that workloads can use selectively**, without creating separate governance models or reproducing an identical platform footprint in every region.
 
-The objective is not to prebuild every capability everywhere. It is to establish a consistent operating model, qualify regional options against known business and workload requirements, and enable only the platform capabilities that each region needs.
+The objective is not to prebuild every capability everywhere. It is to keep one operating model, qualify regional options against known business and workload requirements, and enable only the platform capabilities that each region needs.
+
+## What adding a region involves
+
+A new region is often assumed to be a large project. With this approach, it is a short series of decisions and a targeted change to the platform you already run.
+
+| Common assumption | With this approach |
+|---|---|
+| A new region needs its own landing-zone design. | Reuse the existing landing zone. The region is added to the policies, automation, and monitoring you already run. See [Governance and operating model](./operating-model.md). |
+| Every region needs a full hub. | Start with the lightest [connectivity profile](./connectivity-profiles.md) that meets the requirements. Two of the four profiles need no local hub. |
+| Every region needs another ExpressRoute circuit. | Reuse existing hybrid connectivity where reachability and resiliency requirements allow. Add circuits only when a requirement justifies them. See [Platform enablement and connectivity](./platform-enablement-connectivity.md). |
+| Enabling a region means migrating workloads. | Nothing has to move. Workloads use the region when their own requirements call for it. See [Workload placement](./workload-placement.md). |
+| Qualification is a long assessment. | It is five dimensions, each with one question, answered from what your teams already know. Unknowns are recorded and revisited, not treated as blockers. See [Regional qualification](./regional-qualification.md). |
+
+The first additional region takes the most thought, because the decisions are made for the first time. Later regions reuse those decisions and become mostly configuration. For more examples, see [Common misconceptions](./misconceptions.md).
+
+## How it works
+
+The framework has four parts. Each part answers one question.
+
+1. **[Qualify the region](./regional-qualification.md).** Can this region support the workloads we expect? Five dimensions lead to one of four outcomes: excluded, candidate, conditional, or qualified.
+1. **[Right-size the platform](./platform-architecture.md).** What is the least the platform must provide in this region? Workload Landing Zone archetypes describe what applications require; one of four connectivity profiles describes what the region provides.
+1. **[Keep one operating model](./operating-model.md).** What stays the same in every region, and what can vary?
+1. **[Place workloads when they're ready](./workload-placement.md).** Should this workload use the region now? Decide per workload, with current evidence.
+
+> [!TIP]
+> New to the framework? [Getting started](./getting-started.md) walks through the first additional region in six steps, and the [decision trees](./decision-trees.md) put the two main decisions on one page.
 
 ## The approach at a glance
 

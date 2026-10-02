@@ -317,7 +317,7 @@ module.exports = (pres, L) => {
     // left
     L.chip(s, 'LAYER 1', 0.6, 1.7, { fill: C.s100, color: C.s800, size: 9 });
     L.txt(s, 'Resilient hybrid connectivity', 0.6, 2.05, 5.8, 0.4, { fontSize: 18, fontFace: F.semi, color: C.ink });
-    L.txt(s, 'Evaluate existing hybrid connectivity against datacenter and user locations, data boundaries, provider and peering-location diversity, latency, bandwidth, routing, and failure-domain requirements. Enabling an additional Azure region does not inherently require another ExpressRoute circuit.', 0.6, 2.5, 5.8, 1.2, { fontSize: 11.5, color: C.text });
+    L.txt(s, 'Enabling an additional Azure region doesn’t by itself require another ExpressRoute circuit. Evaluate the existing ExpressRoute, VPN, SD-WAN, or other hybrid connectivity against datacenter and user locations, latency, bandwidth, and routing requirements.', 0.6, 2.5, 5.8, 1.2, { fontSize: 11.5, color: C.text });
     L.box(s, 0.6, 3.8, 5.8, 0.85, { fill: C.b50, line: C.b200, r: 0.1 });
     L.txt(s, [{ text: 'THE DECIDING FACTOR', options: { bold: true, fontSize: 8.5, color: C.b600, charSpacing: 2, breakLine: true } }, { text: 'Are additional circuits, peering locations, gateways, or paths needed for diversity, failure-domain isolation, latency, bandwidth, routing, or resiliency?', options: { fontSize: 11, fontFace: F.semi, color: C.ink } }], 0.8, 3.8, 5.45, 0.85, { valign: 'middle' });
     L.path(s, [[2.0, 4.65], [2.0, 4.95]], { color: C.s600 }); L.tag(s, 'No', 2.0, 4.8, { color: C.s600 });
@@ -353,40 +353,46 @@ module.exports = (pres, L) => {
   // ───────────────────────── Readiness checklist
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, '03 · Dimension 5 · Before workloads arrive', 'Platform readiness checklist for a new region', { tw: 7.6, lede: 'The platform items that most often stall a new region after it has been qualified. Cheap to plan early, expensive to retrofit. Apply only what the profile and workload requirements call for.', lx: 8.5, lw: 4.23 });
+    L.header(s, '03 · Dimension 5 · Before workloads arrive', 'Platform readiness checklist for a new region', { tw: 7.6, lede: 'The platform items that most often stall a new region after it has been qualified. Cheap to plan early, expensive to retrofit. Get these right once, and each later region becomes mostly configuration instead of a new project.', lx: 8.5, lw: 4.23 });
     const G = [
-      ['network', C.b600, 'Network foundation', [['IP address planning', 'Non-overlapping space for future regions and profiles. The most common blocker.', 1], ['Private DNS across regions', 'Private endpoints and hybrid names resolve wherever the workload runs.'], ['Routing and inspection paths', 'Reach hubs and firewalls without asymmetric paths.'], ['Hybrid connectivity', 'Reuse existing circuits or add paths, per Dimension 5.']]],
-      ['shield', C.s800, 'Governance and automation', [['Region settings in policy', 'Allowed locations admit the region only for its qualified requirements.', 1], ['Region-aware infrastructure as code', 'Modules, naming, tagging parameterized by region.'], ['Landing-zone provisioning', 'Subscription vending can place workloads in the region.']]],
+      ['network', C.b600, 'Network foundation', [['IP address planning', 'Non-overlapping space for future regions and profiles.', 1], ['Private DNS across regions', 'Private endpoints and hybrid names resolve wherever the workload runs.'], ['Routing and inspection paths', 'Traffic reaches hubs and firewalls without asymmetric paths.'], ['Hybrid connectivity', 'Existing circuits are reused, or paths are added, per Dimension 5.'], ['Firewall and partner allow-lists', 'On-premises firewalls and third-party allow-lists include the new ranges.'], ['Identity services', 'Directory and identity services that workloads depend on are reachable.']]],
+      ['shield', C.s800, 'Governance and automation', [['Region settings in policy', 'Allowed locations admit the region only for its qualified requirements.', 1], ['Region-aware infrastructure as code', 'Modules, naming, tagging parameterized by region.'], ['Landing-zone provisioning', 'Subscription vending can place workloads in the region.'], ['Regional access', 'Subscriptions have access where the region is restricted.']]],
       ['monitor', C.t600, 'Operations and data', [['Where logs and telemetry live', 'Workspace location and residency for monitoring and security data.', 1], ['Backup placement', 'Vaults and valid restore targets — see Appendix A.'], ['Runbooks and support', 'Incident, on-call, and support procedures include the region.']]],
       ['gauge', C.v600, 'Capacity and security', [['Quota and specific capacity', 'Quota for required SKUs and models requested ahead; reservations where justified.', 1], ['Key Vault placement', 'Workload vaults per region — see Appendix A.'], ['Security coverage', 'Posture, threat detection, privileged access extend to the region.']]],
     ];
+    // network foundation spans the full width (six items, 3 x 2); the other three groups sit below
+    const item = (xx, yy, cw, n, d, key) => {
+      L.box(s, xx, yy, cw, 0.008, { fill: C.line, r: 0 });
+      L.box(s, xx + 0.02, yy + 0.09, 0.16, 0.16, { fill: 'FFFFFF', line: key ? C.w600 : C.b500, lw: 1.5, r: 0.04 });
+      L.txt(s, n, xx + 0.28, yy + 0.04, cw - 0.3, 0.2, { fontSize: 10, bold: true, color: C.ink, valign: 'middle' });
+      L.txt(s, d, xx + 0.28, yy + 0.24, cw - 0.3, 0.26, { fontSize: 8.4, color: C.muted });
+    };
     G.forEach(([ic, c, t, items], i) => {
-      const x = 0.6 + i * 3.08, y = 1.85, w = 2.93, h = 4.2;
+      const wide = i === 0, w3 = (12.13 - 2 * 0.15) / 3;
+      const x = wide ? 0.6 : 0.6 + (i - 1) * (w3 + 0.15), y = wide ? 1.75 : 3.42, w = wide ? 12.13 : w3, h = wide ? 1.57 : 2.58;
       L.box(s, x, y, w, h, { fill: C.wash, r: 0.12 });
-      L.badge(s, ic, x + 0.18, y + 0.18, 0.42, c);
-      L.txt(s, t, x + 0.7, y + 0.16, w - 0.8, 0.46, { fontSize: 12.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
+      L.badge(s, ic, x + 0.18, y + 0.1, 0.32, c);
+      L.txt(s, t, x + 0.6, y + 0.1, w - 0.8, 0.32, { fontSize: 12, fontFace: F.semi, color: C.ink, valign: 'middle' });
       items.forEach(([n, d, key], j) => {
-        const yy = y + 0.8 + j * 0.84;
-        L.box(s, x + 0.18, yy, w - 0.36, 0.008, { fill: C.line, r: 0 });
-        L.box(s, x + 0.2, yy + 0.12, 0.18, 0.18, { fill: 'FFFFFF', line: key ? C.w600 : C.b500, lw: 1.5, r: 0.04 });
-        L.txt(s, n, x + 0.48, yy + 0.07, w - 0.62, 0.28, { fontSize: 10.5, bold: true, color: C.ink, valign: 'middle' });
-        L.txt(s, d, x + 0.48, yy + 0.35, w - 0.62, 0.46, { fontSize: 9, color: C.muted });
+        if (wide) item(x + 0.18 + (j % 3) * ((w - 0.36 + 0.2) / 3), y + 0.48 + Math.floor(j / 3) * 0.52, (w - 0.36 - 0.4) / 3, n, d, key);
+        else item(x + 0.18, y + 0.5 + j * 0.51, w - 0.36, n, d, key);
       });
     });
     L.box(s, 0.6, 6.12, 0.16, 0.16, { fill: 'FFFFFF', line: C.w600, lw: 1.5, r: 0.04 });
-    L.txt(s, 'Most common blockers — plan before qualification completes', 0.85, 6.07, 4.5, 0.26, { fontSize: 9.5, color: C.muted, valign: 'middle' });
-    L.box(s, 5.3, 6.12, 0.16, 0.16, { fill: 'FFFFFF', line: C.b500, lw: 1.5, r: 0.04 });
-    L.txt(s, 'Confirm as the capability set is enabled', 5.55, 6.07, 4, 0.26, { fontSize: 9.5, color: C.muted, valign: 'middle' });
+    L.txt(s, 'Common blockers: plan before qualification completes', 0.85, 6.07, 3.6, 0.26, { fontSize: 9.5, color: C.muted, valign: 'middle' });
+    L.box(s, 4.5, 6.12, 0.16, 0.16, { fill: 'FFFFFF', line: C.b500, lw: 1.5, r: 0.04 });
+    L.txt(s, 'Confirm as the capability set is enabled', 4.75, 6.07, 2.8, 0.26, { fontSize: 9.5, color: C.muted, valign: 'middle' });
+    L.txt(s, 'Private DNS, routing and inspection paths, and hybrid connectivity apply only to connected profiles.', 7.5, 6.07, 5.23, 0.26, { fontSize: 9, color: C.muted, align: 'right', valign: 'middle' });
     L.box(s, 0.6, 6.42, 12.13, 0.45, { fill: C.g100, r: 0.1 });
     L.txt(s, [{ text: 'Ready for workloads ', options: { bold: true, color: C.g600 } }, { text: 'means the region is qualified for its workload requirements, the required capability set is in place through standard automation, and workloads can onboard without platform exceptions.' }], 0.8, 6.42, 11.8, 0.45, { fontSize: 10.5, color: C.ink, valign: 'middle' });
     L.footer(s, 0, SEC);
-    s.addNotes('Hub and shared-service implementations differ between organizations; the checklist names what must be true, not how a specific hub is built. IP address planning is the most common blocker: reserve non-overlapping address space for future regions and profiles before you need it.');
+    s.addNotes('Hub and shared-service implementations differ between organizations; the checklist names what must be true, not how a specific hub is built. Items marked as common blockers should be planned before qualification completes. Everything except private DNS, routing and inspection paths, and hybrid connectivity applies to every profile, including Disconnected Spokes.');
   }
 
   // ───────────────────────── 16 · Decision tree: qualification
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, 'Decision tool · Regional qualification', 'Should this region be qualified?', { tw: 8, lede: 'Apply per candidate region and set of defined workload requirements. Each question is a framework dimension; each branch ends in one of four classifications.', lx: 9.1, lw: 3.63 });
+    L.header(s, 'Decision tool · Regional qualification', 'Should this region be qualified?', { tw: 8, lede: 'Apply per candidate region and set of defined workload requirements. Use the tree to structure the conversation, not as a gate. Questions 1 and 2 need no technical assessment; answer them for every candidate region first.', lx: 9.1, lw: 3.63 });
     L.box(s, 3.15, 1.55, 3.3, 0.38, { fill: C.s800, r: 0.19 });
     L.txt(s, 'Candidate region + defined requirements', 3.15, 1.55, 3.3, 0.38, { fontSize: 11, fontFace: F.semi, color: 'FFFFFF', align: 'center', valign: 'middle' });
     const Q = [

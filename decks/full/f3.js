@@ -15,7 +15,7 @@ module.exports = (pres, L) => {
   // ───────────────────────── 17 · Archetypes
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, '04 · What applications require', 'Workload Landing Zone Archetypes', { ec: C.t600, tw: 8, lede: 'A planning abstraction for grouping recurring connectivity and dependency requirements. It does not replace the Azure landing-zone hierarchy or prescribe a specific connectivity profile.', lx: 8.6, lw: 4.13 });
+    L.header(s, '04 · What applications require', 'Workload Landing Zone Archetypes', { ec: C.t600, tw: 8, lede: 'A planning abstraction that groups recurring application connectivity and dependency requirements. It doesn’t replace the Azure landing-zone hierarchy.', lx: 8.6, lw: 4.13 });
     const A = [
       ['building', 'Hybrid-Connected Applications', 'Significant dependencies on on-premises environments, enterprise networks, or centralized shared services that require persistent private connectivity.', ['Remote hub', 'Minimal hub', 'Full hub'], 'Profile set by dependency latency, resiliency, regulation, and operations. Common in migrations.'],
       ['layers', 'Isolated Cloud-Native or AI Applications', 'Self-contained workloads that can operate without persistent private connectivity to enterprise or centralized dependencies.', ['Disconnected spokes', 'Connected, where justified'], 'Flexible placement across regions; connected only where platform requirements justify it.'],
@@ -45,7 +45,7 @@ module.exports = (pres, L) => {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
     L.txt(s, 'ARCHETYPES AND PROFILES', 0.6, 0.42, 8, 0.25, { fontSize: 10, bold: true, color: C.t600, charSpacing: 3 });
     L.txt(s, [{ text: 'Archetypes describe what applications require.', options: { color: C.t700, breakLine: true } }, { text: 'Profiles describe what the platform provides.', options: { color: C.b700 } }], 0.6, 0.7, 8.6, 0.95, { fontSize: 24, fontFace: F.semi });
-    L.txt(s, 'The mapping is not one-to-one: one archetype can use different profiles, and one profile can support multiple archetypes.', 9.4, 0.72, 3.33, 0.9, { fontSize: 12, color: C.muted });
+    L.txt(s, 'An archetype doesn’t dictate a profile: one archetype can use different profiles, and one profile can serve several archetypes. Choose the lightest profile that meets the needs.', 9.4, 0.72, 3.33, 0.9, { fontSize: 12, color: C.muted });
     const x0 = 0.6, aw = 2.75, pw = 1.55, dx = x0 + aw + 4 * pw, dw = 12.73 - dx, top = 2.8, rh = 0.74;
     L.txt(s, 'REGIONAL PLATFORM CONNECTIVITY PROFILES · WHAT THE PLATFORM PROVIDES', x0 + aw, 1.75, 4 * pw, 0.22, { fontSize: 8.5, bold: true, color: C.b600, charSpacing: 1 });
     L.box(s, x0 + aw, 1.98, 4 * pw, 0.03, { fill: C.b600, r: 0 });
@@ -87,7 +87,7 @@ module.exports = (pres, L) => {
   // ───────────────────────── 19 · Profiles spectrum
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, '05 · What the platform provides', 'Regional Platform Connectivity Profiles', { tw: 8, lede: 'Enabling another region does not require duplicating an existing geographic landing zone. Establish the most efficient profile that supports the workload requirements expected in the region.', lx: 8.6, lw: 4.13 });
+    L.header(s, '05 · What the platform provides', 'Regional Platform Connectivity Profiles', { tw: 8, lede: 'Enabling another region doesn’t require duplicating an existing geographic hub. Choose the most efficient profile that supports the workloads expected to use the region.', lx: 8.6, lw: 4.13 });
     L.line(s, 0.6, 1.95, 12.73, 1.95, { color: C.b500, w: 3 });
     L.txt(s, 'NO DEPENDENCY ON A GEOGRAPHIC HUB', 0.6, 2.03, 5, 0.22, { fontSize: 8.5, bold: true, color: C.t600, charSpacing: 1.5 });
     L.txt(s, 'GREATER LOCAL CAPABILITY AND INDEPENDENCE', 7.2, 2.03, 5.53, 0.22, { fontSize: 8.5, bold: true, color: C.b700, charSpacing: 1.5, align: 'right' });
@@ -182,7 +182,7 @@ module.exports = (pres, L) => {
   // ───────────────────────── Cost, independence, hub implementations
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, '05 · Profiles in practice', 'Cost, independence, and how hubs are built', { tw: 7.5, lede: 'Profiles describe capability, not a specific network build. Two questions matter: what each increase in local capability costs to run, and how the hub capabilities are implemented in your organization.', lx: 8.4, lw: 4.33 });
+    L.header(s, '05 · Profiles in practice', 'Cost, independence, and how hubs are built', { tw: 7.5, lede: 'Profiles describe capability, not a specific network build. Each step up in local capability has a cost, and the same profile can be implemented in different ways.', lx: 8.4, lw: 4.33 });
     // cost curve (native)
     const cx = 0.9, cy = 5.7, cw = 5.1, ch = 3.6;
     L.line(s, cx, cy, cx, cy - ch, { color: C.faint, w: 1 }); L.line(s, cx, cy, cx + cw, cy, { color: C.faint, w: 1 });
@@ -212,7 +212,7 @@ module.exports = (pres, L) => {
   // ───────────────────────── 21 · Profile selection tree
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, 'Decision tool · Connectivity profile', 'Which profile should this region provide?', { tw: 8, lede: 'Start from the workload requirements and dependencies expected in the region. Stop at the first profile that satisfies them.', lx: 9.1, lw: 3.63 });
+    L.header(s, 'Decision tool · Connectivity profile', 'Which profile should this region provide?', { tw: 8, lede: 'Start from the workload requirements and dependencies expected in the region. Stop at the first profile that satisfies them. Two of the four profiles need no local hub.', lx: 9.1, lw: 3.63 });
     L.box(s, 1.35, 1.6, 4.2, 0.4, { fill: C.t600, r: 0.2 });
     L.txt(s, 'Workload scenarios expected in the region', 1.35, 1.6, 4.2, 0.4, { fontSize: 11, fontFace: F.semi, color: 'FFFFFF', align: 'center', valign: 'middle' });
     const Q = [
@@ -253,7 +253,7 @@ module.exports = (pres, L) => {
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
     L.header(s, '05 · Profile selection', 'Different profiles coexist across one governed estate', { tw: 6.2 });
-    const P = ['Start with the workload requirements and dependencies from regional qualification.', 'Use archetypes as a planning abstraction; validate against actual requirements.', 'Select the most efficient regional connectivity profile.', 'Keep capabilities remote when characteristics permit; go local only when measurably justified.', 'Consider direct spoke-to-spoke for significant east-west traffic before a regional hub.', 'Let profiles coexist; they evolve only when requirements change — no maturity path.'];
+    const P = ['Start with the workload requirements and dependencies from regional qualification.', 'Use archetypes to spot recurring needs; validate against the actual workloads.', 'Select the most efficient profile that satisfies those requirements.', 'Keep capabilities remote when characteristics permit; go local only when measurably justified.', 'Consider direct spoke-to-spoke for significant east-west traffic before a regional hub.', 'Profiles coexist; a region’s profile changes only when requirements change — no maturity path.'];
     P.forEach((t, i) => {
       const y = 1.62 + i * 0.58;
       L.txt(s, String(i + 1).padStart(2, '0'), 0.6, y, 0.45, 0.55, { fontSize: 12, bold: true, color: C.b600, valign: 'middle' });

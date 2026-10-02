@@ -1,13 +1,13 @@
 ---
 title: Workload Landing Zone archetypes
 description: Four archetypes that group recurring application connectivity and dependency requirements, so platform teams can plan regional capability before every workload is known.
-ms.date: 09/30/2026
+ms.date: 10/02/2026
 ms.topic: conceptual
 ---
 
 # Workload Landing Zone archetypes
 
-Application Landing Zone archetypes are a planning abstraction that groups recurring application connectivity and dependency requirements. An archetype describes what an application or application portfolio requires from the platform. It doesn't replace the existing Azure landing-zone hierarchy.
+Workload Landing Zone archetypes are a planning abstraction that groups recurring application connectivity and dependency requirements. An archetype describes what an application or application portfolio requires from the platform. It doesn't replace the existing Azure landing-zone hierarchy.
 
 Archetypes describe what applications require; connectivity profiles describe what the platform provides. The mapping isn't one-to-one: one archetype can use different profiles, and one profile can support multiple archetypes. Assign each workload the closest-fitting archetype and record any material requirements that fall outside it. Portfolio-level dependencies can also affect the platform capabilities needed across several workloads.
 

@@ -8,7 +8,7 @@ Source for the multi-region platform guidance and every format it ships in:
 |---|---|---|
 | Website (GitHub Pages) | `content/*.md` + `content/toc.yml` | `docs/` |
 | CAF article set (future) | `content/*.md` + `content/toc.yml` + `content/media/` | submitted as-is to the CAF repo |
-| Whitepaper PDF (45 pages) + single-file HTML | `whitepaper/pages/*.html` | `dist/Adaptable-Multi-Region-Azure-Platform.pdf` / `.html` |
+| Whitepaper PDF (46 pages) + single-file HTML | `whitepaper/pages/*.html` | `dist/Adaptable-Multi-Region-Azure-Platform.pdf` / `.html` |
 | Executive brief PDF (13 pages) + HTML | `whitepaper/exec/pages/*.html` | `dist/…-Executive-Brief.pdf` / `.html` |
 
 The Markdown in `content/` is written in Microsoft Learn syntax, so the same files drive the website now and the Cloud Adoption Framework (CAF) later. Diagrams are drawn once, in the whitepaper, and extracted for the other formats.
@@ -17,9 +17,10 @@ The Markdown in `content/` is written in Microsoft Learn syntax, so the same fil
 content/            Learn-flavored Markdown, toc.yml, media/*.png (CAF-ready)
 whitepaper/         page-accurate HTML/CSS → PDF (full edition and exec brief)
 decks/              pptxgenjs sources for both decks
+word/               generator for the Word edition (built from the Markdown)
 site/               website generator, template, CSS/JS, figure extractor, QA
 docs/               generated website (GitHub Pages serves this folder)
-dist/               generated PDFs, HTML, and PPTX (git-ignored)
+dist/               generated PDFs, HTML, PPTX, and DOCX (git-ignored)
 build.sh            rebuilds everything
 ```
 
@@ -35,6 +36,8 @@ pip install -r requirements.txt && python3 -m playwright install chromium
 ./build.sh site     # website only (use after Markdown-only edits)
 ./build.sh pdf      # whitepaper + executive brief
 ./build.sh decks    # both PowerPoint decks
+./build.sh word     # Word edition, generated from the Markdown (needs pandoc)
+./build.sh check    # drift check: Markdown against the whitepaper, decks, and Word edition
 ```
 
 `./build.sh site` finishes with `site/tools/qa.py`. It checks every page for broken links and anchors, horizontal overflow, and console errors. It should print `no problems`. For a visual review, run `python3 site/tools/qa.py --shots` (add `--dark` or `--width 1280`); screenshots land in `site/tools/shots/`.
@@ -47,17 +50,17 @@ pip install -r requirements.txt && python3 -m playwright install chromium
 2. Go to **Settings → Pages → Build and deployment**. Choose **Deploy from a branch**, then select `main` and `/docs`.
 3. The site is served at `https://<account>.github.io/<repo>/`. `docs/.nojekyll` is already in place, and all links are relative, so a custom domain or a subpath works without changes.
 
-The site is desktop-first. Below 960 px wide it shows a download panel (both PDFs and both decks) instead of the article layout. The downloads come from `docs/downloads/`, which `./build.sh` refreshes.
+The site is desktop-first. Below 960 px wide it shows a download panel (both PDFs) instead of the article layout. The decks and the Word edition are not published: they stay in `dist/`, which is git-ignored. The downloads come from `docs/downloads/`, which `./build.sh` refreshes.
 
 ## Making a content change
 
-The Markdown is the primary text. The PDF and decks are designed layouts, so their changes are made by hand. Use this checklist so the formats don't drift:
+The Markdown is the primary text. The Word edition is generated from it, so it always carries the same text. The PDF and decks are designed layouts that condense some prose, so their changes are made by hand. Use this checklist so the formats don't drift:
 
 1. **Markdown**: edit `content/<article>.md`. For a new article, also add it to `content/toc.yml` and update the `## Next step` link of the article before it.
 2. **Whitepaper**: make the same change on the matching page in `whitepaper/pages/` (see the mapping below). If it affects the executive story, update `whitepaper/exec/pages/` too.
 3. **Decks**: update the matching slide in `decks/full/f*.js` and, if it's exec-level, `decks/exec/e.js`.
 4. **Diagrams**: edit them only in `whitepaper/pages/`. `./build.sh site` re-extracts them into live website figures (`site/figures/`) and CAF PNGs (`content/media/`). The deck diagrams are drawn separately in `decks/`, so mirror any structural change there.
-5. Run `./build.sh`, check `no problems` and `[]`, and spot-check the changed pages.
+5. Run `./build.sh`, check `no problems` and `[]`, and spot-check the changed pages. Then run `./build.sh check`: it lists Markdown sentences that the whitepaper doesn't carry word for word (review new ones; condensed card and figure text is expected) and fails on retired terms in any format. Add a term to `RETIRED` in `site/tools/drift.py` whenever you rename something.
 6. Bump `ms.date` in the front matter of every Markdown article you changed.
 
 Whitepaper page → article mapping:

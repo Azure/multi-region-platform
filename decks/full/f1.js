@@ -20,7 +20,7 @@ module.exports = (pres, L) => {
       L.box(s, 0.6, 6.02 + i * 0.3, 0.26, 0.06, { fill: c, r: 0.03 });
       L.txt(s, t, 0.98, 5.93 + i * 0.3, 5, 0.25, { fontSize: 11.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
     });
-    L.txt(s, 'September 2026', 0.6, 7.0, 3, 0.22, { fontSize: 9.5, color: C.muted });
+    L.txt(s, 'October 2026', 0.6, 7.0, 3, 0.22, { fontSize: 9.5, color: C.muted });
     s.addNotes('Opening. This briefing summarizes the Multi-Region Platform Whitepaper: how to extend Azure landing zones so that additional Azure regions become governed, qualified options — without separate governance structures or identical infrastructure in every region. The artwork shows the model: two strategic hubs, a minimal hub, workload spokes, and an empty candidate footprint, all standing on one shared foundation.');
   }
 
@@ -65,9 +65,9 @@ module.exports = (pres, L) => {
   // ───────────────────────── Executive summary (1/2)
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, 'Executive summary', 'Make regional choice a governed platform capability — not a one-time prediction', { tw: 7.3, ts: 23, lede: 'Extend Azure landing-zone principles so that additional regions become qualified options that workloads can use selectively — without separate governance models or an identical platform footprint in every region.', lx: 8.2, lw: 4.53, ls: 12 });
+    L.header(s, 'Executive summary', 'Make regional choice a governed platform capability — not a one-time prediction', { tw: 7.3, ts: 23, lede: 'Adding an Azure region shouldn’t mean starting another landing-zone project. Most of what a new region needs already exists: governance, identity, policy, automation, and the operating model. Reuse that foundation so additional regions become qualified options that workloads can use selectively.', lh: 1.45, lx: 8.2, lw: 4.53, ls: 11.5 });
     L.box(s, 0.6, 1.95, 12.13, 0.95, { fill: C.b50, r: 0.12 });
-    L.txt(s, 'The objective is not to prebuild every capability everywhere. It is to establish a consistent operating model, qualify regional options against known business and workload requirements, and enable only the platform capabilities that each region needs.', 0.85, 1.95, 11.6, 0.95, { fontSize: 14, fontFace: F.semi, color: C.b800, valign: 'middle' });
+    L.txt(s, 'The objective is not to prebuild every capability everywhere. It is to keep one operating model, qualify regional options against known business and workload requirements, and enable only the platform capabilities that each region needs.', 0.85, 1.95, 11.6, 0.95, { fontSize: 14, fontFace: F.semi, color: C.b800, valign: 'middle' });
     const cards = [
       ['layers', C.b600, C.wash, 'Extend, do not replicate', 'The landing-zone operating model stays consistent across the Azure estate. New regions add only the most efficient platform capabilities required by the workloads expected to use them, rather than replicating an existing regional footprint.'],
       ['search', C.b700, C.wash, 'Qualify regions against defined requirements', 'Business and geography, data and compliance, workload requirements and dependencies, regional capabilities, and platform enablement. Qualification creates a governed regional option; it does not permanently approve the region for every workload.'],
@@ -84,6 +84,53 @@ module.exports = (pres, L) => {
     L.txt(s, [{ text: 'Qualification creates a governed regional option; ', options: { fontFace: F.semi } }, { text: 'it does not permanently approve the region for every workload.' }], 0.85, 6.05, 11.6, 0.7, { fontSize: 14, color: 'FFFFFF', valign: 'middle' });
     L.footer(s, 0, 'EXECUTIVE SUMMARY');
     s.addNotes('Many Azure estates are designed around a fixed primary and disaster-recovery region pair. This approach extends Azure landing-zone principles so additional regions become qualified options that workloads can use selectively. Regional qualification evaluates business and geographic needs, data and compliance constraints, workload requirements and dependencies, regional capabilities, and platform enablement. A region can remain excluded, conditional, or qualified based on documented evidence, constraints, owners, and revalidation triggers. Archetypes describe what applications require; connectivity profiles describe what the platform provides; the relationship is intentionally not one-to-one.');
+  }
+
+  // ───────────────────────── What adding a region involves · How it works
+  {
+    const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
+    L.header(s, 'Executive summary · what it takes', 'What adding a region involves', { tw: 7.3, ts: 24, lede: 'A new region is often assumed to be a large project. With this approach, it is a short series of decisions and a targeted change to the platform you already run.', lx: 8.2, lw: 4.53, ls: 12 });
+    const R = [
+      ['A new region needs its own landing-zone design.', 'Reuse the existing landing zone. The region is added to the policies, automation, and monitoring you already run.'],
+      ['Every region needs a full hub.', 'Start with the lightest connectivity profile that meets the requirements. Two of the four profiles need no local hub.'],
+      ['Every region needs another ExpressRoute circuit.', 'Reuse existing hybrid connectivity where reachability and resiliency requirements allow. Add circuits only when a requirement justifies them.'],
+      ['Enabling a region means migrating workloads.', 'Nothing has to move. Workloads use the region when their own requirements call for it.'],
+      ['Qualification is a long assessment.', 'Five dimensions, each with one question, answered from what your teams already know. Unknowns are recorded and revisited, not treated as blockers.'],
+    ];
+    const tx = 0.6, tw = 7.55, qw = 2.75, ty = 1.75, rh = 0.74;
+    L.txt(s, 'COMMON ASSUMPTION', tx + 0.15, ty, qw, 0.26, { fontSize: 8.5, bold: true, color: C.muted, charSpacing: 2, valign: 'middle' });
+    L.txt(s, 'WITH THIS APPROACH', tx + qw + 0.2, ty, 4, 0.26, { fontSize: 8.5, bold: true, color: C.muted, charSpacing: 2, valign: 'middle' });
+    R.forEach(([q, a], i) => {
+      const y = ty + 0.32 + i * (rh + 0.06);
+      L.box(s, tx, y, qw, rh, { fill: C.w50, r: 0.08 });
+      L.icon(s, 'x', tx + 0.12, y + 0.14, 0.18, 'o');
+      L.txt(s, q, tx + 0.38, y, qw - 0.46, rh, { fontSize: 10.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
+      L.box(s, tx + qw + 0.06, y, tw - qw - 0.06, rh, { fill: 'FFFFFF', line: C.line, r: 0.08 });
+      L.icon(s, 'check', tx + qw + 0.2, y + 0.14, 0.18, 'g');
+      L.txt(s, a, tx + qw + 0.48, y, tw - qw - 0.62, rh, { fontSize: 10.2, color: C.text, valign: 'middle' });
+    });
+    // how it works
+    const hx = 8.4, hw = 4.33;
+    L.txt(s, 'How it works', hx, ty - 0.04, hw, 0.32, { fontSize: 15, fontFace: F.semi, color: C.ink, valign: 'middle' });
+    L.txt(s, 'Four parts. Each part answers one question.', hx, ty + 0.3, hw, 0.24, { fontSize: 10, color: C.muted });
+    const H = [
+      ['Qualify the region', 'Can this region support the workloads we expect?', 'Section 03'],
+      ['Right-size the platform', 'What is the least the platform must provide in this region?', 'Sections 04–05'],
+      ['Keep one operating model', 'What stays the same in every region, and what can vary?', 'Section 07'],
+      ['Place workloads when they’re ready', 'Should this workload use the region now?', 'Section 06'],
+    ];
+    H.forEach(([t, q, ref], i) => {
+      const y = ty + 0.66 + i * 0.86;
+      L.box(s, hx, y, hw, 0.78, { fill: C.b50, r: 0.1 });
+      L.num(s, i + 1, hx + 0.14, y + 0.2, 0.36, C.b600, 'FFFFFF', 11);
+      L.txt(s, t, hx + 0.62, y + 0.08, hw - 1.5, 0.3, { fontSize: 11.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
+      L.txt(s, ref, hx + hw - 1.25, y + 0.1, 1.1, 0.26, { fontSize: 8.5, color: C.muted, align: 'right', valign: 'middle' });
+      L.txt(s, q, hx + 0.62, y + 0.38, hw - 0.75, 0.34, { fontSize: 10, color: C.b700, valign: 'top' });
+    });
+    L.box(s, 0.6, 6.12, 12.13, 0.66, { fill: C.s800, r: 0.12 });
+    L.txt(s, [{ text: 'The first additional region takes the most thought, ', options: { fontFace: F.semi } }, { text: 'because the decisions are made for the first time. Later regions reuse those decisions and become mostly configuration.' }], 0.85, 6.12, 11.6, 0.66, { fontSize: 13, color: 'FFFFFF', valign: 'middle' });
+    L.footer(s, 0, 'EXECUTIVE SUMMARY');
+    s.addNotes('Adding an Azure region should not mean starting another landing-zone project. The table contrasts common assumptions with this approach. The framework has four parts, each answering one question: qualify the region, right-size the platform, keep one operating model, and place workloads when they are ready. Getting started (Section 09) walks through the first additional region in six steps, and the decision trees put the two main decisions on one page.');
   }
 
   // ───────────────────────── Executive summary (2/2)

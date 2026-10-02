@@ -1,6 +1,6 @@
 # The Adaptable Multi-Region Azure Platform — editable source
 
-Page-accurate HTML/CSS source for the whitepaper PDF (US Letter landscape, 45 pages; the executive brief is 13 pages from `exec/pages`).
+Page-accurate HTML/CSS source for the whitepaper PDF (US Letter landscape, 46 pages; the executive brief is 13 pages from `exec/pages`).
 
 - `pages/NN-*.html` — one file per page; edit text and diagrams here.
 - `styles.css` — design tokens (colors, type scale, components).

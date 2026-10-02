@@ -18,14 +18,14 @@
   <div class="row" style="gap:40px;align-items:flex-end">
     <div style="flex:1.2">
       <div class="eyebrow" style="color:var(--s600)">Appendix A · Resiliency scenarios</div>
-      <h2 class="title mt8">Three resiliency scenarios</h2>
+      <h2 class="title mt8">Multi-region resiliency scenarios</h2>
     </div>
-    <p class="muted" style="flex:1;font-size:12.2px">These examples show how service-specific regional behavior changes workload recovery design. They complement the broader placement scenarios in Section 08.</p>
+    <p class="muted" style="flex:1;font-size:12.2px">These examples show how service-specific regional behavior changes workload recovery design. They complement the broader customer scenarios in Section 08.</p>
   </div>
 
   <div class="ax-rs mt20" id="figResScen">
     <div class="c">
-      <div class="h"><div class="n">Scenario R1</div><b>A workload in a nonpaired region requires DR</b><p>A workload operates in a zone-enabled region without a pair and must recover in another Azure region.</p></div>
+      <div class="h"><b>A workload in a nonpaired region requires DR</b><p>A workload operates in a zone-enabled region without a pair and must recover in another Azure region.</p></div>
       <div class="bd">
         <div class="row2"><div class="k">Storage</div><div class="v">A supported region-of-choice pattern such as object replication where suitable, or application-level replication where required (for example, Data Lake Storage).</div></div>
         <div class="row2"><div class="k">Compute</div><div class="v">Azure Site Recovery for applicable VMs, or redeploy stateless compute from infrastructure as code.</div></div>
@@ -35,7 +35,7 @@
       <div class="tk"><b>Takeaway.</b> A nonpaired region can participate in a resilient multi-region architecture, but each workload layer needs an explicit recovery design.</div>
     </div>
     <div class="c">
-      <div class="h"><div class="n">Scenario R2</div><b>“We’re paired, so we have DR”</b><p>Data is geo-replicated to the paired region, but the complete application has never been failed over and tested.</p></div>
+      <div class="h"><b>“We’re paired, so we have DR”</b><p>Data is geo-replicated to the paired region, but the complete application has never been failed over and tested.</p></div>
       <div class="bd">
         <div class="row2"><div class="k">Symptom</div><div class="v">Data is recoverable, but the application cannot operate in the secondary region.</div></div>
         <div class="row2"><div class="k">Possible causes</div><div class="v">Key Vault or another runtime dependency unavailable (failover not yet occurred, or read-only); DNS or private-endpoint configuration incomplete; compute or shared services not recoverable; dependencies missing from the recovery design.</div></div>
@@ -44,7 +44,7 @@
       <div class="tk"><b>Takeaway.</b> Data recovery is not application recovery, and region pairing does not replace a tested workload recovery plan.</div>
     </div>
     <div class="c">
-      <div class="h"><div class="n">Scenario R3</div><b>Customer-managed keys across two regions</b><p>A workload uses customer-managed encryption keys (for example, database TDE) and must operate or recover across two regions.</p></div>
+      <div class="h"><b>Customer-managed keys across two regions</b><p>A workload uses customer-managed encryption keys (for example, database TDE) and must operate or recover across two regions.</p></div>
       <div class="bd">
         <div class="row2"><div class="k">Constraint</div><div class="v">Key material has different recovery and replication characteristics from secrets and certificates; it cannot be assumed to be recreated by the pipeline.</div></div>
         <div class="row2"><div class="k">Options</div><div class="v">Key Vault behavior for the selected regions (paired-region replication where available); backup and restore within the same subscription and geography; Azure Managed HSM multi-region replication; or another workload-specific design.</div></div>

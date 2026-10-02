@@ -44,10 +44,6 @@ items:
     href: storage-backup-key-vault.md
   - name: Resiliency scenarios
     href: resiliency-scenarios.md
-  - name: "Well-Architected: regions and availability zones"
-    href: https://learn.microsoft.com/azure/well-architected/design-guides/regions-availability-zones
-  - name: Azure reliability service guides
-    href: https://learn.microsoft.com/azure/reliability/overview-reliability-guidance
 - name: Resources
   items:
   - name: Customer scenarios

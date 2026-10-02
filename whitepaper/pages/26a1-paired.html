@@ -11,18 +11,20 @@
   .ax-pc li { position: relative; padding-left: 14px; font-size: 12.6px; line-height: 1.5; margin-bottom: 7px; color: var(--text); }
   .ax-pc li::before { content: ""; position: absolute; left: 1px; top: .6em; width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: .55; }
   .ax-pc .ft { margin-top: 14px; padding-top: 11px; border-top: 1px solid var(--line); font-size: 11.8px; font-style: italic; color: var(--muted); line-height: 1.45; }
+  .rec { list-style: none; margin-top: 5px; display: grid; grid-template-columns: 1fr 1fr; gap: 2px 18px; }
+  .rec li { font-size: 10.6px; line-height: 1.4; color: var(--ink); padding-left: 11px; position: relative; margin-bottom: 2px; }
+  .rec li::before { content: ""; position: absolute; left: 1px; top: .55em; width: 4px; height: 4px; border-radius: 50%; background: var(--b600); }
 </style>
 <div class="inner">
-  <div class="open-band" id="sA">
-    <div class="num" style="color:var(--s600)">A</div>
+  <div class="row" style="gap:40px;align-items:flex-end">
     <div style="flex:1">
-      <div class="eyebrow" style="color:var(--s600)">Appendix A · Regional dependencies and resiliency</div>
-      <h1 class="sec-title mt8" style="font-size:28px">Paired vs. nonpaired regions</h1>
+      <div class="eyebrow" style="color:var(--s600)">Appendix A · Region pairing</div>
+      <h2 class="title mt8">Paired and nonpaired regions</h2>
     </div>
-    <p class="standfirst" style="width:340px;font-size:13.4px">Region pairing is one input into resiliency design, not the definition of it. Azure supports resilient architectures using paired regions, nonpaired regions, or both.</p>
+    <p class="muted" style="flex:1.25;font-size:12.2px">Region pairing is one input into resiliency design, not the definition of it. Azure supports resilient architectures using paired regions, nonpaired regions, or combinations of both; the appropriate approach depends on workload requirements and the capabilities of the Azure services involved.</p>
   </div>
 
-  <div class="ax-pc mt20" id="figPaired">
+  <div class="ax-pc mt12" id="figPaired">
     <div class="c" style="background:#F3F8FD">
       <div class="h"><span class="i" style="background:var(--b600)"><svg><use href="#i-route"/></svg></span><b>Azure paired regions</b></div>
       <div class="k" style="color:var(--b600)">Platform-assisted regional relationship</div>
@@ -32,11 +34,11 @@
         <li>Azure uses region pairs for sequential platform updates and recovery prioritization.</li>
         <li>Deploying into both members of a pair does <strong>not</strong> automatically provide workload high availability, disaster recovery, or failover.</li>
       </ul>
-      <div class="ft">Consider: built-in service behavior can constrain the secondary region to the Azure-defined pair. Some paired regions have restricted access (for example, Brazil Southeast, Germany North, Norway West, Switzerland West), and services can have different regional capabilities.</div>
+      <div class="ft">Consider: built-in service behavior can constrain the secondary region to the Azure-defined pair. Some paired regions have restricted access, and individual services can have different regional capabilities. Validate current service behavior before selecting a recovery architecture.</div>
     </div>
     <div class="c" style="background:var(--t50);border-color:var(--t100)">
-      <div class="h"><span class="i" style="background:var(--t600)"><svg><use href="#i-pin"/></svg></span><b>Region of choice</b></div>
-      <div class="k" style="color:var(--t600)">Nonpaired · architecture-led recovery</div>
+      <div class="h"><span class="i" style="background:var(--t600)"><svg><use href="#i-pin"/></svg></span><b>Nonpaired or region-of-choice designs</b></div>
+      <div class="k" style="color:var(--t600)">Architecture-led recovery</div>
       <ul style="color:var(--t600)">
         <li>Many newer Azure regions are nonpaired and use availability zones as an important part of their intra-region resiliency model.</li>
         <li>A multi-region workload can use a nonpaired or customer-selected secondary region where the required Azure services support that regional combination — through Azure service-based or ISV-based disaster recovery.</li>
@@ -47,14 +49,20 @@
     </div>
   </div>
 
-  <div class="row mt24" style="gap:24px;align-items:stretch">
-    <div style="flex:1.6;background:var(--s800);border-radius:12px;padding:14px 20px;color:#fff">
-      <p style="font-size:14.4px;line-height:1.42;font-weight:500;color:#fff">“Deploying resources to a region in a pair doesn’t automatically make them more resilient, nor does it provide automatic high availability, disaster recovery capabilities, or failover.”</p>
+  <div class="row mt12" style="gap:20px;align-items:stretch">
+    <div style="flex:0.8;background:var(--s800);border-radius:12px;padding:12px 18px;color:#fff;display:flex;flex-direction:column;justify-content:center">
+      <p style="font-size:12.4px;line-height:1.42;font-weight:500;color:#fff">“Deploying resources to a region in a pair doesn’t automatically make them more resilient, nor does it provide automatic high availability, disaster recovery capabilities, or failover.”</p>
       <div style="font-size:9.6px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:#A9B6C6;margin-top:6px">Microsoft Learn · Azure region pairs and nonpaired regions</div>
     </div>
-    <div class="note" style="flex:1;padding:12px 15px">
-      <h4>Relationship to Dimension 4</h4>
-      <p class="small" style="color:var(--ink);font-size:11px">Assess availability zones, region pairing, and service-specific cross-region behavior separately (<span data-figref="fig8">Figure 8</span>). Whether a regional combination works depends on the workload’s requirements and the capabilities of each service it uses.</p>
+    <div class="note" style="flex:1.5;padding:12px 16px">
+      <h4>What to record during qualification</h4>
+      <p class="small" style="color:var(--ink);font-size:10.8px">Assess availability zones, region pairing, and service-specific cross-region behavior separately (<span data-figref="fig8">Figure 8</span>). For each regional combination that workloads are expected to use, record:</p>
+      <ul class="rec">
+        <li>Whether each region is paired, which region it is paired with, and whether access to the paired region is restricted.</li>
+        <li>Availability-zone support in each region.</li>
+        <li>For each service the workloads depend on, whether its cross-region capability is tied to the paired region or supports a region of choice.</li>
+        <li>The intended recovery region for the defined workload requirements, and who validates the recovery path.</li>
+      </ul>
     </div>
   </div>
 </div>

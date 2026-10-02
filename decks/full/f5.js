@@ -24,10 +24,44 @@ module.exports = (pres, L) => {
   const SA = 'APPENDIX A · REGIONAL DEPENDENCIES';
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, 'Appendix A · Regional dependencies and resiliency', 'Paired vs. nonpaired regions', { ec: C.s600, tw: 7.5, lede: 'Region pairing is one input into resiliency design, not the definition of it. Azure supports resilient architectures using paired regions, nonpaired regions, or both.', lx: 8.4, lw: 4.33 });
+    L.header(s, 'Appendix A', 'Regional dependencies and resiliency', { ec: C.s600, tw: 7.5, lede: 'A multi-region platform creates qualified regional options. Whether a specific workload uses more than one of those regions, and how, is a workload design decision.', lx: 8.4, lw: 4.33 });
+    L.box(s, 0.6, 1.75, 12.13, 0.95, { fill: C.b50, r: 0.12 });
+    L.txt(s, [{ text: 'This appendix isn’t workload design guidance. ', options: { fontFace: F.semi, color: C.b800 } }, { text: 'The Azure Well-Architected Framework covers how to design a multi-region workload. This appendix covers the regional and service behaviors a platform team should understand when it qualifies regional combinations.' }], 0.85, 1.75, 11.6, 0.95, { fontSize: 12.5, color: C.text, valign: 'middle' });
+    L.txt(s, 'Where workload design guidance lives', 0.6, 2.9, 8, 0.3, { fontSize: 14, fontFace: F.semi, color: C.ink });
+    const LK = [
+      ['AZURE WELL-ARCHITECTED FRAMEWORK', 'Using availability zones and regions', 'How to choose a single-region, zonal, or multi-region design for a workload.', 'https://learn.microsoft.com/azure/well-architected/design-guides/regions-availability-zones'],
+      ['AZURE WELL-ARCHITECTED FRAMEWORK', 'Architecture strategies for designing for redundancy', 'Multi-region deployment models, including active-active and active-passive.', 'https://learn.microsoft.com/azure/well-architected/reliability/highly-available-multi-region-design'],
+      ['AZURE WELL-ARCHITECTED FRAMEWORK', 'Design methodology for mission-critical workloads', 'The full multi-region active design for the most demanding workloads.', 'https://learn.microsoft.com/azure/well-architected/mission-critical/mission-critical-design-methodology'],
+      ['AZURE RELIABILITY', 'Multi-region solutions in nonpaired regions', 'Service-by-service guidance for regions without a pair.', 'https://learn.microsoft.com/azure/reliability/cross-region-replication-azure-no-pair'],
+      ['AZURE RELIABILITY', 'Azure reliability service guides', 'Regional behavior for each Azure service.', 'https://learn.microsoft.com/azure/reliability/overview-reliability-guidance'],
+    ];
+    const lw = (12.13 - 4 * 0.14) / 5;
+    LK.forEach(([src, t, d, u], i) => {
+      const x = 0.6 + i * (lw + 0.14), y = 3.3;
+      L.box(s, x, y, lw, 1.55, { fill: 'FFFFFF', line: C.b100, r: 0.1 });
+      L.txt(s, src, x + 0.14, y + 0.1, lw - 0.28, 0.3, { fontSize: 6.8, bold: true, color: C.b600, charSpacing: 1 });
+      L.txt(s, t, x + 0.14, y + 0.36, lw - 0.28, 0.5, { fontSize: 10.5, fontFace: F.semi, color: C.b700 });
+      L.txt(s, d, x + 0.14, y + 0.86, lw - 0.28, 0.42, { fontSize: 9, color: C.text });
+      L.txt(s, [{ text: 'Open on Microsoft Learn', options: { hyperlink: { url: u }, color: C.b600 } }], x + 0.14, y + 1.27, lw - 0.28, 0.2, { fontSize: 8, valign: 'middle' });
+    });
+    L.txt(s, 'In this appendix', 0.6, 5.05, 8, 0.3, { fontSize: 14, fontFace: F.semi, color: C.ink });
+    const IN = [['Paired and nonpaired regions', 'What pairing provides, what it doesn’t, and how region-of-choice designs shift responsibility for recovery.'], ['Storage, backup, and Key Vault', 'Paired-region and region-of-choice behavior for three services that need special attention, and the recommended Key Vault pattern.'], ['Resiliency scenarios', 'Three situations that show how service behavior changes a recovery design.']];
+    IN.forEach(([t, d], i) => {
+      const x = 0.6 + i * 4.1, y = 5.42, w = 3.93;
+      L.box(s, x, y, w, 1.35, { fill: C.wash, r: 0.12 });
+      L.txt(s, t, x + 0.2, y + 0.12, w - 0.4, 0.3, { fontSize: 12, fontFace: F.semi, color: C.ink, valign: 'middle' });
+      L.txt(s, d, x + 0.2, y + 0.46, w - 0.4, 0.82, { fontSize: 10, color: C.text });
+    });
+    L.footer(s, 0, SA);
+    s.addNotes('Region pairing is one input into resiliency design, not the definition of it, and cross-region behavior can differ significantly by service and regional combination. The slides that follow cover the dependencies that most often decide whether a regional combination works as built.');
+  }
+
+  {
+    const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
+    L.header(s, 'Appendix A · Region pairing', 'Paired and nonpaired regions', { ec: C.s600, tw: 7.5, lede: 'Region pairing is one input into resiliency design, not the definition of it. Azure supports resilient architectures using paired regions, nonpaired regions, or combinations of both.', lx: 8.4, lw: 4.33 });
     const P = [
-      ['route', C.b600, 'F3F8FD', 'Azure paired regions', 'PLATFORM-ASSISTED REGIONAL RELATIONSHIP', ['Microsoft defines region pairs, usually within the same geography, with asymmetric and cross-geography exceptions.', 'Some services use the pair for built-in geo-replication — for example, GRS storage, Key Vault, Azure Backup Cross Region Restore.', 'Pairs guide sequential platform updates and recovery prioritization.', 'Deploying into both members does not automatically provide HA, DR, or failover.'], 'Consider: built-in behavior can constrain the secondary to the pair. Some paired regions are restricted-access (for example, Brazil Southeast, Germany North, Norway West, Switzerland West).'],
-      ['pin', C.t600, C.t50, 'Region of choice', 'NONPAIRED · ARCHITECTURE-LED RECOVERY', ['Many newer regions are nonpaired and rely on availability zones for intra-region resiliency.', 'A multi-region workload can use a nonpaired or customer-selected secondary where the services support that combination — through Azure service-based or ISV-based DR.', 'Flexibility for residency, sovereignty, latency, service availability, or continuity.', 'Recovery architecture, replication, dependencies, and failover must be designed and validated per workload.'], 'Pairing can provide useful platform and service capabilities; it does not replace a tested workload recovery design.'],
+      ['route', C.b600, 'F3F8FD', 'Azure paired regions', 'PLATFORM-ASSISTED REGIONAL RELATIONSHIP', ['Microsoft defines region pairs, usually within the same geography, with asymmetric and cross-geography exceptions.', 'Some services use the pair for built-in geo-replication — for example, GRS storage, Key Vault, Azure Backup Cross Region Restore.', 'Pairs guide sequential platform updates and recovery prioritization.', 'Deploying into both members does not automatically provide HA, DR, or failover.'], 'Consider: built-in behavior can constrain the secondary to the pair. Some paired regions have restricted access. Validate current service behavior before selecting a recovery architecture.'],
+      ['pin', C.t600, C.t50, 'Nonpaired or region-of-choice designs', 'ARCHITECTURE-LED RECOVERY', ['Many newer regions are nonpaired and rely on availability zones for intra-region resiliency.', 'A multi-region workload can use a nonpaired or customer-selected secondary where the services support that combination — through Azure service-based or ISV-based DR.', 'Flexibility for residency, sovereignty, latency, service availability, or continuity.', 'Recovery architecture, replication, dependencies, and failover must be designed and validated per workload.'], 'Pairing can provide useful platform and service capabilities; it does not replace a tested workload recovery design.'],
     ];
     P.forEach(([ic, c, bg, t, k, bl, ft], i) => {
       const x = 0.6 + i * 6.12, y = 1.75, w = 6.0, h = 3.95;
@@ -39,10 +73,12 @@ module.exports = (pres, L) => {
       L.box(s, x + 0.25, y + 3.08, w - 0.5, 0.008, { fill: C.line, r: 0 });
       L.txt(s, ft, x + 0.25, y + 3.14, w - 0.5, 0.75, { fontSize: 9.5, italic: true, color: C.muted });
     });
-    L.box(s, 0.6, 5.88, 8.1, 0.9, { fill: C.s800, r: 0.12 });
-    L.txt(s, [{ text: '“Deploying resources to a region in a pair doesn’t automatically make them more resilient, nor does it provide automatic high availability, disaster recovery capabilities, or failover.”', options: { fontSize: 11.5, color: 'FFFFFF', breakLine: true } }, { text: 'MICROSOFT LEARN · AZURE REGION PAIRS AND NONPAIRED REGIONS', options: { fontSize: 8, bold: true, color: 'A9B6C6', charSpacing: 1 } }], 0.85, 5.88, 7.7, 0.9, { valign: 'middle' });
-    L.box(s, 8.9, 5.88, 3.83, 0.9, { fill: C.wash, r: 0.12 });
-    L.txt(s, [{ text: 'Relationship to Dimension 4: ', options: { bold: true } }, { text: 'assess zones, pairing, and service-specific cross-region behavior separately.' }], 9.05, 5.88, 3.55, 0.9, { fontSize: 10, color: C.ink, valign: 'middle' });
+    L.box(s, 0.6, 5.88, 4.55, 0.9, { fill: C.s800, r: 0.12 });
+    L.txt(s, [{ text: '“Deploying resources to a region in a pair doesn’t automatically make them more resilient, nor does it provide automatic high availability, disaster recovery capabilities, or failover.”', options: { fontSize: 9.6, color: 'FFFFFF', breakLine: true } }, { text: 'MICROSOFT LEARN · AZURE REGION PAIRS AND NONPAIRED REGIONS', options: { fontSize: 8, bold: true, color: 'A9B6C6', charSpacing: 1 } }], 0.78, 5.88, 4.2, 0.9, { valign: 'middle' });
+    L.box(s, 5.3, 5.88, 7.43, 0.9, { fill: C.wash, r: 0.12 });
+    L.txt(s, 'WHAT TO RECORD DURING QUALIFICATION', 5.45, 5.92, 3.2, 0.2, { fontSize: 7.5, bold: true, color: C.b700, charSpacing: 1.5 });
+    L.bullets(s, ['Whether each region is paired, with which region, and whether access to the pair is restricted.', 'Availability-zone support in each region.'], 5.45, 6.13, 3.5, 0.62, { gap: 1, indent: 10, opts: { fontSize: 8.4, color: C.ink } });
+    L.bullets(s, ['For each service, whether its cross-region capability is tied to the pair or supports a region of choice.', 'The intended recovery region, and who validates the recovery path.'], 9.05, 6.13, 3.55, 0.62, { gap: 1, indent: 10, opts: { fontSize: 8.4, color: C.ink } });
     L.footer(s, 0, SA);
     s.addNotes('Whether a particular regional combination works depends on the requirements of the workload and the capabilities of each service it uses.');
   }
@@ -50,11 +86,11 @@ module.exports = (pres, L) => {
   // ───────────────────────── Three services
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, 'Appendix A · Service-level detail', 'Three services that need special attention', { ec: C.s600, tw: 7.5, lede: 'Regional qualification cannot stop at “the service exists in both regions.” Cross-region behavior differs by service and regional combination.', lx: 8.4, lw: 4.33 });
+    L.header(s, 'Appendix A · Three services that need special attention', 'Storage, backup, and Key Vault across regions', { ec: C.s600, tw: 8.2, ts: 23, lede: 'Regional qualification cannot stop at “the service exists in both regions.” Cross-region behavior differs by service and regional combination.', lx: 8.4, lw: 4.33 });
     const S = [
       ['data', 'Storage', ['GRS and GZRS replicate asynchronously to the service-defined secondary.', 'Evaluate built-in failover separately from workload recoverability.'], ['Object replication for block blobs only — not append or page blobs, not hierarchical namespace (Data Lake).', 'Requires change feed and versioning; at most two destination accounts.', 'Otherwise, application-level copy.'], 'Replicated data does not by itself make the workload recoverable.'],
       ['loop', 'Backup and restore', ['Cross Region Restore uses the paired region for supported data sources when configured.', 'Support differs by workload and configuration.'], ['Confirm which technologies and restore targets support the recovery region.', 'Azure Site Recovery supports VM DR between regions, subject to its support matrix.', 'Restricted-access regions can require approval.'], 'Demonstrate RTO and RPO through recovery testing, not configuration.'],
-      ['lock', 'Key Vault', ['In most paired regions, contents replicate asynchronously to the pair.', 'Failover is Microsoft-initiated, best effort, can take hours; restricted (read-only) afterward.'], ['No Microsoft-managed replication in nonpaired regions, Brazil South, Brazil Southeast, or West US 3.', 'Separate regional vaults or another custom design; keys, secrets, certificates analyzed separately.', 'Managed HSM: optional two-region replication for keys.'], 'Often a runtime dependency: data can be recoverable while the app cannot start.'],
+      ['lock', 'Key Vault', ['In most paired regions, contents replicate asynchronously to the pair.', 'Failover is Microsoft-initiated, best effort, and can be significantly delayed; restricted (read-only) afterward.'], ['Some paired regions and all nonpaired regions have no Microsoft-managed replication; see Reliability in Azure Key Vault.', 'Separate regional vaults or another custom design; keys, secrets, certificates analyzed separately.', 'Managed HSM: optional two-region replication, for keys only.'], 'Often a runtime dependency: data can be recoverable while the app cannot start.'],
     ];
     S.forEach(([ic, t, pr, rc, tk], i) => {
       const x = 0.6 + i * 4.1, y = 1.72, w = 3.93, h = 5.1;
@@ -73,24 +109,6 @@ module.exports = (pres, L) => {
     s.addNotes('Built-in replication for all three services targets the paired region; region-of-choice designs need explicit replication, restore, and secret-management patterns. Confirm current capabilities on Microsoft Learn at decision time.');
   }
 
-  // ───────────────────────── Key Vault dependency
-  {
-    const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, 'Appendix A · Key Vault', 'Key Vault is a workload-specific dependency', { ec: C.s600, tw: 9 });
-    L.box(s, 0.6, 1.6, 12.13, 1.2, { fill: C.b800, r: 0.14 });
-    L.badge(s, 'lock', 0.9, 1.84, 0.72, '0A8BB0');
-    L.txt(s, [{ text: '“Data can be recoverable while the application ', options: { fontFace: F.light } }, { text: 'still cannot start.”', options: { fontFace: F.semi, color: '50E6FF' } }], 1.9, 1.6, 10.6, 1.2, { fontSize: 24, color: 'FFFFFF', italic: true, valign: 'middle' });
-    const K = [
-      ['app', C.b600, 'A runtime dependency', 'Applications can require keys, secrets, certificates, DNS resolution, and private connectivity simply to initialize. Recovered data is insufficient if runtime dependencies are unavailable in the recovery region.'],
-      ['layers', C.b600, 'Keys, secrets, and certificates are not interchangeable', 'Each needs its own recovery analysis. Secrets and certificates can often be provisioned into regional vaults through controlled deployment; customer-managed keys have additional constraints.'],
-      ['clock', C.w600, 'Managed failover may not meet the objective', 'Microsoft controls paired-region failover and describes it as best effort. A prolonged outage can mean hours before failover, and the secondary operates with restrictions.'],
-      ['shield', C.b600, 'Managed HSM addresses a different requirement', 'Optional two-region replication of key material, roles, and permissions, both regions serving requests — for keys, not secrets or certificates. Not every region can be an extended region.'],
-    ];
-    K.forEach(([ic, c, t, d], i) => L.card(s, 0.6 + (i % 2) * 6.12, 3.05 + Math.floor(i / 2) * 1.75, 6.0, 1.6, { icon: ic, ic: c, fill: 'FFFFFF', line: C.line, title: t, body: d, bs: 10.5 }));
-    L.footer(s, 0, SA);
-    s.addNotes('Microsoft documents custom multi-region Key Vault approaches for nonpaired regions, paired regions without Microsoft-managed replication, and workloads whose recovery objectives cannot be met by built-in failover.');
-  }
-
   // ───────────────────────── Key Vault pattern
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
@@ -103,8 +121,6 @@ module.exports = (pres, L) => {
       L.badge(s, 'check', 0.6, y + 0.08, 0.32, C.b600);
       L.txt(s, [{ text: t, options: { bold: true, color: C.ink, breakLine: true } }, { text: d, options: { color: C.muted } }], 1.05, y, 5.55, 0.85, { fontSize: 10, valign: 'middle' });
     });
-    L.box(s, 0.6, 6.05, 6.0, 0.72, { fill: C.s800, r: 0.12 });
-    L.txt(s, [{ text: 'DR in practice: ', options: { bold: true, color: '50E6FF' } }, { text: 'when the workload activates in the recovery region, the required vault and runtime dependencies are already available and validated there.' }], 0.8, 6.05, 5.7, 0.72, { fontSize: 10.5, color: 'FFFFFF', valign: 'middle' });
     // diagram
     const X = 7.0;
     L.box(s, X, 1.5, 5.73, 5.27, { fill: 'FFFFFF', line: C.line, r: 0.14 });
@@ -130,13 +146,13 @@ module.exports = (pres, L) => {
       L.txt(s, n, x, y + 2.7, w, 0.4, { fontSize: 8.5, color: C.muted, align: 'center' });
     });
     L.footer(s, 0, SA);
-    s.addNotes('Applies to secrets and certificates. Design customer-managed keys (for example, SQL TDE) separately — see Scenario R3. Microsoft Learn also documents backup and restore between vaults; backups can only be restored within the same subscription and Azure geography.');
+    s.addNotes('Applies to secrets and certificates. Design customer-managed keys (for example, SQL TDE) separately; see the customer-managed keys scenario. Microsoft Learn also documents backup and restore between vaults; backups can only be restored within the same subscription and Azure geography.');
   }
 
   // ───────────────────────── Resiliency scenarios
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, 'Appendix A · Resiliency scenarios', 'Three resiliency scenarios', { ec: C.s600, tw: 7, lede: 'How service-specific regional behavior changes workload recovery design. They complement the placement scenarios in Section 08.', lx: 8.4, lw: 4.33 });
+    L.header(s, 'Appendix A · Resiliency scenarios', 'Multi-region resiliency scenarios', { ec: C.s600, tw: 7, lede: 'How service-specific regional behavior changes workload recovery design. They complement the customer scenarios in Section 08.', lx: 8.4, lw: 4.33 });
     const R = [
       ['R1', 'A workload in a nonpaired region requires DR', [['Storage', 'Region-of-choice pattern such as object replication, or application-level replication.'], ['Compute', 'Azure Site Recovery for applicable VMs, or redeploy stateless compute from IaC.'], ['Key Vault', 'Pre-provision the regional vault; secrets, certificates, key strategy ready before recovery.'], ['Backup', 'Place backup and restore deliberately for the recovery region.']], 'A nonpaired region can be part of a resilient design, but each layer needs an explicit recovery design.'],
       ['R2', '“We’re paired, so we have DR”', [['Symptom', 'Data is recoverable, but the application cannot operate in the secondary.'], ['Possible causes', 'Key Vault or another runtime dependency unavailable; DNS or private endpoints incomplete; compute or shared services not recoverable.'], ['Correction', 'Treat data, identity, secrets and keys, DNS, networking, shared services, compute as dependencies; validate end to end.']], 'Data recovery is not application recovery; pairing does not replace a tested plan.'],
@@ -146,8 +162,7 @@ module.exports = (pres, L) => {
       const x = 0.6 + i * 4.1, y = 1.72, w = 3.93, h = 5.1;
       L.box(s, x, y, w, h, { fill: 'FFFFFF', line: C.line, r: 0.12 });
       L.box(s, x, y, w, 0.95, { fill: C.b50, r: 0.12 }); L.box(s, x, y + 0.6, w, 0.35, { fill: C.b50, r: 0 });
-      L.txt(s, 'SCENARIO ' + n, x + 0.2, y + 0.1, 2, 0.2, { fontSize: 8.5, bold: true, color: C.b600, charSpacing: 2 });
-      L.txt(s, t, x + 0.2, y + 0.32, w - 0.4, 0.58, { fontSize: 12.5, fontFace: F.semi, color: C.ink });
+      L.txt(s, t, x + 0.2, y + 0.12, w - 0.4, 0.72, { fontSize: 12.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
       let yy = y + 1.05;
       rows.forEach(([k, v]) => {
         const hh = rows.length === 4 ? 0.74 : 0.95;

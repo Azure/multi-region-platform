@@ -26,7 +26,7 @@ SITE_TITLE = "Multi-region platform"
 SITE_SUB = "Adaptable multi-region Azure platform"
 
 DOWNLOADS = [
-    ("Full technical guidance (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform.pdf", "pdf", "45 pages"),
+    ("Full technical guidance (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform.pdf", "pdf", "46 pages"),
     ("Executive brief (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf", "pdf", "13 pages"),
 ]
 
@@ -68,9 +68,9 @@ def figure_html(src, alt, caption):
     if os.path.exists(frag_path):
         frag = open(frag_path, encoding="utf-8").read()
         frag = re.sub(r"^<!--.*?-->\n", "", frag)
-        return (f'<figure class="fig live" role="img" aria-label="{html.escape(alt)}">{tools}'
+        return (f'<figure class="fig live" data-fig="{name}" role="img" aria-label="{html.escape(alt)}">{tools}'
                 f'<div class="fig-stage"><div class="fig-scale">{frag}</div></div>{cap}</figure>')
-    return (f'<figure class="fig img">{tools}<div class="fig-stage"><img src="{png}" alt="{html.escape(alt)}" loading="lazy"></div>{cap}</figure>')
+    return (f'<figure class="fig img" data-fig="{name}">{tools}<div class="fig-stage"><img src="{png}" alt="{html.escape(alt)}" loading="lazy"></div>{cap}</figure>')
 
 
 # ───────────────────────────── Learn-flavored markdown
@@ -303,8 +303,8 @@ def build():
             hero = f'''<section class="hero"><div class="hero-in">
 <p class="hero-kicker">Cloud Adoption Framework · Key adoption scenario</p>
 <h1 class="hero-title">{html.escape(SITE_SUB)}</h1>
-<p class="hero-lede">Extend Azure landing zones so additional regions become qualified options that workloads can adopt when business and workload requirements justify them.</p>
-<div class="hero-cta"><a class="btn primary" href="regional-qualification.html">Start with regional qualification</a><a class="btn ghost" href="{DOWNLOADS[0][1]}" download>Full technical guidance (PDF)</a><a class="btn ghost" href="{DOWNLOADS[1][1]}" download>Executive brief (PDF)</a></div>
+<p class="hero-lede">Add Azure regions without starting another landing-zone project. Reuse the platform you already run, qualify each region, and enable only what its workloads need.</p>
+<div class="hero-cta"><a class="btn primary" href="getting-started.html">Get started in six steps</a><a class="btn ghost" href="{DOWNLOADS[0][1]}" download>Full technical guidance (PDF)</a><a class="btn ghost" href="{DOWNLOADS[1][1]}" download>Executive brief (PDF)</a></div>
 </div></section>'''
         page = (tmpl.replace("{{TITLE}}", html.escape(meta.get("title", pg["name"])))
                 .replace("{{DESCRIPTION}}", html.escape(meta.get("description", "")))

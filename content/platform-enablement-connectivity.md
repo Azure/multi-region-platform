@@ -1,7 +1,7 @@
 ---
 title: "Dimension 5: Platform enablement and connectivity"
 description: Decide which platform capabilities a qualified Azure region needs, confirm the hybrid connectivity foundation, and select the most efficient regional connectivity profile.
-ms.date: 09/30/2026
+ms.date: 10/02/2026
 ms.topic: conceptual
 ---
 
@@ -40,7 +40,7 @@ Existing and new workloads follow the same rule: requirements and dependencies d
 
 **Question:** Does the operating geography have resilient hybrid connectivity to Azure that satisfies the identified workload requirements?
 
-Enabling an additional Azure region doesn't by itself require another ExpressRoute circuit. Evaluate the existing ExpressRoute, VPN, SD-WAN, or other hybrid connectivity against datacenter and user locations, latency, bandwidth, and routing requirements. Add circuits, peering locations, gateways, or more connectivity paths only where the existing foundation can't provide the required reachability, diversity, or resilience required.
+Enabling an additional Azure region doesn't by itself require another ExpressRoute circuit. Evaluate the existing ExpressRoute, VPN, SD-WAN, or other hybrid connectivity against datacenter and user locations, latency, bandwidth, and routing requirements. Add circuits, peering locations, gateways, or more connectivity paths only where the existing foundation can't provide the required reachability, diversity, or resilience.
 
 **Decision:** Confirm the hybrid connectivity foundation and identify any required changes to reachability, resiliency, diversity, scale, or ownership.
 

@@ -15,8 +15,8 @@ module.exports = (pres, L) => {
       ['Establish mandatory requirements', 'Location, services, zones, latency, scale, resiliency'],
       ['Review the qualified regional options', 'Regions assessed for the relevant requirements'],
       ['Validate current regional suitability', 'Service, SKU, AI model, access, quota'],
-      ['Select the supporting connectivity profile', 'An available profile must support it'],
-      ['Determine the resiliency role separately', 'Primary, recovery, or active location'],
+      ['Confirm the connectivity profile', 'The region’s profile must support it'],
+      ['Determine the resiliency role', 'Primary, recovery, or active location'],
       ['Record and govern the decision', 'Region, archetype, profile, owners, triggers'],
     ];
     S.forEach(([t, d], i) => {
@@ -63,8 +63,8 @@ module.exports = (pres, L) => {
       ['Establish mandatory requirements', 'Data location, required services and features, zones, latency, expected scale, connectivity, resiliency, critical dependencies.', 0],
       ['Review the qualified regional options', 'Regions previously assessed against the relevant requirements: capabilities, profiles, constraints, when each was last assessed, open validations.', 1],
       ['Validate current regional suitability', 'Re-check before onboarding: services, SKUs, AI models, access, quota, dependencies. Quota isn’t capacity; decide whether to reserve it.', 1],
-      ['Select the supporting connectivity profile', 'Confirm an available profile satisfies the workload. Additional capabilities are a separate governed platform decision.', 1],
-      ['Determine the resiliency role separately', 'Primary, recovery, or part of a multi-region active deployment; availability, RTO, RPO, replication, consistency, failover.', 2],
+      ['Confirm the region’s connectivity profile', 'Check that the region’s profile supports the workload. Additional capabilities are a separate governed platform decision.', 1],
+      ['Determine the workload’s resiliency role', 'Primary, recovery, or part of a multi-region active deployment; availability, RTO, RPO, replication, consistency, failover.', 2],
       ['Record and govern the decision', 'Region, archetype, profile, placement and resiliency outcomes, assumptions, constraints, owners, revalidation triggers.', 2],
     ];
     S.forEach(([t, d, g], i) => {
@@ -89,35 +89,48 @@ module.exports = (pres, L) => {
     L.header(s, '07 · Operating model', 'A consistent operating model, adaptable by region', { tw: 8.4, ts: 23, lede: 'Not a different operating model for every region — one model, with governed room to adapt.', lx: 9.1, lw: 3.63, ls: 13 });
     const A = [['pin', 'Application regional placement'], ['lock', 'Controls for regional or data-boundary requirements'], ['hub', 'Regional platform connectivity profile'], ['gear', 'Regional service, SKU, and configuration parameters'], ['layers', 'Local shared-services footprint'], ['gauge', 'Workload scale, latency, dependency, and resiliency decisions']];
     const K = [['shield', 'Governance guardrails and policy intent'], ['id', 'Identity, security, and compliance baselines'], ['network', 'Architecture principles and approved patterns'], ['gear', 'Deployment automation and infrastructure as code'], ['monitor', 'Monitoring, support, and operational standards'], ['users', 'Ownership, approval, and lifecycle processes']];
+    const E = ['Same policy set everywhere; the allowed-locations setting differs per landing zone', 'Same baseline; an added data-residency control only where a regulation requires it', 'Same approved hub design; one region is a Full Regional Hub, another is Remote Hub Connected', 'Same modules and pipelines; region and SKU are passed in as parameters', 'Same alerting and runbooks; local DNS or firewall only where needed', 'Same approval path; each workload team decides its own recovery design'];
     const cw = 1.94, g = 0.098;
-    L.txt(s, 'ALLOW TO ADAPT BY REGION AND WORKLOAD', 0.6, 1.72, 6, 0.22, { fontSize: 9, bold: true, color: C.t600, charSpacing: 2 });
+    L.txt(s, 'ALLOW TO ADAPT BY REGION AND WORKLOAD', 0.6, 1.6, 6, 0.22, { fontSize: 9, bold: true, color: C.t600, charSpacing: 2 });
     A.forEach(([ic, t], i) => {
       const x = 0.6 + i * (cw + g);
-      L.box(s, x, 2.0, cw, 1.25, { fill: 'FFFFFF', line: C.t300, r: 0.1 });
-      L.icon(s, ic, x + 0.15, 2.15, 0.28, 't');
-      L.txt(s, t, x + 0.15, 2.5, cw - 0.28, 0.7, { fontSize: 10.5, fontFace: F.semi, color: C.t700 });
-      L.line(s, x + cw / 2, 3.25, x + cw / 2, 3.6, { color: C.s300, dash: 'dash', arrow: false });
+      L.box(s, x, 1.86, cw, 0.92, { fill: 'FFFFFF', line: C.t300, r: 0.1 });
+      L.icon(s, ic, x + 0.12, 1.95, 0.24, 't');
+      L.txt(s, t, x + 0.44, 1.9, cw - 0.54, 0.84, { fontSize: 10, fontFace: F.semi, color: C.t700, valign: 'middle' });
+      L.txt(s, [{ text: 'EXAMPLE', options: { fontSize: 6.5, bold: true, color: C.faint, charSpacing: 1.5, breakLine: true } }, { text: E[i], options: { fontSize: 8.4, color: C.text } }], x + 0.04, 2.82, cw - 0.08, 0.74, { align: 'center', valign: 'middle' });
     });
-    L.box(s, 0.6, 3.6, 12.13, 1.3, { fill: C.s800, r: 0.12 });
+    L.box(s, 0.6, 3.6, 12.13, 0.95, { fill: C.s800, r: 0.12 });
     K.forEach(([ic, t], i) => {
       const x = 0.6 + i * (cw + g);
-      if (i) L.box(s, x - g / 2, 3.75, 0.01, 1.0, { fill: '3A5070', r: 0 });
-      L.icon(s, ic, x + 0.15, 3.75, 0.28, 'w');
-      L.txt(s, t, x + 0.15, 4.1, cw - 0.28, 0.72, { fontSize: 10.5, fontFace: F.semi, color: 'FFFFFF' });
+      if (i) L.box(s, x - g / 2, 3.72, 0.01, 0.71, { fill: '3A5070', r: 0 });
+      L.icon(s, ic, x + 0.12, 3.74, 0.24, 'w');
+      L.txt(s, t, x + 0.44, 3.64, cw - 0.54, 0.87, { fontSize: 10, fontFace: F.semi, color: 'FFFFFF', valign: 'middle' });
     });
-    L.txt(s, 'KEEP CONSISTENT ACROSS THE AZURE ESTATE', 0.6, 5.0, 6, 0.22, { fontSize: 9, bold: true, color: C.s800, charSpacing: 2 });
-    L.txt(s, 'Region-agnostic does not mean region-random.', 0.6, 5.5, 5.4, 0.9, { fontSize: 22, fontFace: F.semi, color: C.ink });
-    L.txt(s, 'Regional adaptability operates within a governed framework. Workloads select from qualified regional options based on their requirements, their archetype, and each region’s current capabilities and qualification status. Reassess qualification as workload requirements and Azure capabilities change.', 6.4, 5.45, 6.33, 1.0, { fontSize: 11.5, color: C.text });
+    L.txt(s, 'KEEP CONSISTENT ACROSS THE AZURE ESTATE', 0.6, 4.62, 6, 0.22, { fontSize: 9, bold: true, color: C.s800, charSpacing: 2 });
+    // who decides what
+    L.txt(s, 'Who decides what', 0.6, 5.0, 2.2, 0.3, { fontSize: 14, fontFace: F.semi, color: C.ink });
+    L.txt(s, 'Each qualified option has a named owner, an assessment date, and revalidation triggers.', 0.6, 5.32, 2.2, 0.7, { fontSize: 9, color: C.muted });
+    const W = [['The platform team', 'Owns regional qualification, the connectivity profile for each region, and the decision register. Adding platform capability to a region is a platform decision, not something a workload team changes on its own.', 4.3], ['Security and compliance', 'Own the mandatory gates: data residency, sovereignty, and policy requirements.', 2.5], ['Workload teams', 'Own placement and resiliency decisions for their workloads, within the qualified options.', 2.5]];
+    let wx = 3.05;
+    W.forEach(([t, d, w]) => {
+      L.box(s, wx, 5.0, w, 0.025, { fill: C.b300, r: 0 });
+      L.txt(s, t, wx, 5.08, w, 0.26, { fontSize: 10.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
+      L.txt(s, d, wx, 5.36, w, 0.7, { fontSize: 9.2, color: C.text });
+      wx += w + 0.19;
+    });
+    L.box(s, 0.6, 6.22, 0.04, 0.6, { fill: C.b600, r: 0 });
+    L.txt(s, 'Region-agnostic does not mean region-random.', 0.78, 6.22, 3.4, 0.6, { fontSize: 14, fontFace: F.semi, color: C.ink, valign: 'middle' });
+    L.txt(s, 'Regional adaptability operates within a governed framework. Workloads select from qualified regional options based on their requirements, their archetype, and each region’s current capabilities and qualification status. Reassess qualification as workload requirements and Azure capabilities change.', 4.4, 6.22, 8.33, 0.6, { fontSize: 9.6, color: C.text, valign: 'middle' });
     L.footer(s, 0, '07 · OPERATING MODEL');
-    s.addNotes('A multi-region platform should use one operating model across the estate. Keep governance and architecture standards stable, while regional implementation and workload placement adapt to business, application, and regulatory requirements.');
+    s.addNotes('A multi-region platform should use one operating model across the estate. Keep governance and architecture standards stable, while regional implementation and workload placement adapt to business, application, and regulatory requirements. The platform team owns regional qualification, the connectivity profile for each region, and the decision register. Security and compliance own the mandatory gates. Workload teams own placement and resiliency decisions for their workloads, within the qualified options.');
   }
 
   // ───────────────────────── Scenarios
   const SC = [
-    ['Regulated bank adopts a new in-country region', 'A new Azure region opens in-country while regulation requires certain data or services to remain there.', 'Residency · nonpaired region', [['Driver', 'Data residency and regulation; new in-country region.', C.w600, C.w50], ['Framework', 'D2 mandatory location; D3 affected workloads; D4 services, zones, access.', C.b600, C.b50], ['Qualification', 'Qualified for Hybrid-Connected requirements; other workloads candidates.', C.g600, C.g100], ['Archetype', 'Hybrid-Connected Applications.', C.t600, C.t50], ['Connectivity profile', 'Minimal Regional Hub; reuse existing hybrid connectivity where it permits.', C.b600, C.b50], ['Placement', 'In-scope workloads relocate selectively; recovery stays workload-specific.', C.t600, C.t50]], 'Qualify for defined requirements without forcing portfolio-wide relocation; design the nonpaired recovery path explicitly (Appendix A).'],
-    ['AI team requires a specific model or GPU SKU', 'The model, SKU, or service is unavailable in existing regions or constrained by quota.', 'Specific capacity · net-new', [['Driver', 'AI model, service, SKU, or quota availability.', C.v600, C.v50], ['Framework', 'D1 business need; D2 data constraints; D4 model, SKU, zone, access, quota.', C.b600, C.b50], ['Qualification', 'Qualified for the AI requirements; other dependencies conditional.', C.g600, C.g100], ['Archetype', 'Isolated Cloud-Native or AI; Connected where private dependencies exist.', C.t600, C.t50], ['Connectivity profile', 'Disconnected Spokes; connected only where dependencies justify it.', C.b600, C.b50], ['Placement', 'Net-new; revalidate model, SKU, access, quota at decision time.', C.t600, C.t50]], 'Do not introduce enterprise connectivity or regional platform capabilities before a workload requirement justifies them.'],
-    ['Acquisition brings an estate in another geography', 'Interdependent applications, shared data, and local users where there is little Azure presence.', 'Portfolio · integration', [['Driver', 'Business expansion through acquisition.', C.b600, C.b50], ['Framework', 'D1 business need; D2 local data obligations; D3 portfolio dependencies.', C.b600, C.b50], ['Qualification', 'Candidate until dependencies are known; then qualified.', C.g600, C.g100], ['Archetype', 'Interconnected Application Portfolios.', C.t600, C.t50], ['Connectivity profile', 'Remote Hub Connected; Minimal Regional Hub where east-west or independence justify it.', C.b600, C.b50], ['Placement', 'Remain in place initially; relocate selectively with integration.', C.t600, C.t50]], 'Aggregate portfolio dependencies determine the profile; application count or acquisition status does not.'],
-    ['Datacenter exit accelerates migration', 'Hybrid-connected applications must leave a colocation facility; is another region now required?', 'Datacenter event · relocation', [['Driver', 'Datacenter and connectivity event.', C.s800, C.s100], ['Framework', 'D3 what moves together; D5 hybrid connectivity, reachability, resiliency.', C.b600, C.b50], ['Qualification', 'Existing target region qualified; additional region a candidate.', C.g600, C.g100], ['Archetype', 'Hybrid-Connected Applications.', C.t600, C.t50], ['Connectivity profile', 'Existing strategic hub — no new hub just because a region exists.', C.b600, C.b50], ['Placement', 'Most workloads land in the existing qualified region.', C.t600, C.t50]], 'Remaining in an existing qualified region is a valid outcome; an additional region can stay an option, not a project.'],
+    ['Regulated bank adopts a new in-country region', 'A new Azure region opens in-country while regulation requires certain data or services to remain there.', 'Residency · nonpaired region', [['Driver', 'Data residency and regulation; new in-country region.', C.w600, C.w50], ['Deciding dimensions', 'D2 mandatory location; D3 affected workloads; D4 services, zones, access.', C.b600, C.b50], ['Qualification', 'Qualified for Hybrid-Connected requirements; other workloads candidates.', C.g600, C.g100], ['Archetype', 'Hybrid-Connected Applications.', C.t600, C.t50], ['Connectivity profile', 'Minimal Regional Hub; reuse existing hybrid connectivity where it permits.', C.b600, C.b50], ['Placement', 'In-scope workloads relocate selectively; recovery stays workload-specific.', C.t600, C.t50]], 'Qualify for defined requirements without forcing portfolio-wide relocation; if the new region is nonpaired, design the recovery path explicitly (Appendix A).'],
+    ['AI team requires a specific model or GPU SKU', 'The model, SKU, or service is unavailable in existing regions or constrained by quota.', 'Specific capacity · net-new', [['Driver', 'AI model, service, SKU, or quota availability.', C.v600, C.v50], ['Deciding dimensions', 'D1 business need; D2 data constraints; D4 model, SKU, zone, access, quota.', C.b600, C.b50], ['Qualification', 'Qualified for the AI requirements; conditional where private connectivity is not yet designed.', C.g600, C.g100], ['Archetype', 'Isolated Cloud-Native or AI; Connected where private dependencies exist.', C.t600, C.t50], ['Connectivity profile', 'Disconnected Spokes; connected only where dependencies justify it.', C.b600, C.b50], ['Placement', 'Net-new; revalidate model, SKU, access, quota at decision time.', C.t600, C.t50]], 'Do not introduce enterprise connectivity or regional platform capabilities before a workload requirement justifies them.'],
+    ['Acquisition brings an estate in another geography', 'Interdependent applications, shared data, and local users where there is little Azure presence.', 'Portfolio · integration', [['Driver', 'Business expansion through acquisition.', C.b600, C.b50], ['Deciding dimensions', 'D1 business need; D2 local data obligations; D3 portfolio dependencies.', C.b600, C.b50], ['Qualification', 'Candidate until dependencies are known; then qualified.', C.g600, C.g100], ['Archetype', 'Interconnected Application Portfolios.', C.t600, C.t50], ['Connectivity profile', 'Remote Hub Connected; Minimal Regional Hub where east-west or independence justify it.', C.b600, C.b50], ['Placement', 'Remain in place initially; relocate selectively with integration.', C.t600, C.t50]], 'Aggregate portfolio dependencies determine the profile; application count or acquisition status does not.'],
+    ['Datacenter exit accelerates migration', 'Hybrid-connected applications must leave a colocation facility; is another region now required?', 'Datacenter event · relocation', [['Driver', 'Datacenter and connectivity event.', C.s800, C.s100], ['Deciding dimensions', 'D3 what moves together; D5 hybrid connectivity, reachability, resiliency.', C.b600, C.b50], ['Qualification', 'Existing target region qualified; additional region a candidate.', C.g600, C.g100], ['Archetype', 'Hybrid-Connected Applications.', C.t600, C.t50], ['Connectivity profile', 'No new profile: the existing strategic hub is reused.', C.b600, C.b50], ['Placement', 'Most workloads land in the existing qualified region.', C.t600, C.t50]], 'Remaining in an existing qualified region is a valid outcome; an additional region can stay an option, not a project.'],
   ];
   [[0, 1], [2, 3]].forEach((pair, pi) => {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
@@ -146,25 +159,26 @@ module.exports = (pres, L) => {
   // ───────────────────────── Misconceptions
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, '09 · Putting it into practice', 'Common misconceptions', { tw: 7, lede: 'Multi-region programs often become more complex than necessary when teams start from assumptions instead of workload and platform requirements.', lx: 8.3, lw: 4.43 });
+    L.header(s, '09 · Putting it into practice', 'Common misconceptions', { tw: 7, lede: 'Multi-region programs often become more complex than necessary when teams start from assumptions instead of workload and platform requirements. The corrections follow the order of the framework.', lx: 8.3, lw: 4.43 });
     const M = [
-      ['Every new region needs a Full Regional Hub.', 'Select the most efficient profile that satisfies the requirements. Any profile can remain the long-term target.'],
-      ['A paired region is our disaster recovery.', 'Pairing supports specific platform and service behaviors; workload recovery must still be designed and validated.'],
+      ['Adding a region means another landing-zone project.', 'The landing zone you already run is reused: governance, identity, policy, and automation stay the same. A new region adds regional configuration and only the profile its workloads need.'],
+      ['We must choose the perfect regions up front.', 'Requirements and Azure capabilities change. Design so new qualified options can be added without a redesign.'],
       ['Qualified means approved for any workload.', 'Qualification is scoped to defined requirements and dated evidence. Each workload revalidates at onboarding.'],
-      ['A multi-region platform means active-active.', 'The platform creates options. Single-region, primary/recovery, or active-active is a workload decision.'],
-      ['Enabling a region means migrating workloads.', 'Qualification and readiness are not placement. Remaining in the existing region can be the right outcome.'],
+      ['Every new region needs a Full Regional Hub.', 'Select the most efficient profile that satisfies the requirements. Any profile can remain the long-term target.'],
       ['Another Azure region requires another ExpressRoute circuit.', 'Not by itself. Add connectivity where reachability, diversity, failure domain, latency, routing, or bandwidth justify it.'],
       ['Each region needs its own governance model.', 'Reuse the existing landing-zone governance and operating model; vary implementation only where required.'],
-      ['We must choose the perfect regions up front.', 'Requirements and Azure capabilities change. Design so new qualified options can be added without a redesign.'],
+      ['Enabling a region means migrating workloads.', 'Qualification and readiness are not placement. Remaining in the existing region can be the right outcome.'],
+      ['A paired region is our disaster recovery.', 'Pairing supports specific platform and service behaviors; workload recovery must still be designed and validated.'],
+      ['A multi-region platform means active-active.', 'The platform creates options. Single-region, primary/recovery, or active-active is a workload decision.'],
     ];
     M.forEach(([q, a], i) => {
-      const x = 0.6 + (i % 4) * 3.08, y = 1.8 + Math.floor(i / 4) * 2.45, w = 2.93;
-      L.box(s, x, y, w, 0.85, { fill: C.w50, r: 0.1 });
-      L.icon(s, 'x', x + 0.14, y + 0.14, 0.2, 'o');
-      L.txt(s, '“' + q + '”', x + 0.42, y + 0.06, w - 0.52, 0.74, { fontSize: 10.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
-      L.box(s, x, y + 0.9, w, 1.35, { fill: 'FFFFFF', line: C.line, r: 0.1 });
-      L.icon(s, 'check', x + 0.14, y + 1.05, 0.2, 'g');
-      L.txt(s, a, x + 0.42, y + 0.98, w - 0.52, 1.2, { fontSize: 9.8, color: C.text });
+      const x = 0.6 + (i % 3) * 4.1, y = 1.75 + Math.floor(i / 3) * 1.72, w = 3.93;
+      L.box(s, x, y, w, 0.5, { fill: C.w50, r: 0.1 });
+      L.icon(s, 'x', x + 0.14, y + 0.15, 0.2, 'o');
+      L.txt(s, '“' + q + '”', x + 0.42, y, w - 0.52, 0.5, { fontSize: 10.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
+      L.box(s, x, y + 0.55, w, 1.05, { fill: 'FFFFFF', line: C.line, r: 0.1 });
+      L.icon(s, 'check', x + 0.14, y + 0.68, 0.2, 'g');
+      L.txt(s, a, x + 0.42, y + 0.6, w - 0.52, 0.95, { fontSize: 9.8, color: C.text, valign: 'middle' });
     });
     L.footer(s, 0, '09 · PUTTING IT INTO PRACTICE');
     s.addNotes('Each correction maps to the framework: profiles (Section 05), zones and pairing (Dimension 4 and Appendix A), qualification and placement (Sections 03 and 06), hybrid connectivity (Dimension 5), and the operating model (Section 07).');
@@ -173,19 +187,19 @@ module.exports = (pres, L) => {
   // ───────────────────────── Getting started
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, '09 · Putting it into practice', 'Getting started', { tw: 7, lede: 'Establish the first additional regional options. The same process scales from one candidate region to a broader portfolio.', lx: 8.3, lw: 4.43 });
+    L.header(s, '09 · Putting it into practice', 'Get started with a multi-region platform', { tw: 7.4, lede: 'Start with one candidate region and the workloads that need it. The same process scales to a broader portfolio, and later regions reuse the decisions made for the first.', lx: 8.3, lw: 4.43 });
     const G = [
       ['Name the drivers', 'Business growth, regulation, service or SKU availability, resiliency, a datacenter or connectivity event, cost, or another measurable requirement.'],
-      ['Identify workload requirements and archetypes', 'Start with known workloads and portfolios; validate representative dependencies; set guardrails where requirements are unknown.'],
       ['Shortlist candidate regions', 'Apply business, geographic, and mandatory data and compliance constraints before deeper technical assessment.'],
+      ['Identify workload requirements and archetypes', 'Start with known workloads and portfolios; validate representative dependencies; set guardrails where requirements are unknown.'],
       ['Qualify candidates against workload requirements', 'Services, models, SKUs, zones, dependencies, latency, pricing, access, quota. Record excluded, candidate, conditional, or qualified.'],
-      ['Enable the most efficient platform', 'Select the profile, confirm hybrid connectivity, decide local vs remote shared services, and close readiness gaps.'],
+      ['Enable the most efficient platform', 'Select the profile, confirm hybrid connectivity, decide local vs remote shared services, close readiness gaps, and agree who decides what.'],
       ['Onboard the first workload', 'Apply the placement process with current evidence; govern placement and resiliency; feed findings back into qualification.'],
     ];
     G.forEach(([t, d], i) => {
       const x = 0.6 + (i % 3) * 4.1, y = 1.7 + Math.floor(i / 3) * 1.95, w = 3.93, h = 1.8;
-      L.box(s, x, y, w, h, { fill: i % 3 === 1 ? C.t50 : C.wash, r: 0.12 });
-      L.txt(s, String(i + 1).padStart(2, '0'), x + 0.22, y + 0.12, 0.8, 0.5, { fontSize: 26, fontFace: F.light, color: i % 3 === 1 ? C.t600 : C.b600 });
+      L.box(s, x, y, w, h, { fill: (i === 2 || i === 5) ? C.t50 : C.wash, r: 0.12 });
+      L.txt(s, String(i + 1).padStart(2, '0'), x + 0.22, y + 0.12, 0.8, 0.5, { fontSize: 26, fontFace: F.light, color: (i === 2 || i === 5) ? C.t600 : C.b600 });
       L.txt(s, t, x + 0.22, y + 0.6, w - 0.44, 0.45, { fontSize: 11.5, fontFace: F.semi, color: C.ink, valign: 'top' });
       L.txt(s, d, x + 0.22, y + 1.07, w - 0.44, 0.7, { fontSize: 9.5, color: C.text });
     });

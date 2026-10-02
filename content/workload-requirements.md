@@ -1,7 +1,7 @@
 ---
 title: "Dimension 3: Workload requirements and dependencies"
 description: Identify the workload requirements and dependencies a candidate Azure region must support, from existing and future workloads, including workloads moving into the region.
-ms.date: 09/30/2026
+ms.date: 10/02/2026
 ms.topic: conceptual
 ---
 
@@ -47,7 +47,7 @@ Architecture concepts can help identify and organize these requirements, but the
 ## Reference links
 
 - [Architecture styles](https://learn.microsoft.com/azure/architecture/guide/architecture-styles/) — Supports the discussion of workload architecture, including N-tier, microservices, and event-driven approaches.
-- [Built-in Workload Landing Zone archetypes](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/tailoring-alz#built-in-archetypes-for-the-azure-landing-zone-reference-architecture) — Describes what needs to be true for a landing zone to meet the expected environment and compliance requirements at a specific scope.
+- [Built-in Azure landing zone archetypes](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/tailoring-alz#built-in-archetypes-for-the-azure-landing-zone-reference-architecture) — Describes what needs to be true for a landing zone to meet the expected environment and compliance requirements at a specific scope.
 - [Evaluate a cloud workload for relocation](https://learn.microsoft.com/azure/azure-resource-manager/management/relocate-evaluate) — Dependency discovery, workload ownership, acceptable disruption, and target-region supportability.
 - [Relocate cloud workloads](https://learn.microsoft.com/azure/azure-resource-manager/management/relocate-index) — The broader Azure-to-Azure relocation process, which distinguishes assessment from migration and cutover.
 

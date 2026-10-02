@@ -34,8 +34,6 @@
   --green: #5FC98B; --green-soft: #173024;
   --nav-bg: #1C1F24; --nav-hover: #262A31; --nav-active: #243548; --nav-active-ink: #CFE4FA;
   --fig-bg: #FFFFFF; --fig-line: #2E343C;
-  --matrix-bg: #1C1F24; --matrix-head: #252A31; --matrix-text: #D5DCE5;
-  --matrix-heading: #75D2CC; --matrix-region: #8CC4F5; --matrix-muted: #A2ADBB; --matrix-border: #39414B;
   --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.35);
 }
 @media (prefers-color-scheme: dark) {
@@ -50,8 +48,6 @@
     --green: #5FC98B; --green-soft: #173024;
     --nav-bg: #1C1F24; --nav-hover: #262A31; --nav-active: #243548; --nav-active-ink: #CFE4FA;
     --fig-bg: #FFFFFF; --fig-line: #2E343C;
-    --matrix-bg: #1C1F24; --matrix-head: #252A31; --matrix-text: #D5DCE5;
-    --matrix-heading: #75D2CC; --matrix-region: #8CC4F5; --matrix-muted: #A2ADBB; --matrix-border: #39414B;
     --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 28px rgba(0,0,0,.35);
   }
 }
@@ -242,16 +238,20 @@ blockquote.pull p { margin: 0; font-size: 21px; line-height: 1.4; font-weight: 3
 .outcome-matrix .pm td.rgn { color: var(--matrix-text); }
 .outcome-matrix .pm td.rgn span { color: var(--matrix-muted); }
 .outcome-legend { color: var(--matrix-muted) !important; }
-:root[data-theme="dark"] .prose .wpf .mx thead th { background: #252A31; color: #D5DCE5; }
-:root[data-theme="dark"] .prose .wpf .mx thead th.pf { color: #8CC4F5; }
-:root[data-theme="dark"] .prose .wpf .mx thead th:first-child .cap { color: #75D2CC !important; }
-:root[data-theme="dark"] .prose .wpf .mx thead th.dr { color: #A2ADBB; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .prose .wpf .mx thead th { background: #252A31; color: #D5DCE5; }
-  :root:not([data-theme="light"]) .prose .wpf .mx thead th.pf { color: #8CC4F5; }
-  :root:not([data-theme="light"]) .prose .wpf .mx thead th:first-child .cap { color: #75D2CC !important; }
-  :root:not([data-theme="light"]) .prose .wpf .mx thead th.dr { color: #A2ADBB; }
+/* Figures keep the light palette in both themes. Pin the light tokens inside the figure card and the lightbox so
+   page-level dark styles (for example .prose th) cannot leak into the artwork. */
+.fig, .lb-stage {
+  color-scheme: light; color: #28323E;
+  --bg: #FFFFFF; --bg-soft: #F7F9FB; --bg-sunk: #F1F4F8;
+  --ink: #0A2340; --text: #28323E; --muted: #5B6778; --faint: #8A95A5;
+  --line: #E1E6ED; --line-strong: #CFD7E1;
+  --accent: #0F6CBD; --accent-ink: #0F548C; --accent-soft: #EEF5FC; --accent-line: #BCD9F5;
+  --teal: #04807A; --teal-soft: #EDF8F6; --warm: #A84E1F; --warm-soft: #FBF4EE;
+  --amber: #8A5A00; --amber-soft: #FFF6E0; --green: #107C41; --green-soft: #E9F6EE;
 }
+/* The city analogy is dark artwork: let it fill the card instead of sitting in a white frame. */
+.fig[data-fig="city-analogy"] { padding: 0; overflow: hidden; background: #101B3A; }
+.fig[data-fig="city-analogy"] figcaption { margin: 0; border-radius: 0; }
 .fig-tools { position: absolute; top: 10px; right: 10px; display: flex; gap: 6px; opacity: 0; transition: opacity .15s; z-index: 2; }
 .fig:hover .fig-tools, .fig:focus-within .fig-tools { opacity: 1; }
 .fig-tools button, .fig-tools a { width: 30px; height: 30px; border-radius: 7px; border: 1px solid #D3DBE4; background: #fff; color: #0F548C; display: grid; place-items: center; cursor: pointer; }

@@ -126,7 +126,10 @@ def main():
                 f'<!-- extracted from whitepaper #{fid}; regenerate with site/tools/extract_figures.py -->\n'
                 f'<div class="wpf" data-w="{w}" data-h="{h}" style="width:{w}px">{html}</div>\n')
             box = el.bounding_box(); pad = 16
+            # hide neighbouring blocks so nothing next to the figure leaks into the padding of the PNG
+            el.evaluate("f => { window.__hid = []; for (const s of f.parentElement.children) if (s !== f) { window.__hid.push([s, s.style.visibility]); s.style.visibility = 'hidden'; } }")
             pg.screenshot(path=os.path.join(MEDIA, name + ".png"), clip={"x": box["x"] - pad, "y": box["y"] - pad, "width": box["width"] + 2 * pad, "height": box["height"] + 2 * pad})
+            el.evaluate("() => { for (const [s, v] of window.__hid) s.style.visibility = v; }")
             manifest[name] = {"w": w, "h": h, "source": fid}
             print(f"{name:42s} {w}x{h}")
         b.close()

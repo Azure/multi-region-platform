@@ -1,11 +1,11 @@
 ---
 title: Storage, backup, and Key Vault across regions
 description: Paired-region and region-of-choice behavior for Azure Storage replication, backup and restore, and Key Vault, and the recommended Key Vault pattern for multi-region workloads.
-ms.date: 09/30/2026
+ms.date: 10/02/2026
 ms.topic: conceptual
 ---
 
-# Storage, backup, and Key Vault
+# Storage, backup, and Key Vault across regions
 
 Storage replication, backup and restore, and Key Vault illustrate why regional qualification cannot stop at "the service exists in both regions." Cross-region behavior can differ significantly depending on the service and regional combination.
 
@@ -47,47 +47,17 @@ Storage replication, backup and restore, and Key Vault illustrate why regional q
 **Paired-region behavior**
 
 - In most paired regions, Key Vault asynchronously replicates vault contents to the paired region.
-- Microsoft-managed regional failover is Microsoft initiated, best effort, and can occur only after significant delay; after failover, the vault operates with restrictions, including read-only management behavior.
-- Brazil South, Brazil Southeast, West US 3, and nonpaired regions do not use this Microsoft-managed cross-region replication and failover model.
+- Microsoft-managed regional failover is Microsoft initiated, best effort, and can occur only after significant delay; after failover, the vault operates with restrictions, including read-only management behavior. Workloads with tighter recovery objectives need an explicit multi-region design.
+- Some paired regions and all nonpaired regions do not use this Microsoft-managed cross-region replication and failover model. For the current list, see [Reliability in Azure Key Vault](https://learn.microsoft.com/azure/reliability/reliability-key-vault).
 
 **Region-of-choice designs**
 
 - Where built-in failover does not meet workload requirements, use separate regional vaults or another supported custom multi-region design.
-- Keys, secrets, and certificates require explicit recovery analysis; do not assume they can all be replicated or recreated using the same mechanism.
-- Azure Managed HSM provides an optional two-region replication model for keys, with both regions active, but it has its own regional support and cost considerations.
+- Keys, secrets, and certificates each require their own recovery analysis. Secrets and certificates can often be provisioned independently into regional vaults through controlled deployment processes. Cryptographic keys, particularly customer-managed keys, can have additional constraints and should not be assumed to be reproducible by the same process.
+- Azure Managed HSM provides an optional two-region replication model with both regions active. It applies to keys, not to ordinary Key Vault secrets and certificates; not every region can serve as an extended region, and it has its own cost considerations.
 
 > [!IMPORTANT]
-> Key Vault is often a runtime dependency. Data can be recoverable while the application still cannot start.
-
-## Key Vault is a workload-specific dependency
-
-:::row:::
-   :::column:::
-      **A runtime dependency**
-
-      Applications can require keys, secrets, certificates, DNS resolution, and private connectivity simply to initialize. Recovering application data is insufficient if required runtime dependencies are unavailable in the recovery region.
-   :::column-end:::
-   :::column:::
-      **Keys, secrets, and certificates are not interchangeable**
-
-      Each type of Key Vault content needs its own recovery analysis. Secrets and certificates can often be provisioned independently into regional vaults through controlled deployment processes. Cryptographic keys, particularly customer-managed keys, can have additional constraints and should not be assumed to be reproducible by the same process.
-   :::column-end:::
-:::row-end:::
-:::row:::
-   :::column:::
-      **Microsoft-managed failover may not meet the workload objective**
-
-      For supported paired regions, Microsoft controls Key Vault regional failover and describes it as best effort. A prolonged regional outage can result in hours before failover occurs, and the secondary operates with restrictions after failover. Workloads with tighter recovery objectives need an explicit multi-region design.
-   :::column-end:::
-   :::column:::
-      **Managed HSM addresses a different requirement**
-
-      Azure Managed HSM supports optional two-region replication for key material, roles, and permissions, with both regions able to serve requests. It applies to **keys**, not ordinary Key Vault secrets and certificates, and not every region can serve as an extended region.
-   :::column-end:::
-:::row-end:::
-
-> [!NOTE]
-> Microsoft documents custom multi-region Key Vault approaches for nonpaired regions, paired regions without Microsoft-managed replication, and workloads whose recovery objectives cannot be met by built-in failover.
+> Key Vault is often a runtime dependency. Applications can require keys, secrets, and certificates simply to initialize, so data can be recoverable while the application still cannot start.
 
 ## Recommended Key Vault pattern
 
@@ -101,9 +71,6 @@ Storage replication, backup and restore, and Key Vault illustrate why regional q
 - **Deploy configuration consistently.** Infrastructure as code should consistently provision vault configuration, access controls, private connectivity, monitoring, and policy. Use an approved secret-management or deployment process to populate the required secrets and certificates in each regional vault; do not treat the IaC repository itself as a store for secret values.
 - **Do not make failover the synchronization strategy.** Populate and validate required runtime dependencies before an outage. Recovery should not depend on creating or restoring a regional vault after the primary region has already failed.
 - **Design cryptographic keys separately.** Customer-managed keys cannot always be reproduced using the same process as secrets or certificates. Select an appropriate key-resiliency pattern, such as supported Key Vault backup and restore constraints, Managed HSM multi-region capabilities, or another workload-specific design, based on security and recovery requirements.
-
-> [!TIP]
-> **DR in practice:** When the workload activates in the recovery region, the required vault and runtime dependencies should already be available and validated there.
 
 ## Reference links
 

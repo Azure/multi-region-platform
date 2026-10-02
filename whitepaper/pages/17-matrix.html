@@ -18,12 +18,12 @@
   .mk.none { color: var(--line); font-size: 14px; }
 </style>
 <div class="inner">
-  <div class="row" style="gap:40px;align-items:flex-end">
-    <div style="flex:1.4">
+  <div class="row" style="gap:34px;align-items:flex-end">
+    <div style="flex:0 0 430px">
       <div class="eyebrow" style="color:var(--t600)">Archetypes and profiles</div>
-      <h2 class="title mt8" style="font-size:23px"><span style="color:var(--t700)">Archetypes describe what applications require.</span> <span style="color:var(--b700)">Profiles describe what the platform provides.</span></h2>
+      <h2 class="title mt8" style="font-size:21px"><span style="color:var(--t700)">Archetypes describe what applications require.</span> <span style="color:var(--b700)">Profiles describe what the platform provides.</span></h2>
     </div>
-    <p style="flex:1">The mapping is not one-to-one: one archetype can use different profiles, and one profile can support multiple archetypes. Keeping the two layers separate lets the platform plan capability without prescribing application designs.</p>
+    <p style="flex:1;font-size:12px;line-height:1.45"><strong>An archetype doesn’t dictate a profile.</strong> Use the archetypes expected in a region to understand what it needs, then choose the lightest profile that meets those needs. For example, a hybrid-connected application might run well on a Remote Hub Connected profile in one region and need a Minimal Regional Hub in another, depending on latency, traffic, and resiliency requirements. One profile can also serve several archetypes at once.</p>
   </div>
 
   <div class="figure mt16" id="fig13">

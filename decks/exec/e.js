@@ -29,13 +29,13 @@ module.exports = (pres, L) => {
       L.box(s, 0.6, 6.02 + i * 0.3, 0.26, 0.06, { fill: c, r: 0.03 });
       L.txt(s, t, 0.98, 5.93 + i * 0.3, 5, 0.25, { fontSize: 11.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
     });
-    L.txt(s, 'September 2026', 0.6, 7.0, 3, 0.22, { fontSize: 9.5, color: C.muted });
+    L.txt(s, 'October 2026', 0.6, 7.0, 3, 0.22, { fontSize: 9.5, color: C.muted });
     s.addNotes('Executive briefing based on the Multi-Region Platform Whitepaper. Sequence follows the executive talk track: reframe the objective, move from a region to a geography mindset, decouple connectivity, tier the regional footprint, classify workloads by archetype, explain the agility, and land on the strategic benefit.');
   }
 
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, 'Executive summary', 'Evolve landing zones from fixed regional footprints into a governed operating model', { tw: 7.6, ts: 23, lede: 'In a governed geographic operating model — for example, across Europe — regional placement becomes an adaptable, application-level decision instead of a permanent architectural dependency.', lx: 8.5, lw: 4.23 });
+    L.header(s, 'Executive summary', 'Evolve landing zones from fixed regional footprints into a governed operating model', { tw: 7.6, ts: 23, lede: 'Adding an Azure region shouldn’t mean starting another landing-zone project. In a governed geographic operating model — for example, across Europe — regional placement becomes an adaptable, application-level decision instead of a permanent architectural dependency.', lx: 8.5, lw: 4.23, ls: 11.5, lh: 1.4 });
     L.txt(s, 'FIVE MOVES', 0.6, 1.72, 3, 0.22, { fontSize: 9, bold: true, color: C.muted, charSpacing: 3 });
     const K = [['shield', C.s800, 'Standardize governance', 'Policies, security controls, operational rigor, and compliance are the constants across the geography.'], ['route', C.b600, 'Decouple connectivity', 'Plan resilient hybrid connectivity to Azure geographically, not again for every region.'], ['hub', C.v600, 'Tier the regional footprint', 'A few strategic hubs carry the full stack; other regions use lighter patterns.'], ['app', C.t600, 'Classify workloads by archetype', 'Four archetypes describe what each workload needs from the platform.'], ['pin', C.b700, 'Preserve regional optionality', 'Qualified regions stay available for the next workload when capacity, services, or regulation change.']];
     K.forEach(([ic, c, t, d], i) => {
@@ -410,9 +410,9 @@ module.exports = (pres, L) => {
     L.header(s, '06 · Agility in practice', 'Four scenarios at a glance', { ec: C.t600, tw: 8, lede: 'From a business or technical driver to a governed regional and workload decision. Illustrative, not customer-specific.', lx: 8.9, lw: 3.83 });
     const S = [
       ['Regulated bank adopts a new in-country region', [['Qualification', 'Qualified for Hybrid-Connected requirements; other workloads remain candidates.'], ['Connectivity', 'Minimal Regional Hub; existing hybrid connectivity reused where it permits.'], ['Placement', 'In-scope workloads relocate selectively; others stay.']], 'Qualify for defined requirements without forcing portfolio-wide relocation.'],
-      ['AI team requires a specific model or GPU SKU', [['Qualification', 'Qualified for the AI requirements; other dependencies conditional.'], ['Connectivity', 'Disconnected Spokes; connected only where dependencies justify it.'], ['Placement', 'Net-new, revalidated at decision time.']], 'Do not add connectivity or platform capabilities before a requirement justifies them.'],
+      ['AI team requires a specific model or GPU SKU', [['Qualification', 'Qualified for the AI requirements; conditional where private connectivity is not yet designed.'], ['Connectivity', 'Disconnected Spokes; connected only where dependencies justify it.'], ['Placement', 'Net-new, revalidated at decision time.']], 'Do not add connectivity or platform capabilities before a requirement justifies them.'],
       ['Acquisition brings an estate in another geography', [['Qualification', 'Candidate until dependencies are understood; then qualified.'], ['Connectivity', 'Remote Hub Connected, or Minimal Regional Hub where east-west or independence justify it.'], ['Placement', 'Remain in place; relocate selectively with integration.']], 'Aggregate portfolio dependencies determine the profile.'],
-      ['Datacenter exit accelerates migration', [['Qualification', 'Existing target region qualified; additional region a candidate.'], ['Connectivity', 'Existing strategic hub — no new hub just because a region exists.'], ['Placement', 'Most workloads land in the existing qualified region.']], 'Staying put is valid; a new region can stay an option, not a project.'],
+      ['Datacenter exit accelerates migration', [['Qualification', 'Existing target region qualified; additional region a candidate.'], ['Connectivity', 'No new profile: the existing strategic hub is reused.'], ['Placement', 'Most workloads land in the existing qualified region.']], 'Staying put is valid; a new region can stay an option, not a project.'],
     ];
     S.forEach(([t, rows, tk], i) => {
       const x = 0.6 + (i % 2) * 6.12, y = 1.65 + Math.floor(i / 2) * 2.62, w = 6.0, h = 2.48;

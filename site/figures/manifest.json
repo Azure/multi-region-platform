@@ -26,7 +26,7 @@
  },
  "dimensions-1-2-filter": {
   "w": 940,
-  "h": 141,
+  "h": 176,
   "source": "fig6"
  },
  "workloads-to-platform-requirements": {
@@ -106,12 +106,12 @@
  },
  "operating-model-consistent-adaptable": {
   "w": 940,
-  "h": 284,
+  "h": 316,
   "source": "fig18"
  },
  "key-vault-regional-pattern": {
   "w": 474,
-  "h": 506,
+  "h": 417,
   "source": "figKVPattern"
  }
 }

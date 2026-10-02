@@ -1,7 +1,7 @@
 ---
 title: Regional platform connectivity profiles
 description: Four regional platform connectivity profiles — Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, and Full Regional Hub — and when to choose and reassess each one.
-ms.date: 09/30/2026
+ms.date: 10/02/2026
 ms.topic: conceptual
 ---
 
@@ -13,7 +13,7 @@ An organization can maintain a small number of strategic geographic hubs that pr
 
 Regional enablement is a spectrum: from Disconnected Spokes, with no dependency on a geographic hub, through Remote Hub Connected and Minimal Regional Hub, to a Full Regional Hub with greater local capability and independence. These profiles aren't maturity stages. A profile can remain the right target for a region as long as it continues to satisfy workload and platform requirements.
 
-Connectivity profiles describe platform capabilities, not workload designs. An Application Landing Zone archetype doesn't dictate a profile; choose the profile from the workloads' actual dependencies, latency, resiliency, security, data, and operational requirements.
+Connectivity profiles describe platform capabilities, not workload designs. A Workload Landing Zone archetype doesn't dictate a profile; choose the profile from the workloads' actual dependencies, latency, resiliency, security, data, and operational requirements.
 
 :::image type="content" source="./media/connectivity-profile-spectrum.png" alt-text="Spectrum of four profiles from no dependency on a geographic hub to greater local capability. Disconnected spokes have no hub or gateway; remote-hub-connected spokes connect privately to a hub region; a minimal regional hub hosts selected shared services such as private DNS, a virtual network gateway, and Azure Monitor; a full regional hub adds comprehensive shared services including Azure Firewall." lightbox="./media/connectivity-profile-spectrum.png":::
 
