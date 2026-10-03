@@ -18,10 +18,8 @@ __pycache__/
 build/
 .docusaurus/
 .cache-loader/
-dist/**/*
 public/css/main.css
-site/                   # MkDocs (legacy)
-docs/pdf/               # MkDocs with-pdf output
+docs/pdf/
 
 # ─── Dependencies ───────────────────────────────────────────────────────────────
 node_modules/
@@ -33,7 +31,15 @@ yarn.lock
 # ─── Environment / secrets ──────────────────────────────────────────────────────
 .env
 .env.local
-.env.*.local
+.env.*
+!.env.example
+!.env.template
+
+# ─── Office documents: do not publish source documents ────────────────────────
+*.docx
+*.DOCX
+*.pptx
+*.PPTX
 
 # ─── TypeScript ─────────────────────────────────────────────────────────────────
 *.tsbuildinfo
@@ -68,6 +74,7 @@ Thumbs.db
 
 # ─── Content: local-only / temporary ────────────────────────────────────────────
 temp/
+whitepaper/assets/
 docs/raw-import.md
 _split_docs.py
 .instructions-live-site.md

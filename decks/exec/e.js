@@ -333,7 +333,7 @@ module.exports = (pres, L) => {
 
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, '05 · Governance moves up a level', 'Regions are qualified, not assumed', { tw: 8.2, lede: 'Five dimensions decide which regions are prepared for which workload requirements — with evidence, owners, and revalidation triggers.', lx: 9.1, lw: 3.63 });
+    L.header(s, '06 · Governance moves up a level · Qualify regions', 'Regions are qualified, not assumed', { tw: 8.2, lede: 'Five dimensions decide which regions are prepared for which workload requirements — with evidence, owners, and revalidation triggers.', lx: 9.1, lw: 3.63 });
     const dims = [
       ['Business and geography', 'Where do we need Azure presence?', ['Markets and users', 'Datacenter and partner locations', 'Planned launches or migrations', 'Growth, proximity, concentration risk'], 'Confirm sufficient business value to justify deeper assessment.', C.b300, 'b'],
       ['Data and compliance', 'Are we allowed to operate here?', ['Residency and sovereignty', 'Regulatory and industry rules', 'Company policy, customer commitments', 'Support access, encryption, data movement'], 'Exclude the region when it cannot satisfy a mandatory requirement.', C.b500, 'w'],
@@ -365,13 +365,13 @@ module.exports = (pres, L) => {
       L.txt(s, t, x + 0.35, 5.95, 2.1, 0.55, { fontSize: 11, bold: true, color: col, valign: 'middle' });
     });
     L.caption(s, 'Figure', 'The recommended platform-adoption sequence. Outcomes are specific to defined workload requirements and evidence-dated, never a blanket certification.', 0.6, 6.63, 12.1);
-    L.footer(s, 0, '05 · GOVERNANCE');
+    L.footer(s, 0, '06 · QUALIFY REGIONS');
     s.addNotes("Governance does not disappear in this model — it moves up a level. The Regional Qualification Framework is how a region enters the governed operating model: business and geography, data and compliance, workload requirements and dependencies, regional capability and availability, and platform enablement and connectivity. Each option is recorded as excluded, candidate, conditional, or qualified as of the assessment date. Whether an individual workload uses multiple regions remains a workload-specific design decision.");
   }
 
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, '06 · Why this creates agility', 'Region becomes a deployment parameter', { tw: 8, lede: 'Strategic hubs remain deliberate choices. Workloads stop inheriting those choices automatically.', lx: 8.9, lw: 3.83 });
+    L.header(s, '07 · Why this creates agility', 'Region becomes a deployment parameter', { tw: 8, lede: 'Strategic hubs remain deliberate choices. Workloads stop inheriting those choices automatically.', lx: 8.9, lw: 3.83 });
     L.box(s, 0.6, 1.7, 5.8, 1.9, { fill: C.w50, r: 0.12 });
     L.txt(s, 'TODAY', 0.85, 1.83, 2, 0.2, { fontSize: 8.5, bold: true, color: C.w600, charSpacing: 2 });
     L.txt(s, 'Region as a permanent architectural dependency', 0.85, 2.05, 5.4, 0.35, { fontSize: 14, fontFace: F.semi, color: C.ink });
@@ -401,13 +401,13 @@ module.exports = (pres, L) => {
     L.txt(s, [{ text: 'Deliberate where it matters: ', options: { bold: true } }, { text: 'where the major strategic hubs live.' }], 0.85, 5.98, 5.6, 0.82, { fontSize: 12, color: 'FFFFFF', valign: 'middle' });
     L.box(s, 6.73, 5.98, 6.0, 0.82, { fill: C.t50, line: C.t300, r: 0.12 });
     L.txt(s, [{ text: 'Adaptable where it helps: ', options: { bold: true } }, { text: 'which regions individual applications consume.' }], 6.98, 5.98, 5.6, 0.82, { fontSize: 12, color: C.ink, valign: 'middle' });
-    L.footer(s, 0, '06 · AGILITY');
+    L.footer(s, 0, '07 · AGILITY');
     s.addNotes('Talk track: "The important outcome is that region becomes increasingly a deployment parameter rather than a permanent architectural dependency. We still make deliberate choices about where major strategic hubs exist. But we stop assuming that every workload must inherit those same regional choices. That gives us a much better ability to respond when circumstances change. If capacity is available somewhere else, if a required Azure service is stronger in another region, or if the regulatory or energy environment changes, we have more options for where the next workload can go." From the whitepaper: placement is revalidated at decision time for services, SKUs, AI models, regional access, and quota; capacity remains a deployment-time condition. Staying in the current region is always a valid outcome.');
   }
 
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, '06 · Agility in practice', 'Four scenarios at a glance', { ec: C.t600, tw: 8, lede: 'From a business or technical driver to a governed regional and workload decision. Illustrative, not customer-specific.', lx: 8.9, lw: 3.83 });
+    L.header(s, '08 · Agility in practice', 'Four scenarios at a glance', { ec: C.t600, tw: 8, lede: 'From a business or technical driver to a governed regional and workload decision. Illustrative, not customer-specific.', lx: 8.9, lw: 3.83 });
     const S = [
       ['Regulated bank adopts a new in-country region', [['Qualification', 'Qualified for Hybrid-Connected requirements; other workloads remain candidates.'], ['Connectivity', 'Minimal Regional Hub; existing hybrid connectivity reused where it permits.'], ['Placement', 'In-scope workloads relocate selectively; others stay.']], 'Qualify for defined requirements without forcing portfolio-wide relocation.'],
       ['AI team requires a specific model or GPU SKU', [['Qualification', 'Qualified for the AI requirements; conditional where private connectivity is not yet designed.'], ['Connectivity', 'Disconnected Spokes; connected only where dependencies justify it.'], ['Placement', 'Net-new, revalidated at decision time.']], 'Do not add connectivity or platform capabilities before a requirement justifies them.'],
@@ -427,13 +427,13 @@ module.exports = (pres, L) => {
       L.icon(s, 'flag', x + 0.2, y + h - 0.37, 0.22, 't');
       L.txt(s, tk, x + 0.52, y + h - 0.5, w - 0.7, 0.5, { fontSize: 10, color: C.ink, valign: 'middle' });
     });
-    L.footer(s, 0, '06 · AGILITY IN PRACTICE');
+    L.footer(s, 0, '08 · AGILITY IN PRACTICE');
     s.addNotes('Use one of these scenarios to make the agility point concrete for the audience. The full deck and whitepaper walk each scenario from driver through framework, qualification, archetype, connectivity profile, and placement.');
   }
 
   {
     const s = pres.addSlide(); s.background = { color: 'FFFFFF' };
-    L.header(s, '07 · The strategic benefit', 'Architect so that perfect prediction is unnecessary', { tw: 9 });
+    L.header(s, '09 · The strategic benefit', 'Architect so that perfect prediction is unnecessary', { tw: 9 });
     L.txt(s, [{ text: 'No one can predict which European regions will offer the best combination of capacity, service availability, energy supply, and regulatory environment three to five years from now. ', options: { fontFace: F.light } }, { text: 'Architect so that it does not need to be predicted perfectly.', options: { fontFace: F.semi, color: C.ink } }], 0.6, 1.6, 5.4, 1.9, { fontSize: 16, color: C.s600 });
     L.txt(s, 'That means separating what must stay consistent — governance, security, compliance, and the operating model — from what should stay adaptable: which regions individual applications consume.', 0.6, 3.55, 5.4, 0.9, { fontSize: 11.5, color: C.text });
     L.box(s, 0.6, 4.5, 5.4, 0.95, { fill: C.w50, r: 0.1 });
@@ -448,7 +448,7 @@ module.exports = (pres, L) => {
     L.txt(s, 'Together: an architecture that can evolve as Europe evolves.', 6.4, 5.5, 6.33, 0.3, { fontSize: 10.5, italic: true, color: C.muted, align: 'right' });
     s.addImage({ path: IMG('band.jpg'), x: 0.6, y: 5.9, w: 12.13, h: 0.95, sizing: { type: 'cover', w: 12.13, h: 0.95 } });
     L.txt(s, [{ text: 'The goal is not to select the perfect two regions. ', options: { fontFace: F.light } }, { text: 'It is to make additional regions significantly easier to adopt when business and workload requirements justify them.', options: { fontFace: F.semi } }], 0.95, 5.9, 11.4, 0.95, { fontSize: 16, color: 'FFFFFF', valign: 'middle' });
-    L.footer(s, 0, '07 · STRATEGIC BENEFIT');
+    L.footer(s, 0, '09 · STRATEGIC BENEFIT');
     s.addNotes('Talk track — finish with this: "We should not try to predict perfectly which European regions will have the best combination of capacity, service availability, energy supply and regulatory environment three-to-five years from now. The external environment is inherently dynamic. Instead, we should architect so that we do not need to predict it perfectly. That means separating the things that must remain consistent, our governance, security, compliance and operating model, from the things that should remain adaptable, namely which regions individual applications consume. With a small number of strategic geographic hubs, geographically resilient connectivity, and a set of lightweight Workload Landing Zone archetypes, we create an architecture that can evolve as Europe evolves." For regulated customers, reinforce that this application-level, region-agnostic approach provides a way to de-risk cloud growth if future power restrictions affect the industry’s ability to continue hyperscale expansion in a particular country.');
   }
 
