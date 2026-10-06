@@ -90,7 +90,7 @@
     <h1 class="title">Storage, backup, and Key Vault across regions</h1>
     <p class="meta">October 2, 2026 · 4 min read</p>
     <article class="prose">
-<p>Storage replication, backup and restore, and Key Vault illustrate why regional qualification cannot stop at "the service exists in both regions." Cross-region behavior can differ significantly depending on the service and regional combination.</p>
+<p>Storage replication, backup and restore, and Key Vault illustrate why regional qualification cannot stop at "the service exists in both regions."</p>
 <h2 id="storage">Storage<a class="anchor" href="#storage" aria-label="Link to this section">#</a></h2>
 <p><strong>Paired-region options</strong></p>
 <ul>
@@ -182,7 +182,7 @@
 <li><strong>Independent regional vault.</strong> Each workload uses the vault associated with its local region rather than depending at runtime on a vault hosted in another region.</li>
 <li><strong>Deploy configuration consistently.</strong> Infrastructure as code should consistently provision vault configuration, access controls, private connectivity, monitoring, and policy. Use an approved secret-management or deployment process to populate the required secrets and certificates in each regional vault; do not treat the IaC repository itself as a store for secret values.</li>
 <li><strong>Do not make failover the synchronization strategy.</strong> Populate and validate required runtime dependencies before an outage. Recovery should not depend on creating or restoring a regional vault after the primary region has already failed.</li>
-<li><strong>Design cryptographic keys separately.</strong> Customer-managed keys cannot always be reproduced using the same process as secrets or certificates. Select an appropriate key-resiliency pattern, such as supported Key Vault backup and restore constraints, Managed HSM multi-region capabilities, or another workload-specific design, based on security and recovery requirements.</li>
+<li><strong>Design cryptographic keys separately.</strong> Select an appropriate key-resiliency pattern, such as supported Key Vault backup and restore constraints, Managed HSM multi-region capabilities, or another workload-specific design, based on security and recovery requirements.</li>
 </ul>
 <h2 id="reference-links">Reference links<a class="anchor" href="#reference-links" aria-label="Link to this section">#</a></h2>
 <ul>

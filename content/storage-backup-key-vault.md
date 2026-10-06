@@ -7,7 +7,7 @@ ms.topic: conceptual
 
 # Storage, backup, and Key Vault across regions
 
-Storage replication, backup and restore, and Key Vault illustrate why regional qualification cannot stop at "the service exists in both regions." Cross-region behavior can differ significantly depending on the service and regional combination.
+Storage replication, backup and restore, and Key Vault illustrate why regional qualification cannot stop at "the service exists in both regions."
 
 ## Storage
 
@@ -70,7 +70,7 @@ Storage replication, backup and restore, and Key Vault illustrate why regional q
 - **Independent regional vault.** Each workload uses the vault associated with its local region rather than depending at runtime on a vault hosted in another region.
 - **Deploy configuration consistently.** Infrastructure as code should consistently provision vault configuration, access controls, private connectivity, monitoring, and policy. Use an approved secret-management or deployment process to populate the required secrets and certificates in each regional vault; do not treat the IaC repository itself as a store for secret values.
 - **Do not make failover the synchronization strategy.** Populate and validate required runtime dependencies before an outage. Recovery should not depend on creating or restoring a regional vault after the primary region has already failed.
-- **Design cryptographic keys separately.** Customer-managed keys cannot always be reproduced using the same process as secrets or certificates. Select an appropriate key-resiliency pattern, such as supported Key Vault backup and restore constraints, Managed HSM multi-region capabilities, or another workload-specific design, based on security and recovery requirements.
+- **Design cryptographic keys separately.** Select an appropriate key-resiliency pattern, such as supported Key Vault backup and restore constraints, Managed HSM multi-region capabilities, or another workload-specific design, based on security and recovery requirements.
 
 ## Reference links
 

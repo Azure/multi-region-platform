@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Common multi-region misconceptions · Multi-region platform</title>
-<meta name="description" content="Nine common assumptions that make multi-region programs more complex than necessary, and the correction for each.">
+<meta name="description" content="Eight common assumptions that make multi-region programs more complex than necessary, and the correction for each.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230F6CBD'/%3E%3Ccircle cx='11' cy='13' r='4' fill='%23fff'/%3E%3Ccircle cx='21' cy='13' r='4' fill='%23fff' opacity='.7'/%3E%3Ccircle cx='16' cy='21' r='4' fill='%23fff' opacity='.45'/%3E%3C/svg%3E">
 <script>try{var t=localStorage.getItem('mrp-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <link rel="stylesheet" href="assets/figures.css">
@@ -100,8 +100,8 @@
 </thead>
 <tbody>
 <tr>
-<td>"Adding a region means another landing-zone project."</td>
-<td>The landing zone you already run is reused: governance, identity, policy, and automation stay the same. A new region adds regional configuration and only the connectivity profile its workloads need. See <a href="platform-readiness.html">Platform readiness checklist</a>.</td>
+<td>"Adding a region means another landing-zone project, with its own governance model."</td>
+<td>The landing zone you already run is reused: governance, identity, policy, automation, and the operating model stay the same. A new region adds regional configuration and only the connectivity profile its workloads need. See <a href="framework-overview.html#principles-and-constructs">Framework overview</a> and the <a href="platform-readiness.html">Platform readiness checklist</a>.</td>
 </tr>
 <tr>
 <td>"We must choose the perfect regions up front."</td>
@@ -109,7 +109,7 @@
 </tr>
 <tr>
 <td>"Qualified means approved for any workload."</td>
-<td>Qualification is scoped to defined requirements and evidence at a point in time. Each workload revalidates regional suitability during onboarding. See <a href="regional-qualification.html#assessment-outcome">Regional assessment outcome</a>.</td>
+<td>Qualification is scoped to defined requirements and evidence at a point in time. Each workload revalidates regional suitability during onboarding. See <a href="regional-qualification.html#assessment-outcome">Assessment outcome</a>.</td>
 </tr>
 <tr>
 <td>"Every new region needs a Full Regional Hub."</td>
@@ -120,12 +120,8 @@
 <td>An additional region does not by itself require another circuit. Additional hybrid connectivity should be introduced where reachability, diversity, failure-domain, latency, routing, or bandwidth requirements justify it. See <a href="platform-enablement-connectivity.html#resilient-hybrid-connectivity">Platform capabilities and connectivity</a>.</td>
 </tr>
 <tr>
-<td>"Each region needs its own governance model."</td>
-<td>Reuse the existing Azure landing-zone governance and operating model; vary regional implementation only where requirements justify it. See <a href="framework-overview.html#principles-and-constructs">Framework overview</a>.</td>
-</tr>
-<tr>
 <td>"Enabling a region means migrating workloads."</td>
-<td>Regional qualification and platform readiness are not workload placement. Remaining in the existing region can be the appropriate outcome. See <a href="workload-placement.html">Workload placement</a>.</td>
+<td>Regional qualification and platform readiness are not workload placement. Remaining in the existing region can be the appropriate outcome. See <a href="workload-placement.html">Place workloads</a>.</td>
 </tr>
 <tr>
 <td>"A paired region is our disaster recovery."</td>

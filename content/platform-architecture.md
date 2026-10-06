@@ -23,15 +23,14 @@ Start with the matrix to see which [connectivity profiles](./connectivity-profil
 
 ## Profile selection principles
 
-- Start with the **workload requirements and dependencies** identified during regional qualification, including portfolio-level dependencies.
-- Use Workload Landing Zone archetypes to spot recurring connectivity and shared-service needs, then validate the profile against the actual workloads.
+- Start with the **workload requirements and dependencies** identified during regional qualification, including portfolio-level dependencies. Use Workload Landing Zone archetypes to spot recurring needs, then validate the profile against the actual workloads.
 - Select the **most efficient profile** that satisfies those requirements, not the maximum possible one.
-- Keep capabilities remote when latency, dependency, data, security, resiliency, availability, and operational requirements permit. Add local capabilities only when a measurable requirement justifies the larger regional footprint.
+- Keep capabilities remote when latency, dependency, data, security, resiliency, availability, and operational requirements permit. Add local capabilities only when a measurable requirement justifies the larger regional footprint; adoption growth alone doesn't.
 - Consider direct spoke-to-spoke connectivity where workloads have significant east-west traffic and a hub transit path is unnecessary. Add regional routing, inspection, or shared services when broader requirements justify them.
 
 ## Which connectivity profile should this region provide?
 
-Start from the workload requirements and dependencies identified in [check 3](./workload-requirements.md#platform-and-connectivity-requirements). Each question comes from the "fits when" criteria of the [connectivity profiles](./connectivity-profiles.md); stop at the first profile that satisfies the identified requirements.
+Each question comes from the "fits when" criteria of the [connectivity profiles](./connectivity-profiles.md). Stop at the first profile that satisfies the requirements identified in [check 3](./workload-requirements.md#platform-and-connectivity-requirements).
 
 :::image type="content" source="./media/connectivity-profile-decision-tree.png" alt-text="Decision tree with three questions. If workloads need no private access to enterprise services, use disconnected spokes. If they can tolerate the latency and coupling of another region, use remote-hub-connected spokes. If requirements do not justify a comprehensive local capability set, use a minimal regional hub; otherwise use a full regional hub." lightbox="./media/connectivity-profile-decision-tree.png":::
 
@@ -50,14 +49,7 @@ Two of the four profiles need no local hub, and only the Full Regional Hub appro
 
 **Decision:** Select the most efficient regional platform connectivity profile that satisfies the identified requirements and can evolve as regional adoption changes.
 
-Profiles evolve in both directions. Reassess a region's profile when the trigger below applies. For the full considerations, see [Profile considerations and hub implementations](./profile-selection.md#considerations-and-reassessment-by-profile).
-
-| Current profile | Reassess when |
-|---|---|
-| Disconnected Spokes | Workloads require private access to enterprise services, inspection, on-premises systems, another portfolio, or hub capabilities. |
-| Remote Hub Connected | Cross-region traffic, latency, east-west communication, dependency criticality, regulation, scale, or availability coupling justify local capabilities. |
-| Minimal Regional Hub | Growth adds local requirements, interconnected portfolios need broader capabilities, independence requirements become stricter, or significant local hybrid connectivity is required. |
-| Full Regional Hub | Demand or requirements decrease, services can be safely centralized, dependencies change, or the footprint no longer justifies its cost. |
+Profiles evolve in both directions. Reassess a region's profile when its workload or platform requirements change. For the considerations and the reassessment trigger of each profile, see [Profile considerations and hub implementations](./profile-selection.md#considerations-and-reassessment-by-profile).
 
 ## In this section
 

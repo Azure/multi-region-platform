@@ -1,4 +1,4 @@
-import sys; sys.path.insert(0,'/home/claude/wp')
+import os, sys; sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'whitepaper'))
 import art
 from playwright.sync_api import sync_playwright
 def svg(w,h,body): return f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}">{body}</svg>'

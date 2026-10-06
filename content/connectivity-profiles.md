@@ -7,13 +7,11 @@ ms.topic: conceptual
 
 # Understand common connectivity profiles
 
-Enabling an additional Azure region doesn't require changing or duplicating the full platform footprint of an existing geographic hub. Instead, choose the most efficient regional connectivity profile that supports the workloads expected to use the region.
+Enabling an additional Azure region doesn't require changing or duplicating the full platform footprint of an existing geographic hub. An organization can maintain a small number of strategic geographic hubs that provide resilient hybrid connectivity and common enterprise services. Other Azure regions can use a more efficient profile and consume capabilities from those hubs when workload requirements permit.
 
-An organization can maintain a small number of strategic geographic hubs that provide resilient hybrid connectivity and common enterprise services. Other Azure regions can use lighter profiles and consume capabilities from those hubs when workload requirements permit.
+The four profiles form a spectrum: from Disconnected Spokes, with no dependency on a geographic hub, through Remote Hub Connected and Minimal Regional Hub, to a Full Regional Hub with greater local capability and independence. They aren't maturity stages. A profile can remain the right target for a region as long as it continues to satisfy workload and platform requirements.
 
-Regional enablement is a spectrum: from Disconnected Spokes, with no dependency on a geographic hub, through Remote Hub Connected and Minimal Regional Hub, to a Full Regional Hub with greater local capability and independence. These profiles aren't maturity stages. A profile can remain the right target for a region as long as it continues to satisfy workload and platform requirements.
-
-Connectivity profiles describe platform capabilities, not workload designs. The next article, [Workload Landing Zone archetypes](./application-landing-zone-archetypes.md), describes what applications need. An archetype doesn't dictate a profile; the profile follows the workloads' actual dependencies, latency, resiliency, security, data, and operational requirements.
+Profiles describe platform capabilities, not workload designs; [Workload Landing Zone archetypes](./application-landing-zone-archetypes.md) describe what applications need. You don't select a profile here. That happens in [step 3](./platform-architecture.md), after the region is [qualified](./regional-qualification.md).
 
 :::image type="content" source="./media/connectivity-profile-spectrum.png" alt-text="Spectrum of four profiles from no dependency on a geographic hub to greater local capability. Disconnected spokes have no hub or gateway; remote-hub-connected spokes connect privately to a hub region; a minimal regional hub hosts selected shared services such as private DNS, a virtual network gateway, and Azure Monitor; a full regional hub adds comprehensive shared services including Azure Firewall." lightbox="./media/connectivity-profile-spectrum.png":::
 
@@ -56,10 +54,6 @@ A Full Regional Hub uses the same operating model and control baselines as other
 **Fits when:** Workload and platform requirements justify a comprehensive local capability set—for example, where the region requires local hybrid connectivity, substantial local shared services, strict latency or data-boundary controls, significant interconnected application portfolios, or sufficient independence to continue operating when another region or geographic hub is unavailable.
 
 **Regional footprint:** The approved set of local connectivity, shared services, operational capabilities, and independent critical paths required by the region's workload portfolio.
-
-## What you don't decide yet
-
-You don't select a profile here. First you [qualify the region](./regional-qualification.md). Then, in step 3, you [select the capabilities and connectivity profile](./platform-architecture.md) it provides. [Profile considerations and hub implementations](./profile-selection.md) covers the trade-offs, the considerations for each profile, and when to reassess.
 
 ## Next step
 

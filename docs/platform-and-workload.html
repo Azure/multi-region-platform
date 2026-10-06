@@ -88,7 +88,7 @@
   <main id="main">
     <div class="crumbs">Multi-region platform <span>/</span> 1. Understand concepts</div>
     <h1 class="title">Multi-region platform and multi-region workload</h1>
-    <p class="meta">October 5, 2026 · 3 min read</p>
+    <p class="meta">October 5, 2026 · 2 min read</p>
     <article class="prose">
 <p>A <strong>multi-region platform</strong> and a <strong>multi-region workload</strong> operate at different layers. The platform creates governed regional choices for the customer estate; the workload applies one or more of those choices to a specific workload. Keeping these concepts separate prevents multi-region strategy from being treated as an automatic requirement for a new landing zone, workload migration, active-active high availability, or active/passive disaster recovery.</p>
 <h2 id="the-city-analogy">The city analogy<a class="anchor" href="#the-city-analogy" aria-label="Link to this section">#</a></h2>
@@ -580,10 +580,6 @@
     
   </div></div>
 </div></div></figure>
-<ul>
-<li>A <strong>multi-region platform</strong> targets placement flexibility across the Azure estate. It qualifies additional regions through the existing landing-zone operating model, approved connectivity patterns, deployment automation, and quota planning. It does not require a separate connectivity landing zone or identical shared services in every region; workload requirements determine the cross-region design.</li>
-<li>A <strong>multi-region workload</strong> targets the requirements of a specific workload or component. Depending on workload requirements and regional suitability, the outcome might be net-new placement in another region, selective relocation, active/passive recovery, active-active distribution, or continued operation in one region.</li>
-</ul>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -608,9 +604,14 @@
 <td>The needs of the portfolio of workloads the platform is expected to support</td>
 <td>The specific workload's requirements, such as availability, resiliency, RTO/RPO, latency, or data requirements</td>
 </tr>
+<tr>
+<td><strong>Outcome</strong></td>
+<td>Additional regions qualified through the existing landing-zone operating model, approved connectivity patterns, deployment automation, and quota planning</td>
+<td>Net-new placement in another region, selective relocation, active/passive recovery, active-active distribution, or continued operation in one region</td>
+</tr>
 </tbody>
 </table></div>
-<p>Multi-region platform readiness establishes the shared capabilities needed to support workloads across selected Azure regions. Reuse the existing Azure landing-zone operating model by default. Extend regional policy parameters, connectivity, shared services, automation, and operations only where documented workload requirements justify them. Regional suitability depends on service and SKU fit, dependencies, quota, latency, cost, and data constraints; actual capacity remains a deployment-time condition.</p>
+<p>Reuse the existing Azure landing-zone operating model by default. Extend regional policy parameters, connectivity, shared services, automation, and operations only where documented workload requirements justify them. A multi-region platform doesn't require a separate connectivity landing zone or identical shared services in every region; workload requirements determine the cross-region design.</p>
 <h2 id="next-step">Next step<a class="anchor" href="#next-step" aria-label="Link to this section">#</a></h2>
 <p class="nextstep"><a class="btn-next" href="connectivity-profiles.html">Common connectivity profiles<svg viewBox="0 0 16 16"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></p></article>
     <nav class="pager"><a class="prev" href="framework-overview.html"><small>Previous</small><span>Framework overview</span></a><a class="next" href="connectivity-profiles.html"><small>Next</small><span>Common connectivity profiles</span></a></nav>

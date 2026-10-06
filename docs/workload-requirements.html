@@ -122,7 +122,7 @@
 </ul>
 <p>For <strong>future workloads</strong>, use known business and technical requirements, predefined workload patterns, intended architecture, expected dependencies, required Azure services, and anticipated security, resiliency, connectivity, and scale requirements to determine the regional and platform capabilities they will need. Where aspects of the application design are still evolving, identify the requirements that must influence regional qualification and defer implementation-specific decisions that can be validated during workload onboarding.</p>
 <h2 id="platform-and-connectivity-requirements">Platform and connectivity requirements<a class="anchor" href="#platform-and-connectivity-requirements" aria-label="Link to this section">#</a></h2>
-<p>Workload requirements also define what the platform must provide in the region. Capture them in three areas. In this check you identify the requirement. You decide how the platform meets it in <a href="platform-architecture.html">step 3</a>, after the region qualifies.</p>
+<p>Workload requirements also define what the platform must provide in the region. Capture them in three areas. <a href="platform-architecture.html">Step 3</a> decides how the platform meets each one, after the region qualifies.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -134,7 +134,7 @@
 <tbody>
 <tr>
 <td><strong>Platform enablement</strong></td>
-<td>The shared services and operational capabilities the workloads depend on: identity and access, policy and security controls, deployment automation, monitoring and logging, backup and recovery, and key and secret management. Note which of them must be close to the workloads.</td>
+<td>The shared services and operational capabilities the workloads depend on, such as identity, security controls, monitoring, backup, and key management, and which of them must be close to the workloads.</td>
 <td><a href="platform-enablement-connectivity.html#platform-capabilities">Platform capabilities</a></td>
 </tr>
 <tr>
@@ -149,8 +149,7 @@
 </tr>
 </tbody>
 </table></div>
-<p>A requirement that the platform can't meet yet doesn't exclude the region. Record it as an input to step 3, where you decide how to meet it.</p>
-<div class="alert important"><p class="alert-title"><svg viewBox="0 0 16 16"><path d="M8 1 15 14H1L8 1Zm-.9 4.6.2 4.4h1.4l.2-4.4Zm.9 5.5a.9.9 0 1 0 0 1.8.9.9 0 0 0 0-1.8Z"/></svg>Important</p><p>This phase identifies the <strong>regional and platform capabilities that workloads require</strong>. It does not approve workload relocation or define migration execution. Relocation readiness, migration sequencing, recovery design, and ongoing multi-region operation remain workload-specific activities.</p></div>
+<div class="alert important"><p class="alert-title"><svg viewBox="0 0 16 16"><path d="M8 1 15 14H1L8 1Zm-.9 4.6.2 4.4h1.4l.2-4.4Zm.9 5.5a.9.9 0 1 0 0 1.8.9.9 0 0 0 0-1.8Z"/></svg>Important</p><p>This check doesn't approve workload relocation or define migration execution. Relocation readiness, migration sequencing, recovery design, and ongoing multi-region operation remain workload-specific activities.</p></div>
 <div class="callout decision"><span class="callout-k">Decision</span><p>Identify and record the workload-driven platform requirements. They are the input to check 4, which validates what the region can support, and to step 3, which decides what the platform provides.</p></div>
 <h2 id="reference-links">Reference links<a class="anchor" href="#reference-links" aria-label="Link to this section">#</a></h2>
 <ul>

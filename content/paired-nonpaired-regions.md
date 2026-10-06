@@ -7,7 +7,7 @@ ms.topic: conceptual
 
 # Paired and nonpaired regions
 
-Region pairing is one input into resiliency design, not the definition of it. Azure supports resilient architectures using paired regions, nonpaired regions, or combinations of both; the appropriate approach depends on workload requirements and the capabilities of the Azure services involved.
+Azure supports resilient architectures using paired regions, nonpaired regions, or combinations of both; the appropriate approach depends on workload requirements and the capabilities of the Azure services involved.
 
 :::row:::
    :::column:::

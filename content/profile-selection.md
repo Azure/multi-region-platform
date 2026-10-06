@@ -7,11 +7,11 @@ ms.topic: conceptual
 
 # Profile considerations and hub implementations
 
-This article covers what to check before you settle on a regional connectivity profile, when to reassess it, what each step up in local capability costs, how profiles coexist across an estate, and how hubs are implemented. For what each profile is, see [Common connectivity profiles](./connectivity-profiles.md). To select a profile, use the [selection principles](./platform-architecture.md#profile-selection-principles) and the [connectivity profile decision tree](./platform-architecture.md#which-connectivity-profile-should-this-region-provide) on the Overview.
+Check these points before you settle on a regional connectivity profile, and revisit the profile when its reassessment trigger applies. For what each profile is, see [Common connectivity profiles](./connectivity-profiles.md). To select a profile, use the [selection principles](./platform-architecture.md#profile-selection-principles) and the [connectivity profile decision tree](./platform-architecture.md#which-connectivity-profile-should-this-region-provide) on the Overview.
 
 ## Considerations and reassessment by profile
 
-Check these points before you settle on a profile, and revisit the profile when its reassessment trigger applies. Profiles can move in both directions.
+Profiles can move in both directions.
 
 ### Disconnected Spokes
 

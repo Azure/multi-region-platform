@@ -56,16 +56,14 @@ Think of the platform as a city, and workloads as the people and businesses that
 
 :::image type="content" source="./media/platform-and-workload-layers.png" alt-text="Diagram contrasting the multi-region platform, which creates governed regional choices through governance, identity and security, monitoring, connectivity patterns, deployment automation, and quota planning, with the multi-region workload, which selects qualified regions for net-new placement, relocation, active/passive recovery, active-active distribution, or continued single-region operation." lightbox="./media/platform-and-workload-layers.png":::
 
-- A **multi-region platform** targets placement flexibility across the Azure estate. It qualifies additional regions through the existing landing-zone operating model, approved connectivity patterns, deployment automation, and quota planning. It does not require a separate connectivity landing zone or identical shared services in every region; workload requirements determine the cross-region design.
-- A **multi-region workload** targets the requirements of a specific workload or component. Depending on workload requirements and regional suitability, the outcome might be net-new placement in another region, selective relocation, active/passive recovery, active-active distribution, or continued operation in one region.
-
 | | Multi-region platform | Multi-region workload |
 |---|---|---|
 | **Purpose** | Enable placement flexibility across qualified Azure regions | Meet workload-specific objectives and requirements such as availability, disaster recovery, user proximity, or regulatory requirements |
 | **Focus** | Regional readiness and consistency of shared platform capabilities | Application architecture, data, dependencies, traffic, availability, and recovery |
 | **Design driven by** | The needs of the portfolio of workloads the platform is expected to support | The specific workload's requirements, such as availability, resiliency, RTO/RPO, latency, or data requirements |
+| **Outcome** | Additional regions qualified through the existing landing-zone operating model, approved connectivity patterns, deployment automation, and quota planning | Net-new placement in another region, selective relocation, active/passive recovery, active-active distribution, or continued operation in one region |
 
-Multi-region platform readiness establishes the shared capabilities needed to support workloads across selected Azure regions. Reuse the existing Azure landing-zone operating model by default. Extend regional policy parameters, connectivity, shared services, automation, and operations only where documented workload requirements justify them. Regional suitability depends on service and SKU fit, dependencies, quota, latency, cost, and data constraints; actual capacity remains a deployment-time condition.
+Reuse the existing Azure landing-zone operating model by default. Extend regional policy parameters, connectivity, shared services, automation, and operations only where documented workload requirements justify them. A multi-region platform doesn't require a separate connectivity landing zone or identical shared services in every region; workload requirements determine the cross-region design.
 
 ## Next step
 

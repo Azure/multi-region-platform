@@ -1,6 +1,6 @@
 ---
 title: Platform capabilities and connectivity
-description: Decide which platform capabilities a qualified Azure region needs, confirm the hybrid connectivity foundation, and select the most efficient regional connectivity profile.
+description: Decide which platform capabilities a qualified Azure region needs, confirm the hybrid connectivity foundation, and identify the regional platform connectivity its workloads require.
 ms.date: 10/05/2026
 ms.topic: conceptual
 ---
@@ -32,7 +32,7 @@ Existing and new workloads follow the same rule: requirements and dependencies d
 
 Determine which shared services and operational capabilities must be provided in the region, consumed from another region, or remain centralized. Consider identity and access, policy and security controls, deployment automation, monitoring and logging, backup and recovery, key and secret management, operational support, platform resiliency, ownership, and cost.
 
-Qualifying a region does not require recreating the full platform footprint used elsewhere. Enable only the regional capabilities required by expected workloads, and document which services remain centralized or are consumed remotely. Define the conditions that would trigger future expansion.
+Enable only the regional capabilities required by expected workloads, and document which services remain centralized or are consumed remotely.
 
 **Decision:** Define the most efficient platform capability set, where each capability will be provided, who will operate it, and what requirements would trigger future expansion.
 
@@ -50,14 +50,9 @@ Enabling an additional Azure region doesn't by itself require another ExpressRou
 
 **Question:** What is the most efficient regional platform design that supports the identified requirements?
 
-Determine how workloads in the region will reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments. Those connectivity and dependency requirements determine which profile fits: Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, or Full Regional Hub.
-
-Choose the profile that meets the requirements without unnecessary infrastructure. Adoption growth alone does not justify moving toward a Full Regional Hub. Expand local capabilities when shared-service placement, resiliency, scale, connectivity, or operational requirements change.
+Determine how workloads in the region will reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments. Those connectivity and dependency requirements determine which [connectivity profile](./connectivity-profiles.md) fits: Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, or Full Regional Hub.
 
 You make this decision on the step 3 Overview, with the [selection principles](./platform-architecture.md#profile-selection-principles) and the [connectivity profile decision tree](./platform-architecture.md#which-connectivity-profile-should-this-region-provide). Before you settle on a profile, check [Profile considerations and hub implementations](./profile-selection.md).
-
-> [!TIP]
-> Geographic hybrid connectivity and workload connectivity remain related but distinct decisions. Enabling another region does not automatically require duplicating the existing connectivity platform. For each profile in detail, see [Common connectivity profiles](./connectivity-profiles.md).
 
 ## Reference links
 

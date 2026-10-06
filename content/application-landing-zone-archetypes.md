@@ -9,9 +9,9 @@ ms.topic: conceptual
 
 Workload Landing Zone archetypes are a planning abstraction that groups recurring application connectivity and dependency requirements. An archetype describes what an application or application portfolio requires from the platform. It doesn't replace the existing Azure landing-zone hierarchy.
 
-Archetypes describe what applications require; connectivity profiles describe what the platform provides. The mapping isn't one-to-one: one archetype can use different profiles, and one profile can support multiple archetypes. Assign each workload the closest-fitting archetype and record any material requirements that fall outside it. Portfolio-level dependencies can also affect the platform capabilities needed across several workloads.
+Assign each workload the closest-fitting archetype and record any material requirements that fall outside it. Portfolio-level dependencies can also affect the platform capabilities needed across several workloads.
 
-Use archetypes during regional qualification to anticipate the capabilities a candidate region may need to support. Where future workload requirements aren't yet defined, they give you planning guardrails without constraining later placement, which happens once the workload's current requirements, regional capabilities, and platform readiness are known.
+Use archetypes during regional qualification, in [check 3](./workload-requirements.md), to anticipate the capabilities a candidate region may need to support. Where future workload requirements aren't yet defined, they give you planning guardrails without constraining later placement, which happens once the workload's current requirements, regional capabilities, and platform readiness are known.
 
 :::image type="content" source="./media/application-landing-zone-archetypes.png" alt-text="Four archetype cards — hybrid-connected applications, isolated cloud-native or AI applications, connected cloud-native or AI applications, and interconnected application portfolios — each with its defining characteristics and typical connectivity profiles." lightbox="./media/application-landing-zone-archetypes.png":::
 
@@ -45,11 +45,9 @@ Because this is a **portfolio-level archetype**, its combined dependencies may r
 
 ## How archetypes map to connectivity profiles
 
-An archetype doesn't dictate a profile. Use the archetypes expected in a region to understand what it needs, then choose the most efficient profile that meets those needs. For example, a hybrid-connected application might run well on a Remote Hub Connected profile in one region and need a Minimal Regional Hub in another, depending on latency, traffic, and resiliency requirements. One profile can also serve several archetypes at once.
+Archetypes describe what applications require; connectivity profiles describe what the platform provides. An archetype doesn't dictate a profile: one archetype can use different profiles, and one profile can serve several archetypes. Use the archetypes expected in a region to understand what it needs, then choose the most efficient profile that meets those needs. For example, a hybrid-connected application might run well on a Remote Hub Connected profile in one region and need a Minimal Regional Hub in another, depending on latency, traffic, and resiliency requirements.
 
-:::image type="content" source="./media/archetype-profile-matrix.png" alt-text="Matrix of the four archetypes against the four connectivity profiles. Hybrid-connected and connected cloud-native or AI applications typically use remote hub, minimal hub, or full hub; isolated cloud-native or AI applications often use disconnected spokes and other profiles where justified; interconnected portfolios can use spoke-to-spoke connectivity, a remote hub where acceptable, and a minimal or full hub when justified." lightbox="./media/archetype-profile-matrix.png":::
-
-*Archetype-to-profile relationships are many-to-many. Each row is a set of options, not an assignment; the selected profile follows dependencies, latency, traffic, resiliency, and independence requirements.*
+You don't assign a profile to an archetype here. The [archetype-to-profile matrix](./platform-architecture.md) in step 3 shows the typical options for each archetype, and that step selects the profile.
 
 ## How archetypes differ from other architecture terms
 
@@ -64,10 +62,6 @@ Several architecture concepts help identify and organize workload requirements, 
 
 > [!NOTE]
 > The Azure landing zones reference architecture also uses *archetypes*: built-in definitions of what must be true for a landing zone to meet environment and compliance requirements at a given scope. Workload Landing Zone archetypes in this guidance describe what a workload requires from the platform, which is a different concept.
-
-## What you don't decide yet
-
-You don't assign a profile to an archetype here. [Regional qualification](./regional-qualification.md) uses the archetypes in [check 3](./workload-requirements.md) to describe the workloads a region must support. [Step 3](./platform-architecture.md) then selects the profile those workloads need.
 
 ## Reference links
 

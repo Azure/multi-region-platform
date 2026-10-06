@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Platform capabilities and connectivity · Multi-region platform</title>
-<meta name="description" content="Decide which platform capabilities a qualified Azure region needs, confirm the hybrid connectivity foundation, and select the most efficient regional connectivity profile.">
+<meta name="description" content="Decide which platform capabilities a qualified Azure region needs, confirm the hybrid connectivity foundation, and identify the regional platform connectivity its workloads require.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230F6CBD'/%3E%3Ccircle cx='11' cy='13' r='4' fill='%23fff'/%3E%3Ccircle cx='21' cy='13' r='4' fill='%23fff' opacity='.7'/%3E%3Ccircle cx='16' cy='21' r='4' fill='%23fff' opacity='.45'/%3E%3C/svg%3E">
 <script>try{var t=localStorage.getItem('mrp-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <link rel="stylesheet" href="assets/figures.css">
@@ -138,7 +138,7 @@
 <h2 id="platform-capabilities">Platform capabilities<a class="anchor" href="#platform-capabilities" aria-label="Link to this section">#</a></h2>
 <div class="callout question"><span class="callout-k">Question</span><p>What platform capabilities must be enabled to support the identified workload requirements?</p></div>
 <p>Determine which shared services and operational capabilities must be provided in the region, consumed from another region, or remain centralized. Consider identity and access, policy and security controls, deployment automation, monitoring and logging, backup and recovery, key and secret management, operational support, platform resiliency, ownership, and cost.</p>
-<p>Qualifying a region does not require recreating the full platform footprint used elsewhere. Enable only the regional capabilities required by expected workloads, and document which services remain centralized or are consumed remotely. Define the conditions that would trigger future expansion.</p>
+<p>Enable only the regional capabilities required by expected workloads, and document which services remain centralized or are consumed remotely.</p>
 <div class="callout decision"><span class="callout-k">Decision</span><p>Define the most efficient platform capability set, where each capability will be provided, who will operate it, and what requirements would trigger future expansion.</p></div>
 <p>For the items that most often stall a new region, see the <a href="platform-readiness.html">platform readiness checklist</a>.</p>
 <h2 id="resilient-hybrid-connectivity">Resilient hybrid connectivity<a class="anchor" href="#resilient-hybrid-connectivity" aria-label="Link to this section">#</a></h2>
@@ -147,10 +147,8 @@
 <div class="callout decision"><span class="callout-k">Decision</span><p>Confirm the hybrid connectivity foundation and identify any required changes to reachability, resiliency, diversity, scale, or ownership.</p></div>
 <h2 id="regional-platform-connectivity">Regional platform connectivity<a class="anchor" href="#regional-platform-connectivity" aria-label="Link to this section">#</a></h2>
 <div class="callout question"><span class="callout-k">Question</span><p>What is the most efficient regional platform design that supports the identified requirements?</p></div>
-<p>Determine how workloads in the region will reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments. Those connectivity and dependency requirements determine which profile fits: Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, or Full Regional Hub.</p>
-<p>Choose the profile that meets the requirements without unnecessary infrastructure. Adoption growth alone does not justify moving toward a Full Regional Hub. Expand local capabilities when shared-service placement, resiliency, scale, connectivity, or operational requirements change.</p>
+<p>Determine how workloads in the region will reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments. Those connectivity and dependency requirements determine which <a href="connectivity-profiles.html">connectivity profile</a> fits: Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, or Full Regional Hub.</p>
 <p>You make this decision on the step 3 Overview, with the <a href="platform-architecture.html#profile-selection-principles">selection principles</a> and the <a href="platform-architecture.html#which-connectivity-profile-should-this-region-provide">connectivity profile decision tree</a>. Before you settle on a profile, check <a href="profile-selection.html">Profile considerations and hub implementations</a>.</p>
-<div class="alert tip"><p class="alert-title"><svg viewBox="0 0 16 16"><path d="M8 1.5a4.5 4.5 0 0 0-2.7 8.1V11a1 1 0 0 0 1 1h3.4a1 1 0 0 0 1-1V9.6A4.5 4.5 0 0 0 8 1.5ZM6 13.2h4v1.3H6Z"/></svg>Tip</p><p>Geographic hybrid connectivity and workload connectivity remain related but distinct decisions. Enabling another region does not automatically require duplicating the existing connectivity platform. For each profile in detail, see <a href="connectivity-profiles.html">Common connectivity profiles</a>.</p></div>
 <h2 id="reference-links">Reference links<a class="anchor" href="#reference-links" aria-label="Link to this section">#</a></h2>
 <ul>
 <li><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-areas" target="_blank" rel="noopener">Azure landing zone design areas and conceptual architecture</a> — Supports the broader platform assessment: identity, security, governance, management, connectivity, and deployment automation.</li>

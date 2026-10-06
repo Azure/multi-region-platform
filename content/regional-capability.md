@@ -30,13 +30,13 @@ Validate whether the intended subscription and offer types can deploy in the reg
 
 ## Evidence-based evaluation
 
-Where possible, evaluate objective regional characteristics programmatically. Inputs can include required services and SKUs, zone requirements, latency targets, pricing considerations, expected scale, access eligibility, and quota requirements. The resulting assessment should identify candidate regions, unmet requirements, conditional constraints, and items that require additional validation. Use manual review for considerations that cannot be determined reliably from published or programmatically available information.
+Where possible, evaluate objective regional characteristics programmatically, using the requirements above as inputs. The resulting assessment should identify candidate regions, unmet requirements, conditional constraints, and items that require additional validation. Use manual review for considerations that cannot be determined reliably from published or programmatically available information.
 
 :::image type="content" source="./media/programmatic-regional-evaluation.png" alt-text="Inputs such as services and SKUs, zone requirements, latency targets, pricing, expected scale, and access and quota feed a regional assessment, supplemented by manual review, which produces candidate regions, unmet requirements, conditional constraints, and items requiring validation." lightbox="./media/programmatic-regional-evaluation.png":::
 
 *Programmatic regional evaluation narrows the options; manual review covers what can't be determined reliably.*
 
-If a requirement that could materially affect regional suitability is unresolved, retain the region as a conditional candidate until it is validated. Evaluate requirements that do not affect regional qualification later, during workload onboarding or reassessment.
+If a requirement that could materially affect regional suitability is unresolved, keep the region conditional until it is validated. Evaluate requirements that do not affect regional qualification later, during workload onboarding or reassessment.
 
 **Decision:** Qualify candidate regions against identified workload requirements, documenting conditions, constraints, and unresolved validations while preserving viable options for future workloads.
 

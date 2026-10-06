@@ -140,6 +140,7 @@
 <th>Check</th>
 <th>Question</th>
 <th>Decision</th>
+<th>Outcome if not met</th>
 </tr>
 </thead>
 <tbody>
@@ -147,25 +148,29 @@
 <td><a href="business-and-geography.html">1. Business and geography</a></td>
 <td>Where do we need Azure presence?</td>
 <td>Confirm that the region has sufficient business value to justify deeper assessment.</td>
+<td>No deeper assessment is needed.</td>
 </tr>
 <tr>
 <td><a href="data-and-compliance.html">2. Data and compliance</a></td>
 <td>Are we allowed to operate here?</td>
 <td>Exclude a region when it cannot satisfy a mandatory data, compliance, or policy requirement.</td>
+<td><strong>Excluded.</strong></td>
 </tr>
 <tr>
 <td><a href="workload-requirements.html">3. Workload requirements and dependencies</a></td>
 <td>What workload requirements and dependencies must the region support?</td>
 <td>Identify and record the workload-driven platform requirements that check 4 validates and step 3 uses.</td>
+<td><strong>Candidate</strong> while requirements aren't known. Complete discovery, or set guardrails and assess at onboarding.</td>
 </tr>
 <tr>
 <td><a href="regional-capability.html">4. Regional capability and availability</a></td>
 <td>Which regions can support the identified workload requirements?</td>
 <td>Qualify candidate regions, documenting conditions, constraints, and unresolved validations.</td>
+<td><strong>Conditional</strong>, or excluded if the gap is mandatory. Record material gaps, required changes, and validation owners.</td>
 </tr>
 </tbody>
 </table></div>
-<p>The checks produce one of four outcomes for each regional option: <strong>excluded</strong>, <strong>candidate</strong>, <strong>conditional</strong>, or <strong>qualified as of the assessment date</strong>.</p>
+<p>A region that meets all four checks is <strong>qualified</strong> for the defined workload requirements as of the assessment date.</p>
 <h2 id="assessment-outcome">Assessment outcome<a class="anchor" href="#assessment-outcome" aria-label="Link to this section">#</a></h2>
 <p>Consolidate the workload requirements and platform needs identified through the four checks. Assess each candidate region against the same criteria and document the result, key tradeoffs, and outstanding validation. Reuse the assessment in architecture reviews and regional planning.</p>
 <p>Classify each regional option as:</p>
@@ -194,10 +199,8 @@
     </div></div>
 </div></div><figcaption>Illustrative example: one portfolio, classified per archetype. Regions and statuses are illustrative.</figcaption></figure>
 <p>The same region can be qualified for one set of requirements, conditional or a candidate for another, and excluded for a third. Qualification is a dated planning input, not permanent approval; decision-time validation at onboarding remains authoritative.</p>
-<div class="alert note"><p class="alert-title"><svg viewBox="0 0 16 16"><path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Zm0 3.2a.8.8 0 1 1 0 1.6.8.8 0 0 1 0-1.6ZM9 11.5H7V7.4h2Z"/></svg>Note</p><p>The purpose is not to certify a region for every possible workload, but to know which options are excluded, which remain candidates or conditional, and which are ready for defined workload requirements.</p></div>
 <h2 id="should-this-region-be-qualified">Should this region be qualified?<a class="anchor" href="#should-this-region-be-qualified" aria-label="Link to this section">#</a></h2>
-<p>Apply the tree per candidate region and set of defined workload requirements. Each question is one of the four checks, and each branch ends in one of four classifications: excluded, candidate, conditional, or qualified.</p>
-<p>Use the tree to structure the conversation, not as a gate. Most paths are short, and a "no" or "not yet" is a valid, low-cost answer that you record and revisit when conditions change.</p>
+<p>Apply the tree per candidate region and set of defined workload requirements. Each question is one of the four checks. Use the tree to structure the conversation, not as a gate: most paths are short, and a "no" or "not yet" is a valid, low-cost answer that you record and revisit when conditions change.</p>
 <figure class="fig live" data-fig="regional-qualification-decision-tree" role="img" aria-label="Decision tree with four questions, one for each qualification check. A no on business value ends the assessment; a mandatory data or compliance gap excludes the region; workload requirements, dependencies, archetypes, or platform needs that are not yet known leave the region a candidate; unresolved regional capability makes it conditional; passing every question qualifies the region as of the assessment date."><div class="fig-tools"><button class="fig-zoom" type="button" aria-label="Expand figure" title="Expand"><svg viewBox="0 0 16 16"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><a class="fig-png" href="media/regional-qualification-decision-tree.png" download title="Download image" aria-label="Download image"><svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></div><div class="fig-stage"><div class="fig-scale"><div class="wpf" data-w="940" data-h="436" style="width:940px"><div class="figure mt12">
     <div class="dg qt"><svg class="conn-layer"><defs><marker id="regional-qualification-decision-tree--ah-3-plain" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#8A95A5"></path></marker><marker id="regional-qualification-decision-tree--ah-3-yes" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#0F6CBD"></path></marker><marker id="regional-qualification-decision-tree--ah-3-no" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#A84E1F"></path></marker><marker id="regional-qualification-decision-tree--ah-3-dash" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#8A95A5"></path></marker><marker id="regional-qualification-decision-tree--ah-3-teal" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#04807A"></path></marker><marker id="regional-qualification-decision-tree--ah-3-slate" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#4A5B72"></path></marker><marker id="regional-qualification-decision-tree--ah-3-warm" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#A84E1F"></path></marker><marker id="regional-qualification-decision-tree--ah-3-blue" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#0F6CBD"></path></marker><marker id="regional-qualification-decision-tree--ah-3-green" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#107C41"></path></marker><marker id="regional-qualification-decision-tree--ah-3-light" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#8CC0EE"></path></marker></defs><path d="M381,38 L381,62" fill="none" stroke="#0F6CBD" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#regional-qualification-decision-tree--ah-3-blue)"></path><path d="M381,116 L381,138" fill="none" stroke="#0F6CBD" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#regional-qualification-decision-tree--ah-3-blue)"></path><g><rect x="366.5234375" y="117.30000305175781" width="28.9891357421875" height="17" rx="8.5" fill="#fff" stroke="#0F6CBD" stroke-width="1"></rect><text x="381" y="129.3000015258789" text-anchor="middle" font-size="9.4" font-weight="700" fill="#0F6CBD" font-family="Pub Sans, Segoe UI, sans-serif" letter-spacing=".3">Yes</text></g><path d="M381,192 L381,214" fill="none" stroke="#0F6CBD" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#regional-qualification-decision-tree--ah-3-blue)"></path><g><rect x="366.5234375" y="193.29998779296875" width="28.9891357421875" height="17" rx="8.5" fill="#fff" stroke="#0F6CBD" stroke-width="1"></rect><text x="381" y="205.29999389648438" text-anchor="middle" font-size="9.4" font-weight="700" fill="#0F6CBD" font-family="Pub Sans, Segoe UI, sans-serif" letter-spacing=".3">Yes</text></g><path d="M381,268 L381,290" fill="none" stroke="#0F6CBD" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#regional-qualification-decision-tree--ah-3-blue)"></path><g><rect x="366.5234375" y="269.29998779296875" width="28.9891357421875" height="17" rx="8.5" fill="#fff" stroke="#0F6CBD" stroke-width="1"></rect><text x="381" y="281.29999389648435" text-anchor="middle" font-size="9.4" font-weight="700" fill="#0F6CBD" font-family="Pub Sans, Segoe UI, sans-serif" letter-spacing=".3">Yes</text></g><path d="M381,344 L381,372" fill="none" stroke="#107C41" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#regional-qualification-decision-tree--ah-3-green)"></path><g><rect x="366.5234375" y="348" width="28.9891357421875" height="17" rx="8.5" fill="#fff" stroke="#107C41" stroke-width="1"></rect><text x="381" y="360.0000061035156" text-anchor="middle" font-size="9.4" font-weight="700" fill="#107C41" font-family="Pub Sans, Segoe UI, sans-serif" letter-spacing=".3">Yes</text></g><path d="M566,89 L652,89" fill="none" stroke="#8A95A5" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#regional-qualification-decision-tree--ah-3-plain)"></path><g><rect x="595.984375" y="80.4000015258789" width="26.03125" height="17" rx="8.5" fill="#fff" stroke="#8A95A5" stroke-width="1"></rect><text x="609" y="92.4" text-anchor="middle" font-size="9.4" font-weight="700" fill="#8A95A5" font-family="Pub Sans, Segoe UI, sans-serif" letter-spacing=".3">No</text></g><path d="M566,165 L652,165" fill="none" stroke="#A84E1F" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#regional-qualification-decision-tree--ah-3-warm)"></path><g><rect x="595.984375" y="156.39999389648438" width="26.03125" height="17" rx="8.5" fill="#fff" stroke="#A84E1F" stroke-width="1"></rect><text x="609" y="168.4" text-anchor="middle" font-size="9.4" font-weight="700" fill="#A84E1F" font-family="Pub Sans, Segoe UI, sans-serif" letter-spacing=".3">No</text></g><path d="M566,241 L652,241" fill="none" stroke="#0F6CBD" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 3" marker-end="url(#regional-qualification-decision-tree--ah-3-blue)"></path><g><rect x="584.5078125" y="232.39999389648438" width="48.984375" height="17" rx="8.5" fill="#fff" stroke="#0F6CBD" stroke-width="1"></rect><text x="609" y="244.4" text-anchor="middle" font-size="9.4" font-weight="700" fill="#0F6CBD" font-family="Pub Sans, Segoe UI, sans-serif" letter-spacing=".3">Not yet</text></g><path d="M566,317 L652,317" fill="none" stroke="#0F6CBD" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 3" marker-end="url(#regional-qualification-decision-tree--ah-3-blue)"></path><g><rect x="574.90625" y="308.3999938964844" width="68.1875" height="17" rx="8.5" fill="#fff" stroke="#0F6CBD" stroke-width="1"></rect><text x="609" y="320.4" text-anchor="middle" font-size="9.4" font-weight="700" fill="#0F6CBD" font-family="Pub Sans, Segoe UI, sans-serif" letter-spacing=".3">Unresolved</text></g></svg>
       <!-- start -->
@@ -243,36 +246,8 @@
     
   </div></div>
 </div></div><figcaption>Regional qualification decision tree. Filters come first, then requirements, then technical fit. Candidate and conditional options return to the tree when validation is complete, or when conditions change.</figcaption></figure>
-<p>The four questions, in order:</p>
-<div class="table-wrap"><table>
-<thead>
-<tr>
-<th>Question</th>
-<th>If the answer is no or not yet</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1. Does the region have sufficient business value to justify deeper assessment?</td>
-<td>Stop. No deeper assessment is needed.</td>
-</tr>
-<tr>
-<td>2. Can it satisfy all mandatory data, compliance, and policy requirements?</td>
-<td><strong>Excluded.</strong> A mandatory requirement cannot be satisfied.</td>
-</tr>
-<tr>
-<td>3. Are the workload requirements, dependencies, archetypes, and platform needs known and validated?</td>
-<td><strong>Candidate.</strong> Complete discovery, or set guardrails and assess at onboarding.</td>
-</tr>
-<tr>
-<td>4. Do services, models, SKUs, zones, access, and quota meet the requirements, including recovery?</td>
-<td><strong>Conditional</strong>, or excluded if the gap is mandatory. Record material gaps, required changes, and validation owners.</td>
-</tr>
-</tbody>
-</table></div>
-<p>A yes to all four means the region is <strong>qualified</strong> for the defined workload requirements as of the assessment date. The next step is to <a href="platform-architecture.html">select its capabilities and connectivity profile</a>.</p>
+<p>For a qualified region, the next step is to <a href="platform-architecture.html">select its capabilities and connectivity profile</a>.</p>
 <div class="alert tip"><p class="alert-title"><svg viewBox="0 0 16 16"><path d="M8 1.5a4.5 4.5 0 0 0-2.7 8.1V11a1 1 0 0 0 1 1h3.4a1 1 0 0 0 1-1V9.6A4.5 4.5 0 0 0 8 1.5ZM6 13.2h4v1.3H6Z"/></svg>Tip</p><p>Questions 1 and 2 need no technical assessment. Answer them for every candidate region first, so that deeper work is spent only on the regions that pass.</p></div>
-<p>A qualified outcome is not a placement decision. Workload onboarding still revalidates regional suitability at decision time.</p>
 <h2 id="next-step">Next step<a class="anchor" href="#next-step" aria-label="Link to this section">#</a></h2>
 <p class="nextstep"><a class="btn-next" href="business-and-geography.html">Business and geography<svg viewBox="0 0 16 16"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></p></article>
     <nav class="pager"><a class="prev" href="application-landing-zone-archetypes.html"><small>Previous</small><span>Workload Landing Zone archetypes</span></a><a class="next" href="business-and-geography.html"><small>Next</small><span>1. Business and geography</span></a></nav>
