@@ -1,11 +1,11 @@
 ---
-title: Regional dependencies and resiliency
+title: Service behavior across regions overview
 description: The regional and service behaviors a platform team should understand when it qualifies regional combinations, including paired and nonpaired regions, storage, backup, and Key Vault, with links to workload design guidance.
-ms.date: 10/02/2026
+ms.date: 10/05/2026
 ms.topic: conceptual
 ---
 
-# Regional dependencies and resiliency
+# Service behavior across regions overview
 
 A multi-region platform creates qualified regional options. Whether a specific workload uses more than one of those regions, and how, is a workload design decision.
 

@@ -14,7 +14,9 @@ import glob, html, os, re, subprocess, sys, zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 RETIRED = ["Application Landing Zone", "Multi-region workload design", "Scenario R1", "Scenario R2", "Scenario R3",
-           "Select the supporting connectivity profile", "resiliency role separately"]
+           "Select the supporting connectivity profile", "resiliency role separately",
+           "Qualification and Enablement Framework", "Regional Qualification Framework", "five dimensions", "Dimension 5",
+           "lightest", "Regional dependencies and resiliency"]
 
 
 def norm(t):

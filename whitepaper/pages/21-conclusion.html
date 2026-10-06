@@ -1,0 +1,54 @@
+<section class="page" data-section="Conclusion">
+<style>
+  .stack { display: grid; gap: 10px; }
+  .stack .ly { border-radius: 12px; padding: 20px 22px; display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: center; }
+  .stack .ly svg { width: 26px; height: 26px; }
+  .stack .ly b { font-size: 14.5px; display: block; }
+  .stack .ly span { font-size: 11.6px; line-height: 1.45; display: block; margin-top: 2px; }
+</style>
+<div class="inner">
+  <div class="open-band" id="s10">
+    <div style="flex:1">
+      <div class="eyebrow">Conclusion</div>
+      <h1 class="sec-title mt8" style="font-size:28px">Design for continuing regional choice</h1>
+    </div>
+  </div>
+
+  <div class="row mt32" style="gap:44px">
+    <div style="flex:0 0 380px">
+      <p class="standfirst" style="font-size:18px">No organization can predict which Azure regions will offer the best mix of services, regulatory fit, business proximity, and workload suitability several years from now. <strong>Design the platform so that perfect prediction is unnecessary.</strong></p>
+      <p class="mt20">This framework extends Azure landing-zone principles rather than replacing them. Regional adoption, workload placement, platform expansion, and resiliency can evolve without redesigning the broader platform for every new region.</p>
+    </div>
+    <div style="flex:1">
+      <div class="stack">
+        <div class="ly" style="background:var(--t50);border:1.2px solid var(--t300);margin:0 26px">
+          <svg style="color:var(--t600)"><use href="#i-app"/></svg>
+          <div><b style="color:var(--t700)">Workload-led placement</b><span>Qualified regional options, Workload Landing Zone archetypes, and current workload requirements allow applications to use the regional and platform capabilities appropriate to their needs.</span></div>
+        </div>
+        <div class="ly" style="background:var(--b50);border:1.2px solid var(--b200);margin:0 13px">
+          <svg style="color:var(--b600)"><use href="#i-hub"/></svg>
+          <div><b style="color:var(--b700)">Adaptable regional platform</b><span>Strategic geographic hubs, resilient hybrid connectivity, and regional connectivity profiles distribute capabilities according to workload requirements — without an identical footprint in every region.</span></div>
+        </div>
+        <div class="ly" style="background:var(--s800);color:#fff">
+          <svg style="color:#A9B6C6"><use href="#i-shield"/></svg>
+          <div><b style="color:#fff">Consistent operating model</b><span style="color:#C9D4E2">Keep the landing-zone guardrails and operating standards stable across the Azure estate.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="position:absolute;left:0;right:0;bottom:0;border-radius:16px;overflow:hidden;background:linear-gradient(120deg,var(--b800),var(--b600) 60%,var(--c600));color:#fff;padding:30px 36px;display:grid;grid-template-columns:1fr 300px;gap:30px;align-items:center">
+    <p style="font-size:21px;line-height:1.3;font-weight:300;letter-spacing:-.01em">The goal is not to select the perfect two regions. <b style="font-weight:650">It is to make additional regions significantly easier to adopt when business and workload requirements justify them.</b></p>
+    <svg width="300" height="120" viewBox="0 0 300 120">
+      <g fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.4"><path d="M50 60 C90 20, 130 20, 150 40"/><path d="M50 60 C100 100, 160 100, 190 80"/></g>
+      <g fill="none" stroke="#BFE6F2" stroke-width="1.4" stroke-dasharray="4 4"><path d="M150 40 C190 20, 220 30, 240 44"/><path d="M190 80 C220 90, 250 86, 268 74"/></g>
+      <circle cx="50" cy="60" r="17" fill="#fff"/><circle cx="50" cy="60" r="6" fill="#0F548C"/>
+      <circle cx="150" cy="40" r="14" fill="#fff"/><circle cx="150" cy="40" r="5" fill="#0F548C"/>
+      <circle cx="190" cy="80" r="12" fill="none" stroke="#fff" stroke-width="1.6"/>
+      <circle cx="240" cy="44" r="10" fill="none" stroke="#BFE6F2" stroke-width="1.6" stroke-dasharray="3 3"/>
+      <circle cx="268" cy="74" r="9" fill="none" stroke="#BFE6F2" stroke-width="1.6" stroke-dasharray="3 3"/>
+      <g font-family="Pub Sans" font-size="9" font-weight="700" fill="#DDEBF9" text-anchor="middle"><text x="50" y="96">1</text><text x="150" y="68">2</text><text x="190" y="106">3</text><text x="240" y="70">4</text><text x="268" y="100">…</text></g>
+    </svg>
+  </div>
+</div>
+</section>

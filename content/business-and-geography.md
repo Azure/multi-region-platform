@@ -1,7 +1,7 @@
 ---
-title: "Dimension 1: Business and geography"
+title: "Check 1: Business and geography"
 description: Start regional qualification with the business reason for another Azure region — markets, users, locations, growth, proximity, and concentration risk.
-ms.date: 09/30/2026
+ms.date: 10/05/2026
 ms.topic: conceptual
 ---
 
@@ -13,7 +13,7 @@ Start with the business reason for considering another region. Evaluate expected
 
 **Decision:** Confirm that the region has sufficient business value to justify deeper assessment.
 
-Regions that don't pass this dimension don't need deeper assessment. Regions that pass continue to [data and compliance](./data-and-compliance.md), which can exclude a region outright.
+Regions that don't pass this check don't need deeper assessment. Regions that pass continue to [data and compliance](./data-and-compliance.md), which can exclude a region outright.
 
 ## Reference links
 

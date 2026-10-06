@@ -1,0 +1,41 @@
+<section class="page" data-section="Putting it into practice">
+<style>
+  .gs { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px 18px; }
+  .gs .g.w { grid-column: 1 / -1; }
+  .gs .g.w p { columns: 2; column-gap: 34px; }
+  .gs .g { border-radius: 12px; padding: 11px 18px 12px; min-height: 0; background: var(--wash); position: relative; }
+  .gs .g .n { font-size: 24px; font-weight: 300; color: var(--b600); line-height: 26px; float: left; margin-right: 12px; }
+  .gs .g h3 { font-size: 13.8px; line-height: 26px; }
+  .gs .g p { font-size: 11px; line-height: 1.44; margin-top: 5px; clear: both; }
+  .gs .g .tl { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+</style>
+<div class="inner">
+  <div class="row" style="gap:40px;align-items:flex-end">
+    <div style="flex:1.2">
+      <div class="eyebrow">Putting it into practice</div>
+      <h2 class="title mt8">Get started with a multi-region platform</h2>
+    </div>
+    <p class="muted" style="flex:1;font-size:12.2px">Use this sequence to establish the first additional regional options. Start with one candidate region and the workloads that need it. The same process scales to a broader portfolio, and later regions reuse the decisions made for the first.</p>
+  </div>
+
+  <div class="gs mt16">
+    <div class="g"><div class="n">01</div><h3>Name the drivers</h3><p>Identify what is prompting the discussion — business growth, regulation, service or SKU availability, resiliency, a datacenter or connectivity event, cost, or another measurable requirement.</p><div class="tl"><span class="chip blue">Drivers</span></div></div>
+    <div class="g" style="background:var(--t50)"><div class="n" style="color:var(--t600)">02</div><h3>Understand the concepts</h3><p>Learn how a multi-region platform differs from a multi-region workload, the four connectivity profiles a region can provide, and the four Workload Landing Zone archetypes that describe what applications need. You make no decisions here. You learn the terms the next steps use.</p><div class="tl"><span class="chip teal">Platform and workload</span><span class="chip teal">Connectivity profiles</span><span class="chip teal">Archetypes</span></div></div>
+    <div class="g w"><div class="n">03</div><h3>Shortlist and qualify candidate regions</h3><p>Work through the four qualification checks. Start with the two that need no technical assessment: business and geographic requirements and mandatory data and compliance constraints. Remove regions that cannot satisfy mandatory conditions before investing in deeper technical assessment. For the regions that remain, identify workload requirements and dependencies: start with known workloads and application portfolios, validate representative dependencies, identify the closest-fitting archetypes, and establish planning guardrails where future workload requirements are not yet known. Then validate regional capability and availability: required services, models, SKUs, availability-zone support, dependencies, latency, pricing, regional access, and quota. Record each option as excluded, candidate, conditional, or qualified for the defined requirements, with evidence and revalidation triggers.</p><div class="tl"><span class="chip blue">Checks 1–4</span><span class="chip blue">Qualification tree</span><span class="chip blue">Assessment outcome</span></div></div>
+    <div class="g"><div class="n">04</div><h3>Select capabilities and connectivity profile</h3><p>For each qualified region, determine local versus remote shared services, confirm the hybrid connectivity foundation, and select the most efficient connectivity profile that meets the requirements. Use the platform readiness checklist to plan the gaps to close for the identified workloads, and agree who owns each decision before the first workload arrives.</p><div class="tl"><span class="chip blue">Three decisions</span><span class="chip blue">Profile tree</span><span class="chip blue">Readiness checklist</span></div></div>
+    <div class="g" style="background:var(--t50)"><div class="n" style="color:var(--t600)">05</div><h3>Place the first workload</h3><p>Apply the workload-placement process using current evidence. Revalidate regional capabilities at decision time, govern the placement and resiliency decisions, and feed newly discovered requirements or platform gaps back into regional qualification.</p><div class="tl"><span class="chip teal">Placement flow</span></div></div>
+  </div>
+
+  <div style="position:absolute;left:0;right:0;bottom:0;border-radius:16px;overflow:hidden;height:86px">
+    <svg width="940" height="86" viewBox="0 0 940 86" style="position:absolute;left:0;top:0">
+      {{PY:art.defs('gs')}}
+      {{PY:art.background('gs', 0, 0, 940, 86)}}
+      <path d="M560,80 C680,46 800,86 960,30" fill="none" stroke="url(#gsswoosh)" stroke-width="2"/>
+    </svg>
+    <div style="position:absolute;left:28px;right:28px;top:0;bottom:0;display:flex;align-items:center;gap:22px">
+      <div class="cap" style="color:#BCD9F5;white-space:nowrap">What success looks like</div>
+      <p style="font-size:15.6px;line-height:1.32;font-weight:500;color:#fff">Being able to qualify a regional option, enable only the platform capabilities it requires, and onboard workloads through a repeatable governed process.</p>
+    </div>
+  </div>
+</div>
+</section>

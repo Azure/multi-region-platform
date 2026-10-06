@@ -1,0 +1,69 @@
+<section class="page" data-section="2 · Qualify regions">
+<style>
+  .f7 { height: 204px; }
+  .f7 .pop { position: absolute; left: 0; width: 262px; height: 60px; background: #fff; border: 1px solid var(--line); border-radius: 9px; padding: 8px 12px; }
+  .f7 .pop b { font-size: 11.4px; color: var(--ink); display: flex; align-items: center; gap: 7px; }
+  .f7 .pop b svg { width: 16px; height: 16px; color: var(--t600); }
+  .f7 .pop span { font-size: 10px; color: var(--muted); line-height: 1.35; display: block; margin-top: 3px; }
+  .f7 .mapn { position: absolute; left: 330px; top: 0; width: 280px; height: 204px; background: var(--t50); border: 1.3px solid var(--t300); border-radius: 11px; padding: 12px 14px; }
+  .f7 .mapn .cap { color: var(--t600); }
+  .f7 .mapn .mt { font-size: 13px; font-weight: 700; color: var(--t700); line-height: 1.25; margin-top: 4px; }
+  .f7 .mapn ul { list-style: none; font-size: 10.4px; margin-top: 8px; color: var(--text); }
+  .f7 .mapn li { padding-left: 11px; position: relative; margin-bottom: 2px; }
+  .f7 .mapn li::before { content: ""; position: absolute; left: 1px; top: .55em; width: 4px; height: 4px; border-radius: 50%; background: var(--t600); }
+  .f7 .mapn .xtra { margin-top: 7px; padding-top: 6px; border-top: 1px dashed var(--t300); font-size: 10px; color: var(--t700); line-height: 1.35; }
+  .f7 .oc { position: absolute; left: 672px; width: 268px; height: 60px; border-radius: 9px; padding: 8px 12px; }
+  .f7 .oc b { font-size: 11px; display: block; line-height: 1.25; }
+  .f7 .oc span { font-size: 10px; line-height: 1.35; display: block; margin-top: 3px; }
+</style>
+<div class="inner">
+  <div class="dimnav">
+    <span class="done"><b>1</b>Business and geography</span><span class="done"><b>2</b>Data and compliance</span><span class="on"><b>3</b>Workload requirements</span><span><b>4</b>Regional capability</span>
+  </div>
+
+  <div class="row mt16" style="gap:36px;align-items:flex-start">
+    <div style="flex:1.1">
+      <div class="dimhead"><span class="dn" style="background:var(--t600)">3</span><h2 style="font-size:19.5px">Workload requirements and dependencies</h2></div>
+      <div class="question mt8" style="color:var(--t700);font-size:14px">What workload requirements and dependencies must the region support?</div>
+    </div>
+    <div class="decision" style="flex:1;margin-top:2px;background:var(--t50);border-left-color:var(--t600)"><div class="dl" style="color:var(--t600)">Decision</div><p style="font-size:12px">Identify and record the workload-driven platform requirements. They are the input to check 4, which validates what the region can support, and to Part 3, which decides what the platform provides.</p></div>
+  </div>
+
+  <div class="g3 mt12" style="gap:24px;font-size:11.4px;line-height:1.5">
+    <div>
+      <p>Regional qualification should reflect the requirements of the workloads expected to use the region. These come from two sources: existing workloads, including any that would move into the region, and future workloads that are planned but not yet built. This check gathers requirements, but it doesn’t decide how they are met, and it doesn’t disqualify a region directly.</p>
+      <p>Review architecture, connectivity, data, shared-service, security, resiliency, scale, and operational requirements and dependencies. Where useful, map the key workloads you expect to move to or deploy in the new region, whether existing or new, to the closest-fitting <strong>Workload Landing Zone archetype</strong>; if a workload has requirements beyond that archetype, record them as explicit additions to it rather than forcing multiple classifications.</p>
+    </div>
+    <div>
+      <p>For <strong>existing workloads</strong> — in Azure, on-premises, or another cloud — start with the application inventory and architecture. Validate important dependencies with workload owners, first for critical or representative applications and portfolios. Capture application and data dependencies, connectivity, shared services, required Azure services, security and resiliency requirements, and expected scale.</p>
+      <p><strong>If it would move into the region</strong>, from another Azure region or from outside Azure, also identify what must move together, what can stay where it is, and how it behaves while split across locations — latency, data movement, application changes, acceptable disruption, and temporary operation.</p>
+    </div>
+    <div>
+      <p>For <strong>future workloads</strong>, use known business and technical requirements, predefined workload patterns, intended architecture, expected dependencies, and required services. Where design is still evolving, identify what must influence qualification and defer implementation-specific decisions to onboarding.</p>
+      <div class="note warm mt8" style="padding:10px 13px"><h4>Scope boundary</h4><p class="small" style="color:var(--ink);font-size:10.8px">This phase identifies the regional and platform capabilities workloads require. It does not approve relocation or define migration execution; relocation readiness, sequencing, recovery design, and multi-region operation remain workload-specific.</p></div>
+    </div>
+  </div>
+
+  <div class="figure mt12" id="fig7">
+    <div class="dg f7">
+      <div class="pop node" id="p1" style="top:0;height:112px"><b><svg><use href="#i-app"/></svg>Existing workloads</b><span>In Azure, on-premises, or another cloud. Inventory and architecture; important dependencies validated with owners.</span><span style="margin-top:6px;padding-top:5px;border-top:1px dashed var(--line);color:var(--t700)"><b style="display:inline;font-size:10px;color:var(--t700)">Moving into the region?</b> Also capture what must move together and how it behaves while split.</span></div>
+      <div class="pop node" id="p2" style="top:132px;height:72px;border-style:dashed"><b><svg><use href="#i-flag"/></svg>Future workloads</b><span>Known requirements, workload patterns, intended architecture, and expected dependencies.</span></div>
+      <div class="mapn node" id="mp">
+        <div class="cap">Review and capture</div>
+        <div class="mt">Workload requirements and dependencies</div>
+        <ul><li>Architecture, data, and connectivity</li><li>Shared services and security</li><li>Resiliency, scale, and operations</li><li>Required Azure services</li></ul>
+        <div class="xtra">Map to the closest-fitting archetype where useful; record requirements beyond it as explicit additions.</div>
+      </div>
+      <div class="oc node" id="q1" style="top:0;background:var(--b600);color:#fff"><b>Workload-driven platform requirements</b><span style="color:#DDEBF9">The regional and platform capabilities workloads require.</span></div>
+      <div class="oc node" id="q2" style="top:72px;background:var(--b50);border:1px solid var(--b200);color:var(--b800)"><b><span style="font-size:8.6px;letter-spacing:.1em;color:var(--b600);display:inline;margin-right:6px">AFFECTS SUITABILITY →</span>Check 4</b><span style="color:var(--muted)">Validated during regional qualification.</span></div>
+      <div class="oc node" id="q3" style="top:144px;background:#fff;border:1.3px dashed var(--b500);color:var(--b800)"><b><span style="font-size:8.6px;letter-spacing:.1em;color:var(--b600);display:inline;margin-right:6px">IMPLEMENTATION DETAIL →</span>Onboarding</b><span style="color:var(--muted)">Deferred to workload onboarding or reassessment.</span></div>
+      <i class="ln" data-from="p1" data-to="mp" data-s="r" data-e="l@0.27" data-k="teal" data-mid=".45"></i>
+      <i class="ln" data-from="p2" data-to="mp" data-s="r" data-e="l@0.82" data-k="teal" data-dash="3 3" data-mid=".45"></i>
+      <i class="ln" data-from="mp" data-to="q1" data-s="r@0.2" data-e="l" data-k="blue" data-mid=".45"></i>
+      <i class="ln" data-from="mp" data-to="q2" data-s="r@0.5" data-e="l" data-k="blue"></i>
+      <i class="ln" data-from="mp" data-to="q3" data-s="r@0.8" data-e="l" data-k="blue" data-mid=".45" data-dash="3 3"></i>
+    </div>
+    <div class="figcap"><span class="fn">Figure 7</span><span class="ft"><b>From workloads to platform requirements.</b> Requirements that could materially affect regional suitability are validated in check 4; implementation-specific decisions can wait for onboarding.</span></div>
+  </div>
+</div>
+</section>

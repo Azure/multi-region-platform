@@ -47,13 +47,13 @@
   </div>
   <div class="wa mt12">
     <div class="wr hd"><div>Common assumption</div><div>With this approach</div></div>
-    <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>A new region needs its own landing-zone design.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>Reuse the existing landing zone. The region is added to the policies, automation, and monitoring you already run. <em>Section 07</em></span></div></div>
-    <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>Every region needs a full hub.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>Start with the lightest connectivity profile that meets the requirements. Two of the four profiles need no local hub. <em>Section 05</em></span></div></div>
-    <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>Every region needs another ExpressRoute circuit.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>Reuse existing hybrid connectivity where reachability and resiliency requirements allow. Add circuits only when a requirement justifies them. <em>Section 03, Dimension 5</em></span></div></div>
-    <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>Enabling a region means migrating workloads.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>Nothing has to move. Workloads use the region when their own requirements call for it. <em>Section 06</em></span></div></div>
-    <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>Qualification is a long assessment.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>It is five dimensions, each with one question, answered from what your teams already know. Unknowns are recorded and revisited, not treated as blockers. <em>Section 03</em></span></div></div>
+    <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>A new region needs its own landing-zone design.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>Reuse the existing landing zone. The region is added to the policies, automation, and monitoring you already run. <em>Framework overview</em></span></div></div>
+    <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>Every region needs a full hub.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>Start with the most efficient connectivity profile that meets the requirements. Two of the four profiles need no local hub. <em>Part 1</em></span></div></div>
+    <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>Every region needs another ExpressRoute circuit.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>Reuse existing hybrid connectivity where reachability and resiliency requirements allow. Add circuits only when a requirement justifies them. <em>Part 3</em></span></div></div>
+    <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>Enabling a region means migrating workloads.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>Nothing has to move. Workloads use the region when their own requirements call for it. <em>Part 4</em></span></div></div>
+    <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>Qualification is a long assessment.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>It is four checks, each with one question, answered from what your teams already know. Unknowns are recorded and revisited, not treated as blockers. <em>Part 2</em></span></div></div>
   </div>
-  <p style="margin-top:14px;font-size:12.2px;color:var(--ink)"><strong>The first additional region takes the most thought</strong>, because the decisions are made for the first time. Later regions reuse those decisions and become mostly configuration. For more examples, see Common misconceptions (Section 09).</p>
+  <p style="margin-top:14px;font-size:12.2px;color:var(--ink)"><strong>The first additional region takes the most thought</strong>, because the decisions are made for the first time. Later regions reuse those decisions and become mostly configuration. For more examples, see Common misconceptions (Putting it into practice).</p>
 </div>
 </section>
 
@@ -65,14 +65,14 @@
     <p style="font-size:12.2px;color:var(--text)">The framework has four parts. Each part answers one question.</p>
   </div>
   <div class="hw mt12">
-    <div class="h"><div class="n">1</div><b>Qualify the region</b><i>Can this region support the workloads we expect?</i><p>Five dimensions lead to one of four outcomes: excluded, candidate, conditional, or qualified. <em>Section 03</em></p></div>
-    <div class="h"><div class="n">2</div><b>Right-size the platform</b><i>What is the least the platform must provide in this region?</i><p>Workload Landing Zone archetypes describe what applications require; one of four connectivity profiles describes what the region provides. <em>Sections 04 and 05</em></p></div>
-    <div class="h"><div class="n">3</div><b>Keep one operating model</b><i>What stays the same in every region, and what can vary?</i><p><em>Section 07</em></p></div>
-    <div class="h"><div class="n">4</div><b>Place workloads when they’re ready</b><i>Should this workload use the region now?</i><p>Decide per workload, with current evidence. <em>Section 06</em></p></div>
+    <div class="h"><div class="n">1</div><b>Understand concepts</b><i>What is a multi-region platform, what can a region provide, and what do applications need?</i><p>Four connectivity profiles describe the platform options, and two of them need no local hub. Four archetypes describe what applications require. <em>Part 1</em></p></div>
+    <div class="h"><div class="n">2</div><b>Qualify regions</b><i>Can this region support the workloads we expect?</i><p>Four checks lead to one of four outcomes: excluded, candidate, conditional, or qualified. <em>Part 2</em></p></div>
+    <div class="h"><div class="n">3</div><b>Select capabilities and connectivity profile</b><i>What should the platform provide in a qualified region?</i><p>Decide which capabilities are local, remote, or centralized, whether existing hybrid connectivity is enough, and the most efficient profile. <em>Part 3</em></p></div>
+    <div class="h"><div class="n">4</div><b>Place workloads</b><i>Should this workload use the region now?</i><p>Decide per workload, with current evidence. <em>Part 4</em></p></div>
   </div>
   <div class="note mt12" style="padding:10px 16px;display:flex;gap:14px;align-items:center">
     <svg style="width:20px;height:20px;color:var(--b600);flex:none"><use href="#i-flag"/></svg>
-    <p style="font-size:12px;color:var(--ink)"><strong>New to the framework?</strong> Getting started (Section 09) walks through the first additional region in six steps, and the decision trees (Sections 03 and 05) put the two main decisions on one page.</p>
+    <p style="font-size:12px;color:var(--ink)"><strong>New to the framework?</strong> Getting started (Putting it into practice) walks through the first additional region in five steps, and the decision trees (Parts 2 and 3) put the two main decisions on one page.</p>
   </div>
 
   <h2 class="mt20" style="font-size:17px;color:var(--ink)">The approach at a glance</h2>
@@ -82,7 +82,7 @@
       <p>The landing-zone operating model stays consistent across the Azure estate. New regions add only the <strong>most efficient platform capabilities</strong> required by the workloads expected to use them, rather than replicating an existing regional footprint.</p></div>
     <div class="c"><span class="ic" style="background:var(--b700)"><svg><use href="#i-search"/></svg></span>
       <h3>Qualify regions against defined requirements</h3>
-      <p>Regional qualification evaluates business and geographic needs, data and compliance constraints, workload requirements and dependencies, regional capabilities, and platform enablement considerations. A region can remain excluded, conditional, or qualified based on documented evidence, constraints, owners, and revalidation triggers.</p>
+      <p>Regional qualification evaluates business and geographic needs, data and compliance constraints, workload requirements and dependencies, and regional capabilities. A region can remain excluded, conditional, or qualified based on documented evidence, constraints, owners, and revalidation triggers.</p>
       <p>Qualification creates a <strong>governed regional option</strong>; it does not permanently approve the region for every workload.</p></div>
     <div class="c" style="background:var(--t50)"><span class="ic" style="background:var(--t600)"><svg><use href="#i-app"/></svg></span>
       <h3>Plan by workload requirements, not individual applications</h3>

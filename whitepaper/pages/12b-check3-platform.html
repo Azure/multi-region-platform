@@ -1,0 +1,57 @@
+<section class="page" data-section="2 · Qualify regions">
+<style>
+  .pr3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; }
+  .pr3 .c { border: 1px solid var(--t300); border-radius: 12px; background: #fff; display: flex; flex-direction: column; overflow: hidden; }
+  .pr3 .c .top { height: 4px; background: var(--t600); }
+  .pr3 .c .bd { padding: 14px 16px 14px; flex: 1; }
+  .pr3 .c h3 { font-size: 14.4px; color: var(--ink); display: flex; gap: 9px; align-items: center; }
+  .pr3 .c h3 svg { width: 21px; height: 21px; color: var(--t600); flex: none; }
+  .pr3 .c .lb { font-size: 8.8px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: var(--t600); margin: 12px 0 4px; }
+  .pr3 .c p { font-size: 11.8px; line-height: 1.52; color: var(--text); }
+  .pr3 .c .ft { background: var(--b50); border-top: 1px solid var(--b100); padding: 9px 16px 11px; display: flex; gap: 10px; align-items: center; }
+  .pr3 .c .ft svg { width: 16px; height: 12px; flex: none; }
+  .pr3 .c .ft .lb { color: var(--b600); margin: 0 0 1px; }
+  .pr3 .c .ft b { font-size: 11.8px; color: var(--ink); display: block; }
+</style>
+<div class="inner">
+  <div class="dimnav">
+    <span class="done"><b>1</b>Business and geography</span><span class="done"><b>2</b>Data and compliance</span><span class="on"><b>3</b>Workload requirements</span><span><b>4</b>Regional capability</span>
+  </div>
+  <div class="row mt20" style="gap:40px;align-items:flex-end">
+    <div style="flex:1">
+      <div class="eyebrow" style="color:var(--t600)">Check 3 · continued</div>
+      <h2 class="title mt8" style="font-size:23px">Platform and connectivity requirements</h2>
+    </div>
+    <p class="muted" style="flex:1.15;font-size:12.2px">Workload requirements also define what the platform must provide in the region. Capture them in three areas. In this check you identify the requirement. You decide how the platform meets it in Part 3, after the region qualifies.</p>
+  </div>
+
+  <div class="pr3 mt20">
+    <div class="c"><div class="top"></div><div class="bd">
+      <h3><svg><use href="#i-layers"/></svg>Platform enablement</h3>
+      <div class="lb">What to identify</div>
+      <p>The shared services and operational capabilities the workloads depend on: identity and access, policy and security controls, deployment automation, monitoring and logging, backup and recovery, and key and secret management. Note which of them must be close to the workloads.</p></div>
+      <div class="ft"><svg viewBox="0 0 16 12"><path d="M1 6h12M9 2l4 4-4 4" fill="none" stroke="#0F6CBD" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><div class="lb">Decided in Part 3</div><b>Platform capabilities</b></div></div></div>
+    <div class="c"><div class="top"></div><div class="bd">
+      <h3><svg><use href="#i-network"/></svg>Resilient hybrid connectivity</h3>
+      <div class="lb">What to identify</div>
+      <p>The datacenters and users the workloads must reach, and the latency, bandwidth, routing, and resilience they need on that path.</p></div>
+      <div class="ft"><svg viewBox="0 0 16 12"><path d="M1 6h12M9 2l4 4-4 4" fill="none" stroke="#0F6CBD" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><div class="lb">Decided in Part 3</div><b>Resilient hybrid connectivity</b></div></div></div>
+    <div class="c"><div class="top"></div><div class="bd">
+      <h3><svg><use href="#i-hub"/></svg>Regional platform connectivity</h3>
+      <div class="lb">What to identify</div>
+      <p>How the workloads must reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments.</p></div>
+      <div class="ft"><svg viewBox="0 0 16 12"><path d="M1 6h12M9 2l4 4-4 4" fill="none" stroke="#0F6CBD" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><div class="lb">Decided in Part 3</div><b>Connectivity profile</b></div></div></div>
+  </div>
+
+  <div class="row mt20" style="gap:34px;align-items:center">
+    <div class="note" style="flex:1;padding:14px 18px"><h4>An unmet requirement is an input, not an exclusion</h4><p style="font-size:12px;color:var(--ink)">A requirement that the platform can’t meet yet doesn’t exclude the region. Record it as an input to Part 3, where you decide how to meet it.</p></div>
+    <div class="pull" style="flex:1.1;border-left-color:var(--t600)"><p style="font-size:16px">This check gathers requirements. It doesn’t decide how they are met, and it doesn’t disqualify a region directly.</p></div>
+  </div>
+
+  <ul class="refs" style="position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:2px 22px;border-top:1px solid var(--line-soft);padding-top:8px">
+    <div class="rl" style="width:100%">Reference links</div>
+    <li><a href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/relocate-evaluate">Evaluate a cloud workload for relocation</a></li>
+    <li><a href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/relocate-index">Relocate cloud workloads</a></li>
+  </ul>
+</div>
+</section>

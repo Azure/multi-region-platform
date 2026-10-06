@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Platform architecture for a multi-region platform · Multi-region platform</title>
-<meta name="description" content="How Workload Landing Zone archetypes and regional platform connectivity profiles work together to plan the platform capability each Azure region provides.">
+<title>Capabilities and connectivity profile overview · Multi-region platform</title>
+<meta name="description" content="Decide what the platform provides in a qualified Azure region — which capabilities are local, remote, or centralized, whether existing hybrid connectivity is sufficient, and which regional platform connectivity profile fits — using the archetype-to-profile matrix, the selection principles, and the profile decision tree.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230F6CBD'/%3E%3Ccircle cx='11' cy='13' r='4' fill='%23fff'/%3E%3Ccircle cx='21' cy='13' r='4' fill='%23fff' opacity='.7'/%3E%3Ccircle cx='16' cy='21' r='4' fill='%23fff' opacity='.45'/%3E%3C/svg%3E">
 <script>try{var t=localStorage.getItem('mrp-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <link rel="stylesheet" href="assets/figures.css">
@@ -63,7 +63,7 @@
       <button class="btn-dl" type="button" aria-expanded="false" aria-controls="dl-menu">
         <svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>Downloads
       </button>
-      <div class="dl-menu" id="dl-menu" hidden><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform.pdf" download><span class="dl-ic pdf">PDF</span><span><b>Full technical guidance (PDF)</b><small>46 pages</small></span></a><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf" download><span class="dl-ic pdf">PDF</span><span><b>Executive brief (PDF)</b><small>13 pages</small></span></a></div>
+      <div class="dl-menu" id="dl-menu" hidden><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform.pdf" download><span class="dl-ic pdf">PDF</span><span><b>Full technical guidance (PDF)</b><small>47 pages</small></span></a><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf" download><span class="dl-ic pdf">PDF</span><span><b>Executive brief (PDF)</b><small>13 pages</small></span></a></div>
     </div>
     <button class="theme" type="button" aria-label="Toggle dark theme" title="Toggle theme">
       <svg class="sun" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3" fill="currentColor"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6 13 13M3 13l1.4-1.4M11.6 4.4 13 3" stroke="currentColor" stroke-width="1.4"/></svg>
@@ -77,25 +77,27 @@
 <div class="shell">
   <nav class="side" aria-label="Table of contents">
     <div class="side-in">
-      <ul class="nav"><li class="nav-item d0"><div class="nav-row"><span class="chev-sp"></span><a href="index.html">Multi-region adoption strategy</a></div></li><li class="nav-item d0"><div class="nav-row"><span class="chev-sp"></span><a href="decision-trees.html">Decision trees</a></div></li><li class="nav-item d0 has-kids"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><a href="regional-qualification.html">1. Regional qualification</a></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="assessment-outcome.html">Assessment outcome</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="business-and-geography.html">Business and geography</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="data-and-compliance.html">Data and compliance</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="workload-requirements.html">Workload requirements and dependencies</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="regional-capability.html">Regional capability and availability</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="platform-enablement-connectivity.html">Platform enablement and connectivity</a></div></li></ul></li><li class="nav-item d0 active has-kids open"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><a href="platform-architecture.html" aria-current="page">2. Platform architecture</a></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="application-landing-zone-archetypes.html">Workload Landing Zone archetypes</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="connectivity-profiles.html">Regional platform connectivity profiles</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="profile-selection.html">Profile selection and hub implementations</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="platform-readiness.html">Platform readiness checklist</a></div></li></ul></li><li class="nav-item d0"><div class="nav-row"><span class="chev-sp"></span><a href="operating-model.html">3. Governance and operating model</a></div></li><li class="nav-item d0"><div class="nav-row"><span class="chev-sp"></span><a href="workload-placement.html">4. Workload placement</a></div></li><li class="nav-item d0 has-kids"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><a href="workload-design.html">Regional dependencies and resiliency</a></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="paired-nonpaired-regions.html">Paired and nonpaired regions</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="storage-backup-key-vault.html">Storage, backup, and Key Vault</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="resiliency-scenarios.html">Resiliency scenarios</a></div></li></ul></li><li class="nav-item d0 has-kids"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><span class="nav-group">Resources</span></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="customer-scenarios.html">Customer scenarios</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="misconceptions.html">Common misconceptions</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="getting-started.html">Getting started</a></div></li></ul></li></ul>
+      <ul class="nav"><li class="nav-item d0"><div class="nav-row"><span class="chev-sp"></span><a href="index.html">Multi-region platform strategy</a></div></li><li class="nav-item d0"><div class="nav-row"><span class="chev-sp"></span><a href="framework-overview.html">Framework overview</a></div></li><li class="nav-item d0 has-kids"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><span class="nav-group">1. Understand concepts</span></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="platform-and-workload.html">Multi-region platform and workload</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="connectivity-profiles.html">Common connectivity profiles</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="application-landing-zone-archetypes.html">Workload Landing Zone archetypes</a></div></li></ul></li><li class="nav-item d0 has-kids"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><span class="nav-group">2. Qualify regions</span></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="regional-qualification.html">Overview</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="business-and-geography.html">1. Business and geography</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="data-and-compliance.html">2. Data and compliance</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="workload-requirements.html">3. Workload requirements and dependencies</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="regional-capability.html">4. Regional capability and availability</a></div></li></ul></li><li class="nav-item d0 has-kids open"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><span class="nav-group">3. Select capabilities and connectivity profile</span></div><ul><li class="nav-item d1 active open"><div class="nav-row"><span class="chev-sp"></span><a href="platform-architecture.html" aria-current="page">Overview</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="platform-enablement-connectivity.html">Platform capabilities and connectivity</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="profile-selection.html">Profile considerations and hub implementations</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="platform-readiness.html">Platform readiness checklist</a></div></li></ul></li><li class="nav-item d0"><div class="nav-row"><span class="chev-sp"></span><a href="workload-placement.html">4. Place workloads</a></div></li><li class="nav-item d0 has-kids"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><span class="nav-group">Service behavior across regions</span></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="workload-design.html">Overview</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="paired-nonpaired-regions.html">Paired and nonpaired regions</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="storage-backup-key-vault.html">Storage, backup, and Key Vault</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="resiliency-scenarios.html">Resiliency scenarios</a></div></li></ul></li><li class="nav-item d0 has-kids"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><span class="nav-group">Resources</span></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="getting-started.html">Getting started</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="customer-scenarios.html">Customer scenarios</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="misconceptions.html">Common misconceptions</a></div></li></ul></li></ul>
     </div>
     <div class="side-pdfs">
-      <a class="side-pdf" href="downloads/Adaptable-Multi-Region-Azure-Platform.pdf" download><svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Technical guidance<small>PDF · 45 pages</small></span></a>
+      <a class="side-pdf" href="downloads/Adaptable-Multi-Region-Azure-Platform.pdf" download><svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Technical guidance<small>PDF · 47 pages</small></span></a>
       <a class="side-pdf" href="downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf" download><svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Executive brief<small>PDF · 13 pages</small></span></a>
     </div>
   </nav>
 
   <main id="main">
-    <div class="crumbs">Multi-region platform</div>
-    <h1 class="title">Platform architecture</h1>
-    <p class="meta">October 2, 2026 · 1 min read</p>
+    <div class="crumbs">Multi-region platform <span>/</span> 3. Select capabilities and connectivity profile</div>
+    <h1 class="title">Capabilities and connectivity profile overview</h1>
+    <p class="meta">October 5, 2026 · 4 min read</p>
     <article class="prose">
-<p>Once candidate regions are qualified, two constructs help you decide what the platform provides in each region:</p>
+<p>This step is a set of decisions, not a deployment. For each qualified region, you decide what the platform provides there. Nothing is built yet: deployment follows later, through the automation you already run.</p>
+<p>You make three decisions. Each follows from the workloads you expect in the region, not from the footprint of an existing hub.</p>
 <ul>
-<li><strong><a href="application-landing-zone-archetypes.html">Workload Landing Zone archetypes</a></strong> describe the demand: what applications need from the platform, grouped by recurring connectivity and dependency characteristics.</li>
-<li><strong><a href="connectivity-profiles.html">Regional platform connectivity profiles</a></strong> describe the supply: what the platform provides in a region, from Disconnected Spokes through Remote Hub Connected and Minimal Regional Hub to a Full Regional Hub.</li>
+<li><strong><a href="platform-enablement-connectivity.html#platform-capabilities">Platform capabilities</a>.</strong> Which shared services and operational capabilities are provided in the region, consumed from another region, or kept centralized?</li>
+<li><strong><a href="platform-enablement-connectivity.html#resilient-hybrid-connectivity">Hybrid connectivity</a>.</strong> Is the hybrid connectivity you already have sufficient, or does a requirement justify a change?</li>
+<li><strong><a href="#which-connectivity-profile-should-this-region-provide">Connectivity profile</a>.</strong> Which of the four profiles is the most efficient one that meets the requirements?</li>
 </ul>
-<p>An archetype doesn't dictate a profile. Use the archetypes expected in a region to understand what it needs, then choose the lightest profile that meets those needs. For example, a hybrid-connected application might run well on a Remote Hub Connected profile in one region and need a Minimal Regional Hub in another, depending on latency, traffic, and resiliency requirements. One profile can also serve several archetypes at once.</p>
+<p>Start with the matrix to see which <a href="connectivity-profiles.html">connectivity profiles</a> each <a href="application-landing-zone-archetypes.html">archetype</a> typically uses. Then apply the selection principles and use the decision tree to pick the most efficient profile that meets the requirements.</p>
 <figure class="fig live" data-fig="archetype-profile-matrix" role="img" aria-label="Matrix of the four archetypes against the four connectivity profiles. Hybrid-connected and connected cloud-native or AI applications typically use remote hub, minimal hub, or full hub; isolated cloud-native or AI applications often use disconnected spokes and other profiles where justified; interconnected portfolios can use spoke-to-spoke connectivity, a remote hub where acceptable, and a minimal or full hub when justified."><div class="fig-tools"><button class="fig-zoom" type="button" aria-label="Expand figure" title="Expand"><svg viewBox="0 0 16 16"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><a class="fig-png" href="media/archetype-profile-matrix.png" download title="Download image" aria-label="Download image"><svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></div><div class="fig-stage"><div class="fig-scale"><div class="wpf" data-w="940" data-h="411" style="width:940px"><div class="figure mt16">
     <div style="display:flex;margin-left:214px;margin-bottom:6px">
       <div style="width:448px;border-bottom:2px solid var(--b600);padding-bottom:4px" class="cap"><span style="color:var(--b600)">Regional platform connectivity profiles · what the platform provides</span></div>
@@ -132,23 +134,128 @@
     
   </div></div>
 </div></div><figcaption>Archetype-to-profile relationships are many-to-many. Each row is a set of options, not an assignment; the selected profile follows dependencies, latency, traffic, resiliency, and independence requirements.</figcaption></figure>
-<div class="alert note"><p class="alert-title"><svg viewBox="0 0 16 16"><path d="M8 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Zm0 3.2a.8.8 0 1 1 0 1.6.8.8 0 0 1 0-1.6ZM9 11.5H7V7.4h2Z"/></svg>Note</p><p>Interconnected application portfolios need extra care, because their combined dependencies can call for more than any single application does. See <a href="application-landing-zone-archetypes.html#interconnected-application-portfolios">Interconnected Application Portfolios</a>.</p></div>
+<h2 id="profile-selection-principles">Profile selection principles<a class="anchor" href="#profile-selection-principles" aria-label="Link to this section">#</a></h2>
+<ul>
+<li>Start with the <strong>workload requirements and dependencies</strong> identified during regional qualification, including portfolio-level dependencies.</li>
+<li>Use Workload Landing Zone archetypes to spot recurring connectivity and shared-service needs, then validate the profile against the actual workloads.</li>
+<li>Select the <strong>most efficient profile</strong> that satisfies those requirements, not the maximum possible one.</li>
+<li>Keep capabilities remote when latency, dependency, data, security, resiliency, availability, and operational requirements permit. Add local capabilities only when a measurable requirement justifies the larger regional footprint.</li>
+<li>Consider direct spoke-to-spoke connectivity where workloads have significant east-west traffic and a hub transit path is unnecessary. Add regional routing, inspection, or shared services when broader requirements justify them.</li>
+</ul>
+<h2 id="which-connectivity-profile-should-this-region-provide">Which connectivity profile should this region provide?<a class="anchor" href="#which-connectivity-profile-should-this-region-provide" aria-label="Link to this section">#</a></h2>
+<p>Start from the workload requirements and dependencies identified in <a href="workload-requirements.html#platform-and-connectivity-requirements">check 3</a>. Each question comes from the "fits when" criteria of the <a href="connectivity-profiles.html">connectivity profiles</a>; stop at the first profile that satisfies the identified requirements.</p>
+<figure class="fig live" data-fig="connectivity-profile-decision-tree" role="img" aria-label="Decision tree with three questions. If workloads need no private access to enterprise services, use disconnected spokes. If they can tolerate the latency and coupling of another region, use remote-hub-connected spokes. If requirements do not justify a comprehensive local capability set, use a minimal regional hub; otherwise use a full regional hub."><div class="fig-tools"><button class="fig-zoom" type="button" aria-label="Expand figure" title="Expand"><svg viewBox="0 0 16 16"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><a class="fig-png" href="media/connectivity-profile-decision-tree.png" download title="Download image" aria-label="Download image"><svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></div><div class="fig-stage"><div class="fig-scale"><div class="wpf" data-w="940" data-h="448" style="width:940px"><div class="figure mt8">
+    <div class="dg ptree"><svg class="conn-layer"><defs><marker id="connectivity-profile-decision-tree--ah-10-plain" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#8A95A5"></path></marker><marker id="connectivity-profile-decision-tree--ah-10-yes" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#0F6CBD"></path></marker><marker id="connectivity-profile-decision-tree--ah-10-no" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#A84E1F"></path></marker><marker id="connectivity-profile-decision-tree--ah-10-dash" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#8A95A5"></path></marker><marker id="connectivity-profile-decision-tree--ah-10-teal" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#04807A"></path></marker><marker id="connectivity-profile-decision-tree--ah-10-slate" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#4A5B72"></path></marker><marker id="connectivity-profile-decision-tree--ah-10-warm" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#A84E1F"></path></marker><marker id="connectivity-profile-decision-tree--ah-10-blue" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#0F6CBD"></path></marker><marker id="connectivity-profile-decision-tree--ah-10-green" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#107C41"></path></marker><marker id="connectivity-profile-decision-tree--ah-10-light" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#8CC0EE"></path></marker></defs><path d="M235,40 L235,70" fill="none" stroke="#0F6CBD" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#connectivity-profile-decision-tree--ah-10-blue)"></path><path d="M470,105 L610,105" fill="none" stroke="#8A95A5" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#connectivity-profile-decision-tree--ah-10-plain)"></path><g><rect x="526.984375" y="96.4000015258789" width="26.03125" height="17" rx="8.5" fill="#fff" stroke="#8A95A5" stroke-width="1"></rect><text x="540" y="108.4" text-anchor="middle" font-size="9.4" font-weight="700" fill="#8A95A5" font-family="Pub Sans, Segoe UI, sans-serif" letter-spacing=".3">No</text></g><path d="M235,140 L235,176" fill="none" stroke="#0F6CBD" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#connectivity-profile-decision-tree--ah-10-blue)"></path><g><rect x="220.5234375" y="149.39999389648438" width="28.9891357421875" height="17" rx="8.5" fill="#fff" stroke="#0F6CBD" stroke-width="1"></rect><text x="235" y="161.4" text-anchor="middle" font-size="9.4" font-weight="700" fill="#0F6CBD" font-family="Pub Sans, Segoe UI, sans-serif" letter-spacing=".3">Yes</text></g><path d="M470,211 L610,211" fill="none" stroke="#0F6CBD" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#connectivity-profile-decision-tree--ah-10-blue)"></path><g><rect x="525.5234375" y="202.39999389648438" width="28.9891357421875" height="17" rx="8.5" fill="#fff" stroke="#0F6CBD" stroke-width="1"></rect><text x="540" y="214.4" text-anchor="middle" font-size="9.4" font-weight="700" fill="#0F6CBD" font-family="Pub Sans, Segoe UI, sans-serif" letter-spacing=".3">Yes</text></g><path d="M235,246 L235,282" fill="none" stroke="#8A95A5" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#connectivity-profile-decision-tree--ah-10-plain)"></path><g><rect x="221.984375" y="255.39999389648438" width="26.03125" height="17" rx="8.5" fill="#fff" stroke="#8A95A5" stroke-width="1"></rect><text x="235" y="267.4" text-anchor="middle" font-size="9.4" font-weight="700" fill="#8A95A5" font-family="Pub Sans, Segoe UI, sans-serif" letter-spacing=".3">No</text></g><path d="M470,317 L610,317" fill="none" stroke="#8A95A5" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#connectivity-profile-decision-tree--ah-10-plain)"></path><g><rect x="526.984375" y="308.3999938964844" width="26.03125" height="17" rx="8.5" fill="#fff" stroke="#8A95A5" stroke-width="1"></rect><text x="540" y="320.4" text-anchor="middle" font-size="9.4" font-weight="700" fill="#8A95A5" font-family="Pub Sans, Segoe UI, sans-serif" letter-spacing=".3">No</text></g><path d="M235,352 L235,392" fill="none" stroke="#0F6CBD" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#connectivity-profile-decision-tree--ah-10-blue)"></path><g><rect x="220.5234375" y="363.3999938964844" width="28.9891357421875" height="17" rx="8.5" fill="#fff" stroke="#0F6CBD" stroke-width="1"></rect><text x="235" y="375.4" text-anchor="middle" font-size="9.4" font-weight="700" fill="#0F6CBD" font-family="Pub Sans, Segoe UI, sans-serif" letter-spacing=".3">Yes</text></g></svg>
+      <div class="node" id="connectivity-profile-decision-tree--ps" style="position:absolute;left:60px;top:0;width:350px;height:40px;border-radius:20px;background:var(--t600);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-size:11.6px;font-weight:650"><svg style="width:16px;height:16px;color:#fff"><use href="#i-app"></use></svg>Workload scenarios expected in the region</div>
+
+      <div class="q node" id="connectivity-profile-decision-tree--pq1" style="top:70px"><span class="qi">1</span><span class="qx">Do the workloads require private access to enterprise services, on-premises systems, centralized security inspection, another application portfolio, or geographic-hub capabilities?</span></div>
+      <div class="q node" id="connectivity-profile-decision-tree--pq2" style="top:176px"><span class="qi">2</span><span class="qx">Can they tolerate the latency, availability coupling, data-transfer implications, and dependency on connectivity to another region?</span></div>
+      <div class="q node" id="connectivity-profile-decision-tree--pq3" style="top:282px"><span class="qi">3</span><span class="qx">Do requirements justify a comprehensive local capability set — local hybrid connectivity, substantial shared services, strict latency or data-boundary controls, or independence from other hubs?</span></div>
+
+      <div class="p node" id="connectivity-profile-decision-tree--pp1" style="left:610px;top:70px;background:var(--t50);border:1.2px solid var(--t300);color:var(--t700)">
+        <svg class="pg" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#fff" stroke="#7CC9C3" stroke-dasharray="3 2"></rect><rect x="9" y="10" width="11" height="11" rx="2.5" fill="#04807A"></rect><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"></rect></svg>
+        <div><b>Disconnected spokes</b><span style="color:var(--muted)">Confirm that no hidden dependency requires hub or on-premises connectivity.</span></div></div>
+      <div class="p node" id="connectivity-profile-decision-tree--pp2" style="left:610px;top:176px;background:#fff;border:1.2px solid var(--b200);color:var(--b800)">
+        <svg class="pg" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"></rect><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"></rect><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"></path><circle cx="40" cy="15" r="5" fill="#0F6CBD"></circle></svg>
+        <div><b>Remote-hub-connected spokes</b><span style="color:var(--muted)">Measure with representative traffic; document behavior if the hub is degraded.</span></div></div>
+      <div class="p node" id="connectivity-profile-decision-tree--pp3" style="left:610px;top:282px;background:var(--b50);border:1.2px solid var(--b300);color:var(--b800)">
+        <svg class="pg" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#fff" stroke="#8CC0EE" stroke-dasharray="3 2"></rect><circle cx="14" cy="15" r="6" fill="#fff" stroke="#2B88D8" stroke-width="1.5"></circle><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"></rect></svg>
+        <div><b>Minimal regional hub</b><span style="color:var(--muted)">Only services that must be local; define clearly what stays remote.</span></div></div>
+
+      <i class="ln" data-from="ps" data-to="pq1" data-s="b" data-e="t@0.5" data-k="blue"></i>
+      <i class="ln" data-from="pq1" data-to="pp1" data-s="r" data-e="l" data-k="plain" data-label="No" data-lp=".5"></i>
+      <i class="ln" data-from="pq1" data-to="pq2" data-s="b" data-e="t" data-k="blue" data-label="Yes" data-lp=".5"></i>
+      <i class="ln" data-from="pq2" data-to="pp2" data-s="r" data-e="l" data-k="blue" data-label="Yes" data-lp=".5"></i>
+      <i class="ln" data-from="pq2" data-to="pq3" data-s="b" data-e="t" data-k="plain" data-label="No" data-lp=".5"></i>
+      <i class="ln" data-from="pq3" data-to="pp3" data-s="r" data-e="l" data-k="plain" data-label="No" data-lp=".5"></i>
+      <div class="node" id="connectivity-profile-decision-tree--pp4" style="position:absolute;left:0;top:392px;width:470px;height:56px;border-radius:11px;background:var(--b700);color:#fff;display:flex;align-items:center;gap:12px;padding:0 14px">
+        <svg width="46" height="30" viewBox="0 0 46 30" style="flex:none"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"></rect><circle cx="14" cy="15" r="7" fill="#0F6CBD"></circle><circle cx="14" cy="15" r="2.4" fill="#fff"></circle><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"></rect></svg>
+        <div><b style="font-size:12.6px">Full regional hub</b><span style="display:block;font-size:10.2px;color:#DDEBF9;margin-top:2px">Confirm that the required independence justifies the cost and operational scope.</span></div>
+      </div>
+      <i class="ln" data-from="pq3" data-to="pp4" data-s="b" data-e="t" data-k="blue" data-label="Yes" data-lp=".5"></i>
+      <div style="position:absolute;left:610px;top:378px;width:330px;font-size:10.6px;line-height:1.42;color:var(--ink);border-left:3px solid var(--b600);padding-left:14px">
+        <b>Most efficient, not maximum possible.</b> Keep capabilities remote when latency, dependency, data, security, resiliency, availability, and operational characteristics permit; deploy locally only when a measurable requirement justifies it.
+      </div>
+    </div>
+    
+  </div></div>
+</div></div><figcaption>Connectivity profile selection tree. Questions escalate from dependency, to tolerance of remote consumption, to required independence. The outcome is a platform capability, not a workload design.</figcaption></figure>
+<p>The same tree as a table, from the smallest regional footprint to the largest:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Profile</th>
+<th>Fits when the workloads expected in the region</th>
+<th>What the region gets</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Disconnected Spokes</td>
+<td>Need no private access to enterprise services, on-premises systems, centralized security inspection, another application portfolio, or geographic-hub capabilities.</td>
+<td>No hub and no gateway. Workload spokes use the estate's standard identity, policy, security, and deployment practices.</td>
+</tr>
+<tr>
+<td>Remote Hub Connected</td>
+<td>Need that access, and can tolerate the latency, availability coupling, and dependency on connectivity to another region.</td>
+<td>No local hub. Workload spokes consume an existing geographic hub.</td>
+</tr>
+<tr>
+<td>Minimal Regional Hub</td>
+<td>Need some capabilities locally, without a comprehensive local set.</td>
+<td>A limited hub with only the services that must be local. Everything else stays remote.</td>
+</tr>
+<tr>
+<td>Full Regional Hub</td>
+<td>Need a comprehensive local capability set, or independence from other hubs.</td>
+<td>The complete local connectivity and shared services that the region's workloads require.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Two of the four profiles need no local hub, and only the Full Regional Hub approaches the footprint of an existing geographic hub.</p>
+<div class="callout decision"><span class="callout-k">Decision</span><p>Select the most efficient regional platform connectivity profile that satisfies the identified requirements and can evolve as regional adoption changes.</p></div>
+<p>Profiles evolve in both directions. Reassess a region's profile when the trigger below applies. For the full considerations, see <a href="profile-selection.html#considerations-and-reassessment-by-profile">Profile considerations and hub implementations</a>.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Current profile</th>
+<th>Reassess when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Disconnected Spokes</td>
+<td>Workloads require private access to enterprise services, inspection, on-premises systems, another portfolio, or hub capabilities.</td>
+</tr>
+<tr>
+<td>Remote Hub Connected</td>
+<td>Cross-region traffic, latency, east-west communication, dependency criticality, regulation, scale, or availability coupling justify local capabilities.</td>
+</tr>
+<tr>
+<td>Minimal Regional Hub</td>
+<td>Growth adds local requirements, interconnected portfolios need broader capabilities, independence requirements become stricter, or significant local hybrid connectivity is required.</td>
+</tr>
+<tr>
+<td>Full Regional Hub</td>
+<td>Demand or requirements decrease, services can be safely centralized, dependencies change, or the footprint no longer justifies its cost.</td>
+</tr>
+</tbody>
+</table></div>
 <h2 id="in-this-section">In this section<a class="anchor" href="#in-this-section" aria-label="Link to this section">#</a></h2>
 <ul>
-<li><a href="application-landing-zone-archetypes.html">Workload Landing Zone archetypes</a></li>
-<li><a href="connectivity-profiles.html">Regional platform connectivity profiles</a></li>
-<li><a href="profile-selection.html">Profile selection and hub implementations</a></li>
-<li><a href="platform-readiness.html">Platform readiness checklist</a></li>
+<li><a href="platform-enablement-connectivity.html">Platform capabilities and connectivity</a>: which capabilities the region needs, whether existing hybrid connectivity is sufficient, and how workloads reach hubs and shared services.</li>
+<li><a href="profile-selection.html">Profile considerations and hub implementations</a>: the considerations for each profile, what each step up costs, and how hubs are built.</li>
+<li><a href="platform-readiness.html">Platform readiness checklist</a>: what must be true before workloads arrive.</li>
 </ul>
 <h2 id="next-step">Next step<a class="anchor" href="#next-step" aria-label="Link to this section">#</a></h2>
-<p class="nextstep"><a class="btn-next" href="application-landing-zone-archetypes.html">Workload Landing Zone archetypes<svg viewBox="0 0 16 16"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></p></article>
-    <nav class="pager"><a class="prev" href="platform-enablement-connectivity.html"><small>Previous</small><span>Platform enablement and connectivity</span></a><a class="next" href="application-landing-zone-archetypes.html"><small>Next</small><span>Workload Landing Zone archetypes</span></a></nav>
+<p class="nextstep"><a class="btn-next" href="platform-enablement-connectivity.html">Platform capabilities and connectivity<svg viewBox="0 0 16 16"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></p></article>
+    <nav class="pager"><a class="prev" href="regional-capability.html"><small>Previous</small><span>4. Regional capability and availability</span></a><a class="next" href="platform-enablement-connectivity.html"><small>Next</small><span>Platform capabilities and connectivity</span></a></nav>
   </main>
 
   <aside class="rail" aria-label="In this article">
     <div class="rail-in">
       <p class="rail-h">In this article</p>
-      <ul><li><a href="#in-this-section">In this section</a></li></ul>
+      <ul><li><a href="#profile-selection-principles">Profile selection principles</a></li><li><a href="#which-connectivity-profile-should-this-region-provide">Which connectivity profile should this region provide?</a></li><li><a href="#in-this-section">In this section</a></li></ul>
     </div>
   </aside>
 </div>
@@ -168,7 +275,7 @@
     </svg>
     <h1>Adaptable multi-region Azure platform</h1>
     <p>This guidance is designed for larger screens. On this device, download the documents instead.</p>
-    <div class="ss-dl"><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform.pdf" download><span class="dl-ic pdf">PDF</span><span><b>Full technical guidance (PDF)</b><small>46 pages</small></span></a><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf" download><span class="dl-ic pdf">PDF</span><span><b>Executive brief (PDF)</b><small>13 pages</small></span></a></div>
+    <div class="ss-dl"><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform.pdf" download><span class="dl-ic pdf">PDF</span><span><b>Full technical guidance (PDF)</b><small>47 pages</small></span></a><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf" download><span class="dl-ic pdf">PDF</span><span><b>Executive brief (PDF)</b><small>13 pages</small></span></a></div>
   </div>
 </div>
 

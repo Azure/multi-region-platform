@@ -93,6 +93,6 @@ def page(pair, first):
 if __name__ == "__main__":
     import os
     d = os.path.join(os.path.dirname(__file__), "..", "pages")
-    open(os.path.join(d, "25b-scenarios-1.html"), "w").write(page(SC[:2], True))
-    open(os.path.join(d, "25c-scenarios-2.html"), "w").write(page(SC[2:], False))
+    open(os.path.join(d, "19-scenarios-1.html"), "w").write(page(SC[:2], True))
+    open(os.path.join(d, "19b-scenarios-2.html"), "w").write(page(SC[2:], False))
     print("scenario pages written")

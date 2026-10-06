@@ -1,7 +1,7 @@
 ---
-title: "Dimension 3: Workload requirements and dependencies"
-description: Identify the workload requirements and dependencies a candidate Azure region must support, from existing and future workloads, including workloads moving into the region.
-ms.date: 10/02/2026
+title: "Check 3: Workload requirements and dependencies"
+description: Identify the workload requirements and dependencies a candidate Azure region must support, from existing and future workloads, including workloads moving into the region, and what those workloads require from the platform.
+ms.date: 10/05/2026
 ms.topic: conceptual
 ---
 
@@ -9,13 +9,13 @@ ms.topic: conceptual
 
 **Question:** What workload requirements and dependencies must the region support?
 
-Regional qualification should reflect the requirements of the workloads expected to use the region. These come from two sources: existing workloads, including any that would move into the region, and future workloads that are planned but not yet built.
+Regional qualification should reflect the requirements of the workloads expected to use the region. These come from two sources: existing workloads, including any that would move into the region, and future workloads that are planned but not yet built. This check gathers requirements, but it doesn't decide how they are met, and it doesn't disqualify a region directly.
 
-Review the architecture, connectivity, data, shared-service, security, resiliency, scale, and operational requirements and dependencies of workloads expected to consume the region. Where useful, map the key workloads you expect to move to or deploy in the new region, whether existing or new, to the closest-fitting [Workload Landing Zone archetype](./application-landing-zone-archetypes.md) based on its platform connectivity and dependency requirements. If a workload has requirements beyond its primary archetype, record them as explicit additions to that archetype rather than forcing the workload into multiple classifications.
+Review the architecture, connectivity, data, shared-service, security, resiliency, scale, and operational requirements and dependencies of workloads expected to consume the region. Where useful, map the key workloads you expect to move to or deploy in the new region, whether existing or new, to the closest-fitting [Workload Landing Zone archetype](./application-landing-zone-archetypes.md) based on its platform connectivity and dependency requirements. If a workload has requirements beyond its primary archetype, record them as explicit additions to that archetype rather than forcing the workload into multiple classifications. For how an archetype differs from an architecture style, a design pattern, and a workload pattern, see [How archetypes differ from other architecture terms](./application-landing-zone-archetypes.md#how-archetypes-differ-from-other-architecture-terms).
 
-:::image type="content" source="./media/workloads-to-platform-requirements.png" alt-text="Flow from two workload sources — existing workloads, including those moving into the region, and future workloads — into a review of requirements and dependencies, which produces workload-driven platform requirements; requirements that affect suitability go to dimension 4 and implementation details are deferred to onboarding." lightbox="./media/workloads-to-platform-requirements.png":::
+:::image type="content" source="./media/workloads-to-platform-requirements.png" alt-text="Flow from two workload sources — existing workloads, including those moving into the region, and future workloads — into a review of requirements and dependencies, which produces workload-driven platform requirements; requirements that affect suitability go to check 4 and implementation details are deferred to onboarding." lightbox="./media/workloads-to-platform-requirements.png":::
 
-*From workloads to platform requirements. Requirements that could materially affect regional suitability are validated in dimension 4; implementation-specific decisions can wait for onboarding.*
+*From workloads to platform requirements. Requirements that could materially affect regional suitability are validated in check 4; implementation-specific decisions can wait for onboarding.*
 
 ## Existing and future workloads
 
@@ -25,29 +25,25 @@ For **existing workloads**—running in Azure, on-premises, or in another cloud�
 
 For **future workloads**, use known business and technical requirements, predefined workload patterns, intended architecture, expected dependencies, required Azure services, and anticipated security, resiliency, connectivity, and scale requirements to determine the regional and platform capabilities they will need. Where aspects of the application design are still evolving, identify the requirements that must influence regional qualification and defer implementation-specific decisions that can be validated during workload onboarding.
 
+## Platform and connectivity requirements
+
+Workload requirements also define what the platform must provide in the region. Capture them in three areas. In this check you identify the requirement. You decide how the platform meets it in [step 3](./platform-architecture.md), after the region qualifies.
+
+| Area | What to identify | Decided in step 3 |
+|---|---|---|
+| **Platform enablement** | The shared services and operational capabilities the workloads depend on: identity and access, policy and security controls, deployment automation, monitoring and logging, backup and recovery, and key and secret management. Note which of them must be close to the workloads. | [Platform capabilities](./platform-enablement-connectivity.md#platform-capabilities) |
+| **Resilient hybrid connectivity** | The datacenters and users the workloads must reach, and the latency, bandwidth, routing, and resilience they need on that path. | [Resilient hybrid connectivity](./platform-enablement-connectivity.md#resilient-hybrid-connectivity) |
+| **Regional platform connectivity** | How the workloads must reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments. | [Regional platform connectivity](./platform-enablement-connectivity.md#regional-platform-connectivity) |
+
+A requirement that the platform can't meet yet doesn't exclude the region. Record it as an input to step 3, where you decide how to meet it.
+
 > [!IMPORTANT]
 > This phase identifies the **regional and platform capabilities that workloads require**. It does not approve workload relocation or define migration execution. Relocation readiness, migration sequencing, recovery design, and ongoing multi-region operation remain workload-specific activities.
 
-**Decision:** Identify the workload-driven platform requirements that must be validated as part of regional qualification.
-
-## Organize requirements with the right concept
-
-Architecture concepts can help identify and organize these requirements, but they describe different aspects of a workload and should not be used interchangeably.
-
-| Term | What it describes | Examples | Level |
-|---|---|---|---|
-| Architecture style | The fundamental structural organization of an application | Microservices, N-tier, event-driven, web-queue-worker, big compute | Application architecture |
-| Architecture or design pattern | A reusable solution to a recurring technical problem | Circuit Breaker, Retry, CQRS, Strangler Fig, Competing Consumers | Design technique |
-| Workload pattern | A recurring workload behavior or set of operational characteristics that can influence platform requirements | Latency-sensitive, data-intensive, batch-oriented, globally distributed, hybrid-dependent | Workload characteristics |
-| Workload Landing Zone archetype | A classification of a workload based on the platform connectivity and dependency capabilities it requires | Hybrid-Connected, Connected Cloud-Native or AI, Isolated Cloud-Native or AI, Interconnected Application Portfolios | Platform-consumption model |
-
-> [!NOTE]
-> The Azure landing zones reference architecture also uses *archetypes*: built-in definitions of what must be true for a landing zone to meet environment and compliance requirements at a given scope. Workload Landing Zone archetypes in this guidance describe what a workload requires from the platform, which is a different concept.
+**Decision:** Identify and record the workload-driven platform requirements. They are the input to check 4, which validates what the region can support, and to step 3, which decides what the platform provides.
 
 ## Reference links
 
-- [Architecture styles](https://learn.microsoft.com/azure/architecture/guide/architecture-styles/) — Supports the discussion of workload architecture, including N-tier, microservices, and event-driven approaches.
-- [Built-in Azure landing zone archetypes](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/tailoring-alz#built-in-archetypes-for-the-azure-landing-zone-reference-architecture) — Describes what needs to be true for a landing zone to meet the expected environment and compliance requirements at a specific scope.
 - [Evaluate a cloud workload for relocation](https://learn.microsoft.com/azure/azure-resource-manager/management/relocate-evaluate) — Dependency discovery, workload ownership, acceptable disruption, and target-region supportability.
 - [Relocate cloud workloads](https://learn.microsoft.com/azure/azure-resource-manager/management/relocate-index) — The broader Azure-to-Azure relocation process, which distinguishes assessment from migration and cutover.
 

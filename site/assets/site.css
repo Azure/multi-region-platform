@@ -106,6 +106,9 @@ svg { display: block; }
 .hero-title { margin: 12px 0 0; font-size: 44px; line-height: 1.12; font-weight: 600; letter-spacing: -.015em; max-width: 720px; color: #fff; }
 .hero-lede { margin: 16px 0 0; font-size: 19px; line-height: 1.5; max-width: 640px; color: #DDEBF9; }
 .hero-cta { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+.hero-alt { margin: 16px 0 0; font-size: 14px; color: #BCD9F5; }
+.hero-alt a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+.hero-alt a:hover { color: #DDEBF9; }
 .btn { display: inline-flex; align-items: center; height: 42px; padding: 0 18px; border-radius: 8px; font-weight: 600; font-size: 15px; text-decoration: none !important; }
 .btn.primary { background: #fff; color: #0B3A63; }
 .btn.primary:hover { background: #EEF5FC; }
@@ -202,7 +205,7 @@ blockquote.pull p { margin: 0; font-size: 21px; line-height: 1.4; font-weight: 3
 .attr { display: grid; grid-template-columns: 170px 1fr; gap: 16px; padding: 12px 0; border-top: 1px solid var(--line); }
 .attr p { margin: 0 !important; }
 .attr-k { font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--accent); padding-top: 3px; }
-.attr-choose-when { background: var(--accent-soft); border-top: 0; border-radius: 10px; padding: 14px 16px; margin: 14px 0 4px; }
+.attr-choose-when, .attr-fits-when { background: var(--accent-soft); border-top: 0; border-radius: 10px; padding: 14px 16px; margin: 14px 0 4px; }
 .attr-reassess-when .attr-k { color: var(--warm); }
 
 .rowgrid { display: grid; gap: 16px; margin: 18px 0 28px; }

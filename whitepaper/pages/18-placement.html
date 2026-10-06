@@ -1,0 +1,70 @@
+<section class="page" data-section="4 · Place workloads">
+<style>
+  .pf8 { height: 380px; }
+  .pf8 .grp { position: absolute; top: 0; height: 22px; border-bottom: 2px solid; }
+  .pf8 .grp span { font-size: 9.2px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; }
+  .pf8 .s { position: absolute; top: 34px; width: 106px; height: 146px; border-radius: 10px; padding: 9px 9px; background: #fff; border: 1.2px solid var(--line); }
+  .pf8 .s .n { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 700; color: #fff; }
+  .pf8 .s .t { font-size: 10.8px; font-weight: 700; color: var(--ink); line-height: 1.25; margin-top: 7px; }
+  .pf8 .w { border-color: var(--t300); background: var(--t50); } .pf8 .w .n { background: var(--t600); }
+  .pf8 .b { border-color: var(--b200); background: var(--b50); } .pf8 .b .n { background: var(--b600); }
+  .pf8 .g { border-color: var(--s300); background: var(--s100); } .pf8 .g .n { background: var(--s800); }
+  .pf8 .s .d { font-size: 9.6px; line-height: 1.33; color: var(--muted); margin-top: 5px; }
+  .pf8 .x { position: absolute; border-radius: 9px; padding: 8px 11px; font-size: 10.2px; line-height: 1.36; }
+</style>
+<div class="inner">
+  <div class="open-band" id="s6">
+    <div class="num" style="color:var(--t600)">04</div>
+    <div style="flex:1">
+      <div class="eyebrow" style="color:var(--t600)">From options to placement</div>
+      <h1 class="sec-title mt8" style="font-size:28px">Place workloads using qualified options</h1>
+    </div>
+    <p class="standfirst" style="width:300px;font-size:13.6px">Previous regional qualification is a planning input; <strong>decision-time validation is authoritative.</strong></p>
+  </div>
+
+  <div class="g2 mt12" style="gap:34px">
+    <p>Place a workload only after its requirements are understood well enough to make a decision. Regional qualification narrows the choices; it <strong>does not permanently approve</strong> a region for every application. Placement ends in one of these outcomes: place the workload in a qualified region, keep it where it is, relocate it, extend it to another region for recovery or active use, or conclude that no qualified option meets its requirements yet.</p>
+    <p>Apply the same eight steps to each workload or related application portfolio. The workload team works within the qualified options; additional platform capabilities, where needed, are a separate governed decision. Findings flow back into regional qualification.</p>
+  </div>
+
+  <div class="figure mt16" id="figPlacement">
+    <div class="dg pf8">
+      <div class="grp" style="left:0;width:346px;border-color:var(--t600)"><span style="color:var(--t600)">Understand the workload</span></div>
+      <div class="grp" style="left:357px;width:346px;border-color:var(--b600)"><span style="color:var(--b600)">Match to qualified regional options</span></div>
+      <div class="grp" style="left:714px;width:226px;border-color:var(--s800)"><span style="color:var(--s800)">Decide and govern</span></div>
+
+      <div class="s w node" id="st1" style="left:0"><span class="n">1</span><div class="t">Define the placement objective</div><div class="d">Net-new, remain in place, or relocate</div></div>
+      <div class="s w node" id="st2" style="left:120px"><span class="n">2</span><div class="t">Identify the landing zone archetype</div><div class="d">Closest fit; record requirements beyond it</div></div>
+      <div class="s w node" id="st3" style="left:240px"><span class="n">3</span><div class="t">Establish mandatory requirements</div><div class="d">Data location, services, zones, latency, scale, resiliency</div></div>
+      <div class="s b node" id="st4" style="left:357px"><span class="n">4</span><div class="t">Review the qualified regional options</div><div class="d">Regions assessed for the relevant requirements</div></div>
+      <div class="s b node" id="st5" style="left:477px"><span class="n">5</span><div class="t">Validate current regional suitability</div><div class="d">Service, SKU, AI model, access, quota</div></div>
+      <div class="s b node" id="st6" style="left:597px"><span class="n">6</span><div class="t">Confirm the connectivity profile</div><div class="d">The region's profile must support it</div></div>
+      <div class="s g node" id="st7" style="left:714px"><span class="n">7</span><div class="t">Determine the resiliency role</div><div class="d">Primary, recovery, or active location</div></div>
+      <div class="s g node" id="st8" style="left:834px"><span class="n">8</span><div class="t">Record and govern the decision</div><div class="d">Region, archetype, profile, owners, triggers</div></div>
+      <i class="ln" data-from="st1" data-to="st2" data-s="r" data-e="l" data-k="teal"></i>
+      <i class="ln" data-from="st2" data-to="st3" data-s="r" data-e="l" data-k="teal"></i>
+      <i class="ln" data-from="st3" data-to="st4" data-s="r" data-e="l" data-k="blue"></i>
+      <i class="ln" data-from="st4" data-to="st5" data-s="r" data-e="l" data-k="blue"></i>
+      <i class="ln" data-from="st5" data-to="st6" data-s="r" data-e="l" data-k="blue"></i>
+      <i class="ln" data-from="st6" data-to="st7" data-s="r" data-e="l" data-k="slate"></i>
+      <i class="ln" data-from="st7" data-to="st8" data-s="r" data-e="l" data-k="slate"></i>
+
+      <!-- side outcomes -->
+      <div class="x node" id="xcap" style="left:420px;top:214px;width:170px;background:#fff;border:1px dashed var(--b300);color:var(--b800)"><b>Guaranteed capacity?</b> Quota isn't capacity; decide here whether to reserve it.</div>
+      <div class="x node" id="xexp" style="left:600px;top:214px;width:190px;background:#FBF4EE;color:var(--ink)"><b style="color:var(--w600)">Additional capabilities needed?</b> A separate governed platform decision — not a profile redefined by the workload team.</div>
+      <div class="x node" id="xout" style="left:800px;top:214px;width:140px;background:var(--wash);color:var(--ink)"><b>Valid outcomes</b> include retaining the current region, or no qualified option today.</div>
+      <i class="ln" data-from="st5" data-to="xcap" data-s="b" data-e="t@0.62" data-k="light" data-dash="3 3"></i>
+      <i class="ln" data-from="st6" data-to="xexp" data-s="b" data-e="t@0.4" data-k="warm" data-label="Gap" data-lp=".45"></i>
+      <i class="ln" data-from="st8" data-to="xout" data-s="b" data-e="t@0.5" data-k="slate"></i>
+
+      <div class="x node" id="xrec" style="left:0;top:314px;width:330px;height:62px;background:var(--b600);color:#fff;display:flex;gap:10px;align-items:center">
+        <svg style="width:22px;height:22px;color:#fff;flex:none"><use href="#i-doc"/></svg>
+        <div><b>Regional qualification</b><br><span style="color:#DDEBF9">Remain qualified, become conditional, add platform capabilities, or remove.</span></div>
+      </div>
+      <i class="ln" data-from="xout" data-to="xrec" data-s="b@0.5" data-e="r" data-k="blue" data-dash="5 4" data-label="New requirements, constraints, or platform gaps" data-lp=".42"></i>
+      <i class="ln" data-from="xrec" data-to="st4" data-s="t@0.9" data-e="b@0.3" data-k="blue" data-dash="2 3" data-mid=".5"></i>
+    </div>
+    <div class="figcap"><span class="fn">Figure 17</span><span class="ft"><b>Workload placement using qualified options.</b> Teal steps describe the workload, blue steps match it to regional options, and slate steps decide and govern. Onboarding findings return to regional qualification, closing the loop between platform readiness and workload adoption.</span></div>
+  </div>
+</div>
+</section>

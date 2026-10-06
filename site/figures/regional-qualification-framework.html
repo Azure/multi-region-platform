@@ -1,5 +1,5 @@
 <!-- extracted from whitepaper #fig5; regenerate with site/tools/extract_figures.py -->
-<div class="wpf" data-w="940" data-h="446" style="width:940px"><div class="figure mt8">
+<div class="wpf" data-w="940" data-h="425" style="width:940px"><div class="figure mt8">
     <div class="f5">
       <div class="dc"><div class="acc" style="background:var(--b300)"></div><div class="bd">
         <div class="dh"><span class="dn">1</span><span class="dt">Business and geography</span></div>
@@ -16,27 +16,26 @@
       <div class="dc" style="border-color:var(--t300)"><div class="acc" style="background:var(--t600)"></div><div class="bd">
         <div class="dh"><span class="dn" style="background:var(--t600)">3</span><span class="dt">Workload requirements and dependencies</span></div>
         <div class="dq" style="color:var(--t700)">What workload requirements and dependencies must the region support?</div>
-        <ul class="teal"><li>Existing and future workloads, including moves</li><li>Closest-fitting Workload Landing Zone archetype</li><li>Data, connectivity, and shared services</li><li>Security, resiliency, and scale</li><li>Required Azure services</li></ul></div>
-        <div class="dd" style="background:var(--t50);border-top-color:var(--t100)"><div class="cap" style="color:var(--t600)">Decision</div><p>Identify the workload-driven platform requirements to validate.</p></div>
-        <svg class="chev" height="18" viewBox="0 0 10 18"><path d="M2 2l6 7-6 7" fill="none" stroke="#2B88D8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
-      <div class="dc"><div class="acc" style="background:var(--b600)"></div><div class="bd">
-        <div class="dh"><span class="dn">4</span><span class="dt">Regional capability and availability</span></div>
-        <div class="dq">Which regions can support the identified workload requirements?</div>
-        <ul><li>Services, models, and SKUs</li><li>Availability zones and pairing</li><li>Latency, pricing, and scale</li><li>Regional access and quota</li><li>Service-specific cross-region behavior</li></ul></div>
-        <div class="dd"><div class="cap">Decision</div><p>Qualify candidates, documenting conditions, constraints, and unresolved validations.</p></div>
+        <div class="two">
+          <div><div class="ch">From the workloads</div>
+            <ul class="teal"><li>Existing and future workloads, including moves</li><li>Closest-fitting Workload Landing Zone archetype</li><li>Data, connectivity, and shared services</li><li>Security, resiliency, and scale</li><li>Required Azure services</li></ul></div>
+          <div><div class="ch">Required from the platform</div>
+            <div class="sub"><b>Platform enablement</b><span>Services needed locally, remotely, or centrally</span></div>
+            <div class="sub"><b>Resilient hybrid connectivity</b><span>Reachability and resilience to Azure</span></div>
+            <div class="sub"><b>Regional platform connectivity</b><span>Access to hubs, shared services, and other regions</span></div></div>
+        </div></div>
+        <div class="dd" style="background:var(--t50);border-top-color:var(--t100)"><div class="cap" style="color:var(--t600)">Decision</div><p>Identify and record the workload-driven platform requirements.</p></div>
         <svg class="chev" height="18" viewBox="0 0 10 18"><path d="M2 2l6 7-6 7" fill="none" stroke="#2B88D8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
       <div class="dc"><div class="acc" style="background:var(--b800)"></div><div class="bd">
-        <div class="dh"><span class="dn" style="background:var(--b800)">5</span><span class="dt">Platform enablement and connectivity</span></div>
-        <div class="dq">What must the platform enable for the identified workload requirements?</div>
-        <div class="sub" style="border-top:0;margin-top:0;padding-top:0"><b>Platform enablement</b><span>Local, remote, or centralized services</span></div>
-        <div class="sub"><b>Resilient hybrid connectivity</b><span>Reachability and resilience to Azure</span></div>
-        <div class="sub"><b>Regional platform connectivity</b><span>Most efficient regional profile</span></div></div>
-        <div class="dd"><div class="cap">Decision</div><p>Most efficient capability set and connectivity profile.</p></div></div>
+        <div class="dh"><span class="dn" style="background:var(--b800)">4</span><span class="dt">Regional capability and availability</span></div>
+        <div class="dq">Which regions can support the identified workload requirements?</div>
+        <ul><li>Services, models, and SKUs</li><li>Availability zones and pairing</li><li>Latency, pricing, and scale</li><li>Regional access and quota</li><li>Service-specific cross-region behavior</li></ul></div>
+        <div class="dd"><div class="cap">Decision</div><p>Qualify candidates, documenting conditions, constraints, and unresolved validations.</p></div></div>
     </div>
     <div class="fout">
-      <div style="display:flex;flex-direction:column;justify-content:center;padding-left:4px"><b style="font-size:11.6px;color:var(--ink)">Framework output</b><span style="font-size:9.6px;color:var(--muted);line-height:1.35">Each regional option is classified against <b style="color:var(--ink)">defined workload requirements</b>, with evidence.</span></div>
+      <div style="display:flex;flex-direction:column;justify-content:center;padding-left:4px"><b style="font-size:11.6px;color:var(--ink)">Qualification outcome</b><span style="font-size:9.6px;color:var(--muted);line-height:1.35">Each regional option is classified against <b style="color:var(--ink)">defined workload requirements</b>, with evidence.</span></div>
       <div class="oc"><span class="ic" style="background:var(--w100);color:var(--w600)"><svg><use href="#i-x"></use></svg></span><div><b style="color:var(--w600)">Excluded</b><span>A mandatory requirement cannot be satisfied.</span></div></div>
-      <div class="oc"><span class="ic" style="border:1.4px dashed var(--b600);color:var(--b600)"><svg><use href="#i-clock"></use></svg></span><div><b style="color:var(--b700)">Candidate</b><span>Potentially viable; more discovery or platform enablement first.</span></div></div>
+      <div class="oc"><span class="ic" style="border:1.4px dashed var(--b600);color:var(--b600)"><svg><use href="#i-clock"></use></svg></span><div><b style="color:var(--b700)">Candidate</b><span>Potentially viable; more discovery or validation first.</span></div></div>
       <div class="oc"><span class="ic" style="background:#FFF1CC;border:1.4px solid #C98A00;color:#8A5A00"><svg><use href="#i-flag"></use></svg></span><div><b style="color:#8A5A00">Conditional</b><span>Supported if documented conditions are resolved.</span></div></div>
       <div class="oc"><span class="ic" style="background:var(--g100);color:var(--g600)"><svg><use href="#i-check"></use></svg></span><div><b style="color:var(--g600)">Qualified</b><span>As of the assessment date; onboarding revalidation still required.</span></div></div>
     </div>

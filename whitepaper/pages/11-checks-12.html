@@ -1,0 +1,74 @@
+<section class="page" data-section="2 · Qualify regions">
+<div class="inner">
+  <div class="dimnav">
+    <span class="on"><b>1</b>Business and geography</span><span class="on"><b>2</b>Data and compliance</span><span><b>3</b>Workload requirements</span><span><b>4</b>Regional capability</span>
+  </div>
+
+  <div class="g2 mt20" style="gap:40px">
+    <div>
+      <div class="dimhead"><span class="dn">1</span><h2>Business and geography</h2></div>
+      <div class="question mt12">Where do we need Azure presence?</div>
+      <p>Start with the business reason for considering another region. Evaluate expected markets and users, datacenter and partner locations, planned launches or migrations, anticipated growth, proximity requirements, and geographic concentration risk.</p>
+      <div class="decision"><div class="dl">Decision</div><p>Confirm that the region has sufficient business value to justify deeper assessment.</p></div>
+      <ul class="refs"><div class="rl">Reference links</div>
+        <li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-setup-guide/regions">Select Azure regions</a></li>
+        <li><a href="https://azure.microsoft.com/en-us/explore/global-infrastructure/geographies/">Azure geographies</a></li>
+      </ul>
+    </div>
+    <div class="vr">
+      <div class="dimhead"><span class="dn">2</span><h2>Data and compliance</h2></div>
+      <div class="question mt12">Are we allowed to operate here?</div>
+      <p>Determine whether anticipated workloads and their data can operate in the region. Consider data residency and sovereignty, regulatory and industry requirements, company policy, customer commitments, support access, encryption requirements, and restrictions on data movement or operational control.</p>
+      <div class="decision" style="background:#FBF4EE;border-left-color:var(--w600)"><div class="dl" style="color:var(--w600)">Decision</div><p>Exclude a region when it cannot satisfy a mandatory data, compliance, or policy requirement.</p></div>
+      <ul class="refs"><div class="rl">Reference links</div>
+        <li><a href="https://azure.microsoft.com/en-us/explore/global-infrastructure/data-residency/">Data residency in Azure</a></li>
+        <li><a href="https://learn.microsoft.com/en-us/azure/compliance/">Azure compliance documentation</a></li>
+        <li><a href="https://learn.microsoft.com/en-us/azure/reliability/concept-reliability-sovereignty">Reliability and sovereignty in Azure</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="figure" id="fig6" style="position:absolute;left:0;right:0;bottom:0">
+    <svg viewBox="0 0 940 176" font-family="Pub Sans, Segoe UI, sans-serif" style="display:block;width:100%;height:auto;margin:0 auto">
+      <defs>
+        <linearGradient id="fnl" x1="0" x2="1"><stop offset="0" stop-color="#EEF5FC"/><stop offset="1" stop-color="#DDEBF9"/></linearGradient>
+      </defs>
+      <!-- funnel bands -->
+      <path d="M0,14 H250 L300,34 V122 L250,142 H0 Z" fill="url(#fnl)"/>
+      <path d="M318,34 H520 L570,52 V104 L520,122 H318 Z" fill="#DDEBF9"/>
+      <path d="M588,52 H940 V104 H588 Z" fill="#0F6CBD"/>
+      <!-- dots: regions under consideration -->
+      <g fill="#2B88D8">
+        <circle cx="30" cy="44" r="5"/><circle cx="62" cy="38" r="5"/><circle cx="96" cy="50" r="5"/><circle cx="130" cy="40" r="5"/><circle cx="164" cy="52" r="5"/><circle cx="200" cy="42" r="5"/>
+        <circle cx="44" cy="74" r="5"/><circle cx="80" cy="84" r="5"/><circle cx="114" cy="72" r="5"/><circle cx="150" cy="86" r="5"/><circle cx="186" cy="76" r="5"/><circle cx="222" cy="86" r="5"/>
+        <circle cx="30" cy="108" r="5"/><circle cx="66" cy="116" r="5"/><circle cx="102" cy="106" r="5"/><circle cx="138" cy="118" r="5"/><circle cx="174" cy="108" r="5"/><circle cx="210" cy="116" r="5"/>
+      </g>
+      <g fill="#0F6CBD"><circle cx="350" cy="60" r="5"/><circle cx="386" cy="72" r="5"/><circle cx="420" cy="58" r="5"/><circle cx="456" cy="76" r="5"/><circle cx="490" cy="62" r="5"/><circle cx="366" cy="96" r="5"/><circle cx="404" cy="100" r="5"/><circle cx="440" cy="94" r="5"/><circle cx="476" cy="102" r="5"/></g>
+      <g fill="#fff"><circle cx="640" cy="70" r="5"/><circle cx="662" cy="84" r="5"/><circle cx="684" cy="70" r="5"/><circle cx="706" cy="84" r="5"/></g>
+      <!-- stage labels -->
+      <text x="0" y="6" font-size="9.4" font-weight="700" letter-spacing="1.2" fill="#5B6778">CANDIDATE REGIONS UNDER CONSIDERATION</text>
+      <text x="728" y="74" font-size="12" font-weight="700" fill="#fff">Proceed to checks 3 and 4</text>
+      <text x="728" y="91" font-size="10" fill="#DDEBF9">Workloads · capability · platform</text>
+      <!-- filters -->
+      <g>
+        <rect x="252" y="60" width="96" height="36" rx="18" fill="#fff" stroke="#0F6CBD" stroke-width="1.3"/>
+        <text x="300" y="75" text-anchor="middle" font-size="9" font-weight="700" fill="#0F548C">CHECK 1</text>
+        <text x="300" y="87" text-anchor="middle" font-size="9" fill="#0F548C">Business value?</text>
+        <rect x="522" y="60" width="96" height="36" rx="18" fill="#fff" stroke="#A84E1F" stroke-width="1.3"/>
+        <text x="570" y="75" text-anchor="middle" font-size="9" font-weight="700" fill="#A84E1F">CHECK 2</text>
+        <text x="570" y="87" text-anchor="middle" font-size="9" fill="#A84E1F">Allowed here?</text>
+      </g>
+      <!-- drop-outs -->
+      <path d="M300,96 V150 H330" fill="none" stroke="#8A95A5" stroke-width="1.3" stroke-dasharray="3 3"/>
+      <text x="336" y="146" font-size="10.2" font-weight="700" fill="#5B6778">No deeper assessment</text>
+      <text x="336" y="160" font-size="9.6" fill="#8A95A5">Value does not justify deeper assessment</text>
+      <path d="M570,96 V150 H600" fill="none" stroke="#A84E1F" stroke-width="1.3"/>
+      <path d="M594,145 l7,5 -7,5" fill="none" stroke="#A84E1F" stroke-width="1.3"/>
+      <rect x="606" y="138" width="66" height="18" rx="9" fill="#F8E8DD"/>
+      <text x="639" y="151" text-anchor="middle" font-size="9.6" font-weight="700" fill="#A84E1F">Excluded</text>
+      <text x="682" y="151" font-size="9.6" fill="#8A95A5">A mandatory requirement cannot be satisfied</text>
+    </svg>
+    <div class="figcap" style="margin-top:6px"><span class="fn">Figure 6</span><span class="ft"><b>The first two checks filter the portfolio.</b> Business value decides whether a region merits deeper assessment; mandatory data, compliance, and policy requirements decide whether it can be used at all. Only regions that pass both proceed to workload and capability analysis.</span></div>
+  </div>
+</div>
+</section>

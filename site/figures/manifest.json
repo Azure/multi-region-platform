@@ -21,7 +21,7 @@
  },
  "regional-qualification-framework": {
   "w": 940,
-  "h": 446,
+  "h": 425,
   "source": "fig5"
  },
  "dimensions-1-2-filter": {
@@ -46,7 +46,7 @@
  },
  "connectivity-planning-layers": {
   "w": 940,
-  "h": 164,
+  "h": 170,
   "source": "fig9"
  },
  "assessment-outcome-example": {
@@ -56,7 +56,7 @@
  },
  "regional-qualification-decision-tree": {
   "w": 940,
-  "h": 588,
+  "h": 436,
   "source": "figQualTree"
  },
  "application-landing-zone-archetypes": {
@@ -103,11 +103,6 @@
   "w": 940,
   "h": 97,
   "source": "fig18b"
- },
- "operating-model-consistent-adaptable": {
-  "w": 940,
-  "h": 316,
-  "source": "fig18"
  },
  "key-vault-regional-pattern": {
   "w": 474,

@@ -1,0 +1,87 @@
+<section class="page" data-section="3 · Select capabilities and connectivity profile">
+<style>
+  .sd3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; }
+  .sd3 .c { border: 1px solid var(--line); border-radius: 12px; background: #fff; padding: 16px 18px 12px; display: flex; flex-direction: column; }
+  .sd3 .c .hd { display: flex; align-items: center; gap: 10px; }
+  .sd3 .c .n { width: 28px; height: 28px; border-radius: 50%; background: var(--b600); color: #fff; font-weight: 700; font-size: 13px; display: grid; place-items: center; flex: none; }
+  .sd3 .c h3 { font-size: 15.4px; color: var(--ink); }
+  .sd3 .c .q { font-size: 13px; line-height: 1.46; color: var(--b700); font-weight: 500; margin-top: 10px; flex: 1; }
+  .sd3 .c .pg { margin-top: 14px; border-top: 1px solid var(--line-soft); padding-top: 8px; font-size: 10.4px; color: var(--muted); display: flex; justify-content: space-between; gap: 10px; }
+  .sd3 .c .pg b { color: var(--b600); white-space: nowrap; }
+  .f9 { position: relative; height: 170px; }
+  .f9 .lay { position: absolute; top: 0; height: 30px; border-bottom: 2px solid; display: flex; align-items: flex-end; padding-bottom: 5px; }
+  .f9 .lay span { font-size: 9.2px; letter-spacing: .08em; font-weight: 700; text-transform: uppercase; }
+  .f9 .col { position: absolute; top: 40px; height: 128px; border-radius: 10px; padding: 11px 12px; }
+  .f9 .col .ct { font-size: 12px; font-weight: 700; line-height: 1.25; }
+  .f9 .col .cs { font-size: 10.2px; line-height: 1.38; margin-top: 5px; }
+  .f9 .col svg.ic { width: 22px; height: 22px; margin-bottom: 6px; }
+  .f9 .inp { position: absolute; top: 182px; height: 56px; border-radius: 9px; padding: 8px 12px; background: #fff; border: 1px dashed var(--t300); }
+  .f9 .inp b { font-size: 11px; color: var(--t700); display: block; }
+  .f9 .inp span { font-size: 10px; color: var(--muted); line-height: 1.35; display: block; margin-top: 2px; }
+</style>
+<div class="inner">
+  <div class="open-band" id="s7">
+    <div class="num">03</div>
+    <div style="flex:1">
+      <div class="eyebrow">Decisions, not deployment</div>
+      <h1 class="sec-title mt8" style="font-size:30px">Select capabilities and connectivity profile</h1>
+    </div>
+    <p class="standfirst" style="width:330px;font-size:14.2px">For each qualified region, decide <strong>what the platform provides</strong> there. Nothing is built yet.</p>
+  </div>
+
+  <div class="g2 mt16" style="gap:40px">
+    <p>This step is a set of decisions, not a deployment. For each qualified region, you decide what the platform provides there. Nothing is built yet: deployment follows later, through the automation you already run.</p>
+    <p>You make three decisions. Each follows from the workloads you expect in the region, not from the footprint of an existing hub. Start with the matrix (<span data-figref="fig13">Figure 13</span>, page <span data-toc="fig13"></span>) to see which connectivity profiles each archetype typically uses. Then apply the selection principles and use the decision tree to pick the most efficient profile that meets the requirements.</p>
+  </div>
+
+  <div class="sd3 mt16">
+    <div class="c"><div class="hd"><span class="n">1</span><h3>Platform capabilities</h3></div>
+      <div class="q">Which shared services and operational capabilities are provided in the region, consumed from another region, or kept centralized?</div>
+      <div class="pg"><span>Platform capabilities and connectivity</span><b>page <span data-toc="pcap"></span></b></div></div>
+    <div class="c"><div class="hd"><span class="n">2</span><h3>Hybrid connectivity</h3></div>
+      <div class="q">Is the hybrid connectivity you already have sufficient, or does a requirement justify a change?</div>
+      <div class="pg"><span>Resilient hybrid connectivity</span><b>page <span data-toc="phyb"></span></b></div></div>
+    <div class="c"><div class="hd"><span class="n">3</span><h3>Connectivity profile</h3></div>
+      <div class="q">Which of the four profiles is the most efficient one that meets the requirements?</div>
+      <div class="pg"><span>Selection principles and decision tree</span><b>pages <span data-toc="fig15"></span>–<span data-toc="figProfileTree"></span></b></div></div>
+  </div>
+
+  <p class="mt16" style="font-size:12.2px;max-width:940px">The three decisions sit on one path, from on-premises locations to the workloads in the region. They influence one another, but each has different requirements and tradeoffs. Connectivity that is specific to one application isn’t decided here. It is designed when the workload is placed (Part 4).</p>
+
+  <div class="figure mt8" id="fig9">
+    <div class="dg f9">
+      <div class="lay" style="left:0;width:392px;border-color:var(--s600)"><span style="color:var(--s600)">Resilient hybrid connectivity</span></div>
+      <div class="lay" style="left:410px;width:262px;border-color:var(--b600)"><span style="color:var(--b600)">Platform capabilities</span></div>
+      <div class="lay" style="left:678px;width:262px;border-color:var(--t600)"><span style="color:var(--t600)">Regional platform connectivity</span></div>
+
+      <div class="col node" id="k1" style="left:0;width:164px;background:var(--s800);color:#fff">
+        <svg class="ic" style="color:#C9D4E2"><use href="#i-building"/></svg>
+        <div class="ct">On-premises datacenters and users</div>
+        <div class="cs" style="color:#C9D4E2">Locations, latency, bandwidth, and failure domains</div>
+      </div>
+      <div class="col node" id="k2" style="left:228px;width:164px;background:linear-gradient(135deg,var(--b700),var(--b600));color:#fff">
+        <svg class="ic" style="color:#DDEBF9"><use href="#i-network"/></svg>
+        <div class="ct">Azure backbone in the selected geography</div>
+        <div class="cs" style="color:#DDEBF9">Reached through existing or additional private paths</div>
+      </div>
+      <div class="col node" id="k3" style="left:410px;width:250px;background:var(--b50);border:1.2px solid var(--b200);color:var(--b800)">
+        <svg class="ic" style="color:var(--b600)"><use href="#i-hub"/></svg>
+        <div class="ct">Strategic geographic hubs and shared services</div>
+        <div class="cs" style="color:var(--muted)">Reused where they satisfy requirements; each service provided locally, remotely, or centrally</div>
+      </div>
+      <div class="col node" id="k4" style="left:678px;width:262px;background:var(--t50);border:1.2px solid var(--t300);color:var(--t700)">
+        <svg class="ic" style="color:var(--t600)"><use href="#i-spoke"/></svg>
+        <div class="ct">Workload Landing Zones</div>
+        <div class="cs" style="color:var(--muted)">Supported by the regional platform connectivity profile — selected by dependencies and requirements</div>
+      </div>
+      <div style="position:absolute;left:164px;width:64px;top:74px;text-align:center;font-size:8.8px;font-weight:700;color:var(--s600);line-height:1.2">ExpressRoute<br>or VPN</div>
+      <i class="ln" data-from="k1" data-to="k2" data-s="r" data-e="l" data-k="slate" data-both></i>
+      <i class="ln" data-from="k2" data-to="k3" data-s="r" data-e="l" data-k="blue"></i>
+      <i class="ln" data-from="k3" data-to="k4" data-s="r" data-e="l" data-k="blue" data-both></i>
+
+    </div>
+    <div class="figcap"><span class="fn">Figure 9</span><span class="ft"><b>The three decisions on one path</b> — resilient hybrid connectivity, platform capabilities, and regional platform connectivity. They are related, but each is a separate decision.</span></div>
+  </div>
+
+</div>
+</section>

@@ -1,7 +1,7 @@
 ---
 title: Multi-region customer scenarios
 description: Four illustrative scenarios that follow the multi-region framework from a business or technical driver to a governed regional and workload decision.
-ms.date: 10/02/2026
+ms.date: 10/05/2026
 ms.topic: conceptual
 ---
 
@@ -23,7 +23,7 @@ A financial-services organization operates workloads outside its home country. A
 | Step | Outcome |
 |---|---|
 | Driver | Data residency and regulatory requirements; new in-country Azure region. |
-| Deciding dimensions | [Dimension 2](./data-and-compliance.md) confirms mandatory location requirements. [Dimension 3](./workload-requirements.md) identifies affected workloads and dependencies. [Dimension 4](./regional-capability.md) validates required regional capabilities, services, zones, access, and constraints. |
+| Deciding checks | [Check 2](./data-and-compliance.md) confirms mandatory location requirements. [Check 3](./workload-requirements.md) identifies affected workloads and dependencies. [Check 4](./regional-capability.md) validates required regional capabilities, services, zones, access, and constraints. |
 | Qualification | The region can be qualified for defined Hybrid-Connected workload requirements while other portfolio workloads remain candidates until their dependencies are understood. |
 | Workload Landing Zone archetype | **Hybrid-Connected Applications** |
 | Connectivity profile | **Minimal Regional Hub** where selected local capabilities are required and existing hybrid connectivity can be reused where reachability and resiliency requirements permit. |
@@ -38,7 +38,7 @@ A product team requires an AI model, GPU SKU, or related Azure service that is u
 | Step | Outcome |
 |---|---|
 | Driver | AI model, service, SKU, or quota availability. |
-| Deciding dimensions | [Dimension 1](./business-and-geography.md) confirms the business requirement. [Dimension 2](./data-and-compliance.md) validates data and compliance constraints. [Dimension 4](./regional-capability.md) validates current model, service, SKU, zone, regional access, and quota support. |
+| Deciding checks | [Check 1](./business-and-geography.md) confirms the business requirement. [Check 2](./data-and-compliance.md) validates data and compliance constraints. [Check 4](./regional-capability.md) validates current model, service, SKU, zone, regional access, and quota support. |
 | Qualification | The region can be qualified for the defined AI workload requirements. It remains conditional for requirements that depend on private connectivity until that design is known and validated. |
 | Workload Landing Zone archetype | **Isolated Cloud-Native or AI Applications** where the workload is self-contained; **Connected Cloud-Native or AI Applications** where private enterprise dependencies are required. |
 | Connectivity profile | **Disconnected Spokes** where the workload is self-contained; a connected profile only where actual dependencies justify it. |
@@ -53,7 +53,7 @@ An acquisition introduces a portfolio of interdependent applications, shared dat
 | Step | Outcome |
 |---|---|
 | Driver | Business expansion through acquisition. |
-| Deciding dimensions | [Dimension 1](./business-and-geography.md) confirms the business need. [Dimension 2](./data-and-compliance.md) evaluates local data obligations. [Dimension 3](./workload-requirements.md) maps portfolio-level dependencies, shared services, and connectivity requirements. |
+| Deciding checks | [Check 1](./business-and-geography.md) confirms the business need. [Check 2](./data-and-compliance.md) evaluates local data obligations. [Check 3](./workload-requirements.md) maps portfolio-level dependencies, shared services, and connectivity requirements. |
 | Qualification | Candidate while material dependencies remain unknown; qualified against defined portfolio requirements once sufficient discovery is complete. |
 | Workload Landing Zone archetype | **Interconnected Application Portfolios** |
 | Connectivity profile | **Remote Hub Connected** where cross-region dependencies are acceptable; **Minimal Regional Hub** where aggregate east-west traffic, shared services, latency, or independence requirements justify local capability. |
@@ -68,7 +68,7 @@ A colocation contract is ending. Hybrid-connected applications must leave the da
 | Step | Outcome |
 |---|---|
 | Driver | Datacenter and connectivity event. |
-| Deciding dimensions | [Dimension 3](./workload-requirements.md) identifies applications and components that must move together. [Dimension 5](./platform-enablement-connectivity.md) validates hybrid connectivity, datacenter and user geography, reachability, resiliency, and whether existing connectivity can support the target design. |
+| Deciding checks | [Check 3](./workload-requirements.md) identifies applications and components that must move together. [Step 3](./platform-enablement-connectivity.md#resilient-hybrid-connectivity) validates hybrid connectivity, datacenter and user geography, reachability, resiliency, and whether existing connectivity can support the target design. |
 | Qualification | The existing target region can remain qualified for the identified workload requirements while an additional region remains a candidate for future use. |
 | Workload Landing Zone archetype | **Hybrid-Connected Applications** |
 | Connectivity profile | No new profile. Continue to use the existing strategic geographic hub where it satisfies requirements; do not create a new regional hub solely because another Azure region is available. |

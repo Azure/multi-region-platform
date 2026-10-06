@@ -1,0 +1,50 @@
+<section class="page" data-section="References">
+<style>
+  .rg3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px 30px; }
+  .rgp h4 { margin-bottom: 6px; padding-bottom: 5px; border-bottom: 1px solid var(--line-soft); }
+  .rgp .it { margin-bottom: 8px; }
+  .rgp .it a { font-size: 11.4px; font-weight: 650; display: block; line-height: 1.3; }
+  .rgp .it span { font-size: 10.2px; color: var(--muted); line-height: 1.38; display: block; margin-top: 1px; }
+  .rgp .it code { font-family: inherit; font-size: 9px; color: var(--faint); display: block; margin-top: 1px; word-break: break-all; }
+</style>
+<div class="inner">
+  <div class="row" style="align-items:flex-end;gap:36px" id="sref">
+    <div style="flex:1"><div class="eyebrow">References and further reading</div><h2 class="title mt8" style="font-size:23px">Microsoft Learn and Azure resources cited in this paper</h2></div>
+  </div>
+
+  <div class="rg3 mt16">
+    <div class="rgp">
+      <h4>Multi-region workloads</h4>
+      <div class="it"><a href="https://learn.microsoft.com/en-us/azure/well-architected/design-guides/regions-availability-zones#deployment-approach-4-multi-region-deployments">Using availability zones and regions — Azure Well-Architected Framework</a><span>Deployment approaches, including multi-region deployments.</span><code>learn.microsoft.com/azure/well-architected/design-guides/regions-availability-zones</code></div>
+      <h4 class="mt12">Check 1 · Business and geography</h4>
+      <div class="it"><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-setup-guide/regions">Select Azure regions</a><span>Aligning regional choices with user locations, business requirements, and deployment considerations.</span><code>learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-setup-guide/regions</code></div>
+      <div class="it"><a href="https://azure.microsoft.com/en-us/explore/global-infrastructure/geographies/">Azure geographies</a><span>Azure’s geographic footprint and locations relevant to markets and operations.</span><code>azure.microsoft.com/explore/global-infrastructure/geographies</code></div>
+      <h4 class="mt12">Check 2 · Data and compliance</h4>
+      <div class="it"><a href="https://azure.microsoft.com/en-us/explore/global-infrastructure/data-residency/">Data residency in Azure</a><span>Customer-data location, geographic boundaries, and service-specific exceptions.</span><code>azure.microsoft.com/explore/global-infrastructure/data-residency</code></div>
+      <div class="it"><a href="https://learn.microsoft.com/en-us/azure/compliance/">Azure compliance documentation</a><span>Regional, industry-specific, and global compliance references.</span><code>learn.microsoft.com/azure/compliance</code></div>
+      <div class="it"><a href="https://learn.microsoft.com/en-us/azure/reliability/concept-reliability-sovereignty">Reliability and sovereignty in Azure</a><span>Sovereignty and regional selection, replication destinations, encryption, and operational control.</span><code>learn.microsoft.com/azure/reliability/concept-reliability-sovereignty</code></div>
+    </div>
+    <div class="rgp">
+      <h4>Archetypes and check 3 · Workload requirements</h4>
+      <div class="it"><a href="https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/">Architecture styles</a><span>N-tier, microservices, event-driven, and other styles.</span><code>learn.microsoft.com/azure/architecture/guide/architecture-styles</code></div>
+      <div class="it"><a href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/relocate-evaluate">Evaluate a cloud workload for relocation</a><span>Dependency discovery, workload ownership, acceptable disruption, and target-region supportability.</span><code>learn.microsoft.com/azure/azure-resource-manager/management/relocate-evaluate</code></div>
+      <div class="it"><a href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/relocate-index">Relocate cloud workloads</a><span>The Azure-to-Azure relocation process; assessment distinct from migration and cutover.</span><code>learn.microsoft.com/azure/azure-resource-manager/management/relocate-index</code></div>
+      <h4 class="mt12">Check 4 · Regional capability and availability</h4>
+      <div class="it"><a href="https://learn.microsoft.com/en-us/azure/reliability/regions-paired">Azure region pairs and nonpaired regions</a><code>learn.microsoft.com/azure/reliability/regions-paired</code></div>
+      <div class="it"><a href="https://learn.microsoft.com/en-us/azure/reliability/regions-multiregion-support?tabs=built-in-multiregion-support">Azure services that support multiple regions</a><code>learn.microsoft.com/azure/reliability/regions-multiregion-support</code></div>
+      <div class="it"><a href="https://learn.microsoft.com/en-us/azure/reliability/availability-zones-service-support">Azure services that support availability zones</a><code>learn.microsoft.com/azure/reliability/availability-zones-service-support</code></div>
+      <div class="it"><a href="https://learn.microsoft.com/en-us/azure/reliability/availability-zones-zonal-resource-resiliency">Zonal resources and zone resiliency</a><code>learn.microsoft.com/azure/reliability/availability-zones-zonal-resource-resiliency</code></div>
+      <div class="it"><a href="https://learn.microsoft.com/en-us/azure/reliability/availability-zones-enable-zone-resiliency">Enable zone resiliency for Azure workloads</a><code>learn.microsoft.com/azure/reliability/availability-zones-enable-zone-resiliency</code></div>
+    </div>
+    <div class="rgp">
+      <h4>Part 3 · Platform capabilities and connectivity</h4>
+      <div class="it"><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/design-areas">Azure landing zone design areas and conceptual architecture</a><span>Identity, security, governance, management, connectivity, and deployment automation.</span><code>learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-areas</code></div>
+      <div class="it"><a href="https://learn.microsoft.com/en-us/azure/expressroute/designing-for-disaster-recovery-with-expressroute-privatepeering">Designing for disaster recovery with ExpressRoute private peering</a><span>Peering-location diversity, redundant paths, and failover.</span><code>learn.microsoft.com/azure/expressroute/designing-for-disaster-recovery-with-expressroute-privatepeering</code></div>
+      <div class="it"><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/design-area/network-topology-and-connectivity">Network topology and connectivity</a><span>Connectivity between workloads, shared services, and the broader platform.</span><code>learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/network-topology-and-connectivity</code></div>
+      <div class="it"><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/define-an-azure-network-topology">Define an Azure network topology</a><span>Topology approaches based on cross-region connectivity and routing requirements.</span><code>learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/define-an-azure-network-topology</code></div>
+
+
+    </div>
+  </div>
+</div>
+</section>

@@ -1,0 +1,45 @@
+<section class="page" data-section="Appendix A · Service behavior across regions">
+<style>
+  .ax-lk { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 12px; }
+  .ax-lk .lk { border: 1px solid var(--b100); border-radius: 11px; padding: 12px 13px; background: #fff; }
+  .ax-lk .lk .cap { font-size: 7.8px; color: var(--b600); margin-bottom: 5px; }
+  .ax-lk .lk a { display: block; font-size: 12px; font-weight: 650; line-height: 1.3; }
+  .ax-lk .lk span { display: block; font-size: 10.6px; line-height: 1.42; color: var(--text); margin-top: 5px; }
+  .ax-in { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
+  .ax-in > div { border-radius: 12px; background: var(--wash); padding: 14px 16px; }
+  .ax-in b { display: block; font-size: 13.4px; color: var(--ink); margin-bottom: 4px; }
+  .ax-in p { font-size: 11.4px; line-height: 1.45; }
+</style>
+<div class="inner">
+  <div class="open-band" id="sA">
+    <div class="num" style="color:var(--s600)">A</div>
+    <div style="flex:1">
+      <div class="eyebrow" style="color:var(--s600)">Appendix A</div>
+      <h1 class="sec-title mt8" style="font-size:28px">Service behavior across regions</h1>
+    </div>
+    <p class="standfirst" style="width:350px;font-size:13.4px">A multi-region platform creates qualified regional options. Whether a specific workload uses more than one of those regions, and how, is a workload design decision.</p>
+  </div>
+
+  <div class="g2 mt16" style="gap:34px">
+    <p><strong>This appendix isn’t workload design guidance.</strong> The Azure Well-Architected Framework covers how to design a multi-region workload.</p>
+    <p>This appendix covers the regional and service behaviors a platform team should understand when it qualifies regional combinations: region pairing is one input into resiliency design, not the definition of it, and cross-region behavior can differ significantly by service and regional combination.</p>
+  </div>
+
+  <h3 class="mt24" style="font-size:15px;color:var(--ink)">Where workload design guidance lives</h3>
+  <div class="ax-lk mt12">
+      <div class="lk"><div class="cap">Azure Well-Architected Framework</div><a href="https://learn.microsoft.com/azure/well-architected/design-guides/regions-availability-zones">Using availability zones and regions</a><span>How to choose a single-region, zonal, or multi-region design for a workload.</span></div>
+      <div class="lk"><div class="cap">Azure Well-Architected Framework</div><a href="https://learn.microsoft.com/azure/well-architected/reliability/highly-available-multi-region-design">Architecture strategies for designing for redundancy</a><span>Multi-region deployment models, including active-active and active-passive.</span></div>
+      <div class="lk"><div class="cap">Azure Well-Architected Framework</div><a href="https://learn.microsoft.com/azure/well-architected/mission-critical/mission-critical-design-methodology">Design methodology for mission-critical workloads</a><span>The full multi-region active design for the most demanding workloads.</span></div>
+      <div class="lk"><div class="cap">Azure reliability</div><a href="https://learn.microsoft.com/azure/reliability/cross-region-replication-azure-no-pair">Multi-region solutions in nonpaired regions</a><span>Service-by-service guidance for regions without a pair.</span></div>
+      <div class="lk"><div class="cap">Azure reliability</div><a href="https://learn.microsoft.com/azure/reliability/overview-reliability-guidance">Azure reliability service guides</a><span>Regional behavior for each Azure service.</span></div>
+  </div>
+
+  <h3 class="mt24" style="font-size:15px;color:var(--ink)">In this appendix</h3>
+  <p class="small muted mt4">The pages that follow cover the dependencies that most often decide whether a regional combination works as built.</p>
+  <div class="ax-in mt12">
+    <div><b>Paired and nonpaired regions</b><p>What pairing provides, what it doesn’t, and how region-of-choice designs shift responsibility for recovery.</p></div>
+    <div><b>Storage, backup, and Key Vault</b><p>Paired-region and region-of-choice behavior for three services that need special attention, and the recommended Key Vault pattern.</p></div>
+    <div><b>Resiliency scenarios</b><p>Three situations that show how service behavior changes a recovery design.</p></div>
+  </div>
+</div>
+</section>

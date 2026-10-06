@@ -1,7 +1,7 @@
 ---
-title: "Dimension 2: Data and compliance"
+title: "Check 2: Data and compliance"
 description: Determine whether anticipated workloads and their data can operate in a candidate Azure region, and exclude regions that can't satisfy mandatory requirements.
-ms.date: 09/30/2026
+ms.date: 10/05/2026
 ms.topic: conceptual
 ---
 
@@ -13,13 +13,13 @@ Determine whether anticipated workloads and their data can operate in the region
 
 **Decision:** Exclude a region when it cannot satisfy a mandatory data, compliance, or policy requirement.
 
-## How the first two dimensions filter the portfolio
+## How the first two checks filter the portfolio
 
-The first two dimensions act as filters. Business value decides whether a region merits deeper assessment; mandatory data, compliance, and policy requirements decide whether it can be used at all. Only regions that pass both proceed to workload, capability, and platform analysis.
+The first two checks act as filters. Business value decides whether a region merits deeper assessment; mandatory data, compliance, and policy requirements decide whether it can be used at all. Only regions that pass both proceed to workload and capability analysis.
 
-:::image type="content" source="./media/dimensions-1-2-filter.png" alt-text="Funnel showing many candidate regions filtered first by business value, where regions without value receive no deeper assessment, and then by mandatory data and compliance requirements, where failing regions are excluded; the remaining regions proceed to dimensions 3 to 5." lightbox="./media/dimensions-1-2-filter.png":::
+:::image type="content" source="./media/dimensions-1-2-filter.png" alt-text="Funnel showing many candidate regions filtered first by business value, where regions without value receive no deeper assessment, and then by mandatory data and compliance requirements, where failing regions are excluded; the remaining regions proceed to checks 3 and 4." lightbox="./media/dimensions-1-2-filter.png":::
 
-*The first two dimensions filter the portfolio before deeper technical assessment.*
+*The first two checks filter the portfolio before deeper technical assessment.*
 
 ## Reference links
 

@@ -39,7 +39,6 @@ FIGS = {
     "figProfileTree": "connectivity-profile-decision-tree",
     "figPlacement": "workload-placement-flow",
     "fig18b": "qualification-versus-placement",
-    "fig18": "operating-model-consistent-adaptable",
     "figKVPattern": "key-vault-regional-pattern",
 }
 

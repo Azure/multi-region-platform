@@ -1,11 +1,11 @@
 ---
-title: Workload placement using qualified options
+title: Place workloads using qualified options
 description: Eight steps to place a workload in a qualified Azure region, with decision-time validation and feedback into regional qualification.
-ms.date: 10/02/2026
+ms.date: 10/05/2026
 ms.topic: conceptual
 ---
 
-# Workload placement using qualified options
+# Place workloads
 
 Place a workload only after its requirements are understood well enough to make a decision. Regional qualification narrows the choices; it does not permanently approve a region for every application.
 
@@ -28,10 +28,10 @@ For each workload or related application portfolio:
 1. **Define the placement objective.** Is the workload new, staying where it is, or moving or expanding to another region?
 1. **Identify the [Workload Landing Zone archetype](./application-landing-zone-archetypes.md).** Assess the workload's connectivity, shared-service, data, security, operational, and dependency characteristics and pick the closest-fitting archetype. Record any material requirements it doesn't cover as explicit additions to it.
 1. **Establish mandatory requirements.** Confirm data-location restrictions, required Azure services and features, availability-zone requirements, latency thresholds, expected scale, connectivity, resiliency requirements, and critical dependencies.
-1. **Review qualified regional options.** Consider regions previously assessed against the relevant workload requirements. Review their supported capabilities, connectivity profiles, known constraints, when each was last assessed, and any outstanding validations. See [Regional assessment outcome](./assessment-outcome.md).
+1. **Review qualified regional options.** Consider regions previously assessed against the relevant workload requirements. Review their supported capabilities, connectivity profiles, known constraints, when each was last assessed, and any outstanding validations. See [Regional assessment outcome](./regional-qualification.md#assessment-outcome).
 1. **Validate current regional suitability.** Qualification was an earlier planning assessment, so re-check the target region before onboarding, whether the workload is new or moving. Confirm that the services, SKUs, AI models, regional access, quota, and dependencies it needs are available now. Quota allows deployment but doesn't guarantee capacity. If the workload needs guaranteed capacity, decide here whether to reserve it.
 1. **Confirm the region's connectivity profile supports the workload.** Check that the region's [connectivity profile](./connectivity-profiles.md) satisfies the workload's requirements. If additional platform capabilities are required, treat their introduction as a separate governed platform decision rather than allowing the workload team to redefine the regional profile independently.
-1. **Determine the workload's resiliency role.** Define whether the region will support the workload as its primary location, recovery location, or as part of a multi-region active deployment. Apply workload-specific availability, RTO, RPO, replication, data-consistency, and failover requirements. See [Regional dependencies and resiliency](./workload-design.md).
+1. **Determine the workload's resiliency role.** Define whether the region will support the workload as its primary location, recovery location, or as part of a multi-region active deployment. Apply workload-specific availability, RTO, RPO, replication, data-consistency, and failover requirements. See [Service behavior across regions](./workload-design.md).
 1. **Record and govern the decision.** Document the selected region, Workload Landing Zone archetype, connectivity profile, placement and resiliency outcomes, assumptions, constraints, owners, and revalidation triggers.
 
 ## Feed findings back into qualification
@@ -41,4 +41,4 @@ Workload onboarding can reveal new regional requirements, constraints, or platfo
 ## Next step
 
 > [!div class="nextstepaction"]
-> [Regional dependencies and resiliency](./workload-design.md)
+> [Service behavior across regions overview](./workload-design.md)

@@ -8,7 +8,7 @@ Source for the multi-region platform guidance and every format it ships in:
 |---|---|---|
 | Website (GitHub Pages) | `content/*.md` + `content/toc.yml` | `docs/` |
 | CAF article set (future) | `content/*.md` + `content/toc.yml` + `content/media/` | submitted as-is to the CAF repo |
-| Whitepaper PDF (46 pages) + single-file HTML | `whitepaper/pages/*.html` | `dist/Adaptable-Multi-Region-Azure-Platform.pdf` / `.html` |
+| Whitepaper PDF (47 pages) + single-file HTML | `whitepaper/pages/*.html` | `dist/Adaptable-Multi-Region-Azure-Platform.pdf` / `.html` |
 | Executive brief PDF (13 pages) + HTML | `whitepaper/exec/pages/*.html` | `dist/…-Executive-Brief.pdf` / `.html` |
 
 The Markdown in `content/` is written in Microsoft Learn syntax, so the same files drive the website now and the Cloud Adoption Framework (CAF) later. Diagrams are drawn once, in the whitepaper, and extracted for the other formats.
@@ -67,15 +67,27 @@ Whitepaper page → article mapping:
 
 | Whitepaper pages | Article(s) |
 |---|---|
-| `02b` summary, `03` intro, `03b` drivers, `04` constructs, `05` journey, `06`–`07` platform vs. workload, `26` conclusion | `index.md` |
-| `08` framework, `08b` outcome, `09` dimensions 1–2, `10`/`10b` dimension 3, `11`/`11b` dimension 4, `12`–`13` dimension 5 | `regional-qualification.md`, the five dimension articles, `assessment-outcome.md` |
-| `15` qualification tree, `22` profile tree | `decision-trees.md` |
-| `16` archetypes, `17` matrix, `18`–`20b` profiles, `21` principles, `13b` readiness | `platform-architecture.md` and its four children |
-| `25` operating model | `operating-model.md` |
-| `23`–`24` placement | `workload-placement.md` |
-| `26a1`–`26a5` appendix | `workload-design.md` and its three children |
-| `25b`–`25c` scenarios, `25d` misconceptions, `25e` getting started | Resources articles |
-| `27`/`27b` references | "Reference links" sections across the articles |
+| `02b` summary (intro, assumptions table, how it works), `03` intro (figure only) | `index.md` |
+| `02b` summary (approach at a glance), `03` intro (prose), `03b` drivers, `04` constructs, `05` journey, `21` conclusion | `framework-overview.md` |
+| `06`–`07` platform vs. workload | `platform-and-workload.md` |
+| `08`, `08b`, `08c` profiles (each profile also carries its considerations and reassessment triggers) | `connectivity-profiles.md`, and "Considerations and reassessment by profile" in `profile-selection.md` |
+| `09` archetypes, `09b` matrix, `09c` terminology table | `application-landing-zone-archetypes.md` |
+| `10` four checks, `10b` outcome, `10c` qualification tree | `regional-qualification.md` |
+| `11` checks 1–2, `12`/`12b` check 3, `13`/`13b` check 4 | the four check articles |
+| `14` part 3 opener (three decisions, the three-decisions figure) | `platform-architecture.md` (intro), `platform-enablement-connectivity.md` ("Three related decisions") |
+| `15`, `15b` platform capabilities, hybrid connectivity, regional platform connectivity | `platform-enablement-connectivity.md` |
+| `16` selection principles, `16b` profile tree | `platform-architecture.md` |
+| `16` coexisting-estate figure, `16c` profiles in practice | `profile-selection.md` |
+| `17` readiness | `platform-readiness.md` |
+| `18`–`18b` placement | `workload-placement.md` |
+| `19`–`19b` scenarios, `20` misconceptions, `20b` getting started | Resources articles |
+| `22a0`–`22a5` appendix | `workload-design.md` and its three children |
+| `23`/`23b` references | "Reference links" sections across the articles |
+| (removed) operating model | Not on the website or in the PDF. Kept in `backup/operating-model.md` and `backup/whitepaper-25-operating-model.html`. |
+
+The home page (`index.md`) is a short landing page: intro, assumptions table, the four parts, and one figure. The longer explanation lives in `framework-overview.md` and `platform-and-workload.md`. Where the website condenses text, the whitepaper keeps the full version: `framework-overview.md` folds three of the six "approach at a glance" cards into the construct descriptions, and page `02b` still carries all six in full. Don't shorten a whitepaper page because its article got shorter.
+
+The whitepaper numbers the four parts of the framework as Part 1 to Part 4, where the articles say step 1 to step 4. Its page order follows the website menu, except that the profile selection principles and decision tree come after the capabilities pages, and "Service behavior across regions" is Appendix A.
 
 Figure IDs and the names they're extracted under are listed in `site/tools/extract_figures.py` (`FIGS`) and `site/figures/manifest.json`.
 
@@ -90,13 +102,13 @@ The website generator (`site/build.py`) renders these Learn constructs, so the f
 | `> [!NOTE]`, `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]` | Alert boxes |
 | `> [!div class="nextstepaction"]` | Next-step button |
 | `**Question:**`, `**Decision:**`, `**Takeaway:**` paragraphs | Styled callouts |
-| `**Choose when:**`, `**Regional footprint:**`, `**Key considerations:**`, `**Reassess when:**` | Profile attribute rows |
+| `**Fits when:**`, `**Regional footprint:**`, `**Key considerations:**`, `**Reassess when:**` | Profile attribute rows |
 | `[text](other-article.md#anchor)` | Rewritten to `.html` |
 | `<!-- site-only:start -->` … `<!-- site-only:end -->` | Website-only content. The site renders it; `site/tools/export_caf.py` removes it from the CAF set. |
 
 ### Website-only content
 
-Some content suits the website but not CAF, such as the city analogy on the home page. Wrap it in `<!-- site-only:start -->` and `<!-- site-only:end -->` comment lines in the Markdown. Website-only images go in `site/media/` (not `content/media/`), and a live figure for one can go in `site/figures/<name>.html`.
+Some content suits the website but not CAF, such as the city analogy in `platform-and-workload.md`. Wrap it in `<!-- site-only:start -->` and `<!-- site-only:end -->` comment lines in the Markdown. Website-only images go in `site/media/` (not `content/media/`), and a live figure for one can go in `site/figures/<name>.html`.
 
 The city analogy is generated by `art/city_analogy.py`, which needs Playwright. It writes the full infographic to `art/out/`, the website's city figure to `site/figures/city-analogy.html`, and the downloadable image to `site/media/city-analogy.png`. Rerun it after changing the picture, then run `./build.sh site`.
 

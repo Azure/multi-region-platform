@@ -26,7 +26,7 @@ SITE_TITLE = "Multi-region platform"
 SITE_SUB = "Adaptable multi-region Azure platform"
 
 DOWNLOADS = [
-    ("Full technical guidance (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform.pdf", "pdf", "46 pages"),
+    ("Full technical guidance (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform.pdf", "pdf", "47 pages"),
     ("Executive brief (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf", "pdf", "13 pages"),
 ]
 
@@ -180,7 +180,7 @@ def postprocess(h):
                r'<div class="callout question"><span class="callout-k">Question</span><p>\1</p></div>', h, flags=re.S)
     h = re.sub(r"<p><strong>Decision:</strong>\s*(.*?)</p>",
                r'<div class="callout decision"><span class="callout-k">Decision</span><p>\1</p></div>', h, flags=re.S)
-    h = re.sub(r"<p><strong>(Choose when|Regional footprint|Key considerations|Reassess when):</strong>\s*(.*?)</p>",
+    h = re.sub(r"<p><strong>(Choose when|Fits when|Regional footprint|Key considerations|Reassess when):</strong>\s*(.*?)</p>",
                lambda m: f'<div class="attr attr-{slugify(m.group(1))}"><span class="attr-k">{m.group(1)}</span><p>{m.group(2)}</p></div>', h, flags=re.S)
     h = re.sub(r"<p><strong>Takeaway:</strong>\s*(.*?)</p>",
                r'<div class="takeaway"><span class="callout-k">Takeaway</span><p>\1</p></div>', h, flags=re.S)
@@ -285,9 +285,11 @@ def build():
         rail = "".join(f'<li><a href="#{i}">{t}</a></li>' for i, t in h2s if i != "next-step")
         prev_pg = pages[idx - 1] if idx > 0 else None
         next_pg = pages[idx + 1] if idx + 1 < len(pages) else None
+        # a bare "Overview" label needs its section name to make sense in the pager
+        lab = lambda q: f'{q["parent"]}: {q["name"]}' if q["name"] == "Overview" and q["parent"] else q["name"]
         pn = '<nav class="pager">'
-        pn += (f'<a class="prev" href="{md_link_to_html(prev_pg["href"])}"><small>Previous</small><span>{html.escape(prev_pg["name"])}</span></a>' if prev_pg else "<span></span>")
-        pn += (f'<a class="next" href="{md_link_to_html(next_pg["href"])}"><small>Next</small><span>{html.escape(next_pg["name"])}</span></a>' if next_pg else "<span></span>")
+        pn += (f'<a class="prev" href="{md_link_to_html(prev_pg["href"])}"><small>Previous</small><span>{html.escape(lab(prev_pg))}</span></a>' if prev_pg else "<span></span>")
+        pn += (f'<a class="next" href="{md_link_to_html(next_pg["href"])}"><small>Next</small><span>{html.escape(lab(next_pg))}</span></a>' if next_pg else "<span></span>")
         pn += "</nav>"
         crumbs = [SITE_TITLE] + ([pg["parent"]] if pg["parent"] else [])
         crumb_html = " <span>/</span> ".join(html.escape(c) for c in crumbs)
@@ -304,7 +306,8 @@ def build():
 <p class="hero-kicker">Cloud Adoption Framework · Key adoption scenario</p>
 <h1 class="hero-title">{html.escape(SITE_SUB)}</h1>
 <p class="hero-lede">Add Azure regions without starting another landing-zone project. Reuse the platform you already run, qualify each region, and enable only what its workloads need.</p>
-<div class="hero-cta"><a class="btn primary" href="getting-started.html">Get started in six steps</a><a class="btn ghost" href="{DOWNLOADS[0][1]}" download>Full technical guidance (PDF)</a><a class="btn ghost" href="{DOWNLOADS[1][1]}" download>Executive brief (PDF)</a></div>
+<div class="hero-cta"><a class="btn primary" href="getting-started.html">Get started in five steps</a></div>
+<p class="hero-alt">Or download: <a href="{DOWNLOADS[0][1]}" download>{DOWNLOADS[0][0]}</a> · <a href="{DOWNLOADS[1][1]}" download>{DOWNLOADS[1][0]}</a></p>
 </div></section>'''
         page = (tmpl.replace("{{TITLE}}", html.escape(meta.get("title", pg["name"])))
                 .replace("{{DESCRIPTION}}", html.escape(meta.get("description", "")))

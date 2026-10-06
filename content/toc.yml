@@ -1,43 +1,46 @@
 # Table of contents in Microsoft Learn (docfx) format.
 # The website generator reads this file to build the left navigation.
 items:
-- name: Multi-region adoption strategy
+- name: Multi-region platform strategy
   href: index.md
-- name: Decision trees
-  href: decision-trees.md
-- name: 1. Regional qualification
-  href: regional-qualification.md
+- name: Framework overview
+  href: framework-overview.md
+- name: 1. Understand concepts
   items:
-  - name: Assessment outcome
-    href: assessment-outcome.md
-  - name: Business and geography
-    href: business-and-geography.md
-  - name: Data and compliance
-    href: data-and-compliance.md
-  - name: Workload requirements and dependencies
-    href: workload-requirements.md
-  - name: Regional capability and availability
-    href: regional-capability.md
-  - name: Platform enablement and connectivity
-    href: platform-enablement-connectivity.md
-- name: 2. Platform architecture
-  href: platform-architecture.md
-  items:
+  - name: Multi-region platform and workload
+    href: platform-and-workload.md
+  - name: Common connectivity profiles
+    href: connectivity-profiles.md
   - name: Workload Landing Zone archetypes
     href: application-landing-zone-archetypes.md
-  - name: Regional platform connectivity profiles
-    href: connectivity-profiles.md
-  - name: Profile selection and hub implementations
+- name: 2. Qualify regions
+  items:
+  - name: Overview
+    href: regional-qualification.md
+  - name: 1. Business and geography
+    href: business-and-geography.md
+  - name: 2. Data and compliance
+    href: data-and-compliance.md
+  - name: 3. Workload requirements and dependencies
+    href: workload-requirements.md
+  - name: 4. Regional capability and availability
+    href: regional-capability.md
+- name: 3. Select capabilities and connectivity profile
+  items:
+  - name: Overview
+    href: platform-architecture.md
+  - name: Platform capabilities and connectivity
+    href: platform-enablement-connectivity.md
+  - name: Profile considerations and hub implementations
     href: profile-selection.md
   - name: Platform readiness checklist
     href: platform-readiness.md
-- name: 3. Governance and operating model
-  href: operating-model.md
-- name: 4. Workload placement
+- name: 4. Place workloads
   href: workload-placement.md
-- name: Regional dependencies and resiliency
-  href: workload-design.md
+- name: Service behavior across regions
   items:
+  - name: Overview
+    href: workload-design.md
   - name: Paired and nonpaired regions
     href: paired-nonpaired-regions.md
   - name: Storage, backup, and Key Vault
@@ -46,9 +49,9 @@ items:
     href: resiliency-scenarios.md
 - name: Resources
   items:
+  - name: Getting started
+    href: getting-started.md
   - name: Customer scenarios
     href: customer-scenarios.md
   - name: Common misconceptions
     href: misconceptions.md
-  - name: Getting started
-    href: getting-started.md

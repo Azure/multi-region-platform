@@ -1,0 +1,71 @@
+<section class="page" data-section="3 · Select capabilities and connectivity profile">
+<style>
+  .ptree { height: 448px; }
+  .ptree .q { position: absolute; left: 0; width: 470px; height: 70px; background: #fff; border: 1.4px solid var(--b500); border-radius: 12px; display: flex; align-items: center; gap: 11px; padding: 0 14px 0 11px; }
+  .ptree .q .qi { width: 28px; height: 28px; border-radius: 50%; background: var(--b50); color: var(--b700); font-weight: 700; font-size: 12.5px; display: grid; place-items: center; flex: none; }
+  .ptree .q .qx { font-size: 11.6px; line-height: 1.38; font-weight: 600; color: var(--ink); }
+  .ptree .p { position: absolute; width: 330px; height: 70px; border-radius: 11px; padding: 9px 13px; display: flex; gap: 11px; align-items: center; }
+  .ptree .p .pg { flex: none; }
+  .ptree .p b { font-size: 12.6px; display: block; line-height: 1.2; }
+  .ptree .p span { font-size: 10.2px; line-height: 1.35; display: block; margin-top: 3px; }
+  .rs { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+  .rs div { border-top: 3px solid var(--b200); padding-top: 8px; }
+  .rs h4 { font-size: 9.6px; }
+  .rs p { font-size: 10.6px; line-height: 1.42; margin-top: 4px; }
+</style>
+<div class="inner">
+  <div class="row" style="align-items:flex-end;gap:24px">
+    <div style="flex:1">
+      <div class="eyebrow">Decision tool · Connectivity profile</div>
+      <h2 class="title mt4" style="font-size:23px">Which profile should this region provide?</h2>
+    </div>
+    <p class="small muted" style="width:540px;font-size:10.8px;line-height:1.42">Start from the workload requirements and dependencies identified in check 3. Each question comes from the “fits when” criteria of the profiles; stop at the first profile that satisfies the identified requirements. <b style="color:var(--ink)">Two of the four profiles need no local hub</b>, and only the Full Regional Hub approaches the footprint of an existing geographic hub.</p>
+  </div>
+
+  <div class="figure mt8" id="figProfileTree">
+    <div class="dg ptree">
+      <div class="node" id="ps" style="position:absolute;left:60px;top:0;width:350px;height:40px;border-radius:20px;background:var(--t600);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-size:11.6px;font-weight:650"><svg style="width:16px;height:16px;color:#fff"><use href="#i-app"/></svg>Workload scenarios expected in the region</div>
+
+      <div class="q node" id="pq1" style="top:70px"><span class="qi">1</span><span class="qx">Do the workloads require private access to enterprise services, on-premises systems, centralized security inspection, another application portfolio, or geographic-hub capabilities?</span></div>
+      <div class="q node" id="pq2" style="top:176px"><span class="qi">2</span><span class="qx">Can they tolerate the latency, availability coupling, data-transfer implications, and dependency on connectivity to another region?</span></div>
+      <div class="q node" id="pq3" style="top:282px"><span class="qi">3</span><span class="qx">Do requirements justify a comprehensive local capability set — local hybrid connectivity, substantial shared services, strict latency or data-boundary controls, or independence from other hubs?</span></div>
+
+      <div class="p node" id="pp1" style="left:610px;top:70px;background:var(--t50);border:1.2px solid var(--t300);color:var(--t700)">
+        <svg class="pg" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#fff" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="9" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>
+        <div><b>Disconnected spokes</b><span style="color:var(--muted)">Confirm that no hidden dependency requires hub or on-premises connectivity.</span></div></div>
+      <div class="p node" id="pp2" style="left:610px;top:176px;background:#fff;border:1.2px solid var(--b200);color:var(--b800)">
+        <svg class="pg" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"/><circle cx="40" cy="15" r="5" fill="#0F6CBD"/></svg>
+        <div><b>Remote-hub-connected spokes</b><span style="color:var(--muted)">Measure with representative traffic; document behavior if the hub is degraded.</span></div></div>
+      <div class="p node" id="pp3" style="left:610px;top:282px;background:var(--b50);border:1.2px solid var(--b300);color:var(--b800)">
+        <svg class="pg" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#fff" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="6" fill="#fff" stroke="#2B88D8" stroke-width="1.5"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>
+        <div><b>Minimal regional hub</b><span style="color:var(--muted)">Only services that must be local; define clearly what stays remote.</span></div></div>
+
+      <i class="ln" data-from="ps" data-to="pq1" data-s="b" data-e="t@0.5" data-k="blue"></i>
+      <i class="ln" data-from="pq1" data-to="pp1" data-s="r" data-e="l" data-k="plain" data-label="No" data-lp=".5"></i>
+      <i class="ln" data-from="pq1" data-to="pq2" data-s="b" data-e="t" data-k="blue" data-label="Yes" data-lp=".5"></i>
+      <i class="ln" data-from="pq2" data-to="pp2" data-s="r" data-e="l" data-k="blue" data-label="Yes" data-lp=".5"></i>
+      <i class="ln" data-from="pq2" data-to="pq3" data-s="b" data-e="t" data-k="plain" data-label="No" data-lp=".5"></i>
+      <i class="ln" data-from="pq3" data-to="pp3" data-s="r" data-e="l" data-k="plain" data-label="No" data-lp=".5"></i>
+      <div class="node" id="pp4" style="position:absolute;left:0;top:392px;width:470px;height:56px;border-radius:11px;background:var(--b700);color:#fff;display:flex;align-items:center;gap:12px;padding:0 14px">
+        <svg width="46" height="30" viewBox="0 0 46 30" style="flex:none"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="7" fill="#0F6CBD"/><circle cx="14" cy="15" r="2.4" fill="#fff"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>
+        <div><b style="font-size:12.6px">Full regional hub</b><span style="display:block;font-size:10.2px;color:#DDEBF9;margin-top:2px">Confirm that the required independence justifies the cost and operational scope.</span></div>
+      </div>
+      <i class="ln" data-from="pq3" data-to="pp4" data-s="b" data-e="t" data-k="blue" data-label="Yes" data-lp=".5"></i>
+      <div style="position:absolute;left:610px;top:378px;width:330px;font-size:10.6px;line-height:1.42;color:var(--ink);border-left:3px solid var(--b600);padding-left:14px">
+        <b>Most efficient, not maximum possible.</b> Keep capabilities remote when latency, dependency, data, security, resiliency, availability, and operational characteristics permit; deploy locally only when a measurable requirement justifies it.
+      </div>
+    </div>
+    <div class="figcap"><span class="fn">Figure 16</span><span class="ft"><b>Connectivity profile selection tree.</b> Questions escalate from dependency, to tolerance of remote consumption, to required independence. The outcome is a platform capability, not a workload design.</span></div>
+  </div>
+
+  <div class="mt16">
+    <div class="cap" style="color:var(--w600);margin-bottom:8px">Profiles evolve in both directions — reassess when</div>
+    <div class="rs">
+      <div style="border-top-color:var(--t300)"><h4 style="color:var(--t700)">Disconnected spokes</h4><p>Workloads require private access to enterprise services, inspection, on-premises systems, another portfolio, or hub capabilities.</p></div>
+      <div><h4>Remote-hub-connected</h4><p>Cross-region traffic, latency, east-west communication, dependency criticality, regulation, scale, or availability coupling justify local capabilities.</p></div>
+      <div style="border-top-color:var(--b300)"><h4>Minimal regional hub</h4><p>Growth adds local requirements, interconnected portfolios need broader capabilities, stricter independence, or significant local hybrid connectivity.</p></div>
+      <div style="border-top-color:var(--b600)"><h4>Full regional hub</h4><p>Demand or requirements decrease, services can be safely centralized, dependencies change, or the footprint no longer justifies its cost.</p></div>
+    </div>
+  </div>
+</div>
+</section>

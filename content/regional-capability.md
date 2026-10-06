@@ -1,7 +1,7 @@
 ---
-title: "Dimension 4: Regional capability and availability"
+title: "Check 4: Regional capability and availability"
 description: Evaluate candidate Azure regions against identified workload requirements — services, SKUs, availability zones, pairing, latency, pricing, access, and quota.
-ms.date: 09/30/2026
+ms.date: 10/05/2026
 ms.topic: conceptual
 ---
 
@@ -9,13 +9,13 @@ ms.topic: conceptual
 
 **Question:** Which regions can support the identified workload requirements?
 
-Evaluate each candidate region against the workload requirements identified in the previous phase. Consider required Azure services, deployment models and SKUs, availability-zone support, regional service dependencies, latency, pricing, expected scale, regional access, and quota requirements.
+Evaluate each candidate region against the workload requirements identified in check 3. Consider required Azure services, deployment models and SKUs, availability-zone support, regional service dependencies, latency, pricing, expected scale, regional access, and quota requirements.
 
 ## Availability zones and region pairing
 
 Assess availability-zone support and region pairing separately. Prefer zone-enabled regions when zone resiliency is required, but do not assume that region pairing alone provides workload recovery or that a nonpaired region cannot be used as a recovery destination. Validate service-specific capabilities such as replication, backup and restore, and other regional dependencies against the resiliency requirements identified for the workload.
 
-For requirements that depend on multiple regions, validate the intended regional combination at the service level. This includes built-in paired-region behavior such as Storage GRS and region-of-choice capabilities such as Azure SQL replication. Record material gaps, required changes, and owners for unresolved validation. For detailed design, see [Regional dependencies and resiliency](./workload-design.md).
+For requirements that depend on multiple regions, validate the intended regional combination at the service level. This includes built-in paired-region behavior such as Storage GRS and region-of-choice capabilities such as Azure SQL replication. Record material gaps, required changes, and owners for unresolved validation. For detailed design, see [Service behavior across regions](./workload-design.md).
 
 :::image type="content" source="./media/zones-and-pairing.png" alt-text="Availability-zone support and region pairing shown as two separate considerations, with two cautions — do not assume a paired region provides workload recovery, and do not assume a nonpaired region cannot support it — and a validation step for Storage GRS, Azure SQL replication, backup and restore, and Key Vault that leads either to built-in capabilities or to additional workload design." lightbox="./media/zones-and-pairing.png":::
 
@@ -51,4 +51,4 @@ If a requirement that could materially affect regional suitability is unresolved
 ## Next step
 
 > [!div class="nextstepaction"]
-> [Platform enablement and connectivity](./platform-enablement-connectivity.md)
+> [Capabilities and connectivity profile overview](./platform-architecture.md)
