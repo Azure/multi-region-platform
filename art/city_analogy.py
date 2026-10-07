@@ -15,6 +15,8 @@ U = "ca"                      # gradient id prefix
 W, H = 1800, 1290
 S, OX, OY = 48, 470, 430      # iso scale and origin for the city
 WEB_W, WEB_H, WEB_Y = 1085, 950, 168   # crop used for the website's city-only figure
+PDF_X, PDF_Y, PDF_W, PDF_H = 14, 218, 1072, 836   # crop used for the whitepaper and executive brief page
+PDF_LABEL = 1.32                       # labels are enlarged in the PDF figure, which prints at about 60%
 
 # ───────────────────────── icons (24×24 glyphs, white on a coloured badge)
 ICON = {
@@ -39,6 +41,7 @@ ICON = {
     "coin": '<circle cx="12" cy="12" r="8.2" fill="none" stroke="#fff" stroke-width="2"/><path d="M14.6 9.2c-.5-.9-1.5-1.4-2.6-1.4-1.6 0-2.6.8-2.6 2s1.1 1.6 2.6 2 2.7.8 2.7 2.1-1.2 2.1-2.7 2.1c-1.2 0-2.3-.6-2.8-1.5M12 6v1.8M12 16.2V18" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>',
     "check": '<path d="M5.5 12.5l4.2 4.2 8.8-9.2" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>',
     "x": '<path d="M7 7l10 10M17 7 7 17" fill="none" stroke="#fff" stroke-width="2.8" stroke-linecap="round"/>',
+    "stake": '<path d="M8.5 20.5V4.5" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M9.6 5.2 18.5 8.4 9.6 11.6z" fill="#FFB38A"/>',
     "moon": '<path d="M17.5 14.6A7 7 0 0 1 9.4 6.5a7 7 0 1 0 8.1 8.1z" fill="#fff"/>',
 }
 SVC = {  # badge colours for city services
@@ -165,12 +168,12 @@ def solar_field(x0, y0, n=3):
     return "".join(o)
 
 
-def label(x, y, title, sub, anchor="middle", w=None):
-    tw = w or max(len(title) * 7.6, len(sub) * 6.0) + 26
+def label(x, y, title, sub, anchor="middle", w=None, k=1.0):
+    tw = (w or max(len(title) * 7.6, len(sub) * 6.0) + 26) * k
     lx = x - tw / 2 if anchor == "middle" else x
-    return (f'<g><rect x="{lx:.1f}" y="{y:.1f}" width="{tw:.1f}" height="40" rx="10" fill="#0B2E57" fill-opacity=".72" stroke="#FFFFFF" stroke-opacity=".35"/>'
-            f'<text x="{lx + 12:.1f}" y="{y + 17:.1f}" font-family="{FONT}" font-size="13" font-weight="700" fill="#FFFFFF">{title}</text>'
-            f'<text x="{lx + 12:.1f}" y="{y + 32:.1f}" font-family="{FONT}" font-size="10.8" fill="#CFE4F7">{sub}</text></g>')
+    return (f'<g><rect x="{lx:.1f}" y="{y:.1f}" width="{tw:.1f}" height="{40 * k:g}" rx="{10 * k:g}" fill="#0B2E57" fill-opacity=".72" stroke="#FFFFFF" stroke-opacity=".35"/>'
+            f'<text x="{lx + 12 * k:.1f}" y="{y + 17 * k:.1f}" font-family="{FONT}" font-size="{13 * k:g}" font-weight="700" fill="#FFFFFF">{title}</text>'
+            f'<text x="{lx + 12 * k:.1f}" y="{y + 32 * k:.1f}" font-family="{FONT}" font-size="{round(10.8 * k, 1):g}" fill="#CFE4F7">{sub}</text></g>')
 
 
 # ───────────────────────── the city
@@ -464,7 +467,8 @@ def legend(y):
     return "\n".join(o)
 
 
-def build(web=False):
+def build(web=False, pdf=False):
+    """web: city only, for the website. pdf: city only with larger labels that name what each place stands for."""
     extra = f"""
 <defs>
   <linearGradient id="{U}plHub" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#BFE3FF" stop-opacity=".85"/><stop offset="1" stop-color="#7FB9EA" stop-opacity=".75"/></linearGradient>
@@ -477,7 +481,11 @@ def build(web=False):
   <linearGradient id="{U}rail" x1="0" x2="1"><stop offset="0" stop-color="#C9B6F5"/><stop offset="1" stop-color="#9B7FE0"/></linearGradient>
   <linearGradient id="{U}lane" x1="0" x2="1"><stop offset="0" stop-color="#FFB38A"/><stop offset="1" stop-color="#FF7FA6"/></linearGradient>
 </defs>"""
-    if web:   # city only, cropped: the panels and legend are real HTML on the website
+    if pdf:   # city only, cropped: the title and the icon legend are real HTML on the PDF page
+        o = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{PDF_X} {PDF_Y} {PDF_W} {PDF_H}" font-family="{FONT}" style="display:block;width:100%;height:auto">',
+             defs(U), extra, f'<clipPath id="{U}clip"><rect x="{PDF_X}" y="{PDF_Y}" width="{PDF_W}" height="{PDF_H}" rx="20"/></clipPath>',
+             f'<g clip-path="url(#{U}clip)">', background(U, 0, 0, W, H)]
+    elif web:   # city only, cropped: the panels and legend are real HTML on the website
         o = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{WEB_W}" height="{WEB_H}" viewBox="0 {WEB_Y} {WEB_W} {WEB_H}" font-family="{FONT}">',
              defs(U), extra, f'<clipPath id="{U}clip"><rect x="0" y="{WEB_Y}" width="{WEB_W}" height="{WEB_H}" rx="14"/></clipPath>',
              f'<g clip-path="url(#{U}clip)">', background(U, 0, 0, W, H)]
@@ -487,13 +495,15 @@ def build(web=False):
     for i in range(4, 0, -1):
         r = 70 + 46 * i
         o.append(f'<rect x="{960 - r}" y="{90 - r}" width="{2 * r}" height="{2 * r}" rx="{r * .3:.0f}" fill="#FFFFFF" fill-opacity="{.02 + .015 * (4 - i)}" stroke="#FFFFFF" stroke-opacity=".14"/>')
+    web = web or pdf
     if not web:
         o.append(f'<text x="60" y="64" font-family="{FONT}" font-size="13" font-weight="700" letter-spacing="2.4" fill="#BFE3FF">AN EVERYDAY ANALOGY</text>')
     if not web:
         o.append(f'<text x="60" y="106" font-family="{FONT}" font-size="34" font-weight="300" fill="#FFFFFF">The platform is the <tspan font-weight="700">city</tspan>. Workloads are the <tspan font-weight="700">people and businesses</tspan> that live in it.</text>')
     if not web:
         o.append(f'<text x="60" y="138" font-family="{FONT}" font-size="15.5" fill="#DDEBF9">The city builds neighborhoods, services, roads, transit, and laws once. A family settles in one neighborhood; a bank spreads across several. Neither builds a new city.</text>')
-    o.append(f'<text x="60" y="196" font-family="{FONT}" font-size="12" font-weight="700" letter-spacing="2" fill="#9FE6F7">MULTI-REGION PLATFORM · THE CITY</text>')
+    if not pdf:
+        o.append(f'<text x="60" y="196" font-family="{FONT}" font-size="12" font-weight="700" letter-spacing="2" fill="#9FE6F7">MULTI-REGION PLATFORM · THE CITY</text>')
     o.append(city())
     # neighborhood + campus labels: (title, sub, centre x, top y, leader target)
     L = [("Office campus", "On-premises · outside the city", 165, 222, p(-3.7, 1.0, 1.5)),
@@ -504,11 +514,23 @@ def build(web=False):
          ("Midtown", "Remote-hub-connected · services by transit", 430, 900, p(5.4, 8.1, .3)),
          ("Lakeside", "Disconnected · off-grid, no city roads", 150, 800, p(.4, 8.9, .3)),
          ("New plot", "Candidate · zoned, not yet built", 968, 905, p(11.6, 7.4, .05))]
+    k = 1.0
+    if pdf:   # the label names what the place stands for; the legend beside the picture explains the icons
+        k = PDF_LABEL
+        L = [("Office campus", "On-premises", 150, 240, p(-3.7, 1.0, 1.5)),
+             ("Express toll lanes", "ExpressRoute", 415, 280, p(-1.4, 1.3, 0)),
+             ("Downtown", "Full Regional Hub", 668, 240, p(2.0, .9, 2.9)),
+             ("Riverside", "Minimal Regional Hub", 842, 340, p(6.6, 1.2, .9)),
+             ("Hillcrest", "Remote Hub Connected", 960, 470, p(10.9, 1.4, .6)),
+             ("Midtown", "Remote Hub Connected", 400, 970, p(5.4, 8.1, .3)),
+             ("Lakeside", "Disconnected Spokes", 128, 880, p(.4, 8.9, .3)),
+             ("New plot", "Candidate region", 968, 960, p(11.6, 7.4, .05))]
     for t, sub, cx, ty, (ax, ay) in L:
-        ly = ty + 40 if ay > ty + 40 else ty
+        ly = ty + 40 * k if ay > ty + 40 * k else ty
         o.append(f'<line x1="{cx:.1f}" y1="{ly:.1f}" x2="{ax:.1f}" y2="{ay:.1f}" stroke="#FFFFFF" stroke-opacity=".7" stroke-width="1.2"/><circle cx="{ax:.1f}" cy="{ay:.1f}" r="3" fill="#FFFFFF"/>')
-        o.append(label(cx, ty, t, sub))
-    o.append(f'<text x="64" y="1094" font-family="{FONT}" font-size="12.5" fill="#E9D8FF">· · ·  City limits: one set of laws, codes, and zoning in every neighborhood, Lakeside included</text>')
+        o.append(label(cx, ty, t, sub, k=k))
+    if not pdf:
+        o.append(f'<text x="64" y="1094" font-family="{FONT}" font-size="12.5" fill="#E9D8FF">· · ·  City limits: one set of laws, codes, and zoning in every neighborhood, Lakeside included</text>')
     if web:
         o.append("</g>")
     else:
@@ -517,6 +539,87 @@ def build(web=False):
         o.append(legend(1118))
     o.append("</svg>")
     return "\n".join(o)
+
+
+# ───────────────────────── PDF page figure: the city with a legend for every icon on it
+def _ic(kind, color=None):
+    return f'<svg class="ic" viewBox="0 0 32 32" aria-hidden="true">{badge(16, 16, kind, r=14, color=color, ring=False)}</svg>'
+
+
+def _swatch(kind):
+    """A line as it is drawn on the map, on a chip of the map's background colour."""
+    line = {"lane": '<path d="M6 16h20" stroke="#FF9A98" stroke-width="6" stroke-linecap="round"/><path d="M7 16h18" stroke="#fff" stroke-width="1.3" stroke-dasharray="3.5 3.5"/>',
+            "rail": '<path d="M5 16h22" stroke="#B49CEB" stroke-width="6"/><path d="M5 16h22" stroke="#fff" stroke-width="1.6" stroke-dasharray="1.2 3.6"/>',
+            "limits": '<path d="M6 16h20" stroke="#E9D8FF" stroke-width="2.2" stroke-dasharray="1.6 4.4" stroke-linecap="round"/>'}[kind]
+    return f'<svg class="ic" viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="8" fill="#17458A"/><g fill="none">{line}</g></svg>'
+
+
+def _pin(n):
+    return (f'<svg class="ic" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="#04807A"/>'
+            f'<text x="16" y="21" text-anchor="middle" font-family="{FONT}" font-size="14.5" font-weight="700" fill="#fff">{n}</text></svg>')
+
+
+PDF_CSS = """
+.cty { display: grid; grid-template-columns: 596px 1fr; gap: 0 22px; align-items: start; }
+.cty .ic { width: 22px; height: 22px; flex: none; display: block; }
+.cty h4 { font-size: 9.2px; letter-spacing: .1em; color: var(--b700); padding-bottom: 4px; border-bottom: 1px solid var(--line-soft); margin: 11px 0 1px; display: flex; justify-content: space-between; gap: 8px; }
+.cty h4:first-child { margin-top: 0; }
+.cty h4 em { font-style: normal; color: var(--t600); }
+.cty .r { display: grid; grid-template-columns: 22px 1fr; gap: 9px; padding: 5px 0; align-items: start; }
+.cty .r + .r { border-top: 1px solid var(--line-soft); }
+.cty .r b { display: block; font-size: 10.8px; line-height: 1.25; color: var(--ink); font-weight: 650; }
+.cty .r span { display: block; font-size: 10px; line-height: 1.36; color: var(--muted); margin-top: 1px; }
+.cty .r span i { font-style: normal; color: var(--b700); font-weight: 650; }
+.cty .sv { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 10px; padding: 6px 0 5px; border-top: 1px solid var(--line-soft); }
+.cty .sv div { display: flex; align-items: center; gap: 7px; font-size: 10.2px; font-weight: 650; color: var(--ink); line-height: 1.2; }
+.cty .sv .ic { width: 19px; height: 19px; }
+.cty .svn { font-size: 10px; line-height: 1.36; color: var(--muted); }
+.cty .svn i { font-style: normal; color: var(--b700); font-weight: 650; }
+.cty .who { display: grid; grid-template-columns: 1.5fr 1fr; gap: 12px; margin-top: 10px; }
+.cty .who > div { border-radius: 10px; background: var(--wash); padding: 9px 12px 8px; }
+.cty .who h4 { border-bottom-color: var(--line); }
+.cty .who p { font-size: 10px; line-height: 1.38; color: var(--muted); margin: 5px 0 0; }
+.cty .who p b { color: var(--ink); font-weight: 650; }
+.cty .who .hh { display: grid; grid-template-columns: 1fr 1.25fr; gap: 5px 8px; margin-top: 7px; }
+.cty .who .hh div { display: flex; align-items: center; gap: 6px; font-size: 10px; line-height: 1.2; color: var(--muted); }
+.cty .who .hh div b { display: block; color: var(--ink); font-weight: 650; }
+.cty .who .hh .ic { width: 18px; height: 18px; }
+.cty .who .bk { display: grid; grid-template-columns: 22px 1fr; gap: 9px; margin-top: 6px; align-items: start; }
+.cty .who .bk p { margin: 0; }
+"""
+
+
+def pdf_figure():
+    """The city and a legend for every icon drawn on it, as an HTML block for a whitepaper or executive brief page."""
+    def row(icon, name, what):
+        return f'<div class="r">{icon}<div><b>{name}</b><span>{what}</span></div></div>'
+    services = [("hospital", "Hospital or clinic"), ("fire", "Fire station"), ("police", "Police station"),
+                ("power", "Power plant"), ("water", "Water tower"), ("sewer", "Sewer plant")]
+    legend_col = "".join([
+        '<h4>Places <em>Regions and on-premises</em></h4>',
+        row(_ic("hood", "#2B88D8"), "Neighborhood", "An <i>Azure region</i>. The label names its connectivity profile."),
+        row(_ic("campus"), "Office campus", "<i>On-premises</i> datacenters and users, outside the city."),
+        row(_ic("stake", "#17458A"), "Staked plot", "A <i>candidate region</i>: zoned, but not built yet."),
+        '<h4>Routes <em>Connectivity</em></h4>',
+        row(_swatch("lane"), "Express toll lanes", "<i>ExpressRoute</i>. Two interchanges give the campus two separate paths into the city."),
+        row(_swatch("rail"), "Transit line and stations", "<i>Private connectivity between regions</i>. Hillcrest and Midtown ride it to Downtown."),
+        '<h4>Laws <em>Governance and policy</em></h4>',
+        row(_ic("scales"), "City hall", "Laws, codes, and zoning: <i>governance and policy</i>, set once for the whole city."),
+        row(_swatch("limits"), "City limits", "Where the laws apply: every neighborhood, Lakeside included."),
+        '<h4>City services <em>Shared services</em></h4>',
+        '<div class="sv">' + "".join(f'<div>{_ic(k)}{n}</div>' for k, n in services) + '</div>',
+        '<div class="svn">Together they are the platform&rsquo;s <i>shared services</i>. Downtown has every one. Riverside has a fire station and a clinic. '
+        'Hillcrest and Midtown use Downtown&rsquo;s. Lakeside needs none.</div>',
+    ])
+    homes = [(1, "Hybrid-connected", "Hillcrest"), (2, "Isolated", "Lakeside"), (3, "Connected", "Midtown"), (4, "Interconnected portfolio", "Riverside")]
+    who = ('<div class="who">'
+           '<div><h4>Numbered pins <em>Single-region workloads</em></h4>'
+                      '<div class="hh">' + "".join(f'<div>{_pin(n)}<span><b>{a}</b>{hood}</span></div>' for n, a, hood in homes) + '</div></div>'
+           '<div><h4>Bank <em style="color:var(--b600)">Multi-region workload</em></h4>'
+           f'<div class="bk">{_ic("bank")}<p>Branches in <b>Riverside</b> and <b>Midtown</b> serve customers together. '
+           'A backup operations center in <b>Hillcrest</b> stands by.</p></div></div>'
+           '</div>')
+    return f'<style>{PDF_CSS}</style><div class="cty"><div><div class="cty-map">{build(pdf=True)}</div>{who}</div><div class="cty-lg">{legend_col}</div></div>'
 
 
 def _render(svg, path, w, h, scale, clip_y=0):

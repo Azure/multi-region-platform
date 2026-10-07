@@ -1,0 +1,108 @@
+<section class="page" data-section="4 · Prepare the region">
+<style>
+  .zph { display: flex; align-items: center; gap: 13px; padding-bottom: 12px; border-bottom: 1px solid var(--line-soft); }
+  .zph .n { width: 36px; height: 36px; border-radius: 50%; color: #fff; font-size: 17px; font-weight: 700; display: grid; place-items: center; flex: none; }
+  .zph h2 { font-size: 22px; font-weight: 650; color: var(--ink); line-height: 1.15; white-space: nowrap; margin-top: 3px; }
+  .zph .gl { flex: none; margin-left: 4px; }
+  .zph .zin { flex: 1; font-size: 11.2px; line-height: 1.45; margin-left: 10px; padding-left: 20px; border-left: 1px solid var(--line-soft); }
+  .zph .zin p { margin-bottom: 5px; } .zph .zin p:last-child { margin-bottom: 0; }
+  .zh4 { font-size: 9.6px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--b700); margin-bottom: 5px; }
+  table.zdt { width: 100%; border-collapse: collapse; font-size: 10.6px; line-height: 1.4; }
+  table.zdt th { text-align: left; font-size: 8.8px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--muted); padding: 0 8px 4px 0; }
+  table.zdt td { padding: 4px 12px 4px 0; vertical-align: top; border-top: 1px solid var(--line-soft); }
+  table.zdt tr:last-child td { border-bottom: 1px solid var(--line-soft); }
+  table.zdt td.za { font-weight: 650; color: var(--ink); width: 168px; }
+  table.zdt td.zg { width: 284px; padding-right: 0; font-size: 10px; line-height: 1.4; }
+  table.zdt a, .zrc a, .zin a { font-weight: 650; }
+  .zsv { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 14px; font-size: 10.4px; line-height: 1.4; }
+  .zsv > div { border-top: 2px solid var(--line); padding-top: 6px; }
+  .zsv .zch { width: 88px; margin-bottom: 3px; display: block; }
+  .zch { display: inline-block; font-size: 9.2px; font-weight: 700; letter-spacing: .03em; padding: 2px 0; border-radius: 20px; text-align: center; white-space: nowrap; }
+  .zch.lo { background: var(--b600); color: #fff; }
+  .zch.re { background: #fff; color: var(--b700); box-shadow: inset 0 0 0 1.2px var(--b500); }
+  .zch.gl { background: var(--s100); color: var(--s800); }
+  .zch.lr { background: var(--b100); color: var(--b800); box-shadow: inset 0 0 0 1.2px var(--b500); }
+  .zch.nr { color: var(--muted); box-shadow: inset 0 0 0 1.2px var(--line); font-weight: 650; }
+  .zrc li { font-size: 10.6px; line-height: 1.42; margin-bottom: 4.5px; }
+  .zc3 { columns: 3; column-gap: 28px; column-rule: 1px solid var(--line-soft); }
+  .zc2 { columns: 2; column-gap: 32px; column-rule: 1px solid var(--line-soft); }
+  .zc3 > *, .zc2 > * { break-inside: avoid; }
+  .zc3 ul.bul, .zc2 ul.bul { break-inside: auto; margin: 0 0 2px; }
+  .zc3 ul.bul li, .zc2 ul.bul li { break-inside: avoid; }
+  .zra { background: #FBF4EE; border-radius: 8px; padding: 8px 12px; font-size: 10.6px; line-height: 1.42; color: var(--text); }
+  .zra b { display: block; font-size: 9.2px; letter-spacing: .1em; text-transform: uppercase; color: var(--w600); margin-bottom: 2px; }
+  .zrc2 { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+  .zrc2 .zpn { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px 14px; background: #fff; }
+  .zrc2 .zpn h3 { font-size: 13.4px; color: var(--ink); margin-bottom: 10px; }
+  .zrc2 .zpn p { font-size: 11.2px; line-height: 1.46; margin-top: 12px; }
+  .zrc2 .zpn p a { font-weight: 650; }
+  .zcd { height: 156px; }
+  .zcd .zrg { position: absolute; left: 0; top: 0; width: 128px; height: 156px; border-radius: 10px; border: 1.2px dashed var(--b300); background: #F7FBFE; }
+  .zcd .zrl { position: absolute; left: 10px; top: 8px; display: flex; align-items: center; gap: 4px; font-size: 9.2px; font-weight: 700; color: var(--b700); }
+  .zcd .zrl svg { width: 11px; height: 11px; color: var(--b600); }
+  .zcd .zsp { position: absolute; left: 11px; width: 106px; height: 44px; border-radius: 8px; background: var(--t50); border: 1.2px solid var(--t300); display: flex; align-items: center; gap: 8px; padding: 0 9px; font-size: 9.6px; font-weight: 650; color: var(--t700); line-height: 1.2; }
+  .zcd .zsp i { width: 14px; height: 14px; border-radius: 3.5px; background: var(--t600); flex: none; }
+  .zcd .zhb { position: absolute; left: 212px; top: 0; width: 118px; height: 156px; border-radius: 10px; background: var(--b600); color: #fff; padding: 9px 11px; }
+  .zcd .zhb .t1 { font-size: 8.8px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; color: #BCD9F5; }
+  .zcd .zhb b { display: block; font-size: 11.4px; line-height: 1.25; margin: 3px 0 7px; }
+  .zcd .zhb span { display: block; font-size: 9.6px; line-height: 1.5; color: #DDEBF9; }
+  .zcd .zop { position: absolute; right: 0; top: 46px; width: 58px; height: 64px; border-radius: 9px; background: var(--s800); color: #fff; font-size: 9.2px; font-weight: 650; line-height: 1.25; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 4px; }
+  .zcd .zop svg { width: 18px; height: 18px; color: #A9B6C6; }
+  .zl4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
+  .zl4 > div { border-radius: 10px; background: #FBF4EE; padding: 10px 13px 11px; font-size: 10.8px; line-height: 1.44; color: var(--text); }
+  .zl4 > div svg { width: 15px; height: 15px; color: var(--w600); display: block; margin-bottom: 5px; }
+</style>
+<div class="inner">
+  <div class="zph">
+    <span class="n" style="background:var(--c600)">2</span>
+    <div><div class="eyebrow">Part 4 · Prepare the region</div><h2>Remote Hub Connected <span style="font-weight:400;color:var(--muted);font-size:15px">continued</span></h2></div>
+    <svg class="gl" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"/><circle cx="40" cy="15" r="5" fill="#0F6CBD"/></svg>
+  </div>
+  <div class="row mt16" style="gap:40px;align-items:flex-end">
+    <h2 class="title" style="font-size:21px;flex:1">Connect to the existing hub</h2>
+    <p class="muted" style="flex:1.2;font-size:12.2px">How you connect depends on the topology of the hub you already run.</p>
+  </div>
+
+  <div class="figure mt16" id="figRemoteConnect">
+    <div class="zrc2">
+      <div class="zpn">
+        <h3>Hub-and-spoke virtual networks</h3>
+        <div class="dg zcd">
+        <div class="zrg"></div><div class="zrl"><svg><use href="#i-pin"/></svg>New region</div>
+        <div class="zsp node" id="zra1" style="top:34px"><i></i>Spoke virtual network</div>
+        <div class="zsp node" id="zra2" style="top:94px"><i></i>Spoke virtual network</div>
+        <div class="zhb node" id="zrah"><div class="t1">Existing hub region</div><b>Hub virtual network</b><span>VPN or ExpressRoute gateways</span><span>Firewall</span><span>DNS resolution</span><span>Shared services</span></div>
+        <div class="zop node" id="zrao"><svg><use href="#i-building"/></svg>On-premises</div>
+        <i class="ln" data-from="zra1" data-to="zrah" data-s="r" data-e="l@0.359" data-k="blue" data-both data-label="Global peering" data-lp=".5"></i>
+        <i class="ln" data-from="zra2" data-to="zrah" data-s="r" data-e="l@0.7436" data-k="blue" data-both></i>
+        <i class="ln" data-from="zrah" data-to="zrao" data-s="r" data-e="l" data-k="slate" data-both></i>
+      </div>
+        <p>Create global virtual network peering between each spoke and the hub virtual network. Turn on <a href="https://learn.microsoft.com/azure/vpn-gateway/vpn-gateway-different-region">gateway transit</a> when the spokes use the hub’s VPN or ExpressRoute gateways. Gateway transit works over global peering.</p>
+      </div>
+      <div class="zpn">
+        <h3>Azure Virtual WAN</h3>
+        <div class="dg zcd">
+        <div class="zrg"></div><div class="zrl"><svg><use href="#i-pin"/></svg>New region</div>
+        <div class="zsp node" id="zrb1" style="top:34px"><i></i>Spoke virtual network</div>
+        <div class="zsp node" id="zrb2" style="top:94px"><i></i>Spoke virtual network</div>
+        <div class="zhb node" id="zrbh"><div class="t1">Existing hub region</div><b>Virtual hub</b><span>VPN or ExpressRoute gateways</span><span>Firewall</span><span>Routing between connections</span></div>
+        <div class="zop node" id="zrbo"><svg><use href="#i-building"/></svg>On-premises</div>
+        <i class="ln" data-from="zrb1" data-to="zrbh" data-s="r" data-e="l@0.359" data-k="blue" data-both data-label="Connection" data-lp=".5"></i>
+        <i class="ln" data-from="zrb2" data-to="zrbh" data-s="r" data-e="l@0.7436" data-k="blue" data-both></i>
+        <i class="ln" data-from="zrbh" data-to="zrbo" data-s="r" data-e="l" data-k="slate" data-both></i>
+      </div>
+        <p>Connect each spoke virtual network to the existing virtual hub. Virtual WAN supports <a href="https://learn.microsoft.com/azure/virtual-wan/virtual-wan-global-transit-network-architecture">connecting a virtual network in one region to a virtual hub in another</a>, and describes it as a good option when the footprint is mostly in one region with a few remote spokes.</p>
+      </div>
+    </div>
+    <div class="figcap"><span class="fn">Figure</span><span class="ft"><b>Two ways to reach the hub you already run.</b> Spokes in the new region use the gateways, firewall, and shared services of a hub in another region. No hub is built in the new region.</span></div>
+  </div>
+
+  <div class="zh4 mt20" style="color:var(--w600)">Check these limits before you rely on the connection</div>
+  <div class="zl4 mt8">
+    <div><svg><use href="#i-flag"/></svg>A spoke that uses remote gateways can’t have its own gateway, and it can use the gateways of only one peering.</div>
+    <div><svg><use href="#i-flag"/></svg>ExpressRoute FastPath doesn’t support global virtual network peering.</div>
+    <div><svg><use href="#i-flag"/></svg>Resources can’t reach the front end of a basic load balancer across global peering.</div>
+    <div><svg><use href="#i-flag"/></svg>Peering isn’t transitive. Spokes that peer to the same hub don’t reach each other through peering alone; they route through the hub firewall or connect directly.</div>
+  </div>
+</div>
+</section>

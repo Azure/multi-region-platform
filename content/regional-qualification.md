@@ -1,7 +1,7 @@
 ---
 title: Regional qualification overview
 description: Use four checks and one decision tree to determine which Azure regions should be prepared to support workload requirements, classify each regional option as excluded, candidate, conditional, or qualified, and record it with evidence, owners, and revalidation triggers.
-ms.date: 10/05/2026
+ms.date: 10/06/2026
 ms.topic: conceptual
 ---
 
@@ -21,6 +21,11 @@ Regional qualification determines which Azure regions should be prepared to supp
 | [4. Regional capability and availability](./regional-capability.md) | Which regions can support the identified workload requirements? | Qualify candidate regions, documenting conditions, constraints, and unresolved validations. | **Conditional**, or excluded if the gap is mandatory. Record material gaps, required changes, and validation owners. |
 
 A region that meets all four checks is **qualified** for the defined workload requirements as of the assessment date.
+
+<!-- site-only:start -->
+> [!TIP]
+> Use the [region planning workbook](./region-planner.html) to answer the four checks for each candidate region, compare service availability, prices, and latency, and export the result to Excel.
+<!-- site-only:end -->
 
 ## Assessment outcome
 
@@ -49,7 +54,7 @@ Apply the tree per candidate region and set of defined workload requirements. Ea
 
 *Regional qualification decision tree. Filters come first, then requirements, then technical fit. Candidate and conditional options return to the tree when validation is complete, or when conditions change.*
 
-For a qualified region, the next step is to [select its capabilities and connectivity profile](./platform-architecture.md).
+For a qualified region, the next step is to [select its regional design](./platform-architecture.md).
 
 > [!TIP]
 > Questions 1 and 2 need no technical assessment. Answer them for every candidate region first, so that deeper work is spent only on the regions that pass.

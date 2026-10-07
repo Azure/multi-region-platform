@@ -1,0 +1,41 @@
+# Refreshes the data that the region planning workbook reads (docs/data/).
+# The price script reads the public Azure Retail Prices API. The latency script reads public files on GitHub.
+# Neither needs secrets.
+name: Refresh Azure data snapshot
+
+on:
+  schedule:
+    - cron: "17 4 * * *"   # every day at 04:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300   # the price API allows about 10 requests a minute, so a full run takes more than an hour
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build the snapshot
+        run: python3 site/tools/refresh_data.py
+      - name: Build the latency data
+        run: python3 site/tools/refresh_latency.py
+      - name: Commit the snapshot if it changed
+        run: |
+          git add docs/data
+          if git diff --cached --quiet; then
+            echo "No change."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Refresh Azure data snapshot"
+            git push
+          fi

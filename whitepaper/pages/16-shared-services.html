@@ -1,0 +1,88 @@
+<section class="page" data-section="3 · Select the regional design">
+<style>
+  .lt { display: inline-flex; align-items: center; gap: 8px; font-size: 9.4px; letter-spacing: .12em; font-weight: 700; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; }
+  .zpl3 { display: grid; gap: 6px; }
+  .zpl3 > div { display: grid; grid-template-columns: 74px 1fr; gap: 12px; align-items: center; padding: 8px 12px; border-radius: 9px; background: var(--wash); font-size: 11.4px; line-height: 1.4; color: var(--text); }
+  .zpc { display: inline-block; font-size: 9.6px; font-weight: 700; letter-spacing: .03em; padding: 3px 0; border-radius: 20px; text-align: center; white-space: nowrap; }
+  .zpc.lo { background: var(--b600); color: #fff; }
+  .zpc.re { background: #fff; color: var(--b700); box-shadow: inset 0 0 0 1.2px var(--b500); }
+  .zpc.gl { background: var(--s100); color: var(--s800); }
+  .zpc.lr { background: var(--b100); color: var(--b800); box-shadow: inset 0 0 0 1.2px var(--b500); }
+  .zpc.nr { color: var(--faint); font-weight: 600; }
+  table.zdp { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 11px; line-height: 1.35; }
+  table.zdp th { font-size: 9.6px; font-weight: 700; color: var(--b800); line-height: 1.2; padding: 4px 3px 7px; vertical-align: bottom; text-align: center; width: 78px; }
+  table.zdp th:nth-child(4) { width: 92px; }
+  table.zdp th svg { display: block; margin: 0 auto 4px; }
+  table.zdp th:first-child { text-align: left; width: auto; font-size: 9.2px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-left: 0; }
+  table.zdp td { padding: 4.5px 3px; border-top: 1px solid var(--line-soft); text-align: center; vertical-align: middle; }
+  table.zdp td:first-child { text-align: left; padding-left: 0; padding-right: 12px; color: var(--ink); font-weight: 650; }
+  table.zdp td:first-child span { display: block; font-weight: 400; color: var(--muted); font-size: 10px; }
+  table.zdp tr:last-child td { border-bottom: 1px solid var(--line-soft); }
+  table.zdp .zpc { display: block; width: 72px; margin: 0 auto; font-size: 9.2px; }
+  table.zdp .zpc.lr { width: 86px; }
+  table.zdp td[colspan] .zpc { width: auto; margin: 0 4px; }
+  .zsn li { font-size: 10.8px; line-height: 1.42; margin-bottom: 5px; }
+</style>
+<div class="inner">
+  <div class="row" style="gap:40px;align-items:flex-end" id="pcap">
+    <div style="flex:1.12">
+      <span class="lt" style="background:var(--b50);color:var(--b700)">Part 3 · Choice 2</span>
+      <h2 class="title mt8" style="font-size:23px">Place shared services</h2>
+      <div class="question mt8" style="font-size:13.6px">Where is each shared service that the workloads depend on provided?</div>
+      <p style="font-size:12.2px">Determine which shared services and operational capabilities must be provided in the region, consumed from another region, or remain centralized. Each service has one of three placements:</p>
+    </div>
+    <div class="zpl3" style="flex:1">
+      <div><span class="zpc lo">Local</span><span>Deployed in the region.</span></div>
+      <div><span class="zpc re">Remote</span><span>Consumed from a hub or a shared instance in another region. Record which one.</span></div>
+      <div><span class="zpc gl">Global</span><span>Not tied to a region. There is nothing to deploy.</span></div>
+    </div>
+  </div>
+
+  <div class="row mt12" style="gap:36px;align-items:flex-start">
+    <div style="flex:1.75" id="tblPlacement">
+      <h3 style="color:var(--b700);font-size:14px">Default placement by profile</h3>
+      <p class="mt4" style="font-size:11.6px">The table gives a starting point for each profile. The defaults aren’t rules: change a cell when a workload requirement calls for it, and record the reason. For a Minimal Regional Hub, each row is a separate choice.</p>
+      <table class="zdp mt4">
+        <thead><tr>
+          <th>Shared service</th>
+          <th><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="9" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>Disconnected Spokes</th>
+          <th><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"/><circle cx="40" cy="15" r="5" fill="#0F6CBD"/></svg>Remote Hub Connected</th>
+          <th><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="6" fill="#fff" stroke="#2B88D8" stroke-width="1.5"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>Minimal Regional Hub</th>
+          <th><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="7" fill="#0F6CBD"/><circle cx="14" cy="15" r="2.4" fill="#fff"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>Full Regional Hub</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>Management groups, access control, policy</td><td colspan="4"><span class="zpc gl">Global</span></td></tr>
+          <tr><td>Private DNS zones</td><td colspan="4"><span class="zpc gl">Global</span></td></tr>
+          <tr><td>DNS resolution across premises<span>Private resolver or forwarders</span></td><td><span class="zpc nr">Not required</span></td><td><span class="zpc re">Remote</span></td><td><span class="zpc lr">Local or remote</span></td><td><span class="zpc lo">Local</span></td></tr>
+          <tr><td>Traffic inspection and internet egress<span>Azure Firewall or network virtual appliance</span></td><td><span class="zpc nr">Not required</span></td><td><span class="zpc re">Remote</span></td><td><span class="zpc lr">Local or remote</span></td><td><span class="zpc lo">Local</span></td></tr>
+          <tr><td>Hybrid connectivity gateways<span>ExpressRoute or VPN</span></td><td><span class="zpc nr">Not required</span></td><td><span class="zpc re">Remote</span></td><td><span class="zpc lr">Local or remote</span></td><td><span class="zpc lo">Local</span></td></tr>
+          <tr><td>Directory services<span>Domain controllers</span></td><td><span class="zpc nr">Not required</span></td><td><span class="zpc re">Remote</span></td><td><span class="zpc lr">Local or remote</span></td><td><span class="zpc lo">Local</span></td></tr>
+          <tr><td>Log workspace</td><td colspan="4"><span class="zpc re">Remote, or local for data residency</span></td></tr>
+          <tr><td>Backup vaults</td><td colspan="4"><span class="zpc lo">Local</span></td></tr>
+          <tr><td>Key Vault</td><td colspan="4"><span class="zpc lo">Local</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="vr" style="flex:1">
+      <h4 style="margin-top:3px">Set by the service, not by the profile</h4>
+      <ul class="bul zsn mt8">
+        <li><strong>Backup vaults are local in every profile.</strong> Azure Backup works within a region, so you need a vault in each region that holds protected resources.</li>
+        <li><strong>Key Vault is local in every profile.</strong> Give each workload a vault in the region it runs in. See the recommended Key Vault pattern (Appendix A).</li>
+        <li><strong>Private DNS zones are global.</strong> Create them once, in the connectivity subscription, and link virtual networks to them.</li>
+        <li><strong>Start with a single log workspace.</strong> Add a workspace in the region only when data must stay in that geography, or when the charges for sending data to another region are significant.</li>
+        <li><strong>Policy, access control, and management groups aren’t tied to a region.</strong> The one change is to allow the new region in any policy assignment that restricts locations.</li>
+      </ul>
+      <p style="font-size:10.8px;margin-top:8px">Also consider operational support, platform resiliency, ownership, and cost. Enable only the regional capabilities required by expected workloads, and document which services remain centralized or are consumed remotely.</p>
+      <ul class="refs"><div class="rl">Reference links</div>
+        <li><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions">Landing zone regions</a></li>
+        <li><a href="https://learn.microsoft.com/azure/azure-monitor/logs/workspace-design">Design a Log Analytics workspace architecture</a></li>
+        <li><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/private-link-and-dns-integration-at-scale">Private Link and DNS integration at scale</a></li>
+        <li><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/identity-access-active-directory-hybrid-identity">Hybrid identity in Azure landing zones</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="decision" style="position:absolute;left:0;right:0;bottom:0;margin-top:0"><div class="dl">Decision</div><p style="font-size:12.2px">Define the most efficient platform capability set, where each capability will be provided, who will operate it, and what requirements would trigger future expansion.</p></div>
+</div>
+</section>

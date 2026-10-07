@@ -68,7 +68,7 @@ A colocation contract is ending. Hybrid-connected applications must leave the da
 | Step | Outcome |
 |---|---|
 | Driver | Datacenter and connectivity event. |
-| Deciding checks | [Check 3](./workload-requirements.md) identifies applications and components that must move together. [Step 3](./platform-enablement-connectivity.md#resilient-hybrid-connectivity) validates hybrid connectivity, datacenter and user geography, reachability, resiliency, and whether existing connectivity can support the target design. |
+| Deciding checks | [Check 3](./workload-requirements.md) identifies applications and components that must move together. [Step 3](./hybrid-connectivity.md) validates hybrid connectivity, datacenter and user geography, reachability, resiliency, and whether existing connectivity can support the target design. |
 | Qualification | The existing target region can remain qualified for the identified workload requirements while an additional region remains a candidate for future use. |
 | Workload Landing Zone archetype | **Hybrid-Connected Applications** |
 | Connectivity profile | No new profile. Continue to use the existing strategic geographic hub where it satisfies requirements; do not create a new regional hub solely because another Azure region is available. |

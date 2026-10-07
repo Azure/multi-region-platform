@@ -1,4 +1,4 @@
-<section class="page" data-section="3 · Select capabilities and connectivity profile">
+<section class="page" data-section="4 · Prepare the region">
 <style>
   .ck4 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px 14px; }
   .ck4 .cc.wide { grid-column: 1 / -1; }
@@ -15,7 +15,7 @@
   .ck4 .it.key .bx { border-color: var(--w600); }
 </style>
 <div class="inner">
-  <div class="eyebrow">Part 3 · Before workloads arrive</div>
+  <div class="eyebrow">Part 4 · Before workloads arrive</div>
   <h2 class="title mt4" style="font-size:23px">Platform readiness checklist for a new region</h2>
   <p class="muted mt4" style="font-size:12px;line-height:1.45">These are the platform items that most often stall a new region after it has been qualified. Most are inexpensive to plan early and expensive to retrofit. Get these right once, and each later region becomes mostly configuration instead of a new project. Apply only those the region’s connectivity profile and workload requirements call for.</p>
 
@@ -27,7 +27,7 @@
         <div class="it key"><i class="bx"></i><div><b>IP address planning</b><span>Reserve non-overlapping address space for future regions and profiles.</span></div></div>
         <div class="it"><i class="bx"></i><div><b>Private DNS across regions</b><span>Private endpoints and hybrid names resolve wherever the workload runs.</span></div></div>
         <div class="it"><i class="bx"></i><div><b>Routing and inspection paths</b><span>Traffic reaches hubs and firewalls without asymmetric paths.</span></div></div>
-        <div class="it"><i class="bx"></i><div><b>Hybrid connectivity</b><span>Existing circuits are reused, or paths are added, per decision 2.</span></div></div>
+        <div class="it"><i class="bx"></i><div><b>Hybrid connectivity</b><span>Existing circuits are reused, or paths are added (page <span data-toc="phyb" style="display:inline;font-size:inherit;margin:0"></span>).</span></div></div>
         <div class="it"><i class="bx"></i><div><b>Firewall and partner allow-lists</b><span>On-premises firewalls and third-party allow-lists include the new region’s address ranges.</span></div></div>
         <div class="it"><i class="bx"></i><div><b>Identity services</b><span>The directory and identity services that workloads depend on are reachable from the region.</span></div></div>
         </div>

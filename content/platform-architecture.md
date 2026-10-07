@@ -1,63 +1,65 @@
 ---
-title: Capabilities and connectivity profile overview
-description: Decide what the platform provides in a qualified Azure region — which capabilities are local, remote, or centralized, whether existing hybrid connectivity is sufficient, and which regional platform connectivity profile fits — using the archetype-to-profile matrix, the selection principles, and the profile decision tree.
-ms.date: 10/05/2026
+title: Regional design overview
+description: Select the regional design for a qualified Azure region with three choices from short lists — the connectivity profile, where each shared service is provided, and whether existing hybrid connectivity is reused — and record them so the region can be prepared.
+ms.date: 10/06/2026
 ms.topic: conceptual
 ---
 
-# Capabilities and connectivity profile overview
+# Regional design overview
 
-This step is a set of decisions, not a deployment. For each qualified region, you decide what the platform provides there. Nothing is built yet: deployment follows later, through the automation you already run.
+Selecting the regional design is a set of decisions, not a deployment. For each qualified region, you make three choices, each from a short list. Nothing is built yet: deployment follows later, through the automation you already run.
 
-You make three decisions. Each follows from the workloads you expect in the region, not from the footprint of an existing hub.
+Each choice follows from the workloads you expect in the region, not from the footprint of an existing hub.
 
-- **[Platform capabilities](./platform-enablement-connectivity.md#platform-capabilities).** Which shared services and operational capabilities are provided in the region, consumed from another region, or kept centralized?
-- **[Hybrid connectivity](./platform-enablement-connectivity.md#resilient-hybrid-connectivity).** Is the hybrid connectivity you already have sufficient, or does a requirement justify a change?
-- **[Connectivity profile](#which-connectivity-profile-should-this-region-provide).** Which of the four profiles is the most efficient one that meets the requirements?
-
-Start with the matrix to see which [connectivity profiles](./connectivity-profiles.md) each [archetype](./application-landing-zone-archetypes.md) typically uses. Then apply the selection principles and use the decision tree to pick the most efficient profile that meets the requirements.
-
-:::image type="content" source="./media/archetype-profile-matrix.png" alt-text="Matrix of the four archetypes against the four connectivity profiles. Hybrid-connected and connected cloud-native or AI applications typically use remote hub, minimal hub, or full hub; isolated cloud-native or AI applications often use disconnected spokes and other profiles where justified; interconnected portfolios can use spoke-to-spoke connectivity, a remote hub where acceptable, and a minimal or full hub when justified." lightbox="./media/archetype-profile-matrix.png":::
-
-*Archetype-to-profile relationships are many-to-many. Each row is a set of options, not an assignment; the selected profile follows dependencies, latency, traffic, resiliency, and independence requirements.*
-
-## Profile selection principles
-
-- Start with the **workload requirements and dependencies** identified during regional qualification, including portfolio-level dependencies. Use Workload Landing Zone archetypes to spot recurring needs, then validate the profile against the actual workloads.
-- Select the **most efficient profile** that satisfies those requirements, not the maximum possible one.
-- Keep capabilities remote when latency, dependency, data, security, resiliency, availability, and operational requirements permit. Add local capabilities only when a measurable requirement justifies the larger regional footprint; adoption growth alone doesn't.
-- Consider direct spoke-to-spoke connectivity where workloads have significant east-west traffic and a hub transit path is unnecessary. Add regional routing, inspection, or shared services when broader requirements justify them.
-
-## Which connectivity profile should this region provide?
-
-Each question comes from the "fits when" criteria of the [connectivity profiles](./connectivity-profiles.md). Stop at the first profile that satisfies the requirements identified in [check 3](./workload-requirements.md#platform-and-connectivity-requirements).
-
-:::image type="content" source="./media/connectivity-profile-decision-tree.png" alt-text="Decision tree with three questions. If workloads need no private access to enterprise services, use disconnected spokes. If they can tolerate the latency and coupling of another region, use remote-hub-connected spokes. If requirements do not justify a comprehensive local capability set, use a minimal regional hub; otherwise use a full regional hub." lightbox="./media/connectivity-profile-decision-tree.png":::
-
-*Connectivity profile selection tree. Questions escalate from dependency, to tolerance of remote consumption, to required independence. The outcome is a platform capability, not a workload design.*
-
-The same tree as a table, from the smallest regional footprint to the largest:
-
-| Profile | Fits when the workloads expected in the region | What the region gets |
+| Choice | You select | Page |
 |---|---|---|
-| Disconnected Spokes | Need no private access to enterprise services, on-premises systems, centralized security inspection, another application portfolio, or geographic-hub capabilities. | No hub and no gateway. Workload spokes use the estate's standard identity, policy, security, and deployment practices. |
-| Remote Hub Connected | Need that access, and can tolerate the latency, availability coupling, and dependency on connectivity to another region. | No local hub. Workload spokes consume an existing geographic hub. |
-| Minimal Regional Hub | Need some capabilities locally, without a comprehensive local set. | A limited hub with only the services that must be local. Everything else stays remote. |
-| Full Regional Hub | Need a comprehensive local capability set, or independence from other hubs. | The complete local connectivity and shared services that the region's workloads require. |
+| 1. Connectivity profile | One of four: Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, or Full Regional Hub. | [Select the connectivity profile](./profile-selection.md) |
+| 2. Shared-service placement | For each shared service the workloads depend on: local, remote, or global. | [Place shared services](./platform-enablement-connectivity.md) |
+| 3. Hybrid connectivity | Reuse the existing foundation, change it, or confirm that none is required. | [Confirm hybrid connectivity](./hybrid-connectivity.md) |
 
-Two of the four profiles need no local hub, and only the Full Regional Hub approaches the footprint of an existing geographic hub.
+<!-- site-only:start -->
+> [!TIP]
+> The [region planning workbook](./region-planner.html) walks through the three choices for each selected region and produces the regional design record.
+<!-- site-only:end -->
 
-**Decision:** Select the most efficient regional platform connectivity profile that satisfies the identified requirements and can evolve as regional adoption changes.
+## Start from workload requirements
 
-Profiles evolve in both directions. Reassess a region's profile when its workload or platform requirements change. For the considerations and the reassessment trigger of each profile, see [Profile considerations and hub implementations](./profile-selection.md#considerations-and-reassessment-by-profile).
+Use the workload requirements identified earlier to determine how workloads should consume regional and centralized platform capabilities. Workload Landing Zone archetypes can help inform the assessment, but the resulting connectivity design should be based on the actual dependencies and requirements of each workload.
+
+- For existing workloads, particularly those with legacy or hybrid dependencies, use validated application, network, datacenter, and shared-service dependencies to determine whether existing geographic hubs can continue to support the workload or whether additional regional capabilities are required.
+- For new workloads, derive connectivity needs from the intended architecture and known dependencies, using the Workload Landing Zone archetypes as a planning aid. Reuse existing geographic hubs, shared services, and platform capabilities where they meet those needs; a new region does not automatically require a new platform footprint.
+
+Existing and new workloads follow the same rule: requirements and dependencies determine the regional connectivity profile. Known requirements can shape platform planning in advance; validate workload-specific fit during onboarding and add regional capabilities only when justified.
+
+## Three choices on one path
+
+The three choices sit on one path, from on-premises locations to the workloads in the region. They influence one another, but each has different requirements and tradeoffs. Connectivity that is specific to one application isn't decided here. It is designed when the [workload is placed](./workload-placement.md).
+
+:::image type="content" source="./media/connectivity-planning-layers.png" alt-text="Three decisions shown on one path. Resilient hybrid connectivity links on-premises datacenters and users to the Azure backbone in the selected geography through ExpressRoute or VPN. Platform capabilities covers the strategic geographic hubs and shared services, each provided locally, remotely, or centrally. Regional platform connectivity covers the Workload Landing Zones, supported by the regional platform connectivity profile." lightbox="./media/connectivity-planning-layers.png":::
+
+*The three decisions on one path: resilient hybrid connectivity, platform capabilities, and regional platform connectivity. They are related, but each is a separate decision.*
+
+## The regional design record
+
+Keep one record per region. Record the selected profile, the placement of each shared service (and which hub provides the remote ones), the hybrid connectivity decision, the owner, the date, and the triggers that would reopen the decision.
+
+| Region | Connectivity profile | Shared services | Hybrid connectivity | Open conditions |
+|---|---|---|---|---|
+| Region C | Minimal Regional Hub | Local: gateway, DNS forwarding. Remote from Region A: firewall, domain controllers. | Reuse: existing circuit, new gateway. | None |
+| Region E | Remote Hub Connected | Remote from Region A. | Reuse. | Latency test with representative traffic. |
+| Region G | Disconnected Spokes | None required. | Not required. | None |
+
+*Illustrative example. Regions and choices are examples only.*
+
+A region with a complete record is **selected**. Record the open conditions of a conditional region with it, and update the record when a reassessment trigger applies.
 
 ## In this section
 
-- [Platform capabilities and connectivity](./platform-enablement-connectivity.md): which capabilities the region needs, whether existing hybrid connectivity is sufficient, and how workloads reach hubs and shared services.
-- [Profile considerations and hub implementations](./profile-selection.md): the considerations for each profile, what each step up costs, and how hubs are built.
-- [Platform readiness checklist](./platform-readiness.md): what must be true before workloads arrive.
+- [Select the connectivity profile](./profile-selection.md): the selection principles, the decision tree, and what each step up costs.
+- [Place shared services](./platform-enablement-connectivity.md): where each shared service is provided, with a default for each profile.
+- [Confirm hybrid connectivity](./hybrid-connectivity.md): whether the hybrid connectivity you already have is enough.
 
 ## Next step
 
 > [!div class="nextstepaction"]
-> [Platform capabilities and connectivity](./platform-enablement-connectivity.md)
+> [Select the connectivity profile](./profile-selection.md)

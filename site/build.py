@@ -14,6 +14,9 @@ understands the Learn extensions used there:
   > [!NOTE] / [!TIP] / [!IMPORTANT] / [!WARNING]             -> alert
   > [!div class="nextstepaction"]                            -> next-step button
   **Question:** / **Decision:** paragraphs                   -> styled callouts
+
+Website-only tools (TOOLS below) are interactive pages built from an HTML fragment in site/. They get the same
+header and navigation as the articles, but they aren't part of the CAF article set, so they aren't in toc.yml.
 """
 import html, json, os, re, shutil, textwrap, datetime
 import markdown, yaml
@@ -26,9 +29,25 @@ SITE_TITLE = "Multi-region platform"
 SITE_SUB = "Adaptable multi-region Azure platform"
 
 DOWNLOADS = [
-    ("Full technical guidance (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform.pdf", "pdf", "47 pages"),
-    ("Executive brief (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf", "pdf", "13 pages"),
+    ("Full technical guidance (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform.pdf", "pdf", "57 pages"),
+    ("Executive brief (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf", "pdf", "14 pages"),
 ]
+
+# Interactive pages. "parent" names the toc.yml group that the page is added to, as its last item, in the left navigation.
+TOOLS = [{
+    "name": "Region planning workbook", "href": "region-planner.html", "fragment": "planner/planner.html", "parent": "Resources",
+    "description": "Interactive workbook for steps 2 and 3: qualify candidate Azure regions with the four checks, compare service availability, "
+                   "prices, and latency, select regions, and record the connectivity profile, shared-service placement, and hybrid connectivity of each one. Exports to Excel.",
+    "meta": "Interactive · Steps 2 and 3 · Exports to Excel",
+    "css": ["assets/planner.css"],
+    "js": ["assets/xlsx-lite.js", "assets/planner-icons.js", "assets/planner-data.js", "assets/planner-core.js", "assets/planner-kit.js",
+           "assets/planner-views.js", "assets/planner-design.js", "assets/planner-export.js", "assets/planner.js"],
+    "seed": "data/regions-seed.json",
+    "search": "workbook tool checklist excel export questions decisions latency pricing price comparison service availability "
+              "selected region connectivity profile hub virtual network Virtual WAN Azure Virtual Network Manager shared services hybrid connectivity ExpressRoute",
+}]
+# Folders in docs/ that a build keeps: the PDFs, and the Azure data snapshot written by site/tools/refresh_data.py.
+KEEP = ("downloads", "data")
 
 
 # ───────────────────────────── helpers
@@ -235,6 +254,19 @@ def nav_html(items, current, depth=0):
     return "".join(parts)
 
 
+def with_tools(toc):
+    """The table of contents with the website-only tools added as the last item of the group they name."""
+    out = [dict(it) for it in toc]
+    for t in TOOLS:
+        entry = {"name": t["name"], "href": t["href"]}
+        group = next((it for it in out if it.get("name") == t.get("parent")), None)
+        if group is None:
+            out.append(entry)
+        else:
+            group["items"] = list(group.get("items") or []) + [entry]
+    return out
+
+
 def walk(items):
     for it in items:
         yield it
@@ -250,11 +282,12 @@ def read_time(text):
 def build():
     toc = load_toc()
     pages = flat_pages(toc)
+    toc = with_tools(toc)
     tmpl = open(os.path.join(SITE, "templates", "page.html"), encoding="utf-8").read()
     sprite = open(os.path.join(SITE, "assets", "sprite.svg"), encoding="utf-8").read()
     if os.path.exists(OUT):
         for n in os.listdir(OUT):
-            if n in ("downloads",):
+            if n in KEEP:
                 continue
             p = os.path.join(OUT, n)
             shutil.rmtree(p) if os.path.isdir(p) else os.remove(p)
@@ -265,6 +298,13 @@ def build():
     if os.path.isdir(os.path.join(SITE, "media")):   # website-only images (not part of the CAF article set)
         shutil.copytree(os.path.join(SITE, "media"), os.path.join(OUT, "media"), dirs_exist_ok=True)
     open(os.path.join(OUT, ".nojekyll"), "w").close()
+    # The workbook asks for data/meta.json, data/latency.json and data/latency-cities.json first and requests nothing else until one of them
+    # says it holds real data. Each gets this placeholder when it is missing, and the data scripts overwrite it under the same name,
+    # so the page never has to guess which files exist and never requests one that doesn't.
+    os.makedirs(os.path.join(OUT, "data"), exist_ok=True)
+    for name in ("meta.json", "latency.json", "latency-cities.json"):
+        if not os.path.exists(os.path.join(OUT, "data", name)):
+            open(os.path.join(OUT, "data", name), "w", encoding="utf-8").write('{"generated":null}')
 
     dl_items = "".join(
         f'<a class="dl-item" href="{u}" download><span class="dl-ic {k}">{k.upper()}</span><span><b>{n}</b><small>{d}</small></span></a>'
@@ -306,7 +346,7 @@ def build():
 <p class="hero-kicker">Cloud Adoption Framework · Key adoption scenario</p>
 <h1 class="hero-title">{html.escape(SITE_SUB)}</h1>
 <p class="hero-lede">Add Azure regions without starting another landing-zone project. Reuse the platform you already run, qualify each region, and enable only what its workloads need.</p>
-<div class="hero-cta"><a class="btn primary" href="getting-started.html">Get started in five steps</a></div>
+<div class="hero-cta"><a class="btn primary" href="getting-started.html">Get started in six steps</a></div>
 <p class="hero-alt">Or download: <a href="{DOWNLOADS[0][1]}" download>{DOWNLOADS[0][0]}</a> · <a href="{DOWNLOADS[1][1]}" download>{DOWNLOADS[1][0]}</a></p>
 </div></section>'''
         page = (tmpl.replace("{{TITLE}}", html.escape(meta.get("title", pg["name"])))
@@ -323,6 +363,7 @@ def build():
                 .replace("{{BODYCLASS}}", "home" if is_home else "article")
                 .replace("{{DOWNLOADS}}", dl_items)
                 .replace("{{SPRITE}}", sprite)
+                .replace("{{HEAD}}", "").replace("{{SCRIPTS}}", "")
                 .replace("{{YEAR}}", "2026"))
         out_name = md_link_to_html(pg["href"])
         open(os.path.join(OUT, out_name), "w", encoding="utf-8").write(page)
@@ -331,10 +372,35 @@ def build():
         search_index.append({"t": re.sub(r"<[^>]+>", "", h1), "u": out_name, "s": pg["parent"] or "",
                              "h": [[i, re.sub(r"<[^>]+>", "", t)] for i, t in h2s if i != "next-step"], "x": text[:6000]})
         print(f"  {out_name:42s} {len(h2s):2d} sections")
+    for t in TOOLS:
+        body = open(os.path.join(SITE, t["fragment"]), encoding="utf-8").read()
+        scripts = ""
+        if t.get("seed"):   # reference data the page needs before any request, as a script so that it also works offline
+            seed = json.dumps(json.load(open(os.path.join(SITE, t["seed"]), encoding="utf-8")), ensure_ascii=False, separators=(",", ":"))
+            scripts += "\n<script>window.MRP_SEED = " + seed.replace("</", "<\\/") + ";</script>"
+        scripts += "".join(f'\n<script src="{j}"></script>' for j in t.get("js", []))
+        page = (tmpl.replace("{{TITLE}}", html.escape(t["name"]))
+                .replace("{{DESCRIPTION}}", html.escape(t["description"]))
+                .replace("{{SITE_TITLE}}", SITE_TITLE)
+                .replace("{{NAV}}", nav_html(toc, t["href"]))
+                .replace("{{CRUMBS}}", html.escape(SITE_TITLE) + " <span>/</span> " + html.escape(t.get("parent", "Tools")))
+                .replace("{{H1}}", html.escape(t["name"]))
+                .replace("{{META}}", html.escape(t["meta"]))
+                .replace("{{BODY}}", body)
+                .replace("{{RAIL}}", "").replace("{{PAGER}}", "").replace("{{HERO}}", "")
+                .replace("{{BODYCLASS}}", "article tool")
+                .replace("{{DOWNLOADS}}", dl_items)
+                .replace("{{SPRITE}}", sprite)
+                .replace("{{HEAD}}", "".join(f'\n<link rel="stylesheet" href="{c}">' for c in t.get("css", [])))
+                .replace("{{SCRIPTS}}", scripts)
+                .replace("{{YEAR}}", "2026"))
+        open(os.path.join(OUT, t["href"]), "w", encoding="utf-8").write(page)
+        search_index.append({"t": t["name"], "u": t["href"], "s": t.get("parent", "Tools"), "h": [], "x": t["description"] + " " + t.get("search", "")})
+        print(f"  {t['href']:42s} tool")
     json.dump(search_index, open(os.path.join(OUT, "assets", "search-index.json"), "w"), ensure_ascii=False)
-    # small-screen / 404
+    # 404
     shutil.copy(os.path.join(OUT, "index.html"), os.path.join(OUT, "404.html"))
-    print(f"built {len(pages)} pages -> {OUT}")
+    print(f"built {len(pages)} pages and {len(TOOLS)} tool(s) -> {OUT}")
 
 
 if __name__ == "__main__":

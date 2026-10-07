@@ -1,4 +1,4 @@
-<section class="page" data-section="3 · Select capabilities and connectivity profile">
+<section class="page" data-section="4 · Prepare the region">
 <style>
   .est { height: 500px; }
   .est .rg2 { position: absolute; border-radius: 10px; padding: 7px 10px; background: #fff; border: 1.2px dashed var(--b300); }
@@ -10,25 +10,36 @@
   .est .hubr .rl, .est .hubr .rl svg { color: #DDEBF9; } .est .hubr .pp { color: #fff; } .est .hubr .ps { color: #BCD9F5; }
   .est .glyph { display: flex; gap: 4px; margin-top: 6px; }
   .est .glyph b { width: 14px; height: 14px; border-radius: 3.5px; background: var(--t600); display: block; }
-  .prin { counter-reset: p; list-style: none; }
-  .prin li { counter-increment: p; position: relative; padding: 6px 0 6px 32px; border-top: 1px solid var(--line-soft); font-size: 11.5px; line-height: 1.44; }
-  .prin li::before { content: counter(p, decimal-leading-zero); position: absolute; left: 0; top: 8px; font-size: 11px; font-weight: 700; color: var(--b600); }
+  .zow { list-style: none; counter-reset: zo; }
+  .zow li { counter-increment: zo; position: relative; padding: 7px 0 7px 36px; border-top: 1px solid var(--line-soft); font-size: 11.6px; line-height: 1.44; }
+  .zow li:last-child { border-bottom: 1px solid var(--line-soft); }
+  .zow li::before { content: counter(zo); position: absolute; left: 0; top: 7px; width: 22px; height: 22px; border-radius: 50%; background: var(--b50); color: var(--b700); font-weight: 700; font-size: 11px; display: grid; place-items: center; }
+  .zow li strong { color: var(--ink); }
 </style>
 <div class="inner">
   <div style="position:absolute;left:0;top:0;width:420px;bottom:0">
-    <div class="eyebrow">Part 3 · Profile selection principles</div>
-    <h2 class="title mt8" style="font-size:23px">Principles for choosing and evolving a profile</h2>
-    <ol class="prin mt12">
-      <li>Start with the <strong>workload requirements and dependencies</strong> identified during regional qualification, including portfolio-level dependencies. Use Workload Landing Zone archetypes to spot recurring needs, then validate the profile against the actual workloads.</li>
-      <li>Select the <strong>most efficient profile</strong> that satisfies those requirements, not the maximum possible one.</li>
-      <li>Keep capabilities remote when latency, dependency, data, security, resiliency, availability, and operational requirements permit. Add local capabilities only when a measurable requirement justifies the larger regional footprint; adoption growth alone doesn’t.</li>
-      <li>Consider direct spoke-to-spoke connectivity where workloads have significant east-west traffic and a hub transit path is unnecessary. Add regional routing, inspection, or shared services when broader requirements justify them.</li>
-      <li style="border-bottom:1px solid var(--line-soft)">Different profiles can coexist across the estate. A region’s profile changes only when workload and platform requirements change, not because regions are expected to progress along a maturity path.</li>
+    <div class="eyebrow">Part 4 · Prepare the region overview</div>
+    <h2 class="title mt8" style="font-size:23px">Order of work</h2>
+    <p class="mt8" style="font-size:12.2px">The order is the same for every profile. The profile decides how much each item contains.</p>
+    <ol class="zow mt12">
+      <li><strong>Allow the region in policy</strong>, for the workload requirements it is qualified for.</li>
+      <li><strong>Reserve address space</strong> that doesn’t overlap the rest of the estate, even for Disconnected Spokes.</li>
+      <li><strong>Build the network part</strong> that the profile calls for: nothing, connections to an existing hub, or a hub.</li>
+      <li><strong>Extend the shared services</strong> that must be local, such as DNS forwarding or domain controllers.</li>
+      <li><strong>Turn on landing-zone provisioning</strong> for the region, so that workload teams receive spokes that match the profile.</li>
+      <li><strong>Extend operations</strong>: monitoring, security coverage, backup, and runbooks.</li>
+      <li><strong>Run the platform readiness checklist</strong> (page <span data-toc="figReadiness"></span>).</li>
     </ol>
-    <div class="decision mt16"><div class="dl">Decision</div><p style="font-size:12.4px">Select the most efficient regional platform connectivity profile that satisfies the identified requirements and can evolve as regional adoption changes. The decision tree on the next page walks the choice as three questions.</p></div>
+
+    <div class="note mt20" style="padding:12px 16px;display:flex;gap:14px;align-items:flex-start">
+      <svg style="width:22px;height:22px;color:var(--g600);flex:none;margin-top:2px"><use href="#i-check"/></svg>
+      <div><h4 style="color:var(--g600);margin-bottom:4px">When the region is ready</h4>
+      <p style="font-size:11.6px;color:var(--ink)">A region is <strong>ready for workloads</strong> when the required capability set is in place through standard automation, its open conditions are resolved, and every applicable item on the platform readiness checklist is true. Workloads can then onboard without platform exceptions.</p></div>
+    </div>
   </div>
 
   <div style="position:absolute;left:460px;right:0;top:0;bottom:0">
+    <p style="font-size:12.2px;margin-bottom:12px">Different profiles can coexist across the estate. A region’s profile changes only when workload and platform requirements change, not because regions are expected to progress along a maturity path.</p>
     <div class="figure" id="fig15">
       <div class="fighead"><span class="fttl">Profiles coexisting across one estate</span></div>
       <div class="dg est">

@@ -11,7 +11,7 @@ Workload Landing Zone archetypes are a planning abstraction that groups recurrin
 
 Assign each workload the closest-fitting archetype and record any material requirements that fall outside it. Portfolio-level dependencies can also affect the platform capabilities needed across several workloads.
 
-Use archetypes during regional qualification, in [check 3](./workload-requirements.md), to anticipate the capabilities a candidate region may need to support. Where future workload requirements aren't yet defined, they give you planning guardrails without constraining later placement, which happens once the workload's current requirements, regional capabilities, and platform readiness are known.
+Use archetypes during regional qualification to anticipate the capabilities a candidate region may need to support. Where future workload requirements aren't yet defined, they give you planning guardrails without constraining later placement, which happens once the workload's current requirements, regional capabilities, and platform readiness are known.
 
 :::image type="content" source="./media/application-landing-zone-archetypes.png" alt-text="Four archetype cards — hybrid-connected applications, isolated cloud-native or AI applications, connected cloud-native or AI applications, and interconnected application portfolios — each with its defining characteristics and typical connectivity profiles." lightbox="./media/application-landing-zone-archetypes.png":::
 
@@ -47,7 +47,7 @@ Because this is a **portfolio-level archetype**, its combined dependencies may r
 
 Archetypes describe what applications require; connectivity profiles describe what the platform provides. An archetype doesn't dictate a profile: one archetype can use different profiles, and one profile can serve several archetypes. Use the archetypes expected in a region to understand what it needs, then choose the most efficient profile that meets those needs. For example, a hybrid-connected application might run well on a Remote Hub Connected profile in one region and need a Minimal Regional Hub in another, depending on latency, traffic, and resiliency requirements.
 
-You don't assign a profile to an archetype here. The [archetype-to-profile matrix](./platform-architecture.md) in step 3 shows the typical options for each archetype, and that step selects the profile.
+The [archetype-to-profile matrix](./profile-selection.md) shows the typical options for each archetype.
 
 ## How archetypes differ from other architecture terms
 

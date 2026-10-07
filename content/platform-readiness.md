@@ -20,7 +20,7 @@ Private DNS across regions, routing and inspection paths, and hybrid connectivit
 | **IP address planning** (common blocker) | Reserve non-overlapping address space for future regions and profiles. |
 | Private DNS across regions | Private endpoints and hybrid names resolve wherever the workload runs. |
 | Routing and inspection paths | Traffic reaches hubs and firewalls without asymmetric paths. |
-| Hybrid connectivity | Existing circuits are reused, or paths are added. See [resilient hybrid connectivity](./platform-enablement-connectivity.md#resilient-hybrid-connectivity). |
+| Hybrid connectivity | Existing circuits are reused, or paths are added. See [Confirm hybrid connectivity](./hybrid-connectivity.md). |
 | Firewall and partner allow-lists | On-premises firewalls and third-party allow-lists include the new region's address ranges. |
 | Identity services | The directory and identity services that workloads depend on are reachable from the region. |
 

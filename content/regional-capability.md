@@ -51,4 +51,4 @@ If a requirement that could materially affect regional suitability is unresolved
 ## Next step
 
 > [!div class="nextstepaction"]
-> [Capabilities and connectivity profile overview](./platform-architecture.md)
+> [Regional design overview](./platform-architecture.md)

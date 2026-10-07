@@ -6,6 +6,8 @@
 #   ./build.sh decks      PowerPoint decks (stay in dist/, not published)
 #   ./build.sh word       Word edition generated from the Markdown (stays in dist/)
 #   ./build.sh check      drift check of the Markdown against the other formats
+#   ./build.sh data       refresh the Azure data that the region planning workbook reads: prices, then latency (not part of "all")
+#   ./build.sh latency    refresh only the latency data (needs GitHub, not prices.azure.com)
 set -euo pipefail
 cd "$(dirname "$0")"
 ROOT="$(pwd)"
@@ -60,6 +62,21 @@ check() {
   done
 }
 
+latency() {
+  echo "== latency data for the region planning workbook"
+  python3 site/tools/refresh_latency.py "$@"
+}
+
+# Extra arguments go to the price script. The latency script runs even when the price script fails, because it
+# doesn't need prices.azure.com; the exit status still reports the failure.
+data() {
+  local status=0
+  echo "== Azure price snapshot for the region planning workbook"
+  python3 site/tools/refresh_data.py "${@:2}" || status=$?
+  latency || status=$?
+  return "$status"
+}
+
 case "$what" in
   all)   pdf; decks; site; word; check ;;
   pdf)   pdf ;;
@@ -67,6 +84,8 @@ case "$what" in
   site)  site ;;
   word)  word ;;
   check) check ;;
-  *) echo "usage: ./build.sh [all|pdf|decks|site|word|check]"; exit 1 ;;
+  data)  data "$@" ;;
+  latency) latency "${@:2}" ;;
+  *) echo "usage: ./build.sh [all|pdf|decks|site|word|check|data|latency]"; exit 1 ;;
 esac
 echo "done."

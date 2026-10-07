@@ -1,0 +1,48 @@
+<section class="page" data-section="3 · Select the regional design">
+<style>
+  .rq2 { columns: 2; column-gap: 40px; font-size: 12px; line-height: 1.5; }
+  .rq2 p, .rq2 li { break-inside: avoid; }
+  .rq2 ul.bul { margin: 0 0 9px; }
+  table.drec { font-size: 11.4px; }
+  table.drec th { background: var(--wash); color: var(--muted); padding: 8px 14px; }
+  table.drec th:first-child { border-radius: 8px 0 0 0; } table.drec th:last-child { border-radius: 0 8px 0 0; }
+  table.drec td { padding: 9px 14px; }
+  table.drec td.rh { width: 92px; }
+  table.drec tr:last-child td { border-bottom: 1px solid var(--line-soft); }
+</style>
+<div class="inner">
+  <div class="eyebrow">Part 3 · Regional design overview</div>
+  <h2 class="title mt8" style="font-size:23px">Start from workload requirements</h2>
+
+  <div class="rq2 mt12">
+    <p>Use the workload requirements identified earlier to determine how workloads should consume regional and centralized platform capabilities. Workload Landing Zone archetypes can help inform the assessment, but the resulting connectivity design should be based on the actual dependencies and requirements of each workload.</p>
+    <ul class="bul">
+      <li>For existing workloads, particularly those with legacy or hybrid dependencies, use validated application, network, datacenter, and shared-service dependencies to determine whether existing geographic hubs can continue to support the workload or whether additional regional capabilities are required.</li>
+      <li>For new workloads, derive connectivity needs from the intended architecture and known dependencies, using the Workload Landing Zone archetypes as a planning aid. Reuse existing geographic hubs, shared services, and platform capabilities where they meet those needs; a new region does not automatically require a new platform footprint.</li>
+    </ul>
+    <p>Existing and new workloads follow the same rule: requirements and dependencies determine the regional connectivity profile. Known requirements can shape platform planning in advance; validate workload-specific fit during onboarding and add regional capabilities only when justified.</p>
+  </div>
+
+  <div class="row mt24" style="gap:40px;align-items:flex-end">
+    <h2 class="title" style="font-size:23px;flex:1">The regional design record</h2>
+    <p class="muted" style="flex:1.6;font-size:12.2px">Keep one record per region. Record the selected profile, the placement of each shared service (and which hub provides the remote ones), the hybrid connectivity decision, the owner, the date, and the triggers that would reopen the decision.</p>
+  </div>
+
+  <div class="mt16" id="tblRecord">
+    <table class="pub drec">
+      <thead><tr><th>Region</th><th>Connectivity profile</th><th>Shared services</th><th>Hybrid connectivity</th><th>Open conditions</th></tr></thead>
+      <tbody>
+        <tr><td class="rh">Region C</td><td>Minimal Regional Hub</td><td>Local: gateway, DNS forwarding. Remote from Region A: firewall, domain controllers.</td><td>Reuse: existing circuit, new gateway.</td><td>None</td></tr>
+        <tr><td class="rh">Region E</td><td>Remote Hub Connected</td><td>Remote from Region A.</td><td>Reuse.</td><td>Latency test with representative traffic.</td></tr>
+        <tr><td class="rh">Region G</td><td>Disconnected Spokes</td><td>None required.</td><td>Not required.</td><td>None</td></tr>
+      </tbody>
+    </table>
+    <p class="small muted mt8" style="font-size:10.4px">Illustrative example. Regions and choices are examples only.</p>
+  </div>
+
+  <div class="note mt16" style="padding:12px 18px;display:flex;gap:16px;align-items:center">
+    <svg style="width:22px;height:22px;color:var(--b600);flex:none"><use href="#i-doc"/></svg>
+    <p style="font-size:12.2px;color:var(--ink)">A region with a complete record is <strong>selected</strong>. Record the open conditions of a conditional region with it, and update the record when a reassessment trigger applies.</p>
+  </div>
+</div>
+</section>

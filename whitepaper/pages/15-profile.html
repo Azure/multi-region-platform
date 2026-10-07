@@ -1,0 +1,65 @@
+<section class="page" data-section="3 · Select the regional design">
+<style>
+  .lt { display: inline-flex; align-items: center; gap: 8px; font-size: 9.4px; letter-spacing: .12em; font-weight: 700; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; }
+  .prof4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 10px 0 4px; }
+  .prof4 div { border-radius: 9px; border: 1px solid var(--line); padding: 8px 6px 7px; text-align: center; font-size: 9.8px; font-weight: 650; color: var(--b800); line-height: 1.25; background: #fff; }
+  .prof4 svg { display: block; margin: 0 auto 5px; }
+  .prin { counter-reset: p; list-style: none; }
+  .prin li { counter-increment: p; position: relative; padding: 6px 0 6px 32px; border-top: 1px solid var(--line-soft); font-size: 11.5px; line-height: 1.44; }
+  .prin li::before { content: counter(p, decimal-leading-zero); position: absolute; left: 0; top: 8px; font-size: 11px; font-weight: 700; color: var(--b600); }
+</style>
+<div class="inner">
+  <div class="row" style="gap:40px;align-items:flex-start">
+    <div style="flex:1.08" id="pprof">
+      <span class="lt" style="background:var(--b50);color:var(--b700)">Part 3 · Choice 1</span>
+      <h2 class="title mt8" style="font-size:23px">Select the connectivity profile</h2>
+      <div class="question mt8" style="font-size:13.6px">What is the most efficient regional platform design that supports the identified requirements?</div>
+      <p style="font-size:12.2px">Determine how workloads in the region will reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments. Those connectivity and dependency requirements determine which connectivity profile fits:</p>
+      <div class="prof4">
+        <div><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="9" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>Disconnected Spokes</div>
+        <div><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"/><circle cx="40" cy="15" r="5" fill="#0F6CBD"/></svg>Remote Hub Connected</div>
+        <div><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="6" fill="#fff" stroke="#2B88D8" stroke-width="1.5"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>Minimal Regional Hub</div>
+        <div><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="7" fill="#0F6CBD"/><circle cx="14" cy="15" r="2.4" fill="#fff"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>Full Regional Hub</div>
+      </div>
+      <p style="font-size:12.2px;margin-top:10px">Start with the matrix (<span data-figref="fig13">Figure 13</span>, page <span data-toc="fig13"></span>) to see which connectivity profiles each archetype typically uses. Then apply the selection principles and use the decision tree (page <span data-toc="figProfileTree"></span>) to pick the most efficient profile that meets the requirements.</p>
+
+      <h3 class="mt12" style="color:var(--b700);font-size:14px">Profile selection principles</h3>
+      <ol class="prin mt8">
+        <li>Start with the <strong>workload requirements and dependencies</strong> identified during regional qualification, including portfolio-level dependencies. Use Workload Landing Zone archetypes to spot recurring needs, then validate the profile against the actual workloads.</li>
+        <li>Select the <strong>most efficient profile</strong> that satisfies those requirements, not the maximum possible one.</li>
+        <li>Keep capabilities remote when latency, dependency, data, security, resiliency, availability, and operational requirements permit. Add local capabilities only when a measurable requirement justifies the larger regional footprint; adoption growth alone doesn’t.</li>
+        <li style="border-bottom:1px solid var(--line-soft)">Consider direct spoke-to-spoke connectivity where workloads have significant east-west traffic and a hub transit path is unnecessary. Add regional routing, inspection, or shared services when broader requirements justify them.</li>
+      </ol>
+    </div>
+
+    <div class="vr" style="flex:1">
+      <h3 style="color:var(--b700);font-size:14px;margin-top:4px">What each step up costs</h3>
+      <div class="mt12" style="display:flex">
+    <div class="figure" id="figCost" style="flex:1">
+      <div class="fighead"><span class="fttl">How the profiles trade local capability for platform scope</span></div>
+      <svg width="470" height="370" viewBox="0 0 440 330" font-family="Pub Sans, Segoe UI, sans-serif">
+        <defs><linearGradient id="cvg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#7CC9C3"/><stop offset="1" stop-color="#0F548C"/></linearGradient></defs>
+        <line x1="52" y1="290" x2="425" y2="290" stroke="#A9B6C6" stroke-width="1.2"/><path d="M420 285l7 5-7 5" fill="none" stroke="#A9B6C6" stroke-width="1.2"/>
+        <line x1="52" y1="290" x2="52" y2="18" stroke="#A9B6C6" stroke-width="1.2"/><path d="M47 23l5-7 5 7" fill="none" stroke="#A9B6C6" stroke-width="1.2"/>
+        <text x="238" y="318" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4A5B72">Local capability and independence →</text>
+        <text x="18" y="155" text-anchor="middle" font-size="10.5" font-weight="700" fill="#4A5B72" transform="rotate(-90 18 155)">Fixed platform cost and operational scope →</text>
+        <path d="M95 255 C170 230, 250 170, 380 60" fill="none" stroke="url(#cvg)" stroke-width="3" stroke-linecap="round"/>
+        <g font-size="10.5" font-weight="700">
+          <circle cx="95" cy="255" r="9" fill="#04807A"/><text x="110" y="276" fill="#03615F">Disconnected spokes</text>
+          <circle cx="180" cy="220" r="9" fill="#0A8BB0"/><text x="194" y="240" fill="#0B3A63">Remote-hub-connected</text>
+          <circle cx="275" cy="150" r="9" fill="#2B88D8"/><text x="289" y="170" fill="#0B3A63">Minimal regional hub</text>
+          <circle cx="380" cy="60" r="9" fill="#0F548C"/><text x="372" y="40" text-anchor="end" fill="#0B3A63">Full regional hub</text>
+        </g>
+
+      </svg>
+      <div class="figcap"><span class="fn">Figure</span><span class="ft"><b>A qualitative trade-off, not a price list.</b> Greater local capability and independence usually increase fixed platform cost and operational scope, but they can reduce cross-region dependencies, latency exposure, and availability coupling.</span></div>
+    </div>
+      </div>
+      <ul class="refs"><div class="rl">Reference links</div>
+        <li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/design-area/network-topology-and-connectivity">Network topology and connectivity</a></li>
+        <li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/define-an-azure-network-topology">Define an Azure network topology</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+</section>

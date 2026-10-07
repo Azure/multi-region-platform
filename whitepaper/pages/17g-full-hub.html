@@ -1,0 +1,73 @@
+<section class="page" data-section="4 · Prepare the region">
+<style>
+  .zph { display: flex; align-items: center; gap: 13px; padding-bottom: 12px; border-bottom: 1px solid var(--line-soft); }
+  .zph .n { width: 36px; height: 36px; border-radius: 50%; color: #fff; font-size: 17px; font-weight: 700; display: grid; place-items: center; flex: none; }
+  .zph h2 { font-size: 22px; font-weight: 650; color: var(--ink); line-height: 1.15; white-space: nowrap; margin-top: 3px; }
+  .zph .gl { flex: none; margin-left: 4px; }
+  .zph .zin { flex: 1; font-size: 11.2px; line-height: 1.45; margin-left: 10px; padding-left: 20px; border-left: 1px solid var(--line-soft); }
+  .zph .zin p { margin-bottom: 5px; } .zph .zin p:last-child { margin-bottom: 0; }
+  .zh4 { font-size: 9.6px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--b700); margin-bottom: 5px; }
+  table.zdt { width: 100%; border-collapse: collapse; font-size: 10.6px; line-height: 1.4; }
+  table.zdt th { text-align: left; font-size: 8.8px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--muted); padding: 0 8px 4px 0; }
+  table.zdt td { padding: 4px 12px 4px 0; vertical-align: top; border-top: 1px solid var(--line-soft); }
+  table.zdt tr:last-child td { border-bottom: 1px solid var(--line-soft); }
+  table.zdt td.za { font-weight: 650; color: var(--ink); width: 168px; }
+  table.zdt td.zg { width: 284px; padding-right: 0; font-size: 10px; line-height: 1.4; }
+  table.zdt a, .zrc a, .zin a { font-weight: 650; }
+  .zsv { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 14px; font-size: 10.4px; line-height: 1.4; }
+  .zsv > div { border-top: 2px solid var(--line); padding-top: 6px; }
+  .zsv .zch { width: 88px; margin-bottom: 3px; display: block; }
+  .zch { display: inline-block; font-size: 9.2px; font-weight: 700; letter-spacing: .03em; padding: 2px 0; border-radius: 20px; text-align: center; white-space: nowrap; }
+  .zch.lo { background: var(--b600); color: #fff; }
+  .zch.re { background: #fff; color: var(--b700); box-shadow: inset 0 0 0 1.2px var(--b500); }
+  .zch.gl { background: var(--s100); color: var(--s800); }
+  .zch.lr { background: var(--b100); color: var(--b800); box-shadow: inset 0 0 0 1.2px var(--b500); }
+  .zch.nr { color: var(--muted); box-shadow: inset 0 0 0 1.2px var(--line); font-weight: 650; }
+  .zrc li { font-size: 10.6px; line-height: 1.42; margin-bottom: 4.5px; }
+  .zc3 { columns: 3; column-gap: 28px; column-rule: 1px solid var(--line-soft); }
+  .zc2 { columns: 2; column-gap: 32px; column-rule: 1px solid var(--line-soft); }
+  .zc3 > *, .zc2 > * { break-inside: avoid; }
+  .zc3 ul.bul, .zc2 ul.bul { break-inside: auto; margin: 0 0 2px; }
+  .zc3 ul.bul li, .zc2 ul.bul li { break-inside: avoid; }
+  .zra { background: #FBF4EE; border-radius: 8px; padding: 8px 12px; font-size: 10.6px; line-height: 1.42; color: var(--text); }
+  .zra b { display: block; font-size: 9.2px; letter-spacing: .1em; text-transform: uppercase; color: var(--w600); margin-bottom: 2px; }
+  table.zst td.za { width: 168px; }
+  .zce { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; font-size: 10.6px; line-height: 1.42; }
+  .zce > div { border-top: 2px solid var(--line); padding-top: 6px; }
+  .zce b { display: block; color: var(--ink); font-weight: 650; margin-bottom: 1px; }
+</style>
+<div class="inner">
+  <div class="zph" id="pFull">
+    <span class="n" style="background:var(--b700)">4</span>
+    <div><div class="eyebrow">Part 4 · Prepare the region</div><h2>Full Regional Hub</h2></div>
+    <svg class="gl" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="7" fill="#0F6CBD"/><circle cx="14" cy="15" r="2.4" fill="#fff"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>
+    <div class="zin"><p>The region gets a complete hub: local connectivity, inspection, DNS, identity, and the other shared services its workloads need. It can keep operating when other hubs are unavailable. This is the path that the Cloud Adoption Framework describes for adding a region to an existing landing zone, so most of the work is documented there. A Full Regional Hub uses the same operating model and control baselines as your other hubs. It doesn’t have to be an identical copy.</p></div>
+  </div>
+  <div class="zh4 mt12">What you deploy</div>
+  <p style="font-size:11px;margin-bottom:6px">Start with what every profile needs: the region in policy, address space, landing-zone provisioning, monitoring, backup, and keys (page <span data-toc="pDisc"></span>). Then build the hub in this order.</p>
+  <table class="zdt zst">
+  <thead><tr><th>Step</th><th>Hub-and-spoke virtual networks</th><th>Azure Virtual WAN</th></tr></thead>
+  <tbody>
+  <tr><td class="za">1. Hub</td><td>In the existing connectivity subscription, create a resource group and a hub virtual network in the region.</td><td style="width:38%;padding-right:0">In the existing Virtual WAN, create a virtual hub in the region.</td></tr>
+  <tr><td class="za">2. Inspection</td><td>Deploy Azure Firewall or network virtual appliances in the hub.</td><td style="width:38%;padding-right:0">Deploy Azure Firewall or a supported appliance in the virtual hub, with routing intent and routing policies.</td></tr>
+  <tr><td class="za">3. Hybrid connectivity</td><td>Deploy VPN or ExpressRoute gateways and connect them, reusing existing circuits where they meet requirements.</td><td style="width:38%;padding-right:0">Deploy the gateways in the virtual hub and connect them.</td></tr>
+  <tr><td class="za">4. Connection to other hubs</td><td>Peer the new hub virtual network with the other hub virtual networks.</td><td style="width:38%;padding-right:0">Automatic between hubs of the same Virtual WAN.</td></tr>
+  <tr><td class="za">5. Routing</td><td>Configure Azure Route Server or user-defined routes.</td><td style="width:38%;padding-right:0">Configure any static routes the virtual hub needs.</td></tr>
+  <tr><td class="za">6. Name resolution</td><td>Deploy <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/dns-for-on-premises-and-azure-resources">DNS forwarders</a> for the region and link them to the private DNS zones.</td><td style="width:38%;padding-right:0">Deploy them in a spoke connected to the virtual hub.</td></tr>
+  <tr><td class="za">7. Identity</td><td>In the identity subscription, create a virtual network in the region, peer it to the hub, and deploy domain controllers if workloads need them.</td><td style="width:38%;padding-right:0">The same.</td></tr>
+  <tr><td class="za">8. Spokes</td><td>Peer workload spokes in the region to the new hub.</td><td style="width:38%;padding-right:0">Connect them to the new virtual hub.</td></tr>
+  </tbody>
+  </table>
+  <p style="font-size:10.8px;margin-top:6px">For the detail of each step, follow <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone">Add a new region to an existing landing zone</a>. The network steps are described in <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/traditional-azure-networking-topology">Traditional Azure networking topology</a> and <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/virtual-wan-network-topology">Virtual WAN network topology</a>.</p>
+
+  <div class="zh4 mt16">Connect the hub to the rest of the estate</div>
+  <div class="zce">
+    <div><b>Two regions.</b>Connect the hub virtual networks with global virtual network peering.</div>
+    <div><b>More than two regions.</b>Connect the hub virtual networks in each region to the same ExpressRoute circuits, or use Azure Virtual WAN for managed transit between regions.</div>
+    <div><b>A few workloads across regions.</b>Connect the landing-zone virtual networks that need each other directly with global peering, instead of routing all traffic through the hubs.</div>
+  </div>
+
+  <div class="zh4 mt16">Where shared services sit</div>
+  <div class="zsv"><div><span class="zch gl">Global</span>Management groups, access control, policy, and private DNS zones.</div><div><span class="zch lo">Local</span>Gateways, firewall and egress, DNS resolution, domain controllers, backup vaults, and Key Vaults.</div><div><span class="zch lr">Local or remote</span>The log workspace. Start with the existing workspace unless data must stay in the region.</div></div>
+</div>
+</section>

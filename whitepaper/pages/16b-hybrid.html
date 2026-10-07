@@ -1,0 +1,65 @@
+<section class="page" data-section="3 · Select the regional design">
+<style>
+  .lt { display: inline-flex; align-items: center; gap: 8px; font-size: 9.4px; letter-spacing: .12em; font-weight: 700; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; }
+  .zo3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
+  .zo3 > div { border-radius: 12px; padding: 13px 16px 13px; border: 1px solid var(--line); background: #fff; }
+  .zo3 .zh { display: flex; align-items: center; gap: 9px; margin-bottom: 6px; }
+  .zo3 .zh svg { width: 20px; height: 20px; flex: none; }
+  .zo3 .zh b { font-size: 14px; color: var(--ink); font-weight: 650; }
+  .zo3 p { font-size: 11.4px; line-height: 1.46; }
+  .zo3 .zre { background: var(--b50); border-color: var(--b200); }
+  .zo3 .zcg { background: #FBF4EE; border-color: #EBD3C2; }
+  .zhl li { font-size: 11.4px; line-height: 1.46; margin-bottom: 7px; }
+</style>
+<div class="inner">
+  <div class="row" style="gap:40px;align-items:flex-start" id="phyb">
+    <div style="flex:1">
+      <span class="lt" style="background:var(--s100);color:var(--s800)">Part 3 · Choice 3</span>
+      <h2 class="title mt8" style="font-size:23px">Confirm hybrid connectivity</h2>
+      <div class="question mt8" style="font-size:13.6px;margin-bottom:0">Does the operating geography have resilient hybrid connectivity to Azure that satisfies the identified workload requirements?</div>
+    </div>
+    <p style="flex:1.15;font-size:12.2px">Enabling an additional Azure region doesn’t by itself require another ExpressRoute circuit. Evaluate the existing ExpressRoute, VPN, SD-WAN, or other hybrid connectivity against datacenter and user locations, latency, bandwidth, and routing requirements. Add circuits, peering locations, gateways, or more connectivity paths only where the existing foundation can’t provide the required reachability, diversity, or resilience.</p>
+  </div>
+
+  <div class="cap mt20" style="color:var(--muted)">The outcome is one of three</div>
+  <div class="zo3 mt8">
+    <div><div class="zh"><svg style="color:var(--s600)"><use href="#i-x"/></svg><b>Not required</b></div>
+      <p>The region uses Disconnected Spokes, or its workloads need no private path to on-premises locations.</p></div>
+    <div class="zre"><div class="zh"><svg style="color:var(--b600)"><use href="#i-loop"/></svg><b>Reuse</b></div>
+      <p>The existing circuits, gateways, and peering locations meet the reachability, latency, bandwidth, routing, and resilience that the workloads in the new region need.</p></div>
+    <div class="zcg"><div class="zh"><svg style="color:var(--w600)"><use href="#i-route"/></svg><b>Change</b></div>
+      <p>A requirement can’t be met by the existing foundation: diversity, failure-domain isolation, latency, bandwidth, routing, or resiliency. Record the requirement and the change it justifies.</p></div>
+  </div>
+
+  <div class="g2 mt20" style="gap:40px">
+    <div>
+      <h3 style="color:var(--b700);font-size:14px">How a new region reuses what exists</h3>
+      <ul class="bul zhl mt8">
+        <li><strong>A gateway in another region can serve the new region.</strong> Global virtual network peering supports gateway transit, so spokes in the new region can use the gateways of an existing hub.</li>
+        <li><strong>An existing circuit can connect to a gateway in the new region.</strong> An ExpressRoute circuit can connect virtual networks in the same geopolitical region, and across geopolitical regions with the premium add-on. A hub in the new region doesn’t need a circuit of its own.</li>
+        <li><strong>Azure Virtual WAN extends in the same way.</strong> A virtual network in the new region can connect to an existing virtual hub in another region, or a new virtual hub in the region can connect to the existing circuits.</li>
+      </ul>
+      <div class="decision mt12"><div class="dl">Decision</div><p style="font-size:12.2px">Confirm the hybrid connectivity foundation and identify any required changes to reachability, resiliency, diversity, scale, or ownership.</p></div>
+    </div>
+    <div class="vr">
+      <h3 style="color:var(--w600);font-size:14px">When a change is justified</h3>
+      <ul class="bul zhl mt8">
+        <li><strong>The foundation doesn’t meet resiliency recommendations today.</strong> Microsoft recommends ExpressRoute circuits from more than one peering location, so that a peering-location outage isn’t a single point of failure. A new region is a reason to check this, not a reason to add a circuit for each region.</li>
+        <li><strong>On-premises locations or users are far from the existing peering locations.</strong> Measure latency on the real path before you decide.</li>
+        <li><strong>Bandwidth or gateway capacity is exhausted.</strong> Check the circuit and gateway sizes against the traffic the new region adds.</li>
+        <li><strong>Workloads need a capability that doesn’t work across regions.</strong> For example, ExpressRoute FastPath doesn’t support global virtual network peering, so workloads that rely on it need a gateway in their own region.</li>
+        <li><strong>The region must keep its on-premises path when another region is unavailable.</strong> That requirement points to a local gateway, and usually to a Full Regional Hub.</li>
+      </ul>
+    </div>
+  </div>
+
+  <ul class="refs" style="position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:2px 22px;border-top:1px solid var(--line-soft);padding-top:8px">
+    <div class="rl" style="width:100%">Reference links</div>
+    <li><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/connectivity-to-azure">Connectivity to Azure</a></li>
+    <li><a href="https://learn.microsoft.com/azure/expressroute/designing-for-disaster-recovery-with-expressroute-privatepeering">Designing for disaster recovery with ExpressRoute private peering</a></li>
+    <li><a href="https://learn.microsoft.com/azure/vpn-gateway/vpn-gateway-different-region">Use a VPN or ExpressRoute gateway in a different region</a></li>
+    <li><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/traditional-azure-networking-topology">Traditional Azure networking topology</a></li>
+    <li><a href="https://learn.microsoft.com/azure/virtual-wan/virtual-wan-global-transit-network-architecture">Global transit network architecture and Virtual WAN</a></li>
+  </ul>
+</div>
+</section>

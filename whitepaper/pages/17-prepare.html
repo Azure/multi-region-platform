@@ -1,0 +1,85 @@
+<section class="page" data-section="4 · Prepare the region">
+<style>
+  .zp4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
+  .zp4 .c { border: 1px solid var(--line); border-radius: 12px; background: #fff; padding: 13px 14px 10px; display: flex; flex-direction: column; }
+  .zp4 .hd { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; min-height: 34px; }
+  .zp4 .hd .n { width: 24px; height: 24px; border-radius: 50%; color: #fff; font-weight: 700; font-size: 12px; display: grid; place-items: center; flex: none; }
+  .zp4 .hd h3 { font-size: 12.6px; line-height: 1.2; color: var(--ink); flex: 1; }
+  .zp4 .hd svg { flex: none; }
+  .zp4 .lb { font-size: 8.8px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--b600); margin-top: 8px; }
+  .zp4 p { font-size: 11px; line-height: 1.44; margin: 2px 0 0; }
+  .zp4 .pg { margin-top: auto; border-top: 1px solid var(--line-soft); padding-top: 7px; font-size: 10.2px; color: var(--muted); display: flex; justify-content: space-between; gap: 10px; }
+  .zp4 .c > p:last-of-type { margin-bottom: 10px; }
+  .zp4 .pg b { color: var(--b600); white-space: nowrap; }
+  .zgl { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }
+  .zgl > div { border-top: 2px solid var(--s300); padding-top: 7px; font-size: 11px; line-height: 1.44; }
+  .zgl b { display: block; color: var(--ink); font-weight: 650; margin-bottom: 2px; font-size: 11.4px; }
+</style>
+<div class="inner">
+  <div class="open-band" id="sPrep">
+    <div class="num">04</div>
+    <div style="flex:1">
+      <div class="eyebrow">A targeted change, not a new landing zone</div>
+      <h1 class="sec-title mt8" style="font-size:30px">Prepare the region</h1>
+    </div>
+    <p class="standfirst" style="width:340px;font-size:14.2px">Build only what the selected design calls for. For <strong>two of the four profiles</strong> there is no hub to build.</p>
+  </div>
+
+  <div class="g2 mt16" style="gap:40px">
+    <p>Preparing a region is a targeted change to the platform you already run, not a new landing zone. You build only what the selected connectivity profile and shared-service placement call for, through your existing landing-zone automation. For two of the four profiles there is no hub to build.</p>
+    <p>The Cloud Adoption Framework already describes how to <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone" style="font-weight:650">add a new region to an existing landing zone</a>, including a new hub in the region. That path is the Full Regional Hub. The other three profiles do part of it, for regions whose workloads need less.</p>
+  </div>
+
+  <h3 class="mt20" style="color:var(--b700);font-size:14px">What each profile adds</h3>
+  <div class="zp4 mt8">
+    <div class="c">
+      <div class="hd"><span class="n" style="background:var(--t600)">1</span><h3>Disconnected Spokes</h3><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="9" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg></div>
+      <div class="lb">What you add in the region</div>
+      <p>The region in policy and in landing-zone provisioning. Workload spokes with their own internet ingress and egress. No hub, no gateway, no peering.</p>
+      <div class="lb">What you reuse</div>
+      <p>Governance, identity, policy, monitoring, and automation.</p>
+      <div class="pg"><span>What to deploy</span><b>page <span data-toc="pDisc"></span></b></div>
+    </div>
+    <div class="c">
+      <div class="hd"><span class="n" style="background:var(--c600)">2</span><h3>Remote Hub Connected</h3><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"/><circle cx="40" cy="15" r="5" fill="#0F6CBD"/></svg></div>
+      <div class="lb">What you add in the region</div>
+      <p>The same, plus a cross-region connection from each spoke to an existing hub, with routing and DNS settings. No hub.</p>
+      <div class="lb">What you reuse</div>
+      <p>An existing geographic hub: its gateways, firewall, DNS, and shared services.</p>
+      <div class="pg"><span>What to deploy</span><b>page <span data-toc="pRemote"></span></b></div>
+    </div>
+    <div class="c">
+      <div class="hd"><span class="n" style="background:var(--b500)">3</span><h3>Minimal Regional Hub</h3><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="6" fill="#fff" stroke="#2B88D8" stroke-width="1.5"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg></div>
+      <div class="lb">What you add in the region</div>
+      <p>The same, plus a hub in the region with only the components you selected.</p>
+      <div class="lb">What you reuse</div>
+      <p>The geographic hub, for everything you didn’t make local.</p>
+      <div class="pg"><span>What to deploy</span><b>page <span data-toc="pMinimal"></span></b></div>
+    </div>
+    <div class="c">
+      <div class="hd"><span class="n" style="background:var(--b700)">4</span><h3>Full Regional Hub</h3><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="7" fill="#0F6CBD"/><circle cx="14" cy="15" r="2.4" fill="#fff"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg></div>
+      <div class="lb">What you add in the region</div>
+      <p>The same, plus a complete hub in the region.</p>
+      <div class="lb">What you reuse</div>
+      <p>The landing-zone foundation and, where they meet requirements, the existing ExpressRoute circuits.</p>
+      <div class="pg"><span>What to deploy</span><b>page <span data-toc="pFull"></span></b></div>
+    </div>
+  </div>
+
+  <h3 class="mt24" style="color:var(--b700);font-size:14px">What is global and needs no action</h3>
+  <p class="mt4" style="font-size:12px">Most of the landing zone isn’t tied to a region:</p>
+  <div class="zgl mt12">
+    <div><b>Management groups, subscriptions, and access control</b>No action. Don’t create management groups to model regions.</div>
+    <div><b>Policy</b>Definitions and assignments apply everywhere. Update only the assignments that restrict allowed locations, so that they admit the new region.</div>
+    <div><b>Private DNS zones</b>They are global. Create them once and link virtual networks to them.</div>
+    <div><b>Platform subscriptions</b>Use the existing connectivity and identity subscriptions, with a new resource group for the region.</div>
+  </div>
+
+  <ul class="refs" style="position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:2px 22px;border-top:1px solid var(--line-soft);padding-top:8px">
+    <div class="rl" style="width:100%">Reference links</div>
+    <li><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions">Landing zone regions</a></li>
+    <li><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/resource-org-management-groups">Management groups</a></li>
+    <li><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/subscription-vending">Subscription vending</a></li>
+  </ul>
+</div>
+</section>

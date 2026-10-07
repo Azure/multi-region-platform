@@ -1,0 +1,70 @@
+<section class="page" data-section="4 · Prepare the region">
+<style>
+  .zph { display: flex; align-items: center; gap: 13px; padding-bottom: 12px; border-bottom: 1px solid var(--line-soft); }
+  .zph .n { width: 36px; height: 36px; border-radius: 50%; color: #fff; font-size: 17px; font-weight: 700; display: grid; place-items: center; flex: none; }
+  .zph h2 { font-size: 22px; font-weight: 650; color: var(--ink); line-height: 1.15; white-space: nowrap; margin-top: 3px; }
+  .zph .gl { flex: none; margin-left: 4px; }
+  .zph .zin { flex: 1; font-size: 11.2px; line-height: 1.45; margin-left: 10px; padding-left: 20px; border-left: 1px solid var(--line-soft); }
+  .zph .zin p { margin-bottom: 5px; } .zph .zin p:last-child { margin-bottom: 0; }
+  .zh4 { font-size: 9.6px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--b700); margin-bottom: 5px; }
+  table.zdt { width: 100%; border-collapse: collapse; font-size: 10.6px; line-height: 1.4; }
+  table.zdt th { text-align: left; font-size: 8.8px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--muted); padding: 0 8px 4px 0; }
+  table.zdt td { padding: 4px 12px 4px 0; vertical-align: top; border-top: 1px solid var(--line-soft); }
+  table.zdt tr:last-child td { border-bottom: 1px solid var(--line-soft); }
+  table.zdt td.za { font-weight: 650; color: var(--ink); width: 168px; }
+  table.zdt td.zg { width: 284px; padding-right: 0; font-size: 10px; line-height: 1.4; }
+  table.zdt a, .zrc a, .zin a { font-weight: 650; }
+  .zsv { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 14px; font-size: 10.4px; line-height: 1.4; }
+  .zsv > div { border-top: 2px solid var(--line); padding-top: 6px; }
+  .zsv .zch { width: 88px; margin-bottom: 3px; display: block; }
+  .zch { display: inline-block; font-size: 9.2px; font-weight: 700; letter-spacing: .03em; padding: 2px 0; border-radius: 20px; text-align: center; white-space: nowrap; }
+  .zch.lo { background: var(--b600); color: #fff; }
+  .zch.re { background: #fff; color: var(--b700); box-shadow: inset 0 0 0 1.2px var(--b500); }
+  .zch.gl { background: var(--s100); color: var(--s800); }
+  .zch.lr { background: var(--b100); color: var(--b800); box-shadow: inset 0 0 0 1.2px var(--b500); }
+  .zch.nr { color: var(--muted); box-shadow: inset 0 0 0 1.2px var(--line); font-weight: 650; }
+  .zrc li { font-size: 10.6px; line-height: 1.42; margin-bottom: 4.5px; }
+  .zc3 { columns: 3; column-gap: 28px; column-rule: 1px solid var(--line-soft); }
+  .zc2 { columns: 2; column-gap: 32px; column-rule: 1px solid var(--line-soft); }
+  .zc3 > *, .zc2 > * { break-inside: avoid; }
+  .zc3 ul.bul, .zc2 ul.bul { break-inside: auto; margin: 0 0 2px; }
+  .zc3 ul.bul li, .zc2 ul.bul li { break-inside: avoid; }
+  .zra { background: #FBF4EE; border-radius: 8px; padding: 8px 12px; font-size: 10.6px; line-height: 1.42; color: var(--text); }
+  .zra b { display: block; font-size: 9.2px; letter-spacing: .1em; text-transform: uppercase; color: var(--w600); margin-bottom: 2px; }
+</style>
+<div class="inner">
+  <div class="zph" id="pRemote">
+    <span class="n" style="background:var(--c600)">2</span>
+    <div><div class="eyebrow">Part 4 · Prepare the region</div><h2>Remote Hub Connected</h2></div>
+    <svg class="gl" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"/><circle cx="40" cy="15" r="5" fill="#0F6CBD"/></svg>
+    <div class="zin"><p>Workload spokes in the region connect across regions to an existing geographic hub and use its gateways, firewall, DNS, and shared services. No hub is built in the region. Preparing the region means connecting its spokes to the hub you already operate.</p></div>
+  </div>
+  <div class="zh4 mt12">What you deploy</div>
+  <table class="zdt">
+  <thead><tr><th>Area</th><th>What to do</th><th>Guidance</th></tr></thead>
+  <tbody>
+  <tr><td class="za">Policy, address space, monitoring, backup, and keys</td><td>The same as for Disconnected Spokes (page <span data-toc="pDisc"></span>). Address space must not overlap the hub or the other spokes.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone">Landing zone regions</a></td></tr>
+  <tr><td class="za">Landing-zone provisioning</td><td>Offer the region in subscription vending, with a spoke virtual network that the platform team connects to the remote hub.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/subscription-vending">Subscription vending</a></td></tr>
+  <tr><td class="za">Connection to the hub</td><td>Connect each spoke to the existing hub in the other region. See Connect to the existing hub (page <span data-toc="figRemoteConnect"></span>).</td><td class="zg"><a href="https://learn.microsoft.com/azure/virtual-network/virtual-network-peering-overview">Virtual network peering</a></td></tr>
+  <tr><td class="za">Routing and inspection</td><td>Apply the same route tables as for spokes in the hub’s own region, so that traffic reaches the hub firewall.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/traditional-azure-networking-topology">Traditional Azure networking topology</a></td></tr>
+  <tr><td class="za">Name resolution</td><td>Point the spokes at the DNS resolver or forwarders in the hub. The private DNS zones are global and don’t change.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/dns-for-on-premises-and-azure-resources">DNS for on-premises and Azure resources</a></td></tr>
+  <tr><td class="za">Identity</td><td>Use the domain controllers in the hub region, if workloads need them.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/identity-access-active-directory-hybrid-identity">Hybrid identity in Azure landing zones</a></td></tr>
+  <tr><td class="za">Internet ingress</td><td>Public application ingress can stay in the region, with a web application firewall close to the workload.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/plan-for-inbound-and-outbound-internet-connectivity">Plan for inbound and outbound internet connectivity</a></td></tr>
+  </tbody>
+  </table>
+  <div class="zh4 mt12">Where shared services sit</div>
+  <div class="zsv"><div><span class="zch gl">Global</span>Management groups, access control, policy, and private DNS zones.</div><div><span class="zch re">Remote</span>Gateways, firewall and egress, DNS resolution, domain controllers, and the log workspace, all from the geographic hub.</div><div><span class="zch lo">Local</span>Backup vaults, Key Vaults, and public application ingress where the workload needs it.</div></div>
+  <div class="zh4 mt12">Recommendations and considerations</div>
+  <div class="zc3">
+    <ul class="bul zrc">
+      <li><strong>Accept the dependency knowingly.</strong> Microsoft’s <a href="https://learn.microsoft.com/azure/architecture/networking/architecture/hub-spoke">hub-spoke architecture guidance</a> recommends at least one hub per region, with only same-region spokes connected to it, so that a failure in one region’s hub doesn’t affect other regions. This profile trades that isolation for speed and cost. Use it for workloads that can tolerate the dependency, and document how they behave if the geographic hub or cross-region connectivity is degraded or unavailable.</li>
+      <li><strong>Measure before you commit.</strong> Measure latency and bandwidth using representative traffic.</li>
+      <li><strong>Count the cross-region cost.</strong> Global virtual network peering carries traffic charges. Evaluate cross-region data-transfer cost, routing and transit behavior, and inspection paths.</li>
+      <li><strong>Check the hub’s capacity.</strong> Evaluate geographic hub scale: gateway and firewall throughput, peering limits, and dependency criticality.</li>
+      <li><strong>Agree who operates the path.</strong> Agree operational ownership for the connection, routes, and DNS settings between the team that runs the hub and the teams in the new region.</li>
+      <li><strong>Keep east-west traffic local where it matters.</strong> For spokes in the region that exchange a lot of traffic, direct connectivity between them avoids a round trip through the remote hub. Limit it to spokes of the same environment and workload.</li>
+    </ul>
+    <div class="zra" style="margin-top:8px"><b>Reassess when</b>Cross-region traffic, latency, east-west communication, dependency criticality, regulatory requirements, scale, or availability coupling justify deploying selected connectivity or shared-service capabilities locally.</div>
+  </div>
+</div>
+</section>

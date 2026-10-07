@@ -25,17 +25,31 @@ items:
     href: workload-requirements.md
   - name: 4. Regional capability and availability
     href: regional-capability.md
-- name: 3. Select capabilities and connectivity profile
+- name: 3. Select the regional design
   items:
   - name: Overview
     href: platform-architecture.md
-  - name: Platform capabilities and connectivity
-    href: platform-enablement-connectivity.md
-  - name: Profile considerations and hub implementations
+  - name: Select the connectivity profile
     href: profile-selection.md
+  - name: Place shared services
+    href: platform-enablement-connectivity.md
+  - name: Confirm hybrid connectivity
+    href: hybrid-connectivity.md
+- name: 4. Prepare the region
+  items:
+  - name: Overview
+    href: prepare-region.md
+  - name: Disconnected Spokes
+    href: disconnected-spokes.md
+  - name: Remote Hub Connected
+    href: remote-hub-connected.md
+  - name: Minimal Regional Hub
+    href: minimal-regional-hub.md
+  - name: Full Regional Hub
+    href: full-regional-hub.md
   - name: Platform readiness checklist
     href: platform-readiness.md
-- name: 4. Place workloads
+- name: 5. Place workloads
   href: workload-placement.md
 - name: Service behavior across regions
   items:

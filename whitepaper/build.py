@@ -1,9 +1,20 @@
 #!/usr/bin/env python3
 """Assemble whitepaper.html from pages/*.html (editable source)."""
-import glob, math, os, re
+import glob, importlib.util, math, os, re
 import art
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
+
+
+def _city():
+    """art/city_analogy.py, loaded by path: the repository folder 'art' has the same name as the module art.py here."""
+    spec = importlib.util.spec_from_file_location("city_analogy", os.path.join(ROOT, "..", "art", "city_analogy.py"))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+city = _city()
 
 SPRITE = """
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -83,7 +94,7 @@ def build(edition="full"):
                 args.append(a)
         return dot_field(*args)
     html = re.sub(r"\{\{DOTS:([^}]+)\}\}", repl, html)
-    html = re.sub(r"\{\{PY:(.+?)\}\}", lambda m: str(eval(m.group(1), {"art": art})), html)
+    html = re.sub(r"\{\{PY:(.+?)\}\}", lambda m: str(eval(m.group(1), {"art": art, "city": city})), html)
 
     doc = f"""<!doctype html>
 <html lang="en">

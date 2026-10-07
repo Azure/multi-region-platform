@@ -1,0 +1,98 @@
+<section class="page" data-section="4 · Prepare the region">
+<style>
+  .zph { display: flex; align-items: center; gap: 13px; padding-bottom: 12px; border-bottom: 1px solid var(--line-soft); }
+  .zph .n { width: 36px; height: 36px; border-radius: 50%; color: #fff; font-size: 17px; font-weight: 700; display: grid; place-items: center; flex: none; }
+  .zph h2 { font-size: 22px; font-weight: 650; color: var(--ink); line-height: 1.15; white-space: nowrap; margin-top: 3px; }
+  .zph .gl { flex: none; margin-left: 4px; }
+  .zph .zin { flex: 1; font-size: 11.2px; line-height: 1.45; margin-left: 10px; padding-left: 20px; border-left: 1px solid var(--line-soft); }
+  .zph .zin p { margin-bottom: 5px; } .zph .zin p:last-child { margin-bottom: 0; }
+  .zh4 { font-size: 9.6px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--b700); margin-bottom: 5px; }
+  table.zdt { width: 100%; border-collapse: collapse; font-size: 10.6px; line-height: 1.4; }
+  table.zdt th { text-align: left; font-size: 8.8px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--muted); padding: 0 8px 4px 0; }
+  table.zdt td { padding: 4px 12px 4px 0; vertical-align: top; border-top: 1px solid var(--line-soft); }
+  table.zdt tr:last-child td { border-bottom: 1px solid var(--line-soft); }
+  table.zdt td.za { font-weight: 650; color: var(--ink); width: 168px; }
+  table.zdt td.zg { width: 284px; padding-right: 0; font-size: 10px; line-height: 1.4; }
+  table.zdt a, .zrc a, .zin a { font-weight: 650; }
+  .zsv { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 14px; font-size: 10.4px; line-height: 1.4; }
+  .zsv > div { border-top: 2px solid var(--line); padding-top: 6px; }
+  .zsv .zch { width: 88px; margin-bottom: 3px; display: block; }
+  .zch { display: inline-block; font-size: 9.2px; font-weight: 700; letter-spacing: .03em; padding: 2px 0; border-radius: 20px; text-align: center; white-space: nowrap; }
+  .zch.lo { background: var(--b600); color: #fff; }
+  .zch.re { background: #fff; color: var(--b700); box-shadow: inset 0 0 0 1.2px var(--b500); }
+  .zch.gl { background: var(--s100); color: var(--s800); }
+  .zch.lr { background: var(--b100); color: var(--b800); box-shadow: inset 0 0 0 1.2px var(--b500); }
+  .zch.nr { color: var(--muted); box-shadow: inset 0 0 0 1.2px var(--line); font-weight: 650; }
+  .zrc li { font-size: 10.6px; line-height: 1.42; margin-bottom: 4.5px; }
+  .zc3 { columns: 3; column-gap: 28px; column-rule: 1px solid var(--line-soft); }
+  .zc2 { columns: 2; column-gap: 32px; column-rule: 1px solid var(--line-soft); }
+  .zc3 > *, .zc2 > * { break-inside: avoid; }
+  .zc3 ul.bul, .zc2 ul.bul { break-inside: auto; margin: 0 0 2px; }
+  .zc3 ul.bul li, .zc2 ul.bul li { break-inside: avoid; }
+  .zra { background: #FBF4EE; border-radius: 8px; padding: 8px 12px; font-size: 10.6px; line-height: 1.42; color: var(--text); }
+  .zra b { display: block; font-size: 9.2px; letter-spacing: .1em; text-transform: uppercase; color: var(--w600); margin-bottom: 2px; }
+  table.zoc td { padding: 6px 14px 6px 0; }
+  table.zoc td.za { width: 150px; }
+  table.zoc td.zg { width: 200px; }
+  .zex { display: grid; gap: 7px; }
+  .zex > div { border-radius: 9px; background: var(--wash); padding: 8px 12px; font-size: 10.8px; line-height: 1.44; }
+  .zex b { color: var(--ink); font-weight: 650; }
+  svg.zbase text { font-family: "Pub Sans", "Segoe UI", sans-serif; }
+</style>
+<div class="inner">
+  <div class="zph" id="pMinimal">
+    <span class="n" style="background:var(--b500)">3</span>
+    <div><div class="eyebrow">Part 4 · Prepare the region</div><h2>Minimal Regional Hub</h2></div>
+    <svg class="gl" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="6" fill="#fff" stroke="#2B88D8" stroke-width="1.5"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>
+    <div class="zin"><p>A Minimal Regional Hub is a hub in the region that holds only what its workloads need locally. Everything else comes from a geographic hub. It isn’t a fixed design. Which components are local is a choice for each region. The fewer components you make local, the faster the region is ready and the less it costs to run.</p></div>
+  </div>
+  <div class="row mt16" style="gap:32px;align-items:flex-start">
+    <div style="flex:1">
+      <div class="zh4">The base</div>
+      <p style="font-size:11px;margin-bottom:5px">Every Minimal Regional Hub has the same base:</p>
+      <ul class="bul zrc" style="font-size:11px">
+      <li>A hub in the region, in the connectivity subscription you already use, with a new resource group for the region. The hub is a hub virtual network, or a virtual hub in your existing Azure Virtual WAN.</li>
+      <li>A connection from that hub to the geographic hub.</li>
+      <li>Connections from the spokes in the region to the local hub.</li>
+      <li>The routing that sends traffic to the right hub.</li>
+    </ul>
+      <svg class="zbase" width="384" height="112" viewBox="0 0 384 112" style="display:block;margin-top:12px" role="img" aria-label="The base of a Minimal Regional Hub: spokes connect to a local hub, and the local hub connects to the geographic hub.">
+        <rect x="1" y="1" width="250" height="110" rx="10" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"/>
+        <use href="#i-pin" x="10" y="8" width="12" height="12" color="#0F6CBD"/><text x="25" y="18" font-size="8.8" font-weight="700" fill="#0F548C">New region</text>
+        <rect x="14" y="30" width="86" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3"/><rect x="22" y="38" width="12" height="12" rx="3" fill="#04807A"/><text x="42" y="47.5" font-size="8.8" font-weight="650" fill="#03615F">Spoke</text>
+        <rect x="14" y="70" width="86" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3"/><rect x="22" y="78" width="12" height="12" rx="3" fill="#04807A"/><text x="42" y="87.5" font-size="8.8" font-weight="650" fill="#03615F">Spoke</text>
+        <path d="M100 44 L146 56 M100 84 L146 72" fill="none" stroke="#2B88D8" stroke-width="1.3"/>
+        <rect x="146" y="34" width="92" height="60" rx="8" fill="#fff" stroke="#2B88D8" stroke-width="1.5"/>
+        <text x="192" y="60" text-anchor="middle" font-size="9.6" font-weight="700" fill="#0B3A63">Local hub</text>
+        <text x="192" y="74" text-anchor="middle" font-size="8" fill="#5B6778">plus what you select</text>
+        <path d="M242 64 H288" fill="none" stroke="#2B88D8" stroke-width="1.4" stroke-dasharray="4 3"/><path d="M246 60 l-4 4 4 4 M284 60 l4 4 -4 4" fill="none" stroke="#2B88D8" stroke-width="1.4"/>
+        <rect x="292" y="22" width="90" height="84" rx="8" fill="#0F6CBD"/>
+        <text x="337" y="56" text-anchor="middle" font-size="9.6" font-weight="700" fill="#fff">Geographic hub</text>
+        <text x="337" y="71" text-anchor="middle" font-size="8" fill="#DDEBF9">everything that</text><text x="337" y="82" text-anchor="middle" font-size="8" fill="#DDEBF9">isn’t local</text>
+      </svg>
+    </div>
+    <div class="vr" style="flex:1.4;padding-left:24px">
+      <div class="zh4">Example compositions</div>
+      <p style="font-size:11px;margin-bottom:6px">These are examples, not designs to copy. Each follows from a workload reason.</p>
+      <div class="zex">
+        <div><b>Local on-premises path.</b> A hub with an ExpressRoute gateway connected to an existing circuit. Inspection, DNS, and identity stay in the geographic hub. The reason is latency-sensitive traffic to a nearby datacenter.</div>
+        <div><b>Local inspection and egress.</b> A hub with a firewall and DNS forwarding, and no on-premises path of its own. The reason is heavy traffic between spokes in the region, or internet egress that must leave from the region.</div>
+        <div><b>Local shared services only.</b> A hub virtual network that hosts DNS forwarding and connects to domain controllers in the region, with no firewall and no gateway. The reason is applications that must keep authenticating and resolving names when the link to the other region is down.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="zh4 mt20">Optional components</div>
+  <p style="font-size:11px;margin-bottom:6px">Add a component only when a workload requirement calls for it in the region.</p>
+  <table class="zdt zoc">
+  <thead><tr><th>Component</th><th>Make it local when</th><th>Keep it remote when</th><th>Guidance</th></tr></thead>
+  <tbody>
+  <tr><td class="za">ExpressRoute or VPN gateway</td><td>Workloads need an on-premises path from the region for latency, bandwidth, or independence. The gateway can connect to an existing circuit.</td><td>On-premises traffic is light or tolerates the path through the geographic hub.</td><td class="zg">Confirm hybrid connectivity, page <span data-toc="phyb"></span></td></tr>
+  <tr><td class="za">Azure Firewall or network virtual appliance</td><td>Traffic between spokes in the region is heavy, internet egress must leave from the region, or data must be inspected inside a boundary.</td><td>Inspection in the geographic hub meets latency, cost, and data requirements.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/plan-for-inbound-and-outbound-internet-connectivity">Plan for inbound and outbound internet connectivity</a></td></tr>
+  <tr><td class="za">DNS private resolver or forwarders</td><td>Name resolution for the region must not depend on the link to another region.</td><td>Spokes can use the resolver in the geographic hub.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/dns-for-on-premises-and-azure-resources">DNS for on-premises and Azure resources</a></td></tr>
+  <tr><td class="za">Domain controllers</td><td>Applications authenticate against them often, or must keep working when the other region is unavailable.</td><td>Authentication traffic is light and tolerates the dependency.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/identity-access-active-directory-hybrid-identity">Hybrid identity in Azure landing zones</a></td></tr>
+  <tr><td class="za">Other shared services</td><td>A requirement for latency, residency, or independence names the service.</td><td>No requirement names it.</td><td class="zg">Place shared services, page <span data-toc="pcap"></span></td></tr>
+  </tbody>
+  </table>
+</div>
+</section>

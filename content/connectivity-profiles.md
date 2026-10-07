@@ -11,7 +11,7 @@ Enabling an additional Azure region doesn't require changing or duplicating the 
 
 The four profiles form a spectrum: from Disconnected Spokes, with no dependency on a geographic hub, through Remote Hub Connected and Minimal Regional Hub, to a Full Regional Hub with greater local capability and independence. They aren't maturity stages. A profile can remain the right target for a region as long as it continues to satisfy workload and platform requirements.
 
-Profiles describe platform capabilities, not workload designs; [Workload Landing Zone archetypes](./application-landing-zone-archetypes.md) describe what applications need. You don't select a profile here. That happens in [step 3](./platform-architecture.md), after the region is [qualified](./regional-qualification.md).
+Profiles describe platform capabilities, not workload designs; [Workload Landing Zone archetypes](./application-landing-zone-archetypes.md) describe what applications need.
 
 :::image type="content" source="./media/connectivity-profile-spectrum.png" alt-text="Spectrum of four profiles from no dependency on a geographic hub to greater local capability. Disconnected spokes have no hub or gateway; remote-hub-connected spokes connect privately to a hub region; a minimal regional hub hosts selected shared services such as private DNS, a virtual network gateway, and Azure Monitor; a full regional hub adds comprehensive shared services including Azure Firewall." lightbox="./media/connectivity-profile-spectrum.png":::
 

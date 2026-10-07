@@ -1,17 +1,53 @@
 ---
-title: Profile considerations and hub implementations
-description: What to check for each regional connectivity profile, when to reassess it, what each step up in local capability costs, how profiles coexist across an estate, and how hubs are implemented.
-ms.date: 10/05/2026
+title: Select the connectivity profile
+description: Select one of the four regional connectivity profiles for a qualified Azure region, using the archetype-to-profile matrix, the selection principles, and the profile decision tree, and know when to reassess the selection.
+ms.date: 10/06/2026
 ms.topic: conceptual
 ---
 
-# Profile considerations and hub implementations
+# Select the connectivity profile
 
-Check these points before you settle on a regional connectivity profile, and revisit the profile when its reassessment trigger applies. For what each profile is, see [Common connectivity profiles](./connectivity-profiles.md). To select a profile, use the [selection principles](./platform-architecture.md#profile-selection-principles) and the [connectivity profile decision tree](./platform-architecture.md#which-connectivity-profile-should-this-region-provide) on the Overview.
+**Question:** What is the most efficient regional platform design that supports the identified requirements?
+
+Determine how workloads in the region will reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments. Those connectivity and dependency requirements determine which [connectivity profile](./connectivity-profiles.md) fits: Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, or Full Regional Hub.
+
+Start with the matrix to see which connectivity profiles each [archetype](./application-landing-zone-archetypes.md) typically uses. Then apply the selection principles and use the decision tree to pick the most efficient profile that meets the requirements.
+
+:::image type="content" source="./media/archetype-profile-matrix.png" alt-text="Matrix of the four archetypes against the four connectivity profiles. Hybrid-connected and connected cloud-native or AI applications typically use remote hub, minimal hub, or full hub; isolated cloud-native or AI applications often use disconnected spokes and other profiles where justified; interconnected portfolios can use spoke-to-spoke connectivity, a remote hub where acceptable, and a minimal or full hub when justified." lightbox="./media/archetype-profile-matrix.png":::
+
+*Archetype-to-profile relationships are many-to-many. Each row is a set of options, not an assignment; the selected profile follows dependencies, latency, traffic, resiliency, and independence requirements.*
+
+## Profile selection principles
+
+- Start with the **workload requirements and dependencies** identified during regional qualification, including portfolio-level dependencies. Use Workload Landing Zone archetypes to spot recurring needs, then validate the profile against the actual workloads.
+- Select the **most efficient profile** that satisfies those requirements, not the maximum possible one.
+- Keep capabilities remote when latency, dependency, data, security, resiliency, availability, and operational requirements permit. Add local capabilities only when a measurable requirement justifies the larger regional footprint; adoption growth alone doesn't.
+- Consider direct spoke-to-spoke connectivity where workloads have significant east-west traffic and a hub transit path is unnecessary. Add regional routing, inspection, or shared services when broader requirements justify them.
+
+## Which connectivity profile should this region provide?
+
+Each question comes from the "fits when" criteria of the [connectivity profiles](./connectivity-profiles.md). Stop at the first profile that satisfies the requirements identified in [check 3](./workload-requirements.md#platform-and-connectivity-requirements).
+
+:::image type="content" source="./media/connectivity-profile-decision-tree.png" alt-text="Decision tree with three questions. If workloads need no private access to enterprise services, use disconnected spokes. If they can tolerate the latency and coupling of another region, use remote-hub-connected spokes. If requirements do not justify a comprehensive local capability set, use a minimal regional hub; otherwise use a full regional hub." lightbox="./media/connectivity-profile-decision-tree.png":::
+
+*Connectivity profile selection tree. Questions escalate from dependency, to tolerance of remote consumption, to required independence. The outcome is a platform capability, not a workload design.*
+
+The same tree as a table, from the smallest regional footprint to the largest:
+
+| Profile | Fits when the workloads expected in the region | What the region gets |
+|---|---|---|
+| [Disconnected Spokes](./disconnected-spokes.md) | Need no private access to enterprise services, on-premises systems, centralized security inspection, another application portfolio, or geographic-hub capabilities. | No hub and no gateway. Workload spokes use the estate's standard identity, policy, security, and deployment practices. |
+| [Remote Hub Connected](./remote-hub-connected.md) | Need that access, and can tolerate the latency, availability coupling, and dependency on connectivity to another region. | No local hub. Workload spokes consume an existing geographic hub. |
+| [Minimal Regional Hub](./minimal-regional-hub.md) | Need some capabilities locally, without a comprehensive local set. | A limited hub with only the services that must be local. Everything else stays remote. |
+| [Full Regional Hub](./full-regional-hub.md) | Need a comprehensive local capability set, or independence from other hubs. | The complete local connectivity and shared services that the region's workloads require. |
+
+Two of the four profiles need no local hub, and only the Full Regional Hub approaches the footprint of an existing geographic hub.
+
+**Decision:** Select the most efficient regional platform connectivity profile that satisfies the identified requirements and can evolve as regional adoption changes.
 
 ## Considerations and reassessment by profile
 
-Profiles can move in both directions.
+Check these points before you settle on a profile, and revisit the profile when its reassessment trigger applies. Profiles can move in both directions.
 
 ### Disconnected Spokes
 
@@ -45,29 +81,7 @@ Greater local capability and independence usually increase fixed platform cost a
 
 *A qualitative trade-off, not a price list.*
 
-## Profiles coexisting across one estate
-
-Different profiles can coexist across the estate. A region's profile changes only when workload and platform requirements change, not because regions are expected to progress along a maturity path.
-
-:::image type="content" source="./media/profiles-coexisting-estate.png" alt-text="Illustrative estate: on-premises datacenters connect to two strategic geographic hubs in regions A and B. Region C runs a minimal regional hub that reuses an existing ExpressRoute circuit, region D runs a minimal hub without an on-premises path, regions E and F use remote-hub-connected spokes, region G uses disconnected spokes, and region H is a candidate not yet enabled." lightbox="./media/profiles-coexisting-estate.png":::
-
-*An illustrative estate. Two strategic hubs provide resilient hybrid connectivity; other regions consume what they need. Region C's minimal hub reaches on-premises by reusing an existing ExpressRoute circuit; region D's does not. Both are valid. Names and placements are examples only.*
-
-## Hub implementations vary between organizations
-
-Profiles describe capability, not a specific network build. The same profile can be implemented in different ways:
-
-| Implementation example | Description |
-|---|---|
-| Azure Firewall hub | Platform-native routing, traffic inspection, and egress services implemented with Azure Firewall and related Azure networking capabilities. |
-| NVA firewall hub | Third-party network virtual appliances provide routing, inspection, or security functions. |
-| SD-WAN-integrated hub | Branch, datacenter, and cloud connectivity are integrated through the organization's SD-WAN architecture. |
-| Separate transit and security functions | Transit, hybrid connectivity, routing, and security inspection are separated where scale, ownership, or architecture requirements justify it. |
-
-> [!NOTE]
-> Any of these designs can sit behind a Minimal or Full Regional Hub. Profiles can be implemented using hub-and-spoke virtual networks, Azure Virtual WAN, or other approved Azure networking patterns. Topology determines how the capability is implemented; workload and platform requirements determine which profile is appropriate.
-
 ## Next step
 
 > [!div class="nextstepaction"]
-> [Platform readiness checklist](./platform-readiness.md)
+> [Place shared services](./platform-enablement-connectivity.md)

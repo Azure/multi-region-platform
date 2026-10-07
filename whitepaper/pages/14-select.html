@@ -1,4 +1,4 @@
-<section class="page" data-section="3 · Select capabilities and connectivity profile">
+<section class="page" data-section="3 · Select the regional design">
 <style>
   .sd3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; }
   .sd3 .c { border: 1px solid var(--line); border-radius: 12px; background: #fff; padding: 16px 18px 12px; display: flex; flex-direction: column; }
@@ -24,29 +24,29 @@
     <div class="num">03</div>
     <div style="flex:1">
       <div class="eyebrow">Decisions, not deployment</div>
-      <h1 class="sec-title mt8" style="font-size:30px">Select capabilities and connectivity profile</h1>
+      <h1 class="sec-title mt8" style="font-size:30px">Select the regional design</h1>
     </div>
-    <p class="standfirst" style="width:330px;font-size:14.2px">For each qualified region, decide <strong>what the platform provides</strong> there. Nothing is built yet.</p>
+    <p class="standfirst" style="width:330px;font-size:14.2px">For each qualified region, make <strong>three choices</strong>, each from a short list. Nothing is built yet.</p>
   </div>
 
   <div class="g2 mt16" style="gap:40px">
-    <p>This step is a set of decisions, not a deployment. For each qualified region, you decide what the platform provides there. Nothing is built yet: deployment follows later, through the automation you already run.</p>
-    <p>You make three decisions. Each follows from the workloads you expect in the region, not from the footprint of an existing hub. Start with the matrix (<span data-figref="fig13">Figure 13</span>, page <span data-toc="fig13"></span>) to see which connectivity profiles each archetype typically uses. Then apply the selection principles and use the decision tree to pick the most efficient profile that meets the requirements.</p>
+    <p>Selecting the regional design is a set of decisions, not a deployment. For each qualified region, you make three choices, each from a short list. Nothing is built yet: deployment follows later, through the automation you already run.</p>
+    <p>Each choice follows from the workloads you expect in the region, not from the footprint of an existing hub. Keep one record per region. A region with a complete record is <strong>selected</strong>.</p>
   </div>
 
   <div class="sd3 mt16">
-    <div class="c"><div class="hd"><span class="n">1</span><h3>Platform capabilities</h3></div>
-      <div class="q">Which shared services and operational capabilities are provided in the region, consumed from another region, or kept centralized?</div>
-      <div class="pg"><span>Platform capabilities and connectivity</span><b>page <span data-toc="pcap"></span></b></div></div>
-    <div class="c"><div class="hd"><span class="n">2</span><h3>Hybrid connectivity</h3></div>
-      <div class="q">Is the hybrid connectivity you already have sufficient, or does a requirement justify a change?</div>
-      <div class="pg"><span>Resilient hybrid connectivity</span><b>page <span data-toc="phyb"></span></b></div></div>
-    <div class="c"><div class="hd"><span class="n">3</span><h3>Connectivity profile</h3></div>
-      <div class="q">Which of the four profiles is the most efficient one that meets the requirements?</div>
-      <div class="pg"><span>Selection principles and decision tree</span><b>pages <span data-toc="fig15"></span>–<span data-toc="figProfileTree"></span></b></div></div>
+    <div class="c"><div class="hd"><span class="n">1</span><h3>Connectivity profile</h3></div>
+      <div class="q">One of four: Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, or Full Regional Hub.</div>
+      <div class="pg"><span>Select the connectivity profile</span><b>page <span data-toc="pprof"></span></b></div></div>
+    <div class="c"><div class="hd"><span class="n">2</span><h3>Shared-service placement</h3></div>
+      <div class="q">For each shared service the workloads depend on: local, remote, or global.</div>
+      <div class="pg"><span>Place shared services</span><b>page <span data-toc="pcap"></span></b></div></div>
+    <div class="c"><div class="hd"><span class="n">3</span><h3>Hybrid connectivity</h3></div>
+      <div class="q">Reuse the existing foundation, change it, or confirm that none is required.</div>
+      <div class="pg"><span>Confirm hybrid connectivity</span><b>page <span data-toc="phyb"></span></b></div></div>
   </div>
 
-  <p class="mt16" style="font-size:12.2px;max-width:940px">The three decisions sit on one path, from on-premises locations to the workloads in the region. They influence one another, but each has different requirements and tradeoffs. Connectivity that is specific to one application isn’t decided here. It is designed when the workload is placed (Part 4).</p>
+  <p class="mt16" style="font-size:12.2px;max-width:940px">The three choices sit on one path, from on-premises locations to the workloads in the region. They influence one another, but each has different requirements and tradeoffs. Connectivity that is specific to one application isn’t decided here. It is designed when the workload is placed (Part 5).</p>
 
   <div class="figure mt8" id="fig9">
     <div class="dg f9">

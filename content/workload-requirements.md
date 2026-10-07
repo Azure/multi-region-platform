@@ -27,13 +27,13 @@ For **future workloads**, use known business and technical requirements, predefi
 
 ## Platform and connectivity requirements
 
-Workload requirements also define what the platform must provide in the region. Capture them in three areas. [Step 3](./platform-architecture.md) decides how the platform meets each one, after the region qualifies.
+Workload requirements also define what the platform must provide in the region. Capture them in three areas.
 
 | Area | What to identify | Decided in step 3 |
 |---|---|---|
-| **Platform enablement** | The shared services and operational capabilities the workloads depend on, such as identity, security controls, monitoring, backup, and key management, and which of them must be close to the workloads. | [Platform capabilities](./platform-enablement-connectivity.md#platform-capabilities) |
-| **Resilient hybrid connectivity** | The datacenters and users the workloads must reach, and the latency, bandwidth, routing, and resilience they need on that path. | [Resilient hybrid connectivity](./platform-enablement-connectivity.md#resilient-hybrid-connectivity) |
-| **Regional platform connectivity** | How the workloads must reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments. | [Regional platform connectivity](./platform-enablement-connectivity.md#regional-platform-connectivity) |
+| **Platform enablement** | The shared services and operational capabilities the workloads depend on, such as identity, security controls, monitoring, backup, and key management, and which of them must be close to the workloads. | [Place shared services](./platform-enablement-connectivity.md) |
+| **Resilient hybrid connectivity** | The datacenters and users the workloads must reach, and the latency, bandwidth, routing, and resilience they need on that path. | [Confirm hybrid connectivity](./hybrid-connectivity.md) |
+| **Regional platform connectivity** | How the workloads must reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments. | [Select the connectivity profile](./profile-selection.md) |
 
 > [!IMPORTANT]
 > This check doesn't approve workload relocation or define migration execution. Relocation readiness, migration sequencing, recovery design, and ongoing multi-region operation remain workload-specific activities.

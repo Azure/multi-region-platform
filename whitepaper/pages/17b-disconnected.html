@@ -1,0 +1,77 @@
+<section class="page" data-section="4 · Prepare the region">
+<style>
+  .zph { display: flex; align-items: center; gap: 13px; padding-bottom: 12px; border-bottom: 1px solid var(--line-soft); }
+  .zph .n { width: 36px; height: 36px; border-radius: 50%; color: #fff; font-size: 17px; font-weight: 700; display: grid; place-items: center; flex: none; }
+  .zph h2 { font-size: 22px; font-weight: 650; color: var(--ink); line-height: 1.15; white-space: nowrap; margin-top: 3px; }
+  .zph .gl { flex: none; margin-left: 4px; }
+  .zph .zin { flex: 1; font-size: 11.2px; line-height: 1.45; margin-left: 10px; padding-left: 20px; border-left: 1px solid var(--line-soft); }
+  .zph .zin p { margin-bottom: 5px; } .zph .zin p:last-child { margin-bottom: 0; }
+  .zh4 { font-size: 9.6px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--b700); margin-bottom: 5px; }
+  table.zdt { width: 100%; border-collapse: collapse; font-size: 10.6px; line-height: 1.4; }
+  table.zdt th { text-align: left; font-size: 8.8px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--muted); padding: 0 8px 4px 0; }
+  table.zdt td { padding: 4px 12px 4px 0; vertical-align: top; border-top: 1px solid var(--line-soft); }
+  table.zdt tr:last-child td { border-bottom: 1px solid var(--line-soft); }
+  table.zdt td.za { font-weight: 650; color: var(--ink); width: 168px; }
+  table.zdt td.zg { width: 284px; padding-right: 0; font-size: 10px; line-height: 1.4; }
+  table.zdt a, .zrc a, .zin a { font-weight: 650; }
+  .zsv { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 14px; font-size: 10.4px; line-height: 1.4; }
+  .zsv > div { border-top: 2px solid var(--line); padding-top: 6px; }
+  .zsv .zch { width: 88px; margin-bottom: 3px; display: block; }
+  .zch { display: inline-block; font-size: 9.2px; font-weight: 700; letter-spacing: .03em; padding: 2px 0; border-radius: 20px; text-align: center; white-space: nowrap; }
+  .zch.lo { background: var(--b600); color: #fff; }
+  .zch.re { background: #fff; color: var(--b700); box-shadow: inset 0 0 0 1.2px var(--b500); }
+  .zch.gl { background: var(--s100); color: var(--s800); }
+  .zch.lr { background: var(--b100); color: var(--b800); box-shadow: inset 0 0 0 1.2px var(--b500); }
+  .zch.nr { color: var(--muted); box-shadow: inset 0 0 0 1.2px var(--line); font-weight: 650; }
+  .zrc li { font-size: 10.6px; line-height: 1.42; margin-bottom: 4.5px; }
+  .zc3 { columns: 3; column-gap: 28px; column-rule: 1px solid var(--line-soft); }
+  .zc2 { columns: 2; column-gap: 32px; column-rule: 1px solid var(--line-soft); }
+  .zc3 > *, .zc2 > * { break-inside: avoid; }
+  .zc3 ul.bul, .zc2 ul.bul { break-inside: auto; margin: 0 0 2px; }
+  .zc3 ul.bul li, .zc2 ul.bul li { break-inside: avoid; }
+  .zra { background: #FBF4EE; border-radius: 8px; padding: 8px 12px; font-size: 10.6px; line-height: 1.42; color: var(--text); }
+  .zra b { display: block; font-size: 9.2px; letter-spacing: .1em; text-transform: uppercase; color: var(--w600); margin-bottom: 2px; }
+  .zd1 table.zdt td { padding: 3px 12px 3px 0; }
+  .zd1 .zrc li { font-size: 10.3px; line-height: 1.4; margin-bottom: 4px; }
+  .zd1 .zra { padding: 7px 12px; font-size: 10.3px; line-height: 1.4; }
+  .zd1 .zsv { font-size: 10.3px; }
+</style>
+<div class="inner zd1">
+  <div class="zph" id="pDisc">
+    <span class="n" style="background:var(--t600)">1</span>
+    <div><div class="eyebrow">Part 4 · Prepare the region</div><h2>Disconnected Spokes</h2></div>
+    <svg class="gl" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="9" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>
+    <div class="zin" style="columns:2;column-gap:22px;font-size:10.8px"><p style="break-inside:avoid">Workload spokes run in the region with no private connectivity to a hub, another Azure region, or an on-premises environment. There is no hub to build. Preparing the region means letting the landing zone you already run accept it.</p><p style="break-inside:avoid">In the Azure landing zone architecture, these spokes are <em>online</em> landing zones: workloads that use direct internet connectivity, or that don’t need a virtual network, and that don’t connect to the corporate network through a hub.</p></div>
+  </div>
+  <div class="zh4" style="margin-top:9px">What you deploy</div>
+  <table class="zdt">
+  <thead><tr><th>Area</th><th>What to do</th><th>Guidance</th></tr></thead>
+  <tbody>
+  <tr><td class="za">Policy</td><td>Add the region to any policy assignment that restricts allowed locations.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone">Landing zone regions</a></td></tr>
+  <tr><td class="za">Management groups and access control</td><td>Nothing. Place the subscriptions under the management group you use for landing zones without corporate connectivity.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/resource-org-management-groups">Management groups</a></td></tr>
+  <tr><td class="za">Landing-zone provisioning</td><td>Offer the region in subscription vending, with a spoke virtual network that isn’t peered to a hub, or with no virtual network.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/subscription-vending">Subscription vending</a></td></tr>
+  <tr><td class="za">Address space</td><td>Assign address space that doesn’t overlap the rest of the estate.</td><td class="zg">Platform readiness checklist, page <span data-toc="figReadiness"></span></td></tr>
+  <tr><td class="za">Internet egress and ingress</td><td>Give each spoke explicit outbound connectivity, such as a NAT gateway. Protect inbound HTTP and HTTPS with a web application firewall.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/plan-for-inbound-and-outbound-internet-connectivity">Plan for inbound and outbound internet connectivity</a></td></tr>
+  <tr><td class="za">Name resolution</td><td>Use Azure-provided DNS. For private endpoints, link the spoke virtual network to the private DNS zones it needs.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/private-link-and-dns-integration-at-scale">Private Link and DNS integration at scale</a></td></tr>
+  <tr><td class="za">Monitoring and security</td><td>Send logs to the existing workspace, or to a workspace in the region when data must stay there. Extend security posture and threat detection to the region.</td><td class="zg"><a href="https://learn.microsoft.com/azure/azure-monitor/logs/workspace-design">Design a Log Analytics workspace architecture</a></td></tr>
+  <tr><td class="za">Backup and keys</td><td>Create backup vaults and Key Vaults in the region.</td><td class="zg">Storage, backup, and Key Vault, Appendix A</td></tr>
+  </tbody>
+  </table>
+  <div class="zh4" style="margin-top:9px">Where shared services sit</div>
+  <div class="zsv"><div><span class="zch gl">Global</span>Management groups, access control, policy, and private DNS zones.</div><div><span class="zch re">Remote</span>The log workspace, unless data residency requires one in the region.</div><div><span class="zch lo">Local</span>Backup vaults, Key Vaults, and each spoke’s own egress and ingress.</div><div><span class="zch nr">Not used</span>A hub firewall, hybrid connectivity gateways, DNS forwarders, and domain controllers.</div></div>
+  <div class="zh4" style="margin-top:9px">Recommendations and considerations</div>
+  <div class="zc3">
+    <ul class="bul zrc">
+      <li><strong>Keep address space unique.</strong> A spoke that isn’t peered today can move to a connected profile later only if its address space doesn’t overlap.</li>
+      <li><strong>Plan outbound access explicitly.</strong> New virtual networks default to private subnets, without <a href="https://learn.microsoft.com/azure/virtual-network/ip-services/default-outbound-access">default outbound access</a>. A NAT gateway is the recommended method for most workloads that don’t need a firewall.</li>
+      <li><strong>Decide who owns private DNS zones.</strong> A disconnected spoke can’t use a <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/dns-for-on-premises-and-azure-resources">DNS resolver in a hub</a>. Its virtual network needs its own links to the private DNS zones for the private endpoints it uses, whether those zones are the central ones or zones that the workload owns.</li>
+      <li><strong>Plan operator access.</strong> Without a hub there is no shared management path. Decide how operators reach workloads, for example with Azure Bastion in the spoke.</li>
+      <li><strong>Check identity.</strong> Workloads authenticate with Microsoft Entra ID. A workload that needs domain controllers doesn’t fit this profile.</li>
+      <li><strong>Connect spokes directly only where needed.</strong> Where applications in the region need east-west communication, evaluate <a href="https://learn.microsoft.com/azure/architecture/networking/architecture/hub-spoke">direct spoke-to-spoke connectivity</a> without assuming that a regional hub is required. Limit it to spokes of the same environment and workload.</li>
+      <li><strong>Validate the operating procedures.</strong> Validate administration, identity, DNS, secrets, telemetry, data movement, software distribution, private endpoints, incident response, and support procedures.</li>
+      <li><strong>Look for hidden dependencies.</strong> Confirm that no hidden dependency requires connectivity to a geographic hub or on-premises environment.</li>
+    </ul>
+    <div class="zra" style="margin-top:8px"><b>Reassess when</b>Workloads require private access to enterprise services, centralized security inspection, on-premises systems, another application portfolio, or capabilities hosted through a geographic hub.</div>
+  </div>
+</div>
+</section>
