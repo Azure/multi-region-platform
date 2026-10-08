@@ -55,6 +55,10 @@ the workbook uses the full page width. Hiding it or leaving Regional design rest
 **Editor** and **Details** show one side panel at a time; on narrower screens they overlay the canvas instead
 of shrinking it. The tool follows the website theme, with no separate theme switch.
 
+**Expand to full page** makes the tool fill the browser window, above the website header. Select
+**Exit full page**, or press **Esc** while focus is outside the diagram, to return. Inside the diagram, **Esc**
+keeps its usual meaning of resetting the view. Hiding the tool or leaving Regional design also exits full page.
+
 **Present** (or **F**) opens the current design and selected path in a separate presentation window. Changes
 to the inline design, layers, or website theme update that window while it remains open. The popup has no
 editor and does not overwrite the saved design. Close it with **Close presentation** or **Esc**. If the

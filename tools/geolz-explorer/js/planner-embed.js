@@ -81,7 +81,6 @@ if (PLANNER_MODE === 'embedded') {
   document.querySelector('footer').textContent = 'Illustrative architecture explorer - not an official Microsoft product - ' +
     'Editor and Details share one side panel; Present (F) opens a separate window. Theme follows the workbook.';
 }
-if (PLANNER_MODE) new ResizeObserver(() => { if (layout) fit(); }).observe(document.querySelector('.canvas'));
 if (PLANNER_MODE === 'presentation') {
   if (window.opener && !window.opener.closed && window.opener.GeoLZPlanner) {
     window.GeoLZPlanner.receivePresentation(window.opener.GeoLZPlanner.getPresentationState());

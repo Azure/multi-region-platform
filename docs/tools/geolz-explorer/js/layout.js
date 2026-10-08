@@ -5,7 +5,7 @@
 // A column: frame L.col wide (COL, wider for 3+ gateway lines); hub and spoke container HUB_W wide, PAD in from the
 // left. Its left gutter, the right gutter (path lane, gateway lines 8 apart) and the gaps between columns (hub link
 // lanes) keep routes 8+ px from edges.
-const COL = 300, GAP = 28, M = 16, PAD = 20, HUB_W = 240, ROW = 42, ITEM = 36, SPOKE_H = 48, LANE = 20;
+const COL = 330, GAP = 28, M = 16, PAD = 20, HUB_W = 270, ROW = 40, ITEM = 36, SPOKE_H = 48, LANE = 20;
 const RTOP = 232, HUB_TOP = 288;
 // Bands and lanes above the regions: path lanes 22 px below the users and global nodes (room for an arrowhead), DNS
 // zone links in their own lane above the global path lane.
@@ -13,8 +13,8 @@ const TOP_LANE = 106, GLOBAL_Y = 116, ZONE_LANE = 186, GLOBAL_LANE = 196, AREA_Y
 const centre = n => [n.x + n.w / 2, n.y + n.h / 2];
 const patternId = region => (RULES.patterns[region.pattern] ? region.pattern : 'full-hub');
 // Every diagram label is placed here, so its box is known to the drawing code and the overlap test.
-const LABEL_SIZE = { rname: 14, plabel: 11, title: 12, ph: 11.5, grp: 9.5, 'band-l': 10.5, lbl: 11,
-  mg: 10.5, cap: 10.5, otag: 10.5 };
+const LABEL_SIZE = { rname: 16, plabel: 12, title: 14, ph: 12, grp: 11, 'band-l': 12, lbl: 11.5,
+  mg: 12, cap: 11.5, otag: 12 };
 // Lines of at most n characters: a new line for each " · " part, long parts broken after a comma or space.
 function wrapText(text, n) {
   return text.split(' · ').filter(Boolean).flatMap(part => {
@@ -45,8 +45,7 @@ function placeStack(L, region, groups, x, y, hub) {
           ms = p.vendor === 'Microsoft';  // e.g. own_zones
       const r = CATALOG.roles[role] || {};
       L.nodes[`${region.id}.${role}`] = { x, y, w: HUB_W - 20, h: ITEM, region: region.id, hub, group, ms,
-        layer: r.layer, label: p.short || p.label, sub: ms ? p.sub || r.label : p.vendor, badge: p.badge,
-          title: [p.short && p.label + '.', ...p.points.map(t => t.text || t)].filter(Boolean).join(' ') };
+        layer: r.layer, label: p.short || p.label, sub: ms ? p.sub || r.label : p.vendor, badge: p.badge };
       y += ROW;
     }
   }
@@ -74,9 +73,9 @@ function placeHub(L, col) {
   const nva = open && vhubState(spec, region) === 'nva';
   const notes = [...wrapText(capabilityLine(spec, region), 34), ...(!open ? [] : [nva ? 'Firewall NVA: shared services'
     : 'No hub security · not inspected'])];
-  notes.forEach((t, k) => addLabel(L, t, box.x + 10, HUB_TOP + 34 + k * 14, 'cap'));
+  notes.forEach((t, k) => addLabel(L, t, box.x + 10, HUB_TOP + 34 + k * 15, 'cap'));
   const bottom = placeStack(L, region, groupRoles(ownedRoles(spec, region).hub), box.x + 10,
-    HUB_TOP + 28 + notes.length * 14, true);
+    HUB_TOP + 28 + notes.length * 15, true);
   col.hub = { ...box, h: Math.max(40, bottom - HUB_TOP + 2) };
 }
 const stripHeight = col => (col.strip.length ? 19 + col.strip.length * ROW : 0);
@@ -103,7 +102,7 @@ function placeSpokes(L, col, spokeY) {
 // text: one label or lines, right of the entry lanes (clearLabels may move it); layer: see panels.js
 function addBand(L, text, y, h, layer) {
   const band = L.bands.push({ x: M - 8, y, w: L.width - 2 * (M - 8), h, layer }) - 1;
-  [].concat(text).forEach((t, i) => addLabel(L, t.toUpperCase(), L.left + 2, y + 17 + i * 14, 'band-l',
+  [].concat(text).forEach((t, i) => addLabel(L, t.toUpperCase(), L.left + 2, y + 17 + i * 16, 'band-l',
     { band, layer }));
   return y + h;
 }
@@ -133,7 +132,7 @@ function planLanes(L, lane0) {
     const key = `${c.kind}:${a.region.id}:${b.region.id}`, text = connectionLabel(spec, c);
     L.peers.push({ key, text, from: a.region.id, to: b.region.id, kind: c.kind, laneY, srcX, dstX,
       pts: [...start, [srcX, laneY], [dstX, laneY], ...end] });
-    const half = text.length * 3.3 + 4, wide = Math.abs(dstX - srcX) > 2 * half + 24;  // else right of the U
+    const half = text.length * 3.45 + 4, wide = Math.abs(dstX - srcX) > 2 * half + 24;  // else right of the U
     const mid = wide ? (srcX + dstX) / 2 : Math.max(srcX, dstX) + 12 + half;
     const sel = peerSel({ kind: c.kind, from: a.region.id, to: b.region.id });  // editor-actions.js: click to edit
     addLabel(L, text, Math.min(Math.max(mid, M + half), L.width - M - half), laneY - 5, 'lbl',
@@ -160,7 +159,7 @@ function placeGlobal(L) {
 // Global entry. Front Door and Traffic Manager are Azure global services: in the global services row, centred under
 // Internet (a straight drop). A third-party global load balancer/CDN is not Azure: in the Users & internet band,
 // left of Internet. diagramWidth() reserves the room for either. Origins are tagged in their region headers.
-const THIRD_PARTY_W = 1080, THIRD_PARTY_GAP = 32;  // the gap holds a full arrow from Internet
+const THIRD_PARTY_W = 1240, THIRD_PARTY_GAP = 32;  // the gap holds a full arrow from Internet
 function globalEntryWidth(L) {
   const type = globalEntry(spec).type;
   if (type === 'none') return 0;
@@ -176,17 +175,15 @@ function placeGlobalEntry(L) {
   const roles = `${count('active')} active · ${count('backup')} backup`;
   if (globalEntry(spec).type === 'third-party') {
     L.nodes.global_entry = { x: net.x - THIRD_PARTY_GAP - net.w, y: net.y, w: net.w, h: net.h, ext: true,
-      layer: 'users', label: rule.short, sub: `${rule.kind} · ${roles}`, title: rule.label };
+      layer: 'users', label: rule.short, sub: `${rule.kind} · ${roles}` };
     return;
   }
   L.nodes.global_entry = { x: centre(net)[0] - HUB_W / 2, y: GLOBAL_Y + 22, w: HUB_W, h: ITEM, global: true,
-    ms: true, group: 'connectivity', badge: rule.badge, label: rule.label,
-    sub: `${rule.kind} · ${roles}`, title: rule.points[0].text };
+    ms: true, group: 'connectivity', badge: rule.badge, label: rule.label, sub: `${rule.kind} · ${roles}` };
   // Traffic Manager answers the DNS query only: a dotted line from Internet, beside the path's own drop.
   if (!rule.inPath) {
     const x = centre(net)[0] + 60;
-    L.globalLinks.push({ kind: 'dns', title: 'DNS query to Traffic Manager', pts: [[x, net.y + net.h],
-      [x, L.nodes.global_entry.y]] });
+    L.globalLinks.push({ kind: 'dns', pts: [[x, net.y + net.h], [x, L.nodes.global_entry.y]] });
   }
 }
 // "Active origin" / "Backup endpoint" in the region header's second line, right-aligned; on the first line when
@@ -206,8 +203,8 @@ function placeBands(L) {
   const access = CATALOG.products[spec.defaults.private_user_access];  // optional private user access (ZTNA)
   addBand(L, 'Users & internet', 10, 86, 'users');
   L.bands.at(-1).owner = 'internet';  // outside every ownership boundary
-  const wide = L.width >= 900, w = wide ? 220 : 170;  // the narrowest diagram (one region) still fits all three
-  L.nodes.users = { x: M + 10, y: 36, w: wide ? 300 : 230, h: 48, ext: true, layer: 'users',
+  const wide = L.width >= 900, w = wide ? 255 : 195;  // the narrowest diagram (one region) still fits all three
+  L.nodes.users = { x: M + 10, y: 36, w: wide ? 345 : 265, h: 48, ext: true, layer: 'users',
     label: CATALOG.generic.users.label, sub: access ? access.label : CATALOG.generic.users.sub };
   L.nodes.admins = { x: L.nodes.users.x + L.nodes.users.w + 16, y: 36, w, h: 48, ext: true, layer: 'users',
     ...CATALOG.generic.admins };  // Bastion users: the "Admin access (Bastion)" ingress path starts here
@@ -257,7 +254,7 @@ function freeX(L, want, w, [y0, y1]) {
 }
 // Band titles move sideways (their lines together) to the nearest spot no line crosses. A lane label does the same,
 // and in a narrow diagram falls back to a shorter text: from the regions on (without "Global VNet peering"), then
-// without a note in brackets, then the regions only. The lane's tooltip keeps the full text.
+// without a note in brackets, then the regions only.
 function clearLabels(L) {
   for (const title of L.bands.map((b, i) => L.labels.filter(l => l.band === i)).filter(t => t.length)) {
     const x = title[0].box.x, w = Math.max(...title.map(l => l.box.w)), y = title[0].box.y;
@@ -297,21 +294,27 @@ function columnWidth() {
   }));
   return COL + 8 * Math.max(0, ...Object.values(lines).map(n => n - 2));
 }
+// Width that fits each hybrid row side by side: the sites, the peering locations and the providers.
+function hybridWidth() {
+  const row = (count, w, gap) => (count ? count * (w + gap) - gap + 2 * M : 0);
+  return Math.max(row((spec.onprem || []).length, SITE_W, 24), row(peeringLocations(spec).length, EDGE_W, 44),
+    row(circuitsOf(spec).length, PROV_W, 24));
+}
 function layoutDiagram() {
   const L = { nodes: {}, labels: [], peers: [], bands: [], areas: [], interconnects: [],
     globalLinks: [] };
   const order = regionOrder(spec);
   const { gap, left } = gutters(order), n = order.length;
   Object.assign(L, { gap, left, col: columnWidth() });
-  L.width = Math.max(660, left + n * L.col + Math.max(0, n - 1) * gap + M, globalEntryWidth(L));
+  L.width = Math.max(760, left + n * L.col + Math.max(0, n - 1) * gap + M, globalEntryWidth(L), hybridWidth());
   L.regions = order.map((region, i) => ({ region, x: left + i * (L.col + gap), w: L.col, shared: ownedRoles(spec,
     region).shared, strip: [...ownedRoles(spec, region).spoke, ...(patternOf(region).spokeExtras || [])] }));
   L.regions.forEach(col => placeHub(L, col));
   placeOriginTags(L);
-  const spokeY = Math.max(HUB_TOP + 100, ...L.regions.map(c => c.hub.y + c.hub.h + 54 + stripHeight(c) +
+  const spokeY = Math.max(HUB_TOP + 100, ...L.regions.map(c => c.hub.y + c.hub.h + 44 + stripHeight(c) +
     sharedHeight(c)));
   L.regions.forEach(col => placeSpokes(L, col, spokeY));
-  L.bottom = spokeY + SPOKE_H + 30;
+  L.bottom = spokeY + SPOKE_H + 22;
   placeBands(L); placeAreas(L); clearLabels(L);
   for (const [key, n] of Object.entries(L.nodes)) n.key = key;  // routes look up wires by node key
   return L;
@@ -368,7 +371,7 @@ function hybridLines(L) {
   }
   return lines.map(l => ({ ...l, gx: l.col.x + PAD + HUB_W + 22 + l.k * 8 }));
 }
-const SITE_W = 220;
+const SITE_W = 255;
 // x where a line comes down towards its target: its gutter, or right of a peering location in its way (VPN).
 const dropX = (L, l, lines) => vpnDetour(L, l, lines) ?? l.gx;
 // Arrival slots: every line reaching a node (gateway line, or circuit at a site) gets its own slot on the node's top
@@ -434,7 +437,7 @@ function placeInterconnects(L, laneY) {
   };
   L.interconnects = pairs.map(([a, b], k) => {
     const [na, nb] = [L.nodes[a], L.nodes[b]], [xa, xb] = [slot(a, b), slot(b, a)], y = laneY + 8 * k;
-    return { a, b, conn: icConn(a.slice(5), b.slice(5)), title: `${na.label} ↔ ${nb.label}: on-premises interconnect`,
+    return { a, b, conn: icConn(a.slice(5), b.slice(5)),
       pts: [[xa, na.y + na.h], [xa, y], [xb, y], [xb, nb.y + nb.h]] };
   });
 }
@@ -450,9 +453,8 @@ function placeSites(L, lines, drops, slots, y) {
   };
   const sites = (spec.onprem || []).map(s => ({ s, want: want(s), w: SITE_W }));
   for (const { s, x } of spread(sites, L.width)) {
-    const sub = siteEquipment(spec, s);  // the tooltip keeps a combined sub-label that doesn't fit
-    L.nodes['site.' + s.id] = { x, y, w: SITE_W, h: 48, ext: true, site: true, label: s.name, sub,
-      title: `${s.name} · ${sub}` };
+    L.nodes['site.' + s.id] = { x, y, w: SITE_W, h: 48, ext: true, site: true, label: s.name,
+      sub: siteEquipment(spec, s) };
   }
 }
 // A line's label: its text (e.g. "Site-to-site VPN (IPsec) over internet"), or for a backup line a short one
@@ -468,7 +470,7 @@ function lineTag(x, c, text, hubId) {
 function placeTags(L, tags, y) {
   const rows = [];
   for (const t of tags) {
-    const w = t.text.length * 6.6, clear = x => !tags.some(o => o !== t && o.x > x - 4 && o.x < x + w + 4);
+    const w = t.text.length * 6.9, clear = x => !tags.some(o => o !== t && o.x > x - 4 && o.x < x + w + 4);
     const fits = x => x >= M && x + w <= L.width - M && clear(x);  // never pushed back over its own line
     const x = [t.x + 6, t.x - 6 - w].find(fits) ?? Math.min(t.x + 6, L.width - M - w);
     let r = rows.findIndex(row => row.every(o => x > o.x + o.w + 8 || x + w + 8 < o.x));
@@ -512,7 +514,6 @@ function hybridWires(L, lines, circuitWireList, slots, lanes) {
     const gw = L.nodes[l.gw], t = L.nodes[l.to], gy = centre(gw)[1], bx = vpnDetour(L, l, lines);
     if (!t) continue;
     wires.push({ a: l.gw, b: l.to, type: l.c.type, conn: l.c.id, hub: l.col.region.id, backup: l.backup, link: l.link,
-      title: `${connectionName(spec, l.c)} → ${l.col.region.name}${l.backup ? ' (backup)' : ''}`,
       head: [[gw.x + gw.w, gy], [l.gx, gy]], xs: bx ? [l.gx, bx] : [l.gx], bands: bx ? ['upper'] : [],
       end: [t.x + t.w / 2 + slots.get(l), t.y], band: t.site ? 'lower' : 'upper' });
   }
@@ -548,7 +549,7 @@ function assignLanes(wires, lanes) {
   return used;
 }
 
-const EDGE_W = 200, EDGE_H = 44, PROV_W = 170, METRO_GAP = 16;
+const EDGE_W = 230, EDGE_H = 44, PROV_W = 195, METRO_GAP = 16;
 
 /* ===== PEERING LOCATIONS (band "ExpressRoute peering locations") ===== */
 // Location groups: a Metro area's two locations side by side (with a standard circuit's location in that city), or
@@ -566,17 +567,16 @@ function locationGroups() {
   return groups;
 }
 function placeEdges(L, lines, y) {
-  const sites = spec.onprem || [], top = y + 18;
+  const sites = spec.onprem || [], top = y + (locationGroups().some(g => g.metro) ? 18 : 6);  // room for a metro name
   const rank = g => (k => (k < 0 ? sites.length : k))(sites.findIndex(s => g.circuits.some(c => c.site === s.id)));
   const items = locationGroups().map(g => ({ g, rank: rank(g), w: g.members.length * (EDGE_W + METRO_GAP) - METRO_GAP,
     want: underColumns(lines.filter(l => g.members.some(m => l.to === edgeId(m))).map(l => l.col)) ?? L.width / 2 }));
   L.metroGroups = [];
   for (const { g, x, w } of spread(items.sort((a, b) => a.rank - b.rank), L.width, 44)) {
     g.members.forEach((loc, k) => { L.nodes[edgeId(loc)] = { x: x + k * (EDGE_W + METRO_GAP), y: top, w: EDGE_W,
-      h: EDGE_H, ext: true, edge: true, layer: 'hybrid', label: loc, ...edgeText(loc) }; });
+      h: EDGE_H, ext: true, edge: true, layer: 'hybrid', label: loc, sub: edgeSub(loc) }; });
     if (g.metro) {
-      L.metroGroups.push({ x: x - 6, y: y + 2, w: w + 12, h: EDGE_H + 24, title: `${g.metro}: one link through each` +
-        ' of its two peering locations' });
+      L.metroGroups.push({ x: x - 6, y: y + 2, w: w + 12, h: EDGE_H + 24 });
       addLabel(L, g.metro, x + w / 2, y + 14, 'mg', { anchor: 'middle', layer: 'hybrid' });
     }
   }
@@ -584,22 +584,16 @@ function placeEdges(L, lines, y) {
   return top + EDGE_H;
 }
 // A location's sub-label: "Standard · 2 links, 1 location", or "Metro · link 1 of 2" (its circuits' links there).
-function edgeText(loc) {
+function edgeSub(loc) {
   const at = circuitsOf(spec).filter(c => linkLocations(c).includes(loc));
   const metro = at.filter(isMetro).map(c => linkLocations(c).indexOf(loc) + 1), std = at.some(c => !isMetro(c));
-  const sub = [std && 'Standard · 2 links, 1 location', metro.length && `Metro · link ${metro[0]} of 2`]
+  return [std && 'Standard · 2 links, 1 location', metro.length && `Metro · link ${metro[0]} of 2`]
     .filter(Boolean).join(' + ');
-  const names = at.map(c => c.name || 'Circuit').join(', ');
-  return { sub, title: `${loc} peering location · ${names}: ${std ? 'a standard circuit\'s two links both land' +
-    ' here' : 'one link of a Metro circuit, whose other link lands at the other location of its metro area'}` };
 }
 function tagMaximum(L) {
   for (const r of spec.regions) {
     const gw = L.nodes[`${r.id}.${GATEWAY_ROLE.expressroute}`];
-    if (!gw || hubResiliency(spec, r.id) !== 'maximum') continue;
-    const ers = circuitsAt(spec, r.id).map(c => `${c.name || 'Circuit'} (${c.peering_location})`);
-    Object.assign(gw, { tag: 'Maximum resiliency', title: `Maximum resiliency: ${ers.join(', ')} · circuits at two ` +
-      `different peering locations. ${gw.title || gw.label}` });
+    if (gw && hubResiliency(spec, r.id) === 'maximum') gw.tag = 'Maximum resiliency';
   }
 }
 
@@ -627,8 +621,7 @@ function placeProviders(L, links, y, lanes) {
     o.cx = x + PROV_W / 2;
     o.links.forEach((l, k) => { l.px = any ? o.cx + (k - (o.links.length - 1) / 2) * 16 : l.x; });
     if (any && !isDirect(o.c)) L.nodes[providerId(o.c)] = { x, y: top, w: PROV_W, h: 40, ext: true, prov: true,
-      layer: 'hybrid', label: providerName(o.c), sub: o.c.name || 'Circuit',
-      title: `${providerName(o.c)} · ${connectionName(spec, o.c)} · ownership boundary: the connectivity provider` };
+      layer: 'hybrid', label: providerName(o.c), sub: o.c.name || 'Circuit' };
   }
   return any ? { bottom: top + 40 + 10, mid, circuits } : { bottom: y - 8, mid: null, circuits };
 }
@@ -644,20 +637,18 @@ const circuitText = c => `${c.name || 'Circuit'} · ExpressRoute Direct (custome
 function circuitWires(L, circuits, drops, slots) {
   const wires = [];
   for (const { c, links, cx } of circuits) {
-    const site = L.nodes['site.' + c.site], prov = L.nodes[providerId(c)], name = connectionName(spec, c);
-    const base = { type: 'circuit', conn: c.id, hub: null, backup: isBackup(spec, c), title: name };
+    const site = L.nodes['site.' + c.site], prov = L.nodes[providerId(c)];
+    const base = { type: 'circuit', conn: c.id, hub: null, backup: isBackup(spec, c) };
     const toSite = item => site && { b: 'site.' + c.site, end: [site.x + site.w / 2 + slots.get(item), site.y],
       band: 'lower' };
     for (const o of links) {
       const loc = L.nodes[edgeId(o.loc)], turn = Math.abs(o.px - o.x) > 0.5, head = [[o.x, loc.y + loc.h]];
       const edge = { ...base, a: edgeId(o.loc), link: o.k, head, xs: [o.x], bands: [] };
-      if (prov) wires.push({ ...edge, b: providerId(c), end: [o.px, prov.y], band: 'mid', title: `${name}: the` +
-        ` circuit, between the Microsoft edge routers (MSEEs) at ${o.loc} and the provider's edge` });
+      if (prov) wires.push({ ...edge, b: providerId(c), end: [o.px, prov.y], band: 'mid' });
       else if (site) wires.push({ ...edge, ...toSite(o), xs: turn ? [o.x, o.px] : [o.x], bands: turn ? ['mid'] : [] });
     }
     if (prov && site) wires.push({ ...base, ...toSite(c), a: providerId(c), head: [[cx, prov.y + prov.h]], xs: [cx],
-      bands: [], provnet: true, title: `${name}: the provider's network from its edge to ${site.label} (IPVPN,` +
-        ' point-to-point Ethernet or a cloud exchange cross-connect, depending on the provider)' });
+      bands: [], provnet: true });
   }
   return wires;
 }

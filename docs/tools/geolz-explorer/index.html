@@ -36,7 +36,8 @@
       fill="currentColor"/></symbol>
     <symbol id="i-clear" viewBox="0 0 16 16"><path d="M2.5 4h11M6 4V2.5h4V4M4 4l.7 9.5h6.6L12 4"/></symbol>
   </svg>
-  <div class="brand"><div><h1 id="title"></h1><p id="subtitle"></p></div></div>
+  <div class="brand"><div><h1 id="title"></h1><p class="sub"><span id="subtitle"></span><span id="status"
+    role="status" aria-live="polite"></span></p></div></div>
   <div class="tools" role="toolbar" aria-label="Commands">
     <button id="btnEditor" aria-pressed="false" title="Show or hide the settings editor"><svg class="ic"
       aria-hidden="true"><use href="#i-edit"/></svg>Editor</button>
@@ -67,7 +68,6 @@
     <span class="hint">Your browser saves to its download folder — turn on 'Ask where to save each file' in browser
       settings to choose a location.</span>
   </div>
-  <div id="status" role="status" aria-live="polite"></div>
   <div class="legend" id="legend" aria-label="Legend"></div>
 </header>
 <nav id="controls" aria-label="Path selection">

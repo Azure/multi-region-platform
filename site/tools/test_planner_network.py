@@ -66,6 +66,20 @@ def main():
             assert explorer.locator("aside").is_visible()
             assert explorer.locator(".canvas").bounding_box()["width"] >= 700
             explorer.get_by_role("button", name="Editor", exact=True).click()
+            page.locator("#pl-network-full").click()
+            assert page.locator("html").evaluate("e => e.classList.contains('network-full')")
+            full_box = page.locator("#pl-network iframe").bounding_box()
+            assert full_box["y"] < 80 and full_box["width"] >= 1400 and full_box["height"] >= 1000, full_box
+            assert page.evaluate("""() => { const r = document.querySelector('#pl-network iframe').getBoundingClientRect();
+              return document.elementFromPoint(r.x + r.width / 2, r.y + 10).tagName === 'IFRAME'; }""")
+            assert explorer.locator(".canvas").bounding_box()["width"] >= 1000
+            assert page.locator("#pl-network-full").inner_text() == "Exit full page"
+            page.keyboard.press("Escape")
+            assert not page.locator("html").evaluate("e => e.classList.contains('network-full')")
+            assert page.locator("#pl-network-full").inner_text() == "Expand to full page"
+            page.locator("#pl-network-full").click()
+            page.locator("#pl-network-full").click()
+            assert page.locator("#pl-network iframe").bounding_box()["height"] < 950
             page.evaluate("document.documentElement.dataset.theme='dark'")
             page.wait_for_function("""() => document.querySelector('#pl-network iframe')
               .contentDocument.documentElement.dataset.theme === 'dark'""")

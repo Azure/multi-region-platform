@@ -163,7 +163,11 @@ const productsFor = (role, place, keep) => Object.entries(CATALOG.products)
   .map(([id, p]) => [id, (place === 'virtual-hub' && (p.vwan || {}).option) || p.label]);
 
 /* ===== ZOOM AND PAN (by changing the SVG viewBox) ===== */
-function setView(v) { view = v; $('diagram').setAttribute('viewBox', `${v.x} ${v.y} ${v.w} ${v.h}`); }
+// byUser: a zoom or pan by the user, which a resize of the canvas keeps (watchCanvas).
+let viewByUser = false;
+function setView(v, byUser = false) {
+  view = v; viewByUser = byUser; $('diagram').setAttribute('viewBox', `${v.x} ${v.y} ${v.w} ${v.h}`);
+}
 // Fit the whole diagram, centred; in presentation mode keep it clear of the floating controls at the bottom.
 let reserved = 0;  // px kept free below the diagram for the floating controls
 function fit() {
@@ -175,7 +179,7 @@ function fit() {
   setView({ x: (W - w) / 2, y: (H - (box.height - reserve) / s) / 2, w, h });
 }
 function zoom(f, cx = view.x + view.w / 2, cy = view.y + view.h / 2) {
-  setView({ x: cx - (cx - view.x) * f, y: cy - (cy - view.y) * f, w: view.w * f, h: view.h * f });
+  setView({ x: cx - (cx - view.x) * f, y: cy - (cy - view.y) * f, w: view.w * f, h: view.h * f }, true);
 }
 const toSvgPoint = e => new DOMPoint(e.clientX, e.clientY).matrixTransform($('diagram').getScreenCTM().inverse());
 // Presentation mode: when the floating controls grow (a longer step note, the east-west picker), refit so they
@@ -185,6 +189,20 @@ function watchControls() {
   new ResizeObserver(() => {
     if (document.body.classList.contains('present') && $('controls').offsetHeight + 36 > reserved) fit();
   }).observe($('controls'));
+}
+// The canvas changed size (window resized or moved to another screen, a panel or the page layout changed): fit the
+// whole diagram again, unless the user has zoomed or panned; then keep that scale and top-left corner.
+function watchCanvas() {
+  if (typeof ResizeObserver === 'undefined') return;
+  let last = null;
+  new ResizeObserver(([entry]) => {
+    const { width, height } = entry.contentRect, was = last;
+    last = { width, height };
+    if (!was || !layout || !view || !width || (width === was.width && height === was.height)) return;
+    if (!viewByUser) return fit();
+    const s = was.width / view.w;
+    setView({ ...view, w: width / s, h: height / s }, true);
+  }).observe($('diagram'));
 }
 // Drag pans; a press and release on a node without moving counts as a click on that node (onNodeClick).
 function initPanZoom() {
@@ -199,7 +217,9 @@ function initPanZoom() {
     press = { x: e.clientX, y: e.clientY, node: e.target.closest('.node'), sel: e.target.closest('[data-sel]') };
   });
   svg.addEventListener('pointermove', e => {
-    if (drag) { const p = toSvgPoint(e); setView({ ...view, x: view.x + drag.x - p.x, y: view.y + drag.y - p.y }); } });
+    if (!drag) return;
+    const p = toSvgPoint(e); setView({ ...view, x: view.x + drag.x - p.x, y: view.y + drag.y - p.y }, true);
+  });
   svg.addEventListener('pointerup', e => {
     const still = press && Math.hypot(e.clientX - press.x, e.clientY - press.y) < 5;
     if (still && press.node) onNodeClick(press.node.dataset.id);
@@ -400,7 +420,7 @@ applyPatternCss();
 setTheme(startTheme());
 showDetails((window.innerWidth || 0) >= WIDE, false);
 initPanZoom();
-watchControls();
+watchControls(); watchCanvas();
 initEvents();
 startUp();
 applyLayers();

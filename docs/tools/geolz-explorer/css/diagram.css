@@ -10,7 +10,7 @@ svg text { font-family: inherit; fill: var(--text); }
 .band.owner.customer { stroke-dasharray: 10 3 2 3; }
 .node[data-id^="prov."] rect.b { stroke-dasharray: 2 3; }  /* a provider box is the provider's boundary */
 .xing path { stroke: var(--text); stroke-width: 2.4; stroke-linecap: round; }
-.otag { font-size: 10.5px; font-weight: 700; fill: var(--accent); }
+.otag { font-size: 12px; font-weight: 700; fill: var(--accent); }
 .region { stroke-width: 1.5; fill: var(--tc); stroke: var(--pc); }
 .region.dashed { stroke-dasharray: 7 4; }
 .region.sel { stroke-width: 3; }
@@ -19,13 +19,13 @@ svg text { font-family: inherit; fill: var(--text); }
 .ph-box { fill: var(--hub-bg); stroke: var(--node-stroke); stroke-dasharray: 5 4; }
 .spokes { fill: var(--spokes-bg); stroke: var(--line); }
 .svcnet { fill: var(--hub-bg); stroke: var(--hub-stroke); stroke-dasharray: 6 3; }
-.rname { font-size: 14px; font-weight: 700; }
-.plabel { font-size: 11px; font-weight: 600; fill: var(--muted); }
-.title { font-size: 12px; font-weight: 600; }
-.ph { font-size: 11.5px; font-weight: 600; fill: var(--muted); }
-.cap { font-size: 10.5px; fill: var(--muted); }
-.grp, .band-l { font-size: 9.5px; font-weight: 700; letter-spacing: .05em; fill: var(--muted); }
-.band-l { font-size: 10.5px; paint-order: stroke; stroke: var(--band); stroke-width: 4px; }
+.rname { font-size: 16px; font-weight: 700; }
+.plabel { font-size: 12px; font-weight: 600; fill: var(--muted); }
+.title { font-size: 14px; font-weight: 600; }
+.ph { font-size: 12px; font-weight: 600; fill: var(--muted); }
+.cap { font-size: 11.5px; fill: var(--muted); }
+.grp, .band-l { font-size: 11px; font-weight: 700; letter-spacing: .05em; fill: var(--muted); }
+.band-l { font-size: 12px; paint-order: stroke; stroke: var(--band); stroke-width: 4px; }
 .gb { stroke: var(--badge-edge); }
 
 /* ===== Diagram: links, nodes, badges ===== */
@@ -50,20 +50,20 @@ svg.no-backup [data-layer="backup"], svg.no-hybrid [data-layer="backup"] {
   display: none; }
 svg.focus .lnk.hl:not(.used) { opacity: .1; }
 svg.focus .lnk.used { opacity: .6; }
-.lbl { font-size: 11px; fill: var(--muted); paint-order: stroke; stroke: var(--band); stroke-width: 4px; }
+.lbl { font-size: 11.5px; fill: var(--muted); paint-order: stroke; stroke: var(--band); stroke-width: 4px; }
 .node rect.b { fill: var(--node); stroke: var(--node-stroke); }
 .node.ext rect.b { fill: var(--ext); stroke-dasharray: 4 3; }
 .node.cur rect.b { stroke: var(--path); stroke-width: 2; filter: drop-shadow(0 0 5px var(--path)); }
-.node text.t { font-size: 12px; font-weight: 600; }
-.node text.s { font-size: 10.5px; fill: var(--muted); }
+.node text.t { font-size: 14px; font-weight: 600; }
+.node text.s { font-size: 12px; fill: var(--muted); }
 .metrogrp { fill: none; stroke: var(--line); stroke-dasharray: 2 3; }
-.mg { font-size: 10.5px; font-weight: 600; fill: var(--muted); paint-order: stroke; stroke: var(--band);
+.mg { font-size: 12px; font-weight: 600; fill: var(--muted); paint-order: stroke; stroke: var(--band);
   stroke-width: 4px; }
 .rtag rect { fill: #107C10; }
-.rtag text { font-size: 9.5px; font-weight: 700; fill: #fff; }
+.rtag text { font-size: 10.5px; font-weight: 700; fill: #fff; }
 .bd { stroke: var(--badge-edge); }
 .bd.other { fill: var(--surface); stroke: var(--node-stroke); }
-.bdt { font-size: 9.5px; font-weight: 700; text-anchor: middle; }
+.bdt { font-size: 10.5px; font-weight: 700; text-anchor: middle; }
 svg text.white, svg .bdt.white { fill: #fff; }
 
 /* Feedback (editor.js): what an edit changed pulses briefly; a static highlight with reduced motion */

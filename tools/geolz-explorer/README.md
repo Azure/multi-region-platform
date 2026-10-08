@@ -56,7 +56,6 @@ In the workbook, the website navigation collapses, Editor and Details share one 
 diagram on narrow screens), and the theme follows the website without a separate switch. **Present** or **F**
 opens a separate live presentation window for the current design; **Esc** closes it. The standalone tool's
 theme and in-page presentation controls are unchanged.
-
 Folder layout:
 
 ```text
@@ -100,7 +99,7 @@ active origins, and Front Door Private Link, are not modelled (see *Not modelled
 The bands are the ownership boundaries: **Users & internet** (outside), **Microsoft Azure** (global services and
 every region), **Microsoft global network** (backbone lanes, with the ExpressRoute peering locations at its edge)
 and **Customer on-premises**; each **connectivity provider** box is the provider's part between the peering
-location and the site. On a selected path a short tick marks each crossing (its tooltip names it); VPN hops run
+location and the site. On a selected path a short tick marks each crossing; VPN hops run
 over the internet and get none. The ticks describe traffic, not who manages what.
 
 The full keyboard list, the spec format and the rules are in [docs/guide.md](docs/guide.md).

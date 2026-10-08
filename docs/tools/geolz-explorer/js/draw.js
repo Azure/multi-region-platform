@@ -10,14 +10,13 @@ function nodeSvg(id, n) {
   const sel = selAttr(selOfNode(id, n));  // editor-actions.js: click to edit
   const ty = n.y + n.h / 2 - 2, sy = n.y + n.h / 2 + 12;
   const sub = n.tag ? tagSvg(n, tx, sy)
-    : `<text class="s" x="${tx}" y="${sy}">${esc(cut(n.sub || '', room / 5.6))}</text>`;
+    : `<text class="s" x="${tx}" y="${sy}">${esc(cut(n.sub || '', room / 6.4))}</text>`;
   return `<g class="node${n.ext ? ' ext' : ''}" data-id="${esc(id)}"${layerAttr(n.layer)}${sel}>
-    <title>${esc(n.title || n.label)}</title>
     <rect class="b" x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="4"/>${badge}
-    <text class="t" x="${tx}" y="${ty}">${esc(cut(n.label, room / 7))}</text>${sub}</g>`;
+    <text class="t" x="${tx}" y="${ty}">${esc(cut(n.label, room / 8.2))}</text>${sub}</g>`;
 }
 // A tag in place of the sub-label (a hub's ExpressRoute gateway at maximum resiliency).
-const tagSvg = (n, x, y) => `<g class="rtag"><rect x="${x - 3}" y="${y - 9}" width="${n.tag.length * 5.4 + 8}"
+const tagSvg = (n, x, y) => `<g class="rtag"><rect x="${x - 3}" y="${y - 9}" width="${n.tag.length * 6 + 8}"
   height="12" rx="6"/><text x="${x + 1}" y="${y}">${esc(n.tag)}</text></g>`;
 function labelSvg(l) {
   const bullet = l.group ? `<rect class="gb" x="${l.x - 10}" y="${l.y - 7.5}" width="7" height="7" rx="1.5"
@@ -34,7 +33,7 @@ function regionSvg({ region, x, w, hub, box, sharedBox: sb }) {
   const id = patternId(region), top = RTOP, h = layout.bottom - RTOP, sel = selAttr('region:' + region.id);
   const dashed = RULES.patterns[id].dashed ? ' dashed' : '';
   let s = `<rect data-region="${region.id}" class="region pat-${id}${dashed}" x="${x}" y="${top}" width="${w}"
-    height="${h}" rx="7"${sel}><title>${esc(azureFacts(region))}</title></rect>
+    height="${h}" rx="7"${sel}/>
     <path class="rhead pat-${id}"${sel} d="M${x} ${top + 44}V${top + 7}Q${x} ${top} ${x + 7} ${top}H${x + w - 7}
     Q${x + w} ${top} ${x + w} ${top + 7}V${top + 44}Z"/>
     <rect class="${hub.none ? 'ph-box' : 'hubbox'}" x="${hub.x}" y="${hub.y}" width="${hub.w}" height="${hub.h}"
@@ -44,40 +43,36 @@ function regionSvg({ region, x, w, hub, box, sharedBox: sb }) {
   return hub.none ? s : s + ['spoke', 'spoke2'].map(key => centre(layout.nodes[`${region.id}.${key}`])[0])
     .map(sx => `<path class="lnk" d="M${sx} ${hub.y + hub.h}V${box.y}"/>`).join('');
 }
-// Static links. Backbone lanes carry their connection key (data-peer): hub links are thin and unlabelled (tooltip);
+// Static links. Backbone lanes carry their connection key (data-peer): hub links are thin and unlabelled;
 // remote-hub peerings and lane labels appear only when the selected path uses them (drawPath). Then DNS zone links
-// and hybrid wires.
+// and hybrid wires. The diagram has no hover tooltips: a click opens the details or the editor.
 function peerSvg(p) {  // connection kinds (hub, remote) are also the layer ids
   const cls = { remote: 'lnk x', hub: 'lnk hl' }[p.kind], d = roundPath(p.pts);
   const layer = layerAttr(p.kind);
-  return `<g${selAttr(peerSel(p))}><title>${esc(p.text)}</title><path class="hit"${layer} d="${d}"/>` +
+  return `<g${selAttr(peerSel(p))}><path class="hit"${layer} d="${d}"/>` +
     `<path class="${cls}" data-peer="${p.key}"${layer} d="${d}"/></g>`;
 }
 function linksSvg() {
   const zones = layout.zoneLinks.map(pts => `<path class="lnk z" data-layer="dns" d="${roundPath(pts)}"/>`).join('');
   const wires = layout.wires.map(w => {  // data-conn / data-hub: a simulated link failure marks the failed lines
     const cls = `lnk ${w.provnet ? 'pn' : w.type === 'vpn' ? 'vpn' : 'er'}${w.backup ? ' bk' : ''}`;
-    return `<g data-layer="${w.backup ? 'backup' : 'hybrid'}"${selAttr('conn:' + w.conn)}><title>${esc(w.title)}</title>
+    return `<g data-layer="${w.backup ? 'backup' : 'hybrid'}"${selAttr('conn:' + w.conn)}>
       <path class="hit" d="${roundPath(w.pts)}"/><path class="${cls}" data-conn="${esc(w.conn)}"
       data-hub="${w.hub || ''}" data-link="${w.link ?? ''}" d="${roundPath(w.pts)}"/></g>`;
   });
   // On-premises interconnects (layout.js): a click selects the first site, which holds the setting
   const ics = layout.interconnects.map(w => `<g data-layer="hybrid"${selAttr('site:' + w.a.slice(5))}>
-    <title>${esc(w.title)}</title><path class="hit" d="${roundPath(w.pts)}"/><path class="lnk ic"
+    <path class="hit" d="${roundPath(w.pts)}"/><path class="lnk ic"
     data-ic="${w.conn}" d="${roundPath(w.pts)}"/></g>`).join('');
-  const globals = layout.globalLinks.map(link => `<g data-layer="users"><title>${esc(link.title)}</title>
+  const globals = layout.globalLinks.map(link => `<g data-layer="users">
     <path class="lnk global ${link.kind}" d="${roundPath(link.pts)}"/></g>`).join('');
   return layout.peers.map(peerSvg).join('') + zones + globals + wires.join('') + ics;
 }
 // Ownership boundaries are the bands themselves (layout.js "owner"): one frame per owner, no second outline.
-const OWNERS = { internet: 'Internet and users', azure: 'Microsoft Azure', network: 'Microsoft global network',
-  provider: 'Connectivity provider', customer: 'Customer on-premises' };
 function bandSvg(b) {
   const cls = b.area ? 'area' : b.owner ? `band owner ${b.owner}` : 'band';
-  const tip = !b.owner ? '' : b.owner === 'internet' ? '<title>Outside every ownership boundary</title>'
-    : `<title>Ownership boundary: ${OWNERS[b.owner]}</title>`;
   return `<rect class="${cls}"${layerAttr(b.layer)} x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}"
-    rx="${b.area ? 4 : 8}">${tip}</rect>`;
+    rx="${b.area ? 4 : 8}"/>`;
 }
 function drawBase() {
   const L = layout;  // shorthand
@@ -87,15 +82,15 @@ function drawBase() {
     <path d="M0 0L10 5L0 10z" fill="${t.color}"/></marker>`).join('') + '</defs>';
   s += [...L.bands, ...L.areas].map(bandSvg).join('');
   s += L.regions.map(regionSvg).join('') + L.metroGroups.map(g => `<rect class="metrogrp" data-layer="hybrid"
-    x="${g.x}" y="${g.y}" width="${g.w}" height="${g.h}" rx="6"><title>${esc(g.title)}</title></rect>`).join('');
+    x="${g.x}" y="${g.y}" width="${g.w}" height="${g.h}" rx="6"/>`).join('');
   s += linksSvg();
   s += Object.entries(L.nodes).map(([id, n]) => nodeSvg(id, n)).join('') + L.labels.map(labelSvg).join('');
   $('diagram').innerHTML = s + '<g id="pathLayer"></g>';
 }
 // Where a hop goes from one owner to another (Users & internet, Microsoft Azure, the Microsoft global network, a
 // connectivity provider, the customer): a short tick where the line crosses the band edge of the owner it leaves
-// (or, leaving a provider box, of the owner it enters), named in its tooltip. VPN hops run over the
-// internet, so their line passing the Microsoft bands is not a crossing.
+// (or, leaving a provider box, of the owner it enters). VPN hops run over the internet, so their line passing the
+// Microsoft bands is not a crossing.
 const ownerOf = n => (n.region || (n.global && !n.ext) ? 'azure' : n.edge ? 'network' : n.prov ? 'provider'
   : n.site ? 'customer' : 'internet');
 function crossings(a, b, pts, conn) {
@@ -108,12 +103,11 @@ function crossings(a, b, pts, conn) {
   if (!band) return [];
   for (const [p, q] of pts.slice(1).map((pt, i) => [pts[i], pt])) {
     const y = [band.y, band.y + band.h].find(e => p[0] === q[0] && (e - p[1]) * (q[1] - e) > 0);
-    if (y !== undefined) return [{ x: p[0], y, text: `${OWNERS[from]} → ${OWNERS[to]}` }];
+    if (y !== undefined) return [{ x: p[0], y }];
   }
   return [];
 }
-const crossingSvg = c => `<g class="xing"><title>Boundary crossing: ${esc(c.text)}</title>
-  <path d="M${c.x - 7} ${c.y}H${c.x + 7}"/></g>`;
+const crossingSvg = c => `<g class="xing"><path d="M${c.x - 7} ${c.y}H${c.x + 7}"/></g>`;
 
 /* ===== DIAGRAM: path overlay (flows with dash pattern per type, numbered step markers) ===== */
 function drawPath(path = currentPath()) {
@@ -175,6 +169,6 @@ function failSvg(path) {
     return [p[0], (p[1] + q[1]) / 2];
   });
   const marks = [...at, ...boxes.map(n => [n.x + n.w - 14, n.y + n.h / 2])];
-  return marks.map(([x, y]) => `<g class="xfail"><title>Failed
-    (simulated)</title><circle cx="${x}" cy="${y}" r="8"/><path d="M${x - 4} ${y - 4}l8 8m0 -8l-8 8"/></g>`).join('');
+  return marks.map(([x, y]) => `<g class="xfail"><circle cx="${x}" cy="${y}" r="8"/>
+    <path d="M${x - 4} ${y - 4}l8 8m0 -8l-8 8"/></g>`).join('');
 }

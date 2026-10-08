@@ -128,7 +128,8 @@ Diagram: origins are tagged *Active origin* / *Backup origin* (*endpoint* for Tr
 headers. Ownership boundaries are the bands (`layout.bands[].owner`: `internet`, `azure`, `network`,
 `customer`); the Microsoft Azure band encloses the global services row, area strips and region columns; each
 connectivity provider box is the provider's part (no provider band). Path crossings between owners are marked
-with ticks (tooltip only); VPN hops are not marked.
+with ticks; VPN hops are not marked. The diagram has no hover tooltips: a click on a component opens its details
+or, with the editor open, its settings.
 
 ## Minimal hub capabilities
 
