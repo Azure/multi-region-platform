@@ -24,7 +24,7 @@
     `<div class="pl-cmd" role="toolbar" aria-label="Workbook actions">${K.btn({ act: 'export', label: 'Export to Excel', icon: 'export', kind: 'subtle' })}${K.btn({ act: 'save', label: 'Save', icon: 'save', kind: 'subtle' })}${K.btn({ act: 'open', label: 'Open', icon: 'open', kind: 'subtle' })}` +
     `<span class="pl-sep" role="separator" aria-orientation="vertical"></span>${K.btn({ act: 'example', label: 'Load example', icon: 'sample', kind: 'subtle', id: 'pl-b-example' })}${K.btn({ act: 'reset', label: 'Clear', icon: 'delete', kind: 'subtle', id: 'pl-b-reset' })}</div>` +
     '<div class="pl-msgslot" id="pl-msg"></div><section class="pl-ess" id="pl-ess" aria-label="Essentials"></section><div class="pl-tabswrap" id="pl-tabs"></div>' +
-    '<div class="pl-panel" id="pl-panel" role="tabpanel" tabindex="-1"><p class="pl-muted">Loading the workbook</p></div><div class="pl-foot-bar" id="pl-foot"></div></div>' +
+    '<div class="pl-panel" id="pl-panel" role="tabpanel" tabindex="-1"><p class="pl-muted">Loading the workbook</p></div><div id="pl-network"></div><div class="pl-foot-bar" id="pl-foot"></div></div>' +
     '<div class="pl-layer"><div class="pl-pop" id="pl-pop" role="listbox" hidden></div><div class="pl-tip" role="tooltip" hidden></div></div><input type="file" id="pl-file" accept=".json,application/json" hidden>';
   const el = id => document.getElementById(id);
   const ess = el('pl-ess'), tabsEl = el('pl-tabs'), panel = el('pl-panel'), foot = el('pl-foot'), msgEl = el('pl-msg');
@@ -93,6 +93,8 @@
       if (t) { K.setQuiet(true); t.focus({ preventScroll: true }); K.setQuiet(false); if (caret && textual(t)) { try { t.setSelectionRange(caret[0], caret[1]); } catch (e) { /* not a text field */ } } }
     }
     root.dataset.ready = '1';
+    if (ui.tab === 'latency' || ui.tab === 'design') M.latencyMap.mount();
+    M.network.mount(el('pl-network'));
   }
   // On narrow screens the tab strip scrolls; keep the selected tab in view.
   function revealTab() {
@@ -211,7 +213,7 @@
       case 'open': el('pl-file').click(); return;
       case 'copy': { const t = C.recordText();
         (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => say('success', 'The record was copied.'), () => say('error', 'Copying isn’t available in this browser. Use Export to Excel or Print.')); return; }
-      case 'print': window.print(); return;
+      case 'print': if (M.network.preparePrint()) window.print(); return;
       case 'example': {
         const go = () => { const ex = JSON.parse(JSON.stringify(M.EXAMPLE)); ex.meta.date = C.today(); C.replace(ex); ui.tab = 'checks'; ui.region = ''; ui.noteEdit = ''; history.replaceState(null, '', '#checks');
           C.loadPricing(C.S.baseline).then(ok => ok && lazyRender()); if (C.D.lat) C.loadCities().then(ok => ok && lazyRender()); render(); say('info', 'The example is loaded. Every value in it is illustrative.'); };
@@ -281,7 +283,7 @@
   });
   K.bindPop(root); K.bindTips(root);
   window.addEventListener('hashchange', () => { const id = tabFromHash(); if (id && id !== ui.tab) { openTab(id); render(); } });
-  window.addEventListener('beforeprint', () => { K.closePop(); K.hideTip(); });
+  window.addEventListener('beforeprint', () => { K.closePop(); K.hideTip(); M.network.preparePrint(); });
 
   // ───────────── start
   C.load(); C.tidy();

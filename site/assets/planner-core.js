@@ -107,7 +107,8 @@
         D.ridx = Object.fromEntries(c.regions.map((r, i) => [r.id, i]));
         // keep reference regions that the snapshot doesn't list, so a saved workbook never loses a name
         const seedOnly = D.regions.filter(r => !(r.id in D.ridx));
-        useRegions([...c.regions, ...seedOnly]);
+        // Retail catalog entries omit metro coordinates; retain the reference seed for the map.
+        useRegions([...c.regions.map(r => ({ ...D.byId[r.id], ...r })), ...seedOnly]);
         D.services = c.services;
         D.svc = Object.fromEntries(c.services.map(s => [s.name, s]));
         D.hasCatalog = true;

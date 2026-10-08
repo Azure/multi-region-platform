@@ -9,18 +9,19 @@
   'use strict';
 
   const FONTS = [
-    '<font><sz val="10"/><color rgb="FF28323E"/><name val="Segoe UI"/><family val="2"/></font>',
-    '<font><b/><sz val="10"/><color rgb="FF0A2340"/><name val="Segoe UI"/><family val="2"/></font>',
-    '<font><b/><sz val="15"/><color rgb="FF0A2340"/><name val="Segoe UI"/><family val="2"/></font>',
+    '<font><sz val="10"/><color rgb="FF263746"/><name val="Segoe UI"/><family val="2"/></font>',
+    '<font><b/><sz val="10"/><color rgb="FF12324A"/><name val="Segoe UI"/><family val="2"/></font>',
+    '<font><b/><sz val="18"/><color rgb="FF12324A"/><name val="Segoe UI"/><family val="2"/></font>',
     '<font><b/><sz val="10"/><color rgb="FFFFFFFF"/><name val="Segoe UI"/><family val="2"/></font>',
-    '<font><i/><sz val="9"/><color rgb="FF5B6778"/><name val="Segoe UI"/><family val="2"/></font>',
+    '<font><i/><sz val="9"/><color rgb="FF5B6B78"/><name val="Segoe UI"/><family val="2"/></font>',
+    '<font><sz val="10"/><color rgb="FF0F6CBD"/><name val="Segoe UI"/><family val="2"/></font>',
   ];
-  const FILLS = ['none', 'gray125', 'FF0F6CBD', 'FFDDEBF9', 'FFE2F3E8', 'FFFFF0C7', 'FFFBE1DD', 'FFF1F4F8'];
+  const FILLS = ['none', 'gray125', 'FF0F6CBD', 'FFEAF3FB', 'FFE8F5F4', 'FFFFF3D6', 'FFFCE9E7', 'FFF3F6F8', 'FFF4F8FC', 'FF12324A'];
   const NUMFMTS = { 164: '+0.0%;-0.0%;0.0%', 165: '0.0', 166: '0%' };
   // name: [font, fill, border, numFmt, horizontal, no wrap]. Titles and notes don't wrap, so they run across the empty cells beside them.
   const STYLES = {
     plain: [0, 0, 0, 0, '', 1], title: [2, 0, 0, 0, '', 1], muted: [4, 0, 0, 0, '', 1], bold: [1, 0, 0, 0, '', 1],
-    head: [3, 2, 1, 0], group: [1, 3, 1, 0], label: [1, 0, 1, 0], cell: [0, 0, 1, 0], soft: [0, 7, 1, 0],
+    head: [3, 2, 2, 0], group: [1, 3, 2, 0], label: [1, 0, 1, 0], cell: [0, 0, 1, 0], input: [5, 8, 1, 0], soft: [0, 7, 1, 0],
     good: [0, 4, 1, 0], warn: [0, 5, 1, 0], bad: [0, 6, 1, 0],
     pct: [0, 0, 1, 164, 'right'], pctb: [1, 7, 1, 164, 'right'], num: [0, 0, 1, 165, 'right'],
     numgood: [0, 4, 1, 165, 'right'], numbad: [0, 6, 1, 165, 'right'], share: [0, 0, 1, 166, 'right'], int: [0, 0, 1, 1, 'right'],
@@ -40,7 +41,7 @@
   function stylesXml() {
     const fill = f => f === 'none' || f === 'gray125' ? `<fill><patternFill patternType="${f}"/></fill>`
       : `<fill><patternFill patternType="solid"><fgColor rgb="${f}"/><bgColor indexed="64"/></patternFill></fill>`;
-    const side = t => `<${t} style="thin"><color rgb="FFCFD7E1"/></${t}>`;
+    const edge = (t, style = 'thin', color = 'FFD7E1E8') => `<${t} style="${style}"><color rgb="${color}"/></${t}>`;
     const xfs = Object.values(STYLES).map(([font, fl, border, fmt, h, nowrap]) =>
       `<xf numFmtId="${fmt}" fontId="${font}" fillId="${fl}" borderId="${border}" xfId="0" applyFont="1" applyFill="1" applyBorder="1" applyNumberFormat="1" applyAlignment="1">` +
       `<alignment vertical="top"${nowrap ? '' : ' wrapText="1"'}${h ? ` horizontal="${h}"` : ''}/></xf>`).join('');
@@ -49,7 +50,7 @@
       `<numFmts count="${Object.keys(NUMFMTS).length}">${Object.entries(NUMFMTS).map(([id, c]) => `<numFmt numFmtId="${id}" formatCode="${xml(c)}"/>`).join('')}</numFmts>` +
       `<fonts count="${FONTS.length}">${FONTS.join('')}</fonts>` +
       `<fills count="${FILLS.length}">${FILLS.map(fill).join('')}</fills>` +
-      `<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border>${side('left')}${side('right')}${side('top')}${side('bottom')}<diagonal/></border></borders>` +
+      `<borders count="3"><border><left/><right/><top/><bottom/><diagonal/></border><border><left/><right/><top/>${edge('bottom')}<diagonal/></border><border><left/><right/><top/>${edge('bottom', 'medium', 'FF0F6CBD')}<diagonal/></border></borders>` +
       '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
       `<cellXfs count="${Object.keys(STYLES).length}">${xfs}</cellXfs>` +
       '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
@@ -75,9 +76,9 @@
       `<dataValidation type="list" allowBlank="1" showInputMessage="1" showErrorMessage="0" sqref="${l.ref}"><formula1>${listRefs(l.items)}</formula1></dataValidation>`).join('');
     return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
       '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
-      '<sheetPr><pageSetUpPr fitToPage="1"/></sheetPr>' +
+      `<sheetPr>${sh.tabColor ? `<tabColor rgb="FF${sh.tabColor}"/>` : ''}<pageSetUpPr fitToPage="1"/></sheetPr>` +
       `<sheetViews><sheetView workbookViewId="0" showGridLines="0">${pane}</sheetView></sheetViews>` +
-      '<sheetFormatPr defaultRowHeight="15"/>' +
+      '<sheetFormatPr defaultRowHeight="18"/>' +
       (cols ? `<cols>${cols}</cols>` : '') +
       `<sheetData>${rows}</sheetData>` +
       (merges ? `<mergeCells count="${sh.merges.length}">${merges}</mergeCells>` : '') +

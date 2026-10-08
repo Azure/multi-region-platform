@@ -41,7 +41,7 @@ TOOLS = [{
     "meta": "Interactive · Steps 2 and 3 · Exports to Excel",
     "css": ["assets/planner.css"],
     "js": ["assets/xlsx-lite.js", "assets/planner-icons.js", "assets/planner-data.js", "assets/planner-core.js", "assets/planner-kit.js",
-           "assets/planner-views.js", "assets/planner-design.js", "assets/planner-export.js", "assets/planner.js"],
+           "assets/planner-map.js", "assets/planner-views.js", "assets/planner-design.js", "assets/planner-network.js", "assets/planner-export.js", "assets/planner.js"],
     "seed": "data/regions-seed.json",
     "search": "workbook tool checklist excel export questions decisions latency pricing price comparison service availability "
               "selected region connectivity profile hub virtual network Virtual WAN Azure Virtual Network Manager shared services hybrid connectivity ExpressRoute",
@@ -293,6 +293,8 @@ def build():
             shutil.rmtree(p) if os.path.isdir(p) else os.remove(p)
     os.makedirs(OUT, exist_ok=True)
     shutil.copytree(os.path.join(SITE, "assets"), os.path.join(OUT, "assets"), dirs_exist_ok=True)
+    shutil.copytree(os.path.join(ROOT, "tools", "geolz-explorer"),
+                    os.path.join(OUT, "tools", "geolz-explorer"), dirs_exist_ok=True)
     os.remove(os.path.join(OUT, "assets", "sprite.svg"))
     shutil.copytree(os.path.join(CONTENT, "media"), os.path.join(OUT, "media"), dirs_exist_ok=True)
     if os.path.isdir(os.path.join(SITE, "media")):   # website-only images (not part of the CAF article set)

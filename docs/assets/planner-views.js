@@ -294,6 +294,7 @@
       if (t) wrap.setAttribute('data-tip', t); else wrap.removeAttribute('data-tip');
       if (!focused) input.value = nw.querySelector('.pl-lc-num').value;
     });
+    M.latencyMap.patch(root);
   }
   function siteRow(s, cs) {
     const city = s.city, name = C.siteName(s), isCity = s.kind === 'city';
@@ -333,7 +334,8 @@
         `<p class="pl-fn pl-legend"><span class="pl-lg">${dot('m')}Measured</span><span class="pl-lg">${dot('e')}Estimated</span><span class="pl-lg"><span class="pl-tag brand">Edited</span>A value you typed over the calculated one</span></p>` +
         (S.sites.some(x => x.kind === 'city') && L ? '<p class="pl-fn">Under a value, “3 + 17” shows the two legs it adds up to: the first number is from your location to its ExpressRoute peering location (provider network), the second is from the peering location to the Azure region (Microsoft backbone). Hover over it to see both legs named.</p>' : '') +
         K.mb('info', `Region-to-region values are Microsoft’s published medians${L && L.dataset ? ` (dataset of ${esc(L.dataset)})` : ''}. Values that involve a peering location or a city are estimates based on those medians and on distance. Measure on the real path before you commit. ` +
-          '<a href="https://learn.microsoft.com/azure/networking/azure-network-latency" target="_blank" rel="noopener">Azure network round-trip latency statistics</a>'), { desc: 'Type over any value to replace it. The target marks each value as within or over.' });
+          '<a href="https://learn.microsoft.com/azure/networking/azure-network-latency" target="_blank" rel="noopener">Azure network round-trip latency statistics</a>'), { desc: 'Type over any value to replace it. The target marks each value as within or over.' }) +
+      M.latencyMap.view();
   }
 
   M.views = Object.assign(M.views || {}, { scope: vScope, checks: vChecks, services: vServices, pricing: vPricing, latency: vLatency });

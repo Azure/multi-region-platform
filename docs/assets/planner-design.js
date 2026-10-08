@@ -85,7 +85,7 @@
       K.row('Decision date', k('date'), id => K.inp(k('date'), e.date, { id, type: 'date', label: 'Decision date' })) +
       K.row('Open conditions', `reg/${r.id}/conditions`, id => K.area(`reg/${r.id}/conditions`, r.conditions, { id, ph: 'None', rows: 3, label: 'Open conditions' }), 'The region isn’t ready for workloads until they are resolved.') +
       K.row('Reassess when', k('reassess'), id => K.area(k('reassess'), e.reassess, { id, rows: 6, label: 'Reassess when' })));
-    return h + switcher + state + secProfile + secHub + secSs + secHy + secRec;
+    return h + switcher + state + secProfile + secHub + secSs + secHy + secRec + M.latencyMap.view();
   }
 
   function vReview() {
@@ -95,14 +95,20 @@
     const bad = picked.map(r => ({ r, e: C.effective(r) })).filter(x => !x.e.complete);
     const valid = bad.length ? K.mb('warning', `<b class="pl-blk">${K.plural(bad.length, 'record')} still to complete.</b><ul class="pl-miss">${bad.map(x => `<li><button type="button" class="pl-linkbtn" data-act="goto-design" data-arg="${esc(x.r.id)}">${esc(C.rname(x.r.id))}</button>: ${esc(C.list(x.e.missing))}</li>`).join('')}</ul>`)
       : K.mb('success', 'All records are complete.');
+    const reportMeta = [
+      S.meta.name && `<span><b>Workbook</b>${esc(S.meta.name)}</span>`,
+      S.meta.owner && `<span><b>Owner</b>${esc(S.meta.owner)}</span>`,
+      S.meta.date && `<span><b>Assessment date</b>${esc(S.meta.date)}</span>`,
+    ].filter(Boolean).join('');
     const blocks = picked.map(r => { const e = C.effective(r), p = PROFILES[e.pi];
       return `<section class="pl-rec"><div class="pl-rec-h"><h3>${esc(C.rname(r.id))}</h3>${outcomeBadge(C.outcome(r))}${K.badge(e.complete ? 'success' : 'warning', e.complete ? 'Record complete' : 'Record incomplete')}</div>` +
         `<div class="pl-rec-b">${p ? `<div class="pl-rec-art">${M.diagram.profile(p.id)}</div>` : ''}<dl class="pl-kv">${C.record(r).slice(1).map(([a, b]) => `<div><dt>${esc(a)}</dt><dd>${esc(b)}</dd></div>`).join('')}</dl></div>` +
         `${p ? `<p class="pl-after"><a class="pl-link" href="${p.href}">Prepare the region: ${esc(p.id)}${icon('arrowright')}</a></p>` : ''}</section>`; }).join('');
     const all = S.regions.map(r => { const sel = picked.includes(r), e = sel ? C.effective(r) : null;
       return `<tr><th scope="row">${esc(C.rname(r.id))}</th><td>${outcomeBadge(C.outcome(r))}</td><td>${yesNo(sel, 'Yes', 'No')}</td><td>${e && e.profile ? esc(e.profile) : K.EM}</td></tr>`; }).join('');
-    return h + valid +
-      `<div class="pl-bar pl-noprint">${K.btn({ act: 'export', label: 'Export to Excel', icon: 'export' })}${K.btn({ act: 'copy', label: 'Copy as text', icon: 'copy' })}${K.btn({ act: 'print', label: 'Print', icon: 'print' })}</div>` +
+    return h + `<header class="pl-print-head"><p class="pl-print-kicker">Regional platform planning</p><h1>Regional workbook report</h1>` +
+      `${reportMeta ? `<div class="pl-print-meta">${reportMeta}</div>` : ''}<p class="pl-print-count">${K.plural(picked.length, 'region')} included · ${bad.length ? `${bad.length} record${bad.length === 1 ? '' : 's'} incomplete` : 'All records complete'}</p></header>` +
+      valid + `<div class="pl-bar pl-noprint">${K.btn({ act: 'export', label: 'Export to Excel', icon: 'export' })}${K.btn({ act: 'copy', label: 'Copy as text', icon: 'copy' })}${K.btn({ act: 'print', label: 'Print', icon: 'print' })}</div>` +
       blocks + K.section('All regions in this workbook', K.scroll(`<table class="pl-dl"><thead><tr><th scope="col">Region</th><th scope="col">Outcome</th><th scope="col">Selected</th><th scope="col">Connectivity profile</th></tr></thead><tbody>${all}</tbody></table>`, { label: 'All regions' }));
   }
 
