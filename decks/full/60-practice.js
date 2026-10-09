@@ -1,11 +1,23 @@
-const { C, F, IMG } = require('../lib');
+const { C, F } = require('../lib');
 
 module.exports = (pres, L) => {
   // ───────────────────────── Customer scenarios (PDF p45–46)
   const TONE = { w: [C.w600, C.w50], b: [C.b600, C.b50], g: [C.g600, C.g100], t: [C.t600, C.t50], v: [C.v600, C.v50], s: [C.s800, C.s100] };
   [[0, 1], [2, 3]].forEach((pair, pi) => {
     const s = L.slide('scenarios');
-    L.header(s, pi ? 'Continued' : 'The framework in use', pi ? 'Customer scenarios 3 and 4' : 'Customer scenarios 1 and 2', { ec: C.t600, tw: 8.6, lede: 'Illustrative scenarios, not customer-specific recommendations.', lx: 9.3, lw: 3.43 });
+    L.header(s, pi ? 'Continued' : 'The framework in use', pi ? 'Customer scenarios 3 and 4' : 'Customer scenarios 1 and 2', { eyebrow: pi ? 'Customer scenarios · Continued' : 'Customer scenarios · The framework in use', ec: C.t600, tw: 8.6, lede: 'Illustrative scenarios, not customer-specific recommendations.', lx: 9.3, lw: 3.43 });
+    const scenarios = pair.map(k => L.data.scenarios[k]);
+    const gap = 0.08, total = 11.73 - gap * 5;
+    const weights = scenarios[0].short.steps.map((_, i) => Math.max(...scenarios.map(sc => sc.short.steps[i].length + 14)));
+    const mins = scenarios[0].steps.map((_, i) => Math.max(...scenarios.map(sc => Math.max(1.5, sc.steps[i].label.length * 0.085 + 0.3))));
+    const sum = weights.reduce((a, b) => a + b, 0);
+    let widths = weights.map((v, i) => Math.max(mins[i], total * v / sum));
+    for (let it = 0; it < 6; it++) {
+      const over = widths.reduce((a, b) => a + b, 0) - total;
+      const free = widths.reduce((a, b, i) => a + (b > mins[i] + 0.01 ? b - mins[i] : 0), 0);
+      if (Math.abs(over) < 0.005 || free <= 0) break;
+      widths = widths.map((v, i) => (v > mins[i] + 0.01 ? v - over * (v - mins[i]) / free : v));
+    }
     pair.forEach((k, j) => {
       const sc = L.data.scenarios[k], y = 1.3 + j * 2.83, h = 2.72;
       L.box(s, 0.6, y, 12.13, h, { fill: 'FFFFFF', line: C.line, r: 0.12 });
@@ -14,18 +26,9 @@ module.exports = (pres, L) => {
       const cw0 = sc.tag.length * 0.07 + 0.3;
       L.chip(s, sc.tag, 12.53 - cw0, y + 0.16, { w: cw0, fill: C.s100, color: C.s800, size: 10 });
       L.txt(s, sc.short.situation, 1.35, y + 0.5, 11.2, 0.28, { fontSize: 11, color: C.text });
-      // six cells; widths follow the text length so every cell wraps to about the same number of lines
-      const gap = 0.08, total = 11.73 - gap * 5, wt = sc.short.steps.map(t => t.length + 14), sum = wt.reduce((a, b) => a + b, 0);
-      const mins = sc.steps.map(st => Math.max(1.5, st.label.length * 0.085 + 0.3));
-      let ws = wt.map((v, i) => Math.max(mins[i], total * v / sum));
-      for (let it = 0; it < 6; it++) {   // take the surplus from the cells that are wider than their minimum
-        const over = ws.reduce((a, b) => a + b, 0) - total, free = ws.reduce((a, b, i) => a + (b > mins[i] + 0.01 ? b - mins[i] : 0), 0);
-        if (Math.abs(over) < 0.005 || free <= 0) break;
-        ws = ws.map((v, i) => (v > mins[i] + 0.01 ? v - over * (v - mins[i]) / free : v));
-      }
       let x = 0.8;
       sc.short.steps.forEach((txt, i) => {
-        const st = sc.steps[i], [fg, bg] = TONE[st.tone], w = ws[i], cy = y + 0.88, ch = 1.3;
+        const st = sc.steps[i], [fg, bg] = TONE[st.label === 'Driver' ? 't' : st.tone], w = widths[i], cy = y + 0.88, ch = 1.3;
         L.box(s, x, cy, w, ch, { fill: bg, r: 0.08 });
         L.txt(s, st.label.toUpperCase(), x + 0.1, cy + 0.08, w - 0.15, 0.2, { fontSize: 9.5, bold: true, color: fg, charSpacing: 0.5 });
         L.txt(s, txt, x + 0.1, cy + 0.32, w - 0.2, ch - 0.36, { fontSize: 11, color: C.ink });
@@ -67,13 +70,18 @@ module.exports = (pres, L) => {
     const cw = 3.93, ch = 1.85;
     L.data.gettingStarted.forEach((g, i) => {
       const x = 0.6 + (i % 3) * 4.1, y = 1.7 + Math.floor(i / 3) * (ch + 0.15);
-      const tealCard = i === 2 || i === 5;
-      L.box(s, x, y, cw, ch, { fill: tealCard ? C.t50 : C.wash, r: 0.12 });
-      L.txt(s, String(i + 1).padStart(2, '0'), x + 0.2, y + 0.12, 0.7, 0.5, { fontSize: 26, fontFace: F.light, color: tealCard ? C.t600 : C.b600 });
+      L.box(s, x, y, cw, ch, { fill: C.wash, r: 0.12 });
+      L.txt(s, String(i + 1).padStart(2, '0'), x + 0.2, y + 0.12, 0.7, 0.5, { fontSize: 26, fontFace: F.light, color: C.b600 });
       L.txt(s, g.title, x + 0.95, y + 0.14, cw - 1.1, 0.5, { fontSize: 12.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
-      L.txt(s, g.short, x + 0.2, y + 0.75, cw - 0.4, ch - 0.82, { fontSize: 11, color: C.text });
+      const phrase = 'region planning workbook', at = g.short.indexOf(phrase);
+      const body = at < 0 ? g.short : [
+        { text: g.short.slice(0, at) },
+        { text: phrase, options: { bold: true, color: C.b600, hyperlink: { url: L.data.workbookUrl, tooltip: 'Open the region planning workbook' } } },
+        { text: g.short.slice(at + phrase.length) },
+      ];
+      L.txt(s, body, x + 0.2, y + 0.75, cw - 0.4, ch - 0.82, { fontSize: 11, color: C.text });
     });
-    L.image(s, IMG('band.jpg', L.tone), { x: 0.6, y: 5.75, w: 12.13, h: 1.1 }, 'Blue gradient band behind the success statement', { sizing: { type: 'cover', w: 12.13, h: 1.1 } });
+    L.box(s, 0.6, 5.75, 12.13, 1.1, { fill: C.b600, r: 0.12 });
     L.txt(s, 'WHAT SUCCESS\nLOOKS LIKE', 0.9, 5.75, 2.2, 1.1, { fontSize: 10, bold: true, color: C.b200, charSpacing: 2, valign: 'middle' });
     L.txt(s, 'Being able to qualify a regional option, enable only the platform capabilities it requires, and onboard workloads through a repeatable governed process.', 3.3, 5.75, 9.2, 1.1, { fontSize: 15, fontFace: F.semi, color: 'FFFFFF', valign: 'middle' });
     s.addNotes(L.data.gettingStarted.map((g, i) => (i + 1) + '. ' + g.title + '. ' + g.text).join(' '));
@@ -96,7 +104,7 @@ module.exports = (pres, L) => {
       L.icon(s, ic, x + 0.25, y + h / 2 - 0.18, 0.36, c);
       L.txt(s, [{ text: t, options: { fontFace: F.semi, fontSize: 13, color: tc, breakLine: true, paraSpaceAfter: 2 } }, { text: d, options: { fontSize: 11, color: i === 2 ? C.s100 : C.text } }], x + 0.85, y, w - 1.05, h, { valign: 'middle' });
     });
-    L.image(s, IMG('band.jpg', L.tone), { x: 0.6, y: 5.5, w: 12.13, h: 1.35 }, 'Blue gradient band behind the closing statement', { sizing: { type: 'cover', w: 12.13, h: 1.35 } });
+    L.box(s, 0.6, 5.5, 12.13, 1.35, { fill: C.b600, r: 0.12 });
     L.txt(s, [{ text: 'The goal is not to select the perfect two regions. ', options: { fontFace: F.light } }, { text: 'It is to make additional regions significantly easier to adopt when business and workload requirements justify them.', options: { fontFace: F.semi } }], 1.0, 5.5, 11.3, 1.35, { fontSize: 20, color: 'FFFFFF', valign: 'middle' });
     s.addNotes('Close on the central idea: no organization can predict which Azure regions will serve it best several years from now, so design the platform so that perfect prediction is unnecessary. Three commitments: workload-led placement, an adaptable regional platform, and a consistent operating model. The goal is not to select the perfect two regions; it is to make additional regions significantly easier to adopt when business and workload requirements justify them.');
   }

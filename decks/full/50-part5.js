@@ -13,7 +13,7 @@ module.exports = (pres, L) => {
       L.txt(s, t.toUpperCase(), xa, 1.66, xb - xa, 0.24, { fontSize: 10, bold: true, color: c, charSpacing: 1.5 });
       L.box(s, xa, 1.93, xb - xa, 0.03, { fill: c, r: 0 });
     });
-    const S = ['Define the placement objective', 'Identify the landing zone archetype', 'Establish mandatory requirements', 'Review the qualified regional options', 'Validate current regional suitability', 'Confirm the connectivity profile', 'Determine the resiliency role', 'Record and govern the decision'];
+    const S = ['Define the placement objective', 'Identify the Workload Landing Zone archetype', 'Establish mandatory requirements', 'Review the qualified regional options', 'Validate current regional suitability', 'Confirm the connectivity profile', 'Determine the resiliency role', 'Record and govern the decision'];
     S.forEach((t, i) => {
       const x = X(i), grp = i < 3 ? 0 : i < 6 ? 1 : 2;
       const [bg, ln, nf] = [[C.t50, C.t300, C.t600], [C.b50, C.b200, C.b600], [C.s100, C.s300, C.s800]][grp];
@@ -23,25 +23,28 @@ module.exports = (pres, L) => {
       if (i < 7) L.line(s, x + sw, y + sh / 2, X(i + 1), y + sh / 2, { color: [C.t600, C.b600, C.s600][grp] });
     });
     // side outcomes
-    const oy = 3.95, oh = 1.3, bot = y + sh;
+    const oy = 4.05, oh = 1.28, bot = y + sh;
     const sx5 = X(4) + sw / 2, sx6 = X(5) + sw / 2, sx8 = X(7) + sw / 2;
     L.line(s, sx5, bot, sx5, oy, { color: C.b300, dash: 'dash' });
-    L.box(s, 5.95, oy, 2.25, oh, { fill: 'FFFFFF', line: C.b300, dash: 'dash', r: 0.1 });
-    L.txt(s, [{ text: 'Guaranteed capacity? ', options: { bold: true } }, { text: 'Quota isn’t capacity; decide here whether to reserve it.' }], 6.08, oy, 2.0, oh, { fontSize: 11, color: C.b800, valign: 'middle' });
+    const outcomeX = 6.35, outcomeGap = 0.12, outcomeW = (12.73 - outcomeX - 2 * outcomeGap) / 3;
+    L.box(s, outcomeX, oy, outcomeW, oh, { fill: 'FFFFFF', line: C.b300, dash: 'dash', r: 0.1 });
+    L.txt(s, [{ text: 'Guaranteed capacity? ', options: { bold: true } }, { text: 'Quota isn’t capacity; decide here whether to reserve it.' }], outcomeX + 0.13, oy, outcomeW - 0.26, oh, { fontSize: 11, color: C.b800, valign: 'middle' });
     L.line(s, sx6, bot, sx6, oy, { color: C.w600 }); L.tag(s, 'Gap', sx6, (bot + oy) / 2, { color: C.w600 });
-    L.box(s, 8.35, oy, 2.4, oh, { fill: C.w50, r: 0.1 });
-    L.txt(s, [{ text: 'Additional capabilities needed? ', options: { bold: true, color: C.w600 } }, { text: 'A separate governed platform decision, not a profile redefined by the workload team.' }], 8.48, oy, 2.15, oh, { fontSize: 11, color: C.ink, valign: 'middle' });
+    L.box(s, outcomeX + outcomeW + outcomeGap, oy, outcomeW, oh, { fill: C.w50, r: 0.1 });
+    L.txt(s, [{ text: 'Additional capabilities needed? ', options: { bold: true, color: C.w600 } }, { text: 'A separate governed platform decision, not a profile redefined by the workload team.' }], outcomeX + outcomeW + outcomeGap + 0.13, oy, outcomeW - 0.26, oh, { fontSize: 11, color: C.ink, valign: 'middle' });
     L.line(s, sx8, bot, sx8, oy, { color: C.s600 });
-    L.box(s, 10.9, oy, 1.83, oh, { fill: C.wash, r: 0.1 });
-    L.txt(s, [{ text: 'Valid outcomes ', options: { bold: true } }, { text: 'include retaining the current region, or no qualified option today.' }], 11.0, oy, 1.65, oh, { fontSize: 11, color: C.ink, valign: 'middle' });
+    const lastX = outcomeX + 2 * (outcomeW + outcomeGap);
+    L.box(s, lastX, oy, outcomeW, oh, { fill: C.wash, r: 0.1 });
+    L.txt(s, [{ text: 'Valid outcomes ', options: { bold: true } }, { text: 'include retaining the current region, or no qualified option today.' }], lastX + 0.13, oy, outcomeW - 0.26, oh, { fontSize: 11, color: C.ink, valign: 'middle' });
     // feedback loop into regional qualification
-    const ry = 5.5, rh = 0.85, rw = 4.6;
+    const ry = 4.05, rh = 1.28, rw = 5.4;
     L.box(s, 0.6, ry, rw, rh, { fill: C.b600, r: 0.1 });
-    L.icon(s, 'doc', 0.8, ry + 0.27, 0.32, 'w');
+    L.icon(s, 'doc', 0.8, ry + 0.48, 0.32, 'w');
     L.txt(s, [{ text: 'Regional qualification', options: { fontFace: F.semi, fontSize: 12, breakLine: true } }, { text: 'Remain qualified, become conditional, add platform capabilities, or remove.', options: { fontSize: 11, color: C.b100 } }], 1.3, ry, rw - 0.8, rh, { color: 'FFFFFF', valign: 'middle' });
-    L.path(s, [[sx8, oy + oh], [sx8, ry + rh / 2], [0.6 + rw, ry + rh / 2]], { color: C.b600, dash: 'dash' });
-    L.tag(s, 'New requirements, constraints, or platform gaps', 8.6, ry + rh / 2, { w: 3.5 });
-    L.path(s, [[2.9, ry], [2.9, 5.42], [X(3) + 0.3, 5.42], [X(3) + 0.3, bot]], { color: C.b600, dash: 'dash' });
+    const loopY = ry + rh + 0.22;
+    L.path(s, [[sx8, oy + oh], [sx8, loopY], [0.6 + rw, loopY], [0.6 + rw, ry + rh / 2]], { color: C.b600, dash: 'dash' });
+    L.tag(s, 'New requirements, constraints, or platform gaps', 8.6, loopY, { w: 3.5 });
+    L.path(s, [[2.9, ry], [2.9, 3.8], [X(3) + 0.3, 3.8], [X(3) + 0.3, bot]], { color: C.b600, dash: 'dash' });
     L.caption(s, 'Figure', 'Teal steps describe the workload, blue steps match it to regional options, slate steps decide and govern. Onboarding findings return to regional qualification.', 0.6, 6.5, 12.13);
     s.addNotes('Place a workload only after its requirements are understood well enough to make a decision. Regional qualification narrows the choices; it does not permanently approve a region for every application. Previous regional qualification is a planning input, and decision-time validation is authoritative. Findings from onboarding flow back into regional qualification: an option can remain qualified, become conditional, require additional platform capabilities, or be removed for the affected requirements.');
   }

@@ -307,7 +307,7 @@
     "steps": [
      "Data residency and regulation; new in-country region.",
      "Check 2 mandatory location; Check 3 affected workloads; Check 4 services, zones, access.",
-     "Qualified for Hybrid-Connected requirements; other workloads candidates.",
+     "The region can be qualified for defined Hybrid-Connected workload requirements while other portfolio workloads remain candidates until their dependencies are understood.",
      "Hybrid-Connected Applications.",
      "Minimal Regional Hub; reuse existing hybrid connectivity where it permits.",
      "In-scope workloads relocate selectively; recovery stays workload-specific."
@@ -522,7 +522,7 @@
   {
    "title": "Select the regional design",
    "text": "For each qualified region, select the most efficient connectivity profile that meets the requirements, decide where each shared service is provided, and confirm whether the hybrid connectivity you already have is enough. Write the three choices into the regional design record, and agree who owns each decision.",
-   "short": "The most efficient connectivity profile, where each shared service is provided, and whether existing hybrid connectivity is enough. Write the regional design record."
+   "short": "The most efficient connectivity profile, where each shared service is provided, and whether existing hybrid connectivity is enough. Use the region planning workbook to record the three choices."
   },
   {
    "title": "Prepare the region",

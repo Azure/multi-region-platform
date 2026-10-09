@@ -11,7 +11,7 @@ module.exports = (pres, L) => {
     const s = L.slide('front', { bare: true });
     L.image(s, IMG('cover_panel.png', L.tone), { x: 6.733, y: 0, w: 6.6, h: 7.5 }, 'Illustration: regions of different sizes standing on one shared platform foundation');
     L.logo(s, 0.6, 0.55, 0.14, C.muted, 17);
-    L.txt(s, 'White paper briefing', 10.4, 0.52, 2.4, 0.35, { fontSize: 14, fontFace: F.semi, color: 'FFFFFF', align: 'right' });
+    L.txt(s, 'Whitepaper briefing', 10.4, 0.52, 2.4, 0.35, { fontSize: 14, fontFace: F.semi, color: 'FFFFFF', align: 'right' });
     let x = 0.6; x += L.chip(s, 'AZURE ARCHITECTURE', x, 1.4, { size: 10, w: 2.05, h: 0.3 }) + 0.12;
     L.chip(s, 'PLATFORM STRATEGY', x, 1.4, { size: 10, w: 1.95, h: 0.3, fill: C.t100, color: C.t700 });
     L.title(s, [

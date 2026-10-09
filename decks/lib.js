@@ -146,7 +146,12 @@ function makeLib(pres, opts = {}) {
     const eyebrow = o.eyebrow !== undefined ? o.eyebrow : [sec.eyebrow !== undefined ? sec.eyebrow : sec.label, kicker].filter(Boolean).join(' · ');
     L.txt(s, eyebrow.toUpperCase(), 0.6, 0.42, 8.6, 0.25, { fontSize: 10, bold: true, color: o.ec || sec.color || C.b600, charSpacing: 3 });
     L.title(s, title, 0.6, 0.7, o.tw || 8.6, o.th || 0.9, { fontSize: o.ts || 26, valign: 'top', lineSpacingMultiple: 0.95 });
-    if (o.lede) L.txt(s, o.lede, o.lx || 9.5, 0.46, o.lw || 3.23, o.lh || 1.2, { fontSize: o.ls || 12, color: C.muted, lineSpacingMultiple: 1.1 });
+    if (o.lede) {
+      const normalizeFullDeckLede = L.n >= 28 && L.n <= 52;
+      L.txt(s, o.lede, normalizeFullDeckLede ? 9.1 : o.lx || 9.5, 0.46,
+        normalizeFullDeckLede ? 3.63 : o.lw || 3.23, o.lh || 1.2,
+        { fontSize: normalizeFullDeckLede ? 12 : o.ls || 12, color: C.muted, lineSpacingMultiple: 1.1 });
+    }
   };
   L.caption = (s, label, text, x, y, w) => {
     if (label === 'Figure') label = 'Figure ' + (++L.fig);

@@ -86,7 +86,7 @@ module.exports = (pres, L) => {
   // ───────────────────────── Three services (PDF p52)
   {
     const s = L.slide('appendix');
-    L.header(s, '', 'Storage, backup, and Key Vault across regions', { eyebrow: 'Appendix A · Three services that need special attention', ec: C.s600, tw: 8.4, ts: 24, lede: 'Regional qualification cannot stop at “the service exists in both regions.” Cross-region behavior differs by service and regional combination.', lx: 9.1, lw: 3.63 });
+    L.header(s, '', 'Storage, backup, and Key Vault across regions', { eyebrow: 'Appendix A · Three services that need special attention', ec: C.s600, tw: 8.4, lede: 'Regional qualification cannot stop at “the service exists in both regions.” Cross-region behavior differs by service and regional combination.', lx: 9.1, lw: 3.63 });
     const S = [
       ['data', 'Storage', ['GRS and GZRS replicate asynchronously to the service-defined secondary.', 'Evaluate built-in failover separately from workload recoverability.'], ['Object replication for block blobs only: not append or page blobs, not hierarchical namespace (Data Lake).', 'Requires change feed and versioning; at most two destination accounts.', 'Otherwise, application-level copy.'], 'Replicated data does not by itself make the workload recoverable.'],
       ['loop', 'Backup and restore', ['Cross Region Restore uses the paired region for supported data sources when configured.', 'Support differs by workload and configuration.'], ['Confirm which technologies and restore targets support the recovery region.', 'Azure Site Recovery supports VM DR between regions, subject to its support matrix.', 'Restricted-access regions can require approval.'], 'Demonstrate RTO and RPO through recovery testing, not configuration.'],
@@ -101,7 +101,17 @@ module.exports = (pres, L) => {
       L.txt(s, 'PAIRED REGION', x + 0.2, y + 0.72, 2.5, 0.22, { fontSize: 10, bold: true, color: C.b600, charSpacing: 1.5 });
       L.bullets(s, pr, x + 0.2, y + 0.98, w - 0.4, 1.4, { gap: 3 });
       L.txt(s, 'REGION OF CHOICE', x + 0.2, y + 2.4, 2.5, 0.22, { fontSize: 10, bold: true, color: C.t600, charSpacing: 1.5 });
-      L.bullets(s, rc, x + 0.2, y + 2.66, w - 0.4, 1.7, { gap: 3 });
+      if (i !== 2) {
+        L.bullets(s, rc, x + 0.2, y + 2.66, w - 0.4, 1.7, { gap: 3 });
+      } else {
+        const link = 'Reliability in Azure Key Vault';
+        L.txt(s, [
+          { text: 'Some paired regions and all nonpaired regions have no Microsoft-managed replication; see ', options: { bullet: { indent: 14 }, paraSpaceAfter: 3 } },
+          { text: link, options: { hyperlink: { url: 'https://learn.microsoft.com/azure/reliability/reliability-key-vault', tooltip: 'Open Reliability in Azure Key Vault' }, color: C.b600, bold: true, underline: { style: 'sng', color: C.b600 }, breakLine: true, paraSpaceAfter: 3 } },
+          { text: 'Use separate regional vaults or another custom design; analyze keys, secrets, and certificates separately.', options: { bullet: { indent: 14 }, breakLine: true, paraSpaceAfter: 3 } },
+          { text: 'Managed HSM: optional two-region replication, for keys only.', options: { bullet: { indent: 14 } } },
+        ], x + 0.2, y + 2.66, w - 0.4, 1.7, { fontSize: 11, color: C.text });
+      }
       L.box(s, x, y + h - 0.72, w, 0.72, { fill: C.wash, r: 0.12 }); L.box(s, x, y + h - 0.72, w, 0.25, { fill: C.wash, r: 0 });
       L.txt(s, tk, x + 0.2, y + h - 0.72, w - 0.4, 0.72, { fontSize: 11, bold: true, color: C.ink, valign: 'middle' });
     });
@@ -119,15 +129,15 @@ module.exports = (pres, L) => {
       ['Do not make failover the synchronization strategy', 'Populate and validate runtime dependencies before an outage, not by creating or restoring a vault after the primary region has failed.'],
       ['Design cryptographic keys separately', 'Choose a key-resiliency pattern: Key Vault backup/restore within its constraints, Managed HSM multi-region, or a workload-specific design.'],
     ];
-    const lines = [2, 4, 3, 3];
+    const rowH = 1.05;
     let by = 2.45;
     B.forEach(([t, d], i) => {
-      const bh = 0.32 + lines[i] * 0.2 + 0.12;
       L.box(s, 0.6, by - 0.06, 6.0, 0.008, { fill: C.soft, r: 0 });
       L.badge(s, 'check', 0.6, by + 0.08, 0.32, C.b600);
-      L.txt(s, [{ text: t, options: { bold: true, color: C.ink, breakLine: true } }, { text: d, options: { color: C.muted } }], 1.05, by, 5.55, bh - 0.08, { fontSize: 11, valign: 'top' });
-      by += bh;
+      L.txt(s, [{ text: t, options: { bold: true, color: C.ink, breakLine: true } }, { text: d, options: { color: C.muted } }], 1.05, by, 5.55, rowH - 0.08, { fontSize: 11, valign: 'top' });
+      by += rowH;
     });
+    L.box(s, 0.6, by - 0.06, 6.0, 0.008, { fill: C.soft, r: 0 });
     // diagram
     const X = 7.0, dy = 1.5, dh = 4.72;
     L.box(s, X, dy, 5.73, dh, { fill: 'FFFFFF', line: C.line, r: 0.14 });
@@ -171,11 +181,12 @@ module.exports = (pres, L) => {
       L.box(s, x, y, w, 0.85, { fill: C.b50, r: 0.12 }); L.box(s, x, y + 0.5, w, 0.35, { fill: C.b50, r: 0 });
       L.txt(s, t, x + 0.2, y + 0.05, w - 0.4, 0.75, { fontSize: 13, fontFace: F.semi, color: C.ink, valign: 'middle' });
       let yy = y + 0.95;
-      rows.forEach(([k, v]) => {
-        const nl = wrapLines(v, 46), hh = 0.24 + nl * 0.2 + 0.1;
+      rows.forEach(([k, v], j) => {
+        const nl = wrapLines(v, 46), hh = 0.42 + nl * 0.2;
         L.txt(s, k.toUpperCase(), x + 0.2, yy, w - 0.4, 0.22, { fontSize: 10, bold: true, color: C.b700, charSpacing: 1 });
         L.txt(s, v, x + 0.2, yy + 0.24, w - 0.4, nl * 0.2 + 0.08, { fontSize: 11, color: C.text });
-        yy += hh; L.box(s, x + 0.2, yy - 0.06, w - 0.4, 0.006, { fill: C.soft, r: 0 });
+        yy += hh;
+        if (j < rows.length - 1) L.box(s, x + 0.2, yy - 0.06, w - 0.4, 0.006, { fill: C.soft, r: 0 });
       });
       L.box(s, x, y + h - 0.85, w, 0.85, { fill: C.s800, r: 0.12 }); L.box(s, x, y + h - 0.85, w, 0.3, { fill: C.s800, r: 0 });
       L.txt(s, [{ text: 'Takeaway. ', options: { bold: true, color: 'A6E7F5' } }, { text: tk }], x + 0.2, y + h - 0.85, w - 0.4, 0.85, { fontSize: 11, color: 'FFFFFF', valign: 'middle' });
@@ -188,17 +199,18 @@ module.exports = (pres, L) => {
     const s = L.slide('back', { bare: true });
     s.background = { path: IMG('bg_full.jpg', L.tone) };
     L.logo(s, 0.6, 0.6, 0.14, 'FFFFFF', 17);
-    L.txt(s, 'Briefing deck', 10.3, 0.57, 2.43, 0.35, { fontSize: 13, fontFace: F.semi, color: 'FFFFFF', align: 'right' });
+    L.txt(s, 'Whitepaper briefing', 10.3, 0.57, 2.43, 0.35, { fontSize: 13, fontFace: F.semi, color: 'FFFFFF', align: 'right' });
     L.title(s, [{ text: 'The adaptable ', options: { fontFace: F.light } }, { text: 'multi-region', options: { fontFace: F.semi } }, { text: ' Azure platform', options: { fontFace: F.light } }], 0.6, 2.2, 7.2, 1.3, { fontSize: 34, color: 'FFFFFF', fontFace: F.light });
-    L.txt(s, 'The complete framework, decision tools, and Microsoft Learn references are in the whitepaper on the website.', 0.6, 3.6, 6.6, 0.8, { fontSize: 14, color: C.b100 });
+    L.txt(s, 'The complete framework, decision tools, and Microsoft Learn references are in the whitepaper on the website.', 0.6, 3.6, 6.6, 0.45, { fontSize: 14, color: C.b100 });
     // Links sit on white pills: PowerPoint colors hyperlinks with the theme link color, which needs a light background.
-    const links = [['WEBSITE', 'azure.github.io/multi-region-platform', L.data.siteUrl, 4.5], ['PLANNING TOOL', 'Region planning workbook', L.data.workbookUrl, 5.15]];
+    const links = [['WEBSITE', 'azure.github.io/multi-region-platform', L.data.siteUrl, 4.08], ['PLANNING TOOL', 'Region planning workbook', L.data.workbookUrl, 4.66]];
     links.forEach(([lab, txt, url, y]) => {
-      L.txt(s, lab, 0.6, y, 1.6, 0.46, { fontSize: 10, bold: true, color: C.b200, charSpacing: 2, valign: 'middle' });
+      L.txt(s, lab, 0.6, y, 1.5, 0.46, { fontSize: 10, bold: true, color: C.b200, charSpacing: 2, valign: 'middle' });
       L.box(s, 2.25, y, 4.55, 0.46, { fill: 'FFFFFF', r: 0.23 });
       L.txt(s, [{ text: txt, options: { hyperlink: { url, tooltip: url }, color: C.b600, underline: { style: 'sng', color: C.b600 } } }], 2.25, y, 4.55, 0.46, { fontSize: 13, fontFace: F.semi, align: 'center', valign: 'middle' });
     });
-    L.txt(s, L.brand + ' · ' + L.data.edition, 0.6, 5.95, 6.5, 0.3, { fontSize: 11, color: C.b100 });
-    L.txt(s, L.data.legal, 0.6, 6.4, 12.13, 0.5, { fontSize: 9, color: C.b100 });
+    L.txt(s, L.brand + ' · ' + L.data.edition, 0.6, 5.84, 6.5, 0.22, { fontSize: 10.5, color: C.b100 });
+    L.box(s, 0, 6.12, 13.333, 0.85, { fill: C.s800, r: 0 });
+    L.txt(s, L.data.legal, 0.6, 6.26, 12.13, 0.56, { fontSize: 9, color: 'FFFFFF' });
   }
 };

@@ -109,7 +109,7 @@ module.exports = (pres, L) => {
       ['Region B', 2.0, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full hub', C.b600, 'FFFFFF']], 'Strategic hub'],
       ['Region C', 1.55, [['Workloads', C.t600, 'FFFFFF'], ['Minimal hub', 'FFFFFF', C.b700, C.b300]], 'Minimal hub'],
       ['Region D', 1.2, [['Spokes', C.t600, 'FFFFFF']], 'Remote hub', 'via remote hub'],
-      ['Region E', 1.0, [['Isolated spokes', C.t100, C.t700]], 'Disconnected'],
+      ['Region E', 1.0, [['Disconnected spokes', C.t100, C.t700]], 'Disconnected spokes'],
       ['Region F', 0.75, [], 'Not enabled', 'Candidate'],
     ];
     const base = 5.12, rw = 1.07, gap = 0.06;
@@ -142,7 +142,7 @@ module.exports = (pres, L) => {
     L.header(s, '', 'Three constructs balance advance planning with flexibility', { tw: 8.2, lede: 'Platform teams cannot predict every future workload. Plan for what is known, stay flexible for what is not.', lx: 9.2, lw: 3.53 });
     L.txt(s, 'PLATFORM READINESS · ADVANCE PLANNING', 0.6, 1.72, 6, 0.24, { fontSize: 10.5, bold: true, color: C.b600, charSpacing: 2 });
     const cards = [
-      ['hub', C.v600, 'Regional Platform Connectivity Profiles', 'Describe **what the platform provides** to support those archetypes in a region.', [['Disconnected', C.b100, C.b700], ['Remote hub', C.b100, C.b700], ['Minimal hub', C.b100, C.b700], ['Full hub', C.b100, C.b700]], C.line],
+      ['hub', C.v600, 'Regional Platform Connectivity Profiles', 'Describe **what the platform provides** to support those archetypes in a region.', [['Disconnected spokes', C.b100, C.b700], ['Remote hub', C.b100, C.b700], ['Minimal hub', C.b100, C.b700], ['Full hub', C.b100, C.b700]], C.line],
       ['app', C.t600, 'Workload Landing Zone Archetypes', 'Describe **what applications require**: recurring dependency and connectivity characteristics.', [['Hybrid-connected', C.t100, C.t700], ['Isolated', C.t100, C.t700], ['Connected', C.t100, C.t700], ['Portfolios', C.t100, C.t700]], C.t300],
       ['search', C.b600, 'Regional Qualification', 'Evaluates candidate regions against four checks for defined workload requirements.', [['Excluded', C.w100, C.w600], ['Candidate', 'FFFFFF', C.b700, C.b500], ['Conditional', C.a100, C.a700], ['Qualified', C.g100, C.g600]], C.line],
     ];

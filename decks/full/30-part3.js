@@ -64,8 +64,8 @@ module.exports = (pres, L) => {
     s.addNotes('Selecting the regional design is a set of decisions, not a deployment. For each qualified region you make three choices, each from a short list: the connectivity profile, where each shared service is provided, and whether existing hybrid connectivity is reused. Each choice follows from the workloads you expect in the region, not from the footprint of an existing hub. Nothing is built yet; deployment follows later, through the automation you already run. Connectivity that is specific to one application is not decided here. It is designed when the workload is placed.');
   }
 
-  // ───────────────────────── The regional design record
-  {
+  // ───────────────────────── The regional design record (after the three choices)
+  const addDesignRecord = () => {
     const s = L.slide('part3');
     L.header(s, 'Design record', 'The regional design record', { lede: 'Keep one record per region. Update it when a reassessment trigger applies.', lx: 8.6, lw: 4.13 });
     // left: start from workload requirements
@@ -82,7 +82,6 @@ module.exports = (pres, L) => {
     L.bullets(s, ['Selected connectivity profile', 'Placement of each shared service, and which hub provides the remote ones', 'Hybrid connectivity decision', 'Owner and date', 'Triggers that would reopen the decision'], 7.9, 2.12, 4.65, 1.4, { gap: 3 });
     // example record
     L.txt(s, 'Example record', 0.6, 3.76, 4, 0.3, { fontSize: 14, fontFace: F.semi, color: C.ink, valign: 'middle' });
-    L.chip(s, 'Illustrative example', 2.55, 3.78, { fill: C.s100, color: C.s600, size: 9.5, w: 1.75 });
     const head = ['Region', 'Connectivity profile', 'Shared services', 'Hybrid connectivity', 'Open conditions'];
     const rows = [
       ['Region C', PROF[2], 'Local: gateway, DNS forwarding. Remote from Region A: firewall, domain controllers.', 'Reuse: existing circuit, new gateway.', 'None'],
@@ -99,7 +98,7 @@ module.exports = (pres, L) => {
     L.box(s, 5.95, 6.3, 6.78, 0.55, { fill: C.wash, r: 0.1 });
     L.txt(s, [{ text: 'The ', options: {} }, { text: 'region planning workbook', options: { bold: true, color: C.b700, hyperlink: { url: L.data.workbookUrl, tooltip: 'Open the region planning workbook' } } }, { text: ' walks through the three choices for each selected region and produces the regional design record.', options: {} }], 6.15, 6.3, 6.4, 0.55, { fontSize: 11, color: C.ink, valign: 'middle' });
     s.addNotes('Use the workload requirements identified earlier to decide how workloads consume regional and centralized platform capabilities. Archetypes can inform the assessment, but the design follows each workload’s actual dependencies. Existing and new workloads follow the same rule: requirements and dependencies determine the regional connectivity profile. Keep one record per region. The record also names the open conditions of a conditional region, and it is updated when a reassessment trigger applies. The regions in the table are examples only.');
-  }
+  };
 
   // ───────────────────────── Choice 1: principles and cost
   {
@@ -207,7 +206,7 @@ module.exports = (pres, L) => {
     });
 
     // default placement table
-    const lx = 0.6, labW = 2.95, colW = 1.27, cx0 = lx + labW, tw = labW + 4 * colW, ty = 2.45;
+    const lx = 0.6, labW = 2.65, colW = 1.35, cx0 = lx + labW, tw = labW + 4 * colW, ty = 2.45;
     L.txt(s, 'Default placement by profile'.toUpperCase(), lx, ty, 3, 0.3, { fontSize: 9.5, bold: true, color: C.muted, charSpacing: 1.5, valign: 'bottom' });
     PROF.forEach((p, k) => {
       const x = cx0 + k * colW;
@@ -219,7 +218,7 @@ module.exports = (pres, L) => {
       ['Management groups, access, policy', ['global']],
       ['Private DNS zones', ['global']],
       ['DNS resolution across premises', [NR, 'remote', 'either', 'local']],
-      ['Traffic inspection and internet egress', [NR, 'remote', 'either', 'local']],
+      ['Traffic inspection and egress', [NR, 'remote', 'either', 'local']],
       ['Hybrid connectivity gateways', [NR, 'remote', 'either', 'local']],
       ['Directory services', [NR, 'remote', 'either', 'local']],
       ['Log workspace', ['logs']],
@@ -239,7 +238,7 @@ module.exports = (pres, L) => {
       } else cells.forEach((k, j) => {
         const x = cx0 + j * colW;
         if (k === NR) L.txt(s, 'Not required', x, y, colW, rp, { fontSize: 10.5, color: C.faint, align: 'center', valign: 'middle' });
-        else pill(k, NAME[k], x + 0.04, y + 0.05, colW - 0.08, 0.26);
+        else pill(k, NAME[k], x + 0.02, y + 0.05, colW - 0.04, 0.26);
       });
     });
     L.box(s, lx, ry0 + T.length * rp, tw, 0.012, { fill: C.soft, r: 0 });
@@ -294,8 +293,10 @@ module.exports = (pres, L) => {
       ['On-premises locations or users are far from the existing peering locations.', ''],
       ['Bandwidth or gateway capacity is exhausted.', ''],
       ['Workloads need a capability that doesn’t work across regions.', 'ExpressRoute FastPath, for example, doesn’t support global virtual network peering.'],
-      ['The region must keep its on-premises path when another region is unavailable.', 'This usually points to a Full Regional Hub.'],
+      ['Keep an independent path.', 'The region must retain its on-premises connectivity when another region is unavailable; this usually points to a Full Regional Hub.'],
     ], 7.0, 4.55, 5.73, 2.3, { gap: 4, leadColor: C.ink });
     s.addNotes('Enabling an additional Azure region doesn’t by itself require another ExpressRoute circuit. Evaluate the existing ExpressRoute, VPN, SD-WAN, or other hybrid connectivity against datacenter and user locations, latency, bandwidth, and routing requirements. Add circuits, peering locations, gateways, or more connectivity paths only where the existing foundation can’t provide the required reachability, diversity, or resilience. Microsoft recommends ExpressRoute circuits from more than one peering location, and a new region is a reason to check this. Measure latency on the real path before you decide that locations are too far from the peering locations.');
   }
+
+  addDesignRecord();
 };
