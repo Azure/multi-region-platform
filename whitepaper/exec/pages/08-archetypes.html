@@ -3,11 +3,11 @@
   .xa4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }
   .xa4 .c { border: 1px solid var(--line); border-radius: 13px; background: #fff; overflow: hidden; display: flex; flex-direction: column; }
   .xa4 .top { height: 5px; }
-  .xa4 .hd { padding: 13px 15px 0; display: flex; gap: 10px; align-items: flex-start; }
+  .xa4 .hd { padding: 13px 15px 0; display: flex; gap: 10px; align-items: flex-start; min-height: 66px; box-sizing: border-box; }
   .xa4 .hd .n { width: 28px; height: 28px; border-radius: 50%; color: #fff; font-weight: 700; font-size: 13px; display: grid; place-items: center; flex: none; }
   .xa4 .hd b { font-size: 13.8px; color: var(--ink); line-height: 1.25; }
-  .xa4 .d { padding: 8px 15px 0; font-size: 11.2px; line-height: 1.45; color: var(--text); }
-  .xa4 .pat { margin: 10px 15px 0; padding-top: 8px; border-top: 1px solid var(--line-soft); }
+  .xa4 .d { padding: 8px 15px 0; font-size: 11.2px; line-height: 1.45; color: var(--text); min-height: 100px; box-sizing: border-box; }
+  .xa4 .pat { margin: 10px 15px 8px; padding-top: 8px; border-top: 1px solid var(--line-soft); }
   .xa4 .pat .k { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--b600); }
   .xa4 .pat p { font-size: 11px; line-height: 1.42; color: var(--ink); margin-top: 3px; }
   .xa4 .afoot { margin-top: auto; padding: 10px 15px 12px; background: var(--wash); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
@@ -34,7 +34,7 @@
       <div class="gl"><svg width="150" height="54" viewBox="0 0 150 54"><g color="#243A57"><use href="#i-building" x="14" y="8" width="38" height="38"/></g><path d="M60 27h34" stroke="#04807A" stroke-width="1.6"/><path d="M64 22l-5 5 5 5M90 22l5 5-5 5" fill="none" stroke="#04807A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="100" y="10" width="34" height="34" rx="8" fill="#EDF8F6" stroke="#7CC9C3"/><rect x="109" y="19" width="16" height="16" rx="3.5" fill="#04807A"/></svg></div>
       <div class="d">Traditional line-of-business applications with tight dependencies on on-premises environments.</div>
       <div class="pat"><div class="k">Typical pattern</div><p>Deploy in strategic hub regions, where the complete geographic landing zone exists.</p></div>
-      <div class="afoot"><span class="chips"><span class="chip blue">Full hub</span><span class="chip blue">Minimal hub</span><span class="chip blue">Remote hub</span></span><span class="fx" title="Regional flexibility"><i class="on"></i><i></i><i></i><i></i></span></div></div>
+      <div class="afoot"><span class="chips"><span class="chip blue">Full hub</span><span class="chip blue">Minimal hub</span><span class="chip blue">Remote hub</span></span><span style="display:grid;justify-items:center;gap:2px"><span class="fx" title="Regional flexibility"><i class="on"></i><i></i><i></i><i></i></span><span style="font-size:9px;line-height:1.1;text-align:center">Regional<br>flexibility</span></span></div></div>
     <div class="c"><div class="top" style="background:var(--t600)"></div>
       <div class="hd"><span class="n" style="background:var(--t600)">2</span><b>Isolated cloud-native or AI applications</b></div>
       <div class="gl"><svg width="150" height="54" viewBox="0 0 150 54"><rect x="30" y="4" width="90" height="46" rx="10" fill="none" stroke="#7CC9C3" stroke-dasharray="4 3"/><rect x="44" y="15" width="22" height="22" rx="5" fill="#04807A"/><rect x="74" y="15" width="22" height="22" rx="5" fill="#04807A" opacity=".7"/><rect x="100" y="24" width="12" height="12" rx="3" fill="#04807A" opacity=".45"/></svg></div>
@@ -56,7 +56,6 @@
   </div>
   <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:9.8px;color:var(--muted)">
     <span>Chips show the typical connectivity profiles, most common first; actual dependencies and requirements decide.</span>
-    <span style="display:flex;gap:6px;align-items:center"><span style="display:inline-flex;gap:3px"><i style="width:9px;height:9px;border-radius:2px;background:var(--t600);display:block"></i><i style="width:9px;height:9px;border-radius:2px;background:var(--line);display:block"></i></span>Regional flexibility (indicative)</span>
   </div>
 
   <div style="position:absolute;left:0;right:0;bottom:0;border-radius:14px;overflow:hidden;display:grid;grid-template-columns:330px 1fr">

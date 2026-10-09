@@ -2,9 +2,9 @@
 <style>
   .xsc { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px 20px; }
   .xsc .c { border: 1px solid var(--line); border-radius: 13px; background: #fff; overflow: hidden; display: flex; flex-direction: column; }
-  .xsc .h { display: flex; gap: 12px; align-items: flex-start; padding: 16px 18px 2px; }
+  .xsc .h { display: flex; gap: 12px; align-items: flex-start; padding: 16px 18px 2px; min-height: 72px; box-sizing: border-box; }
   .xsc .h .n { width: 28px; height: 28px; border-radius: 50%; background: var(--t600); color: #fff; font-weight: 700; font-size: 13px; display: grid; place-items: center; flex: none; }
-  .xsc .h b { font-size: 15.4px; color: var(--ink); line-height: 1.25; display: block; }
+  .xsc .h b { font-size: 14.4px; color: var(--ink); line-height: 1.25; display: block; }
   .xsc .h span { font-size: 11.6px; color: var(--muted); line-height: 1.4; display: block; margin-top: 2px; }
   .xsc .rw { display: grid; grid-template-columns: 104px 1fr; gap: 10px; padding: 8px 18px; font-size: 12px; line-height: 1.42; color: var(--ink); }
   .xsc .rw:first-of-type { margin-top: 8px; }
@@ -22,7 +22,7 @@
     <p class="standfirst" style="width:340px;font-size:13.2px">From a business or technical driver to a governed regional and workload decision. Illustrative, not customer-specific recommendations.</p>
   </div>
 
-  <div class="xsc mt16" id="xfScen">
+  <div class="xsc mt12" id="xfScen">
     <div class="c">
       <div class="h"><span class="n">1</span><div><b>Regulated bank adopts a new in-country region</b><span>A new in-country region opens while regulation requires certain data or services to remain there.</span></div></div>
       <div class="rw"><span class="k">Qualification</span><span>Qualified for defined Hybrid-Connected requirements; other workloads remain candidates.</span></div>
