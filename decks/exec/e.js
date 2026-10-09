@@ -8,6 +8,8 @@ module.exports = (pres, L) => {
   const PROF = ['Disconnected spokes', 'Remote-hub-connected spokes', 'Minimal regional hub', 'Full regional hub'];
   const chipW = (t, size = 10) => t.length * (size * 0.0078) + 0.28;
   const cap = (s, t, x, y, o = {}) => L.txt(s, t.toUpperCase(), x, y, o.w || 4, 0.22, Object.assign({ fontSize: 9.5, bold: true, color: C.muted, charSpacing: 2 }, o));
+  const header = L.header;
+  L.header = (s, kicker, title, o = {}) => header(s, kicker, title, Object.assign({}, o, { ec: C.t600 }));
 
   // ───────────────────────── 1 · Cover (brief page 1)
   {
@@ -81,10 +83,10 @@ module.exports = (pres, L) => {
     L.txt(s, 'MIRRORED INFRASTRUCTURE', 0.85, y0 + 2.38, 3.9, 0.2, { fontSize: 9, bold: true, color: C.muted, align: 'center', charSpacing: 1 });
     L.txt(s, 'EVOLVING REGIONAL CONDITIONS', 0.85, y0 + 2.7, 3.9, 0.22, { fontSize: 9.5, bold: true, color: C.w600, charSpacing: 2 });
     let cx = 0.85;
-    ['Regulatory change', 'Power and energy supply'].forEach(t => { const w = chipW(t); L.chip(s, t, cx, y0 + 2.97, { fill: C.w100, color: C.w600, size: 10, w }); cx += w + 0.08; });
+    ['Regulatory change', 'Power and energy supply'].forEach(t => { const w = chipW(t, 10.5); L.chip(s, t, cx, y0 + 2.97, { fill: C.w100, color: C.w600, size: 10.5, w }); cx += w + 0.08; });
     cx = 0.85;
-    ['Service & AI availability', 'Business expansion'].forEach(t => { const w = chipW(t); L.chip(s, t, cx, y0 + 3.3, { fill: C.w100, color: C.w600, size: 10, w }); cx += w + 0.08; });
-    L.txt(s, 'Works while demand and placement remain predictable; becomes less adaptable as conditions evolve.', 0.85, y0 + 3.62, 4.1, 0.6, { fontSize: 11, color: C.muted });
+    ['Service & AI availability', 'Business expansion'].forEach(t => { const w = chipW(t, 10.5); L.chip(s, t, cx, y0 + 3.3, { fill: C.w100, color: C.w600, size: 10.5, w }); cx += w + 0.08; });
+    L.txt(s, 'Works while demand and placement remain predictable; becomes less adaptable as conditions evolve.', 0.85, y0 + 3.62, 4.1, 0.6, { fontSize: 12, color: C.muted });
     // arrow
     L.line(s, 5.3, y0 + 1.7, 5.9, y0 + 1.7, { color: C.b600, w: 2 });
     L.txt(s, 'Extend,\nnot\nreplicate', 5.2, y0 + 1.82, 0.8, 0.6, { fontSize: 10, bold: true, color: C.b700, align: 'center' });
@@ -100,7 +102,7 @@ module.exports = (pres, L) => {
       ['Region E', 0.98, [['Disconnected spokes', C.t100, C.t700]], 'Disconnected'],
       ['Region F', 0.8, [], 'Not enabled', 'Candidate'],
     ];
-    const base = y0 + 3.0, rw = 0.99, gap = 0.078;
+    const base = y0 + 3.0, rw = 1.04, gap = 0.04;
     regs.forEach(([n, h, blocks, lab, extra], i) => {
       const x = 6.2 + i * (rw + gap), y = base - h;
       L.box(s, x, y, rw, h, { fill: 'FFFFFF', line: i === 5 ? C.b500 : C.b300, dash: 'dash', r: 0.08 });
@@ -108,8 +110,8 @@ module.exports = (pres, L) => {
       L.txt(s, n, x + 0.24, y + 0.05, 0.74, 0.22, { fontSize: 9.5, bold: true, color: C.b700, valign: 'middle' });
       blocks.slice().reverse().forEach(([t, f, c, ln], j) => {
         const by = base - 0.1 - (j + 1) * 0.38 + 0.06;
-        L.box(s, x + 0.07, by, rw - 0.14, 0.32, { fill: f, line: ln, r: 0.05 });
-        L.txt(s, t, x + 0.07, by, rw - 0.14, 0.32, { fontSize: 9.5, bold: true, color: c, align: 'center', valign: 'middle' });
+        L.box(s, x + 0.03, by, rw - 0.06, 0.32, { fill: f, line: ln, r: 0.05 });
+        L.txt(s, t, x + 0.03, by, rw - 0.06, 0.32, { fontSize: 9.5, bold: true, color: c, align: 'center', valign: 'middle' });
       });
       if (extra) L.txt(s, extra, x, base - (blocks.length ? 0.1 + blocks.length * 0.38 + 0.26 : 0.46), rw, 0.22, { fontSize: 9.5, bold: true, color: C.b600, align: 'center', valign: 'middle' });
       L.txt(s, lab, x - 0.04, base + 0.07, rw + 0.08, 0.22, { fontSize: 10, color: C.muted, align: 'center' });
@@ -124,7 +126,7 @@ module.exports = (pres, L) => {
   // ───────────────────────── 4 · 02 Geography mindset (brief page 4)
   {
     const s = L.slide('x2');
-    L.header(s, '', 'Define the landing zone by geography, not by region', { tw: 8.2, lede: 'Broaden the architectural boundary. The individual regions underneath become adaptable deployment locations.', lx: 8.9, lw: 3.83 });
+    L.header(s, '', 'Define the landing zone by geography, not by region', { tw: 8.5, ts: 23, lede: 'Broaden the architectural boundary. The individual regions underneath become adaptable deployment locations.', lx: 8.9, lw: 3.83 });
     L.box(s, 0.6, 1.7, 12.13, 3.75, { fill: C.b50, line: C.b200, r: 0.16 });
     L.txt(s, 'Geographic landing zone · for example, Europe', 0.85, 1.82, 7, 0.35, { fontSize: 14, fontFace: F.semi, color: C.b800 });
     L.txt(s, 'ONE GOVERNED OPERATING MODEL', 8.5, 1.88, 4.0, 0.3, { fontSize: 9.5, bold: true, color: C.b600, charSpacing: 2, align: 'right' });
@@ -143,7 +145,7 @@ module.exports = (pres, L) => {
       L.icon(s, 'pin', x + 0.12, y + 0.14, 0.17, hub ? 'w' : 'b');
       L.txt(s, r, x + 0.34, y + 0.08, 1.4, 0.28, { fontSize: 11, bold: true, color: hub ? 'FFFFFF' : C.b700, valign: 'middle' });
       L.chip(s, tag, x + 0.12, y + 0.44, { fill: hub ? '3F86C9' : k === 'c' ? 'FFFFFF' : C.t100, color: hub ? 'FFFFFF' : k === 'c' ? C.b700 : C.t700, size: 9.5, w: chipW(tag, 9.5), line: k === 'c' ? C.b500 : undefined, dash: k === 'c' ? 'dash' : undefined });
-      L.txt(s, d, x + 0.12, y + 0.84, w - 0.24, 0.82, { fontSize: 11, color: hub ? 'DDEBF9' : C.muted, valign: 'bottom' });
+      L.txt(s, d, x + 0.12, y + 0.84, w - 0.24, 0.82, { fontSize: 12, color: hub ? 'DDEBF9' : C.muted, valign: 'bottom' });
     });
     L.txt(s, 'CONSISTENT: GOVERNANCE, SECURITY, COMPLIANCE, OPERATIONS', 0.85, 5.16, 6, 0.25, { fontSize: 9.5, bold: true, color: C.s800, charSpacing: 1.5 });
     L.txt(s, 'ADAPTABLE: WHICH REGIONS EACH APPLICATION CONSUMES', 6.5, 5.16, 5.98, 0.25, { fontSize: 9.5, bold: true, color: C.t600, charSpacing: 1.5, align: 'right' });
@@ -157,7 +159,7 @@ module.exports = (pres, L) => {
   // ───────────────────────── 5 · 03 Decouple connectivity (brief page 5)
   {
     const s = L.slide('x3');
-    L.header(s, '', 'Plan hybrid connectivity once, for the geography', { tw: 8.2, lede: [{ text: 'Enabling an additional Azure region does not by itself require another ExpressRoute circuit.', options: { bold: true, color: C.ink } }], lx: 8.9, lw: 3.83 });
+    L.header(s, '', 'Plan hybrid connectivity once, for the geography', { tw: 8.5, ts: 23, lede: [{ text: 'Enabling an additional Azure region does not by itself require another ExpressRoute circuit.', options: { bold: true, color: C.ink } }], lx: 8.9, lw: 3.83 });
     const top = 1.75, hh = 3.2;
     // on-premises
     L.box(s, 0.6, top, 2.0, hh, { fill: C.wash, r: 0.12 });
@@ -198,7 +200,7 @@ module.exports = (pres, L) => {
       L.box(s, x, y, w, h, { fill: C.wash, r: 0.1 });
       L.badge(s, ic, x + 0.15, y + 0.15, 0.4, c);
       L.txt(s, t, x + 0.68, y + 0.12, w - 0.8, 0.3, { fontSize: 12.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
-      L.txt(s, d, x + 0.68, y + 0.46, w - 0.8, 0.75, { fontSize: 11, color: C.text });
+      L.txt(s, d, x + 0.68, y + 0.46, w - 0.8, 0.75, { fontSize: 12, color: C.text });
     });
     s.addNotes('Talk track: "The next architectural shift is connectivity. Instead of asking, how do I build the full networking stack again every time I enter another Azure region, we can think about connectivity strategically across Europe. We establish redundant connectivity into the Azure backbone through strategically located ExpressRoute or ExpressRoute Direct peering locations. That gives us route diversity and lets us think about connectivity geographically rather than designing it independently for every region." Describe strategically distributed peering locations as a way of providing route diversity and connectivity to Azure regions while decoupling ExpressRoute planning from individual regions. This is important economically as well as architecturally. From the whitepaper: add circuits, peering locations, gateways, or paths only where reachability, diversity, failure-domain isolation, latency, bandwidth, routing, or resiliency requirements justify them.');
   }
@@ -221,41 +223,39 @@ module.exports = (pres, L) => {
       L.box(s, x, y, w, h, { fill: 'FFFFFF', line: C.line, r: 0.12 });
       L.num(s, i + 1, x + 0.18, y + 0.18, 0.38, c, 'FFFFFF', 13);
       L.txt(s, PROF[i], x + 0.66, y + 0.12, w - 0.75, 0.5, { fontSize: 12.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
-      L.txt(s, d, x + 0.18, y + 0.7, w - 0.36, 0.75, { fontSize: 11, color: C.muted });
-      const ax = x + 0.2, ay = y + 1.5, aw = w - 0.4;
-      const mini = (w2, label) => { L.box(s, ax, ay, w2, 1.2, { fill: 'F7FBFE', line: C.b300, dash: 'dash', r: 0.1 }); L.txt(s, label || 'New Region', ax + 0.08, ay + 0.03, w2 - 0.16, 0.2, { fontSize: 9, bold: true, color: C.b700 }); };
+      L.txt(s, d, x + 0.18, y + 0.7, w - 0.36, 0.75, { fontSize: 12, color: C.muted });
+      const ax = x + 0.2, ay = y + 1.5, aw = w - 0.4, mh = 1.55;
+      const mini = (w2, label) => { L.box(s, ax, ay, w2, mh, { fill: 'F7FBFE', line: C.b300, dash: 'dash', r: 0.1 }); L.txt(s, label || 'New Region', ax + 0.08, ay + 0.03, w2 - 0.16, 0.22, { fontSize: 10.5, bold: true, color: C.b700 }); };
       const spoke = (sx, sy, sw, sh) => { L.box(s, sx, sy, sw, sh, { fill: C.t50, line: C.t300, r: 0.07 }); L.box(s, sx + sw / 2 - 0.1, sy + sh / 2 - 0.1, 0.2, 0.2, { fill: C.t600, r: 0.04 }); };
       if (i === 0) {
         mini(aw);
-        spoke(ax + 0.35, ay + 0.28, 0.6, 0.55); spoke(ax + 1.55, ay + 0.28, 0.6, 0.55);
-        L.line(s, ax + 0.95, ay + 0.555, ax + 1.55, ay + 0.555, { color: C.t600, dash: 'dash', arrow: false });
-        L.txt(s, 'peering', ax + 0.95, ay + 0.3, 0.6, 0.2, { fontSize: 9, color: C.t700, align: 'center' });
-        L.txt(s, 'Azure platform services', ax, ay + 0.92, aw, 0.22, { fontSize: 10, color: C.s600, align: 'center' });
+        spoke(ax + 0.3, ay + 0.38, 0.72, 0.62); spoke(ax + 1.55, ay + 0.38, 0.72, 0.62);
+        L.line(s, ax + 1.02, ay + 0.69, ax + 1.55, ay + 0.69, { color: C.t600, dash: 'dash', arrow: false });
+        L.txt(s, 'peering', ax + 1.0, ay + 0.44, 0.58, 0.2, { fontSize: 10.5, color: C.t700, align: 'center' });
+        L.txt(s, 'Azure platform services', ax, ay + 1.22, aw, 0.22, { fontSize: 10.5, color: C.s700, align: 'center' });
       }
       if (i === 1) {
         mini(1.1);
-        spoke(ax + 0.25, ay + 0.28, 0.6, 0.38); spoke(ax + 0.25, ay + 0.74, 0.6, 0.38);
-        L.box(s, ax + 1.45, ay, aw - 1.45, 1.2, { fill: C.b600, r: 0.1 });
-        L.txt(s, [{ text: 'Hub region', options: { bold: true, fontSize: 10, breakLine: true } }, { text: 'strategic hub', options: { fontSize: 9, color: 'BCD9F5', breakLine: true } }, { text: 'Hybrid · egress · DNS', options: { fontSize: 9, color: 'DDEBF9' } }], ax + 1.48, ay + 0.05, aw - 1.5, 1.1, { color: 'FFFFFF', align: 'center', valign: 'middle' });
-        L.line(s, ax + 1.12, ay + 0.6, ax + 1.43, ay + 0.6, { color: C.b600, both: true });
+        spoke(ax + 0.25, ay + 0.34, 0.6, 0.48); spoke(ax + 0.25, ay + 0.91, 0.6, 0.48);
+        L.box(s, ax + 1.45, ay, aw - 1.45, mh, { fill: C.b600, r: 0.1 });
+        L.txt(s, [{ text: 'Hub region', options: { bold: true, fontSize: 11, breakLine: true } }, { text: 'Strategic hub', options: { fontSize: 10.5, color: 'FFFFFF', breakLine: true } }, { text: 'Hybrid · egress · DNS', options: { fontSize: 10, color: 'DDEBF9' } }], ax + 1.48, ay + 0.08, aw - 1.5, 1.35, { color: 'FFFFFF', align: 'center', valign: 'middle' });
+        L.line(s, ax + 1.12, ay + 0.78, ax + 1.43, ay + 0.78, { color: C.b600, both: true });
       }
       if (i === 2) {
         mini(2.0);
-        L.box(s, ax + 0.08, ay + 0.24, 1.84, 0.46, { fill: 'FFFFFF', line: C.b500, lw: 1.5, r: 0.07 });
-        L.txt(s, [{ text: 'Shared services (selected)', options: { bold: true, breakLine: true } }, { text: 'DNS · Gateway · Monitor', options: { fontSize: 9 } }], ax + 0.08, ay + 0.24, 1.84, 0.46, { fontSize: 9, color: C.b700, align: 'center', valign: 'middle' });
-        spoke(ax + 0.2, ay + 0.78, 0.72, 0.36); spoke(ax + 1.08, ay + 0.78, 0.72, 0.36);
+        L.box(s, ax + 0.08, ay + 0.28, 1.84, 0.55, { fill: 'FFFFFF', line: C.b500, lw: 1.5, r: 0.07 });
+        L.txt(s, [{ text: 'Shared services (selected)', options: { bold: true, breakLine: true } }, { text: 'DNS · Gateway · Monitor', options: { fontSize: 10 } }], ax + 0.08, ay + 0.28, 1.84, 0.55, { fontSize: 10.5, color: C.b700, align: 'center', valign: 'middle' });
+        spoke(ax + 0.2, ay + 0.98, 0.72, 0.46); spoke(ax + 1.08, ay + 0.98, 0.72, 0.46);
         L.line(s, ax + 2.0, ay + 0.47, ax + 2.1, ay + 0.47, { color: C.b500, dash: 'dash', arrow: false });
-        L.oval(s, ax + 2.1, ay + 0.3, 0.34, { fill: C.b600 }); L.oval(s, ax + 2.21, ay + 0.41, 0.12, { fill: 'FFFFFF' });
-        L.txt(s, 'strategic\nhub', ax + 1.98, ay + 0.68, 0.62, 0.4, { fontSize: 9, color: C.muted, align: 'center' });
+        L.oval(s, ax + 2.1, ay + 0.36, 0.34, { fill: C.b600 }); L.oval(s, ax + 2.21, ay + 0.47, 0.12, { fill: 'FFFFFF' });
+        L.txt(s, 'strategic\nhub', ax + 1.98, ay + 0.78, 0.62, 0.46, { fontSize: 10.5, color: C.s700, align: 'center' });
       }
       if (i === 3) {
         mini(aw);
-        L.box(s, ax + 0.1, ay + 0.24, aw - 0.2, 0.5, { fill: C.b700, r: 0.08 });
-        L.txt(s, [{ text: 'Shared services (comprehensive)', options: { bold: true, color: 'FFFFFF', breakLine: true } }, { text: 'DNS · Gateway · Firewall · Monitor', options: { color: 'DDEBF9' } }], ax + 0.1, ay + 0.24, aw - 0.2, 0.5, { fontSize: 9, align: 'center', valign: 'middle' });
-        spoke(ax + 0.35, ay + 0.8, 0.7, 0.34); spoke(ax + 1.45, ay + 0.8, 0.7, 0.34);
+        L.box(s, ax + 0.1, ay + 0.28, aw - 0.2, 0.58, { fill: C.b700, r: 0.08 });
+        L.txt(s, [{ text: 'Shared services (comprehensive)', options: { bold: true, color: 'FFFFFF', breakLine: true } }, { text: 'DNS · Gateway · Firewall · Monitor', options: { color: 'DDEBF9' } }], ax + 0.1, ay + 0.28, aw - 0.2, 0.58, { fontSize: 10, align: 'center', valign: 'middle' });
+        spoke(ax + 0.35, ay + 0.98, 0.7, 0.46); spoke(ax + 1.45, ay + 0.98, 0.7, 0.46);
       }
-      L.box(s, x, y + h - 1.05, w, 1.05, { fill: C.wash, r: 0.12 }); L.box(s, x, y + h - 1.05, w, 0.3, { fill: C.wash, r: 0 });
-      L.txt(s, f, x + 0.18, y + h - 1.02, w - 0.36, 1.0, { fontSize: 11, fontFace: F.semi, color: C.ink, valign: 'middle' });
     });
     L.caption(s, 'Figure 4', 'The spectrum of regional platform connectivity profiles. Moving right adds local capability and independence — and cost and operational scope. Services shown are examples; each hub includes only what its workloads require. Any profile can be the right long-term target.', 0.6, 6.4, 12.1);
     s.addNotes('Talk track — this is the core architectural pivot: "Once we have that geographic foundation, we do not have to copy and paste the same full Landing Zone into every Azure region. We can maintain a small number of strategic geographic hubs with the full networking, security, management and shared-service footprint, while allowing applications to consume additional regions using lighter-weight patterns appropriate to the workload." Describe customers using two or three regions for full geographic Landing Zone hubs, then evaluating application requirements individually rather than automatically recreating the entire platform footprint everywhere.');
@@ -265,25 +265,8 @@ module.exports = (pres, L) => {
   {
     const s = L.slide('x4');
     L.header(s, '', 'Pay for local capability only where it is justified', { tw: 8.6 });
-    // left: the trade-off curve
-    L.txt(s, 'How the profiles trade local capability for platform scope', 0.6, 1.55, 4.5, 0.5, { fontSize: 12.5, fontFace: F.semi, color: C.ink });
-    const cx = 1.2, cy = 4.85, cw = 3.85, ch = 2.45;
-    L.line(s, cx, cy, cx, cy - ch, { color: C.faint, w: 1 }); L.line(s, cx, cy, cx + cw, cy, { color: C.faint, w: 1 });
-    L.txt(s, 'Local capability and independence →', cx, cy + 0.08, cw, 0.25, { fontSize: 10, bold: true, color: C.s600, align: 'center' });
-    L.txt(s, 'Fixed platform cost and operational scope →', cx - 0.55, cy - ch, 0.3, ch, { fontSize: 10, bold: true, color: C.s600, align: 'center', vert: 'vert270', valign: 'middle' });
-    const pts = [[0.35, 0.5, C.t600, 'Disconnected spokes'], [1.3, 0.85, C.c600, 'Remote-hub-connected'], [2.5, 1.4, C.b500, 'Minimal regional hub'], [3.6, 2.2, C.b700, 'Full regional hub']];
-    for (let i = 0; i < pts.length - 1; i++) L.line(s, cx + pts[i][0], cy - pts[i][1], cx + pts[i + 1][0], cy - pts[i + 1][1], { color: pts[i + 1][2], w: 2.5, arrow: false });
-    pts.forEach(([x, y, c, t], i) => {
-      L.oval(s, cx + x - 0.13, cy - y - 0.13, 0.26, { fill: c });
-      const left = i >= 2;   // labels of the two upper points sit above-left of the line, the lower two below-right of it
-      L.txt(s, t, left ? cx + x - 2.15 : cx + x + 0.2, left ? cy - y - 0.4 : cy - y + 0.0, 1.95, 0.26, { fontSize: 10.5, bold: true, color: C.ink, align: left ? 'right' : 'left', valign: 'middle' });
-    });
-    L.box(s, 0.6, 5.2, 4.5, 0.95, { fill: C.wash, r: 0.1 });
-    L.txt(s, [{ text: 'There is no required progression between profiles. Select the ' }, { text: 'most efficient profile', options: { bold: true } }, { text: ' for current requirements; different profiles coexist across the estate under the same landing-zone guardrails.' }], 0.78, 5.2, 4.15, 0.95, { fontSize: 11.5, color: C.ink, valign: 'middle' });
-    L.caption(s, 'Figure 5', 'A qualitative trade-off, not a price list. More local capability usually raises fixed cost and operational scope, but can reduce cross-region dependency.', 0.6, 6.27, 4.5);
-    // right: the estate
-    L.txt(s, 'Profiles coexisting across one estate', 5.4, 1.55, 7.3, 0.3, { fontSize: 12.5, fontFace: F.semi, color: C.ink });
-    const X = 5.4, rx = 9.75, rw = 12.73 - rx, hx = 7.2, hw = 1.95, hr = hx + hw;
+    L.txt(s, 'Profiles coexist under one governed landing-zone foundation', 0.6, 1.5, 12.13, 0.3, { fontSize: 14, fontFace: F.semi, color: C.ink });
+    const X = 0.6, rx = 8.7, rw = 12.73 - rx, hx = 3.65, hw = 2.2, hr = hx + hw;
     // A region or node box: pin + label on the first line, title on the second, sub-label on the third (each line has its own height)
     const reg = (x, y, w, h, lab, t, sub, o = {}) => {
       L.box(s, x, y, w, h, { fill: o.fill || 'FFFFFF', line: o.line === undefined ? C.b300 : o.line, dash: 'dash', r: 0.1 });
@@ -292,31 +275,31 @@ module.exports = (pres, L) => {
         L.txt(s, lab, x + 0.32, y + 0.04, w - 0.38, 0.2, { fontSize: 10.5, bold: true, color: o.lc || C.b700, valign: 'middle' });
       }
       const ty = y + (lab ? 0.25 : 0.1);
-      L.txt(s, t, x + 0.1, ty, w - 0.16, 0.2, { fontSize: 11, fontFace: F.semi, color: o.tc || C.ink, valign: 'middle' });
-      if (sub) L.txt(s, sub, x + 0.1, ty + 0.2, w - 0.16, o.subH || 0.2, { fontSize: 10, color: o.sc || C.muted, valign: 'top' });
+      L.txt(s, t, x + 0.1, ty, w - 0.16, 0.24, { fontSize: 12, fontFace: F.semi, color: o.tc || C.ink, valign: 'middle' });
+      if (sub) L.txt(s, sub, x + 0.1, ty + 0.24, w - 0.16, o.subH || 0.24, { fontSize: 12, color: o.sc || C.muted, valign: 'top' });
     };
-    const top = 1.9, pitch = 0.78, bh = 0.72;
+    const top = 1.9, pitch = 0.75, bh = 0.72;
     const R = [['Region C', 'Minimal regional hub', 'Own on-premises path; rest from A'], ['Region D', 'Minimal regional hub', 'No on-premises path; rest from A'], ['Region E', 'Remote-hub-connected spokes', 'Services from Region A'], ['Region F', 'Remote-hub-connected spokes', 'Services from Region B'], ['Region G', 'Disconnected spokes', 'No private path to hubs'], ['Region H', 'Candidate — not yet enabled', '']];
     R.forEach(([l, t, sub], i) => reg(rx, top + i * pitch, rw, bh, l, t, sub, i === 4 ? { line: C.t300, lc: C.t700, ic: 't' } : i === 5 ? { line: C.b500, tc: C.b700 } : {}));
-    const ay = 2.5, by = 4.4, hh = 1.1;
-    reg(X, 3.45, 1.45, 1.05, '', 'On-premises', 'datacenters and user locations', { fill: C.s800, line: null, tc: 'FFFFFF', sc: 'C9D4E2', subH: 0.5 });
+    const ay = 2.4, by = 4.15, hh = 1.15;
+    reg(X, 3.25, 1.7, 1.15, '', 'On-premises', 'datacenters and user locations', { fill: C.s800, line: null, tc: 'FFFFFF', sc: 'C9D4E2', subH: 0.5 });
     reg(hx, ay, hw, hh, 'Region A', 'Strategic hub', 'Full hub · resilient hybrid connectivity', { fill: C.b600, line: null, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9', subH: 0.5 });
     reg(hx, by, hw, hh, 'Region B', 'Strategic hub', 'Full hub · resilient hybrid connectivity', { fill: C.b600, line: null, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9', subH: 0.5 });
-    const opx = X + 0.85, mid = i => top + i * pitch + bh / 2, erY = top + 0.2;
-    L.path(s, [[opx, 3.45], [opx, 2.9], [hx, 2.9]], { color: C.s600, both: true });
-    L.path(s, [[opx, 4.5], [opx, 5.0], [hx, 5.0]], { color: C.s600, both: true });
-    L.path(s, [[opx - 0.4, 3.45], [opx - 0.4, erY], [rx, erY]], { color: C.s600, both: true });
-    L.tag(s, 'Existing ExpressRoute circuit', 8.0, erY, { color: C.s600, w: 2.3 });
-    L.txt(s, 'Express-\nRoute', opx + 0.06, 2.98, 0.8, 0.34, { fontSize: 9, bold: true, color: C.s600 });
-    L.line(s, hx + 1.2, ay + hh, hx + 1.2, by, { color: C.b600, both: true });
-    L.path(s, [[rx, top + 0.5], [9.45, top + 0.5], [9.45, 2.7], [hr, 2.7]], { color: C.b600, dash: 'dash', both: true });
+    const opx = X + 1.05, mid = i => top + i * pitch + bh / 2, erY = top + 0.28;
+    L.path(s, [[opx, 3.25], [opx, 2.95], [hx, 2.95]], { color: C.s600, both: true });
+    L.path(s, [[opx, 4.4], [opx, 4.72], [hx, 4.72]], { color: C.s600, both: true });
+    L.path(s, [[opx - 0.45, 3.25], [opx - 0.45, erY], [rx, erY]], { color: C.s600, both: true });
+    L.tag(s, 'Existing ExpressRoute circuit', 6.25, 1.86, { color: C.s600, w: 2.3 });
+    L.txt(s, 'ExpressRoute', opx + 0.1, 2.66, 1.0, 0.24, { fontSize: 10, bold: true, color: C.s600 });
+    L.line(s, hx + 1.1, ay + hh, hx + 1.1, by, { color: C.b600, both: true });
+    L.path(s, [[rx, mid(0)], [6.2, mid(0)], [6.2, 2.95], [hr, 2.95]], { color: C.b600, dash: 'dash', both: true });
     L.path(s, [[rx, mid(1)], [hr, mid(1)]], { color: C.b600, dash: 'dash', both: true });
-    L.path(s, [[rx, mid(2)], [9.35, mid(2)], [9.35, 3.4], [hr, 3.4]], { color: C.b600, both: true });
+    L.path(s, [[rx, mid(2)], [6.2, mid(2)], [6.2, 3.4], [hr, 3.4]], { color: C.b600, both: true });
     L.path(s, [[rx, mid(3)], [hr, mid(3)]], { color: C.b600, both: true });
-    L.box(s, X, 5.78, 4.15, 0.65, { fill: C.wash, line: C.line, r: 0.08 });
-    L.icon(s, 'shield', X + 0.12, 5.97, 0.26, 's');
-    L.txt(s, [{ text: 'Consistent across every profile: ', options: { bold: true } }, { text: 'governance, security, compliance, automation, and operations' }], X + 0.5, 5.78, 3.55, 0.65, { fontSize: 11, color: C.ink, valign: 'middle' });
-    L.caption(s, 'Figure 6', 'An illustrative estate. Names and placements are examples only.', 5.4, 6.62, 7.3);
+    L.box(s, X, 5.8, 7.35, 0.62, { fill: C.wash, line: C.line, r: 0.08 });
+    L.icon(s, 'shield', X + 0.15, 5.98, 0.26, 's');
+    L.txt(s, [{ text: 'Every profile shares one governed foundation: ', options: { bold: true } }, { text: 'governance, security, compliance, automation, and operations' }], X + 0.55, 5.8, 6.6, 0.62, { fontSize: 12, color: C.ink, valign: 'middle' });
+    L.caption(s, 'Figure 6', 'An illustrative estate. Names and placements are examples only.', 0.6, 6.58, 12.13);
     s.addNotes('Talk track: this is important economically as well as architecturally, because customers raise concerns that establishing a complete footprint in every additional region becomes expensive and difficult to sustain. The estate shows two strategic hubs with full footprints; other regions use minimal hubs, remote-hub-connected spokes, or disconnected spokes, and a candidate region stays an option until needed.');
   }
 
@@ -335,22 +318,20 @@ module.exports = (pres, L) => {
       L.box(s, x, y, w, h, { fill: 'FFFFFF', line: C.line, r: 0.12 });
       L.num(s, i + 1, x + 0.18, y + 0.2, 0.36, c, 'FFFFFF', 12);
       L.txt(s, t, x + 0.64, y + 0.12, w - 0.75, 0.52, { fontSize: 12, fontFace: F.semi, color: C.ink, valign: 'middle' });
-      L.txt(s, d, x + 0.18, y + 0.76, w - 0.36, 1.0, { fontSize: 11, color: C.text });
+      L.txt(s, d, x + 0.18, y + 0.76, w - 0.36, 1.0, { fontSize: 12, color: C.text });
       L.box(s, x + 0.18, y + 1.8, w - 0.36, 0.008, { fill: C.soft, r: 0 });
       L.txt(s, 'TYPICAL PATTERN', x + 0.18, y + 1.88, 2, 0.2, { fontSize: 9, bold: true, color: C.b600, charSpacing: 1.5 });
-      L.txt(s, p, x + 0.18, y + 2.1, w - 0.36, 0.8, { fontSize: 11, color: C.ink });
+      L.txt(s, p, x + 0.18, y + 2.1, w - 0.36, 0.8, { fontSize: 12, color: C.ink });
       L.box(s, x, y + 2.95, w, 0.95, { fill: C.wash, r: 0.12 }); L.box(s, x, y + 2.95, w, 0.3, { fill: C.wash, r: 0 });
       let cx = x + 0.15, cy = y + 3.02;
-      chips.forEach(ch => { const cw = chipW(ch, 9.5); if (cx + cw > x + w - 0.1) { cx = x + 0.15; cy += 0.3; } const dsh = ch.includes('justified'); L.chip(s, ch, cx, cy, { w: cw, fill: dsh ? 'FFFFFF' : ch.startsWith('Disc') ? C.t100 : C.b100, color: ch.startsWith('Disc') ? C.t700 : C.b700, line: dsh ? C.b500 : undefined, dash: dsh ? 'dash' : undefined, size: 9.5 }); cx += cw + 0.06; });
+      chips.forEach(ch => { const cw = chipW(ch, 10.5); if (cx + cw > x + w - 0.1) { cx = x + 0.15; cy += 0.3; } const dsh = ch.includes('justified'); L.chip(s, ch, cx, cy, { w: cw, fill: dsh ? 'FFFFFF' : ch.startsWith('Disc') ? C.t100 : C.b100, color: ch.startsWith('Disc') ? C.t700 : C.b700, line: dsh ? C.b500 : undefined, dash: dsh ? 'dash' : undefined, size: 10.5 }); cx += cw + 0.06; });
       for (let k = 0; k < 4; k++) L.box(s, x + w - 0.95 + k * 0.2, y + 3.68, 0.15, 0.13, { fill: k < flex ? C.t600 : C.line, r: 0.02 });
     });
-    L.txt(s, 'Chips show the typical connectivity profiles, most common first; actual dependencies and requirements decide.', 0.6, 5.68, 8.6, 0.22, { fontSize: 10, color: C.muted });
-    L.box(s, 9.65, 5.72, 0.15, 0.13, { fill: C.t600, r: 0.02 }); L.box(s, 9.85, 5.72, 0.15, 0.13, { fill: C.line, r: 0.02 });
-    L.txt(s, 'Regional flexibility (indicative)', 10.1, 5.68, 2.63, 0.22, { fontSize: 10, color: C.muted, valign: 'middle' });
+    L.txt(s, 'Regional flexibility', 0.78, 5.34, 1.7, 0.2, { fontSize: 9.5, color: C.muted, valign: 'middle' });
     L.box(s, 0.6, 6.0, 4.1, 0.85, { fill: C.s800, r: 0.12 });
     L.txt(s, [{ text: 'Region-agnostic does not mean ', options: { color: 'FFFFFF' } }, { text: 'region-random.', options: { color: '50E6FF' } }], 0.8, 6.0, 3.8, 0.85, { fontSize: 17, fontFace: F.semi, valign: 'middle' });
     L.box(s, 4.8, 6.0, 7.93, 0.85, { fill: C.b50, r: 0.12 });
-    L.txt(s, [{ text: 'Governance moves up a level. ', options: { bold: true, color: C.b700 } }, { text: 'Define a governed operating model and a small number of approved archetypes; each application selects the most efficient pattern that satisfies its connectivity, resiliency, data, security, and service requirements.' }], 5.0, 6.0, 7.55, 0.85, { fontSize: 11, color: C.ink, valign: 'middle' });
+    L.txt(s, [{ text: 'Governance moves up a level. ', options: { bold: true, color: C.b700 } }, { text: 'Define a governed operating model and a small number of approved archetypes; each application selects the most efficient pattern that satisfies its connectivity, resiliency, data, security, and service requirements.' }], 5.0, 6.0, 7.55, 0.85, { fontSize: 12, color: C.ink, valign: 'middle' });
     s.addNotes('Talk track — this is where we can make the model very concrete. Archetype 1, hybrid-connected: "For traditional applications with tight dependencies on on-premises environments, we continue deploying them into our strategic regions where the complete geographic Landing Zone exists." Archetype 2, isolated cloud-native or AI: "Some cloud-native or AI applications are largely self-contained. They may only need their application endpoints exposed securely back into the geographic Landing Zones. Those workloads give us much greater regional flexibility." Archetype 3, connected cloud-native or AI: "Some applications need more than endpoint exposure, but they still do not justify recreating a complete regional hub. For those workloads, Global VNet Peering can provide the private connectivity path back to the geographic hubs." Archetype 4, interconnected portfolios: "We introduce a minimally viable regional hub containing only the dependencies and connectivity capabilities that portfolio actually needs." Then: "Region-agnostic does not mean region-random. We are not eliminating architectural governance. We are actually moving governance up a level into policies that are not dependent on particular regions." The chips show the whitepaper’s typical profiles; actual dependencies decide.');
   }
 
@@ -358,30 +339,19 @@ module.exports = (pres, L) => {
   {
     const s = L.slide('city');
     L.header(s, '', 'The platform is the city. Workloads are the people and businesses that live in it.', { tw: 8.5, ts: 23, lede: 'The city builds neighborhoods, services, roads, transit, and laws once. A family settles in one neighborhood; a bank spreads across several. Neither builds a new city.', lx: 9.3, lw: 3.43, lh: 1.3 });
-    const pw = 5.9, ph = pw * 1672 / 2144;
+    const pw = 6.55, ph = pw * 1672 / 2144;
     L.image(s, IMG('city-analogy.png', 'blue').replace(/img\/(teal\/)?/, 'img/'), { x: 0.6, y: 1.8, w: pw, h: ph }, 'Isometric city used as an analogy for a multi-region platform. An office campus outside the city connects to Downtown through express toll lanes with two interchanges. Downtown has every service locally. Riverside has a fire station and a clinic. Hillcrest and Midtown have homes only and reach Downtown\'s services by transit. Lakeside is an off-grid island with no roads or transit. A new plot is zoned but not yet built. Numbered pins mark where four families live, and bank badges mark two branches and a backup operations center.');
-    L.caption(s, 'Figure 7', 'The platform as a city. Each neighborhood is a region with its own connectivity profile.', 0.6, 1.8 + ph + 0.1, pw);
-    const rx = 6.85, rw = 5.88;
-    // the six mappings
-    cap(s, 'In the city', rx, 1.8, { w: 2.7, color: C.b600 }); cap(s, 'In Azure', rx + 3.3, 1.8, { w: 2.5, color: C.b600 });
-    const M = [['Neighborhoods', 'Azure regions'], ['Transit between neighborhoods', 'Connectivity between regions'], ['Express toll lanes', 'ExpressRoute'], ['Office campus outside the city', 'On-premises'], ['Police, fire, hospitals, utilities', 'Shared services'], ['Laws, codes, zoning', 'Governance and policy']];
+    const rx = 7.35, rw = 5.38;
+    cap(s, 'In the city', rx, 1.8, { w: 1.8, color: C.b600 });
+    cap(s, 'In Azure', rx + 2.8, 1.8, { w: 2.4, color: C.b600 });
+    const M = [['Neighborhoods', 'Azure regions'], ['Transit', 'Connectivity between regions'], ['Express toll lanes', 'ExpressRoute'], ['Office campus', 'On-premises'], ['Downtown', 'Full Regional Hub'], ['Riverside', 'Minimal Regional Hub'], ['Hillcrest and Midtown', 'Remote Hub Connected'], ['Lakeside', 'Disconnected Spokes'], ['New plot', 'Candidate region']];
     M.forEach(([a, b], i) => {
-      const y = 2.1 + i * 0.4;
+      const y = 2.08 + i * 0.48;
       L.box(s, rx, y - 0.03, rw, 0.008, { fill: C.soft, r: 0 });
-      L.txt(s, a, rx, y, 3.1, 0.34, { fontSize: 12, color: C.text, valign: 'middle' });
-      L.txt(s, '→', rx + 3.12, y, 0.2, 0.34, { fontSize: 12, bold: true, color: C.b600, valign: 'middle' });
-      L.txt(s, b, rx + 3.3, y, 2.58, 0.34, { fontSize: 12, fontFace: F.semi, color: C.ink, valign: 'middle' });
+      L.txt(s, a, rx, y, 2.5, 0.4, { fontSize: 12, color: C.text, valign: 'middle' });
+      L.txt(s, '→', rx + 2.55, y, 0.18, 0.4, { fontSize: 12, bold: true, color: C.b600, valign: 'middle' });
+      L.txt(s, b, rx + 2.8, y, 2.58, 0.4, { fontSize: 12, fontFace: F.semi, color: C.ink, valign: 'middle' });
     });
-    // single-region households
-    cap(s, 'Single-region workloads: pins on the map', rx, 4.58, { w: rw, color: C.t600 });
-    [['Hybrid-connected', 'Hillcrest'], ['Isolated', 'Lakeside'], ['Connected', 'Midtown'], ['Interconnected portfolio', 'Riverside']].forEach(([a, h], i) => {
-      const y = 4.86 + i * 0.31;
-      L.num(s, i + 1, rx, y + 0.02, 0.26, C.t600, 'FFFFFF', 10);
-      L.txt(s, [{ text: a, options: { bold: true, color: C.ink } }, { text: ' → ' + h }], rx + 0.38, y, rw - 0.4, 0.3, { fontSize: 12, color: C.text, valign: 'middle' });
-    });
-    // the bank
-    cap(s, 'Bank: a multi-region workload', rx, 6.16, { w: rw, color: C.b600 });
-    L.txt(s, [{ text: 'Branches in ' }, { text: 'Riverside', options: { bold: true } }, { text: ' and ' }, { text: 'Midtown', options: { bold: true } }, { text: ' serve customers together. A backup operations center in ' }, { text: 'Hillcrest', options: { bold: true } }, { text: ' stands by.' }], rx, 6.4, rw, 0.4, { fontSize: 11, color: C.text });
     s.addNotes('Think of the platform as a city, and workloads as the people and businesses that live in it. The city builds neighborhoods, services, roads, transit, and laws once. A family settles in one neighborhood; a bank spreads across several. Neither builds a new city. Each neighborhood is a region with a different connectivity profile; the office campus is on-premises. The four households map to the four archetypes: hybrid-connected picks Hillcrest, isolated picks Lakeside, connected picks Midtown, and an interconnected portfolio picks Riverside. The bank is a multi-region workload: branches in Riverside and Midtown serve customers together, and a backup operations center in Hillcrest stands by.');
   }
 
@@ -390,58 +360,34 @@ module.exports = (pres, L) => {
     const s = L.slide('x6');
     L.header(s, 'Governance moves up a level', 'Regional qualification', {
       tw: 5.8, lx: 7.1, lw: 5.63, lh: 1.15,
-      lede: 'Four checks decide which Azure regions should be prepared for which workload requirements, and each option is recorded with evidence, owners, and revalidation triggers. The connectivity profile, shared-service placement, and hybrid connectivity are selected next; they are not qualification checks.',
+      lede: 'Assess each region for defined workload requirements; record evidence, owners, and revalidation triggers.',
     });
     const CK = D.checks;
-    const bullets = [
-      ['Markets and users', 'Datacenter and partner locations', 'Planned launches or migrations', 'Growth, proximity, concentration risk'],
-      ['Residency and sovereignty', 'Regulatory and industry rules', 'Company policy, customer commitments', 'Restrictions on data movement or operational control'],
-      null,
-      ['Services, models, and SKUs', 'Zones and pairing', 'Latency, pricing, and scale', 'Access, quota, cross-region behavior'],
+    const outcomes = ['Excluded', 'Candidate', 'Conditional', 'Qualified'];
+    const decisions = [
+      'Confirm the region merits deeper assessment.',
+      'Exclude it if any mandatory requirement fails.',
+      'Record platform requirements from workload needs.',
+      'Qualify candidates with evidence and resolved conditions.',
     ];
-    const gap = 0.16, ws = [2.3, 2.45, 4.55, 2.35];
-    const tones = ['b', 'w', 't', 'b'], accent = [C.b500, C.b600, C.t600, C.b800];
-    const y = 1.65, h = 4.28;
-    let x = 0.6;
+    const x0 = 0.6, y = 1.2, h = 3.85, gap = 0.15, w = (12.13 - gap * 3) / 4;
     CK.forEach((ck, i) => {
-      const w = ws[i], tone = tones[i], tc = tone === 't' ? C.t700 : C.b700;
-      const bg = { b: C.b50, w: C.w50, t: C.t50 }[tone], fg = { b: C.b600, w: C.w600, t: C.t600 }[tone];
-      const dh = i === 2 ? 0.68 : 1.08, dy = y + h - dh - 0.07;       // decision box
-      L.box(s, x, y, w, h, { fill: 'FFFFFF', line: tone === 't' ? C.t300 : C.line, r: 0.12 });
-      L.num(s, ck.n, x + 0.15, y + 0.16, 0.38, accent[i], 'FFFFFF', 13);
-      const wide = i === 2;
-      L.txt(s, ck.name, x + 0.62, y + 0.1, w - 0.72, wide ? 0.5 : 0.62, { fontSize: 12, fontFace: F.semi, color: C.ink, valign: 'middle' });
-      const qy = y + (wide ? 0.64 : 0.8);
-      L.txt(s, ck.question, x + 0.15, qy, w - 0.3, wide ? 0.5 : 0.62, { fontSize: 11, fontFace: F.semi, color: tc });
-      const by = qy + (wide ? 0.56 : 0.66);
-      if (bullets[i]) {
-        L.bullets(s, bullets[i], x + 0.15, by, w - 0.28, dy - by - 0.05, { gap: 3, opts: { fontSize: 11, color: C.text } });
-      } else {
-        const cw = 1.85, cw2 = w - 0.3 - 0.2 - cw;
-        cap(s, 'From the workloads', x + 0.15, by, { w: cw, fontSize: 9, color: C.t600, charSpacing: 0.5 });
-        L.bullets(s, ['Existing and future workloads, including moves', 'Closest-fitting archetype', 'Data, connectivity, and shared services', 'Security, resiliency, and scale'], x + 0.15, by + 0.26, cw, dy - by - 0.3, { gap: 3, opts: { fontSize: 11, color: C.text } });
-        L.line(s, x + 0.15 + cw + 0.1, by + 0.02, x + 0.15 + cw + 0.1, dy - 0.08, { color: C.t300, dash: 'dash', arrow: false, w: 1 });
-        const px = x + 0.15 + cw + 0.2;
-        cap(s, 'Required from the platform', px, by, { w: cw2, fontSize: 9, color: C.t600, charSpacing: 0.3 });
-        const items = [['Platform enablement', 'Services needed locally, remotely, or centrally'], ['Resilient hybrid connectivity', 'Reachability and resilience to Azure'], ['Regional platform connectivity', 'Access to hubs, shared services, and other regions']];
-        const runs = [];
-        items.forEach(([a, b]) => { runs.push({ text: a, options: { bold: true, color: C.t700, fontSize: 11, breakLine: true } }); runs.push({ text: b, options: { fontSize: 10.5, color: C.muted, breakLine: true, paraSpaceAfter: 7 } }); });
-        L.txt(s, runs, px, by + 0.26, cw2, dy - by - 0.3);
-      }
-      L.box(s, x + 0.06, dy, w - 0.12, dh, { fill: bg, r: 0.08 });
-      L.txt(s, 'DECISION', x + 0.15, dy + 0.08, 1.5, 0.18, { fontSize: 9, bold: true, color: fg, charSpacing: 2 });
-      L.txt(s, ck.decision, x + 0.15, dy + 0.28, w - 0.3, dh - 0.32, { fontSize: 11, fontFace: F.semi, color: C.ink });
-      if (i < 3) L.txt(s, '›', x + w - 0.07, y + 0.2, gap + 0.14, 0.35, { fontSize: 20, color: C.b500, align: 'center', valign: 'middle' });
-      x += w + gap;
+      const x = x0 + i * (w + gap);
+      const tone = i === 2 ? C.t600 : C.b600;
+      L.box(s, x, y, w, h, { fill: 'FFFFFF', line: i === 2 ? C.t300 : C.line, r: 0.12 });
+      L.num(s, ck.n, x + 0.18, y + 0.2, 0.4, tone, 'FFFFFF', 13);
+      L.txt(s, ck.name, x + 0.18, y + 0.78, w - 0.36, 0.66, { fontSize: 14, fontFace: F.semi, color: C.ink });
+      L.txt(s, ck.question, x + 0.18, y + 1.58, w - 0.36, 0.92, { fontSize: 12, fontFace: F.semi, color: tone });
+      L.box(s, x + 0.12, y + 2.72, w - 0.24, 0.94, { fill: i === 2 ? C.t50 : C.b50, r: 0.08 });
+      L.txt(s, 'DECISION', x + 0.2, y + 2.82, w - 0.4, 0.2, { fontSize: 9, bold: true, color: tone, charSpacing: 1.5 });
+      L.txt(s, decisions[i], x + 0.2, y + 3.06, w - 0.4, 0.54, { fontSize: 12, fontFace: F.semi, color: C.ink });
     });
-    // outcomes
-    const oy = 6.05, oh = 0.8;
-    L.box(s, 0.6, oy, 12.13, oh, { fill: C.wash, r: 0.1 });
-    L.txt(s, [{ text: 'Qualification outcome', options: { fontFace: F.semi, color: C.ink, fontSize: 12, breakLine: true } }, { text: 'against defined workload requirements, with evidence', options: { fontSize: 10.5, color: C.muted } }], 0.8, oy, 2.1, oh, { valign: 'middle' });
-    [['x', 'o', 'Excluded', C.w600, 'A mandatory requirement cannot be satisfied.'], ['clock', 'b', 'Candidate', C.b700, 'Potentially viable; more discovery or validation first.'], ['flag', 'o', 'Conditional', C.a700, 'Supported if documented conditions are resolved.'], ['check', 'g', 'Qualified', C.g600, 'As of the assessment date; onboarding revalidation still required.']].forEach(([ic, c, t, col, d], i) => {
-      const ox = 3.05 + i * 2.42;
-      L.icon(s, ic, ox, oy + oh / 2 - 0.13, 0.26, c);
-      L.txt(s, [{ text: t, options: { bold: true, color: col, fontSize: 12, breakLine: true } }, { text: d, options: { fontSize: 10.5, color: C.muted } }], ox + 0.34, oy + 0.02, 2.0, oh - 0.04, { valign: 'middle' });
+    const oy = 5.35, oh = 0.75, outcomeW = 2.38;
+    L.txt(s, 'Possible outcomes', 0.62, oy, 2.12, oh, { fontSize: 12, fontFace: F.semi, color: C.ink, valign: 'middle' });
+    outcomes.forEach((name, i) => {
+      const x = 2.75 + i * outcomeW;
+      L.box(s, x, oy, outcomeW, oh, { fill: C.wash, r: 0.08 });
+      L.txt(s, name, x + 0.1, oy, outcomeW - 0.2, oh, { fontSize: 13, fontFace: F.semi, color: [C.w600, C.b700, C.a700, C.g600][i], align: 'center', valign: 'middle' });
     });
     s.addNotes('Governance does not disappear in this model — it moves up a level. Regional qualification is how a region enters the governed operating model. Four checks decide which Azure regions should be prepared for which workload requirements: business and geography, data and compliance, workload requirements and dependencies, and regional capability and availability. Check 3 records what the workloads need from the platform: platform enablement (services needed locally, remotely, or centrally), resilient hybrid connectivity (reachability and resilience to Azure), and regional platform connectivity (access to hubs, shared services, and other regions). Each regional option is recorded as excluded, candidate, conditional, or qualified as of the assessment date. The connectivity profile, shared-service placement, and hybrid connectivity are selected next and are not a qualification check. Whether an individual workload uses multiple regions remains a workload-specific design decision.');
   }
@@ -453,28 +399,28 @@ module.exports = (pres, L) => {
     L.box(s, 0.6, 1.7, 5.8, 1.95, { fill: C.w50, r: 0.12 });
     cap(s, 'Today', 0.85, 1.83, { w: 2, color: C.w600 });
     L.txt(s, 'Region as a permanent architectural dependency', 0.85, 2.07, 5.4, 0.35, { fontSize: 14, fontFace: F.semi, color: C.ink });
-    L.txt(s, 'Every workload inherits the same regional pair and its full platform footprint, whether or not its requirements need it.', 0.85, 2.45, 5.4, 0.5, { fontSize: 11.5, color: C.text });
+    L.txt(s, 'Every workload inherits the same regional pair and its full platform footprint, whether or not its requirements need it.', 0.85, 2.45, 5.4, 0.5, { fontSize: 12, color: C.text });
     L.box(s, 0.85, 3.05, 5.3, 0.45, { fill: 'FFFFFF', line: C.line, r: 0.06 });
-    L.txt(s, [{ text: 'region', options: { color: C.b600, bold: true } }, { text: ' = ' }, { text: '"primary"', options: { color: C.w600 } }, { text: '   // fixed for every workload', options: { color: C.faint } }], 1.0, 3.05, 5.1, 0.45, { fontSize: 11.5, fontFace: 'Consolas', color: C.ink, valign: 'middle' });
+    L.txt(s, [{ text: 'region', options: { color: C.b600, bold: true } }, { text: ' = ' }, { text: '"primary"', options: { color: C.w600 } }, { text: '   // fixed for every workload', options: { color: C.faint } }], 1.0, 3.05, 5.1, 0.45, { fontSize: 12, fontFace: 'Consolas', color: C.ink, valign: 'middle' });
     L.line(s, 6.5, 2.65, 6.83, 2.65, { color: C.b600, w: 2 });
     L.box(s, 6.93, 1.7, 5.8, 1.95, { fill: C.t50, r: 0.12 });
     cap(s, 'With this model', 7.18, 1.83, { w: 3, color: C.t600 });
     L.txt(s, 'Region as a deployment parameter', 7.18, 2.07, 5.4, 0.35, { fontSize: 14, fontFace: F.semi, color: C.ink });
-    L.txt(s, 'Each workload selects from qualified regional options that fit its archetype and requirements, validated at decision time.', 7.18, 2.45, 5.4, 0.5, { fontSize: 11.5, color: C.text });
+    L.txt(s, 'Each workload selects from qualified regional options that fit its archetype and requirements, validated at decision time.', 7.18, 2.45, 5.4, 0.5, { fontSize: 12, color: C.text });
     L.box(s, 7.18, 3.05, 5.3, 0.45, { fill: 'FFFFFF', line: C.line, r: 0.06 });
-    L.txt(s, [{ text: 'region', options: { color: C.b600, bold: true } }, { text: ' = ' }, { text: 'qualified_option(archetype, requirements)', options: { color: C.t700 } }], 7.33, 3.05, 5.1, 0.45, { fontSize: 11.5, fontFace: 'Consolas', color: C.ink, valign: 'middle' });
+    L.txt(s, [{ text: 'region', options: { color: C.b600, bold: true } }, { text: ' = ' }, { text: 'qualified_option(archetype, requirements)', options: { color: C.t700 } }], 7.33, 3.05, 5.1, 0.45, { fontSize: 12, fontFace: 'Consolas', color: C.ink, valign: 'middle' });
     cap(s, 'When circumstances change', 0.6, 3.82, { w: 5 });
     const T = [['gauge', C.v600, 'Capacity is available somewhere else', 'A qualified region with the required SKUs and quota can take the next deployment.'], ['layers', C.b600, 'A required service is stronger in another region', 'AI models, services, or zone support can favor a different qualified option.'], ['flag', C.w600, 'The regulatory or energy environment changes', 'Placement can adapt within the governed geography instead of waiting for a redesign.']];
     T.forEach(([ic, c, t, d], i) => {
       const x = 0.6 + i * 2.72, y = 4.05, w = 2.6, h = 1.95;
       L.box(s, x, y, w, h, { fill: C.wash, r: 0.12 });
       L.badge(s, ic, x + 0.18, y + 0.14, 0.36, c);
-      L.txt(s, t, x + 0.18, y + 0.56, w - 0.36, 0.5, { fontSize: 11.5, fontFace: F.semi, color: C.ink });
-      L.txt(s, d, x + 0.18, y + 1.08, w - 0.36, 0.75, { fontSize: 11, color: C.text });
+      L.txt(s, t, x + 0.18, y + 0.56, w - 0.36, 0.5, { fontSize: 12, fontFace: F.semi, color: C.ink });
+      L.txt(s, d, x + 0.18, y + 1.08, w - 0.36, 0.75, { fontSize: 12, color: C.text });
     });
     L.line(s, 8.8, 5.03, 9.1, 5.03, { color: C.t600, w: 2 });
     L.box(s, 9.15, 4.05, 3.58, 1.95, { fill: C.t600, r: 0.12 });
-    L.txt(s, [{ text: 'More options for where the next workload can go', options: { fontFace: F.semi, fontSize: 14, breakLine: true, paraSpaceAfter: 6 } }, { text: 'Existing workloads can stay put; new and movable ones use the best qualified option available.', options: { fontSize: 11.5, color: 'D6F0EC' } }], 9.35, 4.05, 3.25, 1.95, { color: 'FFFFFF', valign: 'middle' });
+    L.txt(s, [{ text: 'More options for where the next workload can go', options: { fontFace: F.semi, fontSize: 14, breakLine: true, paraSpaceAfter: 6 } }, { text: 'Existing workloads can stay put; new and movable ones use the best qualified option available.', options: { fontSize: 12, color: 'D6F0EC' } }], 9.35, 4.05, 3.25, 1.95, { color: 'FFFFFF', valign: 'middle' });
     L.box(s, 0.6, 6.1, 6.0, 0.75, { fill: C.s800, r: 0.12 });
     L.txt(s, [{ text: 'Deliberate where it matters: ', options: { bold: true } }, { text: 'where the major strategic hubs live.' }], 0.85, 6.1, 5.6, 0.75, { fontSize: 12.5, color: 'FFFFFF', valign: 'middle' });
     L.box(s, 6.73, 6.1, 6.0, 0.75, { fill: C.t50, line: C.t300, r: 0.12 });
@@ -486,24 +432,20 @@ module.exports = (pres, L) => {
   {
     const s = L.slide('x8');
     L.header(s, '', 'Four scenarios at a glance', { ec: C.t600, tw: 8, lede: 'From a business or technical driver to a governed regional and workload decision. Illustrative, not customer-specific recommendations.', lx: 8.9, lw: 3.83 });
-    const S = [
-      [[['Qualification', 'Qualified for defined Hybrid-Connected requirements; other workloads remain candidates.'], ['Connectivity', 'Minimal Regional Hub; existing hybrid connectivity reused where it permits.'], ['Placement', 'In-scope workloads relocate selectively; others remain in place.']], 'Qualify for defined requirements without forcing portfolio-wide relocation; if the new region is nonpaired, design the recovery path.'],
-      [[['Qualification', 'Qualified for the defined AI requirements; conditional where private connectivity is not yet designed.'], ['Connectivity', 'Disconnected Spokes where self-contained; connected only where dependencies justify it.'], ['Placement', 'Net-new deployment, revalidated at decision time.']], 'Do not introduce enterprise connectivity or regional platform capabilities before a workload requirement justifies them.'],
-      [[['Qualification', 'Candidate until dependencies are understood; then qualified for defined portfolio requirements.'], ['Connectivity', 'Remote Hub Connected, or Minimal Regional Hub where east-west traffic or independence justify it.'], ['Placement', 'Remain in place initially; relocate selectively as integration proceeds.']], 'Aggregate portfolio dependencies determine the profile; application count or acquisition status does not.'],
-      [[['Qualification', 'Existing target region remains qualified; an additional region stays a candidate.'], ['Connectivity', 'No new profile: reuse the existing strategic hub; no new hub just because another region exists.'], ['Placement', 'Most workloads land in the existing qualified region.']], 'Remaining in an existing qualified region is a valid outcome; a new region can stay an option, not a project.'],
+    const outcomes = [
+      'Qualify for defined requirements, not the full portfolio; explicitly design recovery for a nonpaired region.',
+      'Use the region for the required model or SKU; add connectivity only when the workload needs it.',
+      'Understand portfolio dependencies before choosing the regional profile or planning relocation.',
+      'Reuse the existing qualified region; keep the additional region an option, not a project.',
     ];
-    S.forEach(([rows, tk], i) => {
-      const x = 0.6 + (i % 2) * 6.12, y = 1.68 + Math.floor(i / 2) * 2.65, w = 6.0, h = 2.55;
+    outcomes.forEach((outcome, i) => {
+      const x = 0.6 + (i % 2) * 6.12, y = 1.8 + Math.floor(i / 2) * 2.35, w = 6.0, h = 2.1;
       L.box(s, x, y, w, h, { fill: 'FFFFFF', line: C.line, r: 0.12 });
       L.num(s, i + 1, x + 0.18, y + 0.14, 0.34, C.t600, 'FFFFFF', 12);
-      L.txt(s, D.scenarios[i].title, x + 0.62, y + 0.1, w - 0.8, 0.42, { fontSize: 13, fontFace: F.semi, color: C.ink, valign: 'middle' });
-      rows.forEach(([k, v], j) => {
-        L.txt(s, k.toUpperCase(), x + 0.2, y + 0.6 + j * 0.45, 1.3, 0.42, { fontSize: 9, bold: true, color: C.b600, charSpacing: 1, valign: 'middle' });
-        L.txt(s, v, x + 1.5, y + 0.6 + j * 0.45, w - 1.65, 0.42, { fontSize: 11, color: C.ink, valign: 'middle' });
-      });
-      L.box(s, x, y + h - 0.6, w, 0.6, { fill: C.t50, r: 0.12 }); L.box(s, x, y + h - 0.6, w, 0.2, { fill: C.t50, r: 0 });
-      L.icon(s, 'flag', x + 0.2, y + h - 0.4, 0.22, 't');
-      L.txt(s, tk, x + 0.52, y + h - 0.6, w - 0.7, 0.6, { fontSize: 11, color: C.ink, valign: 'middle' });
+      L.txt(s, D.scenarios[i].title, x + 0.62, y + 0.1, w - 0.8, 0.55, { fontSize: 13, fontFace: F.semi, color: C.ink, valign: 'middle' });
+      L.box(s, x + 0.18, y + 0.82, w - 0.36, 1.08, { fill: C.t50, r: 0.1 });
+      L.icon(s, 'flag', x + 0.35, y + 1.17, 0.28, 't');
+      L.txt(s, outcome, x + 0.78, y + 0.87, w - 1.15, 0.98, { fontSize: 12, color: C.ink, valign: 'middle' });
     });
     s.addNotes('Use one of these scenarios to make the agility point concrete for the audience. The full deck and whitepaper walk each scenario from driver through the deciding checks, qualification, archetype, connectivity profile, and placement.');
   }
@@ -516,15 +458,15 @@ module.exports = (pres, L) => {
     L.txt(s, 'That means separating what must stay consistent — governance, security, compliance, and the operating model — from what should stay adaptable: which regions individual applications consume.', 0.6, 3.5, 5.4, 1.0, { fontSize: 12, color: C.text });
     L.box(s, 0.6, 4.55, 5.4, 1.2, { fill: C.w50, r: 0.1 });
     L.box(s, 0.6, 4.55, 0.05, 1.2, { fill: C.w600, r: 0 });
-    L.txt(s, [{ text: 'For regulated organizations, ', options: { bold: true, color: C.w600 } }, { text: 'application-level, region-agnostic placement is a way to de-risk cloud growth if future power restrictions affect hyperscale expansion in a particular country.' }], 0.85, 4.55, 5.0, 1.2, { fontSize: 11.5, color: C.ink, valign: 'middle' });
+    L.txt(s, [{ text: 'For regulated organizations, ', options: { bold: true, color: C.w600 } }, { text: 'application-level, region-agnostic placement is a way to de-risk cloud growth if future power restrictions affect hyperscale expansion in a particular country.' }], 0.85, 4.55, 5.0, 1.2, { fontSize: 12, color: C.ink, valign: 'middle' });
     const T = [['app', 't', C.t50, C.t300, C.t700, 'Workload Landing Zone archetypes', 'Applications select the most efficient pattern that meets their requirements.', 0.6], ['route', 'b', C.b50, C.b200, C.b700, 'Geographically resilient connectivity', 'Diverse peering locations into the Azure backbone, planned for the geography.', 0.4], ['hub', 'b', 'FFFFFF', C.b300, C.b800, 'A small number of strategic geographic hubs', 'The full footprint lives where it is justified, not in every region.', 0.2], ['shield', 'w', C.s800, null, 'FFFFFF', 'One governed operating model', 'Landing-zone guardrails and operating standards stay stable across the estate.', 0]];
     T.forEach(([ic, c, bg, ln, tc, t, d, inset], i) => {
       const y = 1.5 + i * 1.0, x = 6.4 + inset, w = 12.73 - x - inset;
       L.box(s, x, y, w, 0.9, { fill: bg, line: ln || undefined, r: 0.12 });
       L.icon(s, ic, x + 0.22, y + 0.28, 0.34, c);
-      L.txt(s, [{ text: t, options: { fontFace: F.semi, fontSize: 12.5, color: tc, breakLine: true } }, { text: d, options: { fontSize: 11, color: i === 3 ? 'C9D4E2' : C.text } }], x + 0.75, y, w - 0.9, 0.9, { valign: 'middle' });
+      L.txt(s, [{ text: t, options: { fontFace: F.semi, fontSize: 12.5, color: tc, breakLine: true } }, { text: d, options: { fontSize: 12, color: i === 3 ? 'C9D4E2' : C.text } }], x + 0.75, y, w - 0.9, 0.9, { valign: 'middle' });
     });
-    L.txt(s, 'Together: an architecture that can evolve as Europe evolves.', 6.4, 5.5, 6.33, 0.3, { fontSize: 11, italic: true, color: C.muted, align: 'right' });
+    L.txt(s, 'Together: an architecture that can evolve as Europe evolves.', 6.4, 5.5, 6.33, 0.3, { fontSize: 12, italic: true, color: C.muted, align: 'right' });
     L.image(s, IMG('band.jpg', L.tone), { x: 0.6, y: 5.95, w: 12.13, h: 0.9 }, 'Decorative gradient band', { sizing: { type: 'cover', w: 12.13, h: 0.9 } });
     L.txt(s, [{ text: 'The goal is not to select the perfect two regions. ', options: { fontFace: F.light } }, { text: 'It is to make additional regions significantly easier to adopt when business and workload requirements justify them.', options: { fontFace: F.semi } }], 0.95, 5.95, 11.4, 0.9, { fontSize: 16, color: 'FFFFFF', valign: 'middle' });
     s.addNotes('Talk track — finish with this: "We should not try to predict perfectly which European regions will have the best combination of capacity, service availability, energy supply and regulatory environment three-to-five years from now. The external environment is inherently dynamic. Instead, we should architect so that we do not need to predict it perfectly. That means separating the things that must remain consistent, our governance, security, compliance and operating model, from the things that should remain adaptable, namely which regions individual applications consume. With a small number of strategic geographic hubs, geographically resilient connectivity, and a set of lightweight Workload Landing Zone archetypes, we create an architecture that can evolve as Europe evolves." For regulated customers, reinforce that this application-level, region-agnostic approach provides a way to de-risk cloud growth if future power restrictions affect the industry’s ability to continue hyperscale expansion in a particular country.');
@@ -537,14 +479,15 @@ module.exports = (pres, L) => {
     L.logo(s, 0.6, 0.6, 0.14, 'FFFFFF', 17);
     L.txt(s, 'Executive briefing', 10.3, 0.57, 2.43, 0.35, { fontSize: 13, fontFace: F.semi, color: 'FFFFFF', align: 'right' });
     L.title(s, [{ text: 'The adaptable ', options: { fontFace: F.light } }, { text: 'multi-region', options: { fontFace: F.semi } }, { text: ' Azure platform', options: { fontFace: F.light } }], 0.6, 1.9, 7.4, 1.3, { fontSize: 34, color: 'FFFFFF' });
-    L.txt(s, 'An executive summary of the Multi-Region Platform Whitepaper. The full paper contains the detailed qualification checks, profile criteria, what to deploy for each profile, placement steps, and service-level resiliency guidance.', 0.6, 3.3, 6.6, 1.2, { fontSize: 14, color: 'DDEBF9' });
-    L.txt(s, 'Multi-Region Platform · Executive Briefing · ' + D.edition, 0.6, 4.55, 6.6, 0.3, { fontSize: 11, color: 'BCD9F5' });
-    const link = (label, text, url, y) => {
-      L.txt(s, label.toUpperCase(), 0.6, y, 4, 0.22, { fontSize: 9.5, bold: true, color: 'BCD9F5', charSpacing: 2 });
-      L.txt(s, [{ text, options: { hyperlink: { url, tooltip: label }, color: 'FFFFFF', underline: { style: 'sng', color: 'FFFFFF' } } }], 0.6, y + 0.24, 8, 0.32, { fontSize: 14, fontFace: F.semi, color: 'FFFFFF' });
+    L.txt(s, 'An executive summary of the Multi-Region Platform Whitepaper. The full paper contains the detailed qualification checks, profile criteria, deployment guidance, placement steps, and service-level resiliency guidance.', 0.6, 3.15, 6.6, 0.68, { fontSize: 12.5, color: 'DDEBF9' });
+    L.txt(s, 'Multi-Region Platform · Executive Briefing · ' + D.edition, 0.6, 3.86, 6.6, 0.2, { fontSize: 11, color: 'BCD9F5' });
+    L.txt(s, 'Start with one candidate region and the workloads that need it.', 0.6, 4.1, 9.0, 0.25, { fontSize: 12, fontFace: F.semi, color: 'FFFFFF' });
+    const link = (label, text, url, x) => {
+      L.txt(s, label.toUpperCase(), x, 4.42, 5.85, 0.22, { fontSize: 10, bold: true, color: 'BCD9F5', charSpacing: 2 });
+      L.txt(s, [{ text, options: { hyperlink: { url, tooltip: label }, color: 'FFFFFF', underline: { style: 'sng', color: 'FFFFFF' } } }], x, 4.66, 5.85, 0.3, { fontSize: 13, fontFace: F.semi, color: 'FFFFFF' });
     };
-    link('Website', D.siteUrl.replace(/^https:\/\//, '').replace(/\/$/, ''), D.siteUrl, 5.0);
-    link('Region planning workbook', D.workbookUrl.replace(/^https:\/\//, ''), D.workbookUrl, 5.65);
+    link('Website', D.siteUrl.replace(/^https:\/\//, '').replace(/\/$/, ''), D.siteUrl, 0.6);
+    link('Region planning workbook', D.workbookUrl.replace(/^https:\/\//, ''), D.workbookUrl, 6.75);
     L.txt(s, D.legal, 0.6, 6.5, 12.13, 0.7, { fontSize: 9.5, color: 'E3EEF9' });
     s.addNotes('Close by pointing to the full whitepaper, the website, and the region planning workbook for the detailed qualification checks, profile criteria, what to deploy for each profile, placement steps, and service-level resiliency guidance.');
   }
