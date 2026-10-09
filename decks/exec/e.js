@@ -97,7 +97,7 @@ module.exports = (pres, L) => {
       ['Region B', 1.95, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full hub', C.b600, 'FFFFFF']], 'Strategic hub'],
       ['Region C', 1.55, [['Workloads', C.t600, 'FFFFFF'], ['Minimal hub', 'FFFFFF', C.b700, C.b300]], 'Minimal hub'],
       ['Region D', 1.2, [['Spokes', C.t600, 'FFFFFF']], 'Remote hub', 'via hub'],
-      ['Region E', 0.98, [['Isolated spokes', C.t100, C.t700]], 'Disconnected'],
+      ['Region E', 0.98, [['Disconnected spokes', C.t100, C.t700]], 'Disconnected'],
       ['Region F', 0.8, [], 'Not enabled', 'Candidate'],
     ];
     const base = y0 + 3.0, rw = 0.99, gap = 0.078;

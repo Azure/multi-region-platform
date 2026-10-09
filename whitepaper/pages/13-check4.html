@@ -67,13 +67,15 @@
 
         <div class="dep dg mt16">
           <div class="cap" style="color:var(--b700)">Validate regional dependencies</div>
-          <div class="deps node" id="dps"><span>Storage GRS</span><span>Azure SQL replication</span><span>Backup and restore</span><span>Key Vault</span></div>
+          <div class="deps"><span class="node" id="dpsStorage">Storage GRS</span><span class="node" id="dpsSql">Azure SQL replication</span><span class="node" id="dpsBackup">Backup and restore</span><span class="node" id="dpsVault">Key Vault</span></div>
           <div class="forks">
             <div class="node" id="fk1" style="background:#fff;border:1px solid var(--b200);color:var(--b800)"><b>Built-in Azure capabilities</b> support the required outcome for the candidate regional combination</div>
             <div class="node" id="fk2" style="background:#fff;border:1px solid var(--t300);color:var(--t700)"><b>Additional workload design</b> is required — record gaps, changes, and validation owners</div>
           </div>
-          <i class="ln" data-from="dps" data-to="fk1" data-s="b@0.3" data-e="t" data-k="blue"></i>
-          <i class="ln" data-from="dps" data-to="fk2" data-s="b@0.7" data-e="t" data-k="teal"></i>
+          <i class="ln" data-from="dpsStorage" data-to="fk1" data-s="b" data-e="t@0.3" data-k="blue"></i>
+          <i class="ln" data-from="dpsSql" data-to="fk1" data-s="b" data-e="t@0.7" data-k="blue"></i>
+          <i class="ln" data-from="dpsBackup" data-to="fk2" data-s="b" data-e="t@0.3" data-k="teal"></i>
+          <i class="ln" data-from="dpsVault" data-to="fk2" data-s="b" data-e="t@0.7" data-k="teal"></i>
         </div>
         <div class="figcap"><span class="fn">Figure 8</span><span class="ft"><b>Zones and pairing are independent questions.</b> Neither guarantees nor rules out workload recovery. Service-level detail is in Appendix A.</span></div>
       </div>

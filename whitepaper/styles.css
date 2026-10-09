@@ -120,6 +120,9 @@ ol.num li { counter-increment: n; position: relative; padding-left: 26px; margin
 ol.num li::before { content: counter(n); position: absolute; left: 0; top: 1px; width: 18px; height: 18px; border-radius: 50%;
   background: var(--b50); color: var(--b700); font-size: 10px; font-weight: 700; display: grid; place-items: center; }
 a { color: var(--b600); text-decoration: none; }
+.page[data-section="4 · Prepare the region"] a { color: var(--b700); font-weight: 650; }
+.page[data-section="4 · Prepare the region"] span[data-toc] { font-weight: 650; }
+.page[data-section^="Appendix A"] a { color: var(--b700); font-weight: 650; }
 
 /* ---------- Grid helpers ---------- */
 .row { display: flex; gap: 28px; }
@@ -240,7 +243,7 @@ table.pub td.rh { font-weight: 650; color: var(--ink); width: 150px; font-size: 
 .pdet .attr .k { font-size: 9.4px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--b600); padding-top: 2px; line-height: 1.35; }
 .pdet .attr .v { font-size: 11.6px; line-height: 1.48; }
 .pdet .attr.re .k { color: var(--w600); }
-.pdet .attr.ch { background: var(--b50); border-radius: 8px; border-top: 0; padding: 9px 10px; margin: 0 0 4px -10px; grid-template-columns: 118px 1fr; }
+.pdet .attr.ch { background: var(--b50); border-radius: 8px; border-top: 0; padding: 9px 10px; margin: 0 0 4px; grid-template-columns: 118px 1fr; }
 
 .pdet p { font-size: 12.2px; line-height: 1.5; margin-bottom: 7px; }
 .pdet .ph .gl { margin-left: auto; }

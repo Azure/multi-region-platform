@@ -66,12 +66,12 @@
  },
  "archetype-profile-matrix": {
   "w": 940,
-  "h": 411,
+  "h": 403,
   "source": "fig13"
  },
  "connectivity-profile-spectrum": {
   "w": 940,
-  "h": 339,
+  "h": 344,
   "source": "fig14"
  },
  "profile-cost-tradeoff": {
@@ -100,8 +100,8 @@
   "source": "fig18b"
  },
  "key-vault-regional-pattern": {
-  "w": 474,
-  "h": 401,
+  "w": 544,
+  "h": 450,
   "source": "figKVPattern"
  }
 }

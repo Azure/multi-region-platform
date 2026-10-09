@@ -144,6 +144,18 @@
     });
   }
 
-  function run() { folios(); figures(); toc(); connectors(); document.body.dataset.ready = "1"; }
+  function breakReferenceUrls() {
+    document.querySelectorAll(".rgp .it code").forEach(el => {
+      const pieces = el.textContent.split(/([/\-.?])/);
+      const nodes = [];
+      pieces.forEach((piece, i) => {
+        if (piece) nodes.push(document.createTextNode(piece));
+        if (i % 2 === 1) nodes.push(document.createElement("wbr"));
+      });
+      el.replaceChildren(...nodes);
+    });
+  }
+
+  function run() { folios(); figures(); toc(); breakReferenceUrls(); connectors(); document.body.dataset.ready = "1"; }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => requestAnimationFrame(run)); else window.addEventListener("load", run);
 })();

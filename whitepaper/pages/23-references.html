@@ -1,18 +1,19 @@
 <section class="page" data-section="References">
 <style>
   .rg3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px 30px; }
-  .rgp h4 { margin-bottom: 6px; padding-bottom: 5px; border-bottom: 1px solid var(--line-soft); }
-  .rgp .it { margin-bottom: 8px; }
-  .rgp .it a { font-size: 11.4px; font-weight: 650; display: block; line-height: 1.3; }
-  .rgp .it span { font-size: 10.2px; color: var(--muted); line-height: 1.38; display: block; margin-top: 1px; }
-  .rgp .it code { font-family: inherit; font-size: 9px; color: var(--faint); display: block; margin-top: 1px; word-break: break-all; }
+  .rg3.refs-first.mt16 { margin-top: 8px; }
+  .rg3.refs-first .rgp h4 { margin-bottom: 2px; padding-bottom: 2px; border-bottom: 1px solid var(--line-soft); }
+  .rg3.refs-first .rgp .it { margin-bottom: 0; }
+  .rg3.refs-first .rgp .it a { font-size: 10.8px; font-weight: 650; display: block; line-height: 1.2; }
+  .rg3.refs-first .rgp .it span { font-size: 9.8px; color: var(--muted); line-height: 1.22; display: block; margin-top: 1px; }
+  .rg3.refs-first .rgp .it code { font-family: inherit; font-size: 9px; color: var(--faint); display: block; margin-top: 1px; word-break: normal; overflow-wrap: normal; }
 </style>
 <div class="inner">
   <div class="row" style="align-items:flex-end;gap:36px" id="sref">
     <div style="flex:1"><div class="eyebrow">References and further reading</div><h2 class="title mt8" style="font-size:23px">Microsoft Learn and Azure resources cited in this paper</h2></div>
   </div>
 
-  <div class="rg3 mt16">
+  <div class="rg3 refs-first mt16">
     <div class="rgp">
       <h4>Multi-region workloads</h4>
       <div class="it"><a href="https://learn.microsoft.com/en-us/azure/well-architected/design-guides/regions-availability-zones#deployment-approach-4-multi-region-deployments">Using availability zones and regions — Azure Well-Architected Framework</a><span>Deployment approaches, including multi-region deployments.</span><code>learn.microsoft.com/azure/well-architected/design-guides/regions-availability-zones</code></div>
@@ -42,11 +43,11 @@
       <div class="it"><a href="https://learn.microsoft.com/en-us/azure/expressroute/designing-for-disaster-recovery-with-expressroute-privatepeering">Designing for disaster recovery with ExpressRoute private peering</a><span>Peering-location diversity, redundant paths, and failover.</span><code>learn.microsoft.com/azure/expressroute/designing-for-disaster-recovery-with-expressroute-privatepeering</code></div>
       <div class="it"><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/design-area/network-topology-and-connectivity">Network topology and connectivity</a><span>Connectivity between workloads, shared services, and the broader platform.</span><code>learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/network-topology-and-connectivity</code></div>
       <div class="it"><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/define-an-azure-network-topology">Define an Azure network topology</a><span>Topology approaches based on cross-region connectivity and routing requirements.</span><code>learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/define-an-azure-network-topology</code></div>
-      <div class="note mt12" style="padding:12px 14px">
-        <h4>A note on the figures</h4>
-        <p class="small" style="font-size:10.4px">Region names, service placements, and estates shown in the figures are illustrative. They explain the framework; they do not recommend specific Azure regions or topologies.</p>
-      </div>
-      <div class="note mt12" style="padding:12px 14px"><h4>Service capabilities change</h4><p class="small" style="font-size:10.4px">Regional service behavior described in Appendix A reflects Microsoft Learn at the time of writing. Confirm current capabilities at decision time.</p></div>
+      <h4 class="mt12">Multi-region workload design</h4>
+      <div class="it"><a href="https://learn.microsoft.com/azure/well-architected/reliability/highly-available-multi-region-design">Architecture strategies for designing for redundancy</a><span>Multi-region deployment models, including active-active and active-passive.</span><code>learn.microsoft.com/azure/well-architected/reliability/highly-available-multi-region-design</code></div>
+      <div class="it"><a href="https://learn.microsoft.com/azure/well-architected/mission-critical/mission-critical-design-methodology">Design methodology for mission-critical workloads</a><span>The full multi-region active design for the most demanding workloads.</span><code>learn.microsoft.com/azure/well-architected/mission-critical/mission-critical-design-methodology</code></div>
+      <div class="it"><a href="https://learn.microsoft.com/azure/reliability/cross-region-replication-azure-no-pair">Multi-region solutions in nonpaired regions</a><span>Service-by-service guidance for regions without a pair.</span><code>learn.microsoft.com/azure/reliability/cross-region-replication-azure-no-pair</code></div>
+      <div class="it"><a href="https://learn.microsoft.com/azure/reliability/overview-reliability-guidance">Azure reliability service guides</a><span>Regional behavior for each Azure service.</span><code>learn.microsoft.com/azure/reliability/overview-reliability-guidance</code></div>
     </div>
   </div>
 </div>
