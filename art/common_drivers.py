@@ -4,13 +4,13 @@
 Six driver cards feed one hub; the hub leads to the statement that drivers open the discussion
 and to the steps that decide the outcome. Same palette, type, chips, and icons as the whitepaper figures.
 
-    python3 art/common_drivers.py      -> art/common-drivers.svg + common-drivers.png (2x)
+    python3 art/common_drivers.py      -> art/common-drivers.svg + common-drivers.png (2x),
+                                          site/figures/common-drivers.html, content/media/common-drivers.png
 
 Text stays live in the SVG. Chip and title sizes are measured with the publication font
-(whitepaper/fonts), so edit the wording in DRIVERS and rerun instead of moving boxes by hand.
-Driver names, icons, and colours mirror whitepaper/pages/03b-drivers.html and decks/full/f1.js.
+(whitepaper/fonts), so edit the wording in shared/summary.json ("drivers") and rerun instead of moving boxes by hand.
 """
-import html, math, os, re, tempfile
+import html, json, math, os, pathlib, re, shutil, tempfile
 
 from playwright.sync_api import sync_playwright
 
@@ -22,35 +22,27 @@ FONT = "Pub Sans, Segoe UI, Open Sans, sans-serif"
 U = "cd"                                   # id prefix, so the SVG can sit inline on a page
 
 # palette: whitepaper/styles.css (v* is the deck's violet)
-INK, FAINT, LINE = "#0A2340", "#8A95A5", "#D3DBE4"
+INK, FAINT, LINE = "#0A2340", "#667182", "#D3DBE4"
 B800, B700, B600, B500, B200, B100, B50 = "#0B3A63", "#0F548C", "#0F6CBD", "#2B88D8", "#BCD9F5", "#DDEBF9", "#EEF5FC"
 T700, T600, T100 = "#03615F", "#04807A", "#D6EFEC"
 S800, S600, S100 = "#243A57", "#4A5B72", "#E8EDF3"
 W600, W100 = "#A84E1F", "#F8E8DD"
 V700, V600, V100 = "#5C3D9C", "#8661C5", "#EBE5F7"
 
-# icon, tile, connector, chip background, chip text, driver, typical triggers (one list per chip row, in the order of the table)
-DRIVERS = [
-    ("users", B600, B500, B100, B700, "Business growth and proximity",
-     [["New markets or geographies"], ["Acquisitions or divestitures"], ["Products closer to customers", "User latency"]]),
-    ("lock", W600, W600, W100, W600, "Data residency, sovereignty, and regulation",
-     [["Data-residency laws"], ["Operational resilience requirements"], ["Customer contracts", "Public-sector requirements"]]),
-    ("gauge", V600, V600, V100, V700, "Service, AI model, SKU, and quota availability",
-     [["AI models and GPU SKUs"], ["Services in selected regions only", "Quota constraints"], ["Availability-zone requirements"]]),
-    ("shield", B800, B800, "#DFE8F2", B800, "Resiliency and concentration risk",
-     [["RTO or RPO requirements", "Concentration risk"], ["Paired or nonpaired regions"], ["Audit or regulatory findings", "Lessons from incidents"]]),
-    ("building", S800, S600, S100, S800, "Datacenter and connectivity events",
-     [["Datacenter or colocation exits", "Migration waves"], ["Office or datacenter moves", "Network-provider changes"], ["New Azure region in the geography"]]),
-    ("layers", T600, T600, T100, T700, "Cost and operating model",
-     [["Regional price differences", "Cross-region transfer cost"], ["Landing-zone redesign", "Unnecessary infrastructure"], ["Sustainability objectives"]]),
-]
-HUB = ["Multi-region", "platform", "discussion"]
-OPEN_T = "Drivers open the discussion"
-OPEN_S = "They do not determine the regional architecture or the workload-placement outcome."
-NEXT_T = "What decides the outcome"
-STEPS = [("Qualify regions", B700), ("Select the regional design", B700), ("Prepare the region", B700), ("Place workloads", T700)]
-CAP_L, CAP_R = "What starts the conversation", "Six common drivers and their typical triggers"
-TITLE = "Common drivers of multi-region platform discussions"
+# Driver names and triggers come from shared/summary.json ("drivers"), which the full deck reads too.
+# tone -> tile, connector, chip background, chip text
+TONES = {"b": (B600, B500, B100, B700), "w": (W600, W600, W100, W600), "v": (V600, V600, V100, V700),
+         "n": (B800, B800, "#DFE8F2", B800), "s": (S800, S600, S100, S800), "t": (T600, T600, T100, T700)}
+_SUMMARY = json.load(open(os.path.join(ROOT, "shared", "summary.json"), encoding="utf-8"))
+_FIG = _SUMMARY["driversFigure"]
+# icon, tile, connector, chip background, chip text, driver, typical triggers (one list per chip row)
+DRIVERS = [(d["icon"], *TONES[d["tone"]], d["name"], d["triggers"]) for d in _SUMMARY["drivers"]]
+HUB = _FIG["hub"]
+OPEN_T, OPEN_S = _FIG["openTitle"], _FIG["openText"]
+NEXT_T = _FIG["nextTitle"]
+STEPS = [(p["name"], T700 if p["n"] == 5 else B700) for p in _SUMMARY["parts"][1:]]
+CAP_L, CAP_R = _FIG["captionLeft"], _FIG["captionRight"]
+TITLE = _FIG["title"]
 
 # geometry (content is 940 wide, like every whitepaper figure; PAD is the white margin around it)
 PAD, W = 16, 940
@@ -225,38 +217,78 @@ def build(measure):
     return svg, tw, th
 
 
+def _session(pw):
+    """A Chromium page with the publication font loaded, and a text-width measure that uses it."""
+    faces = "".join(f'@font-face{{font-family:"Pub Sans";src:url("{pathlib.Path(FONTS, f"open-sans-latin-{wt}-normal.woff2").as_uri()}");font-weight:{wt}}}' for wt in (300, 400, 500, 600, 700))
+    workdir = tempfile.mkdtemp()
+    page_html = os.path.join(workdir, "render.html")
+    b = pw.chromium.launch()
+    pg = b.new_page(viewport={"width": 1000, "height": 700}, device_scale_factor=2)
+
+    def show(body):
+        with open(page_html, "w", encoding="utf-8") as fh:
+            fh.write(f'<html><head><meta charset="utf-8"><style>{faces} body{{margin:0}}</style></head><body>{body}</body></html>')
+        pg.goto(pathlib.Path(page_html).as_uri())
+        pg.evaluate("() => Promise.all([400, 700].map(w => document.fonts.load(w + ' 12px \"Pub Sans\"')))")
+
+    show("")
+    cache = {}
+
+    def measure(s, size, weight, ls=0.0):
+        key = (s, size, weight, ls)
+        if key not in cache:
+            w = pg.evaluate("([s, f]) => { const c = document.createElement('canvas').getContext('2d'); c.font = f; return c.measureText(s).width; }",
+                            [s, f'{weight} {size}px "Pub Sans"'])
+            cache[key] = w + ls * size * len(s)
+        return cache[key]
+
+    def close():
+        b.close()
+        shutil.rmtree(workdir, ignore_errors=True)
+
+    return pg, show, measure, close
+
+
+_FIGURE = {}
+
+
+def _figure():
+    if not _FIGURE:
+        with sync_playwright() as pw:
+            _pg, _show, measure, close = _session(pw)
+            _FIGURE["svg"] = build(measure)
+            close()
+    return _FIGURE["svg"]
+
+
+def pdf_figure(width=None):
+    """The figure as an inline SVG string for a whitepaper page. Text stays live; ids carry the 'cd-' prefix.
+    The white margin is cropped (the page has its own). `width` (CSS px) scales the picture; the default is the native 940 px."""
+    svg, tw, th = _figure()
+    cw, ch = tw - 2 * PAD, th - 2 * PAD
+    w = width or cw
+    h = round(ch * w / cw, 2)
+    svg = svg.replace(f'width="{tw}" height="{th:g}" viewBox="0 0 {tw} {th:g}"', f'width="{w:g}" height="{h:g}" viewBox="{PAD} {PAD} {cw} {ch:g}" style="display:block"', 1)
+    return svg.strip()
+
+
 def main():
-    faces = "".join(f'@font-face{{font-family:"Pub Sans";src:url("file://{FONTS}/open-sans-latin-{wt}-normal.woff2");font-weight:{wt}}}' for wt in (300, 400, 500, 600, 700))
-    page_html = os.path.join(tempfile.mkdtemp(), "render.html")
+    """Writes the picture (art/), the website fragment (site/figures) and the article/Word picture (content/media)."""
     with sync_playwright() as pw:
-        b = pw.chromium.launch()
-        pg = b.new_page(viewport={"width": 1000, "height": 700}, device_scale_factor=2)
-
-        def show(body):
-            open(page_html, "w", encoding="utf-8").write(f'<html><head><meta charset="utf-8"><style>{faces} body{{margin:0}}</style></head><body>{body}</body></html>')
-            pg.goto("file://" + page_html)
-            pg.evaluate("() => Promise.all([400, 700].map(w => document.fonts.load(w + ' 12px \"Pub Sans\"')))")
-
-        show("")
-        cache = {}
-
-        def measure(s, size, weight, ls=0.0):
-            key = (s, size, weight, ls)
-            if key not in cache:
-                w = pg.evaluate("([s, f]) => { const c = document.createElement('canvas').getContext('2d'); c.font = f; return c.measureText(s).width; }",
-                                [s, f'{weight} {size}px "Pub Sans"'])
-                cache[key] = w + ls * size * len(s)
-            return cache[key]
-
+        pg, show, measure, close = _session(pw)
         svg, tw, th = build(measure)
-        open(os.path.join(HERE, "common-drivers.svg"), "w", encoding="utf-8").write(svg)
+        with open(os.path.join(HERE, "common-drivers.svg"), "w", encoding="utf-8") as fh:
+            fh.write(svg)
+        with open(os.path.join(ROOT, "site", "figures", "common-drivers.html"), "w", encoding="utf-8", newline="\n") as fh:
+            fh.write("<!-- generated by art/common_drivers.py; copy of art/common-drivers.svg for the website and the Word edition -->\n"
+                     f'<div class="wpf" data-w="{tw}" data-h="{th:g}" style="width:{tw}px">{svg.strip()}</div>\n')
         show(svg)
         pg.set_viewport_size({"width": tw, "height": math.ceil(th)})
         pg.wait_for_timeout(300)
-        pg.screenshot(path=os.path.join(HERE, "common-drivers.png"), clip={"x": 0, "y": 0, "width": tw, "height": th})
-        b.close()
-    os.remove(page_html)
-    print(f"wrote art/common-drivers.svg and common-drivers.png ({tw}x{th:g})")
+        for target in (os.path.join(HERE, "common-drivers.png"), os.path.join(ROOT, "content", "media", "common-drivers.png")):
+            pg.screenshot(path=target, clip={"x": 0, "y": 0, "width": tw, "height": th})
+        close()
+    print(f"wrote art/common-drivers.svg and .png, site/figures/common-drivers.html, content/media/common-drivers.png ({tw}x{th:g})")
 
 
 if __name__ == "__main__":

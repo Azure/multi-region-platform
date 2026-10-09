@@ -3,7 +3,7 @@
   .f5 { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr) minmax(0,2.2fr) minmax(0,1fr); gap: 12px; }
   .f5 .two { display: grid; grid-template-columns: minmax(0,.86fr) minmax(0,1fr); gap: 0; }
   .f5 .two > div + div { border-left: 1px dashed var(--t300); padding-left: 13px; margin-left: 11px; }
-  .f5 .two .ch { font-size: 8.4px; letter-spacing: .11em; text-transform: uppercase; font-weight: 700; color: var(--t600); margin-bottom: 5px; }
+  .f5 .two .ch { font-size: 9px; letter-spacing: .11em; text-transform: uppercase; font-weight: 700; color: var(--t600); margin-bottom: 5px; }
   .f5 .two .sub b { color: var(--t700); }
   .f5 .two .ch + .sub { border-top: 0; margin-top: 0; padding-top: 0; }
   .f5 .two .sub { padding-top: 5px; margin-top: 5px; }
@@ -21,7 +21,7 @@
   .f5 .sub b { font-size: 10.2px; color: var(--b800); display: block; }
   .f5 .sub span { font-size: 10.2px; line-height: 1.35; color: var(--muted); display: block; }
   .f5 .dd { margin-top: 10px; background: var(--b50); border-top: 1px solid var(--b100); border-radius: 0 0 11px 11px; padding: 7px 13px 8px; min-height: 58px; }
-  .f5 .dd .cap { color: var(--b600); font-size: 8.8px; }
+  .f5 .dd .cap { color: var(--b600); font-size: 9px; }
   .f5 .dd p { font-size: 10.6px; line-height: 1.36; color: var(--ink); font-weight: 600; margin-top: 2px; }
   .f5 .chev { position: absolute; right: -11px; top: 44px; z-index: 3; width: 10px; }
   .fout { margin-top: 10px; display: grid; grid-template-columns: 180px 1fr 1fr 1fr 1fr; gap: 8px; align-items: stretch; background: var(--wash); border-radius: 11px; padding: 10px 12px; }
@@ -55,7 +55,7 @@
         <div class="dh"><span class="dn">2</span><span class="dt">Data and compliance</span></div>
         <div class="dq">Are we allowed to operate here?</div>
         <ul><li>Data residency and sovereignty</li><li>Regulatory and industry requirements</li><li>Company policy and customer commitments</li><li>Support access and encryption</li><li>Restrictions on data movement or operational control</li></ul></div>
-        <div class="dd" style="background:#FBF4EE;border-top-color:var(--w100)"><div class="cap" style="color:var(--w600)">Decision</div><p>Exclude the region when it cannot satisfy a mandatory requirement.</p></div>
+        <div class="dd" style="background:var(--w50);border-top-color:var(--w100)"><div class="cap" style="color:var(--w600)">Decision</div><p>Exclude the region when it cannot satisfy a mandatory requirement.</p></div>
         <svg class="chev" height="18" viewBox="0 0 10 18"><path d="M2 2l6 7-6 7" fill="none" stroke="#2B88D8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="dc" style="border-color:var(--t300)"><div class="acc" style="background:var(--t600)"></div><div class="bd">
         <div class="dh"><span class="dn" style="background:var(--t600)">3</span><span class="dt">Workload requirements and dependencies</span></div>
@@ -68,7 +68,7 @@
             <div class="sub"><b>Resilient hybrid connectivity</b><span>Reachability and resilience to Azure</span></div>
             <div class="sub"><b>Regional platform connectivity</b><span>Access to hubs, shared services, and other regions</span></div></div>
         </div></div>
-        <div class="dd" style="background:var(--t50);border-top-color:var(--t100)"><div class="cap" style="color:var(--t600)">Decision</div><p>Identify and record the workload-driven platform requirements.</p></div>
+        <div class="dd" style="background:var(--t50);border-top-color:var(--t100)"><div class="cap" style="color:var(--t700)">Decision</div><p>Identify and record the workload-driven platform requirements.</p></div>
         <svg class="chev" height="18" viewBox="0 0 10 18"><path d="M2 2l6 7-6 7" fill="none" stroke="#2B88D8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="dc"><div class="acc" style="background:var(--b800)"></div><div class="bd">
         <div class="dh"><span class="dn" style="background:var(--b800)">4</span><span class="dt">Regional capability and availability</span></div>
@@ -80,7 +80,7 @@
       <div style="display:flex;flex-direction:column;justify-content:center;padding-left:4px"><b style="font-size:11.6px;color:var(--ink)">Qualification outcome</b><span style="font-size:9.6px;color:var(--muted);line-height:1.35">Each regional option is classified against <b style="color:var(--ink)">defined workload requirements</b>, with evidence.</span></div>
       <div class="oc"><span class="ic" style="background:var(--w100);color:var(--w600)"><svg><use href="#i-x"/></svg></span><div><b style="color:var(--w600)">Excluded</b><span>A mandatory requirement cannot be satisfied.</span></div></div>
       <div class="oc"><span class="ic" style="border:1.4px dashed var(--b600);color:var(--b600)"><svg><use href="#i-clock"/></svg></span><div><b style="color:var(--b700)">Candidate</b><span>Potentially viable; more discovery or validation first.</span></div></div>
-      <div class="oc"><span class="ic" style="background:#FFF1CC;border:1.4px solid #C98A00;color:#8A5A00"><svg><use href="#i-flag"/></svg></span><div><b style="color:#8A5A00">Conditional</b><span>Supported if documented conditions are resolved.</span></div></div>
+      <div class="oc"><span class="ic" style="background:var(--a100);border:1.4px solid var(--a500);color:var(--a700)"><svg><use href="#i-flag"/></svg></span><div><b style="color:var(--a700)">Conditional</b><span>Supported if documented conditions are resolved.</span></div></div>
       <div class="oc"><span class="ic" style="background:var(--g100);color:var(--g600)"><svg><use href="#i-check"/></svg></span><div><b style="color:var(--g600)">Qualified</b><span>As of the assessment date; onboarding revalidation still required.</span></div></div>
     </div>
     <div class="figcap"><span class="fn">Figure 5</span><span class="ft"><b>Four checks — the recommended sequence.</b> Outcomes are specific to defined workload requirements, never a blanket certification; workload resiliency requirements are identified during workload design.</span></div>

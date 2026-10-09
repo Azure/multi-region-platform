@@ -1,0 +1,229 @@
+# application-landing-zone-archetypes
+a connected profile may still be selected where platform requirements such as private management security data access or centralized services justify connectivity
+applications with significant dependencies on on premises environments enterprise networks or centralized shared services that require persistent private connectivity to the wider enterprise environment
+architecture or design pattern
+because this is a portfolio level archetype its combined dependencies may require capabilities beyond those needed by any individual application
+cloud native or ai applications that are primarily self contained but require private connectivity to selected enterprise services data sources apis or other azure environments
+direct connectivity may suit a limited number of tightly coupled workloads while a minimal regional hub or full regional hub may be more appropriate where broader connectivity shared routing traffic inspection resiliency or operational requirements justify regional platform capabilities
+groups of applications with meaningful dependencies on each other including shared data common services east west communication or coordinated connectivity and operations across applications regions or business domains
+select the appropriate connectivity profile based on the portfolio s aggregate connectivity shared service resiliency scale and operational requirements rather than the requirements of a single workload
+the archetype to profile matrix shows the typical options for each archetype
+the four archetypes grouped by the platform connectivity and dependency capabilities each requires
+these workloads can often use disconnected spokes
+these workloads can use remote hub connected minimal regional hub or full regional hub depending on dependency latency traffic patterns resiliency security and operational requirements
+these workloads typically use remote hub connected minimal regional hub or full regional hub depending on dependency latency resiliency regulatory operational and shared service requirements
+understand workload landing zone archetypes
+where significant east west traffic exists within a region evaluate whether direct spoke to spoke connectivity or a regional hub provides a more appropriate path than routing traffic through a remote hub
+workload landing zone archetypes are a planning abstraction that groups recurring application connectivity and dependency requirements
+workload landing zone archetypes in this guidance describe what a workload requires from the platform which is a different concept
+# business-and-geography
+regions that don t pass this check don t need deeper assessment
+regions that pass continue to data and compliance which can exclude a region outright
+# connectivity-profiles
+depending on workload requirements these capabilities can include east west routing dns monitoring backup security inspection egress private connectivity selected identity or directory services on premises connectivity or other services that must remain close to the workloads
+moving right adds local capability and independence and also cost and operational scope
+the minimal regional hub provides only the local capabilities required by its workloads rather than replicating a complete platform footprint
+understand common connectivity profiles
+workload and platform requirements justify a comprehensive local capability set for example where the region requires local hybrid connectivity substantial local shared services strict latency or data boundary controls significant interconnected application portfolios or sufficient independence to continue operating when another region or geographic hub is unavailable
+# customer-scenarios
+candidate until dependencies are known
+check 3 identifies applications and components that must move together
+check 4 validates current model service sku zone regional access and quota support
+check 4 validates required regional capabilities services zones access and constraints
+connected cloud native or ai applications where private enterprise dependencies are required
+data residency and regulation
+do not create a new regional hub solely because another azure region is available
+in scope workloads can relocate selectively
+isolated cloud native or ai applications where the workload is self contained
+isolated or connected cloud native or ai applications
+it remains conditional for requirements that depend on private connectivity until that design is known and validated
+minimal regional hub where aggregate east west traffic shared services latency or independence requirements justify local capability
+minimal regional hub where selected local capabilities are required and existing hybrid connectivity can be reused where reachability and resiliency requirements permit
+most workloads can land in the existing qualified region where it satisfies their requirements
+multi region customer scenarios
+other workloads can remain in place
+qualified against defined portfolio requirements once sufficient discovery is complete
+qualified for defined requirements
+qualified for the ai workload
+recovery architecture remains a workload specific decision
+remote hub connected or minimal regional hub
+revalidate current model sku service regional access and quota support at decision time
+revisit the additional regional option when requirements change
+step 3 validates hybrid connectivity datacenter and user geography reachability resiliency and whether existing connectivity can support the target design
+the existing hub is reused
+the existing target region can remain qualified for the identified workload requirements while an additional region remains a candidate for future use
+the region can be qualified for defined hybrid connected workload requirements while other portfolio workloads remain candidates until their dependencies are understood
+the region can be qualified for the defined ai workload requirements
+these examples show how the framework moves from a business or technical driver to a governed regional and workload decision
+they are illustrative not customer specific recommendations
+workloads can remain in place initially and relocate selectively as business and integration requirements become known
+workloads stay in place at first
+# data-and-compliance
+how the first two checks filter the portfolio
+the first two checks act as filters
+the first two checks filter the portfolio before deeper technical assessment
+# framework-overview
+because platform teams cannot predict every future workload this guidance uses three planning constructs
+extend azure landing zones for adaptable regional placement
+new regions add only the platform capabilities required by the workloads expected to use them rather than replicating an existing regional footprint
+sovereign cloud offerings and azure local have their own constraints and aren t covered although the same qualification logic can inform them
+this guidance covers azure public cloud regions
+this guidance shows how to reuse the azure landing zone foundation you already run so that additional regions become qualified options that workloads can use selectively without creating separate governance models or reproducing an identical platform footprint in every region
+three planning constructs put them into practice
+three principles apply in every region
+# full-regional-hub
+branch datacenter and cloud connectivity are integrated through the organization s sd wan architecture
+platform native routing traffic inspection and egress services implemented with azure firewall and related azure networking capabilities
+topology determines how the capability is implemented
+transit hybrid connectivity routing and security inspection are separated where scale ownership or architecture requirements justify it
+# index
+four workload landing zone archetypes describe what applications require
+from a fixed pair to governed options
+getting started walks through the first additional region in six steps
+multi region platform strategy
+# minimal-regional-hub
+the same as for disconnected spokes with spokes that connect to the local hub
+# misconceptions
+common multi region misconceptions
+the corrections below follow the order of the framework
+# paired-nonpaired-regions
+assess availability zones region pairing and service specific cross region behavior separately as described in regional capability and availability
+azure uses region pairs for considerations such as sequential platform updates and recovery prioritization
+deploying into both members of a region pair does not automatically provide workload high availability disaster recovery or failover
+this can provide flexibility for residency latency service availability or business continuity requirements
+# platform-and-workload
+platform and workload layers
+# platform-architecture
+the selection principles the decision tree and what each step up costs
+three choices on one path
+where each shared service is provided with a default for each profile
+# platform-enablement-connectivity
+some placements are set by the service not by the profile
+# platform-readiness
+confirm the others as the capability set is put in place
+everything else on this page applies to every profile including disconnected spokes
+ip address planning common blocker
+items marked as common blockers should be planned early while the region is still being qualified
+private dns across regions routing and inspection paths and hybrid connectivity apply only to connected profiles
+quota and specific capacity common blocker
+region settings in policy common blocker
+where logs and telemetry live common blocker
+# prepare-region
+disconnected spokes remote hub connected minimal regional hub and full regional hub
+region c s minimal hub reaches on premises by reusing an existing expressroute circuit
+region d s does not
+what must be true before workloads arrive
+# profile-selection
+a limited hub with only the services that must be local
+check these points before you settle on a profile and revisit the profile when its reassessment trigger applies
+considerations and reassessment by profile
+each question comes from the fits when criteria of the connectivity profiles
+everything else stays remote
+fits when the workloads expected in the region
+need a comprehensive local capability set or independence from other hubs
+need no private access to enterprise services on premises systems centralized security inspection another application portfolio or geographic hub capabilities
+need some capabilities locally without a comprehensive local set
+need that access and can tolerate the latency availability coupling and dependency on connectivity to another region
+no hub and no gateway
+start with the matrix to see which connectivity profiles each archetype typically uses
+the complete local connectivity and shared services that the region s workloads require
+the same tree as a table from the smallest regional footprint to the largest
+then apply the selection principles and use the decision tree to pick the most efficient profile that meets the requirements
+what the region gets
+which connectivity profile should this region provide
+workload spokes consume an existing geographic hub
+workload spokes use the estate s standard identity policy security and deployment practices
+# regional-capability
+assess required quota based on expected workload scale and identify any quota increases that may be required
+availability zones and region pairing
+for detailed design see service behavior across regions
+manual review covers what can t be determined reliably
+programmatic regional evaluation narrows the options
+the resulting assessment should identify candidate regions unmet requirements conditional constraints and items that require additional validation
+use manual review for considerations that cannot be determined reliably from published or programmatically available information
+where possible evaluate objective regional characteristics programmatically using the requirements above as inputs
+# regional-qualification
+add the platform connectivity profile when you select it in step 3
+apply the tree per candidate region and set of defined workload requirements
+candidate and conditional options return to the tree when validation is complete or when conditions change
+candidate while requirements aren t known
+complete discovery or set guardrails and assess at onboarding
+conditional or excluded if the gap is mandatory
+filters come first then requirements then technical fit
+identify and record the workload driven platform requirements that check 4 validates and step 3 uses
+no deeper assessment is needed
+outcome if not met
+qualify candidate regions documenting conditions constraints and unresolved validations
+the qualification checks in the recommended sequence
+# resiliency-scenarios
+a workload operates in a zone enabled region without a paired region and must recover in another azure region
+a workload uses customer managed encryption keys and must operate or recover across two azure regions
+application dependencies were not included in the recovery design
+compute or shared services are not recoverable
+confirm key availability access private connectivity permissions and application behavior in the secondary region before the recovery path is considered complete
+data is recoverable but the application cannot operate successfully in the secondary region
+data recovery is not application recovery and azure region pairing does not replace a tested workload recovery plan
+dns or private endpoint configuration is incomplete
+evaluate key vault behavior for the selected regions supported backup and restore patterns azure managed hsm multi region replication where appropriate or another workload specific key management design
+for some workloads the key management architecture can determine which recovery regions are viable
+key material has different recovery and replication characteristics from secrets and certificates and cannot simply be assumed to be recreated by the deployment pipeline
+key vault or another runtime dependency is unavailable
+place backup and restore capabilities deliberately based on the intended recovery region and supported service behavior
+pre provision the required regional vault and ensure runtime secrets certificates and any required key strategy are available before recovery
+they re representative situations not drawn from a specific customer
+use a supported cross region recovery technology such as azure site recovery for applicable vms or redeploy stateless compute from infrastructure as code
+use a supported region of choice replication pattern such as object replication where suitable or application level replication for storage types that require it
+# storage-backup-key-vault
+a source account can currently replicate to no more than two destination accounts
+after failover the vault operates with restrictions including read only management behavior
+azure backup cross region restore uses the azure paired region for supported data sources when the required vault replication and configuration are enabled
+azure managed hsm provides an optional two region replication model with both regions active
+azure site recovery supports azure vm disaster recovery between azure regions subject to its support matrix and regional restrictions
+cryptographic keys particularly customer managed keys can have additional constraints and should not be assumed to be reproducible by the same process
+design customer managed keys separately
+each workload uses the vault associated with its local region rather than depending at runtime on a vault hosted in another region
+for workloads that require controlled region of choice recovery design the runtime dependency so that each active or recovery region has the key vault capability it needs before failover is required
+geo redundant storage options such as grs and gzrs replicate data asynchronously to the service defined secondary region
+in most paired regions key vault asynchronously replicates vault contents to the paired region
+infrastructure as code should consistently provision vault configuration access controls private connectivity monitoring and policy
+it applies to keys not to ordinary key vault secrets and certificates
+it requires change feed on the source and blob versioning on source and destination accounts
+key vault is often a runtime dependency
+keys secrets and certificates each require their own recovery analysis
+microsoft managed regional failover is microsoft initiated best effort and can occur only after significant delay
+not every region can serve as an extended region and it has its own cost considerations
+object replication can asynchronously replicate block blobs between selected storage accounts and regions
+object replication does not support append blobs page blobs or accounts with hierarchical namespace enabled
+populate and validate required runtime dependencies before an outage
+recovery should not depend on creating or restoring a regional vault after the primary region has already failed
+secrets and certificates can often be provisioned independently into regional vaults through controlled deployment processes
+select an appropriate key resiliency pattern such as supported key vault backup and restore constraints managed hsm multi region capabilities or another workload specific design based on security and recovery requirements
+some paired regions and all nonpaired regions do not use this microsoft managed cross region replication and failover model
+this pattern applies to secrets and certificates
+use an approved secret management or deployment process to populate the required secrets and certificates in each regional vault
+where built in failover does not meet workload requirements use separate regional vaults or another supported custom multi region design
+# workload-design
+service behavior across regions overview
+the articles in this section cover the dependencies that most often decide whether a regional combination works as built
+this section covers the regional and service behaviors a platform team should understand when it qualifies regional combinations
+this section isn t workload design guidance
+# workload-placement
+define whether the region will support the workload as its primary location recovery location or as part of a multi region active deployment
+document the selected region workload landing zone archetype connectivity profile placement and resiliency outcomes assumptions constraints owners and revalidation triggers
+for each workload or related application portfolio
+review qualified regional options
+# workload-requirements
+decided in step 3
+for existing workloads running in azure on premises or in another cloud start with the current application inventory and architecture
+for future workloads use known business and technical requirements predefined workload patterns intended architecture expected dependencies required azure services and anticipated security resiliency connectivity and scale requirements to determine the regional and platform capabilities they will need
+for how an archetype differs from an architecture style a design pattern and a workload pattern see how archetypes differ from other architecture terms
+if a workload has requirements beyond its primary archetype record them as explicit additions to that archetype rather than forcing the workload into multiple classifications
+if an existing workload would move into the region from another azure region or from outside azure also identify which components must move together which dependencies can stay where they are and how the workload behaves while it s split across locations
+latency data movement required application changes acceptable disruption and any temporary operating requirements
+relocation readiness migration sequencing recovery design and ongoing multi region operation remain workload specific activities
+review the architecture connectivity data shared service security resiliency scale and operational requirements and dependencies of workloads expected to consume the region
+they are the input to check 4 which validates what the region can support and to step 3 which decides what the platform provides
+this check doesn t approve workload relocation or define migration execution
+validate important dependencies with workload owners focusing first on critical or representative applications and portfolios
+where aspects of the application design are still evolving identify the requirements that must influence regional qualification and defer implementation specific decisions that can be validated during workload onboarding
+where useful map the key workloads you expect to move to or deploy in the new region whether existing or new to the closest fitting workload landing zone archetype based on its platform connectivity and dependency requirements

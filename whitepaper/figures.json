@@ -1,0 +1,23 @@
+{
+ "fig1": "fixed-pair-to-governed-options",
+ "fig2": "three-planning-constructs",
+ "fig3": "progressive-adoption-journey",
+ "fig4": "platform-and-workload-layers",
+ "fig5": "regional-qualification-framework",
+ "fig6": "checks-1-2-filter",
+ "fig7": "workloads-to-platform-requirements",
+ "fig8": "zones-and-pairing",
+ "figEval": "programmatic-regional-evaluation",
+ "fig9": "connectivity-planning-layers",
+ "fig10": "assessment-outcome-example",
+ "figQualTree": "regional-qualification-decision-tree",
+ "fig12": "application-landing-zone-archetypes",
+ "fig13": "archetype-profile-matrix",
+ "fig14": "connectivity-profile-spectrum",
+ "figCost": "profile-cost-tradeoff",
+ "fig15": "profiles-coexisting-estate",
+ "figProfileTree": "connectivity-profile-decision-tree",
+ "figPlacement": "workload-placement-flow",
+ "fig18b": "qualification-versus-placement",
+ "figKVPattern": "key-vault-regional-pattern"
+}

@@ -6,7 +6,8 @@
 
 Run after any change to whitepaper/pages/*.html:  python3 site/tools/extract_figures.py
 """
-import os, re, sys, json
+import os, re, sys, json, subprocess
+from pathlib import Path
 import tinycss2
 from playwright.sync_api import sync_playwright
 
@@ -16,31 +17,9 @@ FIG_OUT = os.path.join(ROOT, "site", "figures")
 MEDIA = os.path.join(ROOT, "content", "media")
 CSS_OUT = os.path.join(ROOT, "site", "assets", "figures.css")
 
-# whitepaper element id -> figure name used in Markdown (content/media/<name>.png)
-FIGS = {
-    "fig1": "fixed-pair-to-governed-options",
-    "fig2": "three-planning-constructs",
-    "fig3": "progressive-adoption-journey",
-    "fig4": "platform-and-workload-layers",
-    "fig5": "regional-qualification-framework",
-    "fig6": "dimensions-1-2-filter",
-    "fig7": "workloads-to-platform-requirements",
-    "fig8": "zones-and-pairing",
-    "figEval": "programmatic-regional-evaluation",
-    "fig9": "connectivity-planning-layers",
-    "fig10": "assessment-outcome-example",
-    "figQualTree": "regional-qualification-decision-tree",
-    "fig12": "application-landing-zone-archetypes",
-    "fig13": "archetype-profile-matrix",
-    "fig14": "connectivity-profile-spectrum",
-    "figCost": "profile-cost-tradeoff",
-    "figHubs": "hub-implementations",
-    "fig15": "profiles-coexisting-estate",
-    "figProfileTree": "connectivity-profile-decision-tree",
-    "figPlacement": "workload-placement-flow",
-    "fig18b": "qualification-versus-placement",
-    "figKVPattern": "key-vault-regional-pattern",
-}
+# whitepaper element id -> figure name used in Markdown (content/media/<name>.png); shared with whitepaper/build.py
+with open(os.path.join(WP, "figures.json"), encoding="utf-8") as _fh:
+    FIGS = json.load(_fh)
 
 
 def scope_css(text):
@@ -87,13 +66,13 @@ def scope_css(text):
 
 def main():
     os.makedirs(FIG_OUT, exist_ok=True); os.makedirs(MEDIA, exist_ok=True)
-    os.system(f"cd {WP} && python3 build.py >/dev/null")
+    subprocess.run([sys.executable, "build.py", "full"], cwd=WP, check=True, stdout=subprocess.DEVNULL)
     base = open(os.path.join(WP, "styles.css"), encoding="utf-8").read()
     manifest = {}
     with sync_playwright() as p:
         b = p.chromium.launch()
         pg = b.new_page(viewport={"width": 1100, "height": 900}, device_scale_factor=2)
-        pg.goto("file://" + os.path.join(WP, "whitepaper.html"))
+        pg.goto(Path(WP, "whitepaper.html").as_uri())
         pg.wait_for_selector("body[data-ready='1']", timeout=20000)
         pg.wait_for_timeout(300)
         page_css = pg.evaluate("() => [...document.querySelectorAll('section.page style')].map(s => s.textContent).join('\\n')")

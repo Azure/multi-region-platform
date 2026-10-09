@@ -12,22 +12,63 @@ See [Building and publishing](building.md) for prerequisites and commands, [Azur
 | Future CAF article set | `content/*.md`, `content/toc.yml`, and `content/media/` | `dist/caf/` after export |
 | Whitepaper PDF and HTML | `whitepaper/pages/*.html` | `dist/Adaptable-Multi-Region-Azure-Platform.pdf` and `.html` |
 | Executive brief PDF and HTML | `whitepaper/exec/pages/*.html` | `dist/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf` and `.html` |
-| PowerPoint decks | `decks/full/`, `decks/exec/` | `dist/*.pptx` |
-| Word edition | `content/` through `word/build.py` | `dist/*.docx` |
+| PowerPoint decks | `decks/full/NN-*.js` with `decks/full/sections.js`, and `decks/exec/` | `dist/*.pptx` |
+| Word edition, full guidance | `content/` through `word/build.py full` | `dist/Adaptable-Multi-Region-Azure-Platform.docx` |
+| Word edition, executive brief | `word/brief.md` and `word/brief_figures.py` through `word/build.py brief` | `dist/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.docx` |
+| Short lists, edition date, URLs, color tokens | `shared/summary.json` | read by the PDF, deck, and Word builds |
 | Region planning workbook | `site/planner/`, `site/assets/planner*.js`, regional seed | `docs/region-planner.html` and `docs/data/` |
 
-`art/` contains diagram generators and prototypes. `backup/` retains retired material, not current guidance. `build.sh` rebuilds the deliverables; generated `dist/` files are git-ignored. Don't edit generated `docs/` pages by hand.
+`art/` contains the art generators (see [Art generators](#art-generators)) and prototypes. `backup/` retains retired material, not current guidance. `build.sh` rebuilds the deliverables; generated `dist/` files are git-ignored. Don't edit generated `docs/` pages by hand.
 
 ## Make a content change
 
 1. Edit `content/<article>.md`. For a new article, add it to `content/toc.yml` and update the preceding article's `## Next step` link.
-2. Mirror the change on the matching whitepaper page using the mapping below. Update `whitepaper/exec/pages/` when the executive story is affected.
-3. Update matching slides in `decks/full/f*.js` and, for executive-level changes, `decks/exec/e.js`.
-4. Edit shared diagrams in `whitepaper/pages/`. `./build.sh site` extracts live website figures into `site/figures/` and CAF PNGs into `content/media/`. Deck diagrams are drawn separately; mirror structural changes there.
-5. Rebuild the affected formats, inspect changed pages, and run `./build.sh check`. It lists Markdown sentences not carried verbatim in the whitepaper (intentional condensation is expected) and checks for retired terms. Add renamed terms to `RETIRED` in `site/tools/drift.py`.
-6. Update `ms.date` in each changed article's front matter. Mirror check/profile/default-placement wording in `site/assets/planner-data.js`.
+2. Mirror the change on the matching whitepaper page using the mapping below. Update `whitepaper/exec/pages/` when the executive story is affected, and mirror that change in `word/brief.md`.
+3. Update the matching slides. The full deck is a set of modules in `decks/full/`, one per section (`NN-*.js`, run in file-name order); `decks/full/sections.js` lists the sections and generates the eyebrows, footer labels, PowerPoint sections, and agenda slide. Executive-level changes go in `decks/exec/`.
+4. If the change renames a part, check, outcome, choice, profile, archetype, scenario, misconception, or getting-started step, or changes the edition date or a URL, edit `shared/summary.json` (see [Shared data](#shared-data)).
+5. Edit shared diagrams in `whitepaper/pages/`. `./build.sh site` extracts live website figures into `site/figures/` and CAF PNGs into `content/media/`. Deck diagrams are drawn separately; mirror structural changes there.
+6. Rebuild the affected formats, inspect changed pages and slides, and run `./build.sh check`. It fails on retired or missing names, on summary titles that are not in the Markdown, and on Markdown sentences that are missing from the whitepaper and not in the baseline. Retired names go into `RETIRED` in `site/tools/drift.py`, so no format can bring them back. See [Cross-format checks](#cross-format-checks).
+7. Update `ms.date` in each changed article's front matter. Mirror check/profile/default-placement wording in `site/assets/planner-data.js`.
 
-The Word edition is generated from Markdown and should not be edited manually. PDF and deck layouts intentionally condense prose and require manual updates. The whitepaper's numbered parts correspond to the website's five steps; "Service behavior across regions" is Appendix A.
+The Word editions are generated and should not be edited manually: the full edition from the Markdown, the executive brief from `word/brief.md`. PDF and deck layouts intentionally condense prose and require manual updates. The whitepaper's numbered parts correspond to the website's five steps; "Service behavior across regions" is Appendix A.
+
+## Shared data
+
+`shared/summary.json` holds the values that several formats show, in the short form that summaries use: `edition`, `siteUrl`, `workbookUrl`, `title`, `legal`, `constructs`, `parts`, `checks`, `outcomes`, `choices`, `profiles`, `archetypes`, `scenarios`, `misconceptions`, `gettingStarted`, and `tokens`. The PDF, deck, and Word builds read it instead of typing these again, so one edit changes every format. Change `edition` to relabel the edition date everywhere.
+
+The Markdown stays the source for prose. The titles in `shared/summary.json` (each scenario `title`, misconception `claim`, getting-started `title`, part and check `name`) must still appear in the matching article; `drift.py summary` checks that. `tokens` is the reference for the color tokens that `site/tools/check_tokens.py` compares across `whitepaper/styles.css`, `decks/lib.js`, and `word/build.py`.
+
+## Cross-format checks
+
+`./build.sh check` runs `site/tools/drift.py` and `site/tools/check_tokens.py`. Each problem prints one line, and any problem makes the check fail.
+
+| Line | Meaning | Fix |
+|---|---|---|
+| `RETIRED TERM  '<match>'  in <where>` | A name the guidance no longer uses (matched case-insensitively, on text only, not tags or styles) | Replace it with the Markdown wording |
+| `MISSING TERM  '<term>'  (<target>)` | A name the target must carry is absent | Add the name where the target introduces it |
+| `SUMMARY DRIFT  '<title>'  not in <article>` | A title in `shared/summary.json` is not in the Markdown | Make the two agree |
+| `NEW DRIFT  <article>  '<sentence>'` | A Markdown sentence is missing from the target and is not in the baseline | Restore the sentence, or accept the condensation |
+
+`RETIRED` in `drift.py` is the list of retired names. Add a name there when you rename a concept. The executive deck's speaker notes that quote the talk track verbatim ("Talk track: …") may say "lighter-weight" and "lightweight": the patterns do not match those phrases.
+
+The required names are read from `shared/summary.json`:
+
+| Target | Must contain |
+|---|---|
+| Whitepaper pages, whitepaper PDF or Word file, full deck | the five part names, "four checks", the three choice names, the four outcome names, "selected", "ready for workloads", the four profiles, the four archetypes |
+| Executive pages and brief (PDF, Word, `word/brief.md`), executive deck | "four checks", the four profiles, the four archetypes |
+
+Names are compared ignoring case and punctuation, so a figure may say "Remote-hub-connected".
+
+Targets: `whitepaper`, `exec`, `brief`, `summary`, or the path of a built `.pdf`, `.pptx`, or `.docx`. Useful options are `--terms` (names only, for summaries such as the decks), `--article NAME`, and `--reverse` (text in the target that is not in the Markdown, for information).
+
+The whitepaper condenses some Markdown on purpose. `site/tools/drift-baseline.txt` lists those sentences, normalized, under a `# article` line each. After an intentional condensation, run
+
+```bash
+python3 site/tools/drift.py whitepaper --update-baseline
+```
+
+review the diff of `drift-baseline.txt`, and commit it with the change. The baseline applies to the whitepaper only. The full Word edition is compared sentence by sentence without a baseline, for information; `word/brief.md` has no baseline, so any sentence that is not on the executive pages is reported.
 
 ## Whitepaper page-to-article mapping
 
@@ -82,9 +123,20 @@ External Learn links use `https://learn.microsoft.com/azure/...` without a local
 
 Wrap website-only content, such as the city analogy, in the site-only comment markers. Its images belong in `site/media/`, not `content/media/`; live figures can live in `site/figures/<name>.html`.
 
-`art/city_analogy.py` requires Playwright and writes the full infographic to `art/out/`, the website figure to `site/figures/city-analogy.html`, and its downloadable image to `site/media/city-analogy.png`. Rerun it after picture changes, then run `./build.sh site`.
-
 `whitepaper/pages/07b-city.html` and `whitepaper/exec/pages/08b-city.html` both call `city.pdf_figure()` during PDF assembly. That function draws the labeled city and icon legend; edit its legend text there. No separate diagram run is needed for those PDF pages.
+
+### Art generators
+
+`./build.sh art` runs the three Python generators below. They need Playwright.
+
+| Command | Writes |
+|---|---|
+| `python3 art/city_analogy.py` | `art/out/` (full infographic), `site/figures/city-analogy.html`, `site/media/city-analogy.png`, `decks/img/city-analogy.png` |
+| `python3 art/common_drivers.py` | `art/common-drivers.svg` and `.png`, `site/figures/common-drivers.html`, `content/media/common-drivers.png` |
+| `python3 render_art.py` (run in `decks/`) | deck backgrounds: the blue set in `decks/img/`, the teal set in `decks/img/teal/` |
+| `node icons.js` (run in `decks/`) | icon PNGs for the decks from `decks/icons.json`; needs the optional `sharp` package and is not part of `./build.sh art` |
+
+Rerun the generator after picture or wording changes, then rebuild what uses the output: `./build.sh site` for the website, `./build.sh pdf`, and `./build.sh decks`.
 
 ## Prepare a future CAF submission
 
@@ -96,4 +148,4 @@ When CAF placement is approved:
 4. Run the destination Learn build, style, and link validation. Review sentence-case headings and "multi-region" terminology.
 5. After CAF publishes, decide whether to redirect this website or retain it as a download hub.
 
-Until then, the website is the publishing channel and offers the two PDFs as downloads. Decks and the Word edition remain local build outputs.
+Until then, the website is the publishing channel and offers the two PDFs as downloads. Decks and the Word editions remain local build outputs.

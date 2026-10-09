@@ -1,20 +1,58 @@
 #!/usr/bin/env python3
 """Assemble whitepaper.html from pages/*.html (editable source)."""
-import glob, importlib.util, math, os, re
+import glob, html as htmllib, importlib.util, json, math, os, re
 import art
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 
 
-def _city():
-    """art/city_analogy.py, loaded by path: the repository folder 'art' has the same name as the module art.py here."""
-    spec = importlib.util.spec_from_file_location("city_analogy", os.path.join(ROOT, "..", "art", "city_analogy.py"))
+def _art_module(name):
+    """art/<name>.py, loaded by path: the repository folder 'art' has the same name as the module art.py here."""
+    spec = importlib.util.spec_from_file_location(name, os.path.join(ROOT, "..", "art", name + ".py"))
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
 
 
-city = _city()
+city = _art_module("city_analogy")
+drivers = _art_module("common_drivers")
+
+with open(os.path.join(ROOT, "..", "shared", "summary.json"), encoding="utf-8") as _fh:
+    SUMMARY = json.load(_fh)
+# Figure containers: element id -> figure name (figures.json, shared with site/tools/extract_figures.py).
+# The name selects the picture's alt text in content/*.md, which becomes the figure's description in the PDF.
+with open(os.path.join(ROOT, "figures.json"), encoding="utf-8") as _fh:
+    FIGURES = json.load(_fh)
+
+
+def _alt_texts():
+    alts = {}
+    for path in sorted(glob.glob(os.path.join(ROOT, "..", "content", "*.md"))):
+        with open(path, encoding="utf-8") as fh:
+            for name, alt in re.findall(r'source="\./media/([\w-]+)\.png"\s+alt-text="([^"]*)"', fh.read()):
+                alts.setdefault(name, alt)
+    return alts
+
+
+def hide_pin_numbers(html):
+    """Pin numbers on the city picture are icon glyphs (the key beside the picture carries the same numbers as text)."""
+    return re.sub(r'<text (?=[^>]*font-size="12\.5")([^>]*>\d</text>)', r'<text aria-hidden="true" \1', html)
+
+
+def describe_figures(html):
+    """Give each figure container role="img" and the Markdown alt text as its label."""
+    alts = _alt_texts()
+    for fid, name in FIGURES.items():
+        alt = alts.get(name)
+        if not alt:
+            continue
+        attrs = f' role="img" aria-label="{htmllib.escape(alt, quote=True)}"'
+        html = re.sub(r'(<[a-zA-Z0-9]+\b[^>]*\bid="' + re.escape(fid) + r'")', lambda m: m.group(1) + attrs, html, count=1)
+    return html
+
+
+# Placeholders usable in any page: {{EDITION}}, {{SITE_URL}}, {{WORKBOOK_URL}}
+PLACEHOLDERS = {"EDITION": SUMMARY["edition"], "SITE_URL": SUMMARY["siteUrl"], "WORKBOOK_URL": SUMMARY["workbookUrl"]}
 
 SPRITE = """
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -94,7 +132,10 @@ def build(edition="full"):
                 args.append(a)
         return dot_field(*args)
     html = re.sub(r"\{\{DOTS:([^}]+)\}\}", repl, html)
-    html = re.sub(r"\{\{PY:(.+?)\}\}", lambda m: str(eval(m.group(1), {"art": art, "city": city})), html)
+    html = re.sub(r"\{\{PY:(.+?)\}\}", lambda m: str(eval(m.group(1), {"art": art, "city": city, "drivers": drivers})), html)
+
+    html = hide_pin_numbers(describe_figures(html))
+    html = re.sub(r"\{\{(EDITION|SITE_URL|WORKBOOK_URL)\}\}", lambda m: PLACEHOLDERS[m.group(1)], html)
 
     doc = f"""<!doctype html>
 <html lang="en">

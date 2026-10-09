@@ -24,7 +24,7 @@
   "h": 425,
   "source": "fig5"
  },
- "dimensions-1-2-filter": {
+ "checks-1-2-filter": {
   "w": 940,
   "h": 176,
   "source": "fig6"
@@ -79,11 +79,6 @@
   "h": 408,
   "source": "figCost"
  },
- "hub-implementations": {
-  "w": 436,
-  "h": 363,
-  "source": "figHubs"
- },
  "profiles-coexisting-estate": {
   "w": 480,
   "h": 532,
@@ -106,7 +101,7 @@
  },
  "key-vault-regional-pattern": {
   "w": 474,
-  "h": 417,
+  "h": 401,
   "source": "figKVPattern"
  }
 }

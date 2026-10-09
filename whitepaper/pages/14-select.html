@@ -60,9 +60,9 @@
         <div class="cs" style="color:#C9D4E2">Locations, latency, bandwidth, and failure domains</div>
       </div>
       <div class="col node" id="k2" style="left:228px;width:164px;background:linear-gradient(135deg,var(--b700),var(--b600));color:#fff">
-        <svg class="ic" style="color:#DDEBF9"><use href="#i-network"/></svg>
+        <svg class="ic" style="color:var(--b100)"><use href="#i-network"/></svg>
         <div class="ct">Azure backbone in the selected geography</div>
-        <div class="cs" style="color:#DDEBF9">Reached through existing or additional private paths</div>
+        <div class="cs" style="color:var(--b100)">Reached through existing or additional private paths</div>
       </div>
       <div class="col node" id="k3" style="left:410px;width:250px;background:var(--b50);border:1.2px solid var(--b200);color:var(--b800)">
         <svg class="ic" style="color:var(--b600)"><use href="#i-hub"/></svg>
@@ -74,7 +74,7 @@
         <div class="ct">Workload Landing Zones</div>
         <div class="cs" style="color:var(--muted)">Supported by the regional platform connectivity profile — selected by dependencies and requirements</div>
       </div>
-      <div style="position:absolute;left:164px;width:64px;top:74px;text-align:center;font-size:8.8px;font-weight:700;color:var(--s600);line-height:1.2">ExpressRoute<br>or VPN</div>
+      <div style="position:absolute;left:164px;width:64px;top:74px;text-align:center;font-size: 9px;font-weight:700;color:var(--s600);line-height:1.2">ExpressRoute<br>or VPN</div>
       <i class="ln" data-from="k1" data-to="k2" data-s="r" data-e="l" data-k="slate" data-both></i>
       <i class="ln" data-from="k2" data-to="k3" data-s="r" data-e="l" data-k="blue"></i>
       <i class="ln" data-from="k3" data-to="k4" data-s="r" data-e="l" data-k="blue" data-both></i>
@@ -83,5 +83,6 @@
     <div class="figcap"><span class="fn">Figure 9</span><span class="ft"><b>The three decisions on one path</b> — resilient hybrid connectivity, platform capabilities, and regional platform connectivity. They are related, but each is a separate decision.</span></div>
   </div>
 
+  <div class="tip mt12"><svg><use href="#i-search"/></svg><span><b>Tip.</b> The <a href="{{WORKBOOK_URL}}">region planning workbook</a> walks through the three choices for each selected region and produces the regional design record.</span></div>
 </div>
 </section>
