@@ -13,11 +13,12 @@ function setStatus(text) {
 }
 // Save ~500 ms after the last change; nothing is written while the spec equals the last saved or restored one.
 function scheduleSave() {
-  if (PLANNER_MODE === 'presentation') return;
+  if (PLANNER_MODE) return;
   clearTimeout(session.timer);
   session.timer = setTimeout(saveNow, 500);
 }
 function saveNow() {
+  if (PLANNER_MODE) return;
   const text = JSON.stringify(spec), store = storage(), savedAt = Date.now();
   if (text === session.lastSaved) return;
   try {
@@ -28,6 +29,8 @@ function saveNow() {
 }
 // Start-up precedence: ?example=<id> > saved session > default example. Returns { spec, status }.
 function startSpec() {
+  if (PLANNER_MODE) return { spec: { format: 1, defaults: { topology: 'hub-spoke' },
+    regions: [] }, status: 'Waiting for regional workbook definitions' };
   const wanted = new URLSearchParams(location.search).get('example'), store = storage();
   if (EXAMPLES[wanted]) return { spec: clone(EXAMPLES[wanted]), status: `Example ${wanted} (from the link)` };
   const fallback = status => ({ spec: clone(EXAMPLES[DEFAULT_EXAMPLE]), status });
@@ -63,6 +66,11 @@ function undoLoad() {
   setStatus('Previous session restored');
 }
 function clearSaved() {
+  if (PLANNER_MODE === 'embedded') {
+    forgetLayers();
+    window.parent.MRP.network.syncWorkbook(true);
+    return;
+  }
   const store = storage();
   if (store) store.removeItem(STORE_KEY);
   forgetTheme();  // theme.js: the saved theme goes too (a ?theme= in the URL still applies)
@@ -273,7 +281,10 @@ function update(path = currentPath()) {
   if (currentRegion()) drawPath(path);
   applySelection();
   renderDetails(path);
-  if (window.GeoLZPlanner) window.GeoLZPlanner.syncPresentation();
+  if (window.GeoLZPlanner) {
+    window.GeoLZPlanner.refreshDefinitions();
+    window.GeoLZPlanner.syncPresentation();
+  }
 }
 function choose(region, type, dest = null) {  // dest: east-west destination region id (null = within region)
   if (type && type !== ui.type) ui.sub = null;  // sub-options belong to one path type

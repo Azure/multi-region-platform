@@ -271,6 +271,13 @@ td.cell:hover { background: var(--accent-soft); }
 }
 
 /* In the workbook, reserve the diagram's width rather than showing two competing side panels. */
+#plannerDefinitions:not([hidden]) { position: absolute; inset: 52px 12px 12px; z-index: 6;
+  overflow: auto; padding: 20px; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+.pl-network-records { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 24px; }
+.pl-network-definitions ul { padding-left: 20px; }
+.pl-network-definitions li { margin: 8px 0; overflow-wrap: anywhere; }
+.planner-presentation body.present .tools > #btnWorkbook { display: inline-flex; }
 .planner-embedded #btnTheme, .planner-presentation #btnTheme { display: none; }
 .planner-embedded body { height: 100vh; overflow: hidden; }
 .planner-embedded main { position: relative; min-height: 0; grid-template-columns: 300px minmax(0, 1fr) !important; gap: 12px; padding: 8px 16px 12px; }

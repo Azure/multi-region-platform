@@ -634,6 +634,9 @@ html.network-full, html.network-full body { overflow: hidden; }
 #planner #pl-network-body.is-full { position: fixed; inset: 0; z-index: 1000; margin: 0; padding: 8px 12px 12px; display: flex; flex-direction: column; background: var(--bg, var(--pl-surface)); }
 #planner #pl-network-body.is-full iframe { flex: 1 1 auto; height: auto; min-height: 0; }
 #planner #pl-network-print { display: none; }
+#planner .pl-network-definitions { break-before: page; }
+#planner .pl-network-records { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+#planner .pl-network-records > section { break-inside: avoid; }
 @media (max-width: 960px) { #planner .pl-network { padding: 0 16px 32px; } }
 
 #planner .pl-rec { margin-top: 20px; padding: 16px 20px 12px; border: 1px solid var(--pl-line); border-radius: 8px; }

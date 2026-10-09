@@ -49,8 +49,12 @@ Useful links: `?example=minimal-gsa` opens the Virtual WAN example, `?new=1` ope
 estate, `?theme=light|dark|auto` forces a theme.
 
 The multi-region platform site's Region planning workbook also embeds this tool below the Regional design
-map, behind **Enable Advanced Networking Design Tool**. The tool keeps its own design and autosave; workbook
-selections are not imported automatically. The workbook's print output includes the full current networking
+map, behind **Enable Advanced Networking Design Tool**. The embedded tool inherits current and selected new
+regions, effective connectivity profiles, hub links, shared-service placements and named hybrid connections.
+The **Workbook definitions** panel retains custom services and choices GeoLZ cannot model, with explicit limitations.
+Workbook definition changes refresh the diagram. Tool-only refinements remain until such a change or
+**Reset from workbook**; they never alter the workbook or the standalone tool's autosave. Use JSON Export
+to keep refinements. The workbook's print output includes the full current networking
 diagram in a light theme, preserving selected paths and visible layers but ignoring zoom and pan.
 In the workbook, the website navigation collapses, Editor and Details share one side panel (overlaying the
 diagram on narrow screens), and the theme follows the website without a separate switch. **Present** or **F**

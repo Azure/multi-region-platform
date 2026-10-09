@@ -50,6 +50,23 @@ def main():
             page.wait_for_function("document.querySelector('#pl-network-notice').hidden")
             assert page.locator('#pl-network-toggle').get_attribute("aria-expanded") == "true"
             frame = page.locator("#pl-network iframe").element_handle().content_frame()
+            inherited = frame.evaluate("spec")
+            assert [r["id"] for r in inherited["regions"]] == ["westeurope", "swedencentral"]
+            assert inherited["regions"][1]["pattern"] == "minimal-hub"
+            assert inherited["regions"][1]["remote_hub"] == "westeurope"
+            assert inherited["regions"][1]["capabilities"]["firewall"] == "local"
+            assert inherited["regions"][1]["capabilities"]["dns"] == "local"
+            circuit = inherited["hybrid_connections"][0]
+            assert circuit["peering_location"] == "Frankfurt"
+            assert set(circuit["connects_to"]) == {"westeurope", "swedencentral"}
+            assert inherited["onprem"] == [{"id": "s3", "name": "Frankfurt"}]
+            explorer.locator("#btnWorkbook").click()
+            assert explorer.locator("#plannerDefinitions").is_visible()
+            assert "Backup vaults: Local" in explorer.locator("#plannerDefinitions").text_content()
+            assert "Domain controllers: Remote from West Europe" in " ".join(
+                explorer.locator("#plannerDefinitions li").all_text_contents())
+            explorer.locator("#btnWorkbook").click()
+            assert explorer.locator("#plannerDefinitions").is_hidden()
             assert page.locator("body").evaluate("e => e.classList.contains('network-wide')")
             assert not page.locator("#side-nav").is_visible()
             page.get_by_role("button", name="Table of contents", exact=True).click()
@@ -124,7 +141,7 @@ def main():
             expected_view = frame.evaluate("`0 0 ${layout.width} ${layout.height}`")
             assert page.locator("#pl-network-print svg").get_attribute("viewBox") == expected_view
             assert original_view != expected_view
-            assert "Custom network print test" in page.locator("#pl-network-print h2").inner_text()
+            assert "Custom network print test" in page.locator("#pl-network-print > h2").inner_text()
             assert explorer.locator("html").get_attribute("data-theme") == "dark"
             assert page.locator("#pl-network-print .rname").first.evaluate(
                 "e => e.style.fill") == "rgb(36, 36, 36)"
@@ -150,7 +167,7 @@ def main():
             }""")
             page.get_by_role("button", name="Print", exact=True).click()
             assert page.evaluate("window.printCalled")
-            assert "Latest design on review" in page.locator("#pl-network-print h2").text_content()
+            assert "Latest design on review" in page.locator("#pl-network-print > h2").text_content()
             page.emulate_media(media="print")
             assert page.locator("#pl-network-print svg").is_visible()
             assert not page.locator("#pl-network iframe").is_visible()
@@ -171,6 +188,105 @@ def main():
                     assert explorer.locator(".canvas").bounding_box()["height"] >= 450
                 page.locator("#pl-network").screenshot(path=str(Path(artifacts) / f"network-{width}.png"))
             assert not errors, errors
+
+            # Workbook edits, replacement and empty state must replace stale inherited definitions.
+            inherited_page = browser.new_page(viewport={"width": 1440, "height": 1100})
+            inherited_page.on("pageerror", lambda error: errors.append(str(error)))
+            inherited_page.goto(url)
+            inherited_page.wait_for_selector('#planner[data-ready="1"]')
+            inherited_page.evaluate("""() => {
+              localStorage.setItem('geolz-explorer.spec.v1', 'standalone sentinel');
+              MRP.core.replace(JSON.parse(JSON.stringify(MRP.EXAMPLE))); MRP.kit.hooks.render();
+            }""")
+            inherited_page.locator("#pl-network-toggle").click()
+            inherited_page.wait_for_function("document.querySelector('#pl-network-notice').hidden")
+            inherited_frame = inherited_page.locator("#pl-network iframe").element_handle().content_frame()
+            assert inherited_frame.evaluate("spec.regions.length") == 2
+            assert inherited_page.evaluate("localStorage.getItem('geolz-explorer.spec.v1')") == "standalone sentinel"
+            inherited_page.evaluate("""() => {
+              const C = MRP.core, r = C.reg('swedencentral'), d = C.design(r);
+              d.profile = 'Remote Hub Connected';
+              d.ss.dnsres = {p:'Remote', from:'westeurope'};
+              d.ss.inspect = {p:'Remote', from:'westeurope'};
+              d.ss.gateway = {p:'Remote', from:'westeurope'};
+              d.hybridPath = MRP.HYBRID_PATHS[0].id;
+              d.custom.push({id:'custom1',name:'Internal registry',p:'Local',note:'Regional images'});
+              MRP.kit.hooks.commit();
+            }""")
+            state = inherited_frame.evaluate("spec")
+            assert state["regions"][1]["pattern"] == "remote-hub"
+            assert state["hybrid_connections"][0]["connects_to"] == ["westeurope"]
+            assert inherited_frame.evaluate("resolveRole(spec,spec.regions[1],'dns').owner") == "westeurope"
+            assert "Internal registry: Local - Regional images" in " ".join(
+                inherited_frame.locator("#plannerDefinitions li").all_text_contents())
+            assert inherited_page.evaluate("MRP.network.preparePrint()")
+            assert "Internal registry" in inherited_page.locator("#pl-network-print").text_content()
+
+            with inherited_page.expect_popup() as inherited_popup:
+                inherited_frame.locator("#btnPresent").click()
+            live = inherited_popup.value
+            live.wait_for_selector("body.present")
+            inherited_page.get_by_role("tab", name="Scope", exact=False).click()
+            inherited_page.locator('[data-k="meta/name"]').fill("Workbook live inheritance")
+            live.wait_for_function("spec.title === 'Workbook live inheritance'")
+            assert inherited_frame.evaluate("spec.title") == "Workbook live inheritance"
+            live.close()
+            inherited_page.get_by_role("tab", name="Regional design", exact=False).click()
+            inherited_frame.evaluate("spec.title='Temporary refinement'; onSpecChange(true)")
+            inherited_page.evaluate("MRP.kit.hooks.render()")
+            assert inherited_frame.evaluate("spec.title") == "Temporary refinement"
+            inherited_frame.locator("#btnClearSaved").click()
+            assert inherited_frame.evaluate("spec.title") == "Workbook live inheritance"
+            assert inherited_page.evaluate("localStorage.getItem('geolz-explorer.spec.v1')") == "standalone sentinel"
+
+            inherited_page.evaluate("""() => {
+              const C = MRP.core, d = C.design(C.reg('swedencentral'));
+              d.profile='Disconnected Spokes'; MRP.kit.hooks.commit();
+            }""")
+            assert inherited_frame.evaluate("spec.regions[1].pattern") == "disconnected"
+            assert inherited_frame.evaluate("spec.hybrid_connections.length") == 0
+            inherited_page.evaluate("""() => {
+              const C = MRP.core, d = C.design(C.reg('swedencentral'));
+              d.profile='Full Regional Hub'; d.topology='Azure Virtual WAN';
+              d.hybrid='Change'; d.hybridPath='SD-WAN or network virtual appliance in this region';
+              d.hybridChange='Add SD-WAN'; MRP.kit.hooks.commit();
+            }""")
+            text = inherited_frame.locator("#plannerDefinitions").text_content()
+            assert "mixed topologies are not modelled" in text
+            assert "SD-WAN/NVA hybrid paths" in text
+            assert inherited_frame.evaluate("spec.hybrid_connections.length") == 0
+            inherited_page.evaluate("""() => {
+              const C = MRP.core, d = C.design(C.reg('swedencentral'));
+              C.S.estate.topology='Azure Virtual WAN';
+              d.ss.gateway={p:'Local'}; d.hybrid='Reuse';
+              d.hybridPath='Site-to-site VPN to a gateway in this region'; MRP.kit.hooks.commit();
+            }""")
+            assert inherited_frame.evaluate("spec.defaults.topology") == "vwan"
+            assert inherited_frame.evaluate("spec.hybrid_connections.every(c => c.type === 'vpn')") is True
+            assert inherited_frame.evaluate("spec.hybrid_connections.length") == 2
+            inherited_page.evaluate("""() => {
+              const C = MRP.core;
+              C.S.current.push({id:'northeurope',hub:true});
+              const r = C.newRegion('francecentral');
+              r.outcome='Qualified'; r.selected=true; C.S.regions.push(r);
+              const d = C.design(r); d.profile='Full Regional Hub'; d.topology='Azure Virtual WAN';
+              d.hub='northeurope'; d.hybrid='Reuse';
+              d.hybridUse='ExpressRoute circuit in Frankfurt';
+              d.hybridPath='New virtual hub in this region, connected to the existing circuits (Virtual WAN)';
+              MRP.kit.hooks.commit();
+            }""")
+            multi = inherited_frame.evaluate("spec")
+            assert {r["id"] for r in multi["regions"]} == {
+                "westeurope", "northeurope", "swedencentral", "francecentral"}
+            assert next(r for r in multi["regions"] if r["id"] == "francecentral")["pattern"] == "full-hub"
+            er = next(c for c in multi["hybrid_connections"] if c["type"] == "expressroute")
+            assert set(er["connects_to"]) == {"francecentral", "northeurope"}
+            inherited_page.evaluate("MRP.core.replace({v:2}); MRP.kit.hooks.render()")
+            assert inherited_frame.evaluate("spec.regions.length") == 0
+            assert inherited_frame.evaluate("spec.hybrid_connections.length") == 0
+            assert inherited_page.evaluate("MRP.network.preparePrint()")
+            assert not errors, errors
+            inherited_page.close()
 
             # A failed tool load must not silently produce a report missing the design.
             failed = browser.new_page()

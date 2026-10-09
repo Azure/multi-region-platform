@@ -64,9 +64,28 @@ to the inline design, layers, or website theme update that window while it remai
 editor and does not overwrite the saved design. Close it with **Close presentation** or **Esc**. If the
 browser blocks popups, allow them for this site and retry.
 
-The explorer has its own browser autosave and JSON Import/Export; it does not automatically copy the workbook's
-region selections or become part of the workbook's Excel/JSON exports. Once enabled, printing Regional design
-or using **Print** in Review + export includes its latest full diagram on a separate page, in a light theme,
+The embedded explorer inherits current regions from Scope and the new regions selected for Regional design.
+It uses their effective profiles, geographic hubs, topology, regional links, shared-service placements and
+hybrid decisions. Named `ExpressRoute circuit in <peering location>` connections are attached to the
+appropriate local or remote gateways; matching Latency locations identify their on-premises sites.
+An unspecified site is explicitly labelled rather than inventing a datacenter. Site-to-site VPN choices
+are also mapped. Unselected qualification candidates are not imported.
+
+The **Workbook definitions** panel retains every shared service (including custom services),
+placement, supplying region, management method, east-west choice and hybrid change. GeoLZ has one topology
+per diagram and does not model every workbook capability or product choice. Mixed topologies, SD-WAN/NVA
+paths, incomplete hybrid definitions and other limitations are called out in the panel. Firewall and DNS
+symbols illustrate the capability, not a confirmed product selection. Current-region services are only
+inferred where a new region requires them; the workbook does not inventory all existing services.
+
+Changes to workbook networking definitions refresh the explorer, including its live presentation window.
+Tool-only refinements survive unrelated renders, hiding and reopening, but are replaced by a networking
+definition change. **Reset from workbook** discards them explicitly. They do not modify the workbook and
+are not saved to the standalone explorer's browser autosave. JSON Export can preserve a refined diagram;
+workbook Excel/JSON exports continue to contain the authoritative workbook decisions.
+
+Once enabled, printing Regional design
+or using **Print** in Review + export includes its latest full diagram and inherited records on separate pages, in a light theme,
 without the explorer's controls or editor. Zoom and pan do not crop the printed design; selected paths and
 layer visibility are retained. A normal site build publishes the explorer under `docs/tools/geolz-explorer/`.
 

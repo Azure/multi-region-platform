@@ -1,6 +1,36 @@
 // Same-origin workbook integration: print snapshots and a separate, live presentation window.
 let plannerPresentation = null;
+function workbookDefinitions() {
+  const section = document.createElement('section');
+  section.className = 'pl-network-definitions';
+  if (!spec.workbook) return section;
+  section.innerHTML = '<h2>Inherited workbook definitions</h2>' +
+    '<p>These are the workbook decisions, including services and paths beyond the diagram model.</p>' +
+    '<div class="pl-network-records">' + (spec.workbook.records || []).map(record =>
+      '<section><h3>' + esc((regionById(spec, record.id) || {}).name || record.id) + '</h3><ul>' +
+      record.lines.map(line => '<li>' + esc(line) + '</li>').join('') + '</ul></section>').join('') +
+    '</div><h3>Diagram limitations</h3><ul>' + (spec.workbook.notes || [])
+      .map(note => '<li>' + esc(note) + '</li>').join('') + '</ul>';
+  return section;
+}
 window.GeoLZPlanner = {
+  refreshDefinitions() {
+    const panel = $('plannerDefinitions');
+    if (!panel) return;
+    const key = JSON.stringify(spec.workbook);
+    if (panel.dataset.source === key) return;
+    panel.dataset.source = key;
+    panel.replaceChildren(workbookDefinitions());
+    $('btnWorkbook').hidden = !spec.workbook;
+  },
+  receiveWorkbook(next) {
+    session.undo = null;
+    edits.past = [];
+    edits.future = [];
+    editorState.sel = null;
+    loadSpec(clone(next));
+    setStatus('Inherited from the regional workbook. Tool-only edits do not change workbook decisions.');
+  },
   setHostTheme(theme) {
     applyTheme(theme);
     this.syncPresentation();
@@ -68,7 +98,8 @@ window.GeoLZPlanner = {
       diagram.style.setProperty('width', '100%');
       diagram.style.setProperty('height', 'auto');
       diagram.style.setProperty('background', '#fff');
-      return { title: $('title').textContent, subtitle: $('subtitle').textContent, diagram };
+      return { title: $('title').textContent, subtitle: $('subtitle').textContent, diagram,
+        definitions: spec.workbook ? workbookDefinitions() : null };
     } finally {
       if (theme === null) root.removeAttribute('data-theme');
       else root.setAttribute('data-theme', theme);
@@ -76,7 +107,26 @@ window.GeoLZPlanner = {
   },
 };
 
+if (PLANNER_MODE) {
+  const button = document.createElement('button'), panel = document.createElement('div');
+  button.id = 'btnWorkbook';
+  button.textContent = 'Workbook definitions';
+  button.setAttribute('aria-expanded', 'false');
+  button.setAttribute('aria-controls', 'plannerDefinitions');
+  panel.id = 'plannerDefinitions';
+  panel.hidden = true;
+  panel.setAttribute('role', 'region');
+  panel.setAttribute('aria-label', 'Inherited workbook definitions');
+  button.onclick = () => {
+    panel.hidden = !panel.hidden;
+    button.setAttribute('aria-expanded', String(!panel.hidden));
+  };
+  document.querySelector('.tools').appendChild(button);
+  document.querySelector('.canvas').appendChild(panel);
+  window.GeoLZPlanner.refreshDefinitions();
+}
 if (PLANNER_MODE === 'embedded') {
+  buttonLabel($('btnClearSaved'), 'Reset from workbook', 'Discard tool-only refinements and reload workbook definitions');
   $('btnPresent').title = 'Open the current design in a separate presentation window (F)';
   document.querySelector('footer').textContent = 'Illustrative architecture explorer - not an official Microsoft product - ' +
     'Editor and Details share one side panel; Present (F) opens a separate window. Theme follows the workbook.';

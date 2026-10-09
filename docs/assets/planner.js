@@ -105,6 +105,7 @@
     put(ess, vEssentials()); put(tabsEl, vTabs()); put(foot, vFoot());
     if (ui.tab === 'pricing') T.patchPricing(panel);
     if (ui.tab === 'latency') T.patchLatency(panel);
+    M.network.syncWorkbook();
   }
   // The checks grid sticks its header to the page when it fits, and scrolls inside its own frame when it doesn't.
   function fitGrid() {

@@ -4,7 +4,7 @@ const ROLE_KEYS = Object.keys(CATALOG.roles).filter(r => !CATALOG.roles[r].deriv
 const COMMON = ['dns_model', 'hub_routing_preference', ...ROLE_KEYS];
 const SPEC_FIELDS = {
   spec: ['format', 'title', 'customer', 'global_entry', 'defaults', 'vwans', 'onprem', 'hybrid_connections',
-    'regions', 'region_links'],
+    'regions', 'region_links', 'workbook'],
   defaults: ['topology', 'routing_intent', ...COMMON],
   region: ['id', 'name', 'pattern', 'remote_hub', 'capabilities', 'vwan', 'er_preferred', ...COMMON],
   site: ['id', 'name', 'interconnect'],
