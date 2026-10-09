@@ -127,7 +127,7 @@
     let html = '', last = null;
     f.rows.forEach((it, i) => {
       if (it.group && it.group !== last) { html += `<div class="pl-pop-g" role="presentation">${esc(it.group)}</div>`; last = it.group; }
-      html += `<div class="pl-pop-o${i === pop.active ? ' on' : ''}" role="option" id="pl-opt-${i}" aria-selected="${i === pop.active}" data-i="${i}"><span class="pl-pop-l">${esc(it.label)}</span>${it.sub ? `<span class="pl-pop-s">${esc(it.sub)}</span>` : ''}${it.tag ? `<span class="pl-tag">${esc(it.tag)}</span>` : ''}</div>`;
+      html += `<div class="pl-pop-o${i === pop.active ? ' on' : ''}" role="option" id="pl-opt-${i}" aria-selected="${i === pop.active}" data-i="${i}" data-tip="${esc(it.label)}"><span class="pl-pop-l">${esc(it.label)}</span>${it.sub ? `<span class="pl-pop-s">${esc(it.sub)}</span>` : ''}${it.tag ? `<span class="pl-tag">${esc(it.tag)}</span>` : ''}</div>`;
     });
     if (!f.rows.length) html = `<div class="pl-pop-n">${cfg.onFree && pop.q.trim() ? `Press Enter to add “${esc(pop.q.trim())}”` : 'No matches'}</div>`;
     else if (f.more) html += `<div class="pl-pop-n">Keep typing to narrow. ${f.more} more.</div>`;

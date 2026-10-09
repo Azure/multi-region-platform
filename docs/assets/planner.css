@@ -325,7 +325,7 @@
 #planner .pl-rn-ic { color: var(--pl-muted); width: 20px; height: 20px; }
 #planner .pl-idx { width: 40px; color: var(--pl-muted); font-variant-numeric: tabular-nums; }
 #planner .pl-sn { font-weight: 600; color: var(--pl-ink); white-space: nowrap; }
-#planner .pl-pr { min-width: 168px; }
+#planner .pl-pr { min-width: 360px; }
 #planner .pl-mx { min-width: 640px; }
 #planner .pl-mx tbody td { min-width: 120px; }
 #planner .pl-mx .pl-idx, #planner .pl-mx .pl-x { min-width: 0; }
@@ -379,7 +379,7 @@
 #planner .pl-cb.txt .pl-cb-in { padding: 0 28px 0 8px; }
 #planner .pl-cb.txt .pl-cb-in::placeholder { color: var(--pl-faint); }
 #planner .pl-cb-caret { position: absolute; right: 8px; top: 8px; pointer-events: none; color: var(--pl-muted); }
-#planner .pl-pr .pl-cb { min-width: 160px; max-width: 200px; }
+#planner .pl-pr .pl-cb { min-width: 340px; max-width: 520px; }
 #planner .pl-pl .pl-cb { min-width: 168px; }
 #planner .pl-add { margin-bottom: 16px; }
 #planner .pl-pop { position: fixed; z-index: 70; overflow-y: auto; padding: 4px; border: 1px solid var(--pl-line); border-radius: 4px; background: var(--pl-surface); box-shadow: var(--pl-pop); }

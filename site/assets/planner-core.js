@@ -94,7 +94,11 @@
   const bit = (hex, i) => i >= 0 && ((parseInt((hex || '')[i >> 2] || '0', 16) >> (i & 3)) & 1) === 1;
   const getJson = async url => { const r = await fetch(url, { cache: 'no-cache' }); if (!r.ok) throw new Error(url + ' ' + r.status); return r.json(); };
 
-  function useRegions(list) {
+  // Restricted regions (access limited to specific customer scenarios) are not offered, and a region paired only with one of them counts as nonpaired.
+  function useRegions(all) {
+    const hidden = new Set(all.filter(r => r.access === 'restricted').map(r => r.id));
+    const list = all.filter(r => !hidden.has(r.id)).map(r => hidden.has(r.pair) ? { ...r, pair: null } : r);
+    D.hidden = new Set([...(D.hidden || []), ...hidden]);
     D.regions = list.slice().sort((a, b) => a.name.localeCompare(b.name));
     D.byId = Object.fromEntries(list.map(r => [r.id, r]));
   }
@@ -113,6 +117,11 @@
         D.svc = Object.fromEntries(c.services.map(s => [s.name, s]));
         D.hasCatalog = true;
       } catch (e) { D.hasCatalog = false; }
+    }
+    if (D.hidden && D.hidden.size) {
+      S.current = S.current.filter(c => !D.hidden.has(c.id));
+      S.regions = S.regions.filter(r => !D.hidden.has(r.id));
+      if (D.hidden.has(S.baseline)) S.baseline = S.current[0] ? S.current[0].id : '';
     }
     await loadLatency();
   }

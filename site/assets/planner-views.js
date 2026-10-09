@@ -137,8 +137,9 @@
   function productCell(s) {
     const prods = D.products && D.products.services[s.service];
     if (!D.hasCatalog || !prods) return `<span class="pl-muted">All products</span>`;
-    return K.combo('prod-' + s.id, { mode: 'value', clearable: true, ph: 'All products', label: 'Product or SKU family of ' + s.service, display: () => s.product || '',
+    const cb = K.combo('prod-' + s.id, { mode: 'value', clearable: true, ph: 'Select Product/SKU', label: 'Product or SKU family of ' + s.service, display: () => s.product || '',
       items: () => Object.keys(prods).sort().map(p => ({ value: p, label: p })), onPick: it => { s.product = it.value; }, onClear: () => { s.product = ''; K.hooks.commit(); } });
+    return s.product ? `<span class="pl-prtip" data-tip="${esc(s.product)}">${cb}</span>` : cb;
   }
   const TILE_ICON = { ok: 'success', warn: 'warning', bad: 'error' };
   function svcTiles() {
@@ -165,7 +166,8 @@
       cs.map(x => `<th scope="col" class="${x.current ? 'is-cur' : ''}">${esc(C.rname(x.id))}${x.current ? '<span class="pl-cap">Current region</span>' : ''}</th>`).join('') + `<th scope="col" aria-label="Remove"></th></tr></thead><tbody>${rows}</tbody></table>`, { label: 'Service availability by region' })
       : K.empty('list', 'No services listed yet. Add the services the workloads expect to use.');
     const date = snapshotDate();
-    return K.head('Services', 'The services the workloads expect to use, and where each one is available.') +
+    const note = K.mb('info', 'The lists of available services, products, SKUs, models, and features need fuller validation directly in your own tenants and subscriptions. Work with your Microsoft account team or Microsoft Support to confirm them with confidence. The data is updated based on the <a href="https://azure.microsoft.com/explore/global-infrastructure/products-by-region/table" target="_blank" rel="noopener">Products available by region</a> page.');
+    return K.head('Services', 'The services the workloads expect to use, and where each one is available.') + note +
       snapshotBar() +
       `<div class="pl-bar">${add}${S.services.length ? '' : K.btn({ act: 'add-starter', label: 'Add common platform services', kind: 'secondary' })}<span class="pl-count">${S.services.length} of ${MAX_SERVICES}</span>${full ? '<span class="pl-cap">20 of 20. Remove one to add another.</span>' : ''}</div>` +
       svcTiles() + (cs.length ? '' : '<p class="pl-muted">Add regions in Scope to see a column for each one.</p>') + table +
