@@ -104,9 +104,24 @@ def main():
                 f'<!-- extracted from whitepaper #{fid}; regenerate with site/tools/extract_figures.py -->\n'
                 f'<div class="wpf" data-w="{w}" data-h="{h}" style="width:{w}px">{html}</div>\n')
             box = el.bounding_box(); pad = 16
-            # hide neighbouring blocks so nothing next to the figure leaks into the padding of the PNG
-            el.evaluate("f => { window.__hid = []; for (const s of f.parentElement.children) if (s !== f) { window.__hid.push([s, s.style.visibility]); s.style.visibility = 'hidden'; } }")
-            pg.screenshot(path=os.path.join(MEDIA, name + ".png"), clip={"x": box["x"] - pad, "y": box["y"] - pad, "width": box["width"] + 2 * pad, "height": box["height"] + 2 * pad})
+            el.evaluate("""f => {
+                window.__hid = [];
+                for (let n = f; n.parentElement && n !== document.body; n = n.parentElement)
+                    for (const s of n.parentElement.children)
+                        if (s !== n && !['STYLE', 'SCRIPT'].includes(s.tagName) && !(s.parentElement === document.body && s.tagName.toLowerCase() === 'svg')) {
+                            window.__hid.push([s, s.style.visibility]); s.style.visibility = 'hidden';
+                        }
+            }""")
+            png = pg.screenshot(clip={"x": box["x"] - pad, "y": box["y"] - pad, "width": box["width"] + 2 * pad, "height": box["height"] + 2 * pad})
+            image_path = os.path.join(MEDIA, name + ".png")
+            if os.path.isfile(image_path):
+                with open(image_path, "rb") as image:
+                    unchanged = image.read() == png
+            else:
+                unchanged = False
+            if not unchanged:
+                with open(image_path, "wb") as image:
+                    image.write(png)
             el.evaluate("() => { for (const [s, v] of window.__hid) s.style.visibility = v; }")
             manifest[name] = {"w": w, "h": h, "source": fid}
             print(f"{name:42s} {w}x{h}")
