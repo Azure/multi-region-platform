@@ -2,6 +2,8 @@
 
 Page-accurate HTML/CSS source for the whitepaper PDF (US Letter landscape, 57 pages; the executive brief is 14 pages from `exec/pages`).
 
+See [Building and publishing](../guides/building.md#generate-pdfs-directly) for prerequisites, both PDF editions, output locations, and publication. See [Authoring](../guides/authoring.md#whitepaper-page-to-article-mapping) for the article-to-page mapping and cross-format updates.
+
 - `pages/NN-*.html` — one file per page; edit text and diagrams here.
 - `styles.css` — design tokens (colors, type scale, components).
 - `layout.js` — running heads, folios, contents page numbers, and diagram connectors
