@@ -26,24 +26,40 @@ FIGURES = ["fig1", "xfGeo", "xfConn", "fig14", "xfCost", "fig15", "figCity", "fi
 # Extra CSS per figure, applied before the screenshot. The comparison block of xfAgility
 # (today / with this model) is a table in brief.md, so the picture shows the rest of the figure.
 FIGURE_CSS = {
-    "xfAgility": "#xfAgility .ag2 { display: none !important; } #xfAgility > .cap { margin-top: 0 !important; }",
+    "xfGeo": "#xfGeo { width: 660px !important; max-width: 660px !important; } #xfGeo .geo { width: 100% !important; } #xfGeo .geo .regs { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }",
+    "fig14": "#fig14 { width: 660px !important; max-width: 660px !important; } #fig14 .sp4 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }",
+    "fig5": """#fig5 { width: 660px !important; max-width: 660px !important; }
+        #fig5 .f5 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+        #fig5 .dc .bd { padding: 8px 9px 0 !important; }
+        #fig5 .dt { font-size: 11px !important; }
+        #fig5 .dq { font-size: 9.5px !important; line-height: 1.2 !important; margin: 4px 0 !important; min-height: 0 !important; }
+        #fig5 ul { font-size: 8.7px !important; line-height: 1.15 !important; padding: 0 !important; }
+        #fig5 li { margin-bottom: 1px !important; }
+        #fig5 .dd { margin-top: 6px !important; min-height: 0 !important; padding: 5px 9px !important; }
+        #fig5 .dd .cap { font-size: 8px !important; }
+        #fig5 .dd p { font-size: 9px !important; line-height: 1.2 !important; }
+        #fig5 .two { display: block !important; }
+        #fig5 .two > div + div { border-left: 0 !important; padding-left: 0 !important; margin-left: 0 !important; }
+        #fig5 .two > div:first-child ul { display: grid !important; grid-template-columns: 1fr 1fr !important; column-gap: 8px !important; }
+        #fig5 .two > div:nth-child(2) { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 4px !important; margin-top: 4px !important; }
+        #fig5 .two .ch { grid-column: 1 / -1 !important; font-size: 8px !important; margin-bottom: 2px !important; }
+        #fig5 .two .sub { border-top: 0 !important; padding: 0 !important; margin: 0 !important; }
+        #fig5 .two .sub b, #fig5 .two .sub span { font-size: 8.7px !important; line-height: 1.15 !important; }
+        #fig5 .fout { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; margin-top: 6px !important; gap: 5px !important; padding: 7px !important; }
+        #fig5 .fout > :first-child { grid-column: 1 / -1 !important; }
+        #fig5 .fout .oc { padding: 5px 6px !important; gap: 5px !important; }
+        #fig5 .fout .oc b { font-size: 9px !important; }
+        #fig5 .fout .oc span { font-size: 8.2px !important; line-height: 1.15 !important; }""",
+    "xfAgility": "#xfAgility { width: 660px !important; max-width: 660px !important; } #xfAgility .ag2 { display: none !important; } #xfAgility .trg { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; } #xfAgility .trg .ar { display: none !important; } #xfAgility .trg .out { grid-column: 1 / -1; } #xfAgility > .cap { margin-top: 0 !important; }",
 }
 
 # Wording alignment: phrases on the pages that are being replaced, old -> new. Applied to the
 # page text before comparing, so brief.md can carry the new wording now.
-ALIGN = {
-    "right-sizing regional platform connectivity": "selecting the most efficient regional platform connectivity",
-    "Right-size regional connectivity": "Choose the most efficient regional connectivity",
-    "selective connectivity — right-sized without a full hub": "selective connectivity, without a full hub",
-    "lighter patterns": "more efficient patterns",
-    "lightest pattern": "most efficient pattern",
-    "Lightweight Workload Landing Zone archetypes": "Workload Landing Zone archetypes",
-}
+ALIGN = {}
 
 # Wording that must not appear in brief.md.
 RETIRED = ["right-siz", "lightest", "lighter", "lightweight", "dimension"]
 
-PAD = 16  # CSS px of white around each figure
 MIN_WORDS = 3  # shorter fragments are not compared
 
 
@@ -61,7 +77,25 @@ def capture(out_dir):
     if not source.exists():
         raise SystemExit(f"build.py exec did not write {source}")
     try:
-        return _capture_figures(source, out)
+        result = _capture_figures(source, out)
+    finally:
+        if not existed:
+            source.unlink(missing_ok=True)
+    result.update(capture_pdf_city(out))
+    return result
+
+
+def capture_pdf_city(out_dir):
+    """Build the full whitepaper and capture its city map and legend at Word text width."""
+    out = pathlib.Path(out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    source = WP / "whitepaper.html"
+    existed = source.exists()
+    subprocess.run([sys.executable, "-B", "build.py", "full"], cwd=WP, check=True, stdout=subprocess.DEVNULL)
+    if not source.exists():
+        raise SystemExit(f"build.py full did not write {source}")
+    try:
+        return _capture_city(source, out)
     finally:
         if not existed:
             source.unlink(missing_ok=True)
@@ -104,19 +138,71 @@ def _capture_figures(source, out):
                 }""",
                 fid,
             )
-            box = el.evaluate(
-                """f => { const r = f.getBoundingClientRect();
-                         return {x: r.left + window.scrollX, y: r.top + window.scrollY, width: r.width, height: r.height}; }"""
-            )
             target = out / f"{fid}.png"
-            page.screenshot(
-                path=str(target),
-                full_page=True,
-                clip={"x": box["x"] - PAD, "y": box["y"] - PAD, "width": box["width"] + 2 * PAD, "height": box["height"] + 2 * PAD},
-            )
+            el.screenshot(path=str(target))
             page.evaluate("() => { for (const [s, v] of window.__hid) s.style.visibility = v; }")
+            size = el.evaluate("f => { const r = f.getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height)]; }")
             result[fid] = str(target)
-            print(f"{fid:10s} {round(box['width'])}x{round(box['height'])}  {target}")
+            print(f"{fid:10s} {size[0]}x{size[1]}  {target}")
+        browser.close()
+    return result
+
+
+def _capture_city(source, out):
+    """Capture the PDF city map and its legend separately at the full Word text width."""
+    from playwright.sync_api import sync_playwright
+
+    city_css = """
+        #figCity .cty { display: block !important; width: 660px !important; }
+        #figCity .cty > div:first-child { width: 660px !important; }
+        #figCity .cty-map { width: 660px !important; max-width: 660px !important; margin: 0 !important; }
+        #figCity .cty-map svg { display: block !important; width: 100% !important; height: auto !important; }
+        #figCity .cty-lg { display: block !important; width: 660px !important; max-width: 660px !important;
+            column-count: 2 !important; column-gap: 24px !important; }
+        #figCity .cty-lg h4, #figCity .cty-lg .r, #figCity .cty-lg .sv, #figCity .cty-lg .svn {
+            break-inside: avoid !important; page-break-inside: avoid !important;
+        }
+    """
+    result = {}
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page(viewport={"width": 1100, "height": 1200}, device_scale_factor=2)
+        page.emulate_media(media="print")
+        page.goto(source.as_uri())
+        page.wait_for_selector("body[data-ready='1']", timeout=30000)
+        page.add_style_tag(content="html, body { background: #fff !important; }" + city_css)
+        figure = page.query_selector("#figCity")
+        if figure is None:
+            browser.close()
+            raise SystemExit("City figure #figCity was not found in the assembled whitepaper.")
+
+        for selector, name in (("#figCity .cty-map", "figCity.png"), ("#figCity .cty-lg", "figCity-legend.png")):
+            element = page.query_selector(selector)
+            if element is None:
+                browser.close()
+                raise SystemExit(f"City figure capture failed: expected {selector} in the assembled whitepaper.")
+            page.evaluate(
+                """(selector) => {
+                    window.__hid = [];
+                    let node = document.querySelector(selector);
+                    while (node && node.parentElement && node !== document.body) {
+                        for (const sibling of node.parentElement.children) {
+                            if (sibling !== node) {
+                                window.__hid.push([sibling, sibling.style.visibility]);
+                                sibling.style.visibility = 'hidden';
+                            }
+                        }
+                        node = node.parentElement;
+                    }
+                }""",
+                selector,
+            )
+            target = out / name
+            element.screenshot(path=str(target))
+            page.evaluate("() => { for (const [s, v] of window.__hid) s.style.visibility = v; }")
+            size = element.evaluate("f => { const r = f.getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height)]; }")
+            result[name] = str(target)
+            print(f"{name:10s} {size[0]}x{size[1]}  {target}")
         browser.close()
     return result
 

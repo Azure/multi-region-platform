@@ -35,9 +35,9 @@
 
 Adaptability becomes a **deliberate architectural property** rather than a reaction to the next country-level power, regulatory, or supply-chain constraint.
 
-> Standardize the operating model, not necessarily the regional footprint.
+**Takeaway:** Standardize the operating model, not necessarily the regional footprint.
 
-> The goal is not to select the perfect two regions. **It is to make additional regions significantly easier to adopt when business and workload requirements justify them.**
+**Takeaway:** The goal is not to select the perfect two regions. **It is to make additional regions significantly easier to adopt when business and workload requirements justify them.**
 
 <!-- eyebrow: 01 · Reframe the objective -->
 # An operating model that keeps working as the environment changes
@@ -63,7 +63,7 @@ At that level, policies, security controls, operational rigor, and compliance re
 
 *A geographic landing zone. The operating model is standardized across the geography; regions underneath are adaptable deployment locations with only the capabilities their workloads need. Region names and roles are illustrative.*
 
-> **Standardize the operating model,** not necessarily the regional footprint.
+**Takeaway:** **Standardize the operating model,** not necessarily the regional footprint.
 
 <!-- eyebrow: 03 · Decouple connectivity from individual regions -->
 # Plan hybrid connectivity once, for the geography
@@ -161,9 +161,9 @@ Other regions are consumed through more efficient patterns appropriate to each w
    :::column-end:::
 :::row-end:::
 
-Chips show the typical connectivity profiles, most common first; actual dependencies and requirements decide.
+The profile labels list typical connectivity profiles, most common first; actual dependencies and requirements decide.
 
-> Region-agnostic does not mean region-random.
+**Takeaway:** Region-agnostic does not mean region-random.
 
 ## Governance moves up a level
 
@@ -171,13 +171,13 @@ Governance is not removed; it moves into policies that do not depend on particul
 
 <!-- eyebrow: The model as a city -->
 # The platform is the city. Workloads are the people and businesses that live in it.
-<!-- standfirst: The city builds neighborhoods, services, roads, transit, and laws once. A family settles in one neighborhood; a bank spreads across several. Neither builds a new city. -->
+<!-- standfirst: A city builds its neighborhoods, services, roads, transit, and laws once. Neither a family nor a bank builds a second city. -->
 
 :::image type="content" source="./brief-media/figCity.png" alt-text="Isometric city used as an analogy for a multi-region platform. An office campus outside the city connects to Downtown through express toll lanes with two interchanges. Downtown has every service locally. Riverside has a fire station and a clinic. Hillcrest and Midtown have homes only and reach Downtown's services by transit. Lakeside is an off-grid island with no roads or transit. A new plot is zoned but not yet built. Numbered pins mark where four families live, and bank badges mark two branches and a backup operations center. A legend beside the map explains each icon." lightbox="./brief-media/figCity.png":::
 
 *The platform as a city. Each neighborhood is a region with its own connectivity profile. The legend explains each icon on the map.*
 
-<!-- eyebrow: 06 · Governance moves up a level · Qualify regions -->
+<!-- eyebrow: 06 · Qualify regions -->
 # Regional qualification
 <!-- standfirst: Which Azure regions should be prepared to support workload requirements — not whether an individual workload should use multiple regions. -->
 
@@ -249,4 +249,4 @@ That means separating what must stay consistent — governance, security, compli
 
 Together: an architecture that can evolve as Europe evolves.
 
-> The goal is not to select the perfect two regions. **It is to make additional regions significantly easier to adopt when business and workload requirements justify them.**
+**Takeaway:** The goal is not to select the perfect two regions. **It is to make additional regions significantly easier to adopt when business and workload requirements justify them.**

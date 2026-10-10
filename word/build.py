@@ -60,10 +60,8 @@ FONT_NAME = "Aptos"
 PAGE_W, PAGE_H, MARGIN = 12240, 15840, 1080              # twips: Letter, 0.75 in margins
 TEXT_W = 10080                                            # twips (7.0 in)
 TEXT_W_IN = TEXT_W / 1440
-LONG_ARTICLE = 3800                                       # characters; longer articles start on a new page
-FIGURE_SCALE = 0.69                                       # no figure larger than this share of its native size: the full-width
-                                                          # figures (10.1 in native) reach it at 7 in, so every figure reads at one size
-MAX_FIGURE_H = 4.75                                       # inches
+LONG_ARTICLE = 1700                                       # shorter chapters may share a page after a clear divider
+MAX_FIGURE_H = 5.6                                        # inches
 EMU = 914400
 ALERTS = {"NOTE": "Note", "TIP": "Tip", "IMPORTANT": "Important", "WARNING": "Warning", "CAUTION": "Warning"}
 CALLOUTS = ("Question", "Decision", "Takeaway")
@@ -232,10 +230,18 @@ class Images:
 
     def markup(self, src, caption, alt):
         """Pandoc image markup: never wider than the text, never upscaled; alt text carried into the picture description."""
+        caption = re.sub(r"\s*Use the download button for the complete picture, including both workloads\.\s*$", "", caption, flags=re.I)
+        if os.path.basename(src) in ("figCity.png", "city-analogy.png") and "figCity-legend.png" in self.extra:
+            city = self._markup_one("figCity.png", "", alt)
+            legend = self._markup_one("figCity-legend.png", caption, "Legend for the city analogy, explaining the places, routes, laws, and shared services on the map.")
+            return city + legend
+        return self._markup_one(src, caption, alt)
+
+    def _markup_one(self, src, caption, alt):
         rel, path, scale = self.find(src)
         with Image.open(path) as im:
             native = im.size[0] / scale / 96, im.size[1] / scale / 96
-        width = min(native[0] * FIGURE_SCALE, TEXT_W_IN, MAX_FIGURE_H * native[0] / native[1])
+        width = min(native[0], TEXT_W_IN, MAX_FIGURE_H * native[0] / native[1])
         attrs = "width=%.2fin" % width
         if alt:
             attrs += ' alt="%s"' % alt.replace("\\", "\\\\").replace('"', '\\"')
@@ -297,7 +303,9 @@ def convert_alerts(s):
         body = [l for l in lines[1:]]
         label = f"**{style}:**"
         if body and not re.match(r"^\s*([-*+]|\d+\.)\s", body[0]) and body[0].strip():
-            body[0] = f"{label} {body[0]}"
+            bold_lead = style == "Tip" and re.match(r"^\s*\*\*[^*]+:\*\*", body[0])
+            if not bold_lead:
+                body[0] = f"{label} {body[0]}"
         else:
             body = [label, ""] + body
         return f'\n::: {{custom-style="{style}"}}\n' + "\n".join(body) + "\n:::\n"
@@ -426,24 +434,30 @@ def contents_markdown(groups, sections, brief):
 
     def para(style, text):
         out.append(f'::: {{custom-style="{style}"}}\n{text}\n:::\n')
+    para("ResourceLinks", f"[Website]({SITE_URL})  ·  [Region planning workbook]({WORKBOOK_URL})")
     if brief:
         for sec in sections:
             title = re.match(r"^# (.+)$", sec.body, flags=re.M).group(1)
             para("TOC Entry", f"[{title}](#art-{sec.key})")
+        para("TOC Entry", "[Links](#art-links)")
         return "\n".join(out)
     for g in groups:
         if g.solo:
             para("TOC Group", f"[{g.label}](#art-{g.entries[0].href[:-3]})")
             continue
-        para("TOC Group", g.label)
+        para("TOC Group", f"[{g.label}](#art-{g.entries[0].href[:-3]})")
         for e in g.entries:
             para("TOC Entry", f"[{e.name}](#art-{e.href[:-3]})")
+    para("TOC Entry", "[Links](#art-links)")
     return "\n".join(out)
 
 
-def links_markdown():
+def links_markdown(brief=False):
     """The last page: where to find the site and the workbook, then the legal notice."""
-    return ("# Links {#links}\n\n"
+    intro = ("This executive brief summarizes the Multi-Region Platform Whitepaper. The full paper contains detailed qualification checks, profile criteria, deployment guidance, placement steps, and service-level resiliency guidance.\n\n"
+             if brief else "")
+    return ('::: {custom-style="Eyebrow New Page"}\nResources\n:::\n\n'
+            "# Links {#art-links}\n\n" + intro +
             f"**Website:** [{SITE_URL}]({SITE_URL})\n\n"
             f"**Region planning workbook:** [{WORKBOOK_URL}]({WORKBOOK_URL})\n\n"
             f'::: {{custom-style="Legal"}}\n{LEGAL}\n:::\n')
@@ -492,8 +506,11 @@ def cover_xml(edition, art_size):
     cx = int(PAGE_W / 1440 * EMU)
     cy = int(cx * art_size[1] / art_size[0])
     art_y = int(PAGE_H / 1440 * EMU) - cy
+    second_tag = "Executive brief" if edition.key == "brief" else COVER_TAGS[1]
+    subtitle = ("A leadership summary: how to make additional Azure regions governed options — adopted when business and workload requirements justify them, without duplicating the platform in every region."
+                if edition.key == "brief" else edition.subtitle)
     tags = run_xml(" " + COVER_TAGS[0].upper() + " ", size=15, bold=True, color=BLUE_D, track=24, fill=SOFT) + run_xml("  ") + \
-        run_xml(" " + COVER_TAGS[1].upper() + " ", size=15, bold=True, color=TEAL_D, track=24, fill=TEAL_SOFT)
+        run_xml(" " + second_tag.upper() + " ", size=15, bold=True, color=TEAL_D, track=24, fill=TEAL_SOFT)
     sect = (f'<w:sectPr><w:type w:val="nextPage"/><w:pgSz w:w="{PAGE_W}" w:h="{PAGE_H}"/>'
             f'<w:pgMar w:top="{MARGIN}" w:right="{MARGIN}" w:bottom="{MARGIN}" w:left="{MARGIN}" w:header="540" w:footer="540" w:gutter="0"/></w:sectPr>')
     return (
@@ -503,7 +520,7 @@ def cover_xml(edition, art_size):
         f'{run_xml(" Microsoft", size=30, color=MUTED, raise_=8)}</w:p>'
         f'<w:p><w:pPr><w:spacing w:before="1500" w:after="260"/></w:pPr>{tags}</w:p>'
         f'<w:p><w:pPr><w:pStyle w:val="Title"/></w:pPr>{cover_title_runs(edition.accent)}</w:p>'
-        f'<w:p><w:pPr><w:pStyle w:val="Subtitle"/></w:pPr>{run_xml(edition.subtitle, color=edition.accent)}</w:p>'
+        f'<w:p><w:pPr><w:pStyle w:val="Subtitle"/></w:pPr>{run_xml(subtitle, color=edition.accent)}</w:p>'
         f'<w:p><w:pPr><w:pStyle w:val="Date"/></w:pPr>{run_xml(EDITION)}</w:p>'
         f'<w:p><w:pPr>{sect}</w:pPr></w:p>')
 
@@ -533,9 +550,9 @@ def cover_images(edition, work):
 
 
 # ================================================================= styles (reference document)
-def ppr(keep=False, brk=False, border="", shade=None, tabs="", before=0, after=100, line=None, left=0, right=0, hanging=0, jc=None, outline=None):
+def ppr(keep=False, keep_lines=False, brk=False, border="", shade=None, tabs="", before=0, after=100, line=None, left=0, right=0, hanging=0, jc=None, outline=None):
     """Paragraph properties in schema order."""
-    x = "<w:keepNext/><w:keepLines/>" if keep else ""
+    x = "<w:keepNext/><w:keepLines/>" if keep else "<w:keepLines/>" if keep_lines else ""
     x += "<w:pageBreakBefore/>" if brk else ""
     x += f"<w:pBdr>{border}</w:pBdr>" if border else ""
     x += f'<w:shd w:val="clear" w:color="auto" w:fill="{shade}"/>' if shade else ""
@@ -573,7 +590,8 @@ def style(sid, name, p="", r="", based="Normal", typ="paragraph", nxt="BodyText"
 
 def callout(sid, name, rule, fill, size=None, color=TEXT, rule_sz=18, before=140, after=140):
     """A paragraph box: a left rule and a tinted fill."""
-    return style(sid, name, ppr(border=border("left", rule, rule_sz, 8), shade=fill, before=before, after=after, line=288, left=160, right=120),
+    borders = border("left", rule, rule_sz, 8) + '<w:right w:val="nil" w:space="8"/>'
+    return style(sid, name, ppr(border=borders, shade=fill, before=before, after=after, line=288),
                  rpr(size=size, color=color), based="BodyText")
 
 
@@ -594,23 +612,24 @@ STYLES = [
     style("Heading2", "heading 2", ppr(keep=True, before=280, after=80, line=240, outline=1), rpr(size=26, bold=True, color=BLUE_D)),
     style("Heading3", "heading 3", ppr(keep=True, before=200, after=60, line=240, outline=2), rpr(size=21, bold=True, color=SLATE)),
     style("Heading4", "heading 4", ppr(keep=True, before=160, after=40, line=240, outline=3), rpr(size=19, bold=True, color=MUTED)),
-    style("Eyebrow", "Eyebrow", ppr(keep=True, before=220, after=40), rpr(size=16, bold=True, color=BLUE, caps=True, track=24), nxt="Heading1"),
+    style("Eyebrow", "Eyebrow", ppr(keep=True, border=border("bottom", LINE, 4, 3), before=650, after=60), rpr(size=16, bold=True, color=BLUE, caps=True, track=24), nxt="Heading1"),
     style("EyebrowNewPage", "Eyebrow New Page", ppr(keep=True, brk=True, before=0, after=40), rpr(size=16, bold=True, color=BLUE, caps=True, track=24), based="Eyebrow", nxt="Heading1"),
     style("Standfirst", "Standfirst", ppr(keep=True, before=0, after=180, line=288), rpr(size=22, color=MUTED), based="BodyText"),
     style("BlockText", "Block Text", ppr(border=border("left", LINE, 18, 8), before=100, after=140, left=160, right=120), rpr(color=MUTED), based="BodyText"),
     callout("Question", "Question", BLUE, None, size=24, color=BLUE_D, rule_sz=24, before=200, after=140),
     callout("Decision", "Decision", BLUE, SOFT, color=INK),
     callout("Takeaway", "Takeaway", TEAL, TEAL_SOFT, color=INK),
-    style("Attribute", "Attribute", ppr(border=border("left", LINE, 12, 8), before=40, after=80, line=288, left=160), based="BodyText"),
+    style("Attribute", "Attribute", ppr(border=border("left", LINE, 12, 8), before=40, after=80, line=288), based="BodyText"),
     callout("Note", "Note", BLUE, SOFT),
     callout("Tip", "Tip", GREEN, GREEN_SOFT),
     callout("Important", "Important", AMBER, AMBER_SOFT),
     callout("Warning", "Warning", WARM, WARM_SOFT),
-    style("ImageCaption", "Image Caption", ppr(before=60, after=140, jc="center"), rpr(size=16, italic=True, color=MUTED), based="BodyText"),
+    style("ImageCaption", "Image Caption", ppr(keep_lines=True, before=60, after=140, jc="center"), rpr(size=16, italic=True, color=MUTED), based="BodyText"),
     style("CaptionedFigure", "Captioned Figure", ppr(keep=True, before=100, after=0, jc="center"), based="BodyText"),
-    style("Figure", "Figure", ppr(before=160, after=120, jc="center"), based="BodyText"),
-    style("TOCGroup", "TOC Group", ppr(keep=True, border=border("bottom", LINE, 4, 2), before=180, after=40), rpr(size=19, bold=True, color=INK), based="BodyText", nxt="TOCEntry"),
-    style("TOCEntry", "TOC Entry", ppr(before=0, after=20, left=240), rpr(size=18), based="BodyText"),
+    style("Figure", "Figure", ppr(keep=True, before=160, after=140, jc="center"), based="BodyText"),
+    style("TOCGroup", "TOC Group", ppr(keep=True, border=border("bottom", LINE, 4, 2), tabs=f'<w:tab w:val="right" w:leader="dot" w:pos="{TEXT_W}"/>', before=180, after=40), rpr(size=19, bold=True, color=INK), based="BodyText", nxt="TOCEntry"),
+    style("TOCEntry", "TOC Entry", ppr(tabs=f'<w:tab w:val="right" w:leader="dot" w:pos="{TEXT_W}"/>', before=0, after=20, left=240), rpr(size=18), based="BodyText"),
+    style("ResourceLinks", "Resource Links", ppr(before=0, after=140), rpr(size=16, color=FAINT), based="BodyText"),
     style("Legal", "Legal", ppr(border=border("top", LINE, 4, 8), before=600, after=0, line=252), rpr(size=15, color=FAINT), based="BodyText"),
     style("Spacer", "Spacer", ppr(before=0, after=0, line=120), rpr(size=8), based="Normal"),
     style("Label", "Label", r=rpr(bold=True, color=BLUE_D), based="DefaultParagraphFont", typ="character"),
@@ -657,9 +676,10 @@ def write_zip(path, parts):
 
 
 # ================================================================= post-pass on the package
-def field_xml(instr, result, rpr_xml):
+def field_xml(instr, result, rpr_xml, dirty=False):
     """A complex field with a cached result."""
-    return (f'<w:r>{rpr_xml}<w:fldChar w:fldCharType="begin"/></w:r><w:r>{rpr_xml}<w:instrText xml:space="preserve"> {instr} </w:instrText></w:r>'
+    mark = ' w:dirty="true"' if dirty else ""
+    return (f'<w:r>{rpr_xml}<w:fldChar w:fldCharType="begin"{mark}/></w:r><w:r>{rpr_xml}<w:instrText xml:space="preserve"> {instr} </w:instrText></w:r>'
             f'<w:r>{rpr_xml}<w:fldChar w:fldCharType="separate"/></w:r><w:r>{rpr_xml}<w:t>{escape(result)}</w:t></w:r><w:r>{rpr_xml}<w:fldChar w:fldCharType="end"/></w:r>')
 
 
@@ -799,27 +819,55 @@ def emphasize(cell, color=None):
 def finish_tables(root):
     """Data tables: tinted header row, bold first column, table text style, rows that never split across pages, no single-row pages."""
     for tbl in root.iter(q("tbl")):
-        if tbl.find("w:tblPr/w:tblLayout", NS) is not None:           # a card grid
+        if tbl.find("w:tblPr/w:tblLayout", NS) is not None and tbl.find("w:tblPr/w:tblStyle", NS) is None:
+            # Card grids have a fixed layout but no data-table style.
             continue
         for p in tbl.iter(q("p")):
             st = p.find("w:pPr/w:pStyle", NS)
             if st is not None and st.get(q("val")) in ("Compact", "BodyText", "FirstParagraph"):
                 st.set(q("val"), "TableText")
         rows = tbl.findall("w:tr", NS)
-        for tr in rows[:2] + rows[-2:-1]:                           # a page never starts or ends with a single row of a table
+        header = [" ".join("".join(tc.itertext()).split()) for tc in rows[0].findall("w:tc", NS)] if rows else []
+        if header[:2] == ["Today", "With this model"]:
+            widths = [TEXT_W // 2, TEXT_W - TEXT_W // 2]
+        elif header[:1] == ["Scenario"] and len(header) == 5:
+            widths = [1400, 1700, 1700, 3100, TEXT_W - 7900]
+        elif header == ["Component", "Make it local when", "Keep it remote when", "Guidance"]:
+            widths = [1600, 2100, 3900, TEXT_W - 7600]
+        elif header == ["Area", "What to do", "Guidance"]:
+            old = [int(c.get(q("w"), "1")) for c in tbl.findall("w:tblGrid/w:gridCol", NS)]
+            remain, old_rest = TEXT_W - 1600, sum(old[1:]) or 1
+            widths = [1600] + [round(remain * x / old_rest) for x in old[1:]]
+            widths[-1] += TEXT_W - sum(widths)
+        else:
+            widths = []
+        if widths:
+            grid = tbl.find("w:tblGrid", NS)
+            for col, width in zip(grid.findall("w:gridCol", NS), widths):
+                col.set(q("w"), str(width))
+            for tr in rows:
+                for tc, width in zip(tr.findall("w:tc", NS), widths):
+                    tcw = tc.find("w:tcPr/w:tcW", NS)
+                    if tcw is not None:
+                        tcw.set(q("w"), str(width))
+        keep_rows = rows[:-1] if len(rows) <= 6 else rows[:2] + rows[-2:-1]
+        for tr in keep_rows:
             for p in tr.iter(q("p")):
-                ppr_ = p.find("w:pPr", NS)
-                if ppr_ is not None and ppr_.find("w:keepNext", NS) is None:
-                    ppr_.insert(1 if ppr_.find("w:pStyle", NS) is not None else 0, el("keepNext"))
+                _set_ppr_child(_ppr(p), "keepNext")
         for tr in rows:
-            header = tr.find("w:trPr/w:tblHeader", NS) is not None
+            is_header = tr.find("w:trPr/w:tblHeader", NS) is not None
             for n, tc in enumerate(tr.findall("w:tc", NS)):
-                if header:
+                if is_header:
                     tcpr = tc.find("w:tcPr", NS)
                     tcpr.append(el("shd", val="clear", color="auto", fill=WASH))
                     emphasize(tc, INK)
-                elif n == 0:
+                elif n == 0 and header[:1] not in (["Today"], ["Scenario"]):
                     emphasize(tc, INK)
+        if header[:2] == ["Today", "With this model"] and rows:
+            for tc in rows[-1].findall("w:tc", NS):
+                tcpr = tc.find("w:tcPr", NS)
+                if tcpr is not None and tcpr.find("w:noWrap", NS) is None:
+                    tcpr.append(el("noWrap"))
     for tbl in root.iter(q("tbl")):                                   # air between a table and the paragraph under it
         after = tbl.getnext()
         if after is not None and after.tag == q("p"):
@@ -839,9 +887,128 @@ def plain_contents_links(root):
     """Links in the contents list are not underlined."""
     for p in root.iter(q("p")):
         st = p.find("w:pPr/w:pStyle", NS)
-        if st is not None and st.get(q("val")) in ("TOCGroup", "TOCEntry"):
+        if st is not None and st.get(q("val")) in ("TOCGroup", "TOCEntry", "ResourceLinks"):
             for props in p.iterfind(".//w:hyperlink/w:r/w:rPr", NS):
-                props.append(el("u", val="none"))
+                underline = props.find("w:u", NS)
+                if underline is None:
+                    underline = el("u")
+                    props.append(underline)
+                underline.set(q("val"), "none")
+                if st.get(q("val")) in ("TOCGroup", "ResourceLinks"):
+                    color = props.find("w:color", NS)
+                    if color is None:
+                        color = el("color")
+                        props.append(color)
+                    color.set(q("val"), INK if st.get(q("val")) == "TOCGroup" else MUTED)
+
+
+def add_page_refs(root):
+    """Append a dirty PAGEREF field to each linked contents entry."""
+    small = f'<w:rPr><w:color w:val="{INK}"/><w:sz w:val="18"/></w:rPr>'
+    for p in root.iter(q("p")):
+        st = p.find("w:pPr/w:pStyle", NS)
+        if st is None or st.get(q("val")) not in ("TOCGroup", "TOCEntry"):
+            continue
+        link = p.find("w:hyperlink", NS)
+        anchor = link.get(q("anchor")) if link is not None else None
+        if not anchor:
+            continue
+        tab = el("r")
+        etree.SubElement(tab, q("tab"))
+        p.append(tab)
+        instr = f"PAGEREF {anchor} \\h"
+        fields = etree.fromstring(f'<root xmlns:w="{W}">{field_xml(instr, "1", small, dirty=True)}</root>'.encode("utf-8"))
+        for field in list(fields):
+            p.append(field)
+
+
+def _ppr(p):
+    ppr_ = p.find("w:pPr", NS)
+    if ppr_ is None:
+        ppr_ = el("pPr")
+        p.insert(0, ppr_)
+    return ppr_
+
+
+def _set_ppr_child(ppr_, name, **attrs):
+    child = ppr_.find(f"w:{name}", NS)
+    if child is None:
+        child = el(name)
+        order = ["pStyle", "keepNext", "keepLines", "pageBreakBefore", "framePr", "widowControl", "numPr",
+                 "suppressLineNumbers", "pBdr", "shd", "tabs", "suppressAutoHyphens", "kinsoku", "wordWrap",
+                 "overflowPunct", "topLinePunct", "autoSpaceDE", "autoSpaceDN", "bidi", "adjustRightInd",
+                 "snapToGrid", "spacing", "ind", "contextualSpacing", "mirrorIndents", "suppressOverlap", "jc",
+                 "textDirection", "textAlignment", "textboxTightWrap", "outlineLvl", "divId", "cnfStyle",
+                 "rPr", "sectPr", "pPrChange"]
+        index = order.index(name) if name in order else len(order)
+        before = next((i for i, node in enumerate(ppr_) if node.tag in {q(n) for n in order[index + 1:]}), len(ppr_))
+        ppr_.insert(before, child)
+    for key, value in attrs.items():
+        child.set(q(key), str(value))
+    return child
+
+
+def finish_paragraphs(body):
+    """Keep headings, captions, labels, and lead-ins with what they introduce; set list and widow spacing."""
+    for p in body.iter(q("p")):
+        ppr_ = _ppr(p)
+        _set_ppr_child(ppr_, "widowControl")
+        st = ppr_.find("w:pStyle", NS)
+        style_id = st.get(q("val"), "") if st is not None else ""
+        text = "".join(p.itertext()).strip()
+        if style_id in ("Heading1", "Heading2", "Heading3", "Heading4", "Eyebrow", "EyebrowNewPage"):
+            _set_ppr_child(ppr_, "keepNext")
+            _set_ppr_child(ppr_, "keepLines")
+        if p.find(".//w:drawing", NS) is not None:
+            ppr_.remove(ppr_.find("w:ind", NS)) if ppr_.find("w:ind", NS) is not None else None
+            _set_ppr_child(ppr_, "jc", val="center")
+            _set_ppr_child(ppr_, "keepLines")
+            following = p.getnext()
+            if following is not None and following.tag == q("p"):
+                next_style = following.find("w:pPr/w:pStyle", NS)
+                if next_style is not None and next_style.get(q("val")) in ("ImageCaption", "CaptionedFigure"):
+                    _set_ppr_child(ppr_, "keepNext")
+        if style_id == "Figure":
+            _set_ppr_child(ppr_, "jc", val="center")
+        if style_id != "ImageCaption" and text and len(text) <= 100:
+            runs = [r for r in p.iter(q("r")) if "".join(r.itertext()).strip()]
+            if runs and all(r.find("w:rPr/w:b", NS) is not None for r in runs):
+                _set_ppr_child(ppr_, "keepNext")
+        if text.endswith(":"):
+            nxt = p.getnext()
+            while nxt is not None and nxt.tag == q("p") and not "".join(nxt.itertext()).strip():
+                nxt = nxt.getnext()
+            if nxt is not None and (nxt.tag == q("tbl") or (nxt.tag == q("p") and
+                    (nxt.find("w:pPr/w:numPr", NS) is not None or nxt.find(".//w:drawing", NS) is not None))):
+                _set_ppr_child(ppr_, "keepNext")
+        if p.find("w:pPr/w:numPr", NS) is not None:
+            num = p.find("w:pPr/w:numPr/w:numId", NS)
+            level = p.find("w:pPr/w:numPr/w:ilvl", NS)
+            next_item = p.getnext()
+            while next_item is not None and next_item.tag == q("p") and not "".join(next_item.itertext()).strip():
+                next_item = next_item.getnext()
+            next_num = next_item.find("w:pPr/w:numPr/w:numId", NS) if next_item is not None and next_item.tag == q("p") else None
+            next_level = next_item.find("w:pPr/w:numPr/w:ilvl", NS) if next_item is not None and next_item.tag == q("p") else None
+            same_list = num is not None and next_num is not None and num.get(q("val")) == next_num.get(q("val"))
+            deeper_list = same_list and level is not None and next_level is not None and int(next_level.get(q("val"))) > int(level.get(q("val")))
+            if not same_list or deeper_list:
+                spacing = ppr_.find("w:spacing", NS)
+                if spacing is None:
+                    spacing = _set_ppr_child(ppr_, "spacing")
+                spacing.set(q("after"), "100")
+
+    for p in body.iter(q("p")):
+        if p.getnext() is None or p.getnext().tag != q("tbl"):
+            continue
+        text = "".join(p.itertext()).strip()
+        if text and any(r.find("w:rPr/w:i", NS) is not None for r in p.iter(q("r"))):
+            ppr_ = _ppr(p)
+            st = ppr_.find("w:pStyle", NS)
+            if st is None:
+                st = el("pStyle", val="ImageCaption")
+                ppr_.insert(0, st)
+            else:
+                st.set(q("val"), "ImageCaption")
 
 
 def start_eyebrow_pages(root):
@@ -851,8 +1018,11 @@ def start_eyebrow_pages(root):
         if st is None or st.get(q("val")) != "EyebrowNewPage":
             continue
         st.set(q("val"), "Eyebrow")
-        st.addnext(el("pageBreakBefore"))
-        p.find("w:pPr", NS).append(el("spacing", before=0))
+        _set_ppr_child(p.find("w:pPr", NS), "pageBreakBefore")
+        spacing = p.find("w:pPr/w:spacing", NS)
+        if spacing is None:
+            spacing = _set_ppr_child(p.find("w:pPr", NS), "spacing")
+        spacing.set(q("before"), "0")
 
 
 def describe_pictures(root):
@@ -875,9 +1045,11 @@ def finish_document(data, edition):
     body = root.find("w:body", NS)
     wrap_cards(body)
     finish_tables(root)
+    finish_paragraphs(body)
     describe_pictures(root)
     plain_contents_links(root)
     start_eyebrow_pages(root)
+    add_page_refs(body)
     for old in body.findall("w:sectPr", NS):
         body.remove(old)
     body.append(etree.fromstring(section_xml("links" if edition.key == "full" else "eyebrow", final=True)))
@@ -978,7 +1150,16 @@ def build(key, out=None):
     try:
         if key == "full":
             groups = toc_outline()
-            sections, images = full_sections(groups), Images(work)
+            sections = full_sections(groups)
+            sources = brief_sources()
+            if sources:
+                spec = importlib.util.spec_from_file_location("brief_figures", sources[1])
+                module = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(module)
+                extra = module.capture_pdf_city(os.path.join(work, "city-capture"))
+                images = Images(work, extra)
+            else:
+                images = Images(work)
         else:
             md, fig = brief_sources()
             groups, sections = [], brief_sections(md)
@@ -990,7 +1171,7 @@ def build(key, out=None):
         parts += [section_break("contents")] if full else []
         parts += [convert(s, known, images) for s in sections]
         parts += [section_break("eyebrow")] if full else []
-        parts.append(links_markdown())
+        parts.append(links_markdown(brief=not full))
         source = os.path.join(work, "combined.md")
         open(source, "w", encoding="utf-8").write("\n".join(parts))
         reference = os.path.join(work, "reference.docx")

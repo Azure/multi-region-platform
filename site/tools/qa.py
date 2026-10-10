@@ -18,8 +18,9 @@ Handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=DOCS
 class H(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *a): pass
 Handler = functools.partial(H, directory=DOCS)
-srv = http.server.ThreadingHTTPServer(("127.0.0.1", 8765), Handler)
+srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Handler)
 threading.Thread(target=srv.serve_forever, daemon=True).start()
+port = srv.server_address[1]
 
 pages = sorted(f for f in os.listdir(DOCS) if f.endswith(".html") and f != "404.html")
 if only:
@@ -36,7 +37,7 @@ with sync_playwright() as p:
         errs = []
         pg.on("console", lambda m: errs.append(m.text) if m.type == "error" else None)
         pg.on("pageerror", lambda e: errs.append(str(e)))
-        pg.goto(f"http://127.0.0.1:8765/{name}")
+        pg.goto(f"http://127.0.0.1:{port}/{name}")
         pg.wait_for_load_state("networkidle")
         pg.wait_for_timeout(250)
         info = pg.evaluate("""() => {
@@ -52,6 +53,7 @@ with sync_playwright() as p:
             if (e.scrollWidth > e.clientWidth + 2 && getComputedStyle(e).overflowX !== 'visible') out.overflow.push((e.className || e.tagName) + '');
           });
           const m = document.querySelector('main');
+          if (!m) { out.overflow.push('MAIN missing'); return out; }
           if (m.scrollWidth > m.clientWidth + 2) out.overflow.push('MAIN');
           out.ids = [...document.querySelectorAll('[id]')].map(e => e.id);
           return out;
