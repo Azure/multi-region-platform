@@ -84,9 +84,9 @@ module.exports = (pres, L) => {
     L.txt(s, 'Example record', 0.6, 3.76, 4, 0.3, { fontSize: 14, fontFace: F.semi, color: C.ink, valign: 'middle' });
     const head = ['Region', 'Connectivity profile', 'Shared services', 'Hybrid connectivity', 'Open conditions'];
     const rows = [
-      ['Region C', PROF[2], 'Local: gateway, DNS forwarding. Remote from Region A: firewall, domain controllers.', 'Reuse: existing circuit, new gateway.', 'None'],
-      ['Region E', PROF[1], 'Remote from Region A.', 'Reuse.', 'Latency test with representative traffic.'],
-      ['Region G', PROF[0], 'None required.', 'Not required.', 'None'],
+      ['Region C', PROF[2], 'Local: selected capabilities. Remote from Region A: remaining shared services.', 'Reuse: existing foundation where required.', 'None'],
+      ['Region D', PROF[1], 'Remote from a strategic geographic hub.', 'Reuse: via the hub where required.', 'Latency test with representative traffic.'],
+      ['Region E', PROF[0], 'None required.', 'Not required.', 'None'],
     ];
     const hOpt = { bold: true, fontSize: 10, color: C.muted, fill: { color: C.wash }, charSpacing: 1, valign: 'middle' };
     const tbl = [head.map(t => ({ text: t.toUpperCase(), options: hOpt }))].concat(rows.map(r => r.map((t, j) => ({ text: t, options: { fontSize: 11, color: j === 0 ? C.ink : C.text, bold: j === 0, fontFace: j === 0 ? F.semi : F.body, valign: 'middle' } }))));

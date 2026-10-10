@@ -60,7 +60,6 @@ FONT_NAME = "Aptos"
 PAGE_W, PAGE_H, MARGIN = 12240, 15840, 1080              # twips: Letter, 0.75 in margins
 TEXT_W = 10080                                            # twips (7.0 in)
 TEXT_W_IN = TEXT_W / 1440
-LONG_ARTICLE = 1700                                       # shorter chapters may share a page after a clear divider
 MAX_FIGURE_H = 5.6                                        # inches
 EMU = 914400
 ALERTS = {"NOTE": "Note", "TIP": "Tip", "IMPORTANT": "Important", "WARNING": "Warning", "CAUTION": "Warning"}
@@ -173,13 +172,13 @@ def full_sections(groups):
         for e in g.entries:
             meta, body = split_front_matter(open(os.path.join(CONTENT, e.href), encoding="utf-8").read())
             out.append(Section(key=e.href[:-3], body=body, eyebrow=e.eyebrow, standfirst=(meta.get("description") or "").strip(),
-                               new_page=e.first or len(body) > LONG_ARTICLE, source=e.href))
+                               new_page=True, source=e.href))
     return out
 
 
 def brief_sections(path):
     """Sections of word/brief.md: one per "# " heading; <!-- eyebrow: … --> before it, <!-- standfirst: … --> after it.
-    The sections of the brief follow one another on the page; only headings that would be stranded move on."""
+    Each major section starts on a new page."""
     _meta, text = split_front_matter(open(path, encoding="utf-8").read())
     sections, current, eyebrow = [], None, None
     for line in text.split("\n"):
@@ -194,7 +193,7 @@ def brief_sections(path):
             eyebrow = None
         elif current:
             current["lines"].append(line)
-    return [Section(key=f"brief-{n}", body="\n".join(s["lines"]), eyebrow=s["eyebrow"], standfirst=s["standfirst"], new_page=False)
+    return [Section(key=f"brief-{n}", body="\n".join(s["lines"]), eyebrow=s["eyebrow"], standfirst=s["standfirst"], new_page=True)
             for n, s in enumerate(sections, 1)]
 
 
@@ -242,9 +241,12 @@ class Images:
         with Image.open(path) as im:
             native = im.size[0] / scale / 96, im.size[1] / scale / 96
         width = min(native[0], TEXT_W_IN, MAX_FIGURE_H * native[0] / native[1])
-        if os.path.basename(src) == "xfCost.png" and os.path.basename(src) in self.extra:
-            # This brief-only chart can use its otherwise empty page without shrinking the estate.
-            width = min(TEXT_W_IN, MAX_FIGURE_H * native[0] / native[1])
+        if native[0] < 6:
+            width = min(width, 4.6, 3.8 * native[0] / native[1])
+        if os.path.basename(src) in ("figCity.png", "figCity-legend.png"):
+            width = min(width, 4.8)
+        if os.path.basename(src) == "platform-and-workload-layers.png":
+            width = min(width, 4.5)
         attrs = "width=%.2fin" % width
         if alt:
             attrs += ' alt="%s"' % alt.replace("\\", "\\\\").replace('"', '\\"')
@@ -633,6 +635,7 @@ STYLES = [
     style("TOCGroup", "TOC Group", ppr(keep=True, border=border("bottom", LINE, 4, 2), tabs=f'<w:tab w:val="right" w:leader="dot" w:pos="{TEXT_W}"/>', before=180, after=40), rpr(size=19, bold=True, color=INK), based="BodyText", nxt="TOCEntry"),
     style("TOCEntry", "TOC Entry", ppr(tabs=f'<w:tab w:val="right" w:leader="dot" w:pos="{TEXT_W}"/>', before=0, after=20, left=240), rpr(size=18), based="BodyText"),
     style("ResourceLinks", "Resource Links", ppr(before=0, after=140), rpr(size=16, color=FAINT), based="BodyText"),
+    style("ReferenceText", "Reference Text", ppr(before=0, after=20, line=230), rpr(size=16), based="BodyText"),
     style("Legal", "Legal", ppr(border=border("top", LINE, 4, 8), before=600, after=0, line=252), rpr(size=15, color=FAINT), based="BodyText"),
     style("Spacer", "Spacer", ppr(before=0, after=0, line=120), rpr(size=8), based="Normal"),
     style("Label", "Label", r=rpr(bold=True, color=BLUE_D), based="DefaultParagraphFont", typ="character"),
@@ -645,7 +648,7 @@ TABLE_STYLES = [
     '<w:tblPr><w:tblInd w:w="0" w:type="dxa"/><w:tblCellMar><w:top w:w="0" w:type="dxa"/><w:left w:w="108" w:type="dxa"/><w:bottom w:w="0" w:type="dxa"/><w:right w:w="108" w:type="dxa"/></w:tblCellMar></w:tblPr></w:style>',
     f'<w:style w:type="table" w:styleId="Table"><w:name w:val="Table"/><w:basedOn w:val="TableNormal"/><w:qFormat/>'
     f'<w:tblPr><w:tblInd w:w="0" w:type="dxa"/><w:tblBorders>{TABLE_BORDERS}</w:tblBorders>'
-    f'<w:tblCellMar><w:top w:w="50" w:type="dxa"/><w:left w:w="100" w:type="dxa"/><w:bottom w:w="50" w:type="dxa"/><w:right w:w="100" w:type="dxa"/></w:tblCellMar></w:tblPr>'
+    f'<w:tblCellMar><w:top w:w="30" w:type="dxa"/><w:left w:w="100" w:type="dxa"/><w:bottom w:w="30" w:type="dxa"/><w:right w:w="100" w:type="dxa"/></w:tblCellMar></w:tblPr>'
     '</w:style>',
 ]
 
@@ -854,10 +857,10 @@ def finish_tables(root):
                     tcw = tc.find("w:tcPr/w:tcW", NS)
                     if tcw is not None:
                         tcw.set(q("w"), str(width))
-        keep_rows = rows[:-1] if len(rows) <= 6 else rows[:2] + rows[-2:-1]
-        for tr in keep_rows:
+        compact = len(rows) <= 4 and len("".join(tbl.itertext())) <= 600
+        for i, tr in enumerate(rows):
             for p in tr.iter(q("p")):
-                _set_ppr_child(_ppr(p), "keepNext")
+                _set_ppr_child(_ppr(p), "keepNext", val="1" if i == 0 or (compact and i < len(rows) - 1) else "0")
         for tr in rows:
             is_header = tr.find("w:trPr/w:tblHeader", NS) is not None
             for n, tc in enumerate(tr.findall("w:tc", NS)):
@@ -964,12 +967,23 @@ def _set_ppr_child(ppr_, name, **attrs):
 
 def finish_paragraphs(body):
     """Keep headings, captions, labels, and lead-ins with what they introduce; set list and widow spacing."""
+    references = False
     for p in body.iter(q("p")):
         ppr_ = _ppr(p)
         _set_ppr_child(ppr_, "widowControl")
         st = ppr_.find("w:pStyle", NS)
         style_id = st.get(q("val"), "") if st is not None else ""
         text = "".join(p.itertext()).strip()
+        in_table = any(parent.tag == q("tbl") for parent in p.iterancestors())
+        if not in_table and style_id in ("Heading1", "Heading2", "Heading3", "Heading4", "Eyebrow", "EyebrowNewPage"):
+            references = style_id == "Heading2" and text == "Reference links"
+            if references:
+                _set_ppr_child(ppr_, "spacing", before="160", after="60")
+        if references and not in_table and p.find("w:pPr/w:numPr", NS) is not None:
+            if st is None:
+                st = el("pStyle")
+                ppr_.insert(0, st)
+            st.set(q("val"), "ReferenceText")
         if style_id in ("Heading1", "Heading2", "Heading3", "Heading4", "Eyebrow", "EyebrowNewPage"):
             _set_ppr_child(ppr_, "keepNext")
             _set_ppr_child(ppr_, "keepLines")
@@ -984,11 +998,11 @@ def finish_paragraphs(body):
                     _set_ppr_child(ppr_, "keepNext")
         if style_id == "Figure":
             _set_ppr_child(ppr_, "jc", val="center")
-        if style_id != "ImageCaption" and text and len(text) <= 100:
+        if not in_table and style_id != "ImageCaption" and text and len(text) <= 100:
             runs = [r for r in p.iter(q("r")) if "".join(r.itertext()).strip()]
             if runs and all(r.find("w:rPr/w:b", NS) is not None for r in runs):
                 _set_ppr_child(ppr_, "keepNext")
-        if text.endswith(":"):
+        if not in_table and text.endswith(":"):
             nxt = p.getnext()
             while nxt is not None and nxt.tag == q("p") and not "".join(nxt.itertext()).strip():
                 nxt = nxt.getnext()
@@ -1053,61 +1067,6 @@ def describe_pictures(root):
         inner.set("descr", outer.get("descr", ""))
 
 
-def flow_brief(body):
-    """Balance the brief without forced chapter breaks; keep captions and individual scenario rows intact."""
-    for tbl in body.findall("w:tbl", NS):
-        text = "".join(tbl.itertext()).strip()
-        if text.startswith("Hybrid-connected applications"):
-            # Readable card text also balances the governance page before the full-size city map.
-            for run in tbl.iter(q("r")):
-                props = run.find("w:rPr", NS)
-                if props is None:
-                    props = el("rPr")
-                    run.insert(0, props)
-                for name in ("sz", "szCs"):
-                    size = props.find(f"w:{name}", NS)
-                    if size is None:
-                        size = etree.SubElement(props, q(name))
-                    size.set(q("val"), "19")
-        if text.startswith("ScenarioQualification"):
-            widths = [2300, 1700, 1800, 2100, 2180]
-            for col, width in zip(tbl.findall("w:tblGrid/w:gridCol", NS), widths):
-                col.set(q("w"), str(width))
-            for row in tbl.findall("w:tr", NS):
-                for cell, width in zip(row.findall("w:tc", NS), widths):
-                    props = cell.find("w:tcPr", NS)
-                    if props is None:
-                        props = el("tcPr")
-                        cell.insert(0, props)
-                    size = props.find("w:tcW", NS)
-                    if size is None:
-                        size = el("tcW", type="dxa")
-                        props.insert(0, size)
-                    size.set(q("w"), str(width))
-            # Keep the header with the first scenario, not all four scenarios.
-            for row in tbl.findall("w:tr", NS)[1:]:
-                for p in row.iter(q("p")):
-                    _set_ppr_child(_ppr(p), "keepNext", val="0")
-    for p in body.findall("w:p", NS):
-        st = p.find("w:pPr/w:pStyle", NS)
-        style_id = st.get(q("val"), "") if st is not None else ""
-        following = p.getnext()
-        if style_id == "Standfirst" and following is not None and (
-                following.tag == q("tbl") or following.find(".//w:drawing", NS) is not None):
-            _set_ppr_child(_ppr(p), "keepNext", val="0")
-        if style_id == "Figure" and following is not None and following.find(".//w:drawing", NS) is not None:
-            # The city map and its separate legend may occupy consecutive pages.
-            _set_ppr_child(_ppr(p), "keepNext", val="0")
-        if style_id == "Eyebrow" and "".join(p.itertext()).strip() == "Resources":
-            brk = p.find("w:pPr/w:pageBreakBefore", NS)
-            if brk is not None:
-                p.find("w:pPr", NS).remove(brk)
-            _set_ppr_child(_ppr(p), "spacing", before="650")
-        if style_id == "Legal":
-            _set_ppr_child(_ppr(p), "spacing", before="140")
-            _set_ppr_child(_ppr(p), "keepLines")
-
-
 def finish_document(data, edition):
     """document.xml: card tables, table rows, page breaks, and the last section with its header and footer."""
     root = etree.fromstring(data)
@@ -1118,8 +1077,6 @@ def finish_document(data, edition):
     describe_pictures(root)
     plain_contents_links(root)
     start_eyebrow_pages(root)
-    if edition.key == "brief":
-        flow_brief(body)
     add_page_refs(body)
     for old in body.findall("w:sectPr", NS):
         body.remove(old)
@@ -1177,6 +1134,23 @@ def check_links(path):
     wide = [int(m) for m in re.findall(r'<wp:inline[^>]*><wp:extent cx="(\d+)"', xml) if int(m) > TEXT_W_IN * EMU + EMU // 50]
     problems = [f"{len(wide)} picture(s) wider than the text" if wide else "", f"dead internal links: {', '.join(dead)}" if dead else "", f"relative external links: {', '.join(relative)}" if relative else "",
                 f"{len(no_alt)} picture(s) without alt text" if no_alt else ""]
+    root = etree.fromstring(xml.encode("utf-8"))
+    for p in root.findall("w:body/w:p", NS):
+        st = p.find("w:pPr/w:pStyle", NS)
+        if st is not None and st.get(q("val")) == "Eyebrow":
+            brk = p.find("w:pPr/w:pageBreakBefore", NS)
+            if brk is None or brk.get(q("val"), "1") in ("0", "false", "off"):
+                problems.append("major chapter does not start on a new page")
+                break
+    for tbl in root.iter(q("tbl")):
+        if tbl.find("w:tblPr/w:tblStyle", NS) is None:
+            continue
+        rows = tbl.findall("w:tr", NS)
+        if len(rows) > 1 and any(p.find("w:pPr/w:keepNext", NS) is not None and
+                p.find("w:pPr/w:keepNext", NS).get(q("val"), "1") not in ("0", "false", "off")
+                for p in rows[-1].iter(q("p"))):
+            problems.append("data table keeps its final row with following content")
+            break
     if any(problems):
         raise SystemExit("error: " + "; ".join(p for p in problems if p))
     return len(anchors), len(pictures)
@@ -1239,7 +1213,7 @@ def build(key, out=None):
         logo, art, art_size = cover_images(edition, work)
         full = key == "full"
         parts = ["```{=openxml}\n" + cover_xml(edition, art_size) + "\n```\n", contents_markdown(groups, sections, not full)]
-        parts += [section_break("contents")] if full else []
+        parts += [section_break("contents")]
         parts += [convert(s, known, images) for s in sections]
         parts += [section_break("eyebrow")] if full else []
         parts.append(links_markdown(brief=not full))

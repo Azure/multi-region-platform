@@ -276,7 +276,7 @@ module.exports = (pres, L) => {
       ['Architecture style', 'The fundamental structural organization of an application', 'Microservices, N-tier, event-driven, web-queue-worker, big compute', 'Application architecture'],
       ['Architecture / design pattern', 'A reusable solution to a recurring technical problem', 'Circuit Breaker, Retry, CQRS, Strangler Fig, Competing Consumers', 'Design technique'],
       ['Workload pattern', 'A recurring workload behavior or set of operational characteristics that can influence platform requirements', 'Latency-sensitive, data-intensive, batch-oriented, globally distributed, hybrid-dependent', 'Workload characteristics'],
-      ['Workload Landing Zone archetype', 'A classification of a workload based on the platform connectivity and dependency capabilities it requires', 'Hybrid-Connected, Connected Cloud-Native or AI, Isolated Cloud-Native or AI, Interconnected Application Portfolios', 'Platform-consumption model'],
+      ['Workload Landing Zone archetype', 'A classification of a workload based on the platform connectivity and dependency capabilities it requires', 'Hybrid-Connected Applications, Isolated Cloud-Native or AI Applications, Connected Cloud-Native or AI Applications, Interconnected Application Portfolios', 'Platform-consumption model'],
     ];
     const data = [[cell('TERM', H), cell('WHAT IT DESCRIBES', H), cell('EXAMPLES', H), cell('LEVEL', H)]];
     rows.forEach((r, i) => { const hi = i === 3, f = hi ? { color: C.t50 } : undefined; data.push([cell(r[0], { bold: true, color: hi ? C.t700 : C.ink, fill: f }), cell(r[1], { fill: f }), cell(r[2], { color: hi ? C.text : C.muted, fill: f }), cell(r[3], { bold: true, fontSize: 11, color: hi ? C.t700 : C.b700, fill: f })]); });

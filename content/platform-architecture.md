@@ -45,9 +45,9 @@ Keep one record per region. Record the selected profile, the placement of each s
 
 | Region | Connectivity profile | Shared services | Hybrid connectivity | Open conditions |
 |---|---|---|---|---|
-| Region C | Minimal Regional Hub | Local: gateway, DNS forwarding. Remote from Region A: firewall, domain controllers. | Reuse: existing circuit, new gateway. | None |
-| Region E | Remote Hub Connected | Remote from Region A. | Reuse. | Latency test with representative traffic. |
-| Region G | Disconnected Spokes | None required. | Not required. | None |
+| Region C | Minimal Regional Hub | Local: selected capabilities. Remote from Region A: remaining shared services. | Reuse: existing foundation where required. | None |
+| Region D | Remote Hub Connected | Remote from a strategic geographic hub. | Reuse: via the hub where required. | Latency test with representative traffic. |
+| Region E | Disconnected Spokes | None required. | Not required. | None |
 
 *Illustrative example. Regions and choices are examples only.*
 

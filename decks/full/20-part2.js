@@ -389,7 +389,7 @@ module.exports = (pres, L) => {
     L.box(s, 4.1, fy + 1.72, 2.6, 0.58, { fill: C.white, line: C.s300, dash: 'dash', r: 0.08 });
     L.txt(s, "Manual review for what can't be determined reliably", 4.18, fy + 1.72, 2.44, 0.58, { fontSize: 11, color: C.s600, align: 'center', valign: 'middle' });
     const O = [
-      ['Candidate regions', 'Regions that meet the identified requirements', C.g100, C.g600, C.g600, 'solid'],
+      ['Qualified regions', 'Meet the identified requirements as of the assessment date', C.g100, C.g600, C.g600, 'solid'],
       ['Unmet requirements', 'Gaps that exclude a region or need workload design', C.w50, C.w600, C.w600, 'solid'],
       ['Conditional constraints', 'Conditions under which a region can be used', C.b50, C.b700, C.b600, 'solid'],
       ['Items requiring validation', 'Open questions, owners, and follow-up', C.white, C.b700, C.b600, 'dash'],

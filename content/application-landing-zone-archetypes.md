@@ -58,7 +58,7 @@ Several architecture concepts help identify and organize workload requirements, 
 | Architecture style | The fundamental structural organization of an application | Microservices, N-tier, event-driven, web-queue-worker, big compute | Application architecture |
 | Architecture or design pattern | A reusable solution to a recurring technical problem | Circuit Breaker, Retry, CQRS, Strangler Fig, Competing Consumers | Design technique |
 | Workload pattern | A recurring workload behavior or set of operational characteristics that can influence platform requirements | Latency-sensitive, data-intensive, batch-oriented, globally distributed, hybrid-dependent | Workload characteristics |
-| Workload Landing Zone archetype | A classification of a workload based on the platform connectivity and dependency capabilities it requires | Hybrid-Connected, Connected Cloud-Native or AI, Isolated Cloud-Native or AI, Interconnected Application Portfolios | Platform-consumption model |
+| Workload Landing Zone archetype | A classification of a workload based on the platform connectivity and dependency capabilities it requires | Hybrid-Connected Applications, Isolated Cloud-Native or AI Applications, Connected Cloud-Native or AI Applications, Interconnected Application Portfolios | Platform-consumption model |
 
 > [!NOTE]
 > The Azure landing zones reference architecture also uses *archetypes*: built-in definitions of what must be true for a landing zone to meet environment and compliance requirements at a given scope. Workload Landing Zone archetypes in this guidance describe what a workload requires from the platform, which is a different concept.

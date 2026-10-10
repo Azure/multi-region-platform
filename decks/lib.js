@@ -35,13 +35,9 @@ function makeLib(pres, opts = {}) {
   const L = { n: 0, fig: 0, brand: opts.brand || 'Multi-Region Platform Whitepaper', tone: opts.tone || 'blue', sections, data: SUMMARY, C, F, MIN };
 
   pres.theme = { headFontFace: F.semi, bodyFontFace: F.body };
-  // One master. The title placeholder gives PowerPoint a title to bind to; each slide's own title box is tagged by save().
+  // Content slides carry slide numbers; covers and closing slides use the default layout.
   pres.defineSlideMaster({
     title: 'CONTENT', background: { color: 'FFFFFF' },
-    objects: [{ placeholder: { options: { name: 'title', type: 'title', x: 0.6, y: 0.7, w: 8.6, h: 0.9, fontFace: F.semi, fontSize: 26, color: C.ink, valign: 'top', align: 'left', margin: 0 }, text: '' } }],
-  });
-  pres.defineSlideMaster({
-    title: 'NUMBERED', background: { color: 'FFFFFF' },
     objects: [{ placeholder: { options: { name: 'title', type: 'title', x: 0.6, y: 0.7, w: 8.6, h: 0.9, fontFace: F.semi, fontSize: 26, color: C.ink, valign: 'top', align: 'left', margin: 0 }, text: '' } }],
     slideNumber: { x: 11.93, y: 7.06, w: 0.8, h: 0.26, fontFace: F.body, fontSize: 9, bold: true, color: C.ink, align: 'right' },
   });
@@ -52,7 +48,7 @@ function makeLib(pres, opts = {}) {
   L.slide = (key, o = {}) => {
     const sec = byKey[key];
     if (!sec) throw new Error(`Unknown section "${key}". Known: ${sections.map(x => x.key).join(', ')}`);
-    const s = pres.addSlide({ masterName: o.bare ? 'CONTENT' : 'NUMBERED', sectionTitle: sec.section === false ? undefined : sec.label });
+    const s = pres.addSlide({ masterName: o.bare ? undefined : 'CONTENT', sectionTitle: sec.section === false ? undefined : sec.label });
     L.n++;
     s._sec = sec; s._hasTitle = false;
     if (!o.bare) {
@@ -72,7 +68,7 @@ function makeLib(pres, opts = {}) {
   L.title = (s, text, x, y, w, h, o = {}) => {
     if (s._hasTitle) throw new Error('A slide can have only one L.title / L.header');
     s._hasTitle = true;
-    L.txt(s, text, x, y, w, h, Object.assign({ fontSize: 26, fontFace: F.semi, color: C.ink, objectName: TITLE_NAME }, o));
+    L.txt(s, text, x, y, w, h, Object.assign({ fontSize: 26, fontFace: F.semi, color: C.ink, align: 'left', objectName: TITLE_NAME }, o));
   };
 
   L.box = (s, x, y, w, h, o = {}) => {
@@ -197,12 +193,26 @@ function makeLib(pres, opts = {}) {
     const buf = await pres.write({ outputType: 'nodebuffer' });
     const zip = await JSZip.loadAsync(buf);
     const names = Object.keys(zip.files).filter(n => /^ppt\/slides\/slide\d+\.xml$/.test(n));
+    let titleIndex;
+    for (const n of Object.keys(zip.files).filter(n => /^ppt\/slideLayouts\/slideLayout\d+\.xml$/.test(n))) {
+      const layout = await zip.file(n).async('string');
+      if (!layout.includes('name="CONTENT"')) continue;
+      const placeholder = layout.match(/<p:ph\b[^>]*\btype="title"[^>]*\/>/);
+      titleIndex = placeholder && (placeholder[0].match(/\bidx="(\d+)"/) || [null, '0'])[1];
+    }
+    if (typeof titleIndex !== 'string') throw new Error('CONTENT layout has no title placeholder');
     const untitled = [];
     for (const n of names) {
       let xml = await zip.file(n).async('string');
+      // Replace the empty layout copy, rather than leaving a second title for PowerPoint to inherit.
+      xml = xml.replace(/<p:sp>(?:(?!<\/p:sp>).)*<\/p:sp>/gs, shape => {
+        if (!/<p:ph\b[^>]*\btype="title"/.test(shape)) return shape;
+        if (/<a:t>[^<\s]/.test(shape)) throw new Error(`Unexpected populated layout title in ${n}`);
+        return '';
+      });
       const re = new RegExp(`(<p:cNvPr id="\\d+" name="${TITLE_NAME}"[^>]*>(?:</p:cNvPr>)?)<p:cNvSpPr[^>]*/>\\s*<p:nvPr>\\s*</p:nvPr>`);
       if (!re.test(xml)) { untitled.push(n.match(/slide(\d+)/)[1]); continue; }
-      xml = xml.replace(re, '$1<p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="title"/></p:nvPr>');
+      xml = xml.replace(re, `$1<p:cNvSpPr><a:spLocks noGrp="1"/></p:cNvSpPr><p:nvPr><p:ph type="title" idx="${titleIndex}"/></p:nvPr>`);
       zip.file(n, xml);
     }
     if (untitled.length) throw new Error('Slides without a title (use L.header or L.title): ' + untitled.join(', '));

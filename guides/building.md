@@ -80,7 +80,7 @@ python3 decks/qa.py exec --render         # also render the slides to decks/out/
 
 The full deck is assembled from the modules `decks/full/NN-*.js`, run in file-name order. `DECK_ONLY` takes one or more module name prefixes, separated by commas. The executive deck is built from `decks/exec/`.
 
-`decks/qa.py` fails (exit 1) when a slide has no title, a picture has no alt text or has a file path as alt text, any text is under 9 pt, or `site/tools/drift.py --terms` reports a `RETIRED` or `MISSING` term. It also reports the share of small text per slide. `./build.sh decks` copies the decks to `dist/` only when both pass.
+`decks/qa.py` fails (exit 1) when a slide has missing or duplicate titles, a title lacks explicit position or left alignment or does not bind to its layout's title slot, a slide uses the wrong layout (DEFAULT for cover and closing, CONTENT elsewhere), a picture has no alt text or has a file path as alt text, any text is under 9 pt, or `site/tools/drift.py --terms` reports a `RETIRED` or `MISSING` term. It also reports the share of small text per slide. `./build.sh decks` copies the decks to `dist/` only when both pass.
 
 ## Build the Word editions
 
@@ -90,7 +90,7 @@ python3 word/build.py full [out.docx]     # full guidance, generated from conten
 python3 word/build.py brief [out.docx]    # executive brief, generated from word/brief.md
 ```
 
-Both editions are portrait with 9 pt Aptos body text, and pictures are reduced to the text width. The brief is built from `word/brief.md` and the figures in `word/brief_figures.py`, which needs Playwright. Without a file name the editions are written to `dist/Adaptable-Multi-Region-Azure-Platform.docx` and `dist/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.docx`. Both editions are generated; don't edit the `.docx` files by hand.
+Both editions are portrait with 9 pt Aptos body text. Contents and every major chapter start on separate pages. Pictures fit the text width; narrower figures are capped at 4.6 inches wide and 3.8 inches tall rather than enlarged to fill a page. The city map and legend share a 4.8-inch width, and the platform/workload comparison is capped at 4.5 inches to avoid a short continuation page. Data-table headers stay with their first row, but longer tables can flow between intact rows without pulling following paragraphs onto another page. The builder checks chapter breaks and final-row keep chains. The brief is built from `word/brief.md` and the figures in `word/brief_figures.py`, which needs Playwright. Without a file name the editions are written to `dist/Adaptable-Multi-Region-Azure-Platform.docx` and `dist/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.docx`. Both editions are generated; don't edit the `.docx` files by hand.
 
 ## Check the formats against each other
 

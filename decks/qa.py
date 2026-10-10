@@ -13,7 +13,8 @@ chips, captions and footers belong there.
 Rendering needs LibreOffice (soffice) and pdftoppm. Without Segoe UI installed the preview uses a fallback
 font, which is slightly wider: text that fits in the preview fits in PowerPoint.
 """
-import collections, glob, os, re, shutil, subprocess, sys, tempfile, zipfile
+import collections, glob, os, posixpath, re, shutil, subprocess, sys, tempfile, zipfile
+from xml.etree import ElementTree as ET
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -29,14 +30,37 @@ def slides(z):
 def check(path):
     z = zipfile.ZipFile(path)
     problems, sizes, small = [], collections.Counter(), {}
-    for n in slides(z):
+    ns = {"p": "http://schemas.openxmlformats.org/presentationml/2006/main",
+          "a": "http://schemas.openxmlformats.org/drawingml/2006/main",
+          "rel": "http://schemas.openxmlformats.org/package/2006/relationships"}
+    slide_names = slides(z)
+    for n in slide_names:
         i = int(re.findall(r"\d+", n)[0])
         x = z.read(n).decode("utf-8")
-        titles = re.findall(r'<p:sp>(?:(?!</p:sp>).)*?<p:ph type="title"/>.*?</p:sp>', x, flags=re.S)
+        rels = ET.fromstring(z.read(posixpath.join(posixpath.dirname(n), "_rels", posixpath.basename(n) + ".rels")))
+        layout_rel = next(r for r in rels if r.get("Type", "").endswith("/slideLayout"))
+        layout_path = posixpath.normpath(posixpath.join(posixpath.dirname(n), layout_rel.get("Target")))
+        layout_xml = ET.fromstring(z.read(layout_path))
+        layout = layout_xml.find("p:cSld", ns).get("name")
+        expected = "DEFAULT" if n in (slide_names[0], slide_names[-1]) else "CONTENT"
+        if layout != expected:
+            problems.append(f"slide {i}: layout {layout!r} (need {expected})")
+        titles = re.findall(r'<p:sp>(?:(?!</p:sp>).)*?<p:ph\b[^>]*\btype="title"[^>]*/>.*?</p:sp>', x, flags=re.S)
         if len(titles) != 1:
             problems.append(f"slide {i}: {len(titles)} title placeholders (need exactly 1)")
         elif not re.sub(r"<[^>]+>", "", "".join(re.findall(r"<a:t>[^<]*</a:t>", titles[0]))).strip():
             problems.append(f"slide {i}: empty title")
+        if len(titles) == 1:
+            title = ET.fromstring(f'<root xmlns:p="{ns["p"]}" xmlns:a="{ns["a"]}">{titles[0]}</root>').find("p:sp", ns)
+            if expected == "CONTENT":
+                placeholder = title.find("p:nvSpPr/p:nvPr/p:ph", ns)
+                layout_title = next((ph for ph in layout_xml.findall(".//p:ph", ns) if ph.get("type") == "title"), None)
+                if layout_title is None or placeholder.get("idx", "0") != layout_title.get("idx", "0"):
+                    problems.append(f"slide {i}: title does not bind to its layout placeholder")
+            if title.find("p:spPr/a:xfrm/a:off", ns) is None or title.find("p:spPr/a:xfrm/a:ext", ns) is None:
+                problems.append(f"slide {i}: title inherits layout geometry instead of explicit positioning")
+            if any(p.get("algn") != "l" for p in title.findall("p:txBody/a:p/a:pPr", ns)):
+                problems.append(f"slide {i}: title is not explicitly left aligned")
         for d in re.findall(r'<p:pic>.*?<p:cNvPr [^>]*?descr="([^"]*)"', x, flags=re.S):
             if not d.strip() or "/" in d or "\\" in d:
                 problems.append(f"slide {i}: picture alt text is {'empty' if not d.strip() else 'a file path'}: {d[:60]!r}")

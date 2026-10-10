@@ -30,9 +30,9 @@ Validate whether the intended subscription and offer types can deploy in the reg
 
 ## Evidence-based evaluation
 
-Where possible, evaluate objective regional characteristics programmatically, using the requirements above as inputs. The resulting assessment should identify candidate regions, unmet requirements, conditional constraints, and items that require additional validation. Use manual review for considerations that cannot be determined reliably from published or programmatically available information.
+Where possible, evaluate objective regional characteristics programmatically, using the requirements above as inputs. The resulting assessment should identify qualified regions as of the assessment date, unmet requirements, conditional constraints, and items that require additional validation. Use manual review for considerations that cannot be determined reliably from published or programmatically available information.
 
-:::image type="content" source="./media/programmatic-regional-evaluation.png" alt-text="Inputs such as services and SKUs, zone requirements, latency targets, pricing, expected scale, and access and quota feed a regional assessment, supplemented by manual review, which produces candidate regions, unmet requirements, conditional constraints, and items requiring validation." lightbox="./media/programmatic-regional-evaluation.png":::
+:::image type="content" source="./media/programmatic-regional-evaluation.png" alt-text="Inputs such as services and SKUs, zone requirements, latency targets, pricing, expected scale, and access and quota feed a regional assessment, supplemented by manual review, which produces qualified regions as of the assessment date, unmet requirements, conditional constraints, and items requiring validation." lightbox="./media/programmatic-regional-evaluation.png":::
 
 *Programmatic regional evaluation narrows the options; manual review covers what can't be determined reliably.*
 
