@@ -829,7 +829,8 @@ def finish_tables(root):
         rows = tbl.findall("w:tr", NS)
         header = [" ".join("".join(tc.itertext()).split()) for tc in rows[0].findall("w:tc", NS)] if rows else []
         if header[:2] == ["Today", "With this model"]:
-            widths = [TEXT_W // 2, TEXT_W - TEXT_W // 2]
+            left_width = round(TEXT_W * 0.49)
+            widths = [left_width, TEXT_W - left_width]
         elif header[:1] == ["Scenario"] and len(header) == 5:
             widths = [1400, 1700, 1700, 3100, TEXT_W - 7900]
         elif header == ["Component", "Make it local when", "Keep it remote when", "Guidance"]:
@@ -868,6 +869,16 @@ def finish_tables(root):
                 tcpr = tc.find("w:tcPr", NS)
                 if tcpr is not None and tcpr.find("w:noWrap", NS) is None:
                     tcpr.append(el("noWrap"))
+                for run in tc.iter(q("r")):
+                    rpr_ = run.find("w:rPr", NS)
+                    style_ = rpr_.find("w:rStyle", NS) if rpr_ is not None else None
+                    if style_ is None or style_.get(q("val")) != "VerbatimChar":
+                        continue
+                    for size_tag in ("sz", "szCs"):
+                        size = rpr_.find(f"w:{size_tag}", NS)
+                        if size is None:
+                            size = etree.SubElement(rpr_, q(size_tag))
+                        size.set(q("val"), "16")
     for tbl in root.iter(q("tbl")):                                   # air between a table and the paragraph under it
         after = tbl.getnext()
         if after is not None and after.tag == q("p"):
