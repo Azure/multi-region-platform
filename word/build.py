@@ -229,7 +229,7 @@ class Images:
         raise SystemExit(f"error: figure not found: {src}")
 
     def markup(self, src, caption, alt):
-        """Pandoc image markup: never wider than the text, never upscaled; alt text carried into the picture description."""
+        """Pandoc image markup: text-width bound, normally native size; alt text carried into the picture description."""
         caption = re.sub(r"\s*Use the download button for the complete picture, including both workloads\.\s*$", "", caption, flags=re.I)
         if os.path.basename(src) in ("figCity.png", "city-analogy.png") and "figCity-legend.png" in self.extra:
             city = self._markup_one("figCity.png", "", alt)
@@ -242,6 +242,9 @@ class Images:
         with Image.open(path) as im:
             native = im.size[0] / scale / 96, im.size[1] / scale / 96
         width = min(native[0], TEXT_W_IN, MAX_FIGURE_H * native[0] / native[1])
+        if os.path.basename(src) == "xfCost.png" and os.path.basename(src) in self.extra:
+            # This brief-only chart can use its otherwise empty page without shrinking the estate.
+            width = min(TEXT_W_IN, MAX_FIGURE_H * native[0] / native[1])
         attrs = "width=%.2fin" % width
         if alt:
             attrs += ' alt="%s"' % alt.replace("\\", "\\\\").replace('"', '\\"')
@@ -1050,6 +1053,61 @@ def describe_pictures(root):
         inner.set("descr", outer.get("descr", ""))
 
 
+def flow_brief(body):
+    """Balance the brief without forced chapter breaks; keep captions and individual scenario rows intact."""
+    for tbl in body.findall("w:tbl", NS):
+        text = "".join(tbl.itertext()).strip()
+        if text.startswith("Hybrid-connected applications"):
+            # Readable card text also balances the governance page before the full-size city map.
+            for run in tbl.iter(q("r")):
+                props = run.find("w:rPr", NS)
+                if props is None:
+                    props = el("rPr")
+                    run.insert(0, props)
+                for name in ("sz", "szCs"):
+                    size = props.find(f"w:{name}", NS)
+                    if size is None:
+                        size = etree.SubElement(props, q(name))
+                    size.set(q("val"), "19")
+        if text.startswith("ScenarioQualification"):
+            widths = [2300, 1700, 1800, 2100, 2180]
+            for col, width in zip(tbl.findall("w:tblGrid/w:gridCol", NS), widths):
+                col.set(q("w"), str(width))
+            for row in tbl.findall("w:tr", NS):
+                for cell, width in zip(row.findall("w:tc", NS), widths):
+                    props = cell.find("w:tcPr", NS)
+                    if props is None:
+                        props = el("tcPr")
+                        cell.insert(0, props)
+                    size = props.find("w:tcW", NS)
+                    if size is None:
+                        size = el("tcW", type="dxa")
+                        props.insert(0, size)
+                    size.set(q("w"), str(width))
+            # Keep the header with the first scenario, not all four scenarios.
+            for row in tbl.findall("w:tr", NS)[1:]:
+                for p in row.iter(q("p")):
+                    _set_ppr_child(_ppr(p), "keepNext", val="0")
+    for p in body.findall("w:p", NS):
+        st = p.find("w:pPr/w:pStyle", NS)
+        style_id = st.get(q("val"), "") if st is not None else ""
+        following = p.getnext()
+        if style_id == "Standfirst" and following is not None and (
+                following.tag == q("tbl") or following.find(".//w:drawing", NS) is not None):
+            _set_ppr_child(_ppr(p), "keepNext", val="0")
+        if style_id == "Figure" and following is not None and following.find(".//w:drawing", NS) is not None:
+            # The city map and its separate legend may occupy consecutive pages.
+            _set_ppr_child(_ppr(p), "keepNext", val="0")
+        if style_id == "Eyebrow" and "".join(p.itertext()).strip() == "Resources":
+            brk = p.find("w:pPr/w:pageBreakBefore", NS)
+            if brk is not None:
+                p.find("w:pPr", NS).remove(brk)
+            _set_ppr_child(_ppr(p), "spacing", before="650")
+        if style_id == "Legal":
+            _set_ppr_child(_ppr(p), "spacing", before="140")
+            _set_ppr_child(_ppr(p), "keepLines")
+
+
 def finish_document(data, edition):
     """document.xml: card tables, table rows, page breaks, and the last section with its header and footer."""
     root = etree.fromstring(data)
@@ -1060,6 +1118,8 @@ def finish_document(data, edition):
     describe_pictures(root)
     plain_contents_links(root)
     start_eyebrow_pages(root)
+    if edition.key == "brief":
+        flow_brief(body)
     add_page_refs(body)
     for old in body.findall("w:sectPr", NS):
         body.remove(old)
