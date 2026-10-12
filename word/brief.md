@@ -122,44 +122,7 @@ Other regions are consumed through more efficient patterns appropriate to each w
 # Four Workload Landing Zone archetypes
 <!-- standfirst: Archetypes describe what applications require; connectivity profiles describe what the platform provides. The mapping is not one-to-one. -->
 
-:::row:::
-   :::column:::
-      **Hybrid-connected applications**
-
-      Traditional line-of-business applications with tight dependencies on on-premises environments.
-
-      **Typical pattern:** Deploy in strategic hub regions, where the complete geographic landing zone exists.
-
-      **Typical connectivity profiles:** Full hub, Minimal hub, Remote hub
-   :::column-end:::
-   :::column:::
-      **Isolated cloud-native or AI applications**
-
-      Largely self-contained; only their application endpoints need secure exposure back into the geographic landing zones.
-
-      **Typical pattern:** Deploy where required services and capacity are available; expose endpoints through Private Endpoints.
-
-      **Typical connectivity profiles:** Disconnected spokes; Connected, where justified
-   :::column-end:::
-   :::column:::
-      **Connected cloud-native or AI applications**
-
-      Need more than endpoint exposure, but do not justify recreating a complete regional hub.
-
-      **Typical pattern:** Private connectivity back to the geographic hubs — for example, Global VNet Peering.
-
-      **Typical connectivity profiles:** Remote hub, Minimal hub, Full hub
-   :::column-end:::
-   :::column:::
-      **Interconnected application portfolios**
-
-      A portfolio in another region needing east-west connectivity between applications and north-south connectivity to the rest of the estate.
-
-      **Typical pattern:** A minimally viable regional hub with only the dependencies and connectivity the portfolio needs.
-
-      **Typical connectivity profiles:** Minimal hub, Remote hub, Full hub
-   :::column-end:::
-:::row-end:::
+:::image type="content" source="./brief-media/xfArch.png" alt-text="Four Workload Landing Zone archetypes: Hybrid-connected applications, Isolated cloud-native or AI applications, Connected cloud-native or AI applications, and Interconnected application portfolios. Each card describes application dependencies, the typical deployment pattern, and typical connectivity profiles." lightbox="./brief-media/xfArch.png":::
 
 The profile labels list typical connectivity profiles, most common first; actual dependencies and requirements decide.
 
@@ -183,7 +146,7 @@ Governance is not removed; it moves into policies that do not depend on particul
 
 Regions enter the model through a repeatable assessment, not by assumption. Four checks decide which Azure regions should be prepared for which workload requirements, and each option is recorded with evidence, owners, and revalidation triggers. What the platform then provides in a qualified region — its connectivity profile, where each shared service is provided, and its hybrid connectivity — is selected next, and is not a qualification check. Whether an individual workload uses multiple regions remains a workload-specific design decision.
 
-:::image type="content" source="./brief-media/fig5.png" alt-text="Four check cards in sequence — business and geography, data and compliance, workload requirements and dependencies, and regional capability and availability — each with its key question and decision. The third card is wider and lists what comes from the workloads beside what they require from the platform: platform enablement, resilient hybrid connectivity, and regional platform connectivity. Below the cards are the four qualification outcomes: excluded, candidate, conditional, and qualified." lightbox="./brief-media/fig5.png":::
+:::image type="content" source="../content/media/regional-qualification-framework.png" alt-text="The full guidance regional qualification framework: business and geography, data and compliance, workload requirements and dependencies, and regional capability and availability. Each check has a question and decision; assessment outcomes are excluded, candidate, conditional, or qualified for defined requirements." lightbox="../content/media/regional-qualification-framework.png":::
 
 *Four checks — the recommended sequence. Outcomes are specific to defined workload requirements, never a blanket certification; workload resiliency requirements are identified during workload design.*
 
@@ -223,6 +186,8 @@ Regions enter the model through a repeatable assessment, not by assumption. Four
 That means separating what must stay consistent — governance, security, compliance, and the operating model — from what should stay adaptable: which regions individual applications consume.
 
 > **For regulated organizations,** application-level, region-agnostic placement is a way to de-risk cloud growth if future power restrictions affect the industry's ability to keep expanding hyperscale capacity in a particular country.
+
+:::image type="content" source="./brief-media/xfStrategy.png" alt-text="Four layers supporting adaptable regional placement: Workload Landing Zone archetypes, geographically resilient connectivity, a small number of strategic geographic hubs, and one governed operating model." lightbox="./brief-media/xfStrategy.png":::
 
 :::row:::
    :::column:::

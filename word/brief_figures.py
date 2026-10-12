@@ -21,7 +21,8 @@ PAGES = WP / "exec" / "pages"
 BRIEF = ROOT / "word" / "brief.md"
 
 # Figure element ids on the executive brief pages, in reading order.
-FIGURES = ["fig1", "xfGeo", "xfConn", "fig14", "xfCost", "fig15", "figCity", "fig5", "xfAgility"]
+FIGURES = ["fig1", "xfGeo", "xfConn", "fig14", "xfCost", "fig15", "xfArch", "figCity", "xfAgility", "xfStrategy"]
+FIGURE_SELECTORS = {"xfStrategy": ".stack"}
 
 # Extra CSS per figure, applied before the screenshot. The comparison block of xfAgility
 # (today / with this model) is a table in brief.md, so the picture shows the rest of the figure.
@@ -101,6 +102,32 @@ def capture_pdf_city(out_dir):
             source.unlink(missing_ok=True)
 
 
+def capture_closing(key, out_dir):
+    """Reuse the complete PDF closing splash, including its logo, links, and legal notice."""
+    from playwright.sync_api import sync_playwright
+
+    out = pathlib.Path(out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    source = WP / ("whitepaper.html" if key == "full" else "executive.html")
+    existed = source.exists()
+    subprocess.run([sys.executable, "-B", "build.py", "full" if key == "full" else "exec"],
+                   cwd=WP, check=True, stdout=subprocess.DEVNULL)
+    target = out / "closing-art.png"
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            page = browser.new_page(viewport={"width": 1100, "height": 900}, device_scale_factor=2)
+            page.emulate_media(media="print")
+            page.goto(source.as_uri())
+            page.wait_for_selector("body[data-ready='1']", timeout=30000)
+            page.locator(".page").last.screenshot(path=str(target))
+            browser.close()
+    finally:
+        if not existed:
+            source.unlink(missing_ok=True)
+    return str(target)
+
+
 def _capture_figures(source, out):
     """Screenshot every figure element of the assembled executive brief."""
     from playwright.sync_api import sync_playwright
@@ -116,19 +143,20 @@ def _capture_figures(source, out):
         css = "html, body { background: #fff !important; } .figure .figcap, .figure .fighead .fn { display: none !important; } "
         page.add_style_tag(content=css + " ".join(FIGURE_CSS.values()))
 
-        missing = [i for i in FIGURES if not page.query_selector(f"#{i}")]
+        missing = [i for i in FIGURES if not page.query_selector(FIGURE_SELECTORS.get(i, f"#{i}"))]
         if missing:
             browser.close()
             raise SystemExit("Figure id not found on the executive brief pages: " + ", ".join(missing))
 
         for fid in FIGURES:
-            el = page.query_selector(f"#{fid}")
+            selector = FIGURE_SELECTORS.get(fid, f"#{fid}")
+            el = page.query_selector(selector)
             el.scroll_into_view_if_needed()
             # hide every neighbouring block, at every level up to the page, so nothing leaks into the padding
             page.evaluate(
-                """(id) => {
+                """(selector) => {
                     window.__hid = [];
-                    let node = document.getElementById(id);
+                    let node = document.querySelector(selector);
                     while (node && node.parentElement && !node.classList.contains('page')) {
                         for (const s of node.parentElement.children) {
                             if (s !== node) { window.__hid.push([s, s.style.visibility]); s.style.visibility = 'hidden'; }
@@ -136,7 +164,7 @@ def _capture_figures(source, out):
                         node = node.parentElement;
                     }
                 }""",
-                fid,
+                selector,
             )
             target = out / f"{fid}.png"
             el.screenshot(path=str(target))
@@ -327,7 +355,7 @@ class PageText(HTMLParser):
         elif tag == "span" and "ft" in cls and any("figcap" in c for _, c in self.stack):
             kind = "caption"
         if kind and self.cur is None:
-            in_fig = any("figure" in c for _, c in self.stack[:-1])
+            in_fig = any(c & {"figure", "xa4", "stack"} for _, c in self.stack[:-1])
             self.cur = (kind, in_fig, [], len(self.stack))
 
     def handle_startendtag(self, tag, attrs):

@@ -9,8 +9,8 @@
 The documents are generated, never edited by hand. Markdown (Microsoft Learn dialect) goes through
 pandoc with a reference document whose styles are written here, and a post-pass finishes what pandoc
 cannot express: card grids, row settings, header, footer, cover and document properties.
-Page: US Letter portrait, 0.75 in margins (7.0 in text width), Aptos 9 pt body text.
-Needs pandoc 3.x, PyYAML, lxml and Pillow; the brief edition also needs Playwright (word/brief_figures.py).
+Page: US Letter portrait body, landscape closing splash, Aptos 9 pt body text.
+Needs pandoc 3.x, PyYAML, lxml, Pillow and Playwright; Windows builds update fields in Microsoft Word.
 Output goes to dist/, which is git-ignored.
 """
 import datetime
@@ -60,7 +60,6 @@ FONT_NAME = "Aptos"
 PAGE_W, PAGE_H, MARGIN = 12240, 15840, 1080              # twips: Letter, 0.75 in margins
 TEXT_W = 10080                                            # twips (7.0 in)
 TEXT_W_IN = TEXT_W / 1440
-MAX_FIGURE_H = 5.6                                        # inches
 EMU = 914400
 ALERTS = {"NOTE": "Note", "TIP": "Tip", "IMPORTANT": "Important", "WARNING": "Warning", "CAUTION": "Warning"}
 CALLOUTS = ("Question", "Decision", "Takeaway")
@@ -237,16 +236,19 @@ class Images:
         return self._markup_one(src, caption, alt)
 
     def _markup_one(self, src, caption, alt):
-        rel, path, scale = self.find(src)
+        rel, path, _scale = self.find(src)
         with Image.open(path) as im:
-            native = im.size[0] / scale / 96, im.size[1] / scale / 96
-        width = min(native[0], TEXT_W_IN, MAX_FIGURE_H * native[0] / native[1])
-        if native[0] < 6:
-            width = min(width, 4.6, 3.8 * native[0] / native[1])
-        if os.path.basename(src) in ("figCity.png", "figCity-legend.png"):
-            width = min(width, 4.8)
-        if os.path.basename(src) == "platform-and-workload-layers.png":
-            width = min(width, 4.5)
+            dpi = im.info.get("dpi", (96, 96))
+            native = im.width / dpi[0], im.height / dpi[1]
+            landscape = im.width > im.height
+        percent = 0.34 if landscape else 0.45
+        if os.path.basename(src) == "figCity.png":
+            percent = 0.50
+        elif os.path.basename(src) == "figCity-legend.png":
+            percent = 0.45
+        width = native[0] * percent
+        if width > TEXT_W_IN + 0.02:
+            raise SystemExit(f"error: {src} at {percent:.0%} is wider than the print area ({width:.2f} in)")
         attrs = "width=%.2fin" % width
         if alt:
             attrs += ' alt="%s"' % alt.replace("\\", "\\\\").replace('"', '\\"')
@@ -443,8 +445,8 @@ def contents_markdown(groups, sections, brief):
     if brief:
         for sec in sections:
             title = re.match(r"^# (.+)$", sec.body, flags=re.M).group(1)
-            para("TOC Entry", f"[{title}](#art-{sec.key})")
-        para("TOC Entry", "[Links](#art-links)")
+            para("TOC Group", f"[{title}](#art-{sec.key})")
+        para("TOC Group", "[Links](#art-links)")
         return "\n".join(out)
     for g in groups:
         if g.solo:
@@ -483,17 +485,17 @@ def run_xml(text, size=None, bold=False, color=None, caps=False, track=None, rai
 def drawing_xml(rid, doc_id, name, descr, cx, cy, anchor_y=None):
     """A picture: inline, or anchored to the page edge at anchor_y (twips from the top) and as wide as the page."""
     graphic = (f'<a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture">'
-               f'<pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:nvPicPr><pic:cNvPr id="{doc_id}" name="{name}" descr="{escape(descr)}"/><pic:cNvPicPr/></pic:nvPicPr>'
+               f'<pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:nvPicPr><pic:cNvPr id="{doc_id}" name="{name}" descr="{escape(descr)}"/><pic:cNvPicPr><a:picLocks noChangeAspect="1"/></pic:cNvPicPr></pic:nvPicPr>'
                f'<pic:blipFill><a:blip xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" r:embed="{rid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill>'
                f'<pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="{cx}" cy="{cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic>')
     ns = 'xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"'
     prop = f'<wp:docPr id="{doc_id}" name="{name}" descr="{escape(descr)}"/>'
     if anchor_y is None:
-        return f'<w:r><w:drawing><wp:inline {ns} distT="0" distB="0" distL="0" distR="0"><wp:extent cx="{cx}" cy="{cy}"/>{prop}{graphic}</wp:inline></w:drawing></w:r>'
+        return f'<w:r><w:drawing><wp:inline {ns} distT="0" distB="0" distL="0" distR="0"><wp:extent cx="{cx}" cy="{cy}"/>{prop}<wp:cNvGraphicFramePr><a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"/></wp:cNvGraphicFramePr>{graphic}</wp:inline></w:drawing></w:r>'
     return (f'<w:r><w:drawing><wp:anchor {ns} distT="0" distB="0" distL="0" distR="0" simplePos="0" relativeHeight="0" behindDoc="1" locked="0" layoutInCell="1" allowOverlap="1">'
             f'<wp:simplePos x="0" y="0"/><wp:positionH relativeFrom="page"><wp:posOffset>0</wp:posOffset></wp:positionH>'
             f'<wp:positionV relativeFrom="page"><wp:posOffset>{anchor_y}</wp:posOffset></wp:positionV><wp:extent cx="{cx}" cy="{cy}"/>'
-            f'<wp:effectExtent l="0" t="0" r="0" b="0"/><wp:wrapNone/>{prop}<wp:cNvGraphicFramePr/>{graphic}</wp:anchor></w:drawing></w:r>')
+            f'<wp:effectExtent l="0" t="0" r="0" b="0"/><wp:wrapNone/>{prop}<wp:cNvGraphicFramePr><a:graphicFrameLocks xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" noChangeAspect="1"/></wp:cNvGraphicFramePr>{graphic}</wp:anchor></w:drawing></w:r>')
 
 
 def cover_title_runs(accent):
@@ -531,7 +533,9 @@ def cover_xml(edition, art_size):
 
 
 def cover_images(edition, work):
-    """Write the logo and the cropped artwork band; return (logo path, art path, art pixel size)."""
+    """Render a rectangular artwork band, without the deck cover's curved transparent edge."""
+    from playwright.sync_api import sync_playwright
+
     s = 480
     logo = Image.new("RGBA", (s, s), (0, 0, 0, 0))
     draw, gap = ImageDraw.Draw(logo), s // 24
@@ -541,17 +545,38 @@ def cover_images(edition, work):
         draw.rectangle([x, y, x + half - 1, y + half - 1], fill="#" + color)
     logo_path = os.path.join(work, "cover-logo.png")
     logo.save(logo_path)
-    art_path = edition.art
-    if not os.path.exists(art_path):
-        art_path = EDITIONS["full"].art
-    with Image.open(art_path) as im:
-        im = im.convert("RGBA")
-        band = int(im.size[0] * 5.5 / (PAGE_W / 1440))             # the band is 5.5 in tall on an 8.5 in wide page
-        top = max(0, min(im.size[1] - band, int(im.size[1] * 0.62) - band // 2))
-        art = im.crop((0, top, im.size[0], top + band))
-        art_out = os.path.join(work, "cover-art.png")
-        art.save(art_out)
-    return logo_path, art_out, art.size
+    spec = importlib.util.spec_from_file_location("word_art", os.path.join(ROOT, "whitepaper", "art.py"))
+    art_module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(art_module)
+    tone = "teal" if edition.key == "brief" else "blue"
+    width, height = 634, 720
+    scene = (art_module.defs("a", tone) + art_module.background("a", 0, 0, width, height) +
+             art_module.discs("a", 575, 60, n=4, r0=30, step=38) + art_module.estate("a", 262, 338, 33) +
+             '<path d="M-20,640 C160,580 340,660 654,560" fill="none" stroke="url(#aswoosh)" stroke-width="2.4"/>')
+    band = width * 5.5 / (PAGE_W / 1440)
+    top = max(0, min(height - band, height * 0.62 - band / 2))
+    svg = f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{band}" viewBox="0 {top} {width} {band}">{scene}</svg>'
+    art_out = os.path.join(work, "cover-art.png")
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page(viewport={"width": width, "height": round(band)}, device_scale_factor=2.5)
+        page.set_content(f'<html><body style="margin:0">{svg}</body></html>')
+        page.screenshot(path=art_out)
+        browser.close()
+    with Image.open(art_out) as im:
+        return logo_path, art_out, im.size
+
+
+def closing_xml():
+    """A landscape closing page matching the PDF splash, with no running header or footer."""
+    sect = (f'<w:sectPr xmlns:w="{W}" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'
+            '<w:headerReference w:type="default" r:id="rIdHeaderBlank"/><w:footerReference w:type="default" r:id="rIdFooterBlank"/>'
+            f'<w:type w:val="nextPage"/><w:pgSz w:w="{PAGE_H}" w:h="{PAGE_W}" w:orient="landscape"/>'
+            '<w:pgMar w:top="0" w:right="0" w:bottom="0" w:left="0" w:header="0" w:footer="0" w:gutter="0"/></w:sectPr>')
+    picture = drawing_xml("rIdClosingArt", 9003, "Closing splash",
+                          f"{TITLE}. Read online: {SITE_URL}. Region planning workbook: {WORKBOOK_URL}. {LEGAL}",
+                          int(11 * EMU), int(8.5 * EMU), anchor_y=0)
+    return f'<w:p><w:pPr><w:spacing w:before="0" w:after="0" w:line="20" w:lineRule="exact"/></w:pPr>{picture}</w:p>{sect}'
 
 
 # ================================================================= styles (reference document)
@@ -667,8 +692,13 @@ def build_reference(path):
     s = re.sub(r"<w:rPrDefault>.*?</w:rPrDefault>", f'<w:rPrDefault><w:rPr>{FONT}<w:sz w:val="18"/><w:szCs w:val="18"/><w:lang w:val="en-US" w:eastAsia="en-US" w:bidi="ar-SA"/></w:rPr></w:rPrDefault>', s, flags=re.S)
     parts["word/styles.xml"] = s.encode("utf-8")
     # pandoc limits a picture to the text width of the reference document, which has no page setup of its own
-    page = f'<w:sectPr><w:pgSz w:w="{PAGE_W}" w:h="{PAGE_H}"/><w:pgMar w:top="1000" w:right="{MARGIN}" w:bottom="1000" w:left="{MARGIN}" w:header="500" w:footer="500" w:gutter="0"/></w:sectPr>'
-    parts["word/document.xml"] = parts["word/document.xml"].decode("utf-8").replace("<w:sectPr />", page).encode("utf-8")
+    page = f'<w:sectPr xmlns:w="{W}"><w:pgSz w:w="{PAGE_W}" w:h="{PAGE_H}"/><w:pgMar w:top="1000" w:right="{MARGIN}" w:bottom="1000" w:left="{MARGIN}" w:header="500" w:footer="500" w:gutter="0"/></w:sectPr>'
+    document = etree.fromstring(parts["word/document.xml"])
+    body = document.find("w:body", NS)
+    for sect in body.findall("w:sectPr", NS):
+        body.remove(sect)
+    body.append(etree.fromstring(page.encode("utf-8")))
+    parts["word/document.xml"] = etree.tostring(document, xml_declaration=True, encoding="UTF-8", standalone=True)
     theme = parts["word/theme/theme1.xml"].decode("utf-8")
     parts["word/theme/theme1.xml"] = re.sub(r'(<a:(?:major|minor)Font>\s*<a:latin typeface=")[^"]*', rf"\g<1>{FONT_NAME}", theme).encode("utf-8")
     write_zip(path, parts)
@@ -822,7 +852,7 @@ def emphasize(cell, color=None):
             props.append(el("color", val=color))
 
 
-def finish_tables(root):
+def finish_tables(root, brief=False):
     """Data tables: tinted header row, bold first column, table text style, rows that never split across pages, no single-row pages."""
     for tbl in root.iter(q("tbl")):
         if tbl.find("w:tblPr/w:tblLayout", NS) is not None and tbl.find("w:tblPr/w:tblStyle", NS) is None:
@@ -838,7 +868,8 @@ def finish_tables(root):
             left_width = round(TEXT_W * 0.49)
             widths = [left_width, TEXT_W - left_width]
         elif header[:1] == ["Scenario"] and len(header) == 5:
-            widths = [1400, 1700, 1700, 3100, TEXT_W - 7900]
+            widths = ([round(inches * 1440) for inches in (1.63, 1.25, 1.31, 1.13, 1.82)] if brief else
+                      [1400, 1700, 1700, 3100, TEXT_W - 7900])
         elif header == ["Component", "Make it local when", "Keep it remote when", "Guidance"]:
             widths = [1600, 2100, 3900, TEXT_W - 7600]
         elif header == ["Area", "What to do", "Guidance"]:
@@ -849,14 +880,19 @@ def finish_tables(root):
         else:
             widths = []
         if widths:
+            tblw = tbl.find("w:tblPr/w:tblW", NS)
+            tblw.set(q("type"), "dxa")
+            tblw.set(q("w"), str(sum(widths)))
             grid = tbl.find("w:tblGrid", NS)
             for col, width in zip(grid.findall("w:gridCol", NS), widths):
                 col.set(q("w"), str(width))
             for tr in rows:
                 for tc, width in zip(tr.findall("w:tc", NS), widths):
                     tcw = tc.find("w:tcPr/w:tcW", NS)
-                    if tcw is not None:
-                        tcw.set(q("w"), str(width))
+                    if tcw is None:
+                        tcw = etree.SubElement(tc.find("w:tcPr", NS), q("tcW"))
+                    tcw.set(q("type"), "dxa")
+                    tcw.set(q("w"), str(width))
         compact = len(rows) <= 4 and len("".join(tbl.itertext())) <= 600
         for i, tr in enumerate(rows):
             for p in tr.iter(q("p")):
@@ -988,8 +1024,9 @@ def finish_paragraphs(body):
             _set_ppr_child(ppr_, "keepNext")
             _set_ppr_child(ppr_, "keepLines")
         if p.find(".//w:drawing", NS) is not None:
+            anchored = p.find(".//{http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing}anchor") is not None
             ppr_.remove(ppr_.find("w:ind", NS)) if ppr_.find("w:ind", NS) is not None else None
-            _set_ppr_child(ppr_, "jc", val="center")
+            _set_ppr_child(ppr_, "jc", val="left" if anchored else "center")
             _set_ppr_child(ppr_, "keepLines")
             following = p.getnext()
             if following is not None and following.tag == q("p"):
@@ -998,6 +1035,7 @@ def finish_paragraphs(body):
                     _set_ppr_child(ppr_, "keepNext")
         if style_id == "Figure":
             _set_ppr_child(ppr_, "jc", val="center")
+            _set_ppr_child(ppr_, "keepNext", val="0")
         if not in_table and style_id != "ImageCaption" and text and len(text) <= 100:
             runs = [r for r in p.iter(q("r")) if "".join(r.itertext()).strip()]
             if runs and all(r.find("w:rPr/w:b", NS) is not None for r in runs):
@@ -1065,6 +1103,24 @@ def describe_pictures(root):
             outer.set("descr", outer.get("title"))
             outer.set("title", "")
         inner.set("descr", outer.get("descr", ""))
+        a_ns = "http://schemas.openxmlformats.org/drawingml/2006/main"
+        frame = drawing.find(".//wp:cNvGraphicFramePr", ns)
+        if frame is None:
+            inline = drawing.find("wp:inline", ns)
+            if inline is not None:
+                frame = etree.Element(f'{{{ns["wp"]}}}cNvGraphicFramePr')
+                inline.insert(list(inline).index(outer) + 1, frame)
+        if frame is not None:
+            locks = frame.find(f"{{{a_ns}}}graphicFrameLocks")
+            if locks is None:
+                locks = etree.SubElement(frame, f"{{{a_ns}}}graphicFrameLocks")
+            locks.set("noChangeAspect", "1")
+        props = drawing.find(".//pic:cNvPicPr", ns)
+        if props is not None:
+            locks = props.find(f"{{{a_ns}}}picLocks")
+            if locks is None:
+                locks = etree.SubElement(props, f"{{{a_ns}}}picLocks")
+            locks.set("noChangeAspect", "1")
 
 
 def finish_document(data, edition):
@@ -1072,7 +1128,7 @@ def finish_document(data, edition):
     root = etree.fromstring(data)
     body = root.find("w:body", NS)
     wrap_cards(body)
-    finish_tables(root)
+    finish_tables(root, brief=edition.key == "brief")
     finish_paragraphs(body)
     describe_pictures(root)
     plain_contents_links(root)
@@ -1080,7 +1136,22 @@ def finish_document(data, edition):
     add_page_refs(body)
     for old in body.findall("w:sectPr", NS):
         body.remove(old)
-    body.append(etree.fromstring(section_xml("links" if edition.key == "full" else "eyebrow", final=True)))
+    end = el("p")
+    end_props = etree.SubElement(end, q("pPr"))
+    end_props.append(el("pStyle", val="Spacer"))
+    end_props.append(etree.fromstring(section_xml("links" if edition.key == "full" else "eyebrow", final=True)))
+    body.append(end)
+    splash = etree.fromstring(f'<root xmlns:w="{W}">{closing_xml()}</root>'.encode("utf-8"))
+    for node in splash:
+        body.append(node)
+    if edition.key == "brief":
+        # The requested scenario columns total 7.14 inches.
+        for sect in root.iter(q("sectPr")):
+            if sect.find("w:pgSz", NS).get(q("orient")) == "landscape":
+                continue
+            margins = sect.find("w:pgMar", NS)
+            margins.set(q("left"), "979")
+            margins.set(q("right"), "979")
     return etree.tostring(root, xml_declaration=True, encoding="UTF-8", standalone=True)
 
 
@@ -1091,7 +1162,7 @@ def tighten_lists(data):
     return s.encode("utf-8")
 
 
-def finish_package(path, edition, logo, art):
+def finish_package(path, edition, logo, art, closing):
     """Add header, footer, cover pictures and properties to pandoc's output; post-process document.xml."""
     with zipfile.ZipFile(path) as z:
         parts = {n: z.read(n) for n in z.namelist()}
@@ -1101,15 +1172,26 @@ def finish_package(path, edition, logo, art):
     for n, (rid, right) in enumerate(HEADERS.values(), 1):
         parts[f"word/header{n}.xml"] = header_xml(right).encode("utf-8")
     parts["word/footer1.xml"] = footer_xml(edition).encode("utf-8")
+    parts["word/header4.xml"] = f'<w:hdr xmlns:w="{W}"><w:p/></w:hdr>'.encode("utf-8")
+    parts["word/footer2.xml"] = f'<w:ftr xmlns:w="{W}"><w:p/></w:ftr>'.encode("utf-8")
     parts["word/media/cover-logo.png"] = open(logo, "rb").read()
     parts["word/media/cover-art.png"] = open(art, "rb").read()
+    parts["word/media/closing-art.png"] = open(closing, "rb").read()
+    settings = etree.fromstring(parts["word/settings.xml"])
+    update = settings.find("w:updateFields", NS)
+    if update is None:
+        update = etree.SubElement(settings, q("updateFields"))
+    update.set(q("val"), "true")
+    parts["word/settings.xml"] = etree.tostring(settings, xml_declaration=True, encoding="UTF-8", standalone=True)
     parts["docProps/core.xml"] = core_xml(edition).encode("utf-8")
     base = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
     rels = "".join(f'<Relationship Id="{i}" Type="{base}/{t}" Target="{target}"/>' for i, t, target in (
         *((rid, "header", f"header{n}.xml") for n, (rid, _) in enumerate(HEADERS.values(), 1)), ("rIdFooter1", "footer", "footer1.xml"),
-        ("rIdCoverLogo", "image", "media/cover-logo.png"), ("rIdCoverArt", "image", "media/cover-art.png")))
+        ("rIdHeaderBlank", "header", "header4.xml"), ("rIdFooterBlank", "footer", "footer2.xml"),
+        ("rIdCoverLogo", "image", "media/cover-logo.png"), ("rIdCoverArt", "image", "media/cover-art.png"),
+        ("rIdClosingArt", "image", "media/closing-art.png")))
     parts["word/_rels/document.xml.rels"] = parts["word/_rels/document.xml.rels"].decode("utf-8").replace("</Relationships>", rels + "</Relationships>").encode("utf-8")
-    types = "".join(f'<Override PartName="/word/{n}.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.{n[:-1]}+xml"/>' for n in ("header1", "header2", "header3", "footer1"))
+    types = "".join(f'<Override PartName="/word/{n}.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.{"header" if n.startswith("header") else "footer"}+xml"/>' for n in ("header1", "header2", "header3", "header4", "footer1", "footer2"))
     ct = parts["[Content_Types].xml"].decode("utf-8")
     if 'Extension="png"' not in ct:
         types += '<Default Extension="png" ContentType="image/png"/>'
@@ -1123,7 +1205,9 @@ def check_links(path):
     with zipfile.ZipFile(path) as z:
         xml = z.read("word/document.xml").decode("utf-8")
         rels = z.read("word/_rels/document.xml.rels").decode("utf-8")
-    anchors = re.findall(r'w:anchor="([^"]+)"', xml)
+    root = etree.fromstring(xml.encode("utf-8"))
+    anchors = [link.get(q("anchor")) for link in root.iter(q("hyperlink")) if link.get(q("anchor")) and
+               link.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id") is None]
     bookmarks = set(re.findall(r'<w:bookmarkStart [^>]*w:name="([^"]+)"', xml))
     dead = sorted({a for a in anchors if a not in bookmarks})
     external = re.findall(r'<Relationship [^>]*Target="([^"]+)"[^>]*TargetMode="External"', rels) + \
@@ -1134,7 +1218,6 @@ def check_links(path):
     wide = [int(m) for m in re.findall(r'<wp:inline[^>]*><wp:extent cx="(\d+)"', xml) if int(m) > TEXT_W_IN * EMU + EMU // 50]
     problems = [f"{len(wide)} picture(s) wider than the text" if wide else "", f"dead internal links: {', '.join(dead)}" if dead else "", f"relative external links: {', '.join(relative)}" if relative else "",
                 f"{len(no_alt)} picture(s) without alt text" if no_alt else ""]
-    root = etree.fromstring(xml.encode("utf-8"))
     for p in root.findall("w:body/w:p", NS):
         st = p.find("w:pPr/w:pStyle", NS)
         if st is not None and st.get(q("val")) == "Eyebrow":
@@ -1185,6 +1268,47 @@ def capture_brief_figures(module_path, out_dir):
     return found
 
 
+def update_word_fields(path):
+    """Save real PAGEREF results on Windows; other readers update the dirty fields when opening."""
+    if os.name != "nt":
+        print("Page references will be refreshed by the Word reader on opening.")
+        return
+    escaped_path = os.path.abspath(path).replace("'", "''")
+    script = f"""
+$ErrorActionPreference = 'Stop'
+$word = New-Object -ComObject Word.Application
+$word.Visible = $false
+$word.DisplayAlerts = 0
+try {{
+    $doc = $word.Documents.Open('{escaped_path}', $false, $false)
+    try {{
+        foreach ($image in $doc.InlineShapes) {{ $image.LockAspectRatio = -1 }}
+        foreach ($image in $doc.Shapes) {{ $image.LockAspectRatio = -1 }}
+        $doc.Repaginate()
+        $doc.Fields.Update() | Out-Null
+        $doc.Repaginate()
+        $doc.Fields.Update() | Out-Null
+        foreach ($section in $doc.Sections) {{
+            foreach ($header in $section.Headers) {{ $header.Range.Fields.Update() | Out-Null }}
+            foreach ($footer in $section.Footers) {{ $footer.Range.Fields.Update() | Out-Null }}
+        }}
+        $doc.Save()
+    }} finally {{ $doc.Close(0) }}
+}} finally {{ $word.Quit() }}
+"""
+    subprocess.run(["powershell", "-NoProfile", "-NonInteractive", "-Command", script], check=True)
+    # Word consumes updateFields when it opens the package; keep refresh-on-open enabled in the delivered file.
+    with zipfile.ZipFile(path) as z:
+        parts = {name: z.read(name) for name in z.namelist()}
+    settings = etree.fromstring(parts["word/settings.xml"])
+    update = settings.find("w:updateFields", NS)
+    if update is None:
+        update = etree.SubElement(settings, q("updateFields"))
+    update.set(q("val"), "true")
+    parts["word/settings.xml"] = etree.tostring(settings, xml_declaration=True, encoding="UTF-8", standalone=True)
+    write_zip(path, parts)
+
+
 def build(key, out=None):
     """Build one edition; returns the output path."""
     check_pandoc()
@@ -1223,8 +1347,17 @@ def build(key, out=None):
         build_reference(reference)
         subprocess.run(["pandoc", source, "-f", "markdown+pipe_tables+implicit_figures+link_attributes+fenced_divs+bracketed_spans-auto_identifiers",
                         "-t", "docx", "--reference-doc", reference, "--resource-path", os.pathsep.join((ROOT, work)), "-o", out], check=True)
-        finish_package(out, edition, logo, art)
+        sources = brief_sources()
+        if sources is None:
+            raise SystemExit("error: the Word splash page needs word/brief_figures.py")
+        spec = importlib.util.spec_from_file_location("word_figures", sources[1])
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        closing = module.capture_closing(key, os.path.join(work, "closing"))
+        finish_package(out, edition, logo, art, closing)
         links, pictures = check_links(out)
+        update_word_fields(out)
+        check_links(out)
         print(f"wrote {out} ({os.path.getsize(out) / 1e6:.1f} MB, {len(sections)} chapters, {links} internal links, 0 dead, {pictures} pictures with alt text)")
         return out
     finally:

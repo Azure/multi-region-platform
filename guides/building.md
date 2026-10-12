@@ -90,7 +90,13 @@ python3 word/build.py full [out.docx]     # full guidance, generated from conten
 python3 word/build.py brief [out.docx]    # executive brief, generated from word/brief.md
 ```
 
-Both editions are portrait with 9 pt Aptos body text. Contents and every major chapter start on separate pages. Pictures fit the text width; narrower figures are capped at 4.6 inches wide and 3.8 inches tall rather than enlarged to fill a page. The city map and legend share a 4.8-inch width, and the platform/workload comparison is capped at 4.5 inches to avoid a short continuation page. Data-table headers stay with their first row, but longer tables can flow between intact rows without pulling following paragraphs onto another page. The builder checks chapter breaks and final-row keep chains. The brief is built from `word/brief.md` and the figures in `word/brief_figures.py`, which needs Playwright. Without a file name the editions are written to `dist/Adaptable-Multi-Region-Azure-Platform.docx` and `dist/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.docx`. Both editions are generated; don't edit the `.docx` files by hand.
+Both editions have portrait body pages with 9 pt Aptos text and finish with the matching PDF's landscape closing splash. The cover artwork has a rectangular, full-bleed edge. Contents and every major chapter start on separate pages; the brief's contents uses the same top-level entry style as the full edition.
+
+Pictures preserve and lock their aspect ratios. The city map uses 50% of its original size and its separate legend 45%; all other landscape pictures use 34%, while portrait or square pictures use 45%. Percentages take priority over filling the print width. The brief's scenario columns are 1.63, 1.25, 1.31, 1.13, and 1.82 inches; its side margins accommodate their 7.14-inch total. Data-table headers stay with their first row, but longer tables can flow between intact rows. The builder checks chapter breaks, final-row keep chains, and links before and after the Office save.
+
+Both files contain live PAGE and PAGEREF fields with refresh-on-open enabled. On Windows the build uses Microsoft Word to repaginate, update the contents and footer fields, and save their cached values before delivery. Other environments require a Word-compatible reader to refresh the fields on opening.
+
+The brief is built from `word/brief.md` and the figures in `word/brief_figures.py`; both editions need Playwright for artwork and the closing splash. The archetype cards are a picture in the brief, its qualification picture is the full guidance figure, and the strategic-benefit picture precedes its comparison table. Without a file name the editions are written to `dist/Adaptable-Multi-Region-Azure-Platform.docx` and `dist/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.docx`. Both editions are generated; don't edit the `.docx` files by hand.
 
 ## Check the formats against each other
 
