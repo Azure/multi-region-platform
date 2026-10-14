@@ -4,12 +4,14 @@
   "description": "PowerPoint decks for the Adaptable Multi-Region Azure Platform (full and executive).",
   "scripts": {
     "build": "node build_full.js && node build_exec.js",
+    "qa": "python3 qa.py full && python3 qa.py exec",
     "icons": "node icons.js"
   },
   "dependencies": {
+    "jszip": "^3.10.1",
     "pptxgenjs": "^4.0.1"
   },
   "optionalDependencies": {
-    "sharp": "^0.33.0"
+    "sharp": "^0.35.4"
   }
 }

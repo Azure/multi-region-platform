@@ -7,6 +7,26 @@
   .es .c h3 { font-size: 14px; margin-bottom: 6px; }
   .es .c p { font-size: 11.6px; line-height: 1.52; margin-bottom: 6px; }
   .es .c p:last-child { margin-bottom: 0; }
+  .wa { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  .wa .wr { display: grid; grid-template-columns: 300px 1fr; border-top: 1px solid var(--line); }
+  .wa .wr:first-child { border-top: 0; }
+  .wa .hd > div { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding: 7px 16px; background: var(--wash); }
+  .wa .q, .wa .a { display: flex; gap: 9px; align-items: flex-start; padding: 9px 16px; }
+  .wa .q { background: var(--w50); }
+  .wa .q svg { width: 14px; height: 14px; color: var(--w600); flex: none; margin-top: 2px; }
+  .wa .a svg { width: 14px; height: 14px; color: var(--g600); flex: none; margin-top: 2px; }
+  .wa .q span { font-size: 12.2px; font-weight: 650; color: var(--ink); line-height: 1.35; }
+  .wa .a span { font-size: 11.8px; color: var(--text); line-height: 1.45; }
+  .wa .a em { font-style: normal; color: var(--muted); }
+  .hw { border: 1px solid var(--b100); border-radius: 12px; background: #fff; padding: 2px 16px; }
+  .hw .h { display: grid; grid-template-columns: 24px 170px 250px 1fr; gap: 0 14px; align-items: start; padding: 6px 0; border-top: 1px solid var(--line-soft); }
+  .hw .h:first-child { border-top: 0; }
+  .hw .h .n { width: 22px; height: 22px; border-radius: 50%; background: var(--b600); color: #fff; font-weight: 700; font-size: 11.4px; display: grid; place-items: center; }
+  .hw .h b { display: block; font-size: 12.6px; color: var(--ink); line-height: 1.3; padding-top: 2px; }
+  .hw .h i { display: block; font-style: normal; font-size: 10.9px; font-weight: 650; color: var(--b700); line-height: 1.38; padding-top: 3px; }
+  .hw .h p { font-size: 10.9px; line-height: 1.4; color: var(--text); padding-top: 3px; }
+  .hw .h p b { display: inline; font-size: inherit; padding: 0; }
+  .hw .h em { font-style: normal; color: var(--muted); font-size: 10px; white-space: nowrap; }
 </style>
 <div class="inner">
   <div class="row" id="sexec" style="gap:40px;align-items:flex-end">
@@ -15,25 +35,57 @@
       <h1 class="sec-title mt8" style="font-size:29px">Make regional choice a governed platform capability — not a one-time prediction</h1>
     </div>
     <div style="flex:1">
-      <p class="standfirst" style="font-size:14px">Many Azure estates are designed around a fixed primary and disaster-recovery region pair. This paper describes a different approach: extend Azure landing-zone principles so that additional regions become <strong>qualified options that workloads can use selectively</strong>, without creating separate governance models or reproducing an identical platform footprint in every region.</p>
+      <p class="standfirst" style="font-size:13.4px">Adding an Azure region shouldn’t mean starting another landing-zone project. If you already run Azure landing zones, most of what a new region needs already exists: the governance, identity, policy, automation, and operating model. This paper shows how to reuse that foundation so that additional regions become <strong>qualified options that workloads can use selectively</strong>, without creating separate governance models or reproducing an identical platform footprint in every region.</p>
     </div>
   </div>
 
-  <div class="pull mt20" style="max-width:860px">
-    <p style="font-size:16px">The objective is not to prebuild every capability everywhere. It is to establish a consistent operating model, qualify regional options against known business and workload requirements, and enable only the platform capabilities that each region needs.</p>
+  <div class="pull mt16" style="max-width:900px">
+    <p style="font-size:15px">The objective is not to prebuild every capability everywhere. It is to keep one operating model, qualify regional options against known business and workload requirements, and enable only the platform capabilities that each region needs.</p>
   </div>
 
-  <div class="es mt24">
+  <div class="row mt20" style="gap:24px;align-items:baseline">
+    <h2 style="font-size:17px;color:var(--ink);white-space:nowrap">What adding a region involves</h2>
+    <p style="font-size:12.2px;color:var(--text)">A new region is often assumed to be a large project. With this approach, it is a short series of decisions and a targeted change to the platform you already run.</p>
+  </div>
+  <div class="wa mt12">
+    <div class="wr hd"><div>Common assumption</div><div>With this approach</div></div>
+    <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>A new region needs its own landing-zone design.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>Reuse the existing landing zone. The region is added to the policies, automation, and monitoring you already run. <em>Framework overview</em></span></div></div>
+    <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>Every region needs a full hub.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>Start with the most efficient connectivity profile that meets the requirements. Two of the four profiles need no local hub. <em>Part 1</em></span></div></div>
+    <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>Every region needs another ExpressRoute circuit.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>Reuse existing hybrid connectivity where reachability and resiliency requirements allow. Add circuits only when a requirement justifies them. <em>Part 3</em></span></div></div>
+    <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>Enabling a region means migrating workloads.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>Nothing has to move. Workloads use the region when their own requirements call for it. <em>Part 5</em></span></div></div>
+    <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>Qualification is a long assessment.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>It is four checks, each with one question, answered from what your teams already know. Unknowns are recorded and revisited, not treated as blockers. <em>Part 2</em></span></div></div>
+  </div>
+  <p style="margin-top:14px;font-size:12.2px;color:var(--ink)"><strong>The first additional region takes the most thought</strong>, because the decisions are made for the first time. Later regions reuse those decisions and become mostly configuration. For more examples, see Common misconceptions (Putting it into practice).</p>
+</div>
+</section>
+
+<section class="page" data-section="Executive summary">
+<div class="inner">
+  <div class="eyebrow">Executive summary · continued</div>
+  <div class="row mt12" style="gap:24px;align-items:baseline">
+    <h2 style="font-size:17px;color:var(--ink);white-space:nowrap">How it works</h2>
+    <p style="font-size:12.2px;color:var(--text)">The framework has five parts. Each part answers one question.</p>
+  </div>
+  <div class="hw mt12">
+    <div class="h"><div class="n">1</div><b>Understand concepts</b><i>What is a multi-region platform, what can a region provide, and what do applications need?</i><p>Four connectivity profiles describe the platform options. Four archetypes describe what applications require. <em>Part 1</em></p></div>
+    <div class="h"><div class="n">2</div><b>Qualify regions</b><i>Can this region support the workloads we expect?</i><p>Four checks lead to one of four outcomes: excluded, candidate, conditional, or qualified. <em>Part 2</em></p></div>
+    <div class="h"><div class="n">3</div><b>Select the regional design</b><i>What should the platform provide in a qualified region?</i><p>Make three choices from short lists: the connectivity profile, where each shared service is provided, and whether the hybrid connectivity you already have is reused. The region is then <strong>selected</strong>. <em>Part 3</em></p></div>
+    <div class="h"><div class="n">4</div><b>Prepare the region</b><i>What has to exist before workloads arrive?</i><p>Build only what the selected design calls for, through the automation you already run. Two of the four profiles need no hub. The region is then <strong>ready for workloads</strong>. <em>Part 4</em></p></div>
+    <div class="h"><div class="n">5</div><b>Place workloads</b><i>Should this workload use the region now?</i><p>Decide per workload, with current evidence. The region is then <strong>in use</strong>. <em>Part 5</em></p></div>
+  </div>
+
+  <h2 class="mt20" style="font-size:17px;color:var(--ink)">The approach at a glance</h2>
+  <div class="es mt12">
     <div class="c"><span class="ic" style="background:var(--b600)"><svg><use href="#i-layers"/></svg></span>
       <h3>Extend, do not replicate</h3>
       <p>The landing-zone operating model stays consistent across the Azure estate. New regions add only the <strong>most efficient platform capabilities</strong> required by the workloads expected to use them, rather than replicating an existing regional footprint.</p></div>
     <div class="c"><span class="ic" style="background:var(--b700)"><svg><use href="#i-search"/></svg></span>
       <h3>Qualify regions against defined requirements</h3>
-      <p>Regional qualification evaluates business and geographic needs, data and compliance constraints, workload requirements and dependencies, regional capabilities, and platform enablement considerations. A region can remain excluded, conditional, or qualified based on documented evidence, constraints, owners, and revalidation triggers.</p>
+      <p>Regional qualification evaluates business and geographic needs, data and compliance constraints, workload requirements and dependencies, and regional capabilities. A region can remain excluded, conditional, or qualified based on documented evidence, constraints, owners, and revalidation triggers.</p>
       <p>Qualification creates a <strong>governed regional option</strong>; it does not permanently approve the region for every workload.</p></div>
     <div class="c" style="background:var(--t50)"><span class="ic" style="background:var(--t600)"><svg><use href="#i-app"/></svg></span>
       <h3>Plan by workload requirements, not individual applications</h3>
-      <p>Application Landing Zone archetypes provide a planning abstraction for recurring connectivity and dependency requirements. They help platform teams anticipate what future workloads may require without attempting to predict every application in advance.</p>
+      <p>Workload Landing Zone archetypes provide a planning abstraction for recurring connectivity and dependency requirements. They help platform teams anticipate what future workloads may require without attempting to predict every application in advance.</p>
       <p>Archetypes describe <strong>what applications require</strong>. Regional connectivity profiles describe <strong>what the platform provides</strong>. The relationship is intentionally not one-to-one.</p></div>
   </div>
 </div>
@@ -52,8 +104,8 @@
 <div class="inner">
   <div class="eyebrow">Executive summary · continued</div>
   <div class="es2 mt16">
-    <div class="c"><span class="ic" style="background:#8661C5"><svg><use href="#i-hub"/></svg></span>
-      <h3>Right-size regional connectivity</h3>
+    <div class="c"><span class="ic" style="background:var(--v600)"><svg><use href="#i-hub"/></svg></span>
+      <h3>Choose the most efficient regional connectivity</h3>
       <p>Regional Platform Connectivity Profiles range from <strong>Disconnected Spokes</strong> through <strong>Remote Hub Connected</strong> and <strong>Minimal Regional Hub</strong> to a <strong>Full Regional Hub</strong>.</p>
       <p>These profiles are not maturity stages. Select the <strong>most efficient profile</strong> for current workload and platform requirements. Add local capabilities only when a measurable need for connectivity, latency, resiliency, security, data handling, or operations justifies them.</p>
       <p>Strategic geographic hubs and shared services can continue to support other regions where dependencies and service characteristics permit, avoiding unnecessary duplication.</p></div>
@@ -69,14 +121,19 @@
       <p><strong>Region-agnostic does not mean region-random.</strong> Regional choice operates within a governed framework of qualified options, documented constraints, and current evidence.</p></div>
   </div>
 
+  <div class="note mt20" style="padding:10px 16px;display:flex;gap:14px;align-items:center">
+    <svg style="width:20px;height:20px;color:var(--b600);flex:none"><use href="#i-flag"/></svg>
+    <p style="font-size:12px;color:var(--ink)"><strong>New to the framework?</strong> Getting started (Putting it into practice) walks through the first additional region in six steps, and the decision trees (Parts 2 and 3) put the two main decisions on one page.</p>
+  </div>
+
   <div style="position:absolute;left:0;right:0;bottom:0;height:128px;border-radius:16px;overflow:hidden">
     <svg width="940" height="128" viewBox="0 0 940 128" style="position:absolute;left:0;top:0">
       {{PY:art.defs('es')}}
       {{PY:art.background('es', 0, 0, 940, 128)}}
       <path d="M560,120 C680,70 800,126 960,46" fill="none" stroke="url(#esswoosh)" stroke-width="2"/>
     </svg>
-    <div style="position:absolute;left:30px;right:120px;top:0;bottom:0;display:flex;align-items:center;gap:26px">
-      <div class="cap" style="color:#BCD9F5;white-space:nowrap">The goal</div>
+    <div data-on-art style="position:absolute;left:30px;right:120px;top:0;bottom:0;display:flex;align-items:center;gap:26px">
+      <div class="cap" style="color:var(--b200);white-space:nowrap">The goal</div>
       <p style="font-size:20px;line-height:1.3;font-weight:300;color:#fff">The goal is not to select the perfect two regions. <b style="font-weight:650">It is to make additional regions significantly easier to adopt when business and workload requirements justify them.</b></p>
     </div>
   </div>

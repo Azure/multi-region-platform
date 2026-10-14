@@ -5,6 +5,10 @@
    Sides: t r b l, optionally with offset "b@0.25" (fraction along the side). */
 (function () {
   const NS = "http://www.w3.org/2000/svg";
+  // layout problems are collected in window.__warn; render.py prints them and fails the build
+  window.__warn = window.__warn || [];
+  const pageNo = el => { const pg = el && el.closest ? el.closest(".page") : null; return pg ? [...document.querySelectorAll(".page")].indexOf(pg) + 1 : "?"; };
+  const warn = (el, msg) => { const m = `page ${pageNo(el)}: ${msg}`; window.__warn.push(m); console.warn(m); };
   const COLORS = { plain: "#8A95A5", yes: "#0F6CBD", no: "#A84E1F", dash: "#8A95A5", teal: "#04807A",
                    slate: "#4A5B72", warm: "#A84E1F", blue: "#0F6CBD", green: "#107C41", light: "#8CC0EE" };
 
@@ -76,7 +80,7 @@
       lines.forEach(ln => {
         const q = id => dg.querySelector(`[id="${id}"]`) || document.getElementById(id);
         const A = q(ln.dataset.from), B = q(ln.dataset.to);
-        if (!A || !B) { console.warn("missing", ln.dataset.from, ln.dataset.to); return; }
+        if (!A || !B) { warn(ln, `connector endpoint missing (from "${ln.dataset.from}" to "${ln.dataset.to}")`); return; }
         const a = anchor(A.getBoundingClientRect(), cr, ln.dataset.s || "b");
         const b = anchor(B.getBoundingClientRect(), cr, ln.dataset.e || "t");
         const k = ln.dataset.k || "plain"; const col = COLORS[k] || COLORS.plain;
@@ -109,8 +113,19 @@
   function toc() {
     const pages = [...document.querySelectorAll(".page")];
     document.querySelectorAll("[data-toc]").forEach(el => {
-      const t = document.getElementById(el.dataset.toc); if (!t) return;
+      const t = document.getElementById(el.dataset.toc);
+      if (!t) { warn(el, `data-toc target "${el.dataset.toc}" not found`); return; }
       const pg = t.closest(".page"); el.textContent = String(pages.indexOf(pg) + 1).padStart(2, "0");
+      // a contents row (or a tools row) becomes one link; any other page number links on its own
+      const row = el.closest(".tocg .e, .tools .tr");
+      if (row && row.tagName !== "A") {
+        const a = document.createElement("a"); a.className = row.className; a.setAttribute("href", "#" + el.dataset.toc);
+        while (row.firstChild) a.appendChild(row.firstChild);
+        row.replaceWith(a);
+      } else if (!row) {
+        const a = document.createElement("a"); a.className = "toc-link"; a.setAttribute("href", "#" + el.dataset.toc);
+        a.textContent = el.textContent; el.textContent = ""; el.appendChild(a);
+      }
     });
   }
 
@@ -124,10 +139,23 @@
       el.textContent = 'Figure ' + map.get(host);
     });
     document.querySelectorAll('[data-figref]').forEach(el => {
-      const v = map.get(el.dataset.figref); if (v) el.textContent = 'Figure ' + v;
+      const v = map.get(el.dataset.figref);
+      if (v) el.textContent = 'Figure ' + v; else warn(el, `data-figref target "${el.dataset.figref}" not found`);
     });
   }
 
-  function run() { folios(); figures(); toc(); connectors(); document.body.dataset.ready = "1"; }
+  function breakReferenceUrls() {
+    document.querySelectorAll(".rgp .it code").forEach(el => {
+      const pieces = el.textContent.split(/([/\-.?])/);
+      const nodes = [];
+      pieces.forEach((piece, i) => {
+        if (piece) nodes.push(document.createTextNode(piece));
+        if (i % 2 === 1) nodes.push(document.createElement("wbr"));
+      });
+      el.replaceChildren(...nodes);
+    });
+  }
+
+  function run() { folios(); figures(); toc(); breakReferenceUrls(); connectors(); document.body.dataset.ready = "1"; }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => requestAnimationFrame(run)); else window.addEventListener("load", run);
 })();

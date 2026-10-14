@@ -1,39 +1,65 @@
 ---
-title: Platform architecture for a multi-region platform
-description: How Application Landing Zone archetypes and regional platform connectivity profiles work together to plan the platform capability each Azure region provides.
-ms.date: 09/30/2026
+title: Regional design overview
+description: Select the regional design for a qualified Azure region with three choices from short lists — the connectivity profile, where each shared service is provided, and whether existing hybrid connectivity is reused — and record them so the region can be prepared.
+ms.date: 10/06/2026
 ms.topic: conceptual
 ---
 
-# Platform architecture
+# Regional design overview
 
-Once candidate regions are qualified, two constructs shape what the platform provides in each region:
+Selecting the regional design is a set of decisions, not a deployment. For each qualified region, you make three choices, each from a short list. Nothing is built yet: deployment follows later, through the automation you already run.
 
-- **[Application Landing Zone archetypes](./application-landing-zone-archetypes.md)** describe what applications require: recurring connectivity and dependency characteristics.
-- **[Regional platform connectivity profiles](./connectivity-profiles.md)** describe what the platform provides: from Disconnected Spokes through Remote Hub Connected and Minimal Regional Hub to a Full Regional Hub.
+Each choice follows from the workloads you expect in the region, not from the footprint of an existing hub.
 
-The mapping is not one-to-one. One archetype can use different profiles, and one profile can support multiple archetypes. Keeping the two layers separate lets the platform plan capability without prescribing application designs.
+| Choice | You select | Page |
+|---|---|---|
+| 1. Connectivity profile | One of four: Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, or Full Regional Hub. | [Select the connectivity profile](./profile-selection.md) |
+| 2. Shared-service placement | For each shared service the workloads depend on: local, remote, or global. | [Place shared services](./platform-enablement-connectivity.md) |
+| 3. Hybrid connectivity | Reuse the existing foundation, change it, or confirm that none is required. | [Confirm hybrid connectivity](./hybrid-connectivity.md) |
 
-:::image type="content" source="./media/archetype-profile-matrix.png" alt-text="Matrix of the four archetypes against the four connectivity profiles. Hybrid-connected and connected cloud-native or AI applications typically use remote hub, minimal hub, or full hub; isolated cloud-native or AI applications often use disconnected spokes and other profiles where justified; interconnected portfolios can use spoke-to-spoke connectivity, a remote hub where acceptable, and a minimal or full hub when justified." lightbox="./media/archetype-profile-matrix.png":::
+<!-- site-only:start -->
+> [!TIP]
+> The [region planning workbook](./region-planner.html) walks through the three choices for each selected region and produces the regional design record.
+<!-- site-only:end -->
 
-*Archetype-to-profile relationships are many-to-many. Each row is a set of options, not an assignment; the selected profile follows dependencies, latency, traffic, resiliency, and independence requirements.*
+## Start from workload requirements
 
-## East-west traffic in interconnected portfolios
+Use the workload requirements identified earlier to determine how workloads should consume regional and centralized platform capabilities. Workload Landing Zone archetypes can help inform the assessment, but the resulting connectivity design should be based on the actual dependencies and requirements of each workload.
 
-Where significant east-west traffic exists within a region, evaluate whether direct spoke-to-spoke connectivity or a regional hub is a better path than routing through a remote hub. Direct connectivity may suit a few tightly coupled workloads; a Minimal or Full Regional Hub fits broader routing, inspection, resiliency, or operational needs.
+- For existing workloads, particularly those with legacy or hybrid dependencies, use validated application, network, datacenter, and shared-service dependencies to determine whether existing geographic hubs can continue to support the workload or whether additional regional capabilities are required.
+- For new workloads, derive connectivity needs from the intended architecture and known dependencies, using the Workload Landing Zone archetypes as a planning aid. Reuse existing geographic hubs, shared services, and platform capabilities where they meet those needs; a new region does not automatically require a new platform footprint.
 
-## Portfolio-level requirements
+Existing and new workloads follow the same rule: requirements and dependencies determine the regional connectivity profile. Known requirements can shape platform planning in advance; validate workload-specific fit during onboarding and add regional capabilities only when justified.
 
-Because a portfolio's combined dependencies can require capabilities beyond any single application, select its profile from aggregate connectivity, shared-service, resiliency, scale, and operational requirements, not from a single workload.
+## Three choices on one path
+
+The three choices sit on one path, from on-premises locations to the workloads in the region. They influence one another, but each has different requirements and tradeoffs. Connectivity that is specific to one application isn't decided here. It is designed when the [workload is placed](./workload-placement.md).
+
+:::image type="content" source="./media/connectivity-planning-layers.png" alt-text="Three decisions shown on one path. Resilient hybrid connectivity links on-premises datacenters and users to the Azure backbone in the selected geography through ExpressRoute or VPN. Platform capabilities covers the strategic geographic hubs and shared services, each provided locally, remotely, or centrally. Regional platform connectivity covers the Workload Landing Zones, supported by the regional platform connectivity profile." lightbox="./media/connectivity-planning-layers.png":::
+
+*The three decisions on one path: resilient hybrid connectivity, platform capabilities, and regional platform connectivity. They are related, but each is a separate decision.*
+
+## The regional design record
+
+Keep one record per region. Record the selected profile, the placement of each shared service (and which hub provides the remote ones), the hybrid connectivity decision, the owner, the date, and the triggers that would reopen the decision.
+
+| Region | Connectivity profile | Shared services | Hybrid connectivity | Open conditions |
+|---|---|---|---|---|
+| Region C | Minimal Regional Hub | Local: selected capabilities. Remote from Region A: remaining shared services. | Reuse: existing foundation where required. | None |
+| Region D | Remote Hub Connected | Remote from a strategic geographic hub. | Reuse: via the hub where required. | Latency test with representative traffic. |
+| Region E | Disconnected Spokes | None required. | Not required. | None |
+
+*Illustrative example. Regions and choices are examples only.*
+
+A region with a complete record is **selected**. Record the open conditions of a conditional region with it, and update the record when a reassessment trigger applies.
 
 ## In this section
 
-- [Application Landing Zone archetypes](./application-landing-zone-archetypes.md)
-- [Regional platform connectivity profiles](./connectivity-profiles.md)
-- [Profile selection and hub implementations](./profile-selection.md)
-- [Platform readiness checklist](./platform-readiness.md)
+- [Select the connectivity profile](./profile-selection.md): the selection principles, the decision tree, and what each step up costs.
+- [Place shared services](./platform-enablement-connectivity.md): where each shared service is provided, with a default for each profile.
+- [Confirm hybrid connectivity](./hybrid-connectivity.md): whether the hybrid connectivity you already have is enough.
 
 ## Next step
 
 > [!div class="nextstepaction"]
-> [Application Landing Zone archetypes](./application-landing-zone-archetypes.md)
+> [Select the connectivity profile](./profile-selection.md)

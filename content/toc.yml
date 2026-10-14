@@ -1,58 +1,71 @@
 # Table of contents in Microsoft Learn (docfx) format.
 # The website generator reads this file to build the left navigation.
 items:
-- name: Multi-region adoption strategy
+- name: Multi-region platform strategy
   href: index.md
-- name: Decision trees
-  href: decision-trees.md
-- name: 1. Regional qualification
-  href: regional-qualification.md
+- name: Framework overview
+  href: framework-overview.md
+- name: 1. Understand concepts
   items:
-  - name: Assessment outcome
-    href: assessment-outcome.md
-  - name: Business and geography
-    href: business-and-geography.md
-  - name: Data and compliance
-    href: data-and-compliance.md
-  - name: Workload requirements and dependencies
-    href: workload-requirements.md
-  - name: Regional capability and availability
-    href: regional-capability.md
-  - name: Platform enablement and connectivity
-    href: platform-enablement-connectivity.md
-- name: 2. Platform architecture
-  href: platform-architecture.md
-  items:
-  - name: Application landing zone archetypes
-    href: application-landing-zone-archetypes.md
-  - name: Regional platform connectivity profiles
+  - name: Multi-region platform and workload
+    href: platform-and-workload.md
+  - name: Common connectivity profiles
     href: connectivity-profiles.md
-  - name: Profile selection and hub implementations
+  - name: Workload Landing Zone archetypes
+    href: application-landing-zone-archetypes.md
+- name: 2. Qualify regions
+  items:
+  - name: Overview
+    href: regional-qualification.md
+  - name: 1. Business and geography
+    href: business-and-geography.md
+  - name: 2. Data and compliance
+    href: data-and-compliance.md
+  - name: 3. Workload requirements and dependencies
+    href: workload-requirements.md
+  - name: 4. Regional capability and availability
+    href: regional-capability.md
+- name: 3. Select the regional design
+  items:
+  - name: Overview
+    href: platform-architecture.md
+  - name: Select the connectivity profile
     href: profile-selection.md
+  - name: Place shared services
+    href: platform-enablement-connectivity.md
+  - name: Confirm hybrid connectivity
+    href: hybrid-connectivity.md
+- name: 4. Prepare the region
+  items:
+  - name: Overview
+    href: prepare-region.md
+  - name: Disconnected Spokes
+    href: disconnected-spokes.md
+  - name: Remote Hub Connected
+    href: remote-hub-connected.md
+  - name: Minimal Regional Hub
+    href: minimal-regional-hub.md
+  - name: Full Regional Hub
+    href: full-regional-hub.md
   - name: Platform readiness checklist
     href: platform-readiness.md
-- name: 3. Governance and operating model
-  href: operating-model.md
-- name: 4. Workload placement
+- name: 5. Place workloads
   href: workload-placement.md
-- name: Multi-region workload design
-  href: workload-design.md
+- name: Service behavior across regions
   items:
+  - name: Overview
+    href: workload-design.md
   - name: Paired and nonpaired regions
     href: paired-nonpaired-regions.md
   - name: Storage, backup, and Key Vault
     href: storage-backup-key-vault.md
   - name: Resiliency scenarios
     href: resiliency-scenarios.md
-  - name: "Well-Architected: regions and availability zones"
-    href: https://learn.microsoft.com/azure/well-architected/design-guides/regions-availability-zones
-  - name: Azure reliability service guides
-    href: https://learn.microsoft.com/azure/reliability/overview-reliability-guidance
 - name: Resources
   items:
+  - name: Getting started
+    href: getting-started.md
   - name: Customer scenarios
     href: customer-scenarios.md
   - name: Common misconceptions
     href: misconceptions.md
-  - name: Getting started
-    href: getting-started.md

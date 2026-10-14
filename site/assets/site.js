@@ -15,6 +15,17 @@
   dlBtn.addEventListener('click', e => { e.stopPropagation(); dlMenu.hidden = !dlMenu.hidden; dlBtn.setAttribute('aria-expanded', String(!dlMenu.hidden)); });
   document.addEventListener('click', e => { if (!dlMenu.hidden && !dlMenu.contains(e.target)) { dlMenu.hidden = true; dlBtn.setAttribute('aria-expanded', 'false'); } });
 
+  // table of contents on small screens
+  const navBtn = $('.nav-toggle'), backdrop = $('.nav-backdrop');
+  function setNav(open) {
+    if (!navBtn) return;
+    document.body.classList.toggle('nav-open', open);
+    navBtn.setAttribute('aria-expanded', String(open));
+    if (backdrop) backdrop.hidden = !open;
+  }
+  if (navBtn) navBtn.addEventListener('click', () => setNav(!document.body.classList.contains('nav-open')));
+  if (backdrop) backdrop.addEventListener('click', () => setNav(false));
+
   // nav expand / collapse
   $$('.nav .chev, .nav .nav-group').forEach(b => b.addEventListener('click', e => {
     e.preventDefault(); b.closest('li').classList.toggle('open');
@@ -48,7 +59,8 @@
     const clone = src.cloneNode(true);
     if (clone.classList.contains('wpf')) {
       const src0 = $('.wpf', fig), w = src0.offsetWidth || +clone.dataset.w, h = src0.offsetHeight || +clone.dataset.h;
-      const s = Math.min(1.6, (innerWidth * 0.9 - 56) / w, (innerHeight * 0.88 - 56) / h);
+      // on small screens keep the figure readable and let the lightbox scroll
+      const s = Math.max(innerWidth <= 960 ? 0.7 : 0, Math.min(1.6, (innerWidth * 0.9 - 56) / w, (innerHeight * 0.88 - 56) / h));
       const box = document.createElement('div');
       box.style.width = w * s + 'px'; box.style.height = h * s + 'px';
       clone.style.transform = `scale(${s})`; clone.style.transformOrigin = '0 0';
@@ -58,7 +70,7 @@
   }
   $$('.fig-zoom').forEach(b => b.addEventListener('click', () => openLb(b.closest('.fig'))));
   lb.addEventListener('click', e => { if (e.target === lb || e.target.classList.contains('lb-close')) lb.hidden = true; });
-  addEventListener('keydown', e => { if (e.key === 'Escape') { lb.hidden = true; closeResults(); } });
+  addEventListener('keydown', e => { if (e.key === 'Escape') { lb.hidden = true; closeResults(); setNav(false); } });
 
   // "In this article" scrollspy
   const railLinks = $$('.rail a');

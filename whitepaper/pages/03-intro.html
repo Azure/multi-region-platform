@@ -1,4 +1,4 @@
-<section class="page" data-section="01 · Introduction">
+<section class="page" data-section="Framework overview">
 <style>
   .f1 { display: grid; grid-template-columns: 330px 70px 1fr; height: 296px; }
   .f1 .panel { border-radius: 12px; padding: 14px 16px 14px; position: relative; }
@@ -8,7 +8,7 @@
   .f1 .ph .cap { color: var(--muted); }
   .f1 .ph b { font-size: 13px; color: var(--ink); font-weight: 650; }
   .rg { border: 1.2px dashed var(--b300); border-radius: 9px; padding: 22px 6px 6px; position: relative; background: #fff; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; }
-  .rg .rl { position: absolute; top: 5px; left: 7px; right: 5px; display: flex; gap: 3px; align-items: center; font-size: 8.8px; font-weight: 700; color: var(--b700); letter-spacing: .02em; white-space: nowrap; }
+  .rg .rl { position: absolute; top: 5px; left: 7px; right: 5px; display: flex; gap: 3px; align-items: center; font-size: 9px; font-weight: 700; color: var(--b700); letter-spacing: .02em; white-space: nowrap; }
   .rg .rl svg { width: 10px; height: 10px; color: var(--b600); flex: none; }
   .blk { border-radius: 5px; font-size: 9px; font-weight: 650; text-align: center; padding: 5px 2px; line-height: 1.2; }
   .blk.hub { background: var(--b600); color: #fff; }
@@ -20,21 +20,20 @@
   .f1 .found .ft { font-size: 11.4px; font-weight: 650; }
   .f1 .found .fs { font-size: 9.6px; color: #C9D4E2; margin-top: 1px; letter-spacing: .02em; }
   .f1 .press { display: flex; flex-wrap: wrap; gap: 5px; }
-  .f1 .rlabel { font-size: 8.8px; color: var(--muted); text-align: center; line-height: 1.25; margin-top: 5px; white-space: nowrap; }
+  .f1 .rlabel { font-size: 9px; color: var(--muted); text-align: center; line-height: 1.25; margin-top: 5px; white-space: nowrap; }
 </style>
 <div class="inner">
   <div class="open-band" id="s1">
-    <div class="num">01</div>
     <div style="flex:1">
-      <div class="eyebrow">Introduction</div>
+      <div class="eyebrow">Framework overview</div>
       <h1 class="sec-title mt8" style="max-width:600px;font-size:30px">Extending Azure landing zones for adaptable regional placement</h1>
     </div>
     <p class="standfirst" style="width:300px;font-size:14.2px;padding-bottom:2px">The same operating model applies across the estate, while each region is <strong>qualified against the workloads</strong> it may need to support.</p>
   </div>
 
-  <div class="g2 mt12" style="gap:34px">
+  <div class="mt12" style="column-count:2;column-gap:34px">
     <p>Azure landing zones provide a governed foundation for identity, connectivity, security, management, and application delivery. Many organizations initially establish this foundation around a small, fixed set of Azure regions — typically a primary region and a disaster-recovery region, reflecting traditional datacenter and colocation design. This model works while demand and placement requirements remain predictable. It becomes less adaptable as business expansion, data boundaries, service and AI availability, latency requirements, and other regional conditions evolve.</p>
-    <p>An adaptable multi-region platform extends Azure landing zones without creating separate governance structures or identical infrastructure in every region. The same operating model applies across the estate, while each region is qualified against the workloads it may need to support. Because platform teams cannot predict every future workload, this paper uses three planning constructs: the Regional Qualification and Enablement Framework, Application Landing Zone Archetypes, and Regional Platform Connectivity Profiles.</p>
+    <p>Because platform teams cannot predict every future workload, this paper uses three planning constructs: Regional Platform Connectivity Profiles, Workload Landing Zone Archetypes, and Regional Qualification.</p>
   </div>
 
   <div class="figure mt16" id="fig1">
@@ -47,7 +46,7 @@
             <div class="blk wl">Workloads</div><div class="blk ss">Shared services</div><div class="blk hub">Hub &amp; connectivity</div></div>
           <div class="rg node" id="f1b"><div class="rl"><svg><use href="#i-pin"/></svg>DR region</div>
             <div class="blk wl">Workloads</div><div class="blk ss">Shared services</div><div class="blk hub">Hub &amp; connectivity</div></div>
-          <div style="position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);font-size:8.6px;font-weight:700;color:var(--muted);background:var(--wash);padding:2px 0;z-index:3;writing-mode:vertical-rl;letter-spacing:.08em">MIRRORED</div>
+          <div style="position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);font-size: 9px;font-weight:700;color:var(--muted);background:var(--wash);padding:2px 0;z-index:3;writing-mode:vertical-rl;letter-spacing:.08em">MIRRORED</div>
         </div>
         <div class="cap mt12" style="color:var(--w600)">Evolving regional conditions</div>
         <div class="press mt4">
@@ -70,9 +69,9 @@
           <div><div class="rg" style="height:150px"><div class="rl"><svg><use href="#i-pin"/></svg>Region A</div><div class="blk wl">Workloads</div><div class="blk ss">Shared</div><div class="blk hub">Full hub</div></div></div>
           <div><div class="rg" style="height:150px"><div class="rl"><svg><use href="#i-pin"/></svg>Region B</div><div class="blk wl">Workloads</div><div class="blk ss">Shared</div><div class="blk hub">Full hub</div></div></div>
           <div><div class="rg" style="height:118px"><div class="rl"><svg><use href="#i-pin"/></svg>Region C</div><div class="blk wl">Workloads</div><div class="blk ss" style="background:#fff;border:1px solid var(--b300)">Minimal hub</div></div></div>
-          <div><div class="rg" style="height:92px"><div class="rl"><svg><use href="#i-pin"/></svg>Region D</div><div class="blk wl">Spokes</div><div class="blk" style="font-size:8.4px;color:var(--b700);padding:2px">↔ remote hub</div></div></div>
-          <div><div class="rg" style="height:70px"><div class="rl"><svg><use href="#i-pin"/></svg>Region E</div><div class="blk wl2">Isolated spokes</div></div></div>
-          <div><div class="rg cand" style="height:56px"><div class="rl" style="color:var(--b600)"><svg><use href="#i-pin"/></svg>Region F</div><span style="font-size:8.8px;font-weight:650;color:var(--b600);margin-top:10px">Candidate</span></div></div>
+          <div><div class="rg" style="height:92px"><div class="rl"><svg><use href="#i-pin"/></svg>Region D</div><div class="blk wl">Spokes</div><div class="blk" style="font-size: 9px;color:var(--b700);padding:2px">↔ remote hub</div></div></div>
+          <div><div class="rg" style="height:70px"><div class="rl"><svg><use href="#i-pin"/></svg>Region E</div><div class="blk wl2">Disconnected spokes</div></div></div>
+          <div><div class="rg cand" style="height:56px"><div class="rl" style="color:var(--b600)"><svg><use href="#i-pin"/></svg>Region F</div><span style="font-size: 9px;font-weight:650;color:var(--b600);margin-top:10px">Candidate</span></div></div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">
           <div class="rlabel">Strategic hub</div><div class="rlabel">Strategic hub</div><div class="rlabel">Minimal hub</div><div class="rlabel">Remote hub</div><div class="rlabel">Disconnected</div><div class="rlabel">Not enabled</div>

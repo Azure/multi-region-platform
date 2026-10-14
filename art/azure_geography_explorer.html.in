@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Explore a European Azure footprint and compare candidate regions with optional latency layers. Illustrative data, not measured network performance.">
+<title>Azure geography explorer</title>
+<script>
+  (() => {
+    const param = new URLSearchParams(window.location.search).get("scoutTheme");
+    const theme =
+      param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+<style>
+:root {
+  color-scheme: light;
+  --cp-bg: #f7f4ef;
+  --cp-bg-elevated: #fcfbf8;
+  --cp-surface: #ffffff;
+  --cp-surface-soft: #f5f5f5;
+  --cp-border: #dedede;
+  --cp-border-strong: #919191;
+  --cp-text: #242424;
+  --cp-text-muted: #5c5c5c;
+  --cp-text-soft: #6f6f6f;
+  --cp-accent: #b11f4b;
+  --cp-accent-hover: #9a1a41;
+  --cp-accent-soft: rgba(177, 31, 75, 0.08);
+  --cp-accent-fg: #ffffff;
+  --cp-success: #16a34a;
+  --cp-danger: #dc2626;
+  --cp-warning: #f59e0b;
+  --cp-link: #0078d4;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+  --cp-overlay: rgba(255, 255, 255, 0.8);
+  --cp-panel: rgba(255, 255, 255, 0.86);
+  --cp-panel-strong: rgba(255, 255, 255, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.55);
+  --cp-highlight: rgba(177, 31, 75, 0.12);
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --cp-bg: #3d3b3a;
+  --cp-bg-elevated: #343231;
+  --cp-surface: #292929;
+  --cp-surface-soft: #2e2e2e;
+  --cp-border: #474747;
+  --cp-border-strong: #5f5f5f;
+  --cp-text: #dedede;
+  --cp-text-muted: #919191;
+  --cp-text-soft: #b0b0b0;
+  --cp-accent: #fd8ea1;
+  --cp-accent-hover: #fb7b91;
+  --cp-accent-soft: rgba(253, 142, 161, 0.14);
+  --cp-accent-fg: #1a1a1a;
+  --cp-success: #4ade80;
+  --cp-danger: #f87171;
+  --cp-warning: #fbbf24;
+  --cp-link: #4da6ff;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+  --cp-overlay: rgba(41, 41, 41, 0.88);
+  --cp-panel: rgba(41, 41, 41, 0.72);
+  --cp-panel-strong: rgba(41, 41, 41, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.04);
+  --cp-highlight: rgba(253, 142, 161, 0.12);
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--cp-bg); color: var(--cp-text); font: 15px/1.5 "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif; }
+button,select { font: inherit; color: inherit; }
+button,summary,select { cursor: pointer; }
+button,select { min-height: 44px; border: 1px solid var(--cp-border); border-radius: .625rem; background: var(--cp-surface); }
+button { padding: 8px 16px; font-weight: 600; transition: background 160ms, border-color 160ms; }
+button:hover,select:hover { background: var(--cp-surface-soft); border-color: var(--cp-border-strong); }
+button:active { transform: translateY(1px); }
+button:disabled { cursor: default; opacity: .45; transform: none; }
+button:focus-visible,select:focus-visible,summary:focus-visible,a:focus-visible,[data-location]:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 4px; }
+a { color: var(--cp-link); }
+.skip { position: absolute; top: -80px; padding: 12px; background: var(--cp-surface); z-index: 3; }
+.skip:focus { top: 8px; left: 8px; }
+.shell { max-width: 1600px; margin: auto; padding: 24px 32px 32px; }
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--cp-border); }
+.identity { display: flex; align-items: center; gap: 12px; }
+.brand { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; color: var(--cp-accent); background: var(--cp-accent-soft); }
+.brand svg { width: 22px; height: 22px; }
+.identity strong { font-size: 16px; letter-spacing: -.3px; }
+.identity small { display: block; color: var(--cp-text-muted); font-size: 12px; }
+.top-actions { display: flex; align-items: center; gap: 12px; }
+.top-actions label { font-size: 12px; color: var(--cp-text-muted); }
+.top-actions select { padding: 8px; }
+.prototype { font-size: 12px; letter-spacing: .6px; color: var(--cp-accent); background: var(--cp-accent-soft); padding: 6px 10px; border-radius: 4px; }
+.heading { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 24px 0; }
+.eyebrow { font-size: 12px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--cp-text-muted); margin: 0 0 6px; }
+h1 { margin: 0; font-size: clamp(24px,3vw,36px); line-height: 1.2; letter-spacing: -1px; font-weight: 650; }
+.subtitle { margin: 8px 0 0; color: var(--cp-text-muted); max-width: 65ch; }
+.primary { background: var(--cp-accent); color: var(--cp-accent-fg); border-color: var(--cp-accent); white-space: nowrap; }
+.primary:hover { background: var(--cp-accent-hover); border-color: var(--cp-accent-hover); }
+.workspace { display: grid; grid-template-columns: minmax(0,1fr) 300px; background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px; overflow: hidden; }
+.map-panel { min-width: 0; }
+.map-toolbar { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; gap: 16px; border-bottom: 1px solid var(--cp-border); }
+.map-toolbar label { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--cp-text-muted); }
+.map-toolbar select { padding: 8px 28px 8px 10px; max-width: 205px; font-size: 13px; }
+.view-status { font-size: 12px; color: var(--cp-text-muted); text-align: right; }
+.view-status strong { font: 600 20px Consolas,"Courier New",monospace; color: var(--cp-text); margin-right: 6px; }
+.map-stage { position: relative; background: var(--cp-bg-elevated); }
+#network-map { display: block; width: 100%; height: auto; aspect-ratio: 920 / 620; }
+.zoom { position: absolute; right: 16px; bottom: 16px; display: flex; gap: 4px; background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 10px; padding: 4px; }
+.zoom button { min-width: 44px; padding: 6px; border: 0; background: var(--cp-surface); }
+.map-key { display: flex; flex-wrap: wrap; gap: 20px; padding: 16px 20px; border-top: 1px solid var(--cp-border); font-size: 12px; color: var(--cp-text-muted); }
+.key { display: inline-flex; align-items: center; gap: 7px; }
+.symbol { display: inline-block; width: 8px; height: 8px; background: var(--cp-accent); border-radius: 50%; flex: none; }
+.symbol.candidate { border: 1.5px solid var(--cp-accent); outline: 1px dashed var(--cp-accent); outline-offset: 2px; background: var(--cp-surface); }
+.symbol.peering { border-radius: 0; background: var(--cp-link); transform: rotate(45deg); }
+.controls { border-left: 1px solid var(--cp-border); padding: 20px; display: flex; flex-direction: column; gap: 24px; }
+h2 { font-size: 15px; letter-spacing: -.2px; font-weight: 650; margin: 0 0 8px; }
+h3 { font-size: 12px; color: var(--cp-text-muted); font-weight: 500; margin: 16px 0 8px; }
+.hint { font-size: 12px; color: var(--cp-text-muted); margin: 0; }
+.layer { display: flex; align-items: center; justify-content: space-between; width: 100%; text-align: left; border: 0; border-radius: 8px; padding: 10px 8px; gap: 12px; background: var(--cp-surface); }
+.layer:hover { background: var(--cp-bg-elevated); }
+.layer strong { display: block; font-size: 13px; font-weight: 600; }
+.layer small { display: block; color: var(--cp-text-muted); font-size: 11px; font-weight: 400; margin-top: 2px; }
+.track { width: 34px; height: 20px; border-radius: 12px; background: var(--cp-border-strong); flex: none; position: relative; transition: background 160ms; }
+.track:after { content: ""; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px; border-radius: 50%; background: var(--cp-surface); transition: transform 160ms; }
+.layer[aria-checked=true] .track { background: var(--cp-accent); }
+.layer[aria-checked=true] .track:after { transform: translateX(14px); }
+.optional { border-top: 1px solid var(--cp-border); margin-top: 10px; padding-top: 12px; }
+.optional .eyebrow { font-size: 10px; margin: 0 0 2px 8px; }
+.footprint { border-top: 1px solid var(--cp-border); padding-top: 20px; }
+.location-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; padding: 5px 0; }
+.location-row span { display: flex; align-items: center; gap: 8px; }
+.location-row code { font: 11px Consolas,"Courier New",monospace; color: var(--cp-text-muted); }
+.clear { border: 0; background: none; padding: 4px 0; text-align: left; color: var(--cp-accent); font-size: 12px; min-height: 44px; }
+.clear:hover { background: none; text-decoration: underline; }
+.disclaimer { padding: 14px 20px; border-top: 1px solid var(--cp-border); color: var(--cp-text-muted); font-size: 12px; }
+.disclaimer strong { color: var(--cp-text); font-weight: 600; }
+.details { margin-top: 20px; border: 1px solid var(--cp-border); border-radius: 12px; background: var(--cp-surface); }
+summary { padding: 16px 20px; font-weight: 600; font-size: 14px; }
+summary small { font-size: 12px; font-weight: 400; color: var(--cp-text-muted); margin-left: 12px; }
+.detail-body { padding: 0 20px 20px; }
+.table-scroll { overflow-x: auto; max-height: 420px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; white-space: nowrap; }
+th,td { padding: 10px 12px; border-bottom: 1px solid var(--cp-border); text-align: left; }
+th { position: sticky; top: 0; font-size: 12px; background: var(--cp-surface); color: var(--cp-text-muted); font-weight: 500; }
+td.numeric { font-family: Consolas,"Courier New",monospace; text-align: right; }
+.empty { padding: 24px; color: var(--cp-text-muted); text-align: center; }
+.sources { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 11px; color: var(--cp-text-muted); padding-top: 20px; }
+.sources a { color: var(--cp-text-muted); text-underline-offset: 3px; }
+.error { color: var(--cp-danger); padding: 12px 0; }
+svg text { font-family: "Segoe UI",Aptos,Calibri,sans-serif; fill: var(--cp-text); }
+svg .muted { fill: var(--cp-text-muted); }
+svg .soft { fill: var(--cp-text-soft); }
+svg .accent { fill: var(--cp-accent); }
+svg .country { fill: var(--cp-surface-soft); stroke: var(--cp-border-strong); stroke-width: 1; stroke-linejoin: round; }
+svg .admin { fill: none; stroke: var(--cp-border); stroke-width: .6; }
+svg:not([data-show-candidate-peering]) [data-layer=candidate-peering],
+svg:not([data-show-other-regions]) [data-layer=other-regions],
+svg[data-hide-current-new] [data-layer=current-new],
+svg[data-hide-current-peering] [data-layer=current-peering],
+.is-hidden { display: none; }
+[data-location] { cursor: pointer; }
+[data-location]:hover > rect,[data-location]:focus-visible > rect { stroke: var(--cp-accent); stroke-width: 2; }
+.is-dimmed { opacity: .35; }
+@media(max-width:1100px) { .shell { padding: 20px; } .workspace { grid-template-columns: minmax(0,1fr) 270px; } .controls { padding: 16px; } }
+@media(max-width:780px) {
+  .shell { padding: 16px; } .topbar { gap: 12px; } .prototype { display: none; }
+  .heading { align-items: start; gap: 12px; } .subtitle { font-size: 13px; }
+  .workspace { grid-template-columns: 1fr; } .controls { border-left: 0; border-top: 1px solid var(--cp-border); display: grid; grid-template-columns: 1fr 1fr; }
+  .footprint { border-top: 0; padding-top: 0; } .map-key { gap: 12px; }
+}
+@media(max-width:500px) {
+  .identity small,.top-actions label { display: none; }
+  .heading { flex-direction: column; }
+  .top-actions select { max-width: 96px; } .map-toolbar { padding: 12px; gap: 8px; }
+  .map-toolbar label { display: block; font-size: 11px; } .map-toolbar select { display: block; max-width: 160px; }
+  .view-status { max-width: 90px; } .controls { grid-template-columns: 1fr; }
+  .footprint { border-top: 1px solid var(--cp-border); padding-top: 16px; }
+  summary small { display: block; margin: 4px 0 0; } .zoom { right: 8px; bottom: 8px; }
+}
+@media(prefers-reduced-motion:reduce) { *,*:after { transition: none !important; } }
+</style>
+</head>
+<body>
+<a class="skip" href="#workspace">Skip to map explorer</a>
+<div class="shell">
+  <header class="topbar">
+    <div class="identity">
+      <span class="brand" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15M15 6v15"/></svg></span>
+      <div><strong>Azure geography explorer</strong><small>Customer planning workspace</small></div>
+    </div>
+    <div class="top-actions"><span class="prototype">DESIGN PROTOTYPE</span><label for="theme">Appearance</label><select id="theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></div>
+  </header>
+  <section class="heading" aria-labelledby="page-title">
+    <div><p class="eyebrow">Europe / expansion scenario</p><h1 id="page-title">A clearer view of your next region.</h1><p class="subtitle">Compare your existing footprint with three candidates. Add connection layers only when you need them.</p></div>
+    <button class="primary" id="export">Export current map</button>
+  </section>
+  <main id="workspace" class="workspace" tabindex="-1">
+    <section class="map-panel" aria-label="European Azure network map">
+      <div class="map-toolbar">
+        <label for="focus">Focus on <select id="focus"><option value="">All selected locations</option></select></label>
+        <div class="view-status" role="status" aria-live="polite"><strong id="link-count">10</strong>visible comparisons</div>
+      </div>
+      <div class="map-stage">@@MAP@@
+        <div class="zoom" aria-label="Map zoom controls"><button id="zoom-out" aria-label="Zoom out">&minus;</button><button id="fit">Fit</button><button id="zoom-in" aria-label="Zoom in">+</button></div>
+      </div>
+      <div class="map-key"><span class="key"><i class="symbol"></i>Existing region</span><span class="key"><i class="symbol candidate"></i>Candidate region</span><span class="key"><i class="symbol peering"></i>ExpressRoute peering</span><span>Line labels = illustrative RTT in ms</span></div>
+      <div class="disclaimer"><strong>Planning illustration, not measured latency.</strong> Distances use approximate metro coordinates, not network routes. Select a location to isolate its visible connections.</div>
+    </section>
+    <aside class="controls" aria-label="Connection layers and customer footprint">
+      <section><h2>Connection layers</h2><p class="hint">A focused starting point. You control the detail.</p>
+        <div id="default-layers"></div><div class="optional"><p class="eyebrow">Add when needed</p><div id="optional-layers"></div></div>
+        <button class="clear" id="reset">Reset to the uncluttered view</button>
+      </section>
+      <section class="footprint"><h2>Your selected locations</h2><div id="locations"></div><p class="hint">Denmark uses the Azure region name Denmark East.</p></section>
+    </aside>
+  </main>
+  <p id="export-error" class="error" role="alert" hidden></p>
+  <details class="details"><summary>Latency &amp; distance details <small id="detail-count">10 visible connections</small></summary><div class="detail-body"><p class="hint">Follows your selected layers and location focus. RTT is illustrative; distance is approximate great-circle km.</p><div class="table-scroll"><table><thead><tr><th scope="col">From</th><th scope="col">To</th><th scope="col">Connection</th><th scope="col">RTT (ms)</th><th scope="col">Distance (km)</th></tr></thead><tbody id="rows"></tbody></table><p id="empty" class="empty" hidden>No connections match this view. Enable a layer or clear the location focus.</p></div></div></details>
+  <details class="details"><summary>Geography &amp; data notes <small>Scope, assumptions, and sources</small></summary><div class="detail-body"><p>West Europe and North Europe belong to Azure's Europe geography. Sweden Central, Denmark East, and Italy North belong to the Sweden, Denmark, and Italy geographies. This view spans geographies within Europe.</p><p>Azure geography and ExpressRoute geopolitical coverage are different. These lines do not establish circuit availability or ExpressRoute Local eligibility. Region and peering markers are approximate metro references, not facility addresses; Dublin's overlapping markers are visually offset.</p><p>RTT = round(3 + 0.018 &times; great-circle distance in km). Zero distance means a shared reference coordinate, not zero network latency. Validate your shortlist with directional measurements from the customer's network.</p></div></details>
+  <footer class="sources"><span>Standalone prototype / no customer telemetry / no external runtime requests</span><span><a href="https://learn.microsoft.com/azure/reliability/regions-list">Azure regions</a> &nbsp; / &nbsp; <a href="https://learn.microsoft.com/azure/expressroute/expressroute-locations-providers">ExpressRoute locations</a> &nbsp; / &nbsp; Natural Earth public-domain basemap</span></footer>
+</div>
+<script id="scenario" type="application/json">@@DATA@@</script>
+<script>
+(() => {
+  const data = JSON.parse(document.getElementById("scenario").textContent);
+  const map = document.getElementById("network-map");
+  const nodes = new Map(data.nodes.map(node => [node.code, node]));
+  const focus = document.getElementById("focus");
+  const layerDefinitions = [
+    ["current-new", "Existing to new regions", "Regional comparisons", true],
+    ["current-peering", "Peering to existing regions", "Your current access paths", true],
+    ["candidate-peering", "Peering to new regions", "Both peering locations to every candidate", false],
+    ["other-regions", "Other region pairs", "Existing pair and candidate-to-candidate", false]
+  ];
+  const enabled = new Map(layerDefinitions.map(([id,,,initial]) => [id, initial]));
+  const attrs = {
+    "current-new": ["data-hide-current-new", false],
+    "current-peering": ["data-hide-current-peering", false],
+    "candidate-peering": ["data-show-candidate-peering", true],
+    "other-regions": ["data-show-other-regions", true]
+  };
+  function matches(from, to) { return !focus.value || from === focus.value || to === focus.value; }
+  function refresh() {
+    for (const [id,[attribute,showWhenPresent]] of Object.entries(attrs)) map.toggleAttribute(attribute, enabled.get(id) === showWhenPresent);
+    document.querySelectorAll("[data-layer-button]").forEach(button => button.setAttribute("aria-checked", String(enabled.get(button.dataset.layerButton))));
+    for (const comparison of data.comparisons) {
+      const show = matches(comparison.from, comparison.to);
+      const pair = `${comparison.from}-${comparison.to}`;
+      map.querySelector(`[data-comparison="${pair}"]`).classList.toggle("is-hidden", !show);
+      map.querySelector(`[data-latency="${pair}"]`).parentElement.classList.toggle("is-hidden", !show);
+    }
+    map.querySelectorAll("[data-location]").forEach(group => {
+      group.classList.toggle("is-dimmed", Boolean(focus.value) && group.dataset.code !== focus.value);
+      group.setAttribute("aria-pressed", String(group.dataset.code === focus.value));
+    });
+    const visible = data.comparisons.filter(c => enabled.get(c.layer) && matches(c.from, c.to));
+    document.getElementById("link-count").textContent = visible.length;
+    document.getElementById("detail-count").textContent = `${visible.length} visible connection${visible.length === 1 ? "" : "s"}`;
+    const tbody = document.getElementById("rows");
+    tbody.replaceChildren();
+    for (const c of visible) {
+      const row = document.createElement("tr");
+      const values = [nodes.get(c.from).name, nodes.get(c.to).name, c.kind === "region" ? "Region to region" : "Peering to region", String(c.rtt), c.km.toLocaleString()];
+      values.forEach((value,index) => {
+        const cell = document.createElement("td");
+        cell.textContent = value;
+        if (index > 2) cell.className = "numeric";
+        row.appendChild(cell);
+      });
+      tbody.appendChild(row);
+    }
+    document.getElementById("empty").hidden = visible.length !== 0;
+  }
+  for (const [id,label,description,initial] of layerDefinitions) {
+    const button = document.createElement("button");
+    button.className = "layer";
+    button.type = "button";
+    button.dataset.layerButton = id;
+    button.setAttribute("role","switch");
+    button.setAttribute("aria-checked",String(initial));
+    button.setAttribute("aria-label",label);
+    const text = document.createElement("span");
+    const strong = document.createElement("strong");
+    strong.textContent = label;
+    const small = document.createElement("small");
+    small.textContent = description;
+    text.append(strong,small);
+    const track = document.createElement("span");
+    track.className = "track";
+    track.setAttribute("aria-hidden","true");
+    button.append(text,track);
+    button.addEventListener("click",() => { enabled.set(id,!enabled.get(id)); refresh(); });
+    document.getElementById(initial ? "default-layers" : "optional-layers").appendChild(button);
+  }
+  const labels = {current:"Existing regions",candidate:"Under validation",peering:"ExpressRoute peering"};
+  for (const [kind,label] of Object.entries(labels)) {
+    const heading = document.createElement("h3");
+    heading.textContent = label;
+    document.getElementById("locations").appendChild(heading);
+    for (const node of data.nodes.filter(n => n.kind === kind)) {
+      const option = document.createElement("option");
+      option.value = node.code;
+      option.textContent = node.name;
+      focus.appendChild(option);
+      const row = document.createElement("div");
+      row.className = "location-row";
+      const name = document.createElement("span");
+      const symbol = document.createElement("i");
+      symbol.className = `symbol ${kind}`;
+      symbol.setAttribute("aria-hidden","true");
+      name.append(symbol,document.createTextNode(node.name));
+      const code = document.createElement("code");
+      code.textContent = node.code;
+      row.append(name,code);
+      document.getElementById("locations").appendChild(row);
+      const group = Array.from(map.querySelectorAll("[data-location]")).find(g => g.dataset.location === node.name);
+      group.dataset.code = node.code;
+      group.setAttribute("role","button");
+      group.setAttribute("tabindex","0");
+      group.setAttribute("aria-label",`Focus connections for ${node.name}`);
+      const activate = () => { focus.value = focus.value === node.code ? "" : node.code; refresh(); };
+      group.addEventListener("click",activate);
+      group.addEventListener("keydown",event => { if (event.key === " " || event.key === "Enter") { event.preventDefault(); activate(); } });
+    }
+  }
+  focus.addEventListener("change",refresh);
+  document.getElementById("reset").addEventListener("click",() => {
+    layerDefinitions.forEach(([id,,,initial]) => enabled.set(id,initial));
+    focus.value = "";
+    refresh();
+    zoom = 1;
+    updateZoom();
+  });
+  let zoom = 1;
+  function updateZoom() {
+    const width = 920/zoom, height = 620/zoom;
+    map.setAttribute("viewBox",`${830-width/2} ${710-height/2} ${width} ${height}`);
+    document.getElementById("zoom-in").disabled = zoom >= 2.5;
+    document.getElementById("zoom-out").disabled = zoom <= 1;
+  }
+  document.getElementById("zoom-in").addEventListener("click",() => { zoom = Math.min(2.5,zoom+.25); updateZoom(); });
+  document.getElementById("zoom-out").addEventListener("click",() => { zoom = Math.max(1,zoom-.25); updateZoom(); });
+  document.getElementById("fit").addEventListener("click",() => { zoom = 1; updateZoom(); });
+  const theme = document.getElementById("theme");
+  const param = new URLSearchParams(location.search).get("scoutTheme");
+  theme.value = ["light","dark"].includes(param) ? param : "system";
+  const media = matchMedia("(prefers-color-scheme: dark)");
+  function applyTheme() { document.documentElement.dataset.theme = theme.value === "system" ? (media.matches ? "dark" : "light") : theme.value; }
+  theme.addEventListener("change",applyTheme);
+  media.addEventListener("change",applyTheme);
+  document.getElementById("export").addEventListener("click",() => {
+    const error = document.getElementById("export-error");
+    error.hidden = true;
+    try {
+      const clone = map.cloneNode(true);
+      clone.setAttribute("xmlns","http://www.w3.org/2000/svg");
+      clone.setAttribute("width","1280");
+      clone.setAttribute("height",String(Math.round(1280*620/920)));
+      clone.dataset.theme = document.documentElement.dataset.theme;
+      clone.setAttribute("role","img");
+      clone.querySelectorAll("[data-location]").forEach(group => {
+        group.removeAttribute("role");
+        group.removeAttribute("tabindex");
+        group.removeAttribute("aria-pressed");
+        group.setAttribute("aria-label",group.dataset.location);
+      });
+      const computed = getComputedStyle(document.documentElement);
+      for (const name of Array.from(computed)) {
+        if (name.startsWith("--cp-")) clone.style.setProperty(name,computed.getPropertyValue(name));
+      }
+      const style = document.createElementNS("http://www.w3.org/2000/svg","style");
+      style.textContent = document.querySelector("style").textContent;
+      clone.prepend(style);
+      const [x,y,w,h] = clone.getAttribute("viewBox").split(" ").map(Number);
+      const background = document.createElementNS("http://www.w3.org/2000/svg","rect");
+      for (const [key,value] of Object.entries({x,y,width:w,height:h,fill:"var(--cp-bg-elevated)"})) background.setAttribute(key,value);
+      style.after(background);
+      const url = URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(clone)],{type:"image/svg+xml"}));
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "azure-europe-current-view.svg";
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url),1000);
+    } catch (cause) {
+      console.error("Could not export the map",cause);
+      error.textContent = "Could not export the map. Keep this page open and retry.";
+      error.hidden = false;
+    }
+  });
+  applyTheme();
+  updateZoom();
+  refresh();
+})();
+</script>
+</body>
+</html>

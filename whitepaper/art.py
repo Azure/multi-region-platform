@@ -33,19 +33,29 @@ def prism(x0, y0, x1, y1, z0, z1, s, ox, oy, top, left, right, op=0.92, edge=0.5
     return "\n".join(out)
 
 
-def defs(uid):
+# Background tones. "blue" is the full guidance; "teal" marks the executive brief so the two covers are easy to tell apart.
+TONES = {
+    "blue": dict(bg=("#0B2E57", "#0F6CBD", "#1AA5D6", "#2BC7C9"), g1="#8661C5", g3="#50E6FF", g4="#0B2E57",
+                 fdL=("#123E6B", "#0A2442"), fdR=("#0B2E57", "#071A31")),
+    "teal": dict(bg=("#062F33", "#04706B", "#0E9E8E", "#4FD1A5"), g1="#0F6CBD", g3="#A8F5D8", g4="#052628",
+                 fdL=("#0B4A4D", "#062A2D"), fdR=("#073638", "#041E20")),
+}
+
+
+def defs(uid, tone="blue"):
+    t = TONES[tone]
     return f"""
 <defs>
   <linearGradient id="{uid}bg" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#0B2E57"/>
-    <stop offset=".45" stop-color="#0F6CBD"/>
-    <stop offset=".78" stop-color="#1AA5D6"/>
-    <stop offset="1" stop-color="#2BC7C9"/>
+    <stop offset="0" stop-color="{t['bg'][0]}"/>
+    <stop offset=".45" stop-color="{t['bg'][1]}"/>
+    <stop offset=".78" stop-color="{t['bg'][2]}"/>
+    <stop offset="1" stop-color="{t['bg'][3]}"/>
   </linearGradient>
-  <radialGradient id="{uid}g1" cx=".15" cy=".18" r=".55"><stop offset="0" stop-color="#8661C5" stop-opacity=".85"/><stop offset="1" stop-color="#8661C5" stop-opacity="0"/></radialGradient>
+  <radialGradient id="{uid}g1" cx=".15" cy=".18" r=".55"><stop offset="0" stop-color="{t['g1']}" stop-opacity=".85"/><stop offset="1" stop-color="{t['g1']}" stop-opacity="0"/></radialGradient>
   <radialGradient id="{uid}g2" cx=".92" cy=".95" r=".5"><stop offset="0" stop-color="#FFB38A" stop-opacity=".75"/><stop offset=".5" stop-color="#FF8FB1" stop-opacity=".25"/><stop offset="1" stop-color="#FF8FB1" stop-opacity="0"/></radialGradient>
-  <radialGradient id="{uid}g3" cx=".78" cy=".22" r=".45"><stop offset="0" stop-color="#50E6FF" stop-opacity=".55"/><stop offset="1" stop-color="#50E6FF" stop-opacity="0"/></radialGradient>
-  <radialGradient id="{uid}g4" cx=".2" cy=".85" r=".5"><stop offset="0" stop-color="#0B2E57" stop-opacity=".7"/><stop offset="1" stop-color="#0B2E57" stop-opacity="0"/></radialGradient>
+  <radialGradient id="{uid}g3" cx=".78" cy=".22" r=".45"><stop offset="0" stop-color="{t['g3']}" stop-opacity=".55"/><stop offset="1" stop-color="{t['g3']}" stop-opacity="0"/></radialGradient>
+  <radialGradient id="{uid}g4" cx=".2" cy=".85" r=".5"><stop offset="0" stop-color="{t['g4']}" stop-opacity=".7"/><stop offset="1" stop-color="{t['g4']}" stop-opacity="0"/></radialGradient>
   <linearGradient id="{uid}hubT" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".95"/><stop offset="1" stop-color="#BFE3FF" stop-opacity=".85"/></linearGradient>
   <linearGradient id="{uid}hubL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B88D8"/><stop offset="1" stop-color="#0F548C"/></linearGradient>
   <linearGradient id="{uid}hubR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0F6CBD"/><stop offset="1" stop-color="#0B3A63"/></linearGradient>
@@ -56,8 +66,8 @@ def defs(uid):
   <linearGradient id="{uid}tlL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2BC7B4"/><stop offset="1" stop-color="#04807A"/></linearGradient>
   <linearGradient id="{uid}tlR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#04807A"/><stop offset="1" stop-color="#03615F"/></linearGradient>
   <linearGradient id="{uid}fdT" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity=".22"/><stop offset="1" stop-color="#FFFFFF" stop-opacity=".08"/></linearGradient>
-  <linearGradient id="{uid}fdL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#123E6B"/><stop offset="1" stop-color="#0A2442"/></linearGradient>
-  <linearGradient id="{uid}fdR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0B2E57"/><stop offset="1" stop-color="#071A31"/></linearGradient>
+  <linearGradient id="{uid}fdL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{t['fdL'][0]}"/><stop offset="1" stop-color="{t['fdL'][1]}"/></linearGradient>
+  <linearGradient id="{uid}fdR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{t['fdR'][0]}"/><stop offset="1" stop-color="{t['fdR'][1]}"/></linearGradient>
   <radialGradient id="{uid}glow"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".35" stop-color="#FFFFFF" stop-opacity=".6"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></radialGradient>
   <linearGradient id="{uid}swoosh" x1="0" x2="1"><stop offset="0" stop-color="#FFB38A" stop-opacity="0"/><stop offset=".35" stop-color="#FFB38A"/><stop offset=".7" stop-color="#FF8FB1"/><stop offset="1" stop-color="#8661C5" stop-opacity="0"/></linearGradient>
 </defs>"""

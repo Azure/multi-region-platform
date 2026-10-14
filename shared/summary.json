@@ -1,0 +1,581 @@
+{
+ "_readme": "Short forms and constants shared by the PDF generator, the decks, and the Word edition. The Markdown in content/ stays the source for prose; site/tools/drift.py checks that every title here still appears in the matching article.",
+ "edition": "October 2026",
+ "siteUrl": "https://azure.github.io/multi-region-platform/",
+ "workbookUrl": "https://azure.github.io/multi-region-platform/region-planner.html",
+ "title": "The adaptable multi-region Azure platform",
+ "legal": "©2026 Microsoft Corporation. All rights reserved. This document is provided “as-is.” Information and views expressed in this document, including URL and other Internet website references, may change without notice. You bear the risk of using it. This document does not provide you with any legal rights to any intellectual property in any Microsoft product. You may copy and use this document for your internal, reference purposes.",
+ "constructs": [
+  "Regional Platform Connectivity Profiles",
+  "Workload Landing Zone Archetypes",
+  "Regional Qualification"
+ ],
+ "parts": [
+  {
+   "n": 1,
+   "name": "Understand concepts",
+   "question": "What is a multi-region platform, what can a region provide, and what do applications need?",
+   "summary": "Four connectivity profiles describe the platform options. Four archetypes describe what applications require.",
+   "state": ""
+  },
+  {
+   "n": 2,
+   "name": "Qualify regions",
+   "question": "Can this region support the workloads we expect?",
+   "summary": "Four checks lead to one of four outcomes: excluded, candidate, conditional, or qualified.",
+   "state": "qualified"
+  },
+  {
+   "n": 3,
+   "name": "Select the regional design",
+   "question": "What should the platform provide in a qualified region?",
+   "summary": "Make three choices from short lists: the connectivity profile, where each shared service is provided, and whether the hybrid connectivity you already have is reused.",
+   "state": "selected"
+  },
+  {
+   "n": 4,
+   "name": "Prepare the region",
+   "question": "What has to exist before workloads arrive?",
+   "summary": "Build only what the selected design calls for, through the automation you already run. Two of the four profiles need no hub.",
+   "state": "ready for workloads"
+  },
+  {
+   "n": 5,
+   "name": "Place workloads",
+   "question": "Should this workload use the region now?",
+   "summary": "Decide per workload, with current evidence.",
+   "state": "in use"
+  }
+ ],
+ "checks": [
+  {
+   "n": 1,
+   "name": "Business and geography",
+   "question": "Where do we need Azure presence?",
+   "decision": "Confirm that the region has sufficient business value to justify deeper assessment.",
+   "ifNotMet": "No deeper assessment is needed."
+  },
+  {
+   "n": 2,
+   "name": "Data and compliance",
+   "question": "Are we allowed to operate here?",
+   "decision": "Exclude a region when it cannot satisfy a mandatory data, compliance, or policy requirement.",
+   "ifNotMet": "Excluded."
+  },
+  {
+   "n": 3,
+   "name": "Workload requirements and dependencies",
+   "question": "What workload requirements and dependencies must the region support?",
+   "decision": "Identify and record the workload-driven platform requirements.",
+   "ifNotMet": "Candidate while requirements aren't known."
+  },
+  {
+   "n": 4,
+   "name": "Regional capability and availability",
+   "question": "Which regions can support the identified workload requirements?",
+   "decision": "Qualify candidate regions, documenting conditions, constraints, and unresolved validations.",
+   "ifNotMet": "Conditional, or excluded if the gap is mandatory."
+  }
+ ],
+ "outcomes": [
+  {
+   "name": "Excluded",
+   "text": "A mandatory requirement cannot be satisfied."
+  },
+  {
+   "name": "Candidate",
+   "text": "The region is potentially viable, but additional discovery or validation is required before qualification."
+  },
+  {
+   "name": "Conditional",
+   "text": "Current evidence supports the defined workload requirements if one or more documented conditions are resolved."
+  },
+  {
+   "name": "Qualified as of the assessment date",
+   "text": "Current evidence supports the defined workload requirements, platform ownership is established, and workload-onboarding revalidation is still required."
+  }
+ ],
+ "choices": [
+  {
+   "n": 1,
+   "name": "Connectivity profile",
+   "options": [
+    "Disconnected Spokes",
+    "Remote Hub Connected",
+    "Minimal Regional Hub",
+    "Full Regional Hub"
+   ],
+   "select": "One of four: Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, or Full Regional Hub.",
+   "article": "profile-selection"
+  },
+  {
+   "n": 2,
+   "name": "Shared-service placement",
+   "options": [
+    "Local",
+    "Remote",
+    "Global"
+   ],
+   "select": "For each shared service the workloads depend on: local, remote, or global.",
+   "article": "platform-enablement-connectivity"
+  },
+  {
+   "n": 3,
+   "name": "Hybrid connectivity",
+   "options": [
+    "Not required",
+    "Reuse",
+    "Change"
+   ],
+   "select": "Reuse the existing foundation, change it, or confirm that none is required.",
+   "article": "hybrid-connectivity"
+  }
+ ],
+ "profiles": [
+  "Disconnected Spokes",
+  "Remote Hub Connected",
+  "Minimal Regional Hub",
+  "Full Regional Hub"
+ ],
+ "archetypes": [
+  "Hybrid-Connected Applications",
+  "Isolated Cloud-Native or AI Applications",
+  "Connected Cloud-Native or AI Applications",
+  "Interconnected Application Portfolios"
+ ],
+ "drivers": [
+  {
+   "icon": "users",
+   "tone": "b",
+   "name": "Business growth and proximity",
+   "triggers": [
+    [
+     "New markets or geographies"
+    ],
+    [
+     "Acquisitions or divestitures"
+    ],
+    [
+     "Products closer to customers",
+     "User latency"
+    ]
+   ]
+  },
+  {
+   "icon": "lock",
+   "tone": "w",
+   "name": "Data residency, sovereignty, and regulation",
+   "triggers": [
+    [
+     "Data-residency laws"
+    ],
+    [
+     "Operational resilience requirements"
+    ],
+    [
+     "Customer contracts",
+     "Public-sector requirements"
+    ]
+   ]
+  },
+  {
+   "icon": "gauge",
+   "tone": "v",
+   "name": "Service, AI model, SKU, and quota availability",
+   "triggers": [
+    [
+     "AI models and GPU SKUs"
+    ],
+    [
+     "Services in selected regions only",
+     "Quota constraints"
+    ],
+    [
+     "Availability-zone requirements"
+    ]
+   ]
+  },
+  {
+   "icon": "shield",
+   "tone": "n",
+   "name": "Resiliency and concentration risk",
+   "triggers": [
+    [
+     "RTO or RPO requirements",
+     "Concentration risk"
+    ],
+    [
+     "Paired or nonpaired regions"
+    ],
+    [
+     "Audit or regulatory findings",
+     "Lessons from incidents"
+    ]
+   ]
+  },
+  {
+   "icon": "building",
+   "tone": "s",
+   "name": "Datacenter and connectivity events",
+   "triggers": [
+    [
+     "Datacenter or colocation exits",
+     "Migration waves"
+    ],
+    [
+     "Office or datacenter moves",
+     "Network-provider changes"
+    ],
+    [
+     "New Azure region in the geography"
+    ]
+   ]
+  },
+  {
+   "icon": "layers",
+   "tone": "t",
+   "name": "Cost and operating model",
+   "triggers": [
+    [
+     "Regional price differences",
+     "Cross-region transfer cost"
+    ],
+    [
+     "Landing-zone redesign",
+     "Unnecessary infrastructure"
+    ],
+    [
+     "Sustainability objectives"
+    ]
+   ]
+  }
+ ],
+ "driversFigure": {
+  "title": "Common drivers of multi-region platform discussions",
+  "hub": [
+   "Multi-region",
+   "platform",
+   "discussion"
+  ],
+  "openTitle": "Drivers open the discussion",
+  "openText": "They do not determine the regional architecture or the workload-placement outcome.",
+  "nextTitle": "What decides the outcome",
+  "captionLeft": "What starts the conversation",
+  "captionRight": "Six common drivers and their typical triggers"
+ },
+ "scenarios": [
+  {
+   "n": 1,
+   "title": "Regulated bank adopts a new in-country region",
+   "situation": "A financial-services organization operates workloads outside its home country. A new Azure region opens in-country while regulatory or business requirements create a need for certain data or services to remain there.",
+   "tag": "Residency · nonpaired region",
+   "steps": [
+    {
+     "label": "Driver",
+     "text": "Data residency and regulatory requirements; new in-country Azure region.",
+     "tone": "w"
+    },
+    {
+     "label": "Deciding checks",
+     "text": "Check 2 confirms mandatory location requirements. Check 3 identifies affected workloads and dependencies. Check 4 validates required services, zones, access, and constraints.",
+     "tone": "b"
+    },
+    {
+     "label": "Qualification",
+     "text": "Qualified for defined Hybrid-Connected requirements; other portfolio workloads remain candidates until dependencies are understood.",
+     "tone": "g"
+    },
+    {
+     "label": "Archetype",
+     "text": "Hybrid-Connected Applications.",
+     "tone": "t"
+    },
+    {
+     "label": "Connectivity profile",
+     "text": "Minimal Regional Hub where selected local capabilities are required; existing hybrid connectivity reused where reachability and resiliency permit.",
+     "tone": "b"
+    },
+    {
+     "label": "Placement",
+     "text": "In-scope workloads relocate selectively; others remain in place. Recovery architecture stays workload-specific.",
+     "tone": "t"
+    }
+   ],
+   "takeaway": "A new in-country region can be qualified for defined workload requirements without forcing portfolio-wide relocation. If the new region is nonpaired, design the recovery path explicitly (Appendix A).",
+   "short": {
+    "situation": "A new Azure region opens in-country while regulation requires certain data or services to remain there.",
+    "steps": [
+     "Data residency and regulation; new in-country region.",
+     "Check 2 mandatory location; Check 3 affected workloads; Check 4 services, zones, access.",
+     "The region can be qualified for defined Hybrid-Connected workload requirements while other portfolio workloads remain candidates until their dependencies are understood.",
+     "Hybrid-Connected Applications.",
+     "Minimal Regional Hub; reuse existing hybrid connectivity where it permits.",
+     "In-scope workloads relocate selectively; recovery stays workload-specific."
+    ],
+    "takeaway": "Qualify for defined requirements without forcing portfolio-wide relocation; if the new region is nonpaired, design the recovery path explicitly (Appendix A)."
+   }
+  },
+  {
+   "n": 2,
+   "title": "AI team requires a specific model or GPU SKU",
+   "situation": "A product team requires an AI model, GPU SKU, or related Azure service that is unavailable in the organization’s existing regions or constrained by quota.",
+   "tag": "Specific capacity · net-new",
+   "steps": [
+    {
+     "label": "Driver",
+     "text": "AI model, service, SKU, or quota availability.",
+     "tone": "v"
+    },
+    {
+     "label": "Deciding checks",
+     "text": "Check 1 confirms the business requirement. Check 2 validates data and compliance constraints. Check 4 validates current model, service, SKU, zone, access, and quota support.",
+     "tone": "b"
+    },
+    {
+     "label": "Qualification",
+     "text": "Qualified for the defined AI workload requirements; conditional for requirements that depend on private connectivity until that design is known and validated.",
+     "tone": "g"
+    },
+    {
+     "label": "Archetype",
+     "text": "Isolated Cloud-Native or AI where self-contained; Connected Cloud-Native or AI where private enterprise dependencies are required.",
+     "tone": "t"
+    },
+    {
+     "label": "Connectivity profile",
+     "text": "Disconnected Spokes where the workload is self-contained; a connected profile only where actual dependencies justify it.",
+     "tone": "b"
+    },
+    {
+     "label": "Placement",
+     "text": "Net-new deployment. Revalidate model, SKU, service, regional access, and quota at decision time.",
+     "tone": "t"
+    }
+   ],
+   "takeaway": "Qualify against the requirements that exist today; do not introduce enterprise connectivity or regional platform capabilities before a workload requirement justifies them.",
+   "short": {
+    "situation": "The model, SKU, or service is unavailable in existing regions or constrained by quota.",
+    "steps": [
+     "AI model, service, SKU, or quota availability.",
+     "Check 1 business need; Check 2 data constraints; Check 4 model, SKU, zone, access, quota.",
+     "Qualified for the AI requirements; conditional where private connectivity is not yet designed.",
+     "Isolated Cloud-Native or AI; Connected where private dependencies exist.",
+     "Disconnected Spokes; connected only where dependencies justify it.",
+     "Net-new; revalidate model, SKU, access, quota at decision time."
+    ],
+    "takeaway": "Do not introduce enterprise connectivity or regional platform capabilities before a workload requirement justifies them."
+   }
+  },
+  {
+   "n": 3,
+   "title": "Acquisition brings an estate in another geography",
+   "situation": "An acquisition introduces a portfolio of interdependent applications, shared data, and local users in a geography where the organization has little or no existing Azure platform presence.",
+   "tag": "Portfolio · integration",
+   "steps": [
+    {
+     "label": "Driver",
+     "text": "Business expansion through acquisition.",
+     "tone": "b"
+    },
+    {
+     "label": "Deciding checks",
+     "text": "Check 1 confirms the business need. Check 2 evaluates local data obligations. Check 3 maps portfolio-level dependencies, shared services, and connectivity requirements.",
+     "tone": "b"
+    },
+    {
+     "label": "Qualification",
+     "text": "Candidate while material dependencies remain unknown; qualified against defined portfolio requirements once discovery is complete.",
+     "tone": "g"
+    },
+    {
+     "label": "Archetype",
+     "text": "Interconnected Application Portfolios.",
+     "tone": "t"
+    },
+    {
+     "label": "Connectivity profile",
+     "text": "Remote Hub Connected where cross-region dependencies are acceptable; Minimal Regional Hub where east-west traffic, shared services, latency, or independence justify it.",
+     "tone": "b"
+    },
+    {
+     "label": "Placement",
+     "text": "Workloads remain in place initially and relocate selectively as business and integration requirements become known.",
+     "tone": "t"
+    }
+   ],
+   "takeaway": "Aggregate portfolio dependencies determine the appropriate regional connectivity profile; application count or acquisition status does not.",
+   "short": {
+    "situation": "Interdependent applications, shared data, and local users where there is little Azure presence.",
+    "steps": [
+     "Business expansion through acquisition.",
+     "Check 1 business need; Check 2 local data obligations; Check 3 portfolio dependencies.",
+     "Candidate until dependencies are known; then qualified.",
+     "Interconnected Application Portfolios.",
+     "Remote Hub Connected; Minimal Regional Hub where east-west or independence justify it.",
+     "Remain in place initially; relocate selectively with integration."
+    ],
+    "takeaway": "Aggregate portfolio dependencies determine the profile; application count or acquisition status does not."
+   }
+  },
+  {
+   "n": 4,
+   "title": "Datacenter exit accelerates migration",
+   "situation": "A colocation contract is ending. Hybrid-connected applications must leave the datacenter, and the organization asks whether the event also requires adoption of another Azure region.",
+   "tag": "Datacenter event · relocation",
+   "steps": [
+    {
+     "label": "Driver",
+     "text": "Datacenter and connectivity event.",
+     "tone": "s"
+    },
+    {
+     "label": "Deciding checks",
+     "text": "Check 3 identifies what must move together. Part 3 validates hybrid connectivity, datacenter and user geography, reachability, resiliency, and whether existing connectivity suffices.",
+     "tone": "b"
+    },
+    {
+     "label": "Qualification",
+     "text": "The existing target region remains qualified for the identified requirements; an additional region remains a candidate for future use.",
+     "tone": "g"
+    },
+    {
+     "label": "Archetype",
+     "text": "Hybrid-Connected Applications.",
+     "tone": "t"
+    },
+    {
+     "label": "Connectivity profile",
+     "text": "No new profile. Continue to use the existing strategic geographic hub where it satisfies requirements; no new regional hub solely because another region is available.",
+     "tone": "b"
+    },
+    {
+     "label": "Placement",
+     "text": "Most workloads land in the existing qualified region. Revisit the additional option when requirements change.",
+     "tone": "t"
+    }
+   ],
+   "takeaway": "Remaining in an existing qualified region is a valid outcome. An additional region can remain an option rather than automatically becoming a deployment project.",
+   "short": {
+    "situation": "Hybrid-connected applications must leave a colocation facility; is another region now required?",
+    "steps": [
+     "Datacenter and connectivity event.",
+     "Check 3 what moves together; Part 3 hybrid connectivity, reachability, resiliency.",
+     "Existing target region qualified; additional region a candidate.",
+     "Hybrid-Connected Applications.",
+     "No new profile: the existing strategic hub is reused.",
+     "Most workloads land in the existing qualified region."
+    ],
+    "takeaway": "Remaining in an existing qualified region is a valid outcome; an additional region can stay an option, not a project."
+   }
+  }
+ ],
+ "misconceptions": [
+  {
+   "claim": "Adding a region means another landing-zone project, with its own governance model.",
+   "correction": "The landing zone you already run is reused: governance, identity, policy, automation, and the operating model stay the same. A new region adds regional configuration and only the connectivity profile its workloads need."
+  },
+  {
+   "claim": "We must choose the perfect regions up front.",
+   "correction": "Regional requirements and Azure capabilities change. Design the platform so additional qualified options can be introduced without redesigning the broader operating model."
+  },
+  {
+   "claim": "Qualified means approved for any workload.",
+   "correction": "Qualification is scoped to defined requirements and evidence at a point in time. Each workload revalidates regional suitability during onboarding."
+  },
+  {
+   "claim": "Every new region needs a Full Regional Hub.",
+   "correction": "Select the most efficient profile that satisfies the identified requirements. Profiles are not maturity stages; any profile can remain the long-term target while it continues to meet those requirements."
+  },
+  {
+   "claim": "Another Azure region requires another ExpressRoute circuit.",
+   "correction": "An additional region does not by itself require another circuit. Additional hybrid connectivity should be introduced where reachability, diversity, failure-domain, latency, routing, or bandwidth requirements justify it."
+  },
+  {
+   "claim": "Enabling a region means migrating workloads.",
+   "correction": "Regional qualification and platform readiness are not workload placement. Remaining in the existing region can be the appropriate outcome."
+  },
+  {
+   "claim": "A paired region is our disaster recovery.",
+   "correction": "Region pairing supports specific Azure platform and service behaviors; it does not automatically provide workload recovery. Recovery must still be designed and validated per workload."
+  },
+  {
+   "claim": "A multi-region platform means active-active.",
+   "correction": "The platform creates regional options. Whether a workload is single-region, primary/recovery, or active across regions is a separate workload-specific resiliency decision."
+  }
+ ],
+ "gettingStarted": [
+  {
+   "title": "Name the drivers",
+   "text": "Identify what is prompting the discussion: business growth, regulation, service or SKU availability, resiliency, a datacenter or connectivity event, cost, or another measurable requirement.",
+   "short": "Business growth, regulation, service or SKU availability, resiliency, a datacenter or connectivity event, cost, or another measurable requirement."
+  },
+  {
+   "title": "Understand the concepts",
+   "text": "Learn how a multi-region platform differs from a multi-region workload, the four connectivity profiles a region can provide, and the four Workload Landing Zone archetypes that describe what applications need. You make no decisions here. You learn the terms the next steps use.",
+   "short": "Platform versus workload, the four connectivity profiles, and the four Workload Landing Zone archetypes. No decisions yet."
+  },
+  {
+   "title": "Shortlist and qualify candidate regions",
+   "text": "Work through the four qualification checks. Start with the two that need no technical assessment, business and geography and data and compliance, and remove regions that cannot satisfy mandatory conditions. For the regions that remain, identify workload requirements and dependencies, then validate regional capability and availability. Record each option as excluded, candidate, conditional, or qualified for the defined requirements, with evidence and revalidation triggers.",
+   "short": "Four checks. Start with business and geography, then data and compliance. Record each option as excluded, candidate, conditional, or qualified."
+  },
+  {
+   "title": "Select the regional design",
+   "text": "For each qualified region, select the most efficient connectivity profile that meets the requirements, decide where each shared service is provided, and confirm whether the hybrid connectivity you already have is enough. Write the three choices into the regional design record, and agree who owns each decision.",
+   "short": "The most efficient connectivity profile, where each shared service is provided, and whether existing hybrid connectivity is enough. Use the region planning workbook to record the three choices."
+  },
+  {
+   "title": "Prepare the region",
+   "text": "Build what the record says, through the automation you already run. Read only the page for the profile you selected: Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, or Full Regional Hub. Use the platform readiness checklist to confirm the region is ready before the first workload arrives.",
+   "short": "Build what the record says through the automation you already run. Confirm with the platform readiness checklist."
+  },
+  {
+   "title": "Place the first workload",
+   "text": "Apply the workload-placement process using current evidence. Revalidate regional capabilities at decision time, govern the placement and resiliency decisions, and feed newly discovered requirements or platform gaps back into regional qualification.",
+   "short": "Apply the placement process with current evidence. Feed new requirements and platform gaps back into qualification."
+  }
+ ],
+ "tokens": {
+  "ink": "#0A2340",
+  "text": "#28323E",
+  "muted": "#5B6778",
+  "faint": "#667182",
+  "line": "#D3DBE4",
+  "line-soft": "#E4E9EF",
+  "paper": "#FFFFFF",
+  "wash": "#F5F8FB",
+  "b900": "#082A4B",
+  "b800": "#0B3A63",
+  "b700": "#0F548C",
+  "b600": "#0F6CBD",
+  "b500": "#2B88D8",
+  "b300": "#8CC0EE",
+  "b200": "#BCD9F5",
+  "b100": "#DDEBF9",
+  "b50": "#EEF5FC",
+  "c600": "#0A8BB0",
+  "c100": "#D8F0F7",
+  "t700": "#03615F",
+  "t600": "#04807A",
+  "t300": "#7CC9C3",
+  "t100": "#D6EFEC",
+  "t50": "#EDF8F6",
+  "s800": "#243A57",
+  "s600": "#4A5B72",
+  "s300": "#A9B6C6",
+  "s100": "#E8EDF3",
+  "g700": "#0B6B38",
+  "g600": "#107C41",
+  "g100": "#DFF1E6",
+  "w600": "#A84E1F",
+  "w100": "#F8E8DD",
+  "w50": "#FBF4EE",
+  "a700": "#8A5A00",
+  "a500": "#C98A00",
+  "a100": "#FFF1CC",
+  "v700": "#5C3D9C",
+  "v600": "#8661C5",
+  "v100": "#EBE5F7",
+  "v50": "#F3EFFA"
+ }
+}

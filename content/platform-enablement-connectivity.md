@@ -1,72 +1,58 @@
 ---
-title: "Dimension 5: Platform enablement and connectivity"
-description: Decide which platform capabilities a qualified Azure region needs, confirm the hybrid connectivity foundation, and select the most efficient regional connectivity profile.
-ms.date: 09/30/2026
+title: Place shared services
+description: Decide where each shared service is provided for a qualified Azure region — local, remote from another hub, or global — starting from a default for each connectivity profile and changing it only when a workload requirement says so.
+ms.date: 10/06/2026
 ms.topic: conceptual
 ---
 
-# Platform enablement and connectivity
+# Place shared services
 
-The fifth dimension covers what the platform must provide for the identified workload requirements: shared services and operational capabilities, resilient hybrid connectivity, and regional platform connectivity.
+**Question:** Where is each shared service that the workloads depend on provided?
 
-## Platform enablement
+Determine which shared services and operational capabilities must be provided in the region, consumed from another region, or remain centralized. Each service has one of three placements:
 
-**Question:** What platform capabilities must be enabled to support the identified workload requirements?
+- **Local:** deployed in the region.
+- **Remote:** consumed from a hub or a shared instance in another region. Record which one.
+- **Global:** not tied to a region. There is nothing to deploy.
 
-Determine which shared services and operational capabilities must be provided in the region, consumed from another region, or remain centralized. Consider identity and access, policy and security controls, deployment automation, monitoring and logging, backup and recovery, key and secret management, operational support, platform resiliency, ownership, and cost.
+## Default placement by profile
 
-Qualifying a region does not require recreating the full platform footprint used elsewhere. Enable only the regional capabilities required by expected workloads, and document which services remain centralized or are consumed remotely. Define the conditions that would trigger future expansion.
+The table gives a starting point for each profile. The defaults aren't rules: change a cell when a workload requirement calls for it, and record the reason. For a Minimal Regional Hub, each row is a separate choice.
+
+| Shared service | Disconnected Spokes | Remote Hub Connected | Minimal Regional Hub | Full Regional Hub |
+|---|---|---|---|---|
+| Management groups, access control, policy | Global | Global | Global | Global |
+| Private DNS zones | Global | Global | Global | Global |
+| DNS resolution across premises (private resolver or forwarders) | Not required | Remote | Local or remote | Local |
+| Traffic inspection and internet egress (Azure Firewall or network virtual appliance) | Not required | Remote | Local or remote | Local |
+| Hybrid connectivity gateways (ExpressRoute or VPN) | Not required | Remote | Local or remote | Local |
+| Directory services (domain controllers) | Not required | Remote | Local or remote | Local |
+| Log workspace | Remote, or local for data residency | Remote, or local for data residency | Remote, or local for data residency | Remote, or local for data residency |
+| Backup vaults | Local | Local | Local | Local |
+| Key Vault | Local | Local | Local | Local |
+
+Some placements are set by the service, not by the profile:
+
+- **Backup vaults are local in every profile.** Azure Backup works within a region, so you need a vault in each region that holds protected resources.
+- **Key Vault is local in every profile.** Give each workload a vault in the region it runs in. See the [recommended Key Vault pattern](./storage-backup-key-vault.md#recommended-key-vault-pattern).
+- **Private DNS zones are global.** Create them once, in the connectivity subscription, and link virtual networks to them.
+- **Start with a single log workspace.** Add a workspace in the region only when data must stay in that geography, or when the charges for sending data to another region are significant.
+- **Policy, access control, and management groups aren't tied to a region.** The one change is to allow the new region in any policy assignment that restricts locations.
+
+Also consider operational support, platform resiliency, ownership, and cost. Enable only the regional capabilities required by expected workloads, and document which services remain centralized or are consumed remotely.
 
 **Decision:** Define the most efficient platform capability set, where each capability will be provided, who will operate it, and what requirements would trigger future expansion.
 
-For the items that most often stall a new region, see the [platform readiness checklist](./platform-readiness.md).
-
-## Connectivity planning
-
-Connectivity planning separates three decisions: resilient hybrid connectivity to Azure, placement of geographic hubs and shared services, and application-specific connectivity. They influence one another, but each has different requirements and tradeoffs.
-
-:::image type="content" source="./media/connectivity-planning-layers.png" alt-text="Three connectivity planning layers: resilient hybrid connectivity from on-premises datacenters and users to the Azure backbone through ExpressRoute or VPN; strategic geographic hubs and shared services; and application landing zones supported by the regional connectivity profile." lightbox="./media/connectivity-planning-layers.png":::
-
-*Three connectivity planning layers: related, but not the same design decision.*
-
-Use the workload requirements identified earlier to determine how workloads should consume regional and centralized platform capabilities. Application Landing Zone archetypes can help inform the assessment, but the resulting connectivity design should be based on the actual dependencies and requirements of each workload.
-
-- For existing workloads, particularly those with legacy or hybrid dependencies, use validated application, network, datacenter, and shared-service dependencies to determine whether existing geographic hubs can continue to support the workload or whether additional regional capabilities are required.
-- For new workloads, derive connectivity needs from the intended architecture and known dependencies, using the Application Landing Zone archetypes as a planning aid. Reuse existing geographic hubs, shared services, and platform capabilities where they meet those needs; a new region does not automatically require a new platform footprint.
-
-Existing and new workloads follow the same rule: requirements and dependencies determine the regional connectivity profile. Known requirements can shape platform planning in advance; validate workload-specific fit during onboarding and add regional capabilities only when justified.
-
-## Resilient hybrid connectivity
-
-**Question:** Does the operating geography have resilient hybrid connectivity to Azure that satisfies the identified workload requirements?
-
-Evaluate existing hybrid connectivity against datacenter and user locations, data boundaries, provider and peering-location diversity, latency, bandwidth, routing, and failure-domain requirements. Determine whether the existing ExpressRoute, VPN, or other hybrid connectivity foundation provides the required reachability and resilience.
-
-Enabling an additional Azure region does not inherently require another ExpressRoute circuit. Determine whether existing connectivity provides the required reachability and whether additional circuits, peering locations, gateways, or connectivity paths are needed for geographic diversity, failure-domain isolation, latency, bandwidth, routing, or resiliency.
-
-**Decision:** Confirm the hybrid connectivity foundation and identify any required changes to reachability, resiliency, diversity, scale, or ownership.
-
-## Regional platform connectivity
-
-**Question:** What is the most efficient regional platform design that supports the identified requirements?
-
-Determine how workloads in the region will reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments. Select Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, or Full Regional Hub based on those connectivity and dependency requirements.
-
-Choose the profile that meets the requirements without unnecessary infrastructure. Adoption growth alone does not justify moving toward a Full Regional Hub. Expand local capabilities when shared-service placement, resiliency, scale, connectivity, or operational requirements change.
-
-**Decision:** Select the most efficient regional platform connectivity profile that satisfies the identified requirements and can evolve as regional adoption changes.
-
-> [!TIP]
-> Geographic hybrid connectivity and workload connectivity remain related but distinct decisions. Enabling another region does not automatically require duplicating the existing connectivity platform. For each profile in detail, see [Regional platform connectivity profiles](./connectivity-profiles.md).
-
 ## Reference links
 
+- [Landing zone regions](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions) — What is global and what is regional in a landing zone, and what to do for each area when you add a region.
 - [Azure landing zone design areas and conceptual architecture](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-areas) — Supports the broader platform assessment: identity, security, governance, management, connectivity, and deployment automation.
-- [Designing for disaster recovery with ExpressRoute private peering](https://learn.microsoft.com/azure/expressroute/designing-for-disaster-recovery-with-expressroute-privatepeering) — Resilient connectivity from on-premises locations to Azure, including peering-location diversity, redundant paths, and failover.
-- [Network topology and connectivity](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/network-topology-and-connectivity) — Assessing connectivity between workloads, shared services, and the broader platform.
-- [Define an Azure network topology](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/define-an-azure-network-topology) — Choosing topology approaches based on cross-region connectivity and routing requirements.
+- [Design a Log Analytics workspace architecture](https://learn.microsoft.com/azure/azure-monitor/logs/workspace-design) — When a single workspace is enough and when to add one per region.
+- [Private Link and DNS integration at scale](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/private-link-and-dns-integration-at-scale) — Central private DNS zones and the policies that keep their records current.
+- [Hybrid identity with Active Directory and Microsoft Entra ID in Azure landing zones](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/identity-access-active-directory-hybrid-identity) — Where to place domain controllers, including across regions.
+- [Azure Backup support matrix](https://learn.microsoft.com/azure/backup/backup-support-matrix) — Vault and region requirements.
 
 ## Next step
 
 > [!div class="nextstepaction"]
-> [Platform architecture](./platform-architecture.md)
+> [Confirm hybrid connectivity](./hybrid-connectivity.md)

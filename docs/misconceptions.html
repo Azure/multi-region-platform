@@ -41,11 +41,19 @@
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="top">
+  <button class="nav-toggle" type="button" aria-label="Table of contents" aria-expanded="false" aria-controls="side-nav">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4h12M2 8h12M2 12h12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+  </button>
   <a class="brand" href="index.html" aria-label="Multi-region platform home">
-    <span class="ms-logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    <svg class="guidance-logo" viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M8 9 16 23 24 9M9 8h14" fill="none" stroke="#7FB9EA" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="8" cy="8" r="4.5" fill="#0F6CBD" stroke="white" stroke-width="1.5"/>
+      <circle cx="24" cy="8" r="4.5" fill="#2BC7B4" stroke="white" stroke-width="1.5"/>
+      <circle cx="16" cy="24" r="4.5" fill="#8661C5" stroke="white" stroke-width="1.5"/>
+    </svg>
     <span class="brand-sep"></span>
     <span class="brand-name">Multi-region platform</span>
-    <span class="brand-tag">Azure landing zones</span>
+    <span class="brand-tag">Architecture Guidance</span>
   </a>
   <div class="search" role="search">
     <svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m10.5 10.5 3.5 3.5" stroke="currentColor" stroke-width="1.5"/></svg>
@@ -58,7 +66,7 @@
       <button class="btn-dl" type="button" aria-expanded="false" aria-controls="dl-menu">
         <svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>Downloads
       </button>
-      <div class="dl-menu" id="dl-menu" hidden><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform.pdf" download><span class="dl-ic pdf">PDF</span><span><b>Full technical guidance (PDF)</b><small>45 pages</small></span></a><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf" download><span class="dl-ic pdf">PDF</span><span><b>Executive brief (PDF)</b><small>13 pages</small></span></a><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform-Full.pptx" download><span class="dl-ic pptx">PPTX</span><span><b>Full deck (PPTX)</b><small>42 slides</small></span></a><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform-Executive.pptx" download><span class="dl-ic pptx">PPTX</span><span><b>Executive deck (PPTX)</b><small>13 slides</small></span></a></div>
+      <div class="dl-menu" id="dl-menu" hidden><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform.pdf" download><span class="dl-ic pdf">PDF</span><span><b>Full technical guidance (PDF)</b><small>57 pages</small></span></a><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf" download><span class="dl-ic pdf">PDF</span><span><b>Executive brief (PDF)</b><small>14 pages</small></span></a></div>
     </div>
     <button class="theme" type="button" aria-label="Toggle dark theme" title="Toggle theme">
       <svg class="sun" viewBox="0 0 16 16"><circle cx="8" cy="8" r="3" fill="currentColor"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6 13 13M3 13l1.4-1.4M11.6 4.4 13 3" stroke="currentColor" stroke-width="1.4"/></svg>
@@ -69,23 +77,24 @@
 
 
 
+<div class="nav-backdrop" hidden></div>
 <div class="shell">
-  <nav class="side" aria-label="Table of contents">
+  <nav class="side" id="side-nav" aria-label="Table of contents">
     <div class="side-in">
-      <ul class="nav"><li class="nav-item d0"><div class="nav-row"><span class="chev-sp"></span><a href="index.html">Multi-region adoption strategy</a></div></li><li class="nav-item d0"><div class="nav-row"><span class="chev-sp"></span><a href="decision-trees.html">Decision trees</a></div></li><li class="nav-item d0 has-kids"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><a href="regional-qualification.html">1. Regional qualification</a></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="assessment-outcome.html">Assessment outcome</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="business-and-geography.html">Business and geography</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="data-and-compliance.html">Data and compliance</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="workload-requirements.html">Workload requirements and dependencies</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="regional-capability.html">Regional capability and availability</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="platform-enablement-connectivity.html">Platform enablement and connectivity</a></div></li></ul></li><li class="nav-item d0 has-kids"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><a href="platform-architecture.html">2. Platform architecture</a></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="application-landing-zone-archetypes.html">Application landing zone archetypes</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="connectivity-profiles.html">Regional platform connectivity profiles</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="profile-selection.html">Profile selection and hub implementations</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="platform-readiness.html">Platform readiness checklist</a></div></li></ul></li><li class="nav-item d0"><div class="nav-row"><span class="chev-sp"></span><a href="operating-model.html">3. Governance and operating model</a></div></li><li class="nav-item d0"><div class="nav-row"><span class="chev-sp"></span><a href="workload-placement.html">4. Workload placement</a></div></li><li class="nav-item d0 has-kids"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><a href="workload-design.html">Multi-region workload design</a></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="paired-nonpaired-regions.html">Paired and nonpaired regions</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="storage-backup-key-vault.html">Storage, backup, and Key Vault</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="resiliency-scenarios.html">Resiliency scenarios</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="https://learn.microsoft.com/azure/well-architected/design-guides/regions-availability-zones" target="_blank" rel="noopener">Well-Architected: regions and availability zones <svg class="ext" viewBox="0 0 16 16"><path d="M9 3h4v4M13 3 7.5 8.5M11 9.5V13H3V5h3.5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="https://learn.microsoft.com/azure/reliability/overview-reliability-guidance" target="_blank" rel="noopener">Azure reliability service guides <svg class="ext" viewBox="0 0 16 16"><path d="M9 3h4v4M13 3 7.5 8.5M11 9.5V13H3V5h3.5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></a></div></li></ul></li><li class="nav-item d0 has-kids open"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><span class="nav-group">Resources</span></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="customer-scenarios.html">Customer scenarios</a></div></li><li class="nav-item d1 active open"><div class="nav-row"><span class="chev-sp"></span><a href="misconceptions.html" aria-current="page">Common misconceptions</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="getting-started.html">Getting started</a></div></li></ul></li></ul>
+      <ul class="nav"><li class="nav-item d0"><div class="nav-row"><span class="chev-sp"></span><a href="index.html">Multi-region platform strategy</a></div></li><li class="nav-item d0"><div class="nav-row"><span class="chev-sp"></span><a href="framework-overview.html">Framework overview</a></div></li><li class="nav-item d0 has-kids"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><span class="nav-group">1. Understand concepts</span></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="platform-and-workload.html">Multi-region platform and workload</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="connectivity-profiles.html">Common connectivity profiles</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="application-landing-zone-archetypes.html">Workload Landing Zone archetypes</a></div></li></ul></li><li class="nav-item d0 has-kids"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><span class="nav-group">2. Qualify regions</span></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="regional-qualification.html">Overview</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="business-and-geography.html">1. Business and geography</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="data-and-compliance.html">2. Data and compliance</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="workload-requirements.html">3. Workload requirements and dependencies</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="regional-capability.html">4. Regional capability and availability</a></div></li></ul></li><li class="nav-item d0 has-kids"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><span class="nav-group">3. Select the regional design</span></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="platform-architecture.html">Overview</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="profile-selection.html">Select the connectivity profile</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="platform-enablement-connectivity.html">Place shared services</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="hybrid-connectivity.html">Confirm hybrid connectivity</a></div></li></ul></li><li class="nav-item d0 has-kids"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><span class="nav-group">4. Prepare the region</span></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="prepare-region.html">Overview</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="disconnected-spokes.html">Disconnected Spokes</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="remote-hub-connected.html">Remote Hub Connected</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="minimal-regional-hub.html">Minimal Regional Hub</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="full-regional-hub.html">Full Regional Hub</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="platform-readiness.html">Platform readiness checklist</a></div></li></ul></li><li class="nav-item d0"><div class="nav-row"><span class="chev-sp"></span><a href="workload-placement.html">5. Place workloads</a></div></li><li class="nav-item d0 has-kids"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><span class="nav-group">Service behavior across regions</span></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="workload-design.html">Overview</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="paired-nonpaired-regions.html">Paired and nonpaired regions</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="storage-backup-key-vault.html">Storage, backup, and Key Vault</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="resiliency-scenarios.html">Resiliency scenarios</a></div></li></ul></li><li class="nav-item d0 has-kids open"><div class="nav-row"><button class="chev" type="button" aria-label="Expand section"><svg viewBox="0 0 16 16"><path d="M5 6.5 8 9.5l3-3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><span class="nav-group">Resources</span></div><ul><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="getting-started.html">Getting started</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="customer-scenarios.html">Customer scenarios</a></div></li><li class="nav-item d1 active open"><div class="nav-row"><span class="chev-sp"></span><a href="misconceptions.html" aria-current="page">Common misconceptions</a></div></li><li class="nav-item d1"><div class="nav-row"><span class="chev-sp"></span><a href="region-planner.html">Region planning workbook</a></div></li></ul></li></ul>
     </div>
     <div class="side-pdfs">
-      <a class="side-pdf" href="downloads/Adaptable-Multi-Region-Azure-Platform.pdf" download><svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Technical guidance<small>PDF · 45 pages</small></span></a>
-      <a class="side-pdf" href="downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf" download><svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Executive brief<small>PDF · 13 pages</small></span></a>
+      <a class="side-pdf" href="downloads/Adaptable-Multi-Region-Azure-Platform.pdf" download><svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Technical guidance<small>PDF · 57 pages</small></span></a>
+      <a class="side-pdf" href="downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf" download><svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><span>Executive brief<small>PDF · 14 pages</small></span></a>
     </div>
   </nav>
 
   <main id="main">
     <div class="crumbs">Multi-region platform <span>/</span> Resources</div>
-    <h1 class="title">Common misconceptions</h1>
-    <p class="meta">September 30, 2026 · 1 min read</p>
+    <h1 class="title">Common multi-region misconceptions</h1>
+    <p class="meta">October 5, 2026 · 2 min read</p>
     <article class="prose">
-<p>Multi-region programs often become more complex than necessary when teams start from assumptions instead of workload and platform requirements.</p>
+<p>Multi-region programs often become more complex than necessary when teams start from assumptions instead of workload and platform requirements. The corrections below follow the order of the framework: qualification, platform capabilities and connectivity, workload placement, and service behavior across regions.</p>
 <div class="table-wrap"><table>
 <thead>
 <tr>
@@ -95,45 +104,42 @@
 </thead>
 <tbody>
 <tr>
+<td>"Adding a region means another landing-zone project, with its own governance model."</td>
+<td>The landing zone you already run is reused: governance, identity, policy, automation, and the operating model stay the same. A new region adds regional configuration and only the connectivity profile its workloads need. See <a href="framework-overview.html#principles-and-constructs">Framework overview</a> and the <a href="platform-readiness.html">Platform readiness checklist</a>.</td>
+</tr>
+<tr>
+<td>"We must choose the perfect regions up front."</td>
+<td>Regional requirements and Azure capabilities change. Design the platform so additional qualified options can be introduced without redesigning the broader operating model. See <a href="regional-qualification.html">Regional qualification</a>.</td>
+</tr>
+<tr>
+<td>"Qualified means approved for any workload."</td>
+<td>Qualification is scoped to defined requirements and evidence at a point in time. Each workload revalidates regional suitability during onboarding. See <a href="regional-qualification.html#assessment-outcome">Assessment outcome</a>.</td>
+</tr>
+<tr>
 <td>"Every new region needs a Full Regional Hub."</td>
 <td>Select the most efficient profile that satisfies the identified requirements. Profiles are not maturity stages; any profile can remain the long-term target while it continues to meet those requirements. See <a href="connectivity-profiles.html">Connectivity profiles</a>.</td>
+</tr>
+<tr>
+<td>"Another Azure region requires another ExpressRoute circuit."</td>
+<td>An additional region does not by itself require another circuit. Additional hybrid connectivity should be introduced where reachability, diversity, failure-domain, latency, routing, or bandwidth requirements justify it. See <a href="hybrid-connectivity.html">Confirm hybrid connectivity</a>.</td>
+</tr>
+<tr>
+<td>"Enabling a region means migrating workloads."</td>
+<td>Regional qualification and platform readiness are not workload placement. Remaining in the existing region can be the appropriate outcome. See <a href="workload-placement.html">Place workloads</a>.</td>
 </tr>
 <tr>
 <td>"A paired region is our disaster recovery."</td>
 <td>Region pairing supports specific Azure platform and service behaviors; it does not automatically provide workload recovery. Recovery must still be designed and validated per workload. See <a href="paired-nonpaired-regions.html">Paired and nonpaired regions</a>.</td>
 </tr>
 <tr>
-<td>"Qualified means approved for any workload."</td>
-<td>Qualification is scoped to defined requirements and evidence at a point in time. Each workload revalidates regional suitability during onboarding. See <a href="assessment-outcome.html">Regional assessment outcome</a>.</td>
-</tr>
-<tr>
 <td>"A multi-region platform means active-active."</td>
-<td>The platform creates regional options. Whether a workload is single-region, primary/recovery, or active across regions is a separate workload-specific resiliency decision.</td>
-</tr>
-<tr>
-<td>"Enabling a region means migrating workloads."</td>
-<td>Regional qualification and platform readiness are not workload placement. Remaining in the existing region can be the appropriate outcome. See <a href="workload-placement.html">Workload placement</a>.</td>
-</tr>
-<tr>
-<td>"Another Azure region requires another ExpressRoute circuit."</td>
-<td>An additional region does not by itself require another circuit. Additional hybrid connectivity should be introduced where reachability, diversity, failure-domain, latency, routing, or bandwidth requirements justify it.</td>
-</tr>
-<tr>
-<td>"Each region needs its own governance model."</td>
-<td>Reuse the existing Azure landing-zone governance and operating model; vary regional implementation only where requirements justify it. See <a href="operating-model.html">Governance and operating model</a>.</td>
-</tr>
-<tr>
-<td>"We must choose the perfect regions up front."</td>
-<td>Regional requirements and Azure capabilities change. Design the platform so additional qualified options can be introduced without redesigning the broader operating model.</td>
+<td>The platform creates regional options. Whether a workload is single-region, primary/recovery, or active across regions is a separate workload-specific resiliency decision. See <a href="workload-design.html">Service behavior across regions</a>.</td>
 </tr>
 </tbody>
 </table></div>
 <h2 id="next-step">Next step<a class="anchor" href="#next-step" aria-label="Link to this section">#</a></h2>
 <p class="nextstep"><a class="btn-next" href="getting-started.html">Getting started<svg viewBox="0 0 16 16"><path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></a></p></article>
-    <nav class="pager"><a class="prev" href="customer-scenarios.html"><small>Previous</small><span>Customer scenarios</span></a><a class="next" href="getting-started.html"><small>Next</small><span>Getting started</span></a></nav>
-    <footer class="foot">
-      <p>©2026 Microsoft Corporation. All rights reserved. This document is provided “as-is.” Information and views expressed in this document, including URL and other Internet website references, may change without notice. You bear the risk of using it. This document does not provide you with any legal rights to any intellectual property in any Microsoft product. You may copy and use this document for your internal, reference purposes.</p>
-    </footer>
+    <nav class="pager"><a class="prev" href="customer-scenarios.html"><small>Previous</small><span>Customer scenarios</span></a><span></span></nav>
   </main>
 
   <aside class="rail" aria-label="In this article">
@@ -147,15 +153,6 @@
 <div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Expanded figure">
   <button class="lb-close" type="button" aria-label="Close">×</button>
   <div class="lb-stage"></div>
-</div>
-
-<div class="small-screen">
-  <div class="ss-in">
-    <span class="ms-logo" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-    <h1>Adaptable multi-region Azure platform</h1>
-    <p>This guidance is designed for larger screens. On this device, download the documents instead.</p>
-    <div class="ss-dl"><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform.pdf" download><span class="dl-ic pdf">PDF</span><span><b>Full technical guidance (PDF)</b><small>45 pages</small></span></a><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf" download><span class="dl-ic pdf">PDF</span><span><b>Executive brief (PDF)</b><small>13 pages</small></span></a><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform-Full.pptx" download><span class="dl-ic pptx">PPTX</span><span><b>Full deck (PPTX)</b><small>42 slides</small></span></a><a class="dl-item" href="downloads/Adaptable-Multi-Region-Azure-Platform-Executive.pptx" download><span class="dl-ic pptx">PPTX</span><span><b>Executive deck (PPTX)</b><small>13 slides</small></span></a></div>
-  </div>
 </div>
 
 <script src="assets/site.js"></script>

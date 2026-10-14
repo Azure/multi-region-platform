@@ -15,7 +15,7 @@
   --ink: #0A2340;
   --text: #28323E;
   --muted: #5B6778;
-  --faint: #8A95A5;
+  --faint: #667182;
   --line: #D3DBE4;
   --line-soft: #E4E9EF;
   --paper: #FFFFFF;
@@ -50,8 +50,19 @@
   /* Status */
   --g600: #107C41;
   --g100: #DFF1E6;
+  --g700: #0B6B38;   /* small green text on --g100 (4.5:1 or better) */
   --w600: #A84E1F;   /* restrained warm — constraints / exclusions */
   --w100: #F8E8DD;
+  --w50:  #FBF4EE;
+  /* Status: conditional (amber) */
+  --a700: #8A5A00;
+  --a500: #C98A00;
+  --a100: #FFF1CC;
+  /* AI and service drivers (violet) */
+  --v700: #5C3D9C;   /* small violet text on --v100 and --v50 */
+  --v600: #8661C5;
+  --v100: #EBE5F7;
+  --v50:  #F3EFFA;
 
   --radius: 10px;
   --radius-sm: 6px;
@@ -109,6 +120,9 @@ ol.num li { counter-increment: n; position: relative; padding-left: 26px; margin
 ol.num li::before { content: counter(n); position: absolute; left: 0; top: 1px; width: 18px; height: 18px; border-radius: 50%;
   background: var(--b50); color: var(--b700); font-size: 10px; font-weight: 700; display: grid; place-items: center; }
 a { color: var(--b600); text-decoration: none; }
+.page[data-section="4 · Prepare the region"] a { color: var(--b700); font-weight: 650; }
+.page[data-section="4 · Prepare the region"] span[data-toc] { font-weight: 650; }
+.page[data-section^="Appendix A"] a { color: var(--b700); font-weight: 650; }
 
 /* ---------- Grid helpers ---------- */
 .row { display: flex; gap: 28px; }
@@ -151,6 +165,10 @@ a { color: var(--b600); text-decoration: none; }
 .pull .attr { font-size: 10px; color: var(--muted); margin-top: 6px; letter-spacing: .06em; text-transform: uppercase; font-weight: 600; }
 .note { background: var(--wash); border-radius: var(--radius); padding: 14px 16px; }
 .note h4 { margin-bottom: 6px; }
+/* Tip: one-line pointer to the region planning workbook */
+.tip { display: flex; gap: 10px; align-items: center; background: var(--b50); border-radius: var(--radius-sm); padding: 7px 12px; font-size: 10.8px; line-height: 1.4; color: var(--ink); }
+.tip svg { width: 16px; height: 16px; color: var(--b600); flex: none; }
+.tip a { font-weight: 650; color: var(--b700); text-decoration: underline; text-underline-offset: 2px; }
 .note.warm { background: #FBF4EE; }
 .note.warm h4 { color: var(--w600); }
 .decision { margin-top: 10px; padding: 9px 12px 9px 14px; background: var(--b50); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; border-left: 3px solid var(--b600); }
@@ -183,7 +201,7 @@ table.pub td.rh { font-weight: 650; color: var(--ink); width: 150px; font-size: 
 .chip.teal { background: var(--t100); color: var(--t700); }
 .chip.slate { background: var(--s100); color: var(--s800); }
 .chip.warm { background: var(--w100); color: var(--w600); }
-.chip.green { background: var(--g100); color: var(--g600); }
+.chip.green { background: var(--g100); color: var(--g700); }
 .chip.out { background: #fff; color: var(--b700); border: 1px dashed var(--b500); }
 .ico { width: 18px; height: 18px; flex: none; }
 .cap { font-size: 9.2px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; }
@@ -225,7 +243,18 @@ table.pub td.rh { font-weight: 650; color: var(--ink); width: 150px; font-size: 
 .pdet .attr .k { font-size: 9.4px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--b600); padding-top: 2px; line-height: 1.35; }
 .pdet .attr .v { font-size: 11.6px; line-height: 1.48; }
 .pdet .attr.re .k { color: var(--w600); }
-.pdet .attr.ch { background: var(--b50); border-radius: 8px; border-top: 0; padding: 9px 10px; margin: 0 0 4px -10px; grid-template-columns: 118px 1fr; }
+.pdet .attr.ch { background: var(--b50); border-radius: 8px; border-top: 0; padding: 9px 10px; margin: 0 0 4px; grid-template-columns: 118px 1fr; }
 
 .pdet p { font-size: 12.2px; line-height: 1.5; margin-bottom: 7px; }
 .pdet .ph .gl { margin-left: auto; }
+
+
+/* Contents rows and page references are links */
+a.toc-link { color: inherit; text-decoration: none; }
+a.e, a.tr { color: inherit; text-decoration: none; }
+
+/* A wrapped heading keeps the space at its line break, so PDF bookmark titles read correctly */
+h1, h2, h3, h4, h5, h6 { white-space: break-spaces; }
+
+/* City figure: map labels must reach 8 px (the art module sizes them at 7.95 px in a 596 px column) */
+.page .cty { grid-template-columns: 602px 1fr; gap: 0 18px; }

@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Render whitepaper.html to PDF + per-page PNG previews, and report overflow."""
 import os, sys, json
+from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(ROOT, "out")
 only = [int(a) for a in sys.argv[1:] if a.isdigit()]
 pdf = "--pdf" in sys.argv
+strict = "--no-strict" not in sys.argv   # strict: exit 1 on overflow or layout warnings
 exe = "--exec" in sys.argv
 SRC = "executive.html" if exe else "whitepaper.html"
 OUT = os.path.join(ROOT, "out-exec" if exe else "out")
@@ -67,12 +69,14 @@ with sync_playwright() as p:
     b = p.chromium.launch()
     pg = b.new_page(viewport={"width": 1100, "height": 900}, device_scale_factor=1.6)
     pg.emulate_media(media="print")
-    pg.goto("file://" + os.path.join(ROOT, SRC))
+    pg.goto(Path(ROOT, SRC).as_uri())
     pg.wait_for_selector("body[data-ready='1']", timeout=20000)
     pg.wait_for_timeout(300)
-    for m in pg.evaluate("() => window.__warn || []"):
-        print(m)
-    print(json.dumps(pg.evaluate(CHECK), indent=1))
+    warnings = pg.evaluate("() => window.__warn || []")
+    for m in warnings:
+        print("WARN", m)
+    overflow = pg.evaluate(CHECK)
+    print(json.dumps(overflow, indent=1))
     pages = pg.query_selector_all(".page")
     print("pages:", len(pages))
     os.makedirs(OUT + "/png", exist_ok=True)
@@ -83,6 +87,10 @@ with sync_playwright() as p:
     if pdf:
         os.makedirs(OUT, exist_ok=True)
         pg.pdf(path=f"{OUT}/{PDFNAME}", width="11in", height="8.5in", print_background=True,
-               prefer_css_page_size=True, margin={"top": "0", "right": "0", "bottom": "0", "left": "0"})
+               prefer_css_page_size=True, tagged=True, outline=True, margin={"top": "0", "right": "0", "bottom": "0", "left": "0"})
         print("pdf written")
     b.close()
+
+if strict and (overflow or warnings):
+    print(f"FAILED: {len(overflow)} page(s) overflow, {len(warnings)} layout warning(s) (use --no-strict for drafts)")
+    sys.exit(1)
