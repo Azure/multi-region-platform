@@ -1,7 +1,7 @@
 ---
 title: Service behavior across regions overview
-description: The regional and service behaviors a platform team should understand when it qualifies regional combinations, including paired and nonpaired regions, storage, backup, and Key Vault, with links to workload design guidance.
-ms.date: 10/05/2026
+description: The regional and service behaviors a platform team should understand when it qualifies regional combinations, including paired and nonpaired regions, storage, backup, Key Vault, and private DNS, with links to workload design guidance.
+ms.date: 10/14/2026
 ms.topic: conceptual
 ---
 
@@ -27,6 +27,7 @@ The articles in this section cover the dependencies that most often decide wheth
 |---|---|
 | [Paired and nonpaired regions](./paired-nonpaired-regions.md) | What pairing provides, what it doesn't, and how region-of-choice designs shift responsibility for recovery. |
 | [Storage, backup, and Key Vault](./storage-backup-key-vault.md) | Paired-region and region-of-choice behavior for three services that need special attention, and the recommended Key Vault pattern. |
+| [Private DNS zones](./private-dns-multi-region.md) | Global and regional zone designs for resources with private endpoints in multiple regions, including failover and policy considerations. |
 | [Resiliency scenarios](./resiliency-scenarios.md) | Three situations that show how service behavior changes a recovery design. |
 
 ## Next step

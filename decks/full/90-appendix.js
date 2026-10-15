@@ -37,13 +37,14 @@ module.exports = (pres, L) => {
     const IN = [
       ['Paired and nonpaired regions', 'What pairing provides, what it doesn’t, and how region-of-choice designs shift responsibility for recovery.'],
       ['Storage, backup, and Key Vault', 'Paired-region and region-of-choice behavior for three services, and the recommended Key Vault pattern.'],
+      ['Private DNS zones', 'Global and regional zones for multi-region private endpoints, failover, and policy.'],
       ['Resiliency scenarios', 'Three situations that show how service behavior changes a recovery design.'],
     ];
     IN.forEach(([t, d], i) => {
-      const x = 0.6 + i * 4.1, y = 5.48, w = 3.93;
+      const x = 0.6 + i * 3.08, y = 5.48, w = 2.89;
       L.box(s, x, y, w, 1.35, { fill: C.wash, r: 0.12 });
-      L.txt(s, t, x + 0.2, y + 0.12, w - 0.4, 0.3, { fontSize: 12.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
-      L.txt(s, d, x + 0.2, y + 0.5, w - 0.4, 0.8, { fontSize: 11, color: C.text });
+      L.txt(s, t, x + 0.2, y + 0.1, w - 0.4, 0.45, { fontSize: 12.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
+      L.txt(s, d, x + 0.2, y + 0.58, w - 0.4, 0.7, { fontSize: 11, color: C.text });
     });
     s.addNotes('Region pairing is one input into resiliency design, not the definition of it, and cross-region behavior can differ significantly by service and regional combination. The pages that follow cover the dependencies that most often decide whether a regional combination works as built. Each of the five links opens the guidance on Microsoft Learn.');
   }
@@ -163,8 +164,10 @@ module.exports = (pres, L) => {
       L.txt(s, n, x + 0.1, y + 2.5, w - 0.2, 0.5, { fontSize: 10, color: C.muted, align: 'center', valign: 'middle' });
     });
     L.caption(s, 'Figure', 'Pre-provisioned regional vaults. Applies to secrets and certificates. Design customer-managed keys (for example, SQL TDE) separately; see the customer-managed keys scenario.', X, dy + dh + 0.1, 5.73);
-    s.addNotes('Applies to secrets and certificates. Design customer-managed keys (for example, SQL TDE) separately; see the customer-managed keys scenario on the next slide. Microsoft Learn also documents backup and restore between vaults (Custom multi-region solutions for resiliency); backups can only be restored within the same subscription and Azure geography.');
+    s.addNotes('Applies to secrets and certificates. Design customer-managed keys (for example, SQL TDE) separately; see the customer-managed keys scenario in Resiliency scenarios. Microsoft Learn also documents backup and restore between vaults (Custom multi-region solutions for resiliency); backups can only be restored within the same subscription and Azure geography.');
   }
+
+  require('./private-dns')(pres, L);
 
   // ───────────────────────── Resiliency scenarios (PDF p54)
   {

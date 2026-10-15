@@ -93,7 +93,7 @@ review the diff of `drift-baseline.txt`, and commit it with the change. The base
 | `17i` readiness | `platform-readiness.md` |
 | `18`-`18b` placement | `workload-placement.md` |
 | `19`-`19b` scenarios, `20` misconceptions, `20b` getting started | Resources articles |
-| `22a0`-`22a5` appendix | `workload-design.md` and its three children |
+| `22a0`-`22a5` appendix | `workload-design.md` and its four children; `22a4a`-`22a4d` cover `private-dns-multi-region.md` after the Key Vault pattern |
 | `23`/`23b` references | Article reference-link sections; part 4 profiles carry links inline and in the Guidance column |
 
 The removed operating-model material remains in `backup/operating-model.md` and `backup/whitepaper-25-operating-model.html`, not on the website or in the PDF.
@@ -101,6 +101,8 @@ The removed operating-model material remains in `backup/operating-model.md` and 
 The home page is a short landing page; longer explanations live in `framework-overview.md` and `platform-and-workload.md`. The whitepaper sometimes retains fuller text: `02b` carries all six approach-at-a-glance cards, while the overview article folds three into construct descriptions. Don't shorten a whitepaper page solely because its article is shorter. Profile considerations also appear on `08b`/`08c`; hub design options appear on the Full Regional Hub pages.
 
 Figure IDs and extraction names live in `site/tools/extract_figures.py` (`FIGS`) and `site/figures/manifest.json`.
+
+The private DNS article uses `content/media/private-dns-global-zone.png` and `private-dns-regional-zones.png`, imported from the supplied HTML diagrams. The website and full Word edition discover the article through `content/toc.yml`; the Word converter preserves the service table's HTML line break as a native Word break. The full PDF/HTML build discovers its `22a4a`-`22a4d` page files in filename order; the single-file HTML exporter embeds the shared `../content/media/` images. The full deck's `90-appendix.js` calls `private-dns.js` between the Key Vault pattern and Resiliency scenarios. These sources do not change the executive editions. To publish website-only changes without rebuilding or copying distribution files, run `python3 site/build.py`.
 
 ## Markdown conventions
 

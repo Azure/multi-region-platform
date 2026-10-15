@@ -78,6 +78,7 @@ def md_sentences(path, brief=False):
         s = re.sub(r"^:::.*$", "", s, flags=re.M)
         s = re.sub(r"^\|[^\n]*\n(?=\|?[-| :]+\|?\n)", "", s, flags=re.M)        # table header rows
     s = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", s)        # links -> text
+    s = re.sub(r"<br\s*/?>", " ", s, flags=re.I)
     s = re.sub(r"> \[![A-Z]+\]", "", s)
     out = []
     for line in s.split("\n"):

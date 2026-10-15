@@ -17,6 +17,6 @@ module.exports = [
   { key: 'scenarios', label: 'Customer scenarios', color: C.t600, agenda: ['', 'Customer scenarios', 'Four scenarios from driver to placement'] },
   { key: 'practice', label: 'Putting it into practice', agenda: ['', 'Putting it into practice', 'Misconceptions and getting started'] },
   { key: 'conclusion', label: 'Conclusion', agenda: ['', 'Conclusion', 'Design for continuing regional choice'] },
-  { key: 'appendix', label: 'Appendix A · Service behavior across regions', color: C.s600, agenda: ['A', 'Service behavior across regions', 'Paired and nonpaired regions, Storage, Backup, Key Vault'] },
+  { key: 'appendix', label: 'Appendix A · Service behavior across regions', color: C.s600, agenda: ['A', 'Service behavior across regions', 'Paired and nonpaired regions, Storage, Backup, Key Vault, private DNS'] },
   { key: 'back', label: 'Closing' },
 ];

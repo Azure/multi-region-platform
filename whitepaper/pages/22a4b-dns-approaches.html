@@ -1,0 +1,39 @@
+<section class="page" data-section="Appendix A · Service behavior across regions">
+<style>
+  table.pub.dns-compare td { padding: 7px 14px; }
+</style>
+<div class="inner">
+  <div class="eyebrow" style="color:var(--s600)">Appendix A · Private DNS zones</div>
+  <h2 class="title mt8">Choose an approach</h2>
+  <div class="g2 mt12" style="gap:28px;font-size:11.2px;line-height:1.4">
+    <div>
+      <p>For a resource with private endpoints in multiple regions, choose one of two approaches:</p>
+      <ul class="mt8">
+        <li><strong>Use a global zone and update the record during failover.</strong> The A record normally points to the private endpoint in the primary region. During failover, update it to the secondary region's private endpoint, manually or through automation in the disaster recovery runbook.</li>
+        <li><strong>Use regional zones.</strong> For each required zone name, such as <code>privatelink.blob.core.windows.net</code>, create one private DNS zone per region. Link each zone only to that region's virtual networks. These zones are still global Azure resources; "regional" describes their use and virtual network links. Each zone resolves the FQDN to the local private endpoint, so no DNS record change is needed during failover.</li>
+      </ul>
+      <ol class="mt8">
+        <li>Clients use the zone linked to their region's virtual networks.</li>
+        <li>Each zone resolves the resource name to the local private endpoint.</li>
+        <li>Clients access the resource through that endpoint without a DNS record change during failover.</li>
+      </ol>
+    </div>
+    <div class="figure">
+      <img src="../content/media/private-dns-regional-zones.png" style="display:block;width:100%;height:auto" alt="Architecture diagram of two regions that each have a private DNS zone with the same name, linked only to the virtual networks of that region. Each zone resolves the storage account to the private endpoint in its own region.">
+      <div class="figcap"><span class="fn">Figure</span><span class="ft">Separate zones with the same name provide a local private endpoint address in each region.</span></div>
+    </div>
+  </div>
+  <table class="pub dns-compare mt12" style="font-size:10.8px;line-height:1.35">
+    <thead><tr><th>Consideration</th><th>Global zones</th><th>Regional zones</th></tr></thead>
+    <tbody>
+      <tr><td>Design</td><td>One zone for each required <code>privatelink.*</code> name, shared across regions</td><td>A separate zone with the same name for each region, linked only to that region</td></tr>
+      <tr><td>A records per FQDN</td><td>One</td><td>One per region</td></tr>
+      <tr><td>Resource with private endpoints in two regions</td><td>Clients use one endpoint. Failover requires a record update.</td><td>Each region uses its local endpoint. No DNS record update is needed during failover.</td></tr>
+      <tr><td>Operations</td><td>One set of zones. Azure landing zone <code>DeployIfNotExists</code> policies work unchanged.</td><td>Separate sets of zones, with records and policy assignments managed per region.</td></tr>
+      <tr><td>Cross-region access</td><td>All regions using the shared zone can resolve the resource.</td><td>Each region can resolve only the records in its zone.</td></tr>
+      <tr><td>On-premises</td><td>Resolvers using the shared zone return the same answer.</td><td>The answer depends on which regional resolver receives the query.</td></tr>
+    </tbody>
+  </table>
+  <p class="small mt12">Use regional zones when a resource needs a private endpoint in each region for disaster recovery or active/active operation. A global zone is an alternative if cross-region connectivity is available, latency is acceptable, and DNS record updates during failover meet the recovery time objective (RTO).</p>
+</div>
+</section>

@@ -1,0 +1,38 @@
+<section class="page" data-section="Appendix A · Service behavior across regions">
+<div class="inner">
+  <div class="eyebrow" style="color:var(--s600)">Appendix A · Private DNS zones</div>
+  <h2 class="title mt8">Private DNS zones for multi-region private endpoints</h2>
+  <p class="mt12">Private DNS zones are global resources, so adding a region doesn't require new zones. Most workloads can continue using the existing landing zone's centrally managed <code>privatelink.*</code> zones. Resources with <strong>private endpoints in more than one region</strong> need additional DNS planning.</p>
+  <p class="small muted mt8">This page covers centralized DNS designs that share private DNS zones across regions. Decentralized designs, such as isolated spokes with their own zones, are outside its scope.</p>
+  <div class="g2 mt16" style="gap:28px;font-size:11.5px;line-height:1.45">
+    <div>
+      <h3>Why resources need private endpoints in multiple regions</h3>
+      <p class="mt8">A private endpoint is deployed in a virtual network and belongs to that network's region. Clients in other regions need routing to reach it. A resource may need private endpoints in multiple regions for:</p>
+      <ul class="mt8">
+        <li><strong>Disaster recovery.</strong> The service, the application, or both can fail over to another region. A private endpoint in the recovery region lets clients there reach the service without depending on the primary region.</li>
+        <li><strong>Active/active.</strong> The application runs in both regions simultaneously. Each region uses a local private endpoint to keep traffic local.</li>
+      </ul>
+      <h3 class="mt16">Why a single global zone can be a problem</h3>
+      <p class="mt8">When private endpoints for the same resource register the same fully qualified domain name (FQDN) in a shared private DNS zone:</p>
+      <ul class="mt8">
+        <li>The zone holds a single A record for that FQDN, pointing to the private endpoint registered last.</li>
+        <li>Clients in both regions receive the same IP address, so clients in the other region use cross-region connectivity.</li>
+        <li>If the selected endpoint's region becomes unavailable, clients can't reach the resource until the record is updated to point to the surviving endpoint, even if the resource itself is healthy.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="figure">
+        <img src="../content/media/private-dns-global-zone.png" style="display:block;width:100%;height:auto" alt="Architecture diagram of two regions that resolve a storage account through one global private DNS zone. The zone holds one record that points to the private endpoint in Region A, so traffic from Region B crosses regions.">
+        <div class="figcap"><span class="fn">Figure</span><span class="ft">A shared global zone resolves the storage account to its private endpoint in Region A. Clients in Region B use cross-region connectivity.</span></div>
+      </div>
+      <ol class="mt12">
+        <li>Clients in both regions use the same global private DNS zone.</li>
+        <li>The record for <code>mystorage</code> points to the private endpoint in Region A.</li>
+        <li>Clients in Region A use their local private endpoint.</li>
+        <li>Clients in Region B receive the same IP address and use cross-region connectivity. Their local private endpoint isn't used. If Region A becomes unavailable, the record must be updated before clients can reach the resource.</li>
+      </ol>
+      <p class="mt12">There is no conflict when the primary and secondary instances have different DNS names and each has a private endpoint only in its own region. If both instances also have private endpoints in the other region, each name has two endpoints competing for the same DNS record.</p>
+    </div>
+  </div>
+</div>
+</section>

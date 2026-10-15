@@ -1,0 +1,24 @@
+<section class="page" data-section="Appendix A · Service behavior across regions">
+<div class="inner">
+  <div class="eyebrow" style="color:var(--s600)">Appendix A · Private DNS zones</div>
+  <h2 class="title mt8">Considerations for regional zones</h2>
+  <ul class="mt16">
+    <li><strong>Choose the pattern per zone name, not per resource.</strong> A virtual network can link to only one zone with a given name. If you use regional zones for <code>privatelink.blob.core.windows.net</code>, all storage account names under that zone are resolved through the zone linked to the client's network.</li>
+    <li><strong>Include every record that clients need.</strong> Region B's zone doesn't automatically contain records for private endpoints in Region A. Either add those records to Region B's zone and provide cross-region routing, or create local private endpoints in Region B and register them in its zone.</li>
+    <li><strong>Target the correct zone in policy and automation.</strong> The <code>DeployIfNotExists</code> policy takes a private DNS zone ID as a parameter. Assign it per region with the corresponding zone ID.</li>
+    <li><strong>Use separate resource groups.</strong> A resource group can't contain two zones with the same name.</li>
+    <li><strong>Check on-premises DNS forwarding.</strong> On-premises clients receive the answer from whichever regional resolver they query. Verify forwarding and resolution during both normal operation and failover.</li>
+  </ul>
+  <h3 class="mt24">Reference links</h3>
+  <ul class="mt12" style="font-size:11.5px;line-height:1.6">
+    <li><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/private-link-and-dns-integration-at-scale">Private Link and DNS integration at scale (Cloud Adoption Framework)</a></li>
+    <li><a href="https://learn.microsoft.com/azure/service-bus-messaging/service-bus-geo-replication#private-endpoints">Azure Service Bus Geo-Replication: private endpoints</a></li>
+    <li><a href="https://learn.microsoft.com/azure/service-bus-messaging/service-bus-geo-dr#private-endpoints">Azure Service Bus Geo-Disaster Recovery: private endpoints</a></li>
+    <li><a href="https://learn.microsoft.com/azure/event-hubs/geo-replication#private-endpoints">Azure Event Hubs geo-replication: private endpoints</a></li>
+    <li><a href="https://learn.microsoft.com/azure/event-hubs/event-hubs-geo-dr#private-endpoints">Azure Event Hubs geo-disaster recovery: private endpoints</a></li>
+    <li><a href="https://learn.microsoft.com/azure/storage/common/storage-failover-private-endpoints">Failover considerations for storage accounts with private endpoints</a></li>
+    <li><a href="https://learn.microsoft.com/azure/azure-sql/database/failover-group-configure-sql-db#use-private-link">Configure a failover group for Azure SQL Database: use Private Link</a></li>
+    <li><a href="https://github.com/adstuart/azure-privatelink-multiregion">Multi-region use of Azure Private Link</a></li>
+  </ul>
+</div>
+</section>

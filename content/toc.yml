@@ -59,6 +59,8 @@ items:
     href: paired-nonpaired-regions.md
   - name: Storage, backup, and Key Vault
     href: storage-backup-key-vault.md
+  - name: Private DNS zones
+    href: private-dns-multi-region.md
   - name: Resiliency scenarios
     href: resiliency-scenarios.md
 - name: Resources

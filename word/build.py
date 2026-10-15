@@ -425,6 +425,7 @@ def convert(section, known, images):
     s = rewrite_links(s, section.key, known)
     s = add_heading_ids(s, section.key)
     s = space_tables(s)
+    s = re.sub(r"<br\s*/?>", r"`<w:r><w:br/></w:r>`{=openxml}", s, flags=re.I)
     head = ""
     if section.eyebrow:
         style = "Eyebrow New Page" if section.new_page else "Eyebrow"

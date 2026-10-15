@@ -1,7 +1,7 @@
 ---
 title: Storage, backup, and Key Vault across regions
 description: Paired-region and region-of-choice behavior for Azure Storage replication, backup and restore, and Key Vault, and the recommended Key Vault pattern for multi-region workloads.
-ms.date: 10/02/2026
+ms.date: 10/14/2026
 ms.topic: conceptual
 ---
 
@@ -85,4 +85,4 @@ Storage replication, backup and restore, and Key Vault illustrate why regional q
 ## Next step
 
 > [!div class="nextstepaction"]
-> [Resiliency scenarios](./resiliency-scenarios.md)
+> [Private DNS zones for multi-region private endpoints](./private-dns-multi-region.md)

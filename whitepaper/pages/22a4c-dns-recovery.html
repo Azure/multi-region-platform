@@ -1,0 +1,33 @@
+<section class="page" data-section="Appendix A · Service behavior across regions">
+<div class="inner">
+  <div class="eyebrow" style="color:var(--s600)">Appendix A · Private DNS zones</div>
+  <h2 class="title mt8">Updating the record during failover</h2>
+  <div class="g2 mt16" style="gap:28px">
+    <div>
+      <p>With a global zone, DNS record updates become part of the failover process. This approach is suitable when:</p>
+      <ul class="mt8">
+        <li>The RTO allows for a manual or automated DNS update.</li>
+        <li>Cross-region routing lets clients reach the active private endpoint during normal operation, with acceptable latency.</li>
+      </ul>
+    </div>
+    <div>
+      <p>Include the following in your recovery plan:</p>
+      <ul class="mt8">
+        <li><strong>Update DNS during both failover and failback.</strong> Document the update in each affected resource's runbook, automate it where possible, and test it.</li>
+        <li><strong>Account for DNS caching.</strong> Clients can continue using the previous IP address until the record's time to live (TTL) expires. Choose a TTL that supports the RTO.</li>
+      </ul>
+    </div>
+  </div>
+  <h3 class="mt24">Disaster recovery examples by service</h3>
+  <table class="pub mt12" style="font-size:11.2px;table-layout:fixed">
+    <thead><tr><th style="width:16%">Service</th><th style="width:28%">Disaster recovery model</th><th style="width:30%">Private endpoints for disaster recovery</th><th>Zone</th></tr></thead>
+    <tbody>
+      <tr><td>Azure Storage (GRS/GZRS)</td><td>Account failover; the account name stays the same.</td><td>One per region, so clients use a local private endpoint after failover.</td><td><code style="overflow-wrap:anywhere">privatelink.blob.core.windows.net</code> and zones for other subresources in use</td></tr>
+      <tr><td>Service Bus Premium and Event Hubs</td><td><strong>Geo-Replication:</strong> a single namespace that can fail over between regions.<br><strong>Geo-Disaster Recovery:</strong> two namespaces, one in each region.</td><td>Create a private endpoint for each namespace in both regions: one endpoint per region for Geo-Replication, and two per region for Geo-Disaster Recovery.</td><td><code style="overflow-wrap:anywhere">privatelink.servicebus.windows.net</code></td></tr>
+      <tr><td>Azure SQL Database</td><td>A failover group has primary and secondary logical servers in different regions. The listener name follows the primary.</td><td>Create a private endpoint for each server in its own region. Both servers can share one private DNS zone.</td><td><code style="overflow-wrap:anywhere">privatelink.database.windows.net</code></td></tr>
+    </tbody>
+  </table>
+  <p class="mt16">The deciding factor is whether the same FQDN maps to private endpoints in multiple regions, not how many service instances exist. If it does, use regional zones or plan for DNS updates during failover. Different resource names can share a global zone without this conflict.</p>
+  <div class="note mt12"><h4>Note</h4><p>Check each service's current documentation for its DNS behavior and private endpoint requirements.</p></div>
+</div>
+</section>
