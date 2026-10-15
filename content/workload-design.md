@@ -1,11 +1,11 @@
 ---
-title: Service behavior across regions overview
+title: Service Guides for Multi Region overview
 description: The regional and service behaviors a platform team should understand when it qualifies regional combinations, including paired and nonpaired regions, storage, backup, Key Vault, and private DNS, with links to workload design guidance.
 ms.date: 10/14/2026
 ms.topic: conceptual
 ---
 
-# Service behavior across regions overview
+# Service Guides for Multi Region overview
 
 A multi-region platform creates qualified regional options. Whether a specific workload uses more than one of those regions, and how, is a workload design decision.
 
@@ -25,12 +25,14 @@ The articles in this section cover the dependencies that most often decide wheth
 
 | Article | What it covers |
 |---|---|
-| [Paired and nonpaired regions](./paired-nonpaired-regions.md) | What pairing provides, what it doesn't, and how region-of-choice designs shift responsibility for recovery. |
-| [Storage, backup, and Key Vault](./storage-backup-key-vault.md) | Paired-region and region-of-choice behavior for three services that need special attention, and the recommended Key Vault pattern. |
+| [Storage](./storage-across-regions.md) | Paired-region and region-of-choice behavior for Azure Storage replication. |
+| [Backup and restore](./backup-across-regions.md) | Cross Region Restore, Azure Site Recovery, and region-of-choice recovery. |
+| [Key Vault](./key-vault-across-regions.md) | Paired-region and region-of-choice behavior, and the recommended Key Vault pattern. |
 | [Private DNS zones](./private-dns-multi-region.md) | Global and regional zone designs for resources with private endpoints in multiple regions, including failover and policy considerations. |
-| [Resiliency scenarios](./resiliency-scenarios.md) | Three situations that show how service behavior changes a recovery design. |
+
+For related background, see [Paired and nonpaired regions](./paired-nonpaired-regions.md) and [Resiliency scenarios](./resiliency-scenarios.md) in Resources.
 
 ## Next step
 
 > [!div class="nextstepaction"]
-> [Paired and nonpaired regions](./paired-nonpaired-regions.md)
+> [Storage across regions](./storage-across-regions.md)

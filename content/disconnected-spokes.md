@@ -22,7 +22,7 @@ In the Azure landing zone architecture, these spokes are *online* landing zones:
 | Internet egress and ingress | Give each spoke explicit outbound connectivity, such as a NAT gateway. Protect inbound HTTP and HTTPS with a web application firewall. | [Plan for inbound and outbound internet connectivity](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/plan-for-inbound-and-outbound-internet-connectivity) |
 | Name resolution | Use Azure-provided DNS. For private endpoints, link the spoke virtual network to the private DNS zones it needs. | [Private Link and DNS integration at scale](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/private-link-and-dns-integration-at-scale) |
 | Monitoring and security | Send logs to the existing workspace, or to a workspace in the region when data must stay there. Extend security posture and threat detection to the region. | [Design a Log Analytics workspace architecture](https://learn.microsoft.com/azure/azure-monitor/logs/workspace-design) |
-| Backup and keys | Create backup vaults and Key Vaults in the region. | [Storage, backup, and Key Vault](./storage-backup-key-vault.md) |
+| Backup and keys | Create backup vaults and Key Vaults in the region. | [Backup](./backup-across-regions.md) and [Key Vault](./key-vault-across-regions.md) |
 
 ## Where shared services sit
 

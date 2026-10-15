@@ -55,4 +55,4 @@ Assess availability zones, region pairing, and service-specific cross-region beh
 ## Next step
 
 > [!div class="nextstepaction"]
-> [Storage, backup, and Key Vault](./storage-backup-key-vault.md)
+> [Storage across regions](./storage-across-regions.md)

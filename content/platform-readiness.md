@@ -38,7 +38,7 @@ Private DNS across regions, routing and inspection paths, and hybrid connectivit
 | Item | What must be true |
 |---|---|
 | **Where logs and telemetry live** (common blocker) | Workspace location and residency for monitoring and security data are decided. |
-| Backup placement | Vaults and valid restore targets exist for the region. See [Storage, backup, and Key Vault](./storage-backup-key-vault.md). |
+| Backup placement | Vaults and valid restore targets exist for the region. See [Backup and restore across regions](./backup-across-regions.md). |
 | Runbooks and support | Incident, on-call, and support procedures include the region. |
 
 ## Capacity and security
@@ -46,7 +46,7 @@ Private DNS across regions, routing and inspection paths, and hybrid connectivit
 | Item | What must be true |
 |---|---|
 | **Quota and specific capacity** (common blocker) | Quota for the required SKUs and models is requested ahead of onboarding; capacity reservations are used where justified. |
-| Key Vault placement | Workload vaults exist per region rather than as a cross-region dependency. See [Storage, backup, and Key Vault](./storage-backup-key-vault.md#recommended-key-vault-pattern). |
+| Key Vault placement | Workload vaults exist per region rather than as a cross-region dependency. See [Key Vault across regions](./key-vault-across-regions.md#recommended-key-vault-pattern). |
 | Security coverage | Security posture, threat detection, and privileged access paths extend to the region. |
 
 > [!TIP]

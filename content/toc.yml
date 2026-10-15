@@ -51,18 +51,18 @@ items:
     href: platform-readiness.md
 - name: 5. Place workloads
   href: workload-placement.md
-- name: Service behavior across regions
+- name: Service Guides for Multi Region
   items:
   - name: Overview
     href: workload-design.md
-  - name: Paired and nonpaired regions
-    href: paired-nonpaired-regions.md
-  - name: Storage, backup, and Key Vault
-    href: storage-backup-key-vault.md
+  - name: Storage
+    href: storage-across-regions.md
+  - name: Backup and restore
+    href: backup-across-regions.md
+  - name: Key Vault
+    href: key-vault-across-regions.md
   - name: Private DNS zones
     href: private-dns-multi-region.md
-  - name: Resiliency scenarios
-    href: resiliency-scenarios.md
 - name: Resources
   items:
   - name: Getting started
@@ -71,3 +71,7 @@ items:
     href: customer-scenarios.md
   - name: Common misconceptions
     href: misconceptions.md
+  - name: Paired and nonpaired regions
+    href: paired-nonpaired-regions.md
+  - name: Resiliency scenarios
+    href: resiliency-scenarios.md

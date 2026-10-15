@@ -18,7 +18,7 @@ Multi-region programs often become more complex than necessary when teams start 
 | "Another Azure region requires another ExpressRoute circuit." | An additional region does not by itself require another circuit. Additional hybrid connectivity should be introduced where reachability, diversity, failure-domain, latency, routing, or bandwidth requirements justify it. See [Confirm hybrid connectivity](./hybrid-connectivity.md). |
 | "Enabling a region means migrating workloads." | Regional qualification and platform readiness are not workload placement. Remaining in the existing region can be the appropriate outcome. See [Place workloads](./workload-placement.md). |
 | "A paired region is our disaster recovery." | Region pairing supports specific Azure platform and service behaviors; it does not automatically provide workload recovery. Recovery must still be designed and validated per workload. See [Paired and nonpaired regions](./paired-nonpaired-regions.md). |
-| "A multi-region platform means active-active." | The platform creates regional options. Whether a workload is single-region, primary/recovery, or active across regions is a separate workload-specific resiliency decision. See [Service behavior across regions](./workload-design.md). |
+| "A multi-region platform means active-active." | The platform creates regional options. Whether a workload is single-region, primary/recovery, or active across regions is a separate workload-specific resiliency decision. See [Service Guides for Multi Region](./workload-design.md). |
 
 ## Next step
 

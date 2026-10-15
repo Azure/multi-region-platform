@@ -1,56 +1,21 @@
 ---
-title: Storage, backup, and Key Vault across regions
-description: Paired-region and region-of-choice behavior for Azure Storage replication, backup and restore, and Key Vault, and the recommended Key Vault pattern for multi-region workloads.
-ms.date: 10/14/2026
+title: Key Vault across regions
+description: Paired-region and region-of-choice behavior for Azure Key Vault, and the recommended Key Vault pattern for multi-region workloads.
+ms.date: 10/15/2026
 ms.topic: conceptual
 ---
 
-# Storage, backup, and Key Vault across regions
+# Key Vault across regions
 
-Storage replication, backup and restore, and Key Vault illustrate why regional qualification cannot stop at "the service exists in both regions."
+Key Vault is often a runtime dependency, so its regional behavior can decide whether a recovery region is viable.
 
-## Storage
-
-**Paired-region options**
-
-- Geo-redundant storage options such as GRS and GZRS replicate data asynchronously to the service-defined secondary region.
-- Built-in geo-redundancy and failover behavior must be evaluated separately from workload-level recoverability.
-
-**Region-of-choice options**
-
-- Object replication can asynchronously replicate **block blobs** between selected storage accounts and regions.
-- It requires change feed on the source and blob versioning on source and destination accounts.
-- Object replication does not support append blobs, page blobs, or accounts with hierarchical namespace enabled.
-- A source account can currently replicate to no more than two destination accounts.
-
-> [!IMPORTANT]
-> Replicated data does not by itself make the workload recoverable. Validate the application recovery path end to end.
-
-## Backup and restore
-
-**Paired-region capabilities**
-
-- Azure Backup Cross Region Restore uses the Azure paired region for supported data sources when the required vault replication and configuration are enabled.
-- Support and behavior differ by backup workload and configuration.
-
-**Region-of-choice capabilities**
-
-- Determine which backup technologies and restore targets support the intended recovery region.
-- Azure Site Recovery supports Azure VM disaster recovery between Azure regions, subject to its support matrix and regional restrictions.
-- Restricted-access regions can require explicit access approval.
-
-> [!IMPORTANT]
-> Demonstrate RTO and RPO through recovery testing, not configuration alone.
-
-## Key Vault
-
-**Paired-region behavior**
+## Paired-region behavior
 
 - In most paired regions, Key Vault asynchronously replicates vault contents to the paired region.
 - Microsoft-managed regional failover is Microsoft initiated, best effort, and can occur only after significant delay; after failover, the vault operates with restrictions, including read-only management behavior. Workloads with tighter recovery objectives need an explicit multi-region design.
 - Some paired regions and all nonpaired regions do not use this Microsoft-managed cross-region replication and failover model. For the current list, see [Reliability in Azure Key Vault](https://learn.microsoft.com/azure/reliability/reliability-key-vault).
 
-**Region-of-choice designs**
+## Region-of-choice designs
 
 - Where built-in failover does not meet workload requirements, use separate regional vaults or another supported custom multi-region design.
 - Keys, secrets, and certificates each require their own recovery analysis. Secrets and certificates can often be provisioned independently into regional vaults through controlled deployment processes. Cryptographic keys, particularly customer-managed keys, can have additional constraints and should not be assumed to be reproducible by the same process.
@@ -74,10 +39,6 @@ Storage replication, backup and restore, and Key Vault illustrate why regional q
 
 ## Reference links
 
-- [Azure Storage redundancy](https://learn.microsoft.com/azure/storage/common/storage-redundancy)
-- [Object replication for block blobs](https://learn.microsoft.com/azure/storage/blobs/object-replication-overview)
-- [Restore Azure VMs, including Cross Region Restore](https://learn.microsoft.com/azure/backup/backup-azure-arm-restore-vms)
-- [Azure Site Recovery support matrix](https://learn.microsoft.com/azure/site-recovery/azure-to-azure-support-matrix)
 - [Azure Key Vault availability and redundancy](https://learn.microsoft.com/azure/key-vault/general/disaster-recovery-guidance)
 - [Reliability in Azure Key Vault](https://learn.microsoft.com/azure/reliability/reliability-key-vault)
 - [Managed HSM multi-region replication](https://learn.microsoft.com/azure/key-vault/managed-hsm/multi-region-replication)

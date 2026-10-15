@@ -32,7 +32,7 @@ Data is geo-replicated to the paired region, but the complete application has ne
 | Possible causes | Key Vault or another runtime dependency is unavailable; DNS or private-endpoint configuration is incomplete; compute or shared services are not recoverable; application dependencies were not included in the recovery design. |
 | Correction | Treat data, identity, secrets and keys, DNS, networking, shared services, and compute as workload dependencies. Validate end-to-end recovery against RTO and RPO. |
 
-**Takeaway:** Data recovery is not application recovery, and Azure region pairing does not replace a tested workload recovery plan. See [Storage, backup, and Key Vault across regions](./storage-backup-key-vault.md).
+**Takeaway:** Data recovery is not application recovery, and Azure region pairing does not replace a tested workload recovery plan. See [Storage](./storage-across-regions.md) and [Backup and restore](./backup-across-regions.md) across regions.
 
 ## Customer-managed keys across two regions
 
@@ -44,7 +44,7 @@ A workload uses customer-managed encryption keys and must operate or recover acr
 | Options | Evaluate Key Vault behavior for the selected regions, supported backup and restore patterns, Azure Managed HSM multi-region replication where appropriate, or another workload-specific key-management design. |
 | Validate | Confirm key availability, access, private connectivity, permissions, and application behavior in the secondary region before the recovery path is considered complete. |
 
-**Takeaway:** Design key availability explicitly. For some workloads, the key-management architecture can determine which recovery regions are viable. See the [recommended Key Vault pattern](./storage-backup-key-vault.md#recommended-key-vault-pattern) and [Managed HSM multi-region replication](https://learn.microsoft.com/azure/key-vault/managed-hsm/multi-region-replication).
+**Takeaway:** Design key availability explicitly. For some workloads, the key-management architecture can determine which recovery regions are viable. See the [recommended Key Vault pattern](./key-vault-across-regions.md#recommended-key-vault-pattern) and [Managed HSM multi-region replication](https://learn.microsoft.com/azure/key-vault/managed-hsm/multi-region-replication).
 
 ## Next step
 
