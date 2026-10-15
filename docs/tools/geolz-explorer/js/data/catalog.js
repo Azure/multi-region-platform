@@ -144,7 +144,7 @@ window.CATALOG = /* catalog.js: roles and products. Everything below this line i
 };
 
 window.AZURE_REGIONS = /* catalog.js: Azure regions, built only from Microsoft Learn "List of Azure regions"
-   (last updated 09/23/2026). "area" groups geographies as that page does. Plain JSON below. */ {
+   (last updated 10/13/2026). "area" groups geographies as that page does. Restricted-access regions are omitted; regions in preview carry "preview": true and "(Preview)" in the name. Plain JSON below. */ {
   "source": "https://learn.microsoft.com/en-us/azure/reliability/regions-list",
   "areas": ["Americas", "Europe", "Middle East", "Africa", "Asia Pacific"],
   "regions": [
@@ -188,6 +188,7 @@ window.AZURE_REGIONS = /* catalog.js: Azure regions, built only from Microsoft L
     {"id": "spaincentral", "name": "Spain Central", "zones": 3, "paired": null, "location": "Madrid", "geography": "Spain", "area": "Europe"},
     {"id": "swedencentral", "name": "Sweden Central", "zones": 3, "paired": null, "location": "Gävle", "geography": "Sweden", "area": "Europe"},
     {"id": "switzerlandnorth", "name": "Switzerland North", "zones": 3, "paired": null, "location": "Zurich", "geography": "Switzerland", "area": "Europe"},
+    {"id": "taiwannorth", "name": "Taiwan North (Preview)", "zones": 3, "paired": null, "location": "Taipei", "geography": "Taiwan", "area": "Asia Pacific", "preview": true},
     {"id": "uaenorth", "name": "UAE North", "zones": 3, "paired": null, "location": "Dubai", "geography": "UAE", "area": "Middle East"},
     {"id": "uksouth", "name": "UK South", "zones": 3, "paired": "UK West", "location": "London", "geography": "United Kingdom", "area": "Europe"},
     {"id": "ukwest", "name": "UK West", "zones": null, "paired": "UK South", "location": "Cardiff", "geography": "United Kingdom", "area": "Europe"},
