@@ -140,4 +140,8 @@ Screenshots land in `site/tools/shots/`. Use `./build.sh check` for the cross-fo
 
 `docs/.nojekyll` is already present. Website links are relative, allowing a custom domain or subpath. Site builds preserve existing `docs/data/` snapshots and `docs/downloads/`; publish refreshed snapshots and PDFs explicitly when those inputs change.
 
+Article text, figures, tables, cards, and callouts share a responsive maximum width of 900 CSS pixels, controlled by `--article-w` in `site/assets/site.css`. The planning workbook retains its custom wider layout. These website styles do not control the generated PDF, Word, or PowerPoint layouts.
+
+The shared page template includes a shield-shaped Privacy and project information link beside the theme toggle in the header on every generated page, including the planning workbook. The website-only page is authored in `site/privacy.html` and registered in `SITE_PAGES` in `site/build.py`; it covers Microsoft Clarity, support, contributing, and trademarks, and is not part of the guidance table of contents or document exports. The homepage also includes a short Clarity disclosure linking to this page. Disclosure wording does not implement consent controls or establish regulatory compliance.
+
 The site is desktop-first but remains usable below 960 px: pages use one column, the table of contents moves behind a menu, wide tables scroll, and figures shrink with an expand option.

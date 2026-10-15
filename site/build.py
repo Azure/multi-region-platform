@@ -49,6 +49,12 @@ TOOLS = [{
 # Folders in docs/ that a build keeps: the PDFs, and the Azure data snapshot written by site/tools/refresh_data.py.
 KEEP = ("downloads", "data")
 
+SITE_PAGES = [{
+    "name": "Privacy and project information", "href": "privacy.html", "fragment": "privacy.html", "parent": "Website",
+    "description": "Privacy and Microsoft Clarity disclosures, project support, contribution guidelines, and trademarks.",
+    "meta": "",
+}]
+
 
 # ───────────────────────────── helpers
 def slugify(text, sep="-"):
@@ -345,11 +351,11 @@ def build():
         hero = ""
         if is_home:
             hero = f'''<section class="hero"><div class="hero-in">
-<p class="hero-kicker">Cloud Adoption Framework · Key adoption scenario</p>
 <h1 class="hero-title">{html.escape(SITE_SUB)}</h1>
 <p class="hero-lede">Add Azure regions without starting another landing-zone project. Reuse the platform you already run, qualify each region, and enable only what its workloads need.</p>
 <div class="hero-cta"><a class="btn primary" href="getting-started.html">Get started in six steps</a></div>
 <p class="hero-alt">Or download: <a href="{DOWNLOADS[0][1]}" download>{DOWNLOADS[0][0]}</a> · <a href="{DOWNLOADS[1][1]}" download>{DOWNLOADS[1][0]}</a></p>
+<p class="hero-alt hero-disclosure">We use Microsoft Clarity to understand website interactions and improve content and usability. See <a href="privacy.html">Privacy and project information</a> for details.</p>
 </div></section>'''
         page = (tmpl.replace("{{TITLE}}", html.escape(meta.get("title", pg["name"])))
                 .replace("{{DESCRIPTION}}", html.escape(meta.get("description", "")))
@@ -374,7 +380,7 @@ def build():
         search_index.append({"t": re.sub(r"<[^>]+>", "", h1), "u": out_name, "s": pg["parent"] or "",
                              "h": [[i, re.sub(r"<[^>]+>", "", t)] for i, t in h2s if i != "next-step"], "x": text[:6000]})
         print(f"  {out_name:42s} {len(h2s):2d} sections")
-    for t in TOOLS:
+    for t in TOOLS + SITE_PAGES:
         body = open(os.path.join(SITE, t["fragment"]), encoding="utf-8").read()
         scripts = ""
         if t.get("seed"):   # reference data the page needs before any request, as a script so that it also works offline
@@ -390,7 +396,7 @@ def build():
                 .replace("{{META}}", html.escape(t["meta"]))
                 .replace("{{BODY}}", body)
                 .replace("{{RAIL}}", "").replace("{{PAGER}}", "").replace("{{HERO}}", "")
-                .replace("{{BODYCLASS}}", "article tool")
+                .replace("{{BODYCLASS}}", "article tool" if t in TOOLS else "article")
                 .replace("{{DOWNLOADS}}", dl_items)
                 .replace("{{SPRITE}}", sprite)
                 .replace("{{HEAD}}", "".join(f'\n<link rel="stylesheet" href="{c}">' for c in t.get("css", [])))
@@ -398,11 +404,11 @@ def build():
                 .replace("{{YEAR}}", "2026"))
         open(os.path.join(OUT, t["href"]), "w", encoding="utf-8").write(page)
         search_index.append({"t": t["name"], "u": t["href"], "s": t.get("parent", "Tools"), "h": [], "x": t["description"] + " " + t.get("search", "")})
-        print(f"  {t['href']:42s} tool")
+        print(f"  {t['href']:42s} {'tool' if t in TOOLS else 'website page'}")
     json.dump(search_index, open(os.path.join(OUT, "assets", "search-index.json"), "w"), ensure_ascii=False)
     # 404
     shutil.copy(os.path.join(OUT, "index.html"), os.path.join(OUT, "404.html"))
-    print(f"built {len(pages)} pages and {len(TOOLS)} tool(s) -> {OUT}")
+    print(f"built {len(pages)} pages, {len(TOOLS)} tool(s), and {len(SITE_PAGES)} website page(s) -> {OUT}")
 
 
 if __name__ == "__main__":

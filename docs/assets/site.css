@@ -21,7 +21,7 @@
   --matrix-bg: #FFFFFF; --matrix-head: #F5F8FB; --matrix-text: #28323E;
   --matrix-heading: #03615F; --matrix-region: #0F548C; --matrix-muted: #5B6778; --matrix-border: #D3DBE4;
   --shadow: 0 1px 2px rgba(10,35,64,.06), 0 6px 24px rgba(10,35,64,.06);
-  --top-h: 56px; --side-w: 300px; --rail-w: 240px; --prose-w: 760px; --wide-w: 980px;
+  --top-h: 56px; --side-w: 300px; --rail-w: 240px; --article-w: 900px;
 }
 :root[data-theme="dark"] {
   --bg: #16181C; --bg-soft: #1C1F24; --bg-sunk: #23272E;
@@ -81,11 +81,11 @@ svg { display: block; }
 .results small mark { background: #FFE58F; color: #1a1a1a; border-radius: 2px; padding: 0 1px; }
 .results .none { padding: 12px; color: var(--muted); font-size: 14px; }
 .top-actions { display: flex; align-items: center; gap: 8px; flex: none; }
-.btn-dl, .theme { height: 36px; border: 1px solid var(--line-strong); background: var(--bg); color: var(--ink); border-radius: 8px; font: 600 14px var(--font); display: inline-flex; align-items: center; gap: 8px; padding: 0 14px; cursor: pointer; }
+.btn-dl, .theme, .privacy-link { height: 36px; border: 1px solid var(--line-strong); background: var(--bg); color: var(--ink); border-radius: 8px; font: 600 14px var(--font); display: inline-flex; align-items: center; gap: 8px; padding: 0 14px; cursor: pointer; }
 .btn-dl svg { width: 16px; height: 16px; }
-.btn-dl:hover, .theme:hover { background: var(--bg-soft); }
-.theme { width: 36px; padding: 0; justify-content: center; }
-.theme svg { width: 16px; height: 16px; }
+.btn-dl:hover, .theme:hover, .privacy-link:hover { background: var(--bg-soft); }
+.theme, .privacy-link { width: 36px; padding: 0; justify-content: center; }
+.theme svg, .privacy-link svg { width: 16px; height: 16px; }
 .theme .moon { display: none; }
 :root[data-theme="dark"] .theme .sun { display: none; }
 :root[data-theme="dark"] .theme .moon { display: block; }
@@ -109,6 +109,7 @@ svg { display: block; }
 .hero-alt { margin: 16px 0 0; font-size: 14px; color: #BCD9F5; }
 .hero-alt a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
 .hero-alt a:hover { color: #DDEBF9; }
+.hero-disclosure { max-width: var(--article-w); }
 .btn { display: inline-flex; align-items: center; height: 42px; padding: 0 18px; border-radius: 8px; font-weight: 600; font-size: 15px; text-decoration: none !important; }
 .btn.primary { background: #fff; color: #0B3A63; }
 .btn.primary:hover { background: #EEF5FC; }
@@ -145,14 +146,13 @@ svg { display: block; }
 main { min-width: 0; padding: 32px 56px 40px; }
 .crumbs { font-size: 13px; color: var(--muted); }
 .crumbs span { color: var(--faint); margin: 0 4px; }
-h1.title { margin: 10px 0 0; font-size: 36px; line-height: 1.18; font-weight: 600; letter-spacing: -.012em; color: var(--ink); max-width: var(--wide-w); }
+h1.title { margin: 10px 0 0; font-size: 36px; line-height: 1.18; font-weight: 600; letter-spacing: -.012em; color: var(--ink); max-width: var(--article-w); }
 .home h1.title { font-size: 30px; }
 .meta { margin: 10px 0 0; font-size: 13.5px; color: var(--muted); }
 
 /* ───────── prose */
 .prose { margin-top: 28px; }
-.prose > * { max-width: var(--prose-w); }
-.prose > figure, .prose > .table-wrap, .prose > .rowgrid { max-width: var(--wide-w); }
+.prose > * { max-width: var(--article-w); }
 .prose p { margin: 0 0 16px; }
 .prose h2 { position: relative; margin: 44px 0 14px; font-size: 25px; line-height: 1.25; font-weight: 600; color: var(--ink); letter-spacing: -.008em; }
 .prose h3 { position: relative; margin: 30px 0 10px; font-size: 19px; font-weight: 600; color: var(--ink); }
@@ -265,7 +265,7 @@ blockquote.pull p { margin: 0; font-size: 21px; line-height: 1.4; font-weight: 3
 .lb-close { position: fixed; top: 18px; right: 24px; width: 40px; height: 40px; border-radius: 50%; border: 0; background: #fff; color: #0A2340; font-size: 26px; line-height: 1; cursor: pointer; }
 
 /* ───────── pager, rail */
-.pager { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: var(--wide-w); margin-top: 48px; }
+.pager { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: var(--article-w); margin-top: 48px; }
 .pager a { display: block; padding: 14px 18px; border: 1px solid var(--line); border-radius: 10px; color: var(--ink); text-decoration: none !important; }
 .pager a:hover { border-color: var(--accent); background: var(--accent-soft); }
 .pager small { display: block; font-size: 12px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; font-weight: 600; }
