@@ -1,6 +1,6 @@
 {
-  "reviewed": "2026-10-07",
-  "note": "Curated reference for Azure public regions: geography, availability-zone support, paired region, and access. It is the fallback when site/tools/refresh_data.py runs without Azure Resource Manager access. Run the script with --arm (or --locations <file>) to replace geography, zones, and pairing with the output of 'az account list-locations'. zones: true, false, or null (verify). access: 'restricted' marks regions that need an access request. lat and lon are the approximate datacenter metro of the region, to about 0.01 degrees. site/tools/refresh_latency.py uses them to estimate distances, so they are not an address.",
+  "reviewed": "2026-10-15",
+  "note": "Curated reference for Azure public regions: geography, availability-zone support, paired region, and access. It is the fallback when site/tools/refresh_data.py runs without Azure Resource Manager access. Run the script with --arm (or --locations <file>) to replace geography, zones, and pairing with the output of 'az account list-locations'. zones: true, false, or null (verify). access: 'restricted' marks regions that need an access request and are not offered. preview: true marks regions in preview, which are offered with (Preview) after the name. Source: learn.microsoft.com/azure/reliability/regions-list. lat and lon are the approximate datacenter metro of the region, to about 0.01 degrees. site/tools/refresh_latency.py uses them to estimate distances, so they are not an address.",
   "regions": [
     {"id": "eastus", "name": "East US", "geo": "United States", "group": "US", "loc": "Virginia", "lat": 37.37, "lon": -79.82, "zones": true, "pair": "westus"},
     {"id": "eastus2", "name": "East US 2", "geo": "United States", "group": "US", "loc": "Virginia", "lat": 36.67, "lon": -78.39, "zones": true, "pair": "centralus"},
@@ -46,12 +46,13 @@
     {"id": "eastasia", "name": "East Asia", "geo": "Asia Pacific", "group": "Asia Pacific", "loc": "Hong Kong SAR", "lat": 22.32, "lon": 114.17, "zones": true, "pair": "southeastasia"},
     {"id": "southeastasia", "name": "Southeast Asia", "geo": "Asia Pacific", "group": "Asia Pacific", "loc": "Singapore", "lat": 1.35, "lon": 103.82, "zones": true, "pair": "eastasia"},
     {"id": "japaneast", "name": "Japan East", "geo": "Japan", "group": "Asia Pacific", "loc": "Tokyo, Saitama", "lat": 35.68, "lon": 139.77, "zones": true, "pair": "japanwest"},
-    {"id": "japanwest", "name": "Japan West", "geo": "Japan", "group": "Asia Pacific", "loc": "Osaka", "lat": 34.69, "lon": 135.50, "zones": null, "pair": "japaneast"},
+    {"id": "japanwest", "name": "Japan West", "geo": "Japan", "group": "Asia Pacific", "loc": "Osaka", "lat": 34.69, "lon": 135.50, "zones": true, "pair": "japaneast"},
     {"id": "koreacentral", "name": "Korea Central", "geo": "Korea", "group": "Asia Pacific", "loc": "Seoul", "lat": 37.57, "lon": 126.98, "zones": true, "pair": "koreasouth"},
     {"id": "koreasouth", "name": "Korea South", "geo": "Korea", "group": "Asia Pacific", "loc": "Busan", "lat": 35.18, "lon": 129.08, "zones": false, "pair": "koreacentral"},
     {"id": "centralindia", "name": "Central India", "geo": "India", "group": "Asia Pacific", "loc": "Pune", "lat": 18.52, "lon": 73.86, "zones": true, "pair": "southindia"},
     {"id": "southindia", "name": "South India", "geo": "India", "group": "Asia Pacific", "loc": "Chennai", "lat": 13.08, "lon": 80.27, "zones": false, "pair": "centralindia"},
     {"id": "westindia", "name": "West India", "geo": "India", "group": "Asia Pacific", "loc": "Mumbai", "lat": 19.08, "lon": 72.88, "zones": false, "pair": "southindia"},
+    {"id": "indiasouthcentral", "name": "India South Central", "geo": "India", "group": "Asia Pacific", "loc": "Hyderabad", "lat": 17.38, "lon": 78.48, "zones": true, "pair": "centralindia"},
     {"id": "jioindiawest", "name": "Jio India West", "geo": "India", "group": "Asia Pacific", "loc": "Jamnagar", "lat": 22.47, "lon": 70.06, "zones": false, "pair": "jioindiacentral", "access": "restricted"},
     {"id": "jioindiacentral", "name": "Jio India Central", "geo": "India", "group": "Asia Pacific", "loc": "Nagpur", "lat": 21.15, "lon": 79.09, "zones": false, "pair": "jioindiawest", "access": "restricted"},
     {"id": "indonesiacentral", "name": "Indonesia Central", "geo": "Indonesia", "group": "Asia Pacific", "loc": "Jakarta", "lat": -6.21, "lon": 106.85, "zones": true, "pair": null},
@@ -61,6 +62,7 @@
     {"id": "australiacentral", "name": "Australia Central", "geo": "Australia", "group": "Asia Pacific", "loc": "Canberra", "lat": -35.31, "lon": 149.12, "zones": false, "pair": "australiacentral2"},
     {"id": "australiacentral2", "name": "Australia Central 2", "geo": "Australia", "group": "Asia Pacific", "loc": "Canberra", "lat": -35.31, "lon": 149.12, "zones": false, "pair": "australiacentral", "access": "restricted"},
     {"id": "newzealandnorth", "name": "New Zealand North", "geo": "New Zealand", "group": "Asia Pacific", "loc": "Auckland", "lat": -36.85, "lon": 174.76, "zones": true, "pair": null},
-    {"id": "taiwannorth", "name": "Taiwan North", "geo": "Taiwan", "group": "Asia Pacific", "loc": "Taiwan", "lat": 25.04, "lon": 121.53, "zones": null, "pair": null}
+    {"id": "taiwannorth", "name": "Taiwan North", "geo": "Taiwan", "group": "Asia Pacific", "loc": "Taipei", "lat": 25.04, "lon": 121.53, "zones": true, "pair": "taiwannorthwest", "preview": true},
+    {"id": "taiwannorthwest", "name": "Taiwan Northwest", "geo": "Taiwan", "group": "Asia Pacific", "loc": "Taiwan", "lat": 24.75, "lon": 120.90, "zones": false, "pair": "taiwannorth", "access": "restricted"}
   ]
 }

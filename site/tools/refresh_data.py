@@ -273,7 +273,8 @@ def main():
         regions.append({
             "id": r, "name": ref.get("name") or names.get(r) or r, "geo": ref.get("geo") or "", "group": ref.get("group") or "Other",
             "loc": ref.get("loc") or "", "zones": ref.get("zones"), "pair": ref.get("pair"),
-            "access": seed.get(r, {}).get("access", ""), "services": counts[r], "known": r in seed or r in arm,
+            "access": seed.get(r, {}).get("access", ""), "preview": bool(seed.get(r, {}).get("preview")),
+            "services": counts[r], "known": r in seed or r in arm,
         })
 
     services, products = [], {}

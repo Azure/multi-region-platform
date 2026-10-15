@@ -97,7 +97,8 @@
   // Restricted regions (access limited to specific customer scenarios) are not offered, and a region paired only with one of them counts as nonpaired.
   function useRegions(all) {
     const hidden = new Set(all.filter(r => r.access === 'restricted').map(r => r.id));
-    const list = all.filter(r => !hidden.has(r.id)).map(r => hidden.has(r.pair) ? { ...r, pair: null } : r);
+    const list = all.filter(r => !hidden.has(r.id)).map(r => ({ ...r, pair: hidden.has(r.pair) ? null : r.pair,
+      name: r.preview && !/\(Preview\)$/.test(r.name) ? r.name + ' (Preview)' : r.name }));
     D.hidden = new Set([...(D.hidden || []), ...hidden]);
     D.regions = list.slice().sort((a, b) => a.name.localeCompare(b.name));
     D.byId = Object.fromEntries(list.map(r => [r.id, r]));
