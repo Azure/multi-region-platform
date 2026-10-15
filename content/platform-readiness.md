@@ -38,7 +38,7 @@ Private DNS across regions, routing and inspection paths, and hybrid connectivit
 | Item | What must be true |
 |---|---|
 | **Where logs and telemetry live** (common blocker) | Workspace location and residency for monitoring and security data are decided. |
-| Backup placement | Vaults and valid restore targets exist for the region. See [Backup and restore across regions](./backup-across-regions.md). |
+| Backup placement | Vaults and valid restore targets exist for the region. See [Backup and restore across regions](./restore-across-regions.md). |
 | Runbooks and support | Incident, on-call, and support procedures include the region. |
 
 ## Capacity and security

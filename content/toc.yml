@@ -58,7 +58,7 @@ items:
   - name: Storage
     href: storage-across-regions.md
   - name: Backup and restore
-    href: backup-across-regions.md
+    href: restore-across-regions.md
   - name: Key Vault
     href: key-vault-across-regions.md
   - name: Private DNS zones

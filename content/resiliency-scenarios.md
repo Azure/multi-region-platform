@@ -32,7 +32,7 @@ Data is geo-replicated to the paired region, but the complete application has ne
 | Possible causes | Key Vault or another runtime dependency is unavailable; DNS or private-endpoint configuration is incomplete; compute or shared services are not recoverable; application dependencies were not included in the recovery design. |
 | Correction | Treat data, identity, secrets and keys, DNS, networking, shared services, and compute as workload dependencies. Validate end-to-end recovery against RTO and RPO. |
 
-**Takeaway:** Data recovery is not application recovery, and Azure region pairing does not replace a tested workload recovery plan. See [Storage](./storage-across-regions.md) and [Backup and restore](./backup-across-regions.md) across regions.
+**Takeaway:** Data recovery is not application recovery, and Azure region pairing does not replace a tested workload recovery plan. See [Storage](./storage-across-regions.md) and [Backup and restore](./restore-across-regions.md) across regions.
 
 ## Customer-managed keys across two regions
 

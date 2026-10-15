@@ -26,7 +26,7 @@ The articles in this section cover the dependencies that most often decide wheth
 | Article | What it covers |
 |---|---|
 | [Storage](./storage-across-regions.md) | Paired-region and region-of-choice behavior for Azure Storage replication. |
-| [Backup and restore](./backup-across-regions.md) | Cross Region Restore, Azure Site Recovery, and region-of-choice recovery. |
+| [Backup and restore](./restore-across-regions.md) | Cross Region Restore, Azure Site Recovery, and region-of-choice recovery. |
 | [Key Vault](./key-vault-across-regions.md) | Paired-region and region-of-choice behavior, and the recommended Key Vault pattern. |
 | [Private DNS zones](./private-dns-multi-region.md) | Global and regional zone designs for resources with private endpoints in multiple regions, including failover and policy considerations. |
 

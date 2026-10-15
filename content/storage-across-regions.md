@@ -32,4 +32,4 @@ Storage replication illustrates why regional qualification cannot stop at "the s
 ## Next step
 
 > [!div class="nextstepaction"]
-> [Backup and restore across regions](./backup-across-regions.md)
+> [Backup and restore across regions](./restore-across-regions.md)
