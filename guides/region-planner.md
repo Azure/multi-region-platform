@@ -4,6 +4,10 @@ The [published workbook](https://azure.github.io/multi-region-platform/region-pl
 
 The workbook exports Excel and saves or opens JSON planning records. Visitor-entered planning data stays in the browser; it is not sent to a server. Azure reference data is loaded from published snapshots: see [Azure data collection](azure-data.md) for provenance and limitations.
 
+The Services tab supports up to 100 services in one table. It shows 10 service rows at a time; scroll within the table to reach the rest, with column headers kept visible. Saved plans, Excel exports, and printing include the full list.
+
+After building the site, run `python site\tools\test_planner_services.py` for the targeted browser regression checks.
+
 ## Source organization
 
 The planner is website-only, not an article in `content/toc.yml` or part of the CAF export. `site/build.py` registers it in `TOOLS`, supplies the shared header and navigation, lists it under Resources, and adds it to search. The overview articles link to it through website-only content.

@@ -203,7 +203,7 @@
     root.addEventListener('input', e => { const i = e.target.closest && e.target.closest('input[data-cb]'); if (i) onInput(i); });
     layer().addEventListener('mousedown', e => { const o = e.target.closest('.pl-pop-o'); if (o) { e.preventDefault(); pick(+o.dataset.i); } else if (e.target.closest('.pl-pop')) e.preventDefault(); });
     window.addEventListener('resize', () => { if (pop) { const i = document.querySelector(`#planner [data-cb="${CSS.escape(pop.id)}"]`); if (i) placePop(i); } });
-    window.addEventListener('scroll', () => { if (pop) { const i = document.querySelector(`#planner [data-cb="${CSS.escape(pop.id)}"]`); if (i) placePop(i); } }, { passive: true });
+    window.addEventListener('scroll', () => { if (pop) { const i = document.querySelector(`#planner [data-cb="${CSS.escape(pop.id)}"]`); if (i) placePop(i); } }, { passive: true, capture: true });
     document.addEventListener('mousedown', e => { if (pop && !e.target.closest('.pl-pop') && !e.target.closest('.pl-cb')) closePop(); });
   }
   const comboClear = id => { const cfg = CB[id]; if (cfg && cfg.onClear) cfg.onClear(); };
@@ -230,7 +230,7 @@
     root.addEventListener('focusin', e => { const el = e.target.closest && e.target.closest('[data-tip]'); if (el) showTip(el); });
     root.addEventListener('focusout', hideTip);
     root.addEventListener('pointerdown', hideTip);
-    window.addEventListener('scroll', hideTip, { passive: true });
+    window.addEventListener('scroll', hideTip, { passive: true, capture: true });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') hideTip(); });
   }
 

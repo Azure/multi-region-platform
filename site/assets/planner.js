@@ -79,15 +79,15 @@
   const textual = a => a && (a.tagName === 'TEXTAREA' || (a.tagName === 'INPUT' && ['text', 'search', ''].includes(a.type)));
   function render() {
     const a = document.activeElement, sig = sigOf(a), caret = sig && textual(a) ? [a.selectionStart, a.selectionEnd] : null;
-    const scrolls = [...panel.querySelectorAll('.pl-scroll')].map(x => x.scrollLeft), same = panel.dataset.tab === ui.tab;
+    const scrolls = [...panel.querySelectorAll('.pl-scroll')].map(x => ({ left: x.scrollLeft, top: x.scrollTop })), same = panel.dataset.tab === ui.tab;
     K.closePop(); K.hideTip();
     put(ess, vEssentials()); put(tabsEl, vTabs()); put(foot, vFoot());
     if (!same) revealTab();
     panel.innerHTML = M.views[ui.tab](); panel.dataset.tab = ui.tab;
     panel.dataset.step = String(TABS.find(t => t.id === ui.tab).step);   // the step group's hue, see "accents" in planner.css
     panel.setAttribute('aria-labelledby', 'tab-' + ui.tab);
-    if (same) panel.querySelectorAll('.pl-scroll').forEach((x, i) => { if (scrolls[i]) x.scrollLeft = scrolls[i]; });
     fitGrid();
+    if (same) panel.querySelectorAll('.pl-scroll').forEach((x, i) => { if (scrolls[i]) { x.scrollLeft = scrolls[i].left; x.scrollTop = scrolls[i].top; } });
     if (sig) {
       const t = root.querySelector(sig);
       if (t) { K.setQuiet(true); t.focus({ preventScroll: true }); K.setQuiet(false); if (caret && textual(t)) { try { t.setSelectionRange(caret[0], caret[1]); } catch (e) { /* not a text field */ } } }
@@ -111,6 +111,12 @@
   function fitGrid() {
     const w = document.getElementById('pl-cgw');
     if (w) w.classList.toggle('fit', panel.clientWidth - 64 >= (window.matchMedia('(max-width: 960px)').matches ? 260 : 320) + (parseInt(w.style.getPropertyValue('--n'), 10) || 1) * 190);
+    const services = panel.querySelector('.pl-services-scroll');
+    if (services) {
+      const table = services.querySelector('table'), rows = [...table.tBodies[0].rows].slice(0, 10);
+      const height = table.tHead.getBoundingClientRect().height + rows.reduce((sum, row) => sum + row.getBoundingClientRect().height, 0);
+      services.style.setProperty('--pl-services-height', height + services.offsetHeight - services.clientHeight + 'px');
+    }
   }
   try { new ResizeObserver(fitGrid).observe(panel); } catch (e) { window.addEventListener('resize', fitGrid); }
   // Loads that finish later (prices, products, cities) must not close a popup the person has opened or drop what they typed in it.

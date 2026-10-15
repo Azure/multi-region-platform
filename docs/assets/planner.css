@@ -308,6 +308,9 @@
 
 /* ───────── detail lists (tables) */
 #planner .pl-scroll { position: relative; max-width: 100%; overflow-x: auto; scrollbar-width: thin; }
+#planner .pl-services-scroll { max-height: var(--pl-services-height); overflow-y: auto; }
+#planner .pl-services-scroll thead th { position: sticky; top: 0; z-index: 1; background: var(--pl-surface); }
+#planner .pl-services-scroll thead th.is-cur { background: color-mix(in srgb, var(--pl-brand) 4%, var(--pl-surface)); }
 #planner .pl-tabswrap, #planner .pl-cgw, #planner .pl-cmd { position: relative; }
 #planner .pl-scroll:focus-visible { outline-offset: -2px; }
 #planner .pl-dl th, #planner .pl-dl td { padding: 8px 12px; border-bottom: 1px solid var(--pl-line); }
@@ -793,6 +796,8 @@ html.network-full, html.network-full body { overflow: hidden; }
 @page { margin: 16mm 14mm; }
 .pl-print-head { display: none; }
 @media print {
+  #planner .pl-services-scroll { max-height: none; overflow: visible; }
+  #planner .pl-services-scroll thead th { position: static; }
   html, body { background: #fff !important; color: #1f2937 !important; }
   body.article.tool .crumbs, body.article.tool main > .title, body.article.tool main > .meta { display: none !important; }
   body.article.tool .shell, body.article.tool main, body.article.tool main .prose { display: block !important; width: auto !important; max-width: none !important; margin: 0 !important; padding: 0 !important; }

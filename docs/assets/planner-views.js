@@ -4,7 +4,7 @@
   const M = global.MRP, C = M.core, K = M.kit, { icon, status } = M, { esc } = K;
   const { O, CHECKS, TONE, OUTCOME_ICON, STARTER_SERVICES } = M;
   const ui = M.ui;
-  const MAX_SERVICES = 20;
+  const MAX_SERVICES = 100;
   const D = C.D;
   const TONE_KIND = { good: 'success', warn: 'warning', bad: 'error' };
   const outcomeBadge = (o, lg) => K.badge(OUTCOME_ICON[o] || 'neutral', o, { lg });
@@ -163,13 +163,13 @@
     const rows = S.services.map((s, i) => `<tr><td class="pl-idx">${i + 1}</td><th scope="row" class="pl-sn">${esc(s.service)}</th><td class="pl-pr">${productCell(s)}</td>` +
       cs.map(x => { const st = C.availability(s, x.id); return `<td class="${x.current ? 'is-cur ' : ''}av-${st}">${avCell(s, x.id, st)}</td>`; }).join('') + `<td class="pl-x">${K.iconBtn('rm-svc', s.id, 'close', 'Remove ' + s.service)}</td></tr>`).join('');
     const table = S.services.length ? K.scroll(`<table class="pl-dl pl-mx"><thead><tr><th scope="col" class="pl-idx">#</th><th scope="col">Service</th><th scope="col">Product or SKU family</th>` +
-      cs.map(x => `<th scope="col" class="${x.current ? 'is-cur' : ''}">${esc(C.rname(x.id))}${x.current ? '<span class="pl-cap">Current region</span>' : ''}</th>`).join('') + `<th scope="col" aria-label="Remove"></th></tr></thead><tbody>${rows}</tbody></table>`, { label: 'Service availability by region' })
+      cs.map(x => `<th scope="col" class="${x.current ? 'is-cur' : ''}">${esc(C.rname(x.id))}${x.current ? '<span class="pl-cap">Current region</span>' : ''}</th>`).join('') + `<th scope="col" aria-label="Remove"></th></tr></thead><tbody>${rows}</tbody></table>`, { cls: 'pl-services-scroll', label: 'Service availability by region' })
       : K.empty('list', 'No services listed yet. Add the services the workloads expect to use.');
     const date = snapshotDate();
     const note = K.mb('info', 'The lists of available services, products, SKUs, models, and features need fuller validation directly in your own tenants and subscriptions. Work with your Microsoft account team or Microsoft Support to confirm them with confidence. The data is updated based on the <a href="https://azure.microsoft.com/explore/global-infrastructure/products-by-region/table" target="_blank" rel="noopener">Products available by region</a> page.');
     return K.head('Services', 'The services the workloads expect to use, and where each one is available.') + note +
       snapshotBar() +
-      `<div class="pl-bar">${add}${S.services.length ? '' : K.btn({ act: 'add-starter', label: 'Add common platform services', kind: 'secondary' })}<span class="pl-count">${S.services.length} of ${MAX_SERVICES}</span>${full ? '<span class="pl-cap">20 of 20. Remove one to add another.</span>' : ''}</div>` +
+      `<div class="pl-bar">${add}${S.services.length ? '' : K.btn({ act: 'add-starter', label: 'Add common platform services', kind: 'secondary' })}<span class="pl-count">${S.services.length} of ${MAX_SERVICES}</span>${full ? '<span class="pl-cap">Remove one to add another.</span>' : ''}</div>` +
       svcTiles() + (cs.length ? '' : '<p class="pl-muted">Add regions in Scope to see a column for each one.</p>') + table +
       `<p class="pl-fn">${D.hasCatalog ? `Available means the Azure Retail Prices API lists a consumption meter for the service or product in the region (snapshot of ${esc(date)}). ` : ''}Confirm SKUs, features, and preview status on <a href="https://azure.microsoft.com/explore/global-infrastructure/products-by-region/table" target="_blank" rel="noopener">Products available by region</a>.</p>`;
   }
