@@ -26,6 +26,7 @@ from openpyxl.utils import get_column_letter
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 DEFAULT_CSV = ROOT / "service_availability_product_sku.csv"
 DEFAULT_CACHE = ROOT / "temp" / "regional_price_cache"
+DEFAULT_NONREGIONAL_CACHE = ROOT / "temp" / "nonregional_price_cache"
 DEFAULT_OUTPUT = ROOT / "service_availability_pricing_enriched.xlsx"
 DOC_URL = "https://learn.microsoft.com/en-us/rest/api/cost-management/retail-prices/azure-retail-prices"
 RESTRICTION = "NotAvailableForSubscription"
@@ -43,6 +44,12 @@ EXTRA_HEADERS = [
     "Matched currency codes",
     "Pricing snapshot finished at",
 ]
+NONREGIONAL_HEADERS = [header.replace("Matched", "Non-regional matched", 1) for header in EXTRA_HEADERS]
+NONREGIONAL_HEADERS[0] = "Non-regional pricing status"
+NONREGIONAL_HEADERS[1] = "Non-regional match level"
+NONREGIONAL_HEADERS[2] = "Non-regional confidence"
+NONREGIONAL_HEADERS[-1] = "Non-regional snapshot finished at"
+NONREGIONAL_HEADERS.insert(4, "Non-regional armRegionName values (up to 10)")
 RAW_METADATA_HEADERS = [
     "Retail record key",
     "Cache region",
@@ -143,6 +150,20 @@ def inspect_snapshots(cache_files):
     return regions, sorted(api_fields), item_count
 
 
+def load_nonregional(cache_dir):
+    """Load records whose armRegionName is blank, Global, or a billing zone."""
+    snapshots = []
+    for path in sorted(cache_dir.glob("*.json.gz")) if cache_dir.is_dir() else []:
+        with gzip.open(path, "rt", encoding="utf-8") as source:
+            snapshot = json.load(source)
+        if not snapshot.get("complete"):
+            raise ValueError(f"Incomplete Retail Prices API snapshot: {path.name}")
+        if not isinstance(snapshot.get("items"), list):
+            raise ValueError(f"Missing API items in {path.name}")
+        snapshots.append((path.name, snapshot))
+    return snapshots
+
+
 def worksheet_row_count(archive, path):
     count = 0
     with archive.open(path) as source:
@@ -191,7 +212,71 @@ def build_indexes(items):
     )
 
 
-def match_row(row, indexes, items, finished_at):
+def loose_service_key(value):
+    """Normalized service name without a leading 'Azure' or trailing 'Service(s)'."""
+    words = normalize(value).split()
+    if words and words[0] == "azure":
+        words = words[1:]
+    if words and words[-1] in {"service", "services"}:
+        words = words[:-1]
+    return " ".join(words)
+
+
+def build_loose_indexes(items):
+    by_loose_service = defaultdict(list)
+    by_product_prefix = defaultdict(list)
+    for record_id, item in enumerate(items):
+        add_index(by_loose_service, loose_service_key(item.get("serviceName")), record_id)
+        product = loose_service_key(item.get("productName"))
+        words = product.split()
+        for length in range(1, len(words) + 1):
+            by_product_prefix[" ".join(words[:length])].append(record_id)
+    return by_loose_service, by_product_prefix
+
+
+def loose_match(row, loose_indexes, items):
+    """Service-level fallback for non-regional prices whose API names differ from the CSV."""
+    if (row.get("product_name") or "").strip() or (row.get("sku_name") or "").strip():
+        return None
+    key = loose_service_key(row.get("service_name"))
+    if not key:
+        return None
+    by_loose_service, by_product_prefix = loose_indexes
+    if by_loose_service.get(key):
+        return "Service only (Azure/Service prefix-suffix ignored)", "Medium", by_loose_service[key]
+    if by_product_prefix.get(key):
+        return "Service only (API product name starts with service name)", "Low", by_product_prefix[key]
+    return None
+
+
+def match_row(row, indexes, items, finished_at, with_region_values=False, loose_indexes=None):
+    matched = []
+    result = _match_row(row, indexes, items, finished_at, matched)
+    if loose_indexes is not None and result[0] == "No matching Retail Price record":
+        found = loose_match(row, loose_indexes, items)
+        if found:
+            level, confidence, ids = found
+            matched = [items[record_id] for record_id in ids]
+            result = [
+                "Yes",
+                level,
+                confidence,
+                len(ids),
+                distinct_values(matched, "serviceName", 5),
+                distinct_values(matched, "productName", 5),
+                distinct_values(matched, "skuName", 5),
+                distinct_values(matched, "armSkuName", 5),
+                distinct_values(matched, "unitOfMeasure", 10),
+                distinct_values(matched, "currencyCode", 5),
+                finished_at,
+            ]
+    if with_region_values:
+        regions = list(dict.fromkeys((item.get("armRegionName") or "(blank)") for item in matched))
+        result.insert(4, "; ".join(regions[:10]))
+    return result
+
+
+def _match_row(row, indexes, items, finished_at, matched_out=None):
     if (row.get("restriction") or "").strip() == RESTRICTION:
         return ["Excluded - NotAvailableForSubscription", "", "", 0, "", "", "", "", "", "", ""]
 
@@ -258,6 +343,8 @@ def match_row(row, indexes, items, finished_at):
         ]
 
     matched = [items[record_id] for record_id in matched_ids]
+    if matched_out is not None:
+        matched_out.extend(matched)
     return [
         "Yes",
         level,
@@ -277,6 +364,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--availability-csv", type=pathlib.Path, default=DEFAULT_CSV)
     parser.add_argument("--pricing-cache-dir", type=pathlib.Path, default=DEFAULT_CACHE)
+    parser.add_argument("--nonregional-cache-dir", type=pathlib.Path, default=DEFAULT_NONREGIONAL_CACHE)
     parser.add_argument("--output", type=pathlib.Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args()
 
@@ -297,6 +385,19 @@ def main():
     for row_index, row in enumerate(source_rows):
         region = (row.get("region") or "").strip().casefold()
         rows_by_region[region].append(row_index)
+
+    nonregional = load_nonregional(args.nonregional_cache_dir)
+    nr_items, nr_meta, nr_fields = [], [], set()
+    for file_name, snapshot in nonregional:
+        for item in snapshot["items"]:
+            nr_items.append(item)
+            nr_meta.append((file_name, snapshot))
+            nr_fields.update(item)
+    nr_fields = sorted(nr_fields)
+    nr_indexes = build_indexes(nr_items)
+    nr_loose = build_loose_indexes(nr_items)
+    nr_finished = max((snapshot.get("finished", "") for _, snapshot in nonregional), default="")
+    extra_count = len(EXTRA_HEADERS) + len(NONREGIONAL_HEADERS)
 
     results = [None] * len(source_rows)
     workbook = Workbook(write_only=True)
@@ -327,6 +428,13 @@ def main():
             "Snapshots are USD, type=Consumption, filtered by armRegionName; every cached record is retained.",
         ),
         (
+            "Non-regional pricing",
+            f"{args.nonregional_cache_dir}: records whose armRegionName is blank, Global, or a billing zone "
+            "(Zone 1-6, US Gov, ...). Kept in the Retail API Non-Regional sheet and matched into the "
+            "'Non-regional' columns of Availability Pricing, independent of the row's region.",
+        ),
+        ("Non-regional API records", len(nr_items)),
+        (
             "Important",
             "Retail price presence is not a guarantee of service/SKU availability or subscription eligibility.",
         ),
@@ -341,11 +449,11 @@ def main():
 
     availability = workbook.create_sheet("Availability Pricing")
     availability.freeze_panes = "A2"
-    append_header(availability, source_headers + EXTRA_HEADERS)
+    append_header(availability, source_headers + EXTRA_HEADERS + NONREGIONAL_HEADERS)
     availability.auto_filter.ref = (
-        f"A1:{get_column_letter(len(source_headers) + len(EXTRA_HEADERS))}{len(source_rows) + 1}"
+        f"A1:{get_column_letter(len(source_headers) + extra_count)}{len(source_rows) + 1}"
     )
-    for column in range(1, len(source_headers) + len(EXTRA_HEADERS) + 1):
+    for column in range(1, len(source_headers) + extra_count + 1):
         letter = get_column_letter(column)
         availability.column_dimensions[letter].width = 18 if column <= len(source_headers) else 32
 
@@ -355,6 +463,26 @@ def main():
     raw.auto_filter.ref = f"A1:{get_column_letter(len(raw_headers))}{api_count + 1}"
     for column in range(1, len(raw_headers) + 1):
         raw.column_dimensions[get_column_letter(column)].width = 22
+
+    nr_raw_headers = RAW_METADATA_HEADERS + nr_fields
+    nr_raw = workbook.create_sheet("Retail API Non-Regional")
+    nr_raw.freeze_panes = "A2"
+    append_header(nr_raw, nr_raw_headers)
+    nr_raw.auto_filter.ref = f"A1:{get_column_letter(len(nr_raw_headers))}{len(nr_items) + 1}"
+    for column in range(1, len(nr_raw_headers) + 1):
+        nr_raw.column_dimensions[get_column_letter(column)].width = 22
+    for record_id, (item, (file_name, snapshot)) in enumerate(zip(nr_items, nr_meta)):
+        append_row(
+            nr_raw,
+            [
+                f"{snapshot['label']}:{record_id + 1}",
+                snapshot["region"] or "(blank)",
+                file_name,
+                snapshot.get("started", ""),
+                snapshot.get("finished", ""),
+            ]
+            + [item.get(field) for field in nr_fields],
+        )
 
     for cache_path in cache_files:
         with gzip.open(cache_path, "rt", encoding="utf-8") as source:
@@ -379,6 +507,7 @@ def main():
             results[row_index] = match_row(source_rows[row_index], indexes, items, finished_at)
 
     status_counts = defaultdict(int)
+    nr_status_counts = defaultdict(int)
     restricted_count = 0
     for row_index, row in enumerate(source_rows):
         region = (row.get("region") or "").strip().casefold()
@@ -395,9 +524,13 @@ def main():
                 raise ValueError(f"Row {row_index + 2} was not assigned a pricing result")
         status_counts[results[row_index][0]] += 1
         restricted_count += (row.get("restriction") or "").strip() == RESTRICTION
+        nr_result = match_row(
+            row, nr_indexes, nr_items, nr_finished, with_region_values=True, loose_indexes=nr_loose
+        )
+        nr_status_counts[nr_result[0]] += 1
         append_row(
             availability,
-            [row.get(header, "") for header in source_headers] + results[row_index],
+            [row.get(header, "") for header in source_headers] + results[row_index] + nr_result,
         )
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -405,15 +538,18 @@ def main():
 
     # Verify workbook readability, serialized row counts, and exclusion behavior.
     check = load_workbook(args.output, read_only=True, data_only=True)
-    if check.sheetnames != ["Read Me", "Availability Pricing", "Retail API Raw"]:
+    if check.sheetnames != ["Read Me", "Availability Pricing", "Retail API Raw", "Retail API Non-Regional"]:
         raise AssertionError("Workbook sheets are missing or out of order")
     with zipfile.ZipFile(args.output) as archive:
         availability_rows = worksheet_row_count(archive, "xl/worksheets/sheet2.xml")
         raw_rows = worksheet_row_count(archive, "xl/worksheets/sheet3.xml")
+        nr_rows = worksheet_row_count(archive, "xl/worksheets/sheet4.xml")
     if availability_rows != len(source_rows) + 1:
         raise AssertionError("Availability sheet row count differs from the CSV")
     if raw_rows != api_count + 1:
         raise AssertionError("Raw API sheet row count differs from complete cache snapshots")
+    if nr_rows != len(nr_items) + 1:
+        raise AssertionError("Non-regional sheet row count differs from its cache snapshots")
     if status_counts["Excluded - NotAvailableForSubscription"] != restricted_count:
         raise AssertionError("Restricted rows were not excluded consistently")
     print(
@@ -429,6 +565,8 @@ def main():
                 "availability_regions": len(rows_by_region),
                 "cached_regions": len(cache_regions),
                 "status_counts": dict(status_counts),
+                "retail_api_nonregional_records": len(nr_items),
+                "nonregional_status_counts": dict(nr_status_counts),
             },
             indent=2,
         )
