@@ -6,7 +6,7 @@
     python3 site/tools/refresh_data.py --arm        # also read region metadata from 'az account list-locations'
 
 The workbook (docs/region-planner.html) never calls Azure. It reads the snapshot that this script writes to
-docs/data/, so run the script on a schedule (see .github/workflows/refresh-data.yml) and publish the result.
+docs/data/, so run the script on a schedule (see .github/workflows/refresh-retail-prices.yml) and publish the result.
 
 Source: the Azure Retail Prices API (https://prices.azure.com/api/retail/prices). It is public and needs no sign-in.
 Only the Python standard library is used.
@@ -22,9 +22,8 @@ What is written:
 
 Two things to know about the data:
 
-  * Availability is derived from pricing. A service counts as available in a region when the price list has a
-    consumption meter for it there. That is a good first filter, not a guarantee: confirm SKUs, features, and
-    preview status on "Products available by region" before a decision depends on it.
+  * This is the retail catalog, not the Services tab's availability source. Its coverage masks describe
+    regional consumption meters only. The Services tab uses the independently imported availability CSV.
   * The price comparison uses list prices in USD for consumption meters. Spot, low-priority, dev/test,
     reservation, and savings-plan prices are left out, and so are negotiated discounts.
 

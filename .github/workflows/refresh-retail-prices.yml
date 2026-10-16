@@ -1,0 +1,50 @@
+name: Refresh retail prices
+
+on:
+  schedule:
+    - cron: '0 6 1 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: refresh-retail-prices
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      BASE_BRANCH: ${{ github.event.repository.default_branch }}
+      REFRESH_BRANCH: data/retail-prices-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Collect the full Retail Prices API snapshot
+        run: python site/tools/refresh_data.py
+      - name: Open a review pull request
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add docs/data/meta.json docs/data/catalog.json docs/data/products.json docs/data/pricing
+          if git diff --cached --quiet; then
+            echo "No retail pricing changes."
+            exit 0
+          fi
+          git switch --create "$REFRESH_BRANCH"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "data: refresh Azure retail prices"
+          git push origin "$REFRESH_BRANCH"
+          gh pr create --base "$BASE_BRANCH" --head "$REFRESH_BRANCH" \
+            --title "data: monthly Azure retail price refresh" \
+            --body "Updates the full Azure Retail Prices API snapshot. Review coverage, warnings in the workflow log, and price differences before merging. The manually imported service availability catalog and service-name mapping are not changed."

@@ -38,13 +38,14 @@
     const breakdown = M.O.outcome.filter(o => counts[o]).map(o => `<span class="pl-it">${status(M.OUTCOME_ICON[o])}<span>${counts[o]} ${esc(o.toLowerCase())}</span></span>`).join('');
     const picked = C.selected();
     const prices = D.hasCatalog ? `${D.meta.partial ? 'Partial test snapshot' : 'Snapshot'} of ${esc(K.fmtDate(D.meta.generated))}` : D.asFile ? 'Not loaded' : 'Not published';
+    const availability = D.hasAvailability ? `Imported ${esc(K.fmtDate(D.availabilityMeta.generated))}` : 'Not loaded';
     const lat = D.lat ? `Dataset of ${esc(D.lat.dataset || K.fmtDate(D.lat.generated))}` : D.asFile ? 'Not loaded' : 'Not published';
     const v = x => x || K.EM;
     const kv = (a, b) => `<div class="pl-kv-r"><dt>${a}</dt><dd>${b}</dd></div>`;
     return `<div class="pl-ess-h"><button type="button" class="pl-ess-t" data-act="essentials" aria-expanded="${open}" aria-controls="pl-ess-b">${icon(open ? 'down' : 'right')}<span>Essentials</span></button></div>` +
       `<div class="pl-ess-b" id="pl-ess-b"${open ? '' : ' hidden'}><dl>${kv('Workbook', esc(v(S.meta.name)))}${kv('Owner', esc(v(S.meta.owner)))}${kv('Assessment date', esc(v(S.meta.date)))}</dl>` +
       `<dl>${kv('Current regions', names.length ? names.join(', ') : K.EM)}${kv('Regions to qualify', S.regions.length ? `${S.regions.length}${breakdown ? `<span class="pl-brk">${breakdown}</span>` : ''}` : K.EM)}` +
-      `${kv('Selected for regional design', picked.length ? esc(picked.map(r => C.rname(r.id)).join(', ')) : 'None yet')}${kv('Azure data', `<span class="pl-blk">Prices: ${prices}</span><span class="pl-blk">Latency: ${lat}</span>`)}</dl></div>`;
+      `${kv('Selected for regional design', picked.length ? esc(picked.map(r => C.rname(r.id)).join(', ')) : 'None yet')}${kv('Azure data', `<span class="pl-blk">Services: ${availability}</span><span class="pl-blk">Prices: ${prices}</span><span class="pl-blk">Latency: ${lat}</span>`)}</dl></div>`;
   }
   function vTabs() {
     const prog = C.progress();
@@ -181,7 +182,6 @@
   }
   function openTab(id) {
     ui.tab = id; history.replaceState(null, '', '#' + id);
-    if (id === 'services' || id === 'pricing') C.loadProducts().then(ok => ok && ui.tab === 'services' && lazyRender());
     if (id === 'latency') C.loadCities().then(ok => ok && ui.tab === 'latency' && lazyRender());
     if (id === 'pricing') C.loadPricing(C.S.baseline).then(ok => ok && ui.tab === 'pricing' && lazyRender());
     const top = (tabsEl.getBoundingClientRect().top), head = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--top-h'), 10) || 56;
@@ -201,7 +201,7 @@
       case 'rm-svc': S.services = S.services.filter(x => x.id !== arg); break;
       case 'add-starter': {
         const have = new Set(S.services.map(s => s.service));
-        M.STARTER_SERVICES.filter(n => (!C.D.hasCatalog || C.D.svc[n]) && !have.has(n)).slice(0, T.MAX_SERVICES - S.services.length).forEach(n => S.services.push({ id: C.uid('v'), service: n, product: '', weight: '' }));
+        M.STARTER_SERVICES.filter(n => (!C.D.hasAvailability || C.D.svc[n]) && !have.has(n)).slice(0, T.MAX_SERVICES - S.services.length).forEach(n => S.services.push({ id: C.uid('v'), service: n, product: '', sku: '', weight: '' }));
         break; }
       case 'rm-site': S.sites = S.sites.filter(x => x.id !== arg); break;
       case 'reset-edit': { const [sid, rid] = arg.split('|'), s = S.sites.find(x => x.id === sid); if (s) delete s.edits[rid]; break; }
@@ -298,7 +298,6 @@
     await C.loadPricing(C.S.baseline);
     if (C.D.lat && C.S.sites.some(s => s.kind === 'city')) await C.loadCities();
     C.tidy(); render();
-    if (ui.tab === 'services') C.loadProducts().then(ok => ok && lazyRender());
     if (ui.tab === 'latency') C.loadCities().then(ok => ok && lazyRender());
   });
 })();

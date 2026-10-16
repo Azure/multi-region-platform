@@ -2,9 +2,47 @@
 
 The [region planning workbook](region-planner.md) loads published snapshots from `docs/data/`, not live Azure APIs. Data collection happens through maintainer-run scripts, separate from browser use and the normal build.
 
-Run the commands below from the repository root in Bash. Both refresh scripts use only the Python standard library and require Python 3.10 or later. In PowerShell, use the direct equivalents `python site\tools\refresh_data.py` and `python site\tools\refresh_latency.py` with the same flags.
+Run the commands below from the repository root. Collection/import scripts use only the Python standard library and require Python 3.10 or later. In PowerShell, use backslash paths, for example `python site\tools\refresh_data.py`.
 
-## Service-availability indicators and pricing
+## Service availability: manually supplied CSV
+
+Services and pricing use **independent catalogs**. The Services tab uses the maintainer-supplied CSV, never Retail Prices API meter coverage. To update it, place the new CSV in the ignored `temp/` directory and run:
+
+```powershell
+python site\tools\import_service_catalog.py temp\service_availability_product_sku.csv
+```
+
+The import writes `docs/data/availability-catalog.json` and regenerates `docs/data/service-pricing-map.json`. It does not collect or change retail pricing. The source filename, SHA-256 digest, row count, and import timestamp are recorded; reimporting the same file does not change its timestamp.
+
+Only these CSV fields are used:
+
+| CSV field | Meaning |
+|---|---|
+| `service_family` | Service Family, used to group the service picker |
+| `service_name` | Service Name |
+| `product_name` | Product Name |
+| `sku_name` | SKU |
+| `region` | Region identifier |
+| `region_display_name` | Region Name |
+| `geography` | Geography |
+| `arm_zones` | Availability Zones, parsed from a JSON array of zone IDs |
+| `is_available` | Regional availability (`1` or `0`) |
+
+**Release Status (`pbr_state`) is deliberately not imported or displayed.** Other availability flags and other CSV columns are ignored.
+
+The importer aggregates availability with an OR: a service is available if any matching service/product/SKU row has `is_available=1`; a product is available if any matching product/SKU row does. Selecting a SKU uses that SKU's rows only. Duplicate rows do not inflate zone counts. AZ counts are shown only for available matching rows with supplied zone information. Different counts are retained (for example, `1/3 AZs`), not combined into a claim of three-zone support for every SKU. Blank, `null`, and empty zone arrays produce no AZ label.
+
+The Services tab has separate Product and SKU selectors; changing or clearing Product clears SKU. Saved plans and Excel exports retain both selections and include availability and reported AZ counts. Saved retail-era service names migrate only when the availability name is already an exact match or the mapping is unambiguous. Obsolete products and ambiguous names remain visible with a correction message, rather than silently choosing another service.
+
+### Mapping availability services to retail pricing
+
+[`docs/data/svcavail-retailprice.csv`](../docs/data/svcavail-retailprice.csv) is the canonical, manually maintained mapping. It stays CSV for straightforward editing; the browser consumes the generated `service-pricing-map.json`. After editing the mapping, rerun the import command with the current availability CSV. Every availability service must have a mapping row; the import fails explicitly if a row is missing.
+
+Pricing inherits the selected availability services and displays their mapped Retail API service names without changing its comparison layout. Product and SKU choices narrow availability only; prices remain service-level meter comparisons. Multiple selected availability services can map to the same retail service; they remain separate selected rows, with their original spend shares and source labels. Entries marked `No Retail meter ...` stay visible with that explanation and no price comparison. Unmapped names never fall back to a guessed retail service.
+
+Confirm features, subscription access, quotas, and the required SKU with Microsoft before making a placement decision. These are published planning snapshots, not live subscription capability checks.
+
+## Retail pricing: API collection
 
 [`site/tools/refresh_data.py`](../site/tools/refresh_data.py) collects consumption meters from the public [Azure Retail Prices API](https://learn.microsoft.com/rest/api/cost-management/retail-prices/azure-retail-prices). The default refresh needs no Azure account or sign-in.
 
@@ -24,7 +62,7 @@ python site/tools/scrape_product_availability.py
 python site/tools/scrape_product_availability.py --html .cache/product-availability-source.html --out .cache/product-availability.json
 ```
 
-The page is HTML, not a documented data API; the visible table is generated from an availability dataset embedded in the page's JavaScript. The scraper parses and validates those embedded records, stopping if the dataset shape or status values change unexpectedly. This is a separate exploratory snapshot and does not refresh prices or replace the pricing-derived availability data.
+The page is HTML, not a documented data API; the visible table is generated from an availability dataset embedded in the page's JavaScript. The scraper parses and validates those embedded records, stopping if the dataset shape or status values change unexpectedly. This is a separate exploratory snapshot and does not refresh prices or replace the Services tab's CSV catalog.
 
 | File | Contents |
 |---|---|
@@ -32,9 +70,12 @@ The page is HTML, not a documented data API; the visible table is generated from
 | `docs/data/catalog.json` | Regions and services with regional consumption meters |
 | `docs/data/products.json` | Product-level regional meter coverage |
 | `docs/data/pricing/<region>.json` | Regional price comparisons for each baseline region |
+| `docs/data/availability-catalog.json` | Independent CSV-derived services, products, SKUs, availability and AZ counts |
+| `docs/data/svcavail-retailprice.csv` | Canonical, manually maintained service-name mapping |
+| `docs/data/service-pricing-map.json` | Generated browser-readable service-name mapping |
 | `.cache/product-availability.json` | Scraped product/SKU availability by region (local exploratory output) |
 
-**Availability is inferred from pricing, not collected as an authoritative service inventory.** A service or product is listed when it has a regional consumption meter. Confirm [products available by region](https://azure.microsoft.com/explore/global-infrastructure/products-by-region/), the required SKU and features, preview status, quota, and subscription access before making a placement decision. Record verified corrections in the evidence or notes for qualification check 4.1; Services and Pricing are read-only snapshot views.
+The retail catalog's service/product masks describe consumption-meter coverage only; they do not drive the Services tab. Record verified corrections in the evidence or notes for qualification check 4.1; Services and Pricing are read-only snapshot views.
 
 Prices are list prices in USD. Comparisons report the median percentage difference across meters present in both regions, with the matched-meter count. Spot, low-priority, dev/test, reservation, savings-plan prices, and negotiated discounts are excluded. These comparisons are not a workload cost estimate.
 
@@ -78,8 +119,10 @@ Maintain regional `lat` and `lon` values in the seed file. The script reports un
 
 ## Review and publish a refresh
 
-There is currently **no checked-in daily refresh workflow**. Run the scripts manually, or add a reviewed scheduled workflow separately; references to `.github/workflows/refresh-data.yml` in script comments are not evidence that automation is installed.
+The [`Refresh retail prices` workflow](../.github/workflows/refresh-retail-prices.yml) runs on the **1st of every month at 06:00 UTC** and supports manual dispatch. It collects the full Retail Prices API snapshot and opens a pull request against the default branch for review; it never changes the availability catalog, service-name mapping, or latency. Scheduled runs begin only after the workflow is merged into the default branch and GitHub Actions is enabled. Schedule times are best-effort and can be delayed by GitHub.
+
+In repository **Settings > Actions > General > Workflow permissions**, allow GitHub Actions to create pull requests. Organization policy must also permit the workflow's `contents: write` and `pull-requests: write` permissions. No Azure credentials or third-party PR action are required. This workflow does not merge or deploy its own results; merge the reviewed data PR and publish through the normal website process. GitHub may disable schedules in inactive public repositories after 60 days.
 
 Review snapshot dates, coverage, source warnings, and the diff before committing `docs/data/`. Pricing data files are rewritten only when content changes, but `meta.json` records the refresh time. Latency files and their `generated` timestamp change only when the data changes. Latency collection stops without writing if a source loses more than one fifth of its rows relative to the existing snapshot.
 
-`./build.sh site` preserves the snapshot; it does not refresh it. Publish approved `docs/data/` changes with the website. Without a snapshot, the workbook uses seeded regions and shows "No data" for Services and Pricing.
+`./build.sh site` preserves both catalogs; it does not refresh them. Publish approved `docs/data/` changes with the website. Each tab reports its own missing data independently: availability works without pricing, and a missing availability catalog never substitutes retail meter coverage.

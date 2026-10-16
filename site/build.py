@@ -306,13 +306,14 @@ def build():
     if os.path.isdir(os.path.join(SITE, "media")):   # website-only images (not part of the CAF article set)
         shutil.copytree(os.path.join(SITE, "media"), os.path.join(OUT, "media"), dirs_exist_ok=True)
     open(os.path.join(OUT, ".nojekyll"), "w").close()
-    # The workbook asks for data/meta.json, data/latency.json and data/latency-cities.json first and requests nothing else until one of them
-    # says it holds real data. Each gets this placeholder when it is missing, and the data scripts overwrite it under the same name,
-    # so the page never has to guess which files exist and never requests one that doesn't.
+    # Missing snapshots get placeholders; the independent collectors/importer replace them.
     os.makedirs(os.path.join(OUT, "data"), exist_ok=True)
-    for name in ("meta.json", "latency.json", "latency-cities.json"):
+    for name in ("meta.json", "latency.json", "latency-cities.json", "availability-catalog.json"):
         if not os.path.exists(os.path.join(OUT, "data", name)):
             open(os.path.join(OUT, "data", name), "w", encoding="utf-8").write('{"generated":null}')
+    mapping_path = os.path.join(OUT, "data", "service-pricing-map.json")
+    if not os.path.exists(mapping_path):
+        open(mapping_path, "w", encoding="utf-8").write('{}')
 
     dl_items = "".join(
         f'<a class="dl-item" href="{u}" download><span class="dl-ic {k}">{k.upper()}</span><span><b>{n}</b><small>{d}</small></span></a>'

@@ -1,0 +1,180 @@
+﻿Service Availability - service_name,Retail API - service_name
+API Management,API Management
+App Service,Azure App Service
+Application Gateway,Application Gateway
+Application Gateway for Containers,Application Gateway
+Application Insights,Application Insights
+Arize AI,No Retail meter (Marketplace partner offer)
+Astronomer,No Retail meter (Marketplace partner offer)
+Automation,Automation
+Azure Active Directory B2C,Azure Active Directory B2C
+Azure Advisor,No Retail meter (free service)
+Azure AI Search,Azure Cognitive Search
+Azure Analysis Services,Azure Analysis Services
+Azure App Configuration,App Configuration
+Azure App Testing,Azure App Testing
+Azure Arc,Azure Arc
+Azure Arc enabled Kubernetes,Azure Arc
+Azure Arc enabled servers,Azure Arc
+Azure Arc enabled System Center Virtual Machine Manager,Azure Arc
+Azure Arc enabled VMware vSphere,Azure Arc
+Azure Arc-enabled SQL Server,Azure Arc Enabled Databases
+Azure Attestation,No Retail meter (free service)
+Azure Backup,Backup
+Azure Bastion,Azure Bastion
+Azure Blob Storage,Storage
+Azure Cache for Redis,Redis Cache
+Azure Center for SAP solutions,No Retail meter (free service)
+Azure Chaos Studio,Azure Chaos Studio
+Azure Cloud HSM,Azure Cloud HSM
+Azure Cloud Services,Cloud Services
+Azure Cloud Shell,No Retail meter (free service)
+Azure Communication Services,Email
+Azure Communications Gateway,Voice Core
+Azure Compute Fleet,No Retail meter (free service)
+Azure Confidential Ledger,Azure confidential ledger
+Azure Container Apps,Azure Container Apps
+Azure Container Instances,Container Instances
+Azure Container Registry,Container Registry
+Azure Container Storage,Storage
+Azure Cosmos DB,Azure Cosmos DB
+Azure Cosmos DB for MongoDB,Azure Cosmos DB
+Azure Cosmos DB for PostgreSQL,Azure Database for PostgreSQL
+Azure CycleCloud,Virtual Machines
+Azure Data Box,Data Box
+Azure Data Explorer,Azure Data Explorer
+Azure Data Factory,Azure Data Factory v2
+Azure Data Lake Storage Gen2,Storage
+Azure Data Manager for Energy,Energy Data Manager
+Azure Data Share,Azure Data Share
+Azure Database for MySQL,Azure Database for MySQL
+Azure Database for MySQL flexible servers,Azure Database for MySQL
+Azure Database for PostgreSQL,Azure Database for PostgreSQL
+Azure Database for PostgreSQL flexible servers,Azure Database for PostgreSQL
+Azure Database Migration Service,Azure Database Migration Service
+Azure Databricks,Azure Databricks
+Azure DDoS Protection,Azure DDOS Protection
+Azure Dedicated HSM,Key Vault
+Azure Deployment Environments,No Retail meter (free service)
+Azure DevOps,Azure DevOps
+Azure DevTest Labs,No Retail meter (free service)
+Azure Digital Twins,Digital Twins
+Azure DNS,Azure DNS
+Azure Edge Hardware Center,Azure Stack Edge
+Azure Elastic SAN,Storage
+Azure File Sync,Storage
+Azure Files,Storage
+Azure Firewall,Azure Firewall
+Azure Firewall Manager,Azure Firewall Manager
+Azure Fluid Relay,Azure Fluid Relay
+Azure Front Door,Azure Front Door Service
+Azure Functions,Functions
+Azure Health Data Services,Azure API for FHIR
+Azure HPC Cache,HPC Cache
+Azure IoT Central,IoT Central
+Azure IoT Hub,IoT Hub
+Azure Kubernetes Fleet Manager,No Retail meter (free service)
+Azure Kubernetes Service (AKS),Azure Kubernetes Service
+Azure Lab Services,Azure Lab Services
+Azure Lighthouse,No Retail meter (free service)
+Azure Local,Azure Local
+Azure Machine Learning,Azure Machine Learning
+Azure Managed Disks,Storage
+Azure Managed Grafana,Azure Grafana Service
+Azure Managed Instance for Apache Cassandra,Azure Managed Instance for Apache Cassandra
+Azure Managed Lustre,Storage
+Azure Managed Redis,Redis Cache
+Azure Maps,Azure Maps
+Azure Migrate,No Retail meter (free service)
+Azure Monitor,Azure Monitor
+Azure Monitor for SAP solutions,No Retail meter (free service)
+Azure NAT Gateway,NAT Gateway
+Azure NetApp Files,Azure NetApp Files
+Azure Network Function Manager,No Retail meter (free service)
+Azure Operator Insights,AI Ops
+Azure Operator Nexus,Azure Operator Nexus
+Azure Payment HSM,Microsoft Azure Payment HSM
+Azure Peering Service,Microsoft Azure Peering Service
+Azure Policy,Azure Policy
+Azure Private Link,Virtual Network
+Azure Quantum,Quantum Computing
+Azure Red Hat OpenShift,Virtual Machines Licenses
+Azure Relay,Service Bus
+Azure Resource Graph,No Retail meter (free service)
+Azure Resource Manager,No Retail meter (free service)
+Azure Resource Mover,Azure Resource Mover
+Azure Route Server,Azure Route Server
+Azure Service Fabric,Service Fabric
+Azure SignalR Service,SignalR
+Azure Site Recovery,Azure Site Recovery
+Azure Spring Apps,Azure Spring Cloud
+Azure SQL Database,SQL Database
+Azure SQL Managed Instance,SQL Managed Instance
+Azure Stack,No Retail meter found
+Azure Stack Edge,Azure Stack Edge
+Azure Storage Actions,Storage
+Azure Storage Mover,No Retail meter (free service)
+Azure Stream Analytics,Stream Analytics
+Azure Synapse Analytics,Azure Synapse Analytics
+Azure Update Manager,Azure Update Manager
+Azure Virtual Desktop,Windows Virtual Desktop
+Azure Virtual Network Manager,Virtual Network
+Azure Virtual WAN,Virtual WAN
+Azure VMware Solution,Specialized Compute
+Azure Web Application Firewall,Application Gateway
+Azure Web PubSub,Web PubSub
+BareMetal Infrastructure,Specialized Compute
+Batch,No Retail meter (free service)
+Confluent Cloud on Azure,No Retail meter (Marketplace partner offer)
+Content Delivery Network,Content Delivery Network
+Datadog on Azure,No Retail meter (Marketplace partner offer)
+Dell PowerScale,No Retail meter (Marketplace partner offer)
+Device Update for IoT Hub,IoT Hub
+Dynatrace,No Retail meter (Marketplace partner offer)
+Elastic on Azure,No Retail meter (Marketplace partner offer)
+Event Grid,Event Grid
+Event Hubs,Event Hubs
+ExpressRoute,ExpressRoute
+HDInsight,HDInsight
+Healthcare Agent Service,Azure API for FHIR
+Informatica,No Retail meter (Marketplace partner offer)
+Key Vault,Key Vault
+LambdaTest,No Retail meter (Marketplace partner offer)
+Load Balancer,Load Balancer
+Log Analytics,Log Analytics
+Logic Apps,Logic Apps
+Managed DevOps Pools,No Retail meter (free service)
+Microsoft Copilot for Security,Microsoft Security Copilot
+Microsoft Cost Management,No Retail meter (free service)
+Microsoft Defender for Cloud,Microsoft Defender for Cloud
+Microsoft Defender for IoT,Azure IoT Security
+Microsoft Dev Box,No Retail meter found
+Microsoft Entra Domain Services,Microsoft Entra Domain Services
+Microsoft Fabric,Microsoft Fabric
+Microsoft Foundry,Foundry Tools
+Microsoft Purview,Microsoft Purview
+Microsoft Sentinel,Sentinel
+MongoDB Atlas,No Retail meter (Marketplace partner offer)
+Neon Postgres,No Retail meter (Marketplace partner offer)
+Network Watcher,Network Watcher
+New Relic,No Retail meter (Marketplace partner offer)
+NGINXaaS,No Retail meter (Marketplace partner offer)
+Notification Hubs,Notification Hubs
+Oracle Database@Azure,No Retail meter (Marketplace partner offer)
+Palo Alto Networks Cloud NGFW,No Retail meter (Marketplace partner offer)
+Pinecone,No Retail meter (Marketplace partner offer)
+Power BI Embedded,Power BI Embedded
+Pure Storage,No Retail meter (Marketplace partner offer)
+Qumulo,No Retail meter (Marketplace partner offer)
+Service Bus,Service Bus
+SQL Server on Azure VMs,Virtual Machines Licenses
+Standby Pool,No Retail meter (free service)
+Static Web Apps,Azure App Service
+Storage Accounts,Storage
+Traffic Manager,Traffic Manager
+Trusted Signing,Trusted Signing
+Virtual Machine Scale Sets,Virtual Machines
+Virtual Machines,Virtual Machines
+Virtual Network,Virtual Network
+VPN Gateway,VPN Gateway
+Weights & Biases,No Retail meter (Marketplace partner offer)

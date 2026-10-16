@@ -3,7 +3,7 @@
   'use strict';
   const M = global.MRP, { CHECKS, CAPABILITY_IDS, PROFILES, SHARED, HUB_SERVICES, HYBRID_PATHS } = M;
   const KEY = 'mrp-planner', OLD_KEY = 'mrp-planner-v1';
-  const VERSION = 2;
+  const VERSION = 3;
   const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
   const uid = p => p + Math.random().toString(36).slice(2, 8);
   const num = v => v === '' || v === null || v === undefined || !isFinite(Number(v)) ? null : Number(v);
@@ -71,7 +71,9 @@
       ({ id: x.id || uid('s'), kind: x.kind, city: x.kind === 'city' && x.city ? { ...x.city } : null, peering: x.peering || '', target: num(x.target) ?? '', edits: Object.fromEntries(Object.entries(x.edits || {}).filter(([, v]) => num(v) !== null).map(([k, v]) => [k, Number(v)])) }));
     const seen = new Set();
     s.services = (Array.isArray(s.services) ? s.services : []).filter(x => x && x.service && !seen.has(x.service) && seen.add(x.service))
-      .map(x => ({ id: x.id || uid('v'), service: x.service, product: x.product || '', weight: num(x.weight) ?? '' }));
+      .map(x => ({ id: x.id || uid('v'), service: x.service, product: x.product || '', sku: x.sku || '', weight: num(x.weight) ?? '',
+        source: x.source || (raw.v >= 3 ? 'availability' : 'retail') }));
+    migrateServices(s);
     if (!s.current.some(c => c.id === s.baseline)) s.baseline = s.current[0] ? s.current[0].id : '';
     fillDates(s);
     return s;
@@ -88,7 +90,9 @@
   // ───────────── Azure reference data
   // meta.json, latency.json and latency-cities.json always exist: the build writes a placeholder ({"generated":null}) when a file is missing,
   // and the data scripts overwrite it under the same name. Nothing else is requested until a placeholder says there is real data.
-  const D = { meta: null, regions: [], byId: {}, ridx: {}, services: [], svc: {}, products: null, pricing: {}, hasCatalog: false, lat: null, cities: null, citiesState: 'idle',
+  const D = { meta: null, regions: [], byId: {}, ridx: {}, services: [], svc: {}, pricing: {}, hasCatalog: false,
+    availabilityMeta: null, availabilityRegions: {}, hasAvailability: false, availabilityError: '', priceMapping: null, mappingError: '',
+    lat: null, cities: null, citiesState: 'idle',
     // a browser doesn't let a page that was opened as a file read the data files next to it
     asFile: global.location.protocol === 'file:' };
   const bit = (hex, i) => i >= 0 && ((parseInt((hex || '')[i >> 2] || '0', 16) >> (i & 3)) & 1) === 1;
@@ -96,7 +100,7 @@
 
   // Restricted regions (access limited to specific customer scenarios) are not offered, and a region paired only with one of them counts as nonpaired.
   function useRegions(all) {
-    const hidden = new Set(all.filter(r => r.access === 'restricted').map(r => r.id));
+    const hidden = new Set([...(D.hidden || []), ...all.filter(r => r.access === 'restricted').map(r => r.id)]);
     const list = all.filter(r => !hidden.has(r.id)).map(r => ({ ...r, pair: hidden.has(r.pair) ? null : r.pair,
       name: r.preview && !/\(Preview\)$/.test(r.name) ? r.name + ' (Preview)' : r.name }));
     D.hidden = new Set([...(D.hidden || []), ...hidden]);
@@ -114,11 +118,36 @@
         const seedOnly = D.regions.filter(r => !(r.id in D.ridx));
         // Retail catalog entries omit metro coordinates; retain the reference seed for the map.
         useRegions([...c.regions.map(r => ({ ...D.byId[r.id], ...r })), ...seedOnly]);
-        D.services = c.services;
-        D.svc = Object.fromEntries(c.services.map(s => [s.name, s]));
         D.hasCatalog = true;
       } catch (e) { D.hasCatalog = false; }
     }
+    await Promise.all([
+      (async () => {
+        try {
+          const c = await getJson('data/availability-catalog.json');
+          if (!c.generated || !Array.isArray(c.regions) || !Array.isArray(c.services)) throw new Error('Invalid availability catalog');
+          D.availabilityMeta = c;
+          D.availabilityRegions = Object.fromEntries(c.regions.map(r => [r.id, r]));
+          D.services = c.services;
+          D.svc = Object.fromEntries(c.services.map(s => [s.name, s]));
+          useRegions([...D.regions.filter(r => !D.availabilityRegions[r.id]),
+            ...c.regions.map(r => ({ ...D.byId[r.id], ...r }))]);
+          D.hasAvailability = true;
+        } catch (e) {
+          D.availabilityError = 'The service availability catalog could not be loaded. Import the availability CSV and publish docs/data/availability-catalog.json.';
+          console.error(D.availabilityError, e);
+        }
+      })(),
+      (async () => {
+        try { D.priceMapping = await getJson('data/service-pricing-map.json'); }
+        catch (e) {
+          D.mappingError = 'The service-to-pricing mapping could not be loaded. Pricing cannot match the selected availability services.';
+          console.error(D.mappingError, e);
+        }
+      })(),
+    ]);
+    migrateServices(S);
+    save();
     if (D.hidden && D.hidden.size) {
       S.current = S.current.filter(c => !D.hidden.has(c.id));
       S.regions = S.regions.filter(r => !D.hidden.has(r.id));
@@ -134,16 +163,6 @@
       D.pricing[id] = p;
       return true;
     } catch (e) { D.pricing[id] = { services: {}, idx: {} }; return false; }
-  }
-  async function loadProducts() {
-    if (!D.hasCatalog || D.products) return false;
-    D.products = { services: {}, idx: {} };
-    try {
-      const p = await getJson('data/products.json');
-      p.idx = Object.fromEntries(p.regions.map((r, i) => [r, i]));
-      D.products = p;
-      return true;
-    } catch (e) { return false; }
   }
   async function loadLatency() {
     D.lat = null;
@@ -217,24 +236,47 @@
     fillDates(S);
   }
 
-  // ───────────── services and pricing (read-only results of the snapshot)
-  const named = () => S.services.filter(s => s.service);
-  // 'yes', 'no', 'global', or 'none' when the snapshot can't say
-  function availability(s, rid) {
-    const svc = D.svc[s.service], i = D.ridx[rid];
-    if (!D.hasCatalog || !svc || i === undefined) return 'none';
-    const prods = s.product && D.products && D.products.services[s.service];
-    if (prods && typeof prods[s.product] === 'string') return bit(prods[s.product], D.products.idx[rid] ?? -1) ? 'yes' : 'no';
-    if (bit(svc.r, i)) return 'yes';
-    return /^0*$/.test(svc.r) && svc.global ? 'global' : 'no';
+  function migrateServices(state) {
+    if (!D.hasAvailability || !D.priceMapping) return;
+    state.services.forEach(s => {
+      if (s.source !== 'retail') return;
+      const matches = Object.keys(D.priceMapping).filter(name => D.priceMapping[name].service === s.service);
+      if (!D.svc[s.service] && matches.length === 1) s.service = matches[0];
+      // Ambiguous names and obsolete product choices stay visible for the user to correct.
+      s.source = 'availability';
+    });
   }
+
+  // ───────────── services and pricing (independent read-only catalogs)
+  const named = () => S.services.filter(s => s.service);
+  function serviceSelection(s) {
+    let entry = D.svc[s.service];
+    if (s.product) entry = entry && entry.products[s.product];
+    if (s.sku) entry = s.product && entry && entry.skus[s.sku];
+    return entry || null;
+  }
+  function availabilityDetails(s, rid) {
+    const selection = serviceSelection(s);
+    if (!D.hasAvailability || !selection || !D.availabilityRegions[rid]) return { state: 'none', zoneCounts: [] };
+    const entry = selection.regions[rid];
+    return { state: entry && entry.available ? 'yes' : 'no', zoneCounts: entry && entry.available ? entry.zoneCounts : [] };
+  }
+  const availability = (s, rid) => availabilityDetails(s, rid).state;
+  const zoneText = details => details.zoneCounts.length ? details.zoneCounts.join('/') + (details.zoneCounts.length === 1 && details.zoneCounts[0] === 1 ? ' AZ' : ' AZs') : '';
   function availSummary(rid) {
     const rows = named(), st = rows.map(s => availability(s, rid));
     return { total: rows.length, ok: st.filter(x => x === 'yes' || x === 'global').length, none: st.filter(x => x === 'none').length,
       missing: rows.filter((s, i) => st[i] === 'no').map(s => s.service) };
   }
 
-  function priceRows() { return named(); }
+  function priceRows() {
+    return named().map(s => {
+      const mapping = D.priceMapping && D.priceMapping[s.service];
+      return { ...s, service: mapping && mapping.service || s.service, availabilityService: s.service,
+        retailService: mapping && mapping.service || null,
+        pricingNote: mapping ? mapping.note || '' : 'No service-pricing mapping' };
+    });
+  }
   // { p: percent difference of rid against the baseline, n: meters compared } or null
   function priceDiff(service, rid) {
     const p = D.pricing[S.baseline], row = p && p.services[service], i = p && p.idx[rid];
@@ -242,7 +284,7 @@
     return { p: row.p[i], n: row.n[i] };
   }
   function priceSummary(rid) {
-    const rows = priceRows().map(s => { const d = priceDiff(s.service, rid); return { p: d ? d.p : null, w: num(s.weight) || 0 }; }).filter(x => x.p !== null && isFinite(x.p));
+    const rows = priceRows().map(s => { const d = priceDiff(s.retailService, rid); return { p: d ? d.p : null, w: num(s.weight) || 0 }; }).filter(x => x.p !== null && isFinite(x.p));
     if (!rows.length) return { avg: null, weighted: null, value: null, n: 0 };
     const wsum = rows.reduce((t, x) => t + x.w, 0);
     const avg = rows.reduce((t, x) => t + x.p, 0) / rows.length;
@@ -501,8 +543,8 @@
     };
   }
 
-  M.core = { get S() { return S; }, D, VERSION, load, save, replace, blank, normalize, tidy, newRegion, uid, today, loadData, loadPricing, loadProducts, loadCities, bit,
-    info, rname, reg, cols, suggest, outcome, selectable, selected, checkState, named, availability, availSummary, priceRows, priceDiff, priceSummary,
+  M.core = { get S() { return S; }, D, VERSION, load, save, replace, blank, normalize, tidy, newRegion, uid, today, loadData, loadPricing, loadCities, bit,
+    info, rname, reg, cols, suggest, outcome, selectable, selected, checkState, named, serviceSelection, availability, availabilityDetails, zoneText, availSummary, priceRows, priceDiff, priceSummary,
     regionLatency, peeringLatency, cityLatency, peeringChoices, nearestPeering, sitePeering, siteName, siteLatency, latencySummary, srcText, km, estimate, latScale, latPos,
     num, fmtPct, priceTone, evidence, hubRegions, design, suggestProfile, effective, hybridText, record, recordText, list, progress };
 })(window);

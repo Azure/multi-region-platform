@@ -10,7 +10,7 @@
   const outcomeBadge = (o, lg) => K.badge(OUTCOME_ICON[o] || 'neutral', o, { lg });
   const nameTip = text => `tabindex="0" data-tip="${esc(text)}"`;
   const snapshotDate = () => D.meta && D.meta.generated ? K.fmtDate(D.meta.generated) : '';
-  const NO_SNAPSHOT = 'No Azure price snapshot is published with this site, so availability can’t be shown. Run site/tools/refresh_data.py to create it.';
+  const NO_SNAPSHOT = 'No Azure price snapshot is published with this site. Run site/tools/refresh_data.py to create it.';
   const AS_FILE = 'The Azure data can’t be read while this page is open as a file. From the repository folder, run python -m http.server 8000 --directory docs, and then open http://localhost:8000/region-planner.html.';
   const PARTIAL_SNAPSHOT = 'The price snapshot is a partial test run, so most services and prices are missing. Run site/tools/refresh_data.py without --max-pages to complete it.';
   // A missing or partial snapshot changes what every result on the Services and Pricing tabs means, so it is said first.
@@ -39,13 +39,9 @@
       const lat = C.regionLatency(cur.id, r.id);
       return fact('clock', 'Latency to ' + C.rname(cur.id), lat ? `<span class="pl-n">${lat.ms} ms</span> <span class="pl-tag" ${nameTip(C.srcText(lat.src))}>${lat.src === 'm' ? 'measured' : 'estimated'}</span>` : 'No data');
     }).join('') : fact('clock', 'Latency to current region', 'Add a current region');
-    let priceV, svcV;
-    if (!D.hasCatalog) priceV = svcV = 'No price snapshot';
-    else {
-      const p = C.priceSummary(r.id), a = C.availSummary(r.id);
-      priceV = !C.named().length ? 'Add services to compare' : p.value !== null ? `<span class="pl-n">${C.fmtPct(p.value)}</span>` : 'No data';
-      svcV = !a.total ? 'Add services to check' : a.none === a.total ? 'No data' : `<span class="pl-n">${a.ok} of ${a.total}</span>`;
-    }
+    const p = C.priceSummary(r.id), a = C.availSummary(r.id);
+    const priceV = !D.hasCatalog ? 'No price snapshot' : !C.named().length ? 'Add services to compare' : p.value !== null ? `<span class="pl-n">${C.fmtPct(p.value)}</span>` : 'No data';
+    const svcV = !D.hasAvailability ? 'No availability catalog' : !a.total ? 'Add services to check' : a.none === a.total ? 'No data' : `<span class="pl-n">${a.ok} of ${a.total}</span>`;
     const started = Object.values(r.checks).some(Boolean) || r.outcome;
     return `<article class="pl-rc"><div class="pl-rc-h"><div><h4>${esc(i.name)}</h4><p class="pl-cap">${esc([i.geo, i.loc].filter(Boolean).join(' · ') || 'Not in the reference data')}</p></div>` +
       `${K.iconBtn('rm-region', r.id, 'close', 'Remove ' + i.name)}</div>` +
@@ -131,20 +127,28 @@
   function avCell(s, rid, st) {
     const [k, text] = AV[st];
     const ic = k === 'globe' ? icon('globe', { cls: 'pl-av-globe' }) : status(k);
-    const tipText = `${text}\n${s.service}${s.product ? ' (' + s.product + ')' : ''} in ${C.rname(rid)}${snapshotDate() ? '. Snapshot of ' + snapshotDate() + '.' : ''}`;
-    return `<span class="pl-av" ${nameTip(tipText)} aria-label="${esc(text + ': ' + s.service + ' in ' + C.rname(rid))}">${ic}<span class="pl-av-t">${text}</span></span>`;
+    const zones = C.zoneText(C.availabilityDetails(s, rid)), date = D.availabilityMeta && K.fmtDate(D.availabilityMeta.generated);
+    const tipText = `${text}\n${[s.service, s.product, s.sku].filter(Boolean).join(' / ')} in ${C.rname(rid)}${date ? '. Imported ' + date + '.' : ''}${zones ? '\nReported zone counts across matching entries: ' + zones : ''}`;
+    return `<span class="pl-av" ${nameTip(tipText)} aria-label="${esc(text + ': ' + s.service + ' in ' + C.rname(rid) + (zones ? ', ' + zones : ''))}">${ic}<span class="pl-av-t">${text}</span></span>${zones ? `<span class="pl-av-meta">${esc(zones)}</span>` : ''}`;
   }
   function productCell(s) {
-    const prods = D.products && D.products.services[s.service];
-    if (!D.hasCatalog || !prods) return `<span class="pl-muted">All products</span>`;
-    const cb = K.combo('prod-' + s.id, { mode: 'value', clearable: true, ph: 'Select Product/SKU', label: 'Product or SKU family of ' + s.service, display: () => s.product || '',
-      items: () => Object.keys(prods).sort().map(p => ({ value: p, label: p })), onPick: it => { s.product = it.value; }, onClear: () => { s.product = ''; K.hooks.commit(); } });
+    const prods = D.svc[s.service] && D.svc[s.service].products;
+    const cb = K.combo('prod-' + s.id, { mode: 'value', clearable: true, ph: 'All products', label: 'Product of ' + s.service, display: () => s.product || '',
+      disabled: !D.hasAvailability || !prods || !Object.keys(prods).length,
+      items: () => Object.keys(prods || {}).sort().map(p => ({ value: p, label: p })), onPick: it => { s.product = it.value; s.sku = ''; }, onClear: () => { s.product = ''; s.sku = ''; K.hooks.commit(); } });
     return s.product ? `<span class="pl-prtip" data-tip="${esc(s.product)}">${cb}</span>` : cb;
+  }
+  function skuCell(s) {
+    const product = D.svc[s.service] && D.svc[s.service].products[s.product], skus = product && product.skus;
+    return K.combo('sku-' + s.id, { mode: 'value', clearable: true, ph: s.product ? 'All SKUs' : 'Select a product first', label: 'SKU of ' + s.service,
+      disabled: !skus || !Object.keys(skus).length, display: () => s.sku || '',
+      items: () => Object.keys(skus || {}).sort().map(sku => ({ value: sku, label: sku })), onPick: it => { s.sku = it.value; },
+      onClear: () => { s.sku = ''; K.hooks.commit(); } });
   }
   const TILE_ICON = { ok: 'success', warn: 'warning', bad: 'error' };
   function svcTiles() {
     const S = C.S;
-    if (!D.hasCatalog || !C.named().length || !S.regions.length) return '';
+    if (!D.hasAvailability || !C.named().length || !S.regions.length) return '';
     return `<div class="pl-tiles">${S.regions.map(r => { const a = C.availSummary(r.id), pct = a.total ? Math.round(a.ok / a.total * 100) : 0;
       const miss = a.missing.length ? `Missing: ${a.missing.slice(0, 3).join(', ')}${a.missing.length > 3 ? ` +${a.missing.length - 3} more` : ''}` : '';
       // The tile takes the worst state in its column: any service that is not available makes it red, an unknown one makes it amber.
@@ -156,22 +160,22 @@
     const S = C.S, cs = C.cols(), full = S.services.length >= MAX_SERVICES;
     const used = () => new Set(S.services.map(s => s.service));
     const add = K.combo('svc', { mode: 'add', ph: 'Add a service', label: 'Add a service', disabled: full,
-      items: () => (D.hasCatalog ? D.services.map(s => ({ value: s.name, label: s.name, group: s.family || 'Other' })).sort((a, b) => a.group.localeCompare(b.group) || a.label.localeCompare(b.label))
+      items: () => (D.hasAvailability ? D.services.map(s => ({ value: s.name, label: s.name, group: s.family || 'Other' })).sort((a, b) => a.group.localeCompare(b.group) || a.label.localeCompare(b.label))
         : STARTER_SERVICES.map(n => ({ value: n, label: n }))).filter(x => !used().has(x.value)),
-      onPick: it => { if (S.services.length < MAX_SERVICES) S.services.push({ id: C.uid('v'), service: it.value, product: '', weight: '' }); },
-      onFree: D.hasCatalog ? null : (t => { if (S.services.length < MAX_SERVICES && !used().has(t)) S.services.push({ id: C.uid('v'), service: t, product: '', weight: '' }); }) });
-    const rows = S.services.map((s, i) => `<tr><td class="pl-idx">${i + 1}</td><th scope="row" class="pl-sn">${esc(s.service)}</th><td class="pl-pr">${productCell(s)}</td>` +
+      onPick: it => { if (S.services.length < MAX_SERVICES) S.services.push({ id: C.uid('v'), service: it.value, product: '', sku: '', weight: '' }); },
+      onFree: D.hasAvailability ? null : (t => { if (S.services.length < MAX_SERVICES && !used().has(t)) S.services.push({ id: C.uid('v'), service: t, product: '', sku: '', weight: '' }); }) });
+    const rows = S.services.map((s, i) => `<tr><td class="pl-idx">${i + 1}</td><th scope="row" class="pl-sn">${esc(s.service)}${D.hasAvailability && !C.serviceSelection(s) ? '<span class="pl-cap">Saved selection not in this catalog. Clear the product/SKU or remove and re-add the service.</span>' : ''}</th><td class="pl-pr">${productCell(s)}</td><td class="pl-pr pl-sku">${skuCell(s)}</td>` +
       cs.map(x => { const st = C.availability(s, x.id); return `<td class="${x.current ? 'is-cur ' : ''}av-${st}">${avCell(s, x.id, st)}</td>`; }).join('') + `<td class="pl-x">${K.iconBtn('rm-svc', s.id, 'close', 'Remove ' + s.service)}</td></tr>`).join('');
-    const table = S.services.length ? K.scroll(`<table class="pl-dl pl-mx"><thead><tr><th scope="col" class="pl-idx">#</th><th scope="col">Service</th><th scope="col">Product or SKU family</th>` +
+    const table = S.services.length ? K.scroll(`<table class="pl-dl pl-mx"><thead><tr><th scope="col" class="pl-idx">#</th><th scope="col">Service</th><th scope="col">Product</th><th scope="col">SKU</th>` +
       cs.map(x => `<th scope="col" class="${x.current ? 'is-cur' : ''}">${esc(C.rname(x.id))}${x.current ? '<span class="pl-cap">Current region</span>' : ''}</th>`).join('') + `<th scope="col" aria-label="Remove"></th></tr></thead><tbody>${rows}</tbody></table>`, { cls: 'pl-services-scroll', label: 'Service availability by region' })
       : K.empty('list', 'No services listed yet. Add the services the workloads expect to use.');
-    const date = snapshotDate();
-    const note = K.mb('info', 'The lists of available services, products, SKUs, models, and features need fuller validation directly in your own tenants and subscriptions. Work with your Microsoft account team or Microsoft Support to confirm them with confidence. The data is updated based on the <a href="https://azure.microsoft.com/explore/global-infrastructure/products-by-region/table" target="_blank" rel="noopener">Products available by region</a> page.');
+    const date = D.availabilityMeta && K.fmtDate(D.availabilityMeta.generated);
+    const note = K.mb('info', 'The lists of available services, products, SKUs, models, and features need fuller validation directly in your own tenants and subscriptions. Work with your Microsoft account team or Microsoft Support to confirm them with confidence. Use <a href="https://azure.microsoft.com/explore/global-infrastructure/products-by-region/table" target="_blank" rel="noopener">Products available by region</a> as an additional reference.');
     return K.head('Services', 'The services the workloads expect to use, and where each one is available.') + note +
-      snapshotBar() +
+      (!D.hasAvailability ? K.mb('warning', esc(D.asFile ? AS_FILE : D.availabilityError || 'No service availability catalog is published. Import the availability CSV first.')) : '') +
       `<div class="pl-bar">${add}${S.services.length ? '' : K.btn({ act: 'add-starter', label: 'Add common platform services', kind: 'secondary' })}<span class="pl-count">${S.services.length} of ${MAX_SERVICES}</span>${full ? '<span class="pl-cap">Remove one to add another.</span>' : ''}</div>` +
       svcTiles() + (cs.length ? '' : '<p class="pl-muted">Add regions in Scope to see a column for each one.</p>') + table +
-      `<p class="pl-fn">${D.hasCatalog ? `Available means the Azure Retail Prices API lists a consumption meter for the service or product in the region (snapshot of ${esc(date)}). ` : ''}Confirm SKUs, features, and preview status on <a href="https://azure.microsoft.com/explore/global-infrastructure/products-by-region/table" target="_blank" rel="noopener">Products available by region</a>.</p>`;
+      `<p class="pl-fn">${D.hasAvailability ? `Availability comes from the manually supplied CSV (imported ${esc(date)}), using is_available. A service or product is available when any matching entry is available. ` : ''}AZ counts are shown only where supplied for available entries; multiple counts reflect different matching entries. Confirm features and subscription access before choosing a region.</p>`;
   }
 
   // ───────────── Pricing
@@ -199,14 +203,15 @@
   function vPricing() {
     const S = C.S, rs = S.regions, rows = C.priceRows();
     const note = K.mb('info', 'These are Azure retail pay-as-you-go list prices in USD. They don’t include your negotiated discounts, reservations, savings plans, Azure Hybrid Benefit, or other incentives, so the prices you pay can differ.');
-    const h = K.head('Pricing', 'List-price difference between the current region and each region you are qualifying.') + note;
+    const h = K.head('Pricing', 'List-price difference between the current region and each region you are qualifying.') + note +
+      (D.mappingError ? K.mb('warning', esc(D.mappingError)) : '');
     if (!S.current.length) return h + K.empty('tag', 'Add a current region to compare prices with.', 'scope');
     if (!rs.length) return h + K.empty('tag', 'Add the regions to qualify first.', 'scope');
     if (!rows.length) return h + snapshotBar() + K.empty('list', 'Add the services the workloads expect to use.', 'services', 'Go to Services');
     const base = C.rname(S.baseline), w = S.ui.weighted;
-    const body = rows.map(s => `<tr><th scope="row">${esc(s.service)}</th>` +
+    const body = rows.map(s => `<tr><th scope="row">${esc(s.service)}${s.service !== s.availabilityService || s.pricingNote ? `<span class="pl-cap">${esc(s.pricingNote || 'Selected: ' + s.availabilityService)}</span>` : ''}</th>` +
       (w ? `<td><span class="pl-pct">${K.inp(`svc/${s.id}/weight`, s.weight, { type: 'number', min: 0, max: 100, step: 1, label: 'Spend share of ' + s.service + ' in percent' })}<i>%</i></span></td>` : '') +
-      rs.map(r => { const d = C.priceDiff(s.service, r.id);
+      rs.map(r => { const d = C.priceDiff(s.retailService, r.id);
         const t = d ? `Median over ${d.n.toLocaleString('en-US')} meters that both regions have\n${s.service}: ${C.rname(r.id)} vs ${base}` : `No comparable meters\n${s.service}: ${C.rname(r.id)} vs ${base}`;
         return `<td><div class="pl-pc" ${nameTip(t)} aria-label="${esc(s.service + ' in ' + C.rname(r.id) + ': ' + (d ? C.fmtPct(d.p) || '0.0%' : 'no data'))}"><span class="pl-pc-v">${d ? (C.fmtPct(d.p) || '0.0%') : 'No data'}</span>${divBar(d ? d.p : null)}</div></td>`; }).join('') + '</tr>').join('');
     return h + snapshotBar() +

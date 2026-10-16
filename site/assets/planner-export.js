@@ -14,7 +14,9 @@
     const regs = S.regions.length ? S.regions.map(r => ({ r, name: C.rname(r.id) })) : [1, 2, 3].map(i => ({ r: null, name: 'Region ' + i }));
     const picked = C.selected();
     const des = picked.length ? picked.map(r => ({ r, name: C.rname(r.id), e: C.effective(r), d: C.design(r) })) : [1, 2].map(i => ({ r: null, name: 'Selected region ' + i }));
-    const snapshot = D.meta && D.meta.generated ? `Azure data snapshot: ${D.meta.generated.slice(0, 10)} (Azure Retail Prices API, list prices in USD)` : 'No Azure data snapshot was published, so availability and prices are blank';
+    const priceSnapshot = D.meta && D.meta.generated ? `Prices: ${D.meta.generated.slice(0, 10)} (Azure Retail Prices API, list prices in USD)` : 'No price snapshot was published';
+    const availabilitySnapshot = D.availabilityMeta ? `Availability CSV imported ${D.availabilityMeta.generated.slice(0, 10)}` : 'No service availability catalog was published';
+    const snapshot = `${availabilitySnapshot}. ${priceSnapshot}`;
     const title = S.meta.name || 'Region planning workbook';
     const sub = [`Date: ${S.meta.date}`, S.meta.owner && `Owner: ${S.meta.owner}`, S.current.length && `Current regions: ${S.current.map(x => C.rname(x.id)).join(', ')}`].filter(Boolean).join('  ·  ');
     const frame = (width, extra = []) => [`A1:${col(width - 1)}1`, `A2:${col(width - 1)}2`, `A3:${col(width - 1)}3`, ...extra];
@@ -97,13 +99,15 @@
     // ── Services (read-only results of the snapshot)
     const cs = C.cols().length ? C.cols().map(x => ({ id: x.id, name: C.rname(x.id) + (x.current ? ' (current)' : '') })) : regs.map(x => ({ id: null, name: x.name }));
     const AV = { yes: ['Available', 'good'], no: ['Not available', 'bad'], global: ['Global service', 'good'], none: ['No data', 'cell'] };
-    const sRows = [[c('Service availability', 'title')], [c('The services you expect to use, and whether each one is available in each region. ' + snapshot + '. Available means the Azure Retail Prices API lists a consumption meter for the service or product in the region. Confirm SKUs, features, and preview status on "Products available by region".', 'muted')], [],
-      [c('#', 'head'), c('Service', 'head'), c('Product or SKU family', 'head'), ...cs.map(x => c(x.name, 'head'))]];
+    const sRows = [[c('Service availability', 'title')], [c('The services you expect to use, and whether each one is available in each region. ' + availabilitySnapshot + '. Availability uses is_available from the CSV; any matching available entry makes a service or product available. AZ counts are included only where reported; multiple counts reflect different matching entries.', 'muted')], [],
+      [c('#', 'head'), c('Service', 'head'), c('Product', 'head'), c('SKU', 'head'), ...cs.map(x => c(x.name, 'head'))]];
     const svc = C.named();
-    (svc.length ? svc : Array.from({ length: 20 }, () => null)).forEach((s, i) => sRows.push([c(i + 1, 'int'), c(s && s.service, 'label'), c(s && s.product),
-      ...cs.map(x => { const v = s && x.id ? AV[C.availability(s, x.id)] : ['', 'cell']; return c(v[0], v[1]); })]));
-    if (svc.length) sRows.push([c('', 'soft'), c('Available', 'soft'), c('', 'soft'), ...cs.map(x => { const a = x.id ? C.availSummary(x.id) : { ok: 0, total: 0 }; return c(`${a.ok} of ${a.total}`, 'soft'); })]);
-    const services = { name: 'Services', tabColor: '008272', cols: [5, 34, 38, ...cs.map(() => 22)], freeze: { x: 3, y: 4 }, rows: sRows, merges: frame(3 + cs.length) };
+    (svc.length ? svc : Array.from({ length: 20 }, () => null)).forEach((s, i) => sRows.push([c(i + 1, 'int'), c(s && s.service, 'label'), c(s && s.product), c(s && s.sku),
+      ...cs.map(x => { const details = s && x.id ? C.availabilityDetails(s, x.id) : null;
+        const v = details ? AV[details.state] : ['', 'cell'], zones = details && C.zoneText(details);
+        return c(v[0] + (zones ? '\n' + zones : ''), v[1]); })]));
+    if (svc.length) sRows.push([c('', 'soft'), c('Available', 'soft'), c('', 'soft'), c('', 'soft'), ...cs.map(x => { const a = x.id ? C.availSummary(x.id) : { ok: 0, total: 0 }; return c(`${a.ok} of ${a.total}`, 'soft'); })]);
+    const services = { name: 'Services', tabColor: '008272', cols: [5, 34, 38, 30, ...cs.map(() => 22)], freeze: { x: 4, y: 4 }, rows: sRows, merges: frame(4 + cs.length) };
 
     // ── Pricing (read-only results of the snapshot)
     const base = S.baseline ? C.rname(S.baseline) : 'the current region';
@@ -113,8 +117,8 @@
       [c('Service', 'head'), c('Spend share', 'head'), ...pRegs.map(x => c(x.name, 'head'))]];
     const prs = C.priceRows();
     (prs.length ? prs : Array.from({ length: 10 }, () => null)).forEach(s => {
-      pRows.push([c(s && s.service, 'label'), c(s && C.num(s.weight) !== null ? C.num(s.weight) / 100 : '', 'share'),
-        ...pRegs.map(x => { const d = s && x.r ? C.priceDiff(s.service, x.r.id) : null; return c(d ? d.p / 100 : '', 'pct'); })]);
+      pRows.push([c(s ? s.service + (s.pricingNote ? '\n' + s.pricingNote : s.service !== s.availabilityService ? '\nSelected: ' + s.availabilityService : '') : '', 'label'), c(s && C.num(s.weight) !== null ? C.num(s.weight) / 100 : '', 'share'),
+        ...pRegs.map(x => { const d = s && x.r ? C.priceDiff(s.retailService, x.r.id) : null; return c(d ? d.p / 100 : '', 'pct'); })]);
     });
     if (prs.length) {
       pRows.push([c('Average of the listed services', 'soft'), c('', 'soft'), ...pRegs.map(x => { const p = x.r ? C.priceSummary(x.r.id).avg : null; return c(p === null ? '' : p / 100, 'pctb'); })]);

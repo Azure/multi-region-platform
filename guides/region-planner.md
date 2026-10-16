@@ -6,7 +6,10 @@ The workbook exports Excel and saves or opens JSON planning records. Visitor-ent
 
 The Services tab supports up to 100 services in one table. It shows 10 service rows at a time; scroll within the table to reach the rest, with column headers kept visible. Saved plans, Excel exports, and printing include the full list.
 
+Services, Products, and SKUs come from the manually imported availability CSV. Separate Product and SKU selectors narrow the selection; leaving either unselected checks whether any matching entry is available. Regional cells show small AZ counts only where the CSV supplies them. Release Status is not imported. Pricing inherits those services through the maintained service-name mapping, but continues to use its separate Retail Prices API snapshot and service-level comparisons. See [Azure data collection](azure-data.md) for monthly CSV imports and the monthly pricing refresh Action.
+
 After building the site, run `python site\tools\test_planner_services.py` for the targeted browser regression checks.
+Importer and data-layer regressions run with `python -m unittest discover -s site\tools -p test_service_catalog.py` and `node --test site\tools\test_service_catalog.cjs`.
 
 ## Source organization
 
@@ -24,7 +27,8 @@ The planner is website-only, not an article in `content/toc.yml` or part of the 
 | `site/assets/planner.js`, `planner.css` | Frame, events, and styles |
 | `site/assets/planner-export.js`, `xlsx-lite.js` | Excel export and the small `.xlsx` writer; no third-party spreadsheet library |
 | `site/data/regions-seed.json` | Geography, zones, pairing, access, and coordinate reference data |
-| `site/tools/refresh_data.py`, `refresh_latency.py` | Published availability/pricing and latency snapshots |
+| `site/tools/import_service_catalog.py` | Manual availability CSV import and service-pricing mapping generation |
+| `site/tools/refresh_data.py`, `refresh_latency.py` | Independent retail pricing and latency snapshots |
 
 When checks, profiles, or default placements change in the articles, mirror the wording in `planner-data.js`. Build and serve `docs/` over HTTP as described in [Building and publishing](building.md).
 

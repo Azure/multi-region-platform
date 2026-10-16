@@ -135,12 +135,12 @@
     return [];
   }
 
-  // Service names as the Azure Retail Prices API spells them. Only the ones found in the data snapshot are added.
-  const STARTER_SERVICES = ['Virtual Machines', 'Storage', 'Virtual Network', 'Azure Kubernetes Service', 'Azure App Service', 'SQL Database', 'Azure Database for PostgreSQL', 'Azure Cosmos DB', 'Key Vault', 'Azure Monitor', 'Log Analytics', 'Backup', 'Azure Firewall', 'Application Gateway', 'Load Balancer', 'ExpressRoute', 'VPN Gateway', 'Azure DNS', 'Azure Bastion', 'Foundry Models'];
+  // Service names from the availability catalog. Only names present in the imported snapshot are added.
+  const STARTER_SERVICES = ['Virtual Machines', 'Storage Accounts', 'Virtual Network', 'Azure Kubernetes Service (AKS)', 'App Service', 'Azure SQL Database', 'Azure Database for PostgreSQL', 'Azure Cosmos DB', 'Key Vault', 'Azure Monitor', 'Log Analytics', 'Azure Backup', 'Azure Firewall', 'Application Gateway', 'Load Balancer', 'ExpressRoute', 'VPN Gateway', 'Azure DNS', 'Azure Bastion', 'Microsoft Foundry'];
 
   // An illustrative, filled-in workbook. Every value is an example.
   const EXAMPLE = {
-    v: 2, meta: { name: 'Example: Nordic expansion', owner: 'Platform team', date: '' },
+    v: 3, meta: { name: 'Example: Nordic expansion', owner: 'Platform team', date: '' },
     estate: { topology: 'Hub-and-spoke virtual networks', managed: 'Azure Virtual Network Manager', hybrid: 'ExpressRoute' },
     current: [{ id: 'westeurope', hub: true }], baseline: 'westeurope',
     regions: [
