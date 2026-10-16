@@ -4,6 +4,12 @@ The [published workbook](https://azure.github.io/multi-region-platform/region-pl
 
 The workbook exports Excel and saves or opens JSON planning records. Visitor-entered planning data stays in the browser; it is not sent to a server. Azure reference data is loaded from published snapshots: see [Azure data collection](azure-data.md) for provenance and limitations.
 
+Every workbook tab uses the full page width, with a compact header and the website navigation behind the
+**Table of contents** button. Open that menu to return to the guidance without narrowing the workbook.
+Workbook actions, Essentials, and step tabs remain available throughout.
+After building, run `python site\tools\test_planner_layout.py` for full-width, navigation, and responsive
+layout regressions across all tabs in light and dark themes.
+
 The Services tab supports up to 100 services in one table. It shows 10 service rows at a time; scroll within the table to reach the rest, with column headers kept visible. Saved plans, Excel exports, and printing include the full list.
 
 Services, Products, and SKUs come from the manually imported availability CSV. Separate Product and SKU selectors narrow the selection; leaving either unselected checks whether any matching entry is available. Regional cells show small AZ counts only where the CSV supplies them. Release Status is not imported. Pricing inherits those services through the maintained service-name mapping, but continues to use its separate Retail Prices API snapshot and service-level comparisons. See [Azure data collection](azure-data.md) for monthly CSV imports and the monthly pricing refresh Action.
@@ -58,8 +64,8 @@ inline at the bottom of the page. Use its **Editor** to build or change hub-spok
 shared services, regional links, and hybrid connectivity. You can hide and reopen the tool or switch workbook
 tabs without losing the loaded design.
 
-While the tool is shown, the website navigation moves behind the header's **Table of contents** button and
-the workbook uses the full page width. Hiding it or leaving Regional design restores the normal navigation.
+The tool uses the same full-width layout and collapsed website navigation as the rest of the workbook.
+Hiding it or leaving Regional design keeps that workbook layout.
 **Editor** and **Details** show one side panel at a time; on narrower screens they overlay the canvas instead
 of shrinking it. The tool follows the website theme, with no separate theme switch.
 

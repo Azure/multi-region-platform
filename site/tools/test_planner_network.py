@@ -152,7 +152,7 @@ def main():
             page.get_by_role("button", name="Hide Advanced Networking Design Tool", exact=True).click()
             assert not page.locator("#pl-network-body").is_visible()
             assert not page.locator("body").evaluate("e => e.classList.contains('network-wide')")
-            assert page.locator("#side-nav").is_visible()
+            assert not page.locator("#side-nav").is_visible()
             page.get_by_role("button", name="Show Advanced Networking Design Tool", exact=True).click()
             assert explorer.locator("#title").inner_text() == "Custom network print test"
             page.evaluate("MRP.kit.hooks.render()")
@@ -160,6 +160,7 @@ def main():
             page.get_by_role("tab", name="Review + export", exact=False).click()
             assert not page.locator("#pl-network").is_visible()
             assert not page.locator("body").evaluate("e => e.classList.contains('network-wide')")
+            assert not page.locator("#side-nav").is_visible()
             frame.evaluate("spec.title = 'Latest design on review'; onSpecChange(true)")
             page.evaluate("""() => {
               window.print = () => { window.printCalled = true;

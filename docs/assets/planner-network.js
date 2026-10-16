@@ -189,7 +189,7 @@
       host = node;
       host.innerHTML = '<section class="pl-network" aria-labelledby="pl-network-title">' +
         '<div class="pl-noprint"><h2 id="pl-network-title">Advanced networking design</h2>' +
-        '<p class="pl-hint">Design hub-spoke or Virtual WAN networks. Navigation collapses while open; Expand to full page fills the window; Present opens a live window. ' +
+        '<p class="pl-hint">Design hub-spoke or Virtual WAN networks. Expand to full page fills the window; Present opens a live window. ' +
         'Regions, connectivity and shared services follow the workbook. Tool-only refinements last until the workbook definitions change; printing includes the diagram and inherited records.</p>' +
         '<button type="button" class="pl-btn" id="pl-network-toggle" aria-expanded="false" aria-controls="pl-network-body">' +
         'Enable Advanced Networking Design Tool</button></div>' +

@@ -2,20 +2,26 @@
    Every rule is scoped to #planner (or .tool for the page shell). The id beats the site's .prose rules for tables, headings,
    paragraphs, and lists, which otherwise leak into the workbook. */
 
-/* The workbook needs the full width: no "In this article" rail, no reading measure. */
-.tool .shell { grid-template-columns: var(--side-w) minmax(0, 1fr); }
+/* Keep the workbook full-width on every tab, with guidance navigation available on demand. */
+.tool { --top-h: 48px; }
+.tool .shell { grid-template-columns: minmax(0, 1fr); max-width: none; }
 .tool .rail { display: none; }
 .tool h1.title, .tool .prose > * { max-width: none; }
-.tool .prose { margin-top: 20px; }
-.tool.network-wide .shell { grid-template-columns: minmax(0, 1fr); max-width: none; }
-.tool.network-wide #planner { max-width: none; }
+.tool main { padding: 16px 24px 24px; }
+.tool .crumbs, .tool .meta, .tool .brand-tag { display: none; }
+.tool h1.title { margin: 0; font-size: 22px; }
+.tool .prose { margin-top: 12px; }
+.tool #planner { max-width: none; }
 .tool.network-wide #planner .pl-foot-bar { position: static; }
-.tool.network-wide .side { display: none; }
-.tool.network-wide.nav-open .side { display: flex; position: fixed; top: var(--top-h); left: 0; bottom: 0; z-index: 60; width: min(320px, 86vw); height: auto; transform: none; box-shadow: var(--shadow); }
-.tool.network-wide .nav-toggle { display: inline-grid; place-items: center; flex: none; width: 36px; height: 36px; border: 1px solid var(--line-strong); background: var(--bg); color: var(--ink); border-radius: 8px; cursor: pointer; }
-.tool.network-wide .nav-toggle svg { width: 16px; height: 16px; }
-.tool.network-wide .nav-backdrop:not([hidden]) { display: block; position: fixed; inset: var(--top-h) 0 0; z-index: 55; background: rgba(8,20,36,.45); }
-.tool.network-wide #pl-network { scroll-margin-top: calc(var(--top-h) + 16px); }
+.tool .side { display: none; }
+.tool.nav-open .side { display: flex; position: fixed; top: var(--top-h); left: 0; bottom: 0; z-index: 60; width: min(320px, 86vw); height: auto; transform: none; box-shadow: var(--shadow); }
+.tool .nav-toggle { display: inline-grid; place-items: center; flex: none; width: 36px; height: 36px; border: 1px solid var(--line-strong); background: var(--bg); color: var(--ink); border-radius: 8px; cursor: pointer; }
+.tool .nav-toggle svg { width: 16px; height: 16px; }
+.tool .nav-backdrop:not([hidden]) { display: block; position: fixed; inset: var(--top-h) 0 0; z-index: 55; background: rgba(8,20,36,.45); }
+.tool #pl-network { scroll-margin-top: calc(var(--top-h) + 16px); }
+@media (max-width: 960px) {
+  .tool main { padding: 12px 12px 20px; }
+}
 
 /* ───────── tokens. Controls and surfaces are neutral; color is for state and data. */
 #planner {
