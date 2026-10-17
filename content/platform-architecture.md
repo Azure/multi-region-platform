@@ -19,7 +19,7 @@ Each choice follows from the workloads you expect in the region, not from the fo
 
 <!-- site-only:start -->
 > [!TIP]
-> The [region planning workbook](./region-planner.html) walks through the three choices for each selected region and produces the regional design record.
+> The [Multi-region planner](./region-planner.html) walks through the three choices for each selected region and produces the regional design record.
 <!-- site-only:end -->
 
 ## Start from workload requirements

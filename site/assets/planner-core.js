@@ -1,4 +1,4 @@
-// Region planning workbook — state, Azure reference data, and everything derived from them. No DOM in this file.
+// Multi-region planner — state, Azure reference data, and everything derived from them. No DOM in this file.
 (function (global) {
   'use strict';
   const M = global.MRP, { CHECKS, CAPABILITY_IDS, PROFILES, SHARED, HUB_SERVICES, HYBRID_PATHS } = M;
@@ -575,7 +575,7 @@
     return out;
   }
   function recordText() {
-    const head = [S.meta.name || 'Region planning workbook', `Date: ${S.meta.date}` + (S.meta.owner ? ` · Owner: ${S.meta.owner}` : ''), ''];
+    const head = [S.meta.name || 'Multi-region planner', `Date: ${S.meta.date}` + (S.meta.owner ? ` · Owner: ${S.meta.owner}` : ''), ''];
     const body = selected().map(r => record(r).filter(x => x[1]).map(([k, v]) => `${k}: ${v}`).join('\n'));
     return head.concat(body.join('\n\n')).join('\n');
   }

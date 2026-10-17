@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Refresh the latency data that the region planning workbook reads.
+"""Refresh the latency data that the Multi-region planner reads.
 
     python3 site/tools/refresh_latency.py                   # download the three sources, write docs/data/
     python3 site/tools/refresh_latency.py --cache .cache    # keep the downloads in .cache and reuse them on the next run

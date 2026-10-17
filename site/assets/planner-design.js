@@ -1,4 +1,4 @@
-// Region planning workbook — the views of step 3: Regional design, and Review + export.
+// Multi-region planner — the views of step 3: Regional design, and Review + export.
 (function (global) {
   'use strict';
   const M = global.MRP, C = M.core, K = M.kit, { icon, status } = M, { esc } = K;
@@ -126,7 +126,7 @@
     const valid = bad.length ? K.mb('warning', `<b class="pl-blk">${K.plural(bad.length, 'record')} still to complete.</b><ul class="pl-miss">${bad.map(x => `<li><button type="button" class="pl-linkbtn" data-act="goto-design" data-arg="${esc(x.r.id)}">${esc(C.rname(x.r.id))}</button>: ${esc(C.list(x.e.missing))}</li>`).join('')}</ul>`)
       : K.mb('success', 'All records are complete.');
     const reportMeta = [
-      S.meta.name && `<span><b>Workbook</b>${esc(S.meta.name)}</span>`,
+      S.meta.name && `<span><b>Plan</b>${esc(S.meta.name)}</span>`,
       S.meta.owner && `<span><b>Owner</b>${esc(S.meta.owner)}</span>`,
       S.meta.date && `<span><b>Assessment date</b>${esc(S.meta.date)}</span>`,
     ].filter(Boolean).join('');
@@ -136,10 +136,10 @@
         `${p ? `<p class="pl-after"><a class="pl-link" href="${p.href}">Prepare the region: ${esc(p.id)}${icon('arrowright')}</a></p>` : ''}</section>`; }).join('');
     const all = S.regions.map(r => { const sel = picked.includes(r), e = sel ? C.effective(r) : null;
       return `<tr><th scope="row">${esc(C.rname(r.id))}</th><td>${outcomeBadge(C.outcome(r))}</td><td>${yesNo(sel, 'Yes', 'No')}</td><td>${e && e.profile ? esc(e.profile) : K.EM}</td></tr>`; }).join('');
-    return h + `<header class="pl-print-head"><p class="pl-print-kicker">Regional platform planning</p><h1>Regional workbook report</h1>` +
+    return h + `<header class="pl-print-head"><p class="pl-print-kicker">Regional platform planning</p><h1>Multi-region planner report</h1>` +
       `${reportMeta ? `<div class="pl-print-meta">${reportMeta}</div>` : ''}<p class="pl-print-count">${K.plural(picked.length, 'region')} included · ${bad.length ? `${bad.length} record${bad.length === 1 ? '' : 's'} incomplete` : 'All records complete'}</p></header>` +
       valid + `<div class="pl-bar pl-noprint">${K.btn({ act: 'export', label: 'Export to Excel', icon: 'export' })}${K.btn({ act: 'copy', label: 'Copy as text', icon: 'copy' })}${K.btn({ act: 'print', label: 'Print', icon: 'print' })}</div>` +
-      blocks + K.section('All regions in this workbook', K.scroll(`<table class="pl-dl"><thead><tr><th scope="col">Region</th><th scope="col">Outcome</th><th scope="col">Selected</th><th scope="col">Connectivity profile</th></tr></thead><tbody>${all}</tbody></table>`, { label: 'All regions' }));
+      blocks + K.section('All regions in this plan', K.scroll(`<table class="pl-dl"><thead><tr><th scope="col">Region</th><th scope="col">Outcome</th><th scope="col">Selected</th><th scope="col">Connectivity profile</th></tr></thead><tbody>${all}</tbody></table>`, { label: 'All regions' }));
   }
 
   M.views.design = vDesign;

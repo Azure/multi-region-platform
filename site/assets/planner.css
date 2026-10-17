@@ -1,4 +1,4 @@
-/* Region planning workbook. Fluent 2 as used in the Azure portal, on the tokens of site.css.
+/* Multi-region planner. Fluent 2 as used in the Azure portal, on the tokens of site.css.
    Every rule is scoped to #planner (or .tool for the page shell). The id beats the site's .prose rules for tables, headings,
    paragraphs, and lists, which otherwise leak into the workbook. */
 

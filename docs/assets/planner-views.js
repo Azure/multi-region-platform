@@ -1,4 +1,4 @@
-// Region planning workbook — the views of step 2: Scope, Services, Latency, Pricing, and Checks. Each view returns HTML.
+// Multi-region planner — the views of step 2: Scope, Services, Latency, Pricing, and Checks. Each view returns HTML.
 (function (global) {
   'use strict';
   const M = global.MRP, C = M.core, K = M.kit, { icon, status } = M, { esc } = K;
@@ -62,7 +62,7 @@
       ? K.scroll(`<table class="pl-dl"><thead><tr><th scope="col">Region</th><th scope="col">Geographic hub</th><th scope="col">Price baseline</th><th scope="col" aria-label="Remove"></th></tr></thead><tbody>${cur}</tbody></table>`, { label: 'Current regions' })
       : '<p class="pl-muted">No current regions yet.</p>';
     return K.head('Scope', 'The platform you run today and the regions you are considering.') +
-      K.section('Workbook', K.row('Workbook name', 'meta/name', id => K.inp('meta/name', S.meta.name, { id, ph: 'For example, Contoso Nordic expansion', label: 'Workbook name' })) +
+      K.section('Plan', K.row('Plan name', 'meta/name', id => K.inp('meta/name', S.meta.name, { id, ph: 'For example, Contoso Nordic expansion', label: 'Plan name' })) +
         K.row('Owner', 'meta/owner', id => K.inp('meta/owner', S.meta.owner, { id, ph: 'Team or person', label: 'Owner' })) +
         K.row('Assessment date', 'meta/date', id => K.inp('meta/date', S.meta.date, { id, type: 'date', label: 'Assessment date' }))) +
       K.section('Current platform', K.rowRaw('Hub topology', K.cards('estate/topology', S.estate.topology, topo, { label: 'Hub topology', cls: 'sm' }), '', true) +

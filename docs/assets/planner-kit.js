@@ -1,4 +1,4 @@
-// Region planning workbook — shared interface pieces: escaping, buttons, form controls, message bars, the combobox, and tooltips.
+// Multi-region planner — shared interface pieces: escaping, buttons, form controls, message bars, the combobox, and tooltips.
 // Builders return HTML strings. The combobox and the tooltip live in a layer outside the re-rendered page, so a render never closes them by accident.
 (function (global) {
   'use strict';

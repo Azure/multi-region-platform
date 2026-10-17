@@ -131,7 +131,7 @@
         });
       });
     });
-    notes.push('Firewall and DNS symbols represent the workbook capability choices, not a confirmed product selection.');
+    notes.push('Firewall and DNS symbols represent the capability choices in the plan, not a confirmed product selection.');
     notes.push('Current-region services are shown only where required by a selected new region. No other existing services are assumed.');
     return result;
   }
@@ -147,7 +147,7 @@
       message('');
       return true;
     } catch (error) {
-      message('The workbook networking definitions could not be loaded: ' + error.message);
+      message('The networking definitions from the plan could not be loaded: ' + error.message);
       return false;
     }
   }
@@ -193,7 +193,7 @@
       host.innerHTML = '<section class="pl-network" aria-labelledby="pl-network-title">' +
         '<div class="pl-noprint"><h2 id="pl-network-title">Advanced networking design</h2>' +
         '<p class="pl-hint">Design hub-spoke or Virtual WAN networks. Expand to full page fills the window; Present opens a live window. ' +
-        'Regions, connectivity and shared services follow the workbook. Tool-only refinements last until the workbook definitions change; printing includes the diagram and inherited records.</p>' +
+        'Regions, connectivity and shared services follow the plan. Tool-only refinements last until the plan definitions change; printing includes the diagram and inherited records.</p>' +
         '<button type="button" class="pl-btn" id="pl-network-toggle" aria-expanded="false" aria-controls="pl-network-body">' +
         'Enable Advanced Networking Design Tool</button></div>' +
         '<p id="pl-network-notice" class="pl-mb warning" role="status" hidden></p>' +

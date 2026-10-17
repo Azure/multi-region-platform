@@ -1,4 +1,4 @@
-// Region planning workbook — Excel export. Builds the sheet definitions that xlsx-lite.js turns into a file.
+// Multi-region planner — Excel export. Builds the sheet definitions that xlsx-lite.js turns into a file.
 // With nothing entered, the export is a blank template with the same questions and drop-down lists.
 (function (global) {
   'use strict';
@@ -17,17 +17,17 @@
     const priceSnapshot = D.meta && D.meta.generated ? `Prices: ${D.meta.generated.slice(0, 10)} (Azure Retail Prices API, list prices in USD)` : 'No price snapshot was published';
     const availabilitySnapshot = D.availabilityMeta ? `Availability CSV imported ${D.availabilityMeta.generated.slice(0, 10)}` : 'No service availability catalog was published';
     const snapshot = `${availabilitySnapshot}. ${priceSnapshot}`;
-    const title = S.meta.name || 'Region planning workbook';
+    const title = S.meta.name || 'Multi-region planner';
     const sub = [`Date: ${S.meta.date}`, S.meta.owner && `Owner: ${S.meta.owner}`, S.current.length && `Current regions: ${S.current.map(x => C.rname(x.id)).join(', ')}`].filter(Boolean).join('  ·  ');
     const frame = (width, extra = []) => [`A1:${col(width - 1)}1`, `A2:${col(width - 1)}2`, `A3:${col(width - 1)}3`, ...extra];
 
     // ── Scope
-    const scRows = [[c('Scope', 'title')], [c('Workbook context, current platform, and the regions being assessed.', 'muted')], [c(snapshot, 'muted')], []];
+    const scRows = [[c('Scope', 'title')], [c('Plan context, current platform, and the regions being assessed.', 'muted')], [c(snapshot, 'muted')], []];
     const scMerges = frame(7);
     const scGroup = text => { scRows.push(pad([c(text, 'group')], 7, 'group')); scMerges.push(`A${scRows.length}:G${scRows.length}`); };
     const scField = (label, value) => scRows.push([c(label, 'label'), c(value, 'input')]);
-    scGroup('Workbook details');
-    scField('Workbook name', title);
+    scGroup('Plan details');
+    scField('Plan name', title);
     scField('Owner', S.meta.owner);
     scField('Assessment date', S.meta.date);
     scRows.push([]);
@@ -190,5 +190,5 @@
   }
 
   M.workbook = workbook;
-  M.fileName = ext => `Region-planning-${(C.S.meta.name || 'workbook').replace(/[^\w]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'workbook'}-${C.S.meta.date}.${ext}`;
+  M.fileName = ext => `Multi-region-plan-${(C.S.meta.name || 'plan').replace(/[^\w]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'plan'}-${C.S.meta.date}.${ext}`;
 })(window);

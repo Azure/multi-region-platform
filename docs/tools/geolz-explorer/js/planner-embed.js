@@ -1,11 +1,11 @@
-// Same-origin workbook integration: print snapshots and a separate, live presentation window.
+// Same-origin Multi-region planner integration: print snapshots and a separate, live presentation window.
 let plannerPresentation = null;
 function workbookDefinitions() {
   const section = document.createElement('section');
   section.className = 'pl-network-definitions';
   if (!spec.workbook) return section;
-  section.innerHTML = '<h2>Inherited workbook definitions</h2>' +
-    '<p>These are the workbook decisions, including services and paths beyond the diagram model.</p>' +
+  section.innerHTML = '<h2>Inherited plan definitions</h2>' +
+    '<p>These are the decisions in the plan, including services and paths beyond the diagram model.</p>' +
     '<div class="pl-network-records">' + (spec.workbook.records || []).map(record =>
       '<section><h3>' + esc((regionById(spec, record.id) || {}).name || record.id) + '</h3><ul>' +
       record.lines.map(line => '<li>' + esc(line) + '</li>').join('') + '</ul></section>').join('') +
@@ -29,7 +29,7 @@ window.GeoLZPlanner = {
     edits.future = [];
     editorState.sel = null;
     loadSpec(clone(next));
-    setStatus('Inherited from the regional workbook. Tool-only edits do not change workbook decisions.');
+    setStatus('Inherited from the Multi-region planner. Tool-only edits do not change decisions in the plan.');
   },
   setHostTheme(theme) {
     applyTheme(theme);
@@ -110,13 +110,13 @@ window.GeoLZPlanner = {
 if (PLANNER_MODE) {
   const button = document.createElement('button'), panel = document.createElement('div');
   button.id = 'btnWorkbook';
-  button.textContent = 'Workbook definitions';
+  button.textContent = 'Plan definitions';
   button.setAttribute('aria-expanded', 'false');
   button.setAttribute('aria-controls', 'plannerDefinitions');
   panel.id = 'plannerDefinitions';
   panel.hidden = true;
   panel.setAttribute('role', 'region');
-  panel.setAttribute('aria-label', 'Inherited workbook definitions');
+  panel.setAttribute('aria-label', 'Inherited plan definitions');
   button.onclick = () => {
     panel.hidden = !panel.hidden;
     button.setAttribute('aria-expanded', String(!panel.hidden));
@@ -126,10 +126,10 @@ if (PLANNER_MODE) {
   window.GeoLZPlanner.refreshDefinitions();
 }
 if (PLANNER_MODE === 'embedded') {
-  buttonLabel($('btnClearSaved'), 'Reset from workbook', 'Discard tool-only refinements and reload workbook definitions');
+  buttonLabel($('btnClearSaved'), 'Reset from plan', 'Discard tool-only refinements and reload the plan definitions');
   $('btnPresent').title = 'Open the current design in a separate presentation window (F)';
   document.querySelector('footer').textContent = 'Illustrative architecture explorer - not an official Microsoft product - ' +
-    'Editor and Details share one side panel; Present (F) opens a separate window. Theme follows the workbook.';
+    'Editor and Details share one side panel; Present (F) opens a separate window. Theme follows the planner.';
 }
 if (PLANNER_MODE === 'presentation') {
   if (window.opener && !window.opener.closed && window.opener.GeoLZPlanner) {
@@ -140,6 +140,6 @@ if (PLANNER_MODE === 'presentation') {
       if (event.key === 'Escape') window.close();
     });
   } else {
-    setStatus('The source networking design is unavailable. Close this window and use Present from the workbook again.');
+    setStatus('The source networking design is unavailable. Close this window and use Present from the planner again.');
   }
 }

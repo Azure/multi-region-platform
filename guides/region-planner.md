@@ -1,12 +1,12 @@
-# Region planning workbook
+# Multi-region planner
 
-The [published workbook](https://azure.github.io/multi-region-platform/region-planner.html) supports regional qualification and design selection (steps 2 and 3 of the framework). Teams answer the four qualification checks, compare availability indicators, prices, and latency, select regions, and record their connectivity profiles, shared-service placement, and hybrid connectivity.
+The [published planner](https://azure.github.io/multi-region-platform/region-planner.html) supports regional qualification and design selection (steps 2 and 3 of the framework). Teams answer the four qualification checks, compare availability indicators, prices, and latency, select regions, and record their connectivity profiles, shared-service placement, and hybrid connectivity.
 
-The workbook exports Excel and saves or opens JSON planning records. Visitor-entered planning data stays in the browser; it is not sent to a server. Azure reference data is loaded from published snapshots: see [Azure data collection](azure-data.md) for provenance and limitations.
+The planner exports Excel and saves or opens JSON planning records. Visitor-entered planning data stays in the browser; it is not sent to a server. Azure reference data is loaded from published snapshots: see [Azure data collection](azure-data.md) for provenance and limitations.
 
 In Regional design, **Hub Connections** is a searchable multi-select: select or clear regions without
 closing the dropdown. Arrow keys move between options; Enter or Space toggles a selection, and Esc closes
-the list. Saved workbooks, review records, and Excel exports retain every selected region. Older workbooks
+the list. Saved plans, review records, and Excel exports retain every selected region. Older plans
 with a single geographic hub keep that selection. Remote shared services still name one supplying region;
 when no supplier is specified, the first selected hub is used.
 
@@ -18,9 +18,9 @@ the field explains why no locations are suggested.
 After building, run `python site\tools\test_planner_connectivity.py` for the hub multi-select,
 saved-plan compatibility, review/export, diagram inheritance, and peering-suggestion browser checks.
 
-Every workbook tab uses the full page width, with a compact header and the website navigation behind the
-**Table of contents** button. Open that menu to return to the guidance without narrowing the workbook.
-Workbook actions, Essentials, and step tabs remain available throughout.
+Every planner tab uses the full page width, with a compact header and the website navigation behind the
+**Table of contents** button. Open that menu to return to the guidance without narrowing the planner.
+Planner actions, Essentials, and step tabs remain available throughout.
 After building, run `python site\tools\test_planner_layout.py` for full-width, navigation, and responsive
 layout regressions across all tabs in light and dark themes.
 
@@ -43,7 +43,7 @@ The planner is website-only, not an article in `content/toc.yml` or part of the 
 | `site/assets/planner-core.js` | State, reference data, qualification/evidence/latency/profile logic, and planning record; no DOM |
 | `site/assets/planner-icons.js`, `planner-kit.js` | Icons, diagrams, and shared UI components |
 | `site/assets/planner-views.js`, `planner-design.js` | Scope, Services, Latency, Pricing, Checks, Regional design, and Review + export views |
-| `site/assets/planner-map.js`, `planner-map.json` | Workbook-derived geographic view and local Natural Earth boundaries |
+| `site/assets/planner-map.js`, `planner-map.json` | Planner-derived geographic view and local Natural Earth boundaries |
 | `site/assets/planner-network.js` | Optional embedded networking explorer and print integration |
 | `site/assets/planner.js`, `planner.css` | Frame, events, and styles |
 | `site/assets/planner-export.js`, `xlsx-lite.js` | Excel export and the small `.xlsx` writer; no third-party spreadsheet library |
@@ -53,9 +53,9 @@ The planner is website-only, not an article in `content/toc.yml` or part of the 
 
 When checks, profiles, or default placements change in the articles, mirror the wording in `planner-data.js`. Build and serve `docs/` over HTTP as described in [Building and publishing](building.md).
 
-## Workbook geography view
+## Planner geography view
 
-The Latency tab ends with a geographic view derived from Scope's current/candidate regions, selected peering locations and customer cities, and the same published, estimated, or edited latency values as the tables. It adds no duplicate tables. Blue current-region, green candidate, and orange peering labels follow the workbook's light/dark styling.
+The Latency tab ends with a geographic view derived from Scope's current/candidate regions, selected peering locations and customer cities, and the same published, estimated, or edited latency values as the tables. It adds no duplicate tables. Blue current-region, green candidate, and orange peering labels follow the planner's light/dark styling.
 
 **Add a peering location** lists every location in the published peering snapshot in a scrollable dropdown,
 without a 50-result cutoff. Search remains available; locations already added are omitted to prevent duplicates.
@@ -76,14 +76,14 @@ The targeted browser checks require Playwright and Chromium, like existing websi
 
 ## Advanced networking design
 
-Regional design ends with the workbook geography map and an **Enable Advanced Networking Design Tool**
+Regional design ends with the planner geography map and an **Enable Advanced Networking Design Tool**
 button. The button opens the [Geo Landing Zone Connectivity Explorer](../tools/geolz-explorer/README.md)
 inline at the bottom of the page. Use its **Editor** to build or change hub-spoke or Virtual WAN designs,
-shared services, regional links, and hybrid connectivity. You can hide and reopen the tool or switch workbook
+shared services, regional links, and hybrid connectivity. You can hide and reopen the tool or switch planner
 tabs without losing the loaded design.
 
-The tool uses the same full-width layout and collapsed website navigation as the rest of the workbook.
-Hiding it or leaving Regional design keeps that workbook layout.
+The tool uses the same full-width layout and collapsed website navigation as the rest of the planner.
+Hiding it or leaving Regional design keeps that planner layout.
 **Editor** and **Details** show one side panel at a time; on narrower screens they overlay the canvas instead
 of shrinking it. The tool follows the website theme, with no separate theme switch.
 
@@ -103,20 +103,20 @@ appropriate local or remote gateways; matching Latency locations identify their 
 An unspecified site is explicitly labelled rather than inventing a datacenter. Site-to-site VPN choices
 are also mapped. Unselected qualification candidates are not imported.
 
-The **Workbook definitions** panel retains every shared service (including custom services),
+The **Plan definitions** panel retains every shared service (including custom services),
 placement, supplying region, management method, east-west choice and hybrid change. GeoLZ has one topology
-per diagram and does not model every workbook capability or product choice. Mixed topologies, SD-WAN/NVA
+per diagram and does not model every planner capability or product choice. Mixed topologies, SD-WAN/NVA
 paths, incomplete hybrid definitions and other limitations are called out in the panel. Firewall and DNS
 symbols illustrate the capability, not a confirmed product selection. Current-region services are only
-inferred where a new region requires them; the workbook does not inventory all existing services.
+inferred where a new region requires them; the planner does not inventory all existing services.
 Every selected hub connection is passed to the diagram. For Remote Hub Connected spokes, GeoLZ models
-traffic through one remote hub (the first selection); this limitation is called out in Workbook definitions.
+traffic through one remote hub (the first selection); this limitation is called out in Plan definitions.
 
-Changes to workbook networking definitions refresh the explorer, including its live presentation window.
+Changes to networking definitions in the plan refresh the explorer, including its live presentation window.
 Tool-only refinements survive unrelated renders, hiding and reopening, but are replaced by a networking
-definition change. **Reset from workbook** discards them explicitly. They do not modify the workbook and
+definition change. **Reset from plan** discards them explicitly. They do not modify the plan and
 are not saved to the standalone explorer's browser autosave. JSON Export can preserve a refined diagram;
-workbook Excel/JSON exports continue to contain the authoritative workbook decisions.
+Excel and JSON exports of the plan continue to contain its authoritative decisions.
 
 Once enabled, printing Regional design
 or using **Print** in Review + export includes its latest full diagram and inherited records on separate pages, in a light theme,

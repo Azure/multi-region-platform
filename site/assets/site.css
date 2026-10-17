@@ -106,10 +106,6 @@ svg { display: block; }
 .hero-title { margin: 12px 0 0; font-size: 44px; line-height: 1.12; font-weight: 600; letter-spacing: -.015em; max-width: 720px; color: #fff; }
 .hero-lede { margin: 16px 0 0; font-size: 19px; line-height: 1.5; max-width: 640px; color: #DDEBF9; }
 .hero-cta { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
-.hero-alt { margin: 16px 0 0; font-size: 14px; color: #BCD9F5; }
-.hero-alt a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
-.hero-alt a:hover { color: #DDEBF9; }
-.hero-disclosure { max-width: var(--article-w); }
 .btn { display: inline-flex; align-items: center; height: 42px; padding: 0 18px; border-radius: 8px; font-weight: 600; font-size: 15px; text-decoration: none !important; }
 .btn.primary { background: #fff; color: #0B3A63; }
 .btn.primary:hover { background: #EEF5FC; }
@@ -279,6 +275,11 @@ blockquote.pull p { margin: 0; font-size: 21px; line-height: 1.4; font-weight: 3
 .rail li a.on { color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
 .rail ul:empty, .rail ul:empty + * { display: none; }
 
+/* ───────── footer on every page: the analytics disclosure */
+.site-foot { border-top: 1px solid var(--line); background: var(--bg-soft); }
+.site-foot p { max-width: 960px; margin: 0 auto; padding: 18px 24px 22px; text-align: center; font-size: 13px; line-height: 1.5; color: var(--muted); }
+.site-foot a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 2px; }
+
 @media (max-width: 1440px) {
   .shell { grid-template-columns: var(--side-w) minmax(0, 1fr); }
   .rail { display: none; }
@@ -323,7 +324,7 @@ blockquote.pull p { margin: 0; font-size: 21px; line-height: 1.4; font-weight: 3
 }
 
 @media print {
-  .top, .side, .rail, .pager, .hero, .fig-tools { display: none !important; }
+  .top, .side, .rail, .pager, .hero, .fig-tools, .site-foot { display: none !important; }
   .shell { display: block; }
   main { padding: 0; }
   .fig { break-inside: avoid; }

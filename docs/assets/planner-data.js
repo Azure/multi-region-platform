@@ -1,4 +1,4 @@
-// Region planning workbook — reference lists: the checks of step 2, the choices of step 3, and their options.
+// Multi-region planner — reference lists: the checks of step 2, the choices of step 3, and their options.
 // The wording follows the articles in content/. Change a question here and it changes in the page and in the Excel export.
 (function (global) {
   'use strict';

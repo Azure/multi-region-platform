@@ -30,7 +30,7 @@ function saveNow() {
 // Start-up precedence: ?example=<id> > saved session > default example. Returns { spec, status }.
 function startSpec() {
   if (PLANNER_MODE) return { spec: { format: 1, defaults: { topology: 'hub-spoke' },
-    regions: [] }, status: 'Waiting for regional workbook definitions' };
+    regions: [] }, status: 'Waiting for the plan definitions' };
   const wanted = new URLSearchParams(location.search).get('example'), store = storage();
   if (EXAMPLES[wanted]) return { spec: clone(EXAMPLES[wanted]), status: `Example ${wanted} (from the link)` };
   const fallback = status => ({ spec: clone(EXAMPLES[DEFAULT_EXAMPLE]), status });

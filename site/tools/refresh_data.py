@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Refresh the Azure reference data that the region planning workbook reads.
+"""Refresh the Azure reference data that the Multi-region planner reads.
 
     python3 site/tools/refresh_data.py              # full refresh: the whole consumption price list, page by page
     python3 site/tools/refresh_data.py --max-pages 20   # quick partial run, to test the pipeline

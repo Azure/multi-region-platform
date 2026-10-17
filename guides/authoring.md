@@ -2,7 +2,7 @@
 
 The Markdown in `content/` is the primary article text. It uses Microsoft Learn syntax so the same files drive the website now and can be prepared for a future Cloud Adoption Framework (CAF) submission. CAF publication is not yet implied by this repository.
 
-See [Building and publishing](building.md) for prerequisites and commands, [Azure data collection](azure-data.md) for reference snapshots, and [Region planning workbook](region-planner.md) for the website-only tool.
+See [Building and publishing](building.md) for prerequisites and commands, [Azure data collection](azure-data.md) for reference snapshots, and [Multi-region planner](region-planner.md) for the website-only tool.
 
 ## Repository organization
 
@@ -16,7 +16,7 @@ See [Building and publishing](building.md) for prerequisites and commands, [Azur
 | Word edition, full guidance | `content/` through `word/build.py full` | `dist/Adaptable-Multi-Region-Azure-Platform.docx` |
 | Word edition, executive brief | `word/brief.md` and `word/brief_figures.py` through `word/build.py brief` | `dist/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.docx` |
 | Short lists, edition date, URLs, color tokens | `shared/summary.json` | read by the PDF, deck, and Word builds |
-| Region planning workbook | `site/planner/`, `site/assets/planner*.js`, regional seed | `docs/region-planner.html` and `docs/data/` |
+| Multi-region planner | `site/planner/`, `site/assets/planner*.js`, regional seed | `docs/region-planner.html` and `docs/data/` |
 
 `art/` contains the art generators (see [Art generators](#art-generators)) and prototypes. `backup/` retains retired material, not current guidance. `build.sh` rebuilds the deliverables; generated `dist/` files are git-ignored. Don't edit generated `docs/` pages by hand.
 

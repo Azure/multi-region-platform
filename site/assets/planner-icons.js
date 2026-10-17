@@ -1,4 +1,4 @@
-// Region planning workbook — icons, status glyphs, and the small diagrams.
+// Multi-region planner — icons, status glyphs, and the small diagrams.
 // Drawn for this page on a 16px grid with 1.5px strokes. Colors come from CSS (currentColor and the diagram classes in planner.css).
 (function (global) {
   'use strict';

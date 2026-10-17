@@ -48,15 +48,15 @@ in the same virtual WAN.
 Useful links: `?example=minimal-gsa` opens the Virtual WAN example, `?new=1` opens the guided start of a blank
 estate, `?theme=light|dark|auto` forces a theme.
 
-The multi-region platform site's Region planning workbook also embeds this tool below the Regional design
+The Multi-region planner on the multi-region platform site also embeds this tool below the Regional design
 map, behind **Enable Advanced Networking Design Tool**. The embedded tool inherits current and selected new
 regions, effective connectivity profiles, hub links, shared-service placements and named hybrid connections.
-The **Workbook definitions** panel retains custom services and choices GeoLZ cannot model, with explicit limitations.
-Workbook definition changes refresh the diagram. Tool-only refinements remain until such a change or
-**Reset from workbook**; they never alter the workbook or the standalone tool's autosave. Use JSON Export
-to keep refinements. The workbook's print output includes the full current networking
+The **Plan definitions** panel retains custom services and choices GeoLZ cannot model, with explicit limitations.
+Plan definition changes refresh the diagram. Tool-only refinements remain until such a change or
+**Reset from plan**; they never alter the plan or the standalone tool's autosave. Use JSON Export
+to keep refinements. The planner's print output includes the full current networking
 diagram in a light theme, preserving selected paths and visible layers but ignoring zoom and pan.
-In the workbook, the website navigation collapses, Editor and Details share one side panel (overlaying the
+In the planner, the website navigation collapses, Editor and Details share one side panel (overlaying the
 diagram on narrow screens), and the theme follows the website without a separate switch. **Present** or **F**
 opens a separate live presentation window for the current design; **Esc** closes it. The standalone tool's
 theme and in-page presentation controls are unchanged.

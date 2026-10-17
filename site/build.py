@@ -35,15 +35,15 @@ DOWNLOADS = [
 
 # Interactive pages. "parent" names the toc.yml group that the page is added to, as its last item, in the left navigation.
 TOOLS = [{
-    "name": "Region planning workbook", "href": "region-planner.html", "fragment": "planner/planner.html", "parent": "Resources",
-    "description": "Interactive workbook for steps 2 and 3: qualify candidate Azure regions with the four checks, compare service availability, "
+    "name": "Multi-region planner", "href": "region-planner.html", "fragment": "planner/planner.html", "parent": "Resources",
+    "description": "Interactive planner for steps 2 and 3: qualify candidate Azure regions with the four checks, compare service availability, "
                    "prices, and latency, select regions, and record the connectivity profile, shared-service placement, and hybrid connectivity of each one. Exports to Excel.",
     "meta": "Interactive · Steps 2 and 3 · Exports to Excel",
     "css": ["assets/planner.css"],
     "js": ["assets/xlsx-lite.js", "assets/planner-icons.js", "assets/planner-data.js", "assets/planner-core.js", "assets/planner-kit.js",
            "assets/planner-map.js", "assets/planner-views.js", "assets/planner-design.js", "assets/planner-network.js", "assets/planner-export.js", "assets/planner.js"],
     "seed": "data/regions-seed.json",
-    "search": "workbook tool checklist excel export questions decisions latency pricing price comparison service availability "
+    "search": "planner workbook tool checklist excel export questions decisions latency pricing price comparison service availability "
               "selected region connectivity profile hub virtual network Virtual WAN Azure Virtual Network Manager shared services hybrid connectivity ExpressRoute",
 }]
 # Folders in docs/ that a build keeps: the PDFs, and the Azure data snapshot written by site/tools/refresh_data.py.
@@ -355,9 +355,7 @@ def build():
             hero = f'''<section class="hero"><div class="hero-in">
 <h1 class="hero-title">{html.escape(SITE_SUB)}</h1>
 <p class="hero-lede">Add Azure regions without starting another landing-zone project. Reuse the platform you already run, qualify each region, and enable only what its workloads need.</p>
-<div class="hero-cta"><a class="btn primary" href="getting-started.html">Get started in six steps</a></div>
-<p class="hero-alt">Or download: <a href="{DOWNLOADS[0][1]}" download>{DOWNLOADS[0][0]}</a> · <a href="{DOWNLOADS[1][1]}" download>{DOWNLOADS[1][0]}</a></p>
-<p class="hero-alt hero-disclosure">We use Microsoft Clarity to understand website interactions and improve content and usability. See <a href="privacy.html">Privacy and project information</a> for details.</p>
+<div class="hero-cta"><a class="btn primary" href="getting-started.html">Get started in six steps</a><a class="btn ghost" href="region-planner.html">Open the Multi-region planner</a></div>
 </div></section>'''
         page = (tmpl.replace("{{TITLE}}", html.escape(meta.get("title", pg["name"])))
                 .replace("{{DESCRIPTION}}", html.escape(meta.get("description", "")))

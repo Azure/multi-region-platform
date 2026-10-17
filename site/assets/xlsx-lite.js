@@ -1,5 +1,5 @@
 // Minimal .xlsx writer (no dependencies): styled cells, column widths, frozen panes, merged cells,
-// and drop-down lists. Enough for the region planning workbook export; not a general spreadsheet library.
+// and drop-down lists. Enough for the Multi-region planner export; not a general spreadsheet library.
 //
 //   const blob = XlsxLite.build({ sheets: [{ name, cols: [30, 14], freeze: { x: 1, y: 2 }, merges: ['A1:C1'],
 //     rows: [[ 'text', 12, { v: 0.042, s: 'pct' }, null ]], lists: [{ ref: 'B3:D3', items: ['Yes', 'No'] }] }] });

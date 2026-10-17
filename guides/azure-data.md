@@ -1,6 +1,6 @@
 # Azure data collection
 
-The [region planning workbook](region-planner.md) loads published snapshots from `docs/data/`, not live Azure APIs. Data collection happens through maintainer-run scripts, separate from browser use and the normal build.
+The [Multi-region planner](region-planner.md) loads published snapshots from `docs/data/`, not live Azure APIs. Data collection happens through maintainer-run scripts, separate from browser use and the normal build.
 
 Run the commands below from the repository root. Collection/import scripts use only the Python standard library and require Python 3.10 or later. In PowerShell, use backslash paths, for example `python site\tools\refresh_data.py`.
 

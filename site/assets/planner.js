@@ -1,4 +1,4 @@
-// Region planning workbook — the frame (command bar, Essentials, step tabs, footer), events, save, open, and export.
+// Multi-region planner — the frame (command bar, Essentials, step tabs, footer), events, save, open, and export.
 // State and logic live in planner-core.js, the views in planner-views.js and planner-design.js.
 //
 // Rendering rule: text, number, and date fields only update the state and patch the parts that depend on them.
@@ -23,10 +23,10 @@
   // ───────────── skeleton
   root.innerHTML =
     '<div class="pl-app">' +
-    `<div class="pl-cmd" role="toolbar" aria-label="Workbook actions">${K.btn({ act: 'export', label: 'Export to Excel', icon: 'export', kind: 'subtle' })}${K.btn({ act: 'save', label: 'Save', icon: 'save', kind: 'subtle' })}${K.btn({ act: 'open', label: 'Open', icon: 'open', kind: 'subtle' })}` +
+    `<div class="pl-cmd" role="toolbar" aria-label="Planner actions">${K.btn({ act: 'export', label: 'Export to Excel', icon: 'export', kind: 'subtle' })}${K.btn({ act: 'save', label: 'Save', icon: 'save', kind: 'subtle' })}${K.btn({ act: 'open', label: 'Open', icon: 'open', kind: 'subtle' })}` +
     `<span class="pl-sep" role="separator" aria-orientation="vertical"></span>${K.btn({ act: 'example', label: 'Load example', icon: 'sample', kind: 'subtle', id: 'pl-b-example' })}${K.btn({ act: 'reset', label: 'Clear', icon: 'delete', kind: 'subtle', id: 'pl-b-reset' })}</div>` +
     '<div class="pl-msgslot" id="pl-msg"></div><section class="pl-ess" id="pl-ess" aria-label="Essentials"></section><div class="pl-tabswrap" id="pl-tabs"></div>' +
-    '<div class="pl-panel" id="pl-panel" role="tabpanel" tabindex="-1"><p class="pl-muted">Loading the workbook</p></div><div id="pl-network"></div><div class="pl-foot-bar" id="pl-foot"></div></div>' +
+    '<div class="pl-panel" id="pl-panel" role="tabpanel" tabindex="-1"><p class="pl-muted">Loading the planner</p></div><div id="pl-network"></div><div class="pl-foot-bar" id="pl-foot"></div></div>' +
     '<div class="pl-layer"><div class="pl-pop" id="pl-pop" role="listbox" hidden></div><div class="pl-tip" role="tooltip" hidden></div></div><input type="file" id="pl-file" accept=".json,application/json" hidden>';
   const el = id => document.getElementById(id);
   const ess = el('pl-ess'), tabsEl = el('pl-tabs'), panel = el('pl-panel'), foot = el('pl-foot'), msgEl = el('pl-msg');
@@ -57,7 +57,7 @@
     const names = S.current.map(c => `${esc(C.rname(c.id))}${c.id === S.baseline && S.current.length > 1 ? ' <span class="pl-tag">Price baseline</span>' : ''}${c.hub ? ' <span class="pl-tag">Hub</span>' : ''}`);
     return `<div class="pl-ess-h"><button type="button" class="pl-ess-t" data-act="essentials" aria-expanded="${open}" aria-controls="pl-ess-b">${icon(open ? 'down' : 'right')}<span>Essentials</span></button>` +
       `${open ? '' : `<p class="pl-sum">${sum}</p>`}</div>` +
-      `<div class="pl-ess-b" id="pl-ess-b"${open ? '' : ' hidden'}><dl>${kv('Workbook', esc(v(S.meta.name)))}${kv('Owner', esc(v(S.meta.owner)))}${kv('Assessment date', esc(v(S.meta.date)))}</dl>` +
+      `<div class="pl-ess-b" id="pl-ess-b"${open ? '' : ' hidden'}><dl>${kv('Plan', esc(v(S.meta.name)))}${kv('Owner', esc(v(S.meta.owner)))}${kv('Assessment date', esc(v(S.meta.date)))}</dl>` +
       `<dl>${kv('Current regions', names.length ? names.join(', ') : K.EM)}${kv('Regions to qualify', S.regions.length ? `${S.regions.length}${breakdown ? `<span class="pl-brk">${breakdown}</span>` : ''}` : K.EM)}` +
       `${kv('Selected for regional design', picked.length ? esc(picked.map(r => C.rname(r.id)).join(', ')) : 'None yet')}${kv('Azure data', `<span class="pl-blk">Services: ${availability}</span><span class="pl-blk">Prices: ${prices}</span><span class="pl-blk">Latency: ${lat}</span>`)}</dl></div>`;
   }
@@ -71,7 +71,7 @@
     const i = TABS.findIndex(t => t.id === ui.tab);
     const opts = TABS.map((t, j) => `<option value="${t.id}"${t.id === ui.tab ? ' selected' : ''}${prog[t.id] === 'lock' ? ' disabled' : ''}>${j + 1}. ${esc(t.label)} (${GLYPH[prog[t.id]][1]})</option>`).join('');
     const bar = TABS.map(t => `<i class="${t.id === ui.tab ? 'on' : prog[t.id]}"></i>`).join('');
-    return `<div class="pl-tabs" role="tablist" aria-label="Workbook steps">${group(1)}${group(2)}</div>` +
+    return `<div class="pl-tabs" role="tablist" aria-label="Planner steps">${group(1)}${group(2)}</div>` +
       `<div class="pl-stepm"><span class="pl-stepm-n" aria-hidden="true">${i + 1}/${TABS.length}</span><span class="pl-stepm-t" aria-hidden="true">${esc(TABS[i].label)}</span>${icon('down', { cls: 'pl-stepm-c' })}` +
       `<select id="pl-stepsel" aria-label="Step ${i + 1} of ${TABS.length}: ${esc(TABS[i].label)}. Choose a step">${opts}</select></div><div class="pl-stepbar" aria-hidden="true">${bar}</div>`;
   }
@@ -265,7 +265,7 @@
           C.loadPricing(C.S.baseline).then(ok => ok && lazyRender()); if (C.D.lat) C.loadCities().then(ok => ok && lazyRender()); render(); say('info', 'The example is loaded. Every value in it is illustrative.'); };
         if (isEmpty()) go(); else confirmThen('example', 'pl-b-example', 'Replace with the example?', go);
         return; }
-      case 'reset': confirmThen('reset', 'pl-b-reset', 'Clear everything?', () => { C.replace(C.blank()); ui.tab = 'scope'; ui.region = ''; ui.noteEdit = ''; history.replaceState(null, '', '#scope'); render(); say('info', 'The workbook is cleared.'); }); return;
+      case 'reset': confirmThen('reset', 'pl-b-reset', 'Clear everything?', () => { C.replace(C.blank()); ui.tab = 'scope'; ui.region = ''; ui.noteEdit = ''; history.replaceState(null, '', '#scope'); render(); say('info', 'The plan is cleared.'); }); return;
       default: return;
     }
     commit();
@@ -289,7 +289,7 @@
     if (e.target.id === 'pl-file') {
       const f = e.target.files[0];
       if (f) f.text().then(t => { const raw = JSON.parse(t); if (!raw || typeof raw !== 'object' || !Array.isArray(raw.regions)) throw new Error('not a workbook'); C.replace(raw); ui.region = ''; ui.noteEdit = ''; C.loadPricing(C.S.baseline).then(ok => ok && lazyRender()); if (C.D.lat) C.loadCities().then(ok => ok && lazyRender()); render(); say('success', `Opened ${f.name}.`); })
-        .catch(() => say('error', 'That file isn’t a workbook saved from this page.')).finally(() => { e.target.value = ''; });
+        .catch(() => say('error', 'That file isn’t a plan saved from this page.')).finally(() => { e.target.value = ''; });
       return;
     }
     const t = e.target.closest('[data-k]');

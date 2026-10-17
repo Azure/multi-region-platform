@@ -24,7 +24,7 @@ A region that meets all four checks is **qualified** for the defined workload re
 
 <!-- site-only:start -->
 > [!TIP]
-> Use the [region planning workbook](./region-planner.html) to answer the four checks for each candidate region, compare service availability, prices, and latency, and export the result to Excel.
+> Use the [Multi-region planner](./region-planner.html) to answer the four checks for each candidate region, compare service availability, prices, and latency, and export the result to Excel.
 <!-- site-only:end -->
 
 ## Assessment outcome

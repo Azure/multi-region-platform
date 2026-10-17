@@ -65,7 +65,7 @@ python3 render.py --pdf --exec
 
 The renderer writes `whitepaper/out/whitepaper.pdf`, `whitepaper/out-exec/executive.pdf`, and per-page PNG previews. Rendering is strict: it exits with status 1 when content overflows a page or a layout warning is raised, so `./build.sh pdf` stops there. Add `--no-strict` to `render.py` to look at a page that still overflows. The PDFs are tagged and carry bookmarks. The root `./build.sh pdf` target also copies the PDFs to `dist/` and produces self-contained HTML with `whitepaper/inline.py`.
 
-The edition date and the links to the website and the region planning workbook come from `shared/summary.json` (`{{EDITION}}` and `{{SITE_URL}}` in the page files). See [Shared data](authoring.md#shared-data).
+The edition date and the links to the website and the Multi-region planner come from `shared/summary.json` (`{{EDITION}}` and `{{SITE_URL}}` in the page files). See [Shared data](authoring.md#shared-data).
 
 ## Build the decks
 
@@ -140,8 +140,8 @@ Screenshots land in `site/tools/shots/`. Use `./build.sh check` for the cross-fo
 
 `docs/.nojekyll` is already present. Website links are relative, allowing a custom domain or subpath. Site builds preserve existing `docs/data/` snapshots and `docs/downloads/`; publish refreshed snapshots and PDFs explicitly when those inputs change.
 
-Article text, figures, tables, cards, and callouts share a responsive maximum width of 900 CSS pixels, controlled by `--article-w` in `site/assets/site.css`. The planning workbook retains its custom wider layout. These website styles do not control the generated PDF, Word, or PowerPoint layouts.
+Article text, figures, tables, cards, and callouts share a responsive maximum width of 900 CSS pixels, controlled by `--article-w` in `site/assets/site.css`. The Multi-region planner retains its custom wider layout. These website styles do not control the generated PDF, Word, or PowerPoint layouts.
 
-The shared page template includes a shield-shaped Privacy and project information link beside the theme toggle in the header on every generated page, including the planning workbook. The website-only page is authored in `site/privacy.html` and registered in `SITE_PAGES` in `site/build.py`; it covers Microsoft Clarity, support, contributing, and trademarks, and is not part of the guidance table of contents or document exports. The homepage also includes a short Clarity disclosure linking to this page. Disclosure wording does not implement consent controls or establish regulatory compliance.
+The shared page template includes a shield-shaped Privacy and project information link beside the theme toggle in the header on every generated page, including the Multi-region planner. The website-only page is authored in `site/privacy.html` and registered in `SITE_PAGES` in `site/build.py`; it covers Microsoft Clarity, support, contributing, and trademarks, and is not part of the guidance table of contents or document exports. The homepage also includes a short Clarity disclosure linking to this page. Disclosure wording does not implement consent controls or establish regulatory compliance.
 
 The site is desktop-first but remains usable below 960 px: pages use one column, the table of contents moves behind a menu, wide tables scroll, and figures shrink with an expand option.
