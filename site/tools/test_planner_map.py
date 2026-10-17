@@ -38,7 +38,8 @@ def main():
             page = browser.new_page(viewport={"width": 1440, "height": 1100})
             errors, external = [], []
             page.on("pageerror", lambda e: errors.append(str(e)))
-            page.on("request", lambda r: external.append(r.url) if r.url.startswith("http") and not r.url.startswith(f"http://127.0.0.1:{server.server_port}/") else None)
+            # the site template's analytics tag is not the map's doing; the map itself must load nothing from outside
+            page.on("request", lambda r: external.append(r.url) if r.url.startswith("http") and not r.url.startswith(f"http://127.0.0.1:{server.server_port}/") and "clarity.ms" not in r.url else None)
             page.goto(url)
             page.wait_for_selector('#planner[data-ready="1"]')
             scenario(page)
@@ -47,7 +48,19 @@ def main():
             assert page.locator(".pl-map-value").count() == 10
             assert page.locator("#pl-latency-map table").count() == 0
             assert page.locator(".pl-map-node.peering").count() == 2
-            assert page.locator(".pl-map-node.candidate title").all_text_contents()[0].endswith("Sweden geography · approximate metro")
+            assert page.locator(".pl-map-node.candidate title").all_text_contents()[0].endswith("Europe geography · approximate metro")
+            # Layout: every name fits its box, no two labels overlap, and every value sits on or right beside its line.
+            layout = page.evaluate("""() => {
+              const r = e => e.getBoundingClientRect();
+              const names = [...document.querySelectorAll('.pl-map-node')].map(g => [r(g.querySelector('text')), r(g.querySelector('rect.pl-map-name'))]);
+              const boxes = [...document.querySelectorAll('.pl-map-node rect.pl-map-name, .pl-map-value rect')].map(r);
+              let overlaps = 0;
+              for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {
+                const a = boxes[i], b = boxes[j]; if (a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top) overlaps++; }
+              const leaders = [...document.querySelectorAll('.pl-map-value line')].map(l => Math.hypot(l.x2.baseVal.value - l.x1.baseVal.value, l.y2.baseVal.value - l.y1.baseVal.value));
+              return { spill: names.filter(([t, b]) => t.right > b.right + 0.5).length, overlaps, leader: Math.max(0, ...leaders) };
+            }""")
+            assert layout["spill"] == 0 and layout["overlaps"] == 0 and layout["leader"] <= 40, layout
             expected = page.evaluate("MRP.core.regionLatency('westeurope','swedencentral').ms")
             assert any(f"West Europe → Sweden Central: {expected} ms" in t
                 for t in page.locator(".pl-map-value title").all_text_contents())

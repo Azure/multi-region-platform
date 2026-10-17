@@ -95,31 +95,94 @@
     return `<button type="button" class="pl-btn subtle sm" data-act="note" data-arg="${rowId}" data-tip="Add note">${icon('note')}<span>Add note</span></button>`;
   }
 
+  // Phones show one region at a time: a switcher above the grid, and cells marked with the region they belong to.
+  function mRegion(rs) {
+    if (!rs.some(r => r.id === ui.mregion)) ui.mregion = rs[0] ? rs[0].id : '';
+    return ui.mregion;
+  }
+  function mSwitch(rs, mark) {
+    if (rs.length < 2) return '';
+    const on = mRegion(rs);
+    return `<div class="pl-mreg" role="group" aria-label="Region shown">${rs.map(r => `<button type="button" class="pl-mreg-b${r.id === on ? ' on' : ''}" data-act="mregion" data-arg="${esc(r.id)}" aria-pressed="${r.id === on}">${mark ? status(mark(r)) : ''}<span>${esc(C.rname(r.id))}</span></button>`).join('')}</div>`;
+  }
+  const mAttr = r => ` data-rid="${esc(r.id)}"${r.id === ui.mregion ? ' data-m="1"' : ''}`;
+  // Regions folded away because checks 1 to 3 ruled them out, with the switch that shows them.
+  function foldNote() {
+    const S = C.S, out = S.regions.filter(C.ruledOut);
+    if (!out.length) return '';
+    const names = C.list(out.map(r => `${C.rname(r.id)} (${C.outcome(r).toLowerCase()})`));
+    return `<div class="pl-fold">${status('neutral')}<p>${S.ui.showOut ? `Showing ${out.length === 1 ? 'the region' : 'the regions'} ruled out by checks 1 to 3: ${esc(names)}.` : `Ruled out by checks 1 to 3 and folded here: ${esc(names)}. Still in the record and the export.`}</p>` +
+      `${K.btn({ act: 'show-out', label: S.ui.showOut ? 'Hide' : 'Show', kind: 'subtle', cls: 'sm' })}</div>`;
+  }
+
+  function checksGrid(chs, rs, o = {}) {
+    mRegion(rs);
+    const thead = `<thead><tr><th scope="col" class="pl-cg-q">Question</th>${rs.map(r => `<th scope="col" class="pl-cg-r"${mAttr(r)}><span class="pl-cg-name">${esc(C.rname(r.id))}</span>${outcomeBadge(C.outcome(r))}</th>`).join('')}</tr></thead>`;
+    const cell = (row, r) => {
+      const v = r.checks[row.id] || '', label = `${row.id} ${row.label} ${C.rname(r.id)}`;
+      const sug = o.suggest && !v ? C.suggestAnswer(row.id, r) : '';
+      const ctl = sug
+        ? `<div class="pl-sugw">${K.sel(`reg/${r.id}/check/${row.id}`, v, row.opts, { cls: 'is-sug', empty: 'Suggested: ' + sug, label: `${label}. Suggested from the evidence: ${sug}` })}` +
+          `<button type="button" class="pl-btn primary sm" data-act="accept" data-arg="${esc(r.id)}|${row.id}" aria-label="Accept ${esc(sug)} for ${row.id}, ${esc(C.rname(r.id))}">Accept</button></div>`
+        : K.sel(`reg/${r.id}/check/${row.id}`, v, row.opts, { tone: row.neutral ? '' : TONE[v], label });
+      return `<td data-r="${esc(C.rname(r.id))}"${mAttr(r)}>${ctl}${row.ev ? evChip(row.ev, r) : ''}</td>`;
+    };
+    const body = chs.map(ch => `<tbody class="pl-cg-b"><tr class="pl-band"><th scope="row" class="pl-cg-q"><div class="pl-band-q"><span class="pl-band-n">${ch.n}</span><span class="pl-band-t"><b>${esc(ch.title)}</b><span>${esc(ch.q)}</span><a class="pl-link" href="${ch.href}">Guidance${icon('arrowright')}</a></span></div></th>` +
+      rs.map(r => { const st = C.checkState(ch, r), name = `Check ${ch.n} for ${C.rname(r.id)}: ${ROLL_TEXT[st]}`;
+        return `<td class="pl-roll" data-r="${esc(C.rname(r.id))}"${mAttr(r)}><span ${nameTip(name)} aria-label="${esc(name)}" role="img">${status(ROLL_KIND[st])}</span></td>`; }).join('') + '</tr>' +
+      ch.rows.map(row => `<tr><th scope="row" class="pl-cg-q"><div class="pl-qt"><span class="pl-id">${row.id}</span><span>${esc(row.label)}</span></div><div class="pl-note-cell" data-note-cell="${row.id}">${noteCell(row.id)}</div></th>` +
+        rs.map(r => cell(row, r)).join('') + '</tr>').join('') + '</tbody>').join('');
+    return mSwitch(rs, r => ROLL_KIND[C.checkState(chs[chs.length - 1], r)]) + `<div class="pl-cgw" id="pl-cgw" style="--n:${rs.length}"><table class="pl-cg">${thead}${body}</table></div>`;
+  }
+
   function vChecks() {
     const S = C.S, rs = S.regions;
-    if (!rs.length) return K.head('Checks', 'Four checks for each region.') + K.empty('checklist', 'Add the regions to qualify first.', 'scope', 'Go to Scope');
-    const thead = `<thead><tr><th scope="col" class="pl-cg-q">Question</th>${rs.map(r => `<th scope="col" class="pl-cg-r"><span class="pl-cg-name">${esc(C.rname(r.id))}</span>${outcomeBadge(C.outcome(r))}</th>`).join('')}</tr></thead>`;
-    const body = CHECKS.map(ch => `<tbody class="pl-cg-b"><tr class="pl-band"><th scope="row" class="pl-cg-q"><div class="pl-band-q"><span class="pl-band-n">${ch.n}</span><span class="pl-band-t"><b>${esc(ch.title)}</b><span>${esc(ch.q)}</span><a class="pl-link" href="${ch.href}">Guidance${icon('arrowright')}</a></span></div></th>` +
-      rs.map(r => { const st = C.checkState(ch, r), name = `Check ${ch.n} for ${C.rname(r.id)}: ${ROLL_TEXT[st]}`;
-        return `<td class="pl-roll" data-r="${esc(C.rname(r.id))}"><span ${nameTip(name)} aria-label="${esc(name)}" role="img">${status(ROLL_KIND[st])}</span></td>`; }).join('') + '</tr>' +
-      ch.rows.map(row => `<tr><th scope="row" class="pl-cg-q"><div class="pl-qt"><span class="pl-id">${row.id}</span><span>${esc(row.label)}</span></div><div class="pl-note-cell" data-note-cell="${row.id}">${noteCell(row.id)}</div></th>` +
-        rs.map(r => { const v = r.checks[row.id] || '';
-          return `<td data-r="${esc(C.rname(r.id))}">${K.sel(`reg/${r.id}/check/${row.id}`, v, row.opts, { tone: row.neutral ? '' : TONE[v], label: `${row.id} ${row.label} ${C.rname(r.id)}` })}${row.ev ? evChip(row.ev, r) : ''}</td>`; }).join('') + '</tr>').join('') + '</tbody>').join('');
-    const grid = `<div class="pl-cgw" id="pl-cgw" style="--n:${rs.length}"><table class="pl-cg">${thead}${body}</table></div>`;
+    const h = K.head('Checks 1 to 3', 'Business and geography, data and compliance, and workload requirements for each region. They need no Azure data.');
+    if (!rs.length) return h + K.empty('checklist', 'Add the regions to qualify first.', 'scope', 'Go to Scope');
+    const out = rs.filter(C.ruledOut);
+    return h + checksGrid(CHECKS.slice(0, 3), rs) +
+      (out.length ? K.mb('info', `${esc(C.list(out.map(r => C.rname(r.id))))} ${out.length > 1 ? 'are' : 'is'} ruled out, so Services, Latency, Pricing, and check 4 fold ${out.length > 1 ? 'them' : 'it'} away.`) : '');
+  }
 
-    const cards = rs.map(r => { const s = C.suggest(r), ok = C.selectable(r), id = 'o-' + K.slug(r.id), o = C.outcome(r);
-      return `<article class="pl-oc k-${OUTCOME_ICON[o] || 'neutral'}${r.selected && ok ? ' sel' : ''}"><h4>${esc(C.rname(r.id))}</h4>${outcomeBadge(s.o, true)}<p class="pl-oc-why">${esc(s.why)}</p>` +
-        `<div class="pl-fld"><label for="${id}-o">Outcome</label>${K.sel(`reg/${r.id}/outcome`, r.outcome, O.outcome, { id: id + '-o', empty: 'As suggested', label: 'Outcome for ' + C.rname(r.id) })}${r.outcome && r.outcome !== s.o ? `<p class="pl-hint">Set by hand. The suggestion is ${esc(s.o)}.</p>` : ''}</div>` +
-        `<div class="pl-fld"><label for="${id}-c">Conditions and open validations</label>${K.area(`reg/${r.id}/conditions`, r.conditions, { id: id + '-c', ph: 'What must be resolved, and by whom', rows: 3 })}</div>` +
-        `<div class="pl-fld2"><div class="pl-fld"><label for="${id}-w">Owner</label>${K.inp(`reg/${r.id}/owner`, r.owner, { id: id + '-w', ph: 'Team or person' })}</div>` +
-        `<div class="pl-fld"><label for="${id}-r">Review date</label>${K.inp(`reg/${r.id}/review`, r.review, { id: id + '-r', type: 'date' })}</div></div>` +
-        `<label class="pl-pick${ok ? '' : ' off'}${r.selected && ok ? ' on' : ''}"><input type="checkbox" data-k="reg/${esc(r.id)}/selected"${r.selected && ok ? ' checked' : ''}${ok ? '' : ' disabled'}>` +
-        `<span class="pl-pick-t"><b>Select for regional design</b><span>${ok ? 'Records the regional design in the next step.' : `Needs a Qualified or Conditional outcome. Now: ${esc(o)}.`}</span></span></label></article>`; }).join('');
+  // The outcome of each region as one table: a column for each region, a row for each decision.
+  function outcomeTable(rs) {
+    const row = (label, f, cls) => `<tr${cls ? ` class="${cls}"` : ''}><th scope="row">${label}</th>${rs.map(r => `<td${mAttr(r)}${cls === 'pl-ot-pick' && r.selected && C.selectable(r) ? ' class="on"' : ''}>${f(r, 'o-' + K.slug(r.id))}</td>`).join('')}</tr>`;
+    const head = `<thead><tr><th scope="col"><span class="pl-sr">Decision</span></th>${rs.map(r => `<th scope="col"${mAttr(r)}>${esc(C.rname(r.id))}</th>`).join('')}</tr></thead>`;
+    const body = [
+      row('Suggested', r => { const s = C.suggest(r); return `${outcomeBadge(s.o, true)}<p class="pl-oc-why">${esc(s.why)}</p>`; }),
+      row('Outcome', (r, id) => { const s = C.suggest(r); return `${K.sel(`reg/${r.id}/outcome`, r.outcome, O.outcome, { id: id + '-o', empty: 'As suggested', label: 'Outcome for ' + C.rname(r.id) })}${r.outcome && r.outcome !== s.o ? `<p class="pl-hint">Set by hand. The suggestion is ${esc(s.o)}.</p>` : ''}`; }),
+      row('Conditions and open validations', (r, id) => K.area(`reg/${r.id}/conditions`, r.conditions, { id: id + '-c', ph: 'What must be resolved, and by whom', rows: 3, label: 'Conditions and open validations for ' + C.rname(r.id) })),
+      row('Owner', (r, id) => K.inp(`reg/${r.id}/owner`, r.owner, { id: id + '-w', ph: 'Team or person', label: 'Owner for ' + C.rname(r.id) })),
+      row('Review date', (r, id) => K.inp(`reg/${r.id}/review`, r.review, { id: id + '-r', type: 'date', label: 'Review date for ' + C.rname(r.id) })),
+      row('Regional design', r => { const ok = C.selectable(r), o = C.outcome(r);
+        return `<label class="pl-pick${ok ? '' : ' off'}${r.selected && ok ? ' on' : ''}"><input type="checkbox" data-k="reg/${esc(r.id)}/selected"${r.selected && ok ? ' checked' : ''}${ok ? '' : ' disabled'} aria-label="Select ${esc(C.rname(r.id))} for regional design">` +
+          `<span class="pl-pick-t"><b>Select</b><span>${ok ? 'Records the regional design in the next step.' : `Needs a Qualified or Conditional outcome. Now: ${esc(o)}.`}</span></span></label>`; }, 'pl-ot-pick'),
+    ].join('');
+    return `<div class="pl-otw" style="--n:${rs.length}"><table class="pl-ot">${head}<tbody>${body}</tbody></table></div>`;
+  }
+
+  function vCapability() {
+    const S = C.S, rs = C.active();
+    const h = K.head('Check 4 and outcome', 'Regional capability and availability for each region, with the evidence from the other tabs, and the outcome.');
+    if (!S.regions.length) return h + K.empty('checklist', 'Add the regions to qualify first.', 'scope', 'Go to Scope');
+    if (!rs.length) return h + foldNote() + K.empty('checklist', 'Every region is ruled out by checks 1 to 3.', 'checks', 'Go to checks 1 to 3');
+    const sug = C.suggestions(rs);
+    const by = rs.map(r => [r, sug.filter(x => x.r === r).length]).filter(x => x[1]);
+    const bar = sug.length ? K.mb('info', `<b>${K.plural(sug.length, 'answer')} can come from the evidence</b> on Services, Latency, and the region data: ${esc(C.list(by.map(([r, n]) => `${C.rname(r.id)} ${n}`)))}. Nothing is saved until you accept.`,
+      K.btn({ act: 'accept-all', label: sug.length > 1 ? `Accept ${sug.length} suggestions` : 'Accept the suggestion', kind: 'primary', cls: 'sm' })) : '';
     const picked = C.selected();
     const msg = picked.length ? K.mb('success', `${esc(C.list(picked.map(r => C.rname(r.id))))} ${picked.length > 1 ? 'are' : 'is'} selected for regional design.`)
       : K.mb('info', 'Select at least one qualified or conditional region to continue to the regional design.');
-    return K.head('Checks', 'Four checks for each region. Checks 1 and 2 need no technical work, so answer them first.') + grid +
-      K.section('Outcome', `<div class="pl-ocs">${cards}</div><div class="pl-after">${msg}</div>`, { desc: 'For the defined workload requirements, as of the assessment date.', link: ['regional-qualification.html#assessment-outcome', 'Guidance'] });
+    return h + foldNote() + bar + checksGrid([CHECKS[3]], rs, { suggest: true }) +
+      K.section('Outcome', mSwitch(rs, r => OUTCOME_ICON[C.outcome(r)] || 'neutral') + outcomeTable(rs) + `<div class="pl-after">${msg}</div>`, { desc: 'For the defined workload requirements, as of the assessment date.', link: ['regional-qualification.html#assessment-outcome', 'Guidance'] });
+  }
+
+  // One summary tile for every evidence tab: region, status word with its glyph, the headline number, one line of context.
+  const ARROW = { lo: '▼', hi: '▲' };
+  function tile(name, kind, word, value, unit, cap) {
+    const g = ARROW[kind] ? `<span class="pl-arr" aria-hidden="true">${ARROW[kind]}</span>` : status(kind);
+    return `<div class="pl-tile"><p class="pl-tile-h"><span class="pl-tile-l">${esc(name)}</span><span class="pl-tile-s k-${kind}">${g}<span>${esc(word)}</span></span></p>` +
+      `<p class="pl-tile-v">${value}${unit ? ` <span>${esc(unit)}</span>` : ''}</p>${cap ? `<p class="pl-cap">${esc(cap)}</p>` : ''}</div>`;
   }
 
   // ───────────── Services
@@ -133,28 +196,30 @@
   }
   function productCell(s) {
     const prods = D.svc[s.service] && D.svc[s.service].products;
+    // Narrowing to a product and SKU is optional, so an unnarrowed row shows a link, not two empty drop-downs.
+    if (!s.product && !ui.narrow[s.id]) return prods && Object.keys(prods).length && D.hasAvailability
+      ? `<button type="button" class="pl-linkbtn" data-act="narrow" data-arg="${esc(s.id)}" aria-label="Narrow ${esc(s.service)} to a product and SKU">Narrow</button>` : `<span class="pl-muted">${K.EM}</span>`;
     const cb = K.combo('prod-' + s.id, { mode: 'value', clearable: true, ph: 'All products', label: 'Product of ' + s.service, display: () => s.product || '',
       disabled: !D.hasAvailability || !prods || !Object.keys(prods).length,
-      items: () => Object.keys(prods || {}).sort().map(p => ({ value: p, label: p })), onPick: it => { s.product = it.value; s.sku = ''; }, onClear: () => { s.product = ''; s.sku = ''; K.hooks.commit(); } });
+      items: () => Object.keys(prods || {}).sort().map(p => ({ value: p, label: p })), onPick: it => { s.product = it.value; s.sku = ''; }, onClear: () => { s.product = ''; s.sku = ''; ui.narrow[s.id] = true; K.hooks.commit(); } });
     return s.product ? `<span class="pl-prtip" data-tip="${esc(s.product)}">${cb}</span>` : cb;
   }
   function skuCell(s) {
+    if (!s.product && !ui.narrow[s.id]) return '';
     const product = D.svc[s.service] && D.svc[s.service].products[s.product], skus = product && product.skus;
     return K.combo('sku-' + s.id, { mode: 'value', clearable: true, ph: s.product ? 'All SKUs' : 'Select a product first', label: 'SKU of ' + s.service,
       disabled: !skus || !Object.keys(skus).length, display: () => s.sku || '',
       items: () => Object.keys(skus || {}).sort().map(sku => ({ value: sku, label: sku })), onPick: it => { s.sku = it.value; },
       onClear: () => { s.sku = ''; K.hooks.commit(); } });
   }
-  const TILE_ICON = { ok: 'success', warn: 'warning', bad: 'error' };
   function svcTiles() {
-    const S = C.S;
-    if (!D.hasAvailability || !C.named().length || !S.regions.length) return '';
-    return `<div class="pl-tiles">${S.regions.map(r => { const a = C.availSummary(r.id), pct = a.total ? Math.round(a.ok / a.total * 100) : 0;
-      const miss = a.missing.length ? `Missing: ${a.missing.slice(0, 3).join(', ')}${a.missing.length > 3 ? ` +${a.missing.length - 3} more` : ''}` : '';
-      // The tile takes the worst state in its column: any service that is not available makes it red, an unknown one makes it amber.
-      const tone = a.ok === a.total ? 'ok' : a.missing.length ? 'bad' : 'warn';
-      return `<div class="pl-tile pl-tn s-${tone}"><p class="pl-tile-l pl-tile-s">${status(TILE_ICON[tone])}<span>${esc(C.rname(r.id))}</span></p><p class="pl-tile-v">${a.ok} of ${a.total} <span>available</span></p>` +
-        `<span class="pl-meter" role="img" aria-label="${a.ok} of ${a.total} services available in ${esc(C.rname(r.id))}"><i style="width:${pct}%"></i></span>${miss ? `<p class="pl-cap">${esc(miss)}</p>` : a.none ? `<p class="pl-cap">${a.none} with no data</p>` : ''}</div>`; }).join('')}</div>`;
+    const rs = C.active();
+    if (!D.hasAvailability || !C.named().length || !rs.length) return '';
+    return `<div class="pl-tiles">${rs.map(r => { const a = C.availSummary(r.id);
+      const miss = a.missing.length ? `Missing: ${a.missing.slice(0, 3).join(', ')}${a.missing.length > 3 ? ` +${a.missing.length - 3} more` : ''}` : a.none ? `${a.none} with no data` : '';
+      const z = C.info(r.id).zones;
+      const [kind, word] = a.ok === a.total ? ['success', 'All available'] : a.missing.length ? ['error', 'Gaps'] : ['warning', 'Check'];
+      return tile(C.rname(r.id), kind, word, `${a.ok} of ${a.total}`, 'available', miss || (z === true ? 'Zones: yes' : z === false ? 'Zones: no' : '')); }).join('')}</div>`;
   }
   function vServices() {
     const S = C.S, cs = C.cols(), full = S.services.length >= MAX_SERVICES;
@@ -171,7 +236,7 @@
       : K.empty('list', 'No services listed yet. Add the services the workloads expect to use.');
     const date = D.availabilityMeta && K.fmtDate(D.availabilityMeta.generated);
     const note = K.mb('info', 'The lists of available services, products, SKUs, models, and features need fuller validation directly in your own tenants and subscriptions. Work with your Microsoft account team or Microsoft Support to confirm them with confidence. Use <a href="https://azure.microsoft.com/explore/global-infrastructure/products-by-region/table" target="_blank" rel="noopener">Products available by region</a> as an additional reference.');
-    return K.head('Services', 'The services the workloads expect to use, and where each one is available.') + note +
+    return K.head('Services', 'The services the workloads expect to use, and where each one is available.') + foldNote() + note +
       (!D.hasAvailability ? K.mb('warning', esc(D.asFile ? AS_FILE : D.availabilityError || 'No service availability catalog is published. Import the availability CSV first.')) : '') +
       `<div class="pl-bar">${add}${S.services.length ? '' : K.btn({ act: 'add-starter', label: 'Add common platform services', kind: 'secondary' })}<span class="pl-count">${S.services.length} of ${MAX_SERVICES}</span>${full ? '<span class="pl-cap">Remove one to add another.</span>' : ''}</div>` +
       svcTiles() + (cs.length ? '' : '<p class="pl-muted">Add regions in Scope to see a column for each one.</p>') + table +
@@ -191,22 +256,24 @@
   }
   function priceTiles() {
     const S = C.S, base = C.rname(S.baseline);
-    return S.regions.map(r => { const p = C.priceSummary(r.id), v = p.value;
+    return C.active().map(r => { const p = C.priceSummary(r.id), v = p.value;
       const cap = !D.hasCatalog ? 'No price snapshot' : v === null ? (S.ui.weighted && p.avg !== null ? 'Enter spend shares to weight the average' : 'No comparable prices') : `${S.ui.weighted ? 'spend-weighted average' : 'average'} of ${K.plural(p.n, 'service')} vs ${base}`;
-      return `<div class="pl-tile pl-tn ${C.priceTone(v)}"><p class="pl-tile-l">${esc(C.rname(r.id))}</p><p class="pl-tile-v">${v === null ? K.EM : C.fmtPct(v)}</p>${divBar(v)}<p class="pl-cap">${esc(cap)}</p></div>`; }).join('');
+      const t = C.priceTone(v), [kind, word] = t === 'n' ? ['neutral', 'No data'] : t === 'z' ? ['neutral', 'Same'] : v < 0 ? ['lo', 'Lower'] : ['hi', 'Higher'];
+      return tile(C.rname(r.id), kind, word, v === null ? K.EM : C.fmtPct(v), '', cap); }).join('');
   }
   function priceFoot() {
     const S = C.S, rows = C.priceRows();
     return `<tr><th scope="row">${S.ui.weighted ? 'Weighted average' : `Average`}</th>${S.ui.weighted ? '<td></td>' : ''}` +
-      S.regions.map(r => { const v = C.priceSummary(r.id).value; return `<td><div class="pl-pc"><span class="pl-pc-v">${v === null ? K.EM : C.fmtPct(v)}</span>${divBar(v)}</div></td>`; }).join('') + '</tr>';
+      C.active().map(r => { const v = C.priceSummary(r.id).value; return `<td><div class="pl-pc"><span class="pl-pc-v">${v === null ? K.EM : C.fmtPct(v)}</span>${divBar(v)}</div></td>`; }).join('') + '</tr>';
   }
   function vPricing() {
-    const S = C.S, rs = S.regions, rows = C.priceRows();
+    const S = C.S, rs = C.active(), rows = C.priceRows();
     const note = K.mb('info', 'These are Azure retail pay-as-you-go list prices in USD. They don’t include your negotiated discounts, reservations, savings plans, Azure Hybrid Benefit, or other incentives, so the prices you pay can differ.');
-    const h = K.head('Pricing', 'List-price difference between the current region and each region you are qualifying.') + note +
+    const h = K.head('Pricing', 'List-price difference between the current region and each region you are qualifying.') + foldNote() + note +
       (D.mappingError ? K.mb('warning', esc(D.mappingError)) : '');
     if (!S.current.length) return h + K.empty('tag', 'Add a current region to compare prices with.', 'scope');
-    if (!rs.length) return h + K.empty('tag', 'Add the regions to qualify first.', 'scope');
+    if (!S.regions.length) return h + K.empty('tag', 'Add the regions to qualify first.', 'scope');
+    if (!rs.length) return h + K.empty('tag', 'Every region is ruled out by checks 1 to 3.', 'checks', 'Go to checks 1 to 3');
     if (!rows.length) return h + snapshotBar() + K.empty('list', 'Add the services the workloads expect to use.', 'services', 'Go to Services');
     const base = C.rname(S.baseline), w = S.ui.weighted;
     const body = rows.map(s => `<tr><th scope="row">${esc(s.service)}${s.service !== s.availabilityService || s.pricingNote ? `<span class="pl-cap">${esc(s.pricingNote || 'Selected: ' + s.availabilityService)}</span>` : ''}</th>` +
@@ -260,14 +327,15 @@
   }
   function vBetween() {
     const S = C.S;
-    if (!S.current.length || !S.regions.length) return '<p class="pl-muted">Add current regions and regions to qualify in Scope to compare them.</p>';
-    const grid = S.current.map(f => S.regions.map(t => C.regionLatency(f.id, t.id)));
-    const rows = S.current.map((f, i) => `<tr><th scope="row"><b>${esc(C.rname(f.id))}</b></th>` + S.regions.map((t, j) => {
+    const rs = C.active();
+    if (!S.current.length || !rs.length) return '<p class="pl-muted">Add current regions and regions to qualify in Scope to compare them.</p>';
+    const grid = S.current.map(f => rs.map(t => C.regionLatency(f.id, t.id)));
+    const rows = S.current.map((f, i) => `<tr><th scope="row"><b>${esc(C.rname(f.id))}</b></th>` + rs.map((t, j) => {
       const l = grid[i][j];
       if (!l) return `<td><span class="pl-muted">No data</span></td>`;
       const tipT = `${l.ms} ms, ${l.src === 'm' ? 'measured' : 'estimated'}\n${C.srcText(l.src)}\n${C.rname(f.id)} to ${C.rname(t.id)}`;
       return `<td><div class="pl-bc" ${nameTip(tipT)} aria-label="${esc(`${C.rname(f.id)} to ${C.rname(t.id)}: ${l.ms} milliseconds, ${l.src === 'm' ? 'measured' : 'estimated'}`)}"><span class="pl-bc-v pl-n">${l.ms} ms</span>${dot(l.src)}${latBar(l.ms)}</div></td>`; }).join('') + '</tr>').join('');
-    return K.scroll(`<table class="pl-dl pl-mx"><thead><tr><th scope="col">From</th>${S.regions.map(r => `<th scope="col">${esc(C.rname(r.id))}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>`, { label: 'Latency between regions' }) + latLegend() +
+    return K.scroll(`<table class="pl-dl pl-mx"><thead><tr><th scope="col">From</th>${rs.map(r => `<th scope="col">${esc(C.rname(r.id))}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>`, { label: 'Latency between regions' }) + latLegend() +
       `<p class="pl-fn pl-legend"><span class="pl-lg">${dot('m')}Measured: Microsoft published median${D.lat && D.lat.dataset ? ', dataset of ' + esc(D.lat.dataset) : ''}</span><span class="pl-lg">${dot('e')}Estimated from distance</span></p>`;
   }
 
@@ -315,6 +383,15 @@
       `<td class="pl-pl">${peer}</td><td class="pl-tg">${K.inp(`site/${s.id}/target`, s.target, { type: 'number', min: 0, label: 'Target in milliseconds for ' + name })}</td>` +
       cs.map(x => siteCell(s, x.id)).join('') + `<td class="pl-x">${K.iconBtn('rm-site', s.id, 'close', 'Remove ' + name)}</td></tr>`;
   }
+  function latTiles() {
+    const S = C.S, rs = C.active();
+    if (!S.sites.length || !rs.length || !S.sites.some(s => C.num(s.target) !== null)) return '';
+    return `<div class="pl-tiles">${rs.map(r => { const l = C.latencySummary(r.id), w = C.latencyWorst(r.id);
+      if (!l.total) return tile(C.rname(r.id), 'neutral', 'No data', K.EM, '', 'No values for the locations with a target');
+      const ok = l.within === l.total;
+      const cap = w ? `${ok ? 'closest margin' : 'worst'} ${w.name}, ${w.ms} of ${w.target} ms` : '';
+      return tile(C.rname(r.id), ok ? 'success' : 'error', ok ? 'Within target' : 'Over target', `${l.within} of ${l.total}`, 'within target', cap); }).join('')}</div>`;
+  }
   function vLatency() {
     const S = C.S, cs = C.cols();
     if (!cs.length) return K.head('Latency', 'Round-trip latency from your locations and current regions to each region, in milliseconds.') + K.empty('clock', 'Add your current regions and the regions to qualify first.', 'scope');
@@ -325,19 +402,20 @@
       items: () => D.cities ? D.cities.cities.filter(c => !usedCities().has(D.cities.key(c))).map(c => ({ value: D.cities.key(c), label: c.n, sub: `${c.a || c.n}, ${c.c}`, group: c.c, tag: KIND[c.k] || '', city: c })) : [],
       onPick: it => { S.sites.push({ id: C.uid('s'), kind: 'city', city: { ...it.city }, peering: '', target: '', edits: {} }); },
       onFree: L && D.citiesState === 'ready' ? null : (t => { S.sites.push({ id: C.uid('s'), kind: 'city', city: { n: t, a: t, c: '', cc: '', k: 'city' }, peering: '', target: '', edits: {} }); }) });
-    const addPeer = K.combo('peer', { mode: 'add', ph: 'Add a peering location', label: 'Add a peering location',
+    const addPeer = K.combo('peer', { mode: 'add', showAll: true, ph: 'Add a peering location', label: 'Add a peering location',
       items: () => L ? L.peering.filter(p => !usedPeering().has(p.name)).map(p => ({ value: p.name, label: p.name, sub: [p.city, p.country].filter(Boolean).join(', ') })) : [],
       onPick: it => { S.sites.push({ id: C.uid('s'), kind: 'peering', city: null, peering: it.value, target: '', edits: {} }); },
       onFree: L ? null : (t => { if (!usedPeering().has(t)) S.sites.push({ id: C.uid('s'), kind: 'peering', city: null, peering: t, target: '', edits: {} }); }) });
     const table = S.sites.length ? K.scroll(`<table class="pl-dl pl-mx pl-lt"><thead><tr><th scope="col">Location</th><th scope="col">Peering location</th><th scope="col">Target (ms)</th>` +
       cs.map(x => `<th scope="col" class="${x.current ? 'is-cur' : ''}">${esc(C.rname(x.id))}${x.current ? '<span class="pl-cap">Current region</span>' : ''}</th>`).join('') + `<th scope="col" aria-label="Remove"></th></tr></thead><tbody>${S.sites.map(s => siteRow(s, cs)).join('')}</tbody></table>`, { label: 'Latency from your locations' })
       : '<p class="pl-muted">No locations yet. Add a city, or a peering location where your circuit lands.</p>';
-    return K.head('Latency', 'Round-trip latency from your locations and current regions to each region, in milliseconds.') +
+    return K.head('Latency', 'Round-trip latency from your locations and current regions to each region, in milliseconds.') + foldNote() +
       (L ? '' : K.mb('warning', esc(D.asFile ? AS_FILE : 'No latency data is published with this site. Run site/tools/refresh_latency.py to create it.'))) +
       K.section('How the path is built', pathDiagram()) +
       K.section('Between regions', vBetween()) +
-      K.section('From your locations', `<div class="pl-bar">${addCity}${addPeer}</div>${table}` +
-        (S.sites.length ? latLegend() : '') +
+      K.section('From your locations', `${latTiles()}<div class="pl-bar">${addCity}${addPeer}</div>${table}` +
+        // The scale legend is drawn once on the tab: under the first table that has bars.
+        (S.sites.length && !(S.current.length && C.active().length) ? latLegend() : '') +
         `<p class="pl-fn pl-legend"><span class="pl-lg">${dot('m')}Measured</span><span class="pl-lg">${dot('e')}Estimated</span><span class="pl-lg"><span class="pl-tag brand">Edited</span>A value you typed over the calculated one</span></p>` +
         (S.sites.some(x => x.kind === 'city') && L ? '<p class="pl-fn">Under a value, “3 + 17” shows the two legs it adds up to: the first number is from your location to its ExpressRoute peering location (provider network), the second is from the peering location to the Azure region (Microsoft backbone). Hover over it to see both legs named.</p>' : '') +
         K.mb('info', `Region-to-region values are Microsoft’s published medians${L && L.dataset ? ` (dataset of ${esc(L.dataset)})` : ''}. Values that involve a peering location or a city are estimates based on those medians and on distance. Measure on the real path before you commit. ` +
@@ -345,6 +423,6 @@
       M.latencyMap.view();
   }
 
-  M.views = Object.assign(M.views || {}, { scope: vScope, checks: vChecks, services: vServices, pricing: vPricing, latency: vLatency });
-  M.viewTools = { noteCell, patchPricing, patchLatency, MAX_SERVICES };
+  M.views = Object.assign(M.views || {}, { scope: vScope, checks: vChecks, capability: vCapability, services: vServices, pricing: vPricing, latency: vLatency });
+  M.viewTools = { noteCell, patchPricing, patchLatency, MAX_SERVICES, mSwitch, mRegion, foldNote };
 })(window);

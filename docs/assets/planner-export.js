@@ -161,10 +161,10 @@
     PROFILE_QUESTIONS.forEach(q => dLine(q.label, x => x.d[q.id], ['Yes', 'No']));
     dLine('Connectivity profile', x => x.e.profile, PROFILES.map(p => p.id));
     group2('Hub implementation and regional connectivity');
-    dLine('Geographic hub the region uses', x => x.e.hub ? C.rname(x.e.hub) : '');
+    dLine('Hub Connections', x => C.list(x.e.hubConnections.map(C.rname)));
     dLine('Hub topology', x => x.e.topology, O.topology);
     dLine('Connectivity managed with', x => x.e.none ? '' : x.e.managed, O.managed);
-    dLine('Connection to the geographic hub', x => x.e.link);
+    dLine('Connection to the hubs', x => x.e.link);
     dLine('Traffic between spokes in the region', x => x.e.eastWest);
     group2('Choice 2 · Shared-service placement');
     const place = s => !s ? '' : s.p === 'Remote' && s.from ? `Remote (from ${C.rname(s.from)})` : s.p;

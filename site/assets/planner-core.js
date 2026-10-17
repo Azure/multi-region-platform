@@ -10,9 +10,9 @@
 
   // ───────────── state
   const blank = () => ({ v: VERSION, meta: { name: '', owner: '', date: today() }, estate: { topology: '', managed: '', hybrid: '' },
-    current: [], baseline: '', regions: [], notes: {}, sites: [], services: [], ui: { essentials: true, weighted: false } });
+    current: [], baseline: '', regions: [], notes: {}, sites: [], services: [], ui: { details: false, weighted: false, showOut: false } });
   const newRegion = id => ({ id, checks: {}, outcome: '', selected: false, conditions: '', owner: '', review: '', design: null });
-  const newDesign = () => ({ q1: '', q2: '', q3: '', profile: '', hub: '', topology: '', managed: '', link: '', eastWest: '', ss: {}, custom: [],
+  const newDesign = () => ({ q1: '', q2: '', q3: '', profile: '', hub: '', hubConnections: null, topology: '', managed: '', link: '', eastWest: '', ss: {}, custom: [],
     hybrid: '', hybridUse: '', hybridPath: '', hybridReason: '', hybridChange: '', owner: '', date: '', reassess: '' });
 
   // A workbook saved by version 1 keeps its answers where the question still exists. Manual availability, price and latency entries are dropped.
@@ -62,6 +62,7 @@
       const o = { ...newRegion(r.id), ...r, checks: { ...(r.checks || {}) } };
       if (o.design) {
         o.design = { ...newDesign(), ...o.design, ss: { ...(o.design.ss || {}) }, custom: [...(o.design.custom || [])] };
+        o.design.hubConnections = Array.isArray(o.design.hubConnections) ? [...new Set(o.design.hubConnections.filter(id => typeof id === 'string' && id))] : null;
         if (!HYBRID_PATHS.some(p => p.id === o.design.hybridPath)) o.design.hybridPath = '';
       }
       return o;
@@ -88,8 +89,7 @@
   function replace(raw) { S = normalize(raw); tidy(); save(); return S; }
 
   // ───────────── Azure reference data
-  // meta.json, latency.json and latency-cities.json always exist: the build writes a placeholder ({"generated":null}) when a file is missing,
-  // and the data scripts overwrite it under the same name. Nothing else is requested until a placeholder says there is real data.
+  // The build supplies placeholders for missing snapshots. Only latest data is loaded; archives are for maintainer use.
   const D = { meta: null, regions: [], byId: {}, ridx: {}, services: [], svc: {}, pricing: {}, hasCatalog: false,
     availabilityMeta: null, availabilityRegions: {}, hasAvailability: false, availabilityError: '', priceMapping: null, mappingError: '',
     lat: null, cities: null, citiesState: 'idle',
@@ -109,10 +109,10 @@
   }
   async function loadData() {
     if (global.MRP_SEED) useRegions(global.MRP_SEED.regions.map(r => ({ access: '', known: true, ...r })));
-    try { D.meta = await getJson('data/meta.json'); } catch (e) { D.meta = null; }
+    try { D.meta = await getJson('data/retail-latest/meta.json'); } catch (e) { D.meta = null; }
     if (D.meta && D.meta.generated) {
       try {
-        const c = await getJson('data/catalog.json');
+        const c = await getJson('data/retail-latest/catalog.json');
         D.ridx = Object.fromEntries(c.regions.map((r, i) => [r.id, i]));
         // keep reference regions that the snapshot doesn't list, so a saved workbook never loses a name
         const seedOnly = D.regions.filter(r => !(r.id in D.ridx));
@@ -124,7 +124,7 @@
     await Promise.all([
       (async () => {
         try {
-          const c = await getJson('data/availability-catalog.json');
+          const c = await getJson('data/availability-catalog-latest.json');
           if (!c.generated || !Array.isArray(c.regions) || !Array.isArray(c.services)) throw new Error('Invalid availability catalog');
           D.availabilityMeta = c;
           D.availabilityRegions = Object.fromEntries(c.regions.map(r => [r.id, r]));
@@ -134,7 +134,7 @@
             ...c.regions.map(r => ({ ...D.byId[r.id], ...r }))]);
           D.hasAvailability = true;
         } catch (e) {
-          D.availabilityError = 'The service availability catalog could not be loaded. Import the availability CSV and publish docs/data/availability-catalog.json.';
+          D.availabilityError = 'The service availability catalog could not be loaded. Import the availability CSV and publish docs/data/availability-catalog-latest.json.';
           console.error(D.availabilityError, e);
         }
       })(),
@@ -158,7 +158,7 @@
   async function loadPricing(id) {
     if (!D.hasCatalog || !(id in D.ridx) || D.pricing[id]) return false;
     try {
-      const p = await getJson(`data/pricing/${id}.json`);
+      const p = await getJson(`data/retail-latest/pricing/${id}.json`);
       p.idx = Object.fromEntries(p.regions.map((r, i) => [r, i]));
       D.pricing[id] = p;
       return true;
@@ -191,7 +191,7 @@
   const rname = id => info(id).name;
   const reg = id => S.regions.find(r => r.id === id);
   // columns of the evidence tables: current regions first, then the regions being qualified
-  const cols = () => [...S.current.map(c => ({ id: c.id, current: true })), ...S.regions.map(r => ({ id: r.id, current: false }))];
+  const cols = () => [...S.current.map(c => ({ id: c.id, current: true })), ...active().map(r => ({ id: r.id, current: false }))];
 
   // ───────────── step 2: outcome
   function suggest(r) {
@@ -211,6 +211,15 @@
   const outcome = r => r.outcome || suggest(r).o;
   const selectable = r => ['Qualified', 'Conditional'].includes(outcome(r));
   const selected = () => S.regions.filter(r => r.selected && selectable(r));
+  // A region ruled out by checks 1 to 3 (or set by hand to Excluded or No deeper assessment) is folded in the evidence tabs and in check 4.
+  // A region excluded for a check 4 gap stays visible, because the evidence is the reason.
+  function ruledOut(r) {
+    const o = outcome(r);
+    if (o !== 'Excluded' && o !== 'No deeper assessment') return false;
+    return !!r.outcome || !/^Check 4/.test(suggest(r).why);
+  }
+  const active = () => S.ui.showOut ? S.regions : S.regions.filter(r => !ruledOut(r));
+  const folded = () => S.ui.showOut ? [] : S.regions.filter(ruledOut);
 
   // The answer-by-answer state of one check in one region: success, warning, error, or none.
   function checkState(ch, r) {
@@ -420,9 +429,46 @@
     return { text: '', tone: '' };
   }
 
+  // The location with the least margin to its target: { name, ms, target, over } or null.
+  function latencyWorst(rid) {
+    let w = null;
+    S.sites.forEach(s => {
+      const l = siteLatency(s, rid), t = num(s.target);
+      if (!l || t === null) return;
+      if (!w || l.ms - t > w.ms - w.target) w = { name: siteName(s), ms: l.ms, target: t };
+    });
+    if (w) w.over = w.ms > w.target;
+    return w;
+  }
+  // The answer that the evidence supports for a check 4 question, or ''. Only where the workbook has the data:
+  // services, zones against check 3.4, and latency against the targets. Over-target latency is "To validate", because
+  // the values that involve a location are estimates. Judgment calls (pairing, price, access, quota) get no suggestion.
+  function suggestAnswer(rowId, r) {
+    if (rowId === '4.1') {
+      const a = availSummary(r.id);
+      if (!a.total || a.none) return '';
+      return a.ok === a.total ? 'Yes' : 'To validate';
+    }
+    if (rowId === '4.2') {
+      const z = info(r.id).zones, need = r.checks['3.4'];
+      if (z === true) return 'Yes';
+      if (z === false && need === 'No') return 'Not applicable';
+      if (z === false && need === 'Yes') return 'No (mandatory gap)';
+      return '';
+    }
+    if (rowId === '4.4') {
+      const l = latencySummary(r.id);
+      if (!l.total) return '';
+      return l.within === l.total ? 'Yes' : 'To validate';
+    }
+    return '';
+  }
+  // Open check 4 questions that the evidence can answer: [{ r, id, v }]
+  const suggestions = rs => rs.flatMap(r => CAPABILITY_IDS.filter(id => !r.checks[id]).map(id => ({ r, id, v: suggestAnswer(id, r) })).filter(x => x.v));
+
   // ───────────── step 3: the regional design of one region
   const hubRegions = exceptId => {
-    const cur = S.current.slice().sort((a, b) => (b.hub ? 1 : 0) - (a.hub ? 1 : 0)).map(c => c.id);
+    const cur = S.current.filter(c => c.id !== exceptId).sort((a, b) => (b.hub ? 1 : 0) - (a.hub ? 1 : 0)).map(c => c.id);
     return [...cur, ...selected().map(r => r.id).filter(id => id !== exceptId && !cur.includes(id))];
   };
   function design(r) {
@@ -446,8 +492,10 @@
     const hubs = hubRegions(r.id);
     const estateTopo = M.O.topology.includes(S.estate.topology) ? S.estate.topology : '';
     const none = profile === 'Disconnected Spokes';
-    const defHub = hubs.includes(d.hub) ? d.hub : hubs[0] || '';
-    const e = { profile, pi, suggested, none, hubs, hub: none ? '' : defHub,
+    const connections = Array.isArray(d.hubConnections) ? d.hubConnections.filter(id => hubs.includes(id))
+      : [hubs.includes(d.hub) ? d.hub : hubs[0]].filter(Boolean);
+    const hubConnections = none ? [] : [...new Set(connections)], defHub = hubConnections[0] || '';
+    const e = { profile, pi, suggested, none, hubs, hubConnections, hub: defHub,
       topology: none ? '' : (d.topology || estateTopo), managed: d.managed || S.estate.managed || '' };
     const links = M.linkOptions(profile, e.topology), ew = M.eastWestOptions(profile);
     e.linkOptions = links; e.eastWestOptions = ew;
@@ -493,7 +541,10 @@
     if (e.hybrid === 'Not required') return 'Not required';
     const path = HYBRID_PATHS.find(p => p.id === e.hybridPath);
     let say = path ? path.say : '';
-    if (say && e.hub) say = say.replace('the geographic hub', rname(e.hub)).replace('another region', rname(e.hub));
+    const gateway = e.ss.find(s => s.id === 'gateway');
+    const provider = gateway && gateway.p === 'Remote' ? gateway.from : '';
+    const hubNames = provider ? rname(provider) : list(e.hubConnections.map(rname));
+    if (say && hubNames) say = say.replace('the geographic hub', hubNames).replace('another region', hubNames);
     if (e.hybrid === 'Reuse') return `Reuse the existing ${d.hybridUse || 'connectivity'}${say ? ', ' + say : ''}`;
     return `Change: ${d.hybridChange || 'to be defined'}${d.hybridReason ? ` (${d.hybridReason.charAt(0).toLowerCase() + d.hybridReason.slice(1)})` : ''}${say ? ', ' + say : ''}`;
   }
@@ -506,7 +557,8 @@
     if (!e.none && e.profile) {
       out.push(['Hub implementation', [e.profile === 'Remote Hub Connected' ? 'No local hub' : e.topology === 'Azure Virtual WAN' ? 'Virtual hub in the region (Azure Virtual WAN)' : e.topology ? 'Hub virtual network in the region' : 'Hub in the region',
         e.managed ? 'managed with ' + e.managed : ''].filter(Boolean).join(', ')]);
-      out.push(['Regional connectivity', [e.hub ? `${e.profile === 'Full Regional Hub' ? 'Connected to' : 'Depends on'} ${rname(e.hub)}` : '', e.link, e.eastWest ? 'spoke to spoke: ' + e.eastWest.charAt(0).toLowerCase() + e.eastWest.slice(1) : ''].filter(Boolean).join('; ')]);
+      out.push(['Hub Connections', list(e.hubConnections.map(rname)) || 'None']);
+      out.push(['Regional connectivity', [e.hubConnections.length ? `${e.profile === 'Full Regional Hub' ? 'Connected to' : 'Depends on'} ${list(e.hubConnections.map(rname))}` : '', e.link, e.eastWest ? 'spoke to spoke: ' + e.eastWest.charAt(0).toLowerCase() + e.eastWest.slice(1) : ''].filter(Boolean).join('; ')]);
     } else if (e.none && e.eastWest) out.push(['Regional connectivity', 'No hub. Spoke to spoke: ' + e.eastWest.charAt(0).toLowerCase() + e.eastWest.slice(1)]);
     out.push(['Hybrid connectivity', hybridText(r, e) || 'Not decided yet']);
     out.push(['Local shared services', list(at('Local').map(s => s.short)) || 'None']);
@@ -529,22 +581,31 @@
   }
 
   // ───────────── progress of each tab, for the step indicators
+  // Checks 1 to 3 are complete for a region when every question is answered, or when check 1 or 2 already rules it out.
+  const FIT_IDS = CHECKS.slice(0, 3).flatMap(ch => ch.rows.map(row => row.id));
+  const fitDone = r => ruledOut(r) || FIT_IDS.every(id => r.checks[id]);
   function progress() {
-    const picked = selected(), rs = S.regions;
-    const checkAnswers = rs.some(r => Object.values(r.checks).some(Boolean));
+    const picked = selected(), rs = S.regions, live = rs.filter(r => !ruledOut(r));
+    const fitAny = rs.some(r => FIT_IDS.some(id => r.checks[id]));
+    const capAny = rs.some(r => CAPABILITY_IDS.some(id => r.checks[id]) || r.outcome);
+    const decided = live.filter(r => outcome(r) !== 'Candidate').length;
+    const allDone = picked.length && picked.every(r => effective(r).complete);
     return {
       scope: S.current.length && rs.length ? 'done' : S.current.length || rs.length || S.meta.name ? 'half' : 'none',
-      checks: rs.length && picked.length && rs.every(r => outcome(r) !== 'Candidate') ? 'done' : checkAnswers ? 'half' : 'none',
+      checks: rs.length && rs.every(fitDone) ? 'done' : fitAny ? 'half' : 'none',
       services: named().length ? 'done' : 'none',
       pricing: S.baseline && named().length && D.hasCatalog ? 'done' : S.baseline || named().length ? 'half' : 'none',
       latency: S.sites.length ? 'done' : 'none',
-      design: !picked.length ? 'lock' : picked.every(r => effective(r).complete) ? 'done' : 'half',
-      review: picked.length ? 'none' : 'lock',
+      capability: live.length && picked.length && decided === live.length ? 'done' : capAny || picked.length ? 'half' : 'none',
+      design: !picked.length ? 'lock' : allDone ? 'done' : 'half',
+      review: !picked.length ? 'lock' : allDone ? 'done' : 'half',
+      // the counts shown beside a tab that is in progress
+      counts: { checks: [rs.filter(fitDone).length, rs.length, 'answered'], capability: [decided, live.length, 'decided'] },
     };
   }
 
   M.core = { get S() { return S; }, D, VERSION, load, save, replace, blank, normalize, tidy, newRegion, uid, today, loadData, loadPricing, loadCities, bit,
-    info, rname, reg, cols, suggest, outcome, selectable, selected, checkState, named, serviceSelection, availability, availabilityDetails, zoneText, availSummary, priceRows, priceDiff, priceSummary,
+    info, rname, reg, cols, suggest, outcome, selectable, selected, ruledOut, active, folded, fitDone, checkState, named, serviceSelection, availability, availabilityDetails, zoneText, availSummary, priceRows, priceDiff, priceSummary,
     regionLatency, peeringLatency, cityLatency, peeringChoices, nearestPeering, sitePeering, siteName, siteLatency, latencySummary, srcText, km, estimate, latScale, latPos,
-    num, fmtPct, priceTone, evidence, hubRegions, design, suggestProfile, effective, hybridText, record, recordText, list, progress };
+    num, fmtPct, priceTone, evidence, latencyWorst, suggestAnswer, suggestions, hubRegions, design, suggestProfile, effective, hybridText, record, recordText, list, progress };
 })(window);

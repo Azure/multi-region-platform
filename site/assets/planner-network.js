@@ -42,9 +42,11 @@
       const region = result.regions.find(x => x.id === r.id);
       region.pattern = patterns[e.profile] || 'disconnected';
       if (e.hub && e.hub !== r.id && region.pattern !== 'disconnected') region.remote_hub = e.hub;
-      if (region.remote_hub && ['full-hub', 'minimal-hub'].includes(region.pattern)) {
-        result.region_links.push({ from: r.id, to: e.hub });
-      }
+      if (region.pattern !== 'disconnected') e.hubConnections.forEach(id => {
+        result.region_links.push({ from: r.id, to: id });
+      });
+      if (e.hubConnections.length > 1 && region.pattern === 'remote-hub') notes.push(C.rname(r.id) +
+        ': GeoLZ models spoke traffic through the first selected hub only; all hub connections are retained in the record.');
       e.ss.forEach(service => {
         const role = roles[service.id];
         if (role) {
@@ -53,8 +55,8 @@
           if (service.p === 'Remote') {
             const provider = result.regions.find(x => x.id === service.from);
             if (provider && provider.pattern !== 'disconnected') provider[role[0]] = role[1];
-            if (service.from !== e.hub) notes.push(C.rname(r.id) + ': ' + service.short +
-              ' comes from ' + C.rname(service.from) + ', not its geographic hub; see the inherited service record.');
+            if (!e.hubConnections.includes(service.from)) notes.push(C.rname(r.id) + ': ' + service.short +
+              ' comes from ' + C.rname(service.from) + ', outside its hub connections; see the inherited service record.');
           }
         }
         if (service.id === 'gateway') region.capabilities.hybrid =
@@ -70,7 +72,7 @@
         'New region - ' + (e.profile || 'Profile not decided'),
         'Topology: ' + (e.topology || 'Not decided'),
         'Managed with: ' + (e.managed || 'Not decided'),
-        'Hub: ' + (e.hub ? C.rname(e.hub) : 'None'),
+        'Hub Connections: ' + (C.list(e.hubConnections.map(C.rname)) || 'None'),
         'Regional link: ' + (e.link || 'None'),
         'East-west: ' + (e.eastWest || 'Not decided'),
         'Hybrid: ' + (e.hybrid || 'Not decided') + (d.hybridUse ? ' - ' + d.hybridUse : ''),
@@ -124,8 +126,9 @@
         }
         if (!connection.connects_to.includes(target)) connection.connects_to.push(target);
         // Reusing a circuit also requires the existing geographic hub's attachment.
-        if (e.hybrid === 'Reuse' && S.current.some(c => c.id === e.hub && c.hub) &&
-            !connection.connects_to.includes(e.hub)) connection.connects_to.push(e.hub);
+        if (e.hybrid === 'Reuse') e.hubConnections.forEach(id => {
+          if (S.current.some(c => c.id === id && c.hub) && !connection.connects_to.includes(id)) connection.connects_to.push(id);
+        });
       });
     });
     notes.push('Firewall and DNS symbols represent the workbook capability choices, not a confirmed product selection.');

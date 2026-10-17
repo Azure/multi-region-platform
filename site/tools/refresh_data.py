@@ -13,11 +13,11 @@ Only the Python standard library is used.
 
 What is written:
 
-  docs/data/meta.json              when the snapshot was taken and what it holds
-  docs/data/catalog.json           regions (with geography, zones, pairing) and services, with the regions each
+  docs/data/retail-latest/meta.json              when the snapshot was taken and what it holds
+  docs/data/retail-latest/catalog.json           regions (with geography, zones, pairing) and services, with the regions each
                                    service has consumption meters in
-  docs/data/products.json          the same, one level down: products of each service by region
-  docs/data/pricing/<region>.json  for one baseline region: the median price difference of every service in
+  docs/data/retail-latest/products.json          the same, one level down: products of each service by region
+  docs/data/retail-latest/pricing/<region>.json  for one baseline region: the median price difference of every service in
                                    every other region, over the meters that exist in both
 
 Two things to know about the data:
@@ -32,6 +32,10 @@ site/data/regions-seed.json, or from Azure Resource Manager when you pass --arm 
 """
 import argparse, datetime, json, os, re, shutil, statistics, subprocess, sys, time
 import urllib.error, urllib.parse, urllib.request
+import tempfile
+from pathlib import Path
+
+from snapshot_history import publish_snapshot
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 API = "https://prices.azure.com/api/retail/prices"
@@ -237,7 +241,7 @@ def write_if_changed(path, text):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-    ap.add_argument("--out", default=OUT, help="output folder (default: docs/data)")
+    ap.add_argument("--out", default=OUT, help="parent of retail-latest and monthly backups (default: docs/data)")
     ap.add_argument("--api-url", default=API, help="price list endpoint (for tests)")
     ap.add_argument("--max-pages", type=int, default=0, help="stop after N pages; the snapshot is marked partial")
     ap.add_argument("--arm", action="store_true", help="read region metadata from 'az account list-locations'")
@@ -259,7 +263,7 @@ def main():
     ridx = {r: i for i, r in enumerate(region_ids)}
 
     # don't replace a good snapshot with a broken one
-    old_path = os.path.join(args.out, "catalog.json")
+    old_path = os.path.join(args.out, "retail-latest", "catalog.json")
     if os.path.exists(old_path) and not args.force and not args.max_pages:
         old = json.load(open(old_path, encoding="utf-8"))
         if len(region_ids) < 0.7 * len(old.get("regions", [])) or len(svc_regions) < 0.7 * len(old.get("services", [])):
@@ -291,27 +295,26 @@ def main():
     pricing = compare_prices(prices, region_ids)
     log(f"  done in {time.time() - t0:.0f}s")
 
-    changed = 0
-    changed += write_if_changed(os.path.join(args.out, "catalog.json"), dump({"regions": regions, "services": services}))
-    changed += write_if_changed(os.path.join(args.out, "products.json"), dump({"regions": region_ids, "services": products}))
-    pdir = os.path.join(args.out, "pricing")
-    for r in region_ids:
-        changed += write_if_changed(os.path.join(pdir, r + ".json"), dump({"baseline": r, "regions": region_ids, "services": pricing[r]}))
-    if os.path.isdir(pdir):
-        for f in os.listdir(pdir):
-            if f.endswith(".json") and f[:-5] not in ridx:
-                os.remove(os.path.join(pdir, f))
     meta = {
         "generated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "source": "Azure Retail Prices API", "currency": "USD", "items": count,
         "regions": len(regions), "services": len(services), "partial": bool(args.max_pages),
         "regionMetadata": "Azure Resource Manager" if arm else f"reference file, reviewed {reviewed}",
     }
-    write_if_changed(os.path.join(args.out, "meta.json"), dump(meta))
+    os.makedirs(args.out, exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix=".retail-", dir=args.out) as temporary:
+        staged = Path(temporary) / "retail-latest"
+        write_if_changed(str(staged / "catalog.json"), dump({"regions": regions, "services": services}))
+        write_if_changed(str(staged / "products.json"), dump({"regions": region_ids, "services": products}))
+        for r in region_ids:
+            write_if_changed(str(staged / "pricing" / (r + ".json")),
+                             dump({"baseline": r, "regions": region_ids, "services": pricing[r]}))
+        write_if_changed(str(staged / "meta.json"), dump(meta))
+        publish_snapshot(staged, Path(args.out) / "retail-latest")
     unknown = [r["id"] for r in regions if not r["known"]]
     if unknown:
         log("  regions without reference data (add them to site/data/regions-seed.json or use --arm): " + ", ".join(unknown))
-    log(f"wrote {len(regions)} regions, {len(services)} services to {args.out} ({changed} data file(s) changed)")
+    log(f"wrote {len(regions)} regions, {len(services)} services to {args.out}/retail-latest")
 
 
 if __name__ == "__main__":

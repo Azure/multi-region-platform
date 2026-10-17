@@ -16,7 +16,7 @@
   let quiet = false;                    // true while the page puts focus back after a render, so the popup doesn't open by itself
   const setQuiet = v => { quiet = v; };
   // View state that isn't part of the saved workbook.
-  const ui = { tab: 'scope', region: '', noteEdit: '' };
+  const ui = { tab: 'scope', region: '', noteEdit: '', mregion: '', narrow: {}, ssAll: false, desMap: false };   // view state that isn't saved
 
   // ───────────── buttons
   function btn(o) {
@@ -94,7 +94,7 @@
   const scroll = (html, o = {}) => `<div class="pl-scroll${o.cls ? ' ' + o.cls : ''}" tabindex="0" role="region" aria-label="${esc(o.label || 'Table')}">${html}</div>`;
 
   // ───────────── combobox
-  // cfg: { items(): [{ value, label, sub, group, tag }], mode: 'add' | 'value' | 'text', display, onPick(item), onFree(text), onClear, ph, label, disabled, clearable }
+  // cfg: { items(): [{ value, label, sub, group, tag }], mode: 'add' | 'value' | 'text' | 'multi', display, selected(): [value], onPick(item), onFree(text), onClear, ph, label, disabled, clearable, showAll }
   // 'text' is a plain text field that suggests values: the text is the value, whatever is typed is kept, and a suggestion only fills it in.
   // It also takes { key, inputId, describedBy, value() }: the input carries data-k, so typing goes through the same path as any other text field.
   const CB = {};
@@ -104,22 +104,25 @@
 
   function combo(id, cfg) {
     CB[id] = cfg;
-    const val = cfg.mode === 'value', txt = cfg.mode === 'text', value = val ? (cfg.display ? cfg.display() : '') : txt ? (cfg.value ? cfg.value() : '') : '', clear = val && cfg.clearable && value;
-    return `<div class="pl-cb${val ? ' val' : ''}${txt ? ' txt' : ''}${cfg.disabled ? ' off' : ''}">${val || txt ? '' : icon('search', { cls: 'pl-cb-ic' })}` +
+    const multi = cfg.mode === 'multi', val = cfg.mode === 'value' || multi, txt = cfg.mode === 'text', value = val ? (cfg.display ? cfg.display() : '') : txt ? (cfg.value ? cfg.value() : '') : '', clear = val && cfg.clearable && value;
+    return `<div class="pl-cb${val ? ' val' : ''}${multi ? ' multi' : ''}${txt ? ' txt' : ''}${cfg.disabled ? ' off' : ''}">${val || txt ? '' : icon('search', { cls: 'pl-cb-ic' })}` +
       `<input class="pl-cb-in" type="text" role="combobox" aria-expanded="false" aria-controls="pl-pop" aria-autocomplete="list" aria-haspopup="listbox" autocomplete="off" spellcheck="false" ` +
-      `data-cb="${esc(id)}"${txt ? ` data-k="${esc(cfg.key)}"${cfg.inputId ? ` id="${cfg.inputId}"` : ''}${cfg.describedBy ? ` aria-describedby="${cfg.describedBy}"` : ''}` : ''} placeholder="${esc(cfg.ph || '')}" aria-label="${esc(cfg.label || cfg.ph || '')}" value="${esc(value)}"${cfg.disabled ? ' disabled' : ''}>` +
+      `data-cb="${esc(id)}"${cfg.inputId ? ` id="${cfg.inputId}"` : ''}${cfg.describedBy ? ` aria-describedby="${cfg.describedBy}"` : ''}${txt ? ` data-k="${esc(cfg.key)}"` : ''} placeholder="${esc(cfg.ph || '')}" aria-label="${esc(cfg.label || cfg.ph || '')}" value="${esc(value)}"${value ? ` title="${esc(value)}"` : ''}${cfg.disabled ? ' disabled' : ''}>` +
       (clear ? `<button type="button" class="pl-cb-x" data-act="cb-clear" data-arg="${esc(id)}" aria-label="Clear ${esc(cfg.label || 'value')}">${icon('close')}</button>` : val || (txt && cfg.items().length) ? icon('down', { cls: 'pl-cb-caret' }) : '') + '</div>';
   }
   function filtered() {
     const cfg = CB[pop.id];
     const q = fold(pop.touched ? pop.q : '').trim(), words = q.split(/\s+/).filter(Boolean);
     const all = cfg.items().filter(it => !words.length || words.every(w => fold(it.label + ' ' + (it.sub || '')).includes(w)));
-    return { rows: all.slice(0, 50), more: Math.max(0, all.length - 50), total: all.length };
+    const rows = cfg.showAll ? all : all.slice(0, 50);
+    return { rows, more: all.length - rows.length, total: all.length };
   }
   function drawPop() {
     const el = popEl(), input = document.querySelector(`#planner [data-cb="${CSS.escape(pop.id)}"]`);
     if (!input) { closePop(); return; }
-    const cfg = CB[pop.id], f = filtered(), txt = cfg.mode === 'text';
+    const cfg = CB[pop.id], f = filtered(), txt = cfg.mode === 'text', multi = cfg.mode === 'multi';
+    if (multi) el.setAttribute('aria-multiselectable', 'true'); else el.removeAttribute('aria-multiselectable');
+    el.setAttribute('aria-label', cfg.label || cfg.ph || 'Suggestions');
     pop.shown = f.rows;
     if (pop.active >= f.rows.length) pop.active = txt ? f.rows.length - 1 : Math.max(0, f.rows.length - 1);
     // a text field with nothing to suggest stays a plain text field
@@ -127,7 +130,8 @@
     let html = '', last = null;
     f.rows.forEach((it, i) => {
       if (it.group && it.group !== last) { html += `<div class="pl-pop-g" role="presentation">${esc(it.group)}</div>`; last = it.group; }
-      html += `<div class="pl-pop-o${i === pop.active ? ' on' : ''}" role="option" id="pl-opt-${i}" aria-selected="${i === pop.active}" data-i="${i}" data-tip="${esc(it.label)}"><span class="pl-pop-l">${esc(it.label)}</span>${it.sub ? `<span class="pl-pop-s">${esc(it.sub)}</span>` : ''}${it.tag ? `<span class="pl-tag">${esc(it.tag)}</span>` : ''}</div>`;
+      const selected = multi ? cfg.selected().includes(it.value) : i === pop.active;
+      html += `<div class="pl-pop-o${i === pop.active ? ' on' : ''}" role="option" id="pl-opt-${i}" aria-selected="${selected}" data-i="${i}" data-tip="${esc(it.label)}">${multi ? `<span class="pl-pop-check${selected ? ' checked' : ''}" aria-hidden="true"></span>` : ''}<span class="pl-pop-l">${esc(it.label)}</span>${it.sub ? `<span class="pl-pop-s">${esc(it.sub)}</span>` : ''}${it.tag ? `<span class="pl-tag">${esc(it.tag)}</span>` : ''}</div>`;
     });
     if (!f.rows.length) html = `<div class="pl-pop-n">${cfg.onFree && pop.q.trim() ? `Press Enter to add “${esc(pop.q.trim())}”` : 'No matches'}</div>`;
     else if (f.more) html += `<div class="pl-pop-n">Keep typing to narrow. ${f.more} more.</div>`;
@@ -152,7 +156,10 @@
     if (input.disabled) return;
     const id = input.dataset.cb, txt = CB[id] && CB[id].mode === 'text';
     if (txt && !CB[id].items().length) return;
-    if (!pop || pop.id !== id) pop = { id, q: '', touched: false, active: txt ? -1 : 0, shown: [] };
+    if (!pop || pop.id !== id) {
+      pop = { id, q: '', touched: false, active: txt ? -1 : 0, shown: [] };
+      if (CB[id].mode === 'multi') input.select();
+    }
     drawPop();
   }
   function closePop() {
@@ -162,7 +169,7 @@
     if (input) {
       input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant');
       const cfg = CB[pop.id];
-      if (cfg && cfg.mode === 'value') input.value = cfg.display ? cfg.display() : '';
+      if (cfg && (cfg.mode === 'value' || cfg.mode === 'multi')) input.value = cfg.display ? cfg.display() : '';
       else if (cfg && cfg.mode !== 'text') input.value = '';
     }
     pop = null;
@@ -170,11 +177,20 @@
   function pick(i) {
     const it = pop && pop.shown[i], cfg = pop && CB[pop.id];
     if (!it || !cfg) return;
-    const id = pop.id, input = cfg.mode === 'text' && document.querySelector(`#planner [data-cb="${CSS.escape(id)}"]`);
+    const state = { ...pop }, id = pop.id, input = cfg.mode === 'text' && document.querySelector(`#planner [data-cb="${CSS.escape(id)}"]`);
     closePop();
     if (input) input.value = it.value;   // the caret goes to the end of the text that was filled in
     cfg.onPick(it);
     hooks.commit(id);
+    if (cfg.mode === 'multi') {
+      const next = document.querySelector(`#planner [data-cb="${CSS.escape(id)}"]`);
+      if (next) {
+        pop = state;
+        if (state.touched) next.value = state.q;
+        else next.select();
+        drawPop();
+      }
+    }
   }
   function onInput(input) {
     if (!pop || pop.id !== input.dataset.cb) openPop(input);
@@ -188,7 +204,7 @@
       e.preventDefault();
       if (!pop) openPop(input);
       else { const n = pop.shown.length; if (n) { pop.active = pop.active < 0 ? (e.key === 'ArrowDown' ? 0 : n - 1) : (pop.active + (e.key === 'ArrowDown' ? 1 : n - 1)) % n; drawPop(); } }
-    } else if (e.key === 'Enter') {
+    } else if (e.key === 'Enter' || (e.key === ' ' && cfg.mode === 'multi' && pop && !pop.touched)) {
       if (pop && pop.shown.length && pop.active >= 0) { e.preventDefault(); pick(pop.active); }
       else if (cfg.onFree && input.value.trim()) { e.preventDefault(); const t = input.value.trim(); closePop(); cfg.onFree(t); hooks.commit(id); }
     } else if (e.key === 'Escape') {
@@ -198,10 +214,10 @@
   function bindPop(root) {
     root.addEventListener('focusin', e => { const i = e.target.closest && e.target.closest('[data-cb]'); if (i && i.matches('input') && !quiet) openPop(i); });
     root.addEventListener('click', e => { const i = e.target.closest && e.target.closest('input[data-cb]'); if (i && (!pop || pop.id !== i.dataset.cb)) openPop(i); });
-    root.addEventListener('focusout', e => { const i = e.target.closest && e.target.closest('input[data-cb]'); if (i) setTimeout(() => { if (pop && pop.id === i.dataset.cb && document.activeElement !== i) closePop(); }, 0); });
+    root.addEventListener('focusout', e => { const i = e.target.closest && e.target.closest('input[data-cb]'); if (i) setTimeout(() => { if (pop && pop.id === i.dataset.cb && document.activeElement?.dataset.cb !== i.dataset.cb) closePop(); }, 0); });
     root.addEventListener('keydown', e => { const i = e.target.closest && e.target.closest('input[data-cb]'); if (i) onKey(e, i); });
     root.addEventListener('input', e => { const i = e.target.closest && e.target.closest('input[data-cb]'); if (i) onInput(i); });
-    layer().addEventListener('mousedown', e => { const o = e.target.closest('.pl-pop-o'); if (o) { e.preventDefault(); pick(+o.dataset.i); } else if (e.target.closest('.pl-pop')) e.preventDefault(); });
+    layer().addEventListener('mousedown', e => { const o = e.target.closest('.pl-pop-o'); if (o) { e.preventDefault(); e.stopPropagation(); pick(+o.dataset.i); } else if (e.target.closest('.pl-pop')) e.preventDefault(); });
     window.addEventListener('resize', () => { if (pop) { const i = document.querySelector(`#planner [data-cb="${CSS.escape(pop.id)}"]`); if (i) placePop(i); } });
     window.addEventListener('scroll', () => { if (pop) { const i = document.querySelector(`#planner [data-cb="${CSS.escape(pop.id)}"]`); if (i) placePop(i); } }, { passive: true, capture: true });
     document.addEventListener('mousedown', e => { if (pop && !e.target.closest('.pl-pop') && !e.target.closest('.pl-cb')) closePop(); });

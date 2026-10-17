@@ -27,21 +27,21 @@ const mapping = {
 
 async function core({ noRetail = false, noMapping = false, noAvailability = false, initial } = {}) {
   const data = {
-    'data/meta.json': { generated: noRetail ? null : '2026-10-01' },
-    'data/catalog.json': { regions: [{ id: 'eastus', name: 'East US' }, { id: 'westus', name: 'West US' }], services: [] },
-    'data/availability-catalog.json': {
+    'data/retail-latest/meta.json': { generated: noRetail ? null : '2026-10-01' },
+    'data/retail-latest/catalog.json': { regions: [{ id: 'eastus', name: 'East US' }, { id: 'westus', name: 'West US' }], services: [] },
+    'data/availability-catalog-latest.json': {
       generated: '2026-10-16', regions: [{ id: 'eastus', name: 'East US', geo: 'US' }, { id: 'westus', name: 'West US', geo: 'US' }],
       services: [service, { name: 'Azure AI Search', regions: {}, products: {} }],
     },
     'data/service-pricing-map.json': mapping,
     'data/latency.json': { generated: null },
-    'data/pricing/eastus.json': { regions: ['eastus', 'westus'], services: {
+    'data/retail-latest/pricing/eastus.json': { regions: ['eastus', 'westus'], services: {
       'Azure App Service': { p: [0, 12], n: [10, 10] },
       Free: { p: [0, 99], n: [1, 1] },
     } },
   };
   if (noMapping) delete data['data/service-pricing-map.json'];
-  if (noAvailability) delete data['data/availability-catalog.json'];
+  if (noAvailability) delete data['data/availability-catalog-latest.json'];
   const context = vm.createContext({
     location: { protocol: 'http:' },
     localStorage: { getItem: () => initial ? JSON.stringify(initial) : null, setItem: () => {} },

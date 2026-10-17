@@ -8,13 +8,15 @@
   const root = document.getElementById('planner');
   if (!root) return;
   const M = window.MRP, C = M.core, K = M.kit, { icon, status } = M, { esc } = K, ui = M.ui, T = M.viewTools;
+  // Checks 1 to 3 need no Azure data and come first; the evidence tabs then feed check 4 and the outcome.
   const TABS = [
-    { id: 'scope', label: 'Scope', step: 1 }, { id: 'services', label: 'Services', step: 1 }, { id: 'latency', label: 'Latency', step: 1 },
-    { id: 'pricing', label: 'Pricing', step: 1 }, { id: 'checks', label: 'Checks', step: 1 },
+    { id: 'scope', label: 'Scope', step: 1 }, { id: 'checks', label: 'Checks 1 to 3', step: 1 }, { id: 'services', label: 'Services', step: 1 },
+    { id: 'latency', label: 'Latency', step: 1 }, { id: 'pricing', label: 'Pricing', step: 1 }, { id: 'capability', label: 'Check 4 and outcome', step: 1 },
     { id: 'design', label: 'Regional design', step: 2 }, { id: 'review', label: 'Review + export', step: 2 },
-  ];   // the order of this list is the order of the tab strip, of Previous and Next, and of the arrow keys
+  ];   // the order of this list is the order of the tab strip, of the phone step menu, of Previous and Next, and of the arrow keys
   const STEPS = { 1: 'Qualify regions', 2: 'Select the regional design' };
-  const tabFromHash = () => { const h = location.hash.slice(1), id = h === 'record' ? 'review' : h; return TABS.some(t => t.id === id) ? id : ''; };
+  const OLD_HASH = { record: 'review', outcome: 'capability' };
+  const tabFromHash = () => { const h = location.hash.slice(1), id = OLD_HASH[h] || h; return TABS.some(t => t.id === id) ? id : ''; };
   ui.tab = tabFromHash() || 'scope';
   const GLYPH = { done: ['success', 'complete'], half: ['half', 'in progress'], none: ['none', 'not started'], lock: ['lock', 'needs a selected region'] };
 
@@ -31,34 +33,59 @@
 
   // ───────────── frame views
   function vEssentials() {
-    const S = C.S, D = C.D, open = S.ui.essentials;
-    const names = S.current.map(c => `${esc(C.rname(c.id))}${c.id === S.baseline && S.current.length > 1 ? ' <span class="pl-tag">Price baseline</span>' : ''}${c.hub ? ' <span class="pl-tag">Hub</span>' : ''}`);
+    const S = C.S, D = C.D, open = S.ui.details;
     const counts = {};
     S.regions.forEach(r => { const o = C.outcome(r); counts[o] = (counts[o] || 0) + 1; });
     const breakdown = M.O.outcome.filter(o => counts[o]).map(o => `<span class="pl-it">${status(M.OUTCOME_ICON[o])}<span>${counts[o]} ${esc(o.toLowerCase())}</span></span>`).join('');
     const picked = C.selected();
+    const short = iso => { try { return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }); } catch (e) { return ''; } };
+    const v = x => x || K.EM;
+    const kv = (a, b) => `<div class="pl-kv-r"><dt>${a}</dt><dd>${b}</dd></div>`;
+    // One line while folded: what the workbook is about, where it stands, and how fresh the Azure data is.
+    const cur = S.current.map(c => `${esc(C.rname(c.id))}${c.hub ? ' <span class="pl-tag">Hub</span>' : ''}`).join(', ');
+    const data = [D.hasAvailability && ['services', D.availabilityMeta.generated], D.hasCatalog && ['prices', D.meta.generated], D.lat && ['latency', D.lat.generated]].filter(Boolean);
+    const sum = [
+      S.meta.name ? `<span class="pl-sum-i pl-sum-name">${esc(S.meta.name)}</span>` : '',
+      `<span class="pl-sum-i pl-sum-cur"><span class="pl-sum-k">Current</span> ${cur || K.EM}</span>`,
+      `<span class="pl-sum-i"><span class="pl-sum-k">Qualifying</span> ${S.regions.length}${breakdown ? `<span class="pl-brk">${breakdown}</span>` : ''}</span>`,
+      `<span class="pl-sum-i"><span class="pl-sum-k">Selected</span> ${picked.length ? esc(picked.map(r => C.rname(r.id)).join(', ')) : 'None yet'}</span>`,
+      data.length ? `<span class="pl-sum-i pl-sum-data"><span class="pl-sum-k">Data</span> ${data.map(([k, d]) => `${k} ${esc(short(d))}`).join(' · ')}</span>` : '',
+    ].filter(Boolean).join('');
     const prices = D.hasCatalog ? `${D.meta.partial ? 'Partial test snapshot' : 'Snapshot'} of ${esc(K.fmtDate(D.meta.generated))}` : D.asFile ? 'Not loaded' : 'Not published';
     const availability = D.hasAvailability ? `Imported ${esc(K.fmtDate(D.availabilityMeta.generated))}` : 'Not loaded';
     const lat = D.lat ? `Dataset of ${esc(D.lat.dataset || K.fmtDate(D.lat.generated))}` : D.asFile ? 'Not loaded' : 'Not published';
-    const v = x => x || K.EM;
-    const kv = (a, b) => `<div class="pl-kv-r"><dt>${a}</dt><dd>${b}</dd></div>`;
-    return `<div class="pl-ess-h"><button type="button" class="pl-ess-t" data-act="essentials" aria-expanded="${open}" aria-controls="pl-ess-b">${icon(open ? 'down' : 'right')}<span>Essentials</span></button></div>` +
+    const names = S.current.map(c => `${esc(C.rname(c.id))}${c.id === S.baseline && S.current.length > 1 ? ' <span class="pl-tag">Price baseline</span>' : ''}${c.hub ? ' <span class="pl-tag">Hub</span>' : ''}`);
+    return `<div class="pl-ess-h"><button type="button" class="pl-ess-t" data-act="essentials" aria-expanded="${open}" aria-controls="pl-ess-b">${icon(open ? 'down' : 'right')}<span>Essentials</span></button>` +
+      `${open ? '' : `<p class="pl-sum">${sum}</p>`}</div>` +
       `<div class="pl-ess-b" id="pl-ess-b"${open ? '' : ' hidden'}><dl>${kv('Workbook', esc(v(S.meta.name)))}${kv('Owner', esc(v(S.meta.owner)))}${kv('Assessment date', esc(v(S.meta.date)))}</dl>` +
       `<dl>${kv('Current regions', names.length ? names.join(', ') : K.EM)}${kv('Regions to qualify', S.regions.length ? `${S.regions.length}${breakdown ? `<span class="pl-brk">${breakdown}</span>` : ''}` : K.EM)}` +
       `${kv('Selected for regional design', picked.length ? esc(picked.map(r => C.rname(r.id)).join(', ')) : 'None yet')}${kv('Azure data', `<span class="pl-blk">Services: ${availability}</span><span class="pl-blk">Prices: ${prices}</span><span class="pl-blk">Latency: ${lat}</span>`)}</dl></div>`;
   }
   function vTabs() {
     const prog = C.progress();
-    const tab = t => { const [g, word] = GLYPH[prog[t.id]];
-      return `<button type="button" role="tab" id="tab-${t.id}" class="pl-tab${ui.tab === t.id ? ' on' : ''}" aria-label="${esc(t.label)}, ${word}" aria-selected="${ui.tab === t.id}" aria-controls="pl-panel" tabindex="${ui.tab === t.id ? 0 : -1}" data-act="tab" data-arg="${t.id}">${status(g)}<span>${esc(t.label)}</span></button>`; };
-    const group = n => `<div class="pl-tabgrp" data-step="${n}" role="none"><span class="pl-tabgrp-l" aria-hidden="true">${STEPS[n]}</span><div class="pl-tabrow" role="none">${TABS.filter(t => t.step === n).map(tab).join('')}</div></div>`;
-    return `<div class="pl-tabs" role="tablist" aria-label="Workbook steps">${group(1)}${group(2)}</div>`;
+    const count = id => { const c = prog.counts[id]; return c && prog[id] === 'half' && c[1] ? `${c[0]} of ${c[1]} ${c[2]}` : ''; };
+    const tab = t => { const [g, word] = GLYPH[prog[t.id]], n = count(t.id);
+      return `<button type="button" role="tab" id="tab-${t.id}" class="pl-tab${ui.tab === t.id ? ' on' : ''}" aria-label="${esc(t.label)}, ${word}${n ? ', ' + n : ''}" aria-selected="${ui.tab === t.id}" aria-controls="pl-panel" tabindex="${ui.tab === t.id ? 0 : -1}" data-act="tab" data-arg="${t.id}">${status(g)}<span>${esc(t.label)}</span>${n ? `<span class="pl-tab-n">${n}</span>` : ''}</button>`; };
+    const group = n => `<div class="pl-tabgrp" data-step="${n}" role="none"><span class="pl-tabgrp-l" aria-hidden="true" title="${STEPS[n]}"><span class="pl-tabgrp-n">${n}</span><span class="pl-tabgrp-t">${STEPS[n]}</span></span><div class="pl-tabrow" role="none">${TABS.filter(t => t.step === n).map(tab).join('')}</div></div>`;
+    // Phones get one step menu (a native list) and a progress bar in place of the strip.
+    const i = TABS.findIndex(t => t.id === ui.tab);
+    const opts = TABS.map((t, j) => `<option value="${t.id}"${t.id === ui.tab ? ' selected' : ''}${prog[t.id] === 'lock' ? ' disabled' : ''}>${j + 1}. ${esc(t.label)} (${GLYPH[prog[t.id]][1]})</option>`).join('');
+    const bar = TABS.map(t => `<i class="${t.id === ui.tab ? 'on' : prog[t.id]}"></i>`).join('');
+    return `<div class="pl-tabs" role="tablist" aria-label="Workbook steps">${group(1)}${group(2)}</div>` +
+      `<div class="pl-stepm"><span class="pl-stepm-n" aria-hidden="true">${i + 1}/${TABS.length}</span><span class="pl-stepm-t" aria-hidden="true">${esc(TABS[i].label)}</span>${icon('down', { cls: 'pl-stepm-c' })}` +
+      `<select id="pl-stepsel" aria-label="Step ${i + 1} of ${TABS.length}: ${esc(TABS[i].label)}. Choose a step">${opts}</select></div><div class="pl-stepbar" aria-hidden="true">${bar}</div>`;
   }
   function vFoot() {
-    const i = TABS.findIndex(t => t.id === ui.tab), prev = TABS[i - 1], next = TABS[i + 1], n = C.selected().length;
-    return `<div class="pl-foot-in"><div class="pl-foot-l">${prev ? K.btn({ act: 'tab', arg: prev.id, label: 'Previous', icon: 'arrowleft' }) : ''}` +
-      `${next ? K.btn({ act: 'tab', arg: next.id, label: 'Next: ' + next.label, kind: 'primary' }) : K.btn({ act: 'export', label: 'Export to Excel', icon: 'export', kind: 'primary' })}</div>` +
-      `<p class="pl-foot-r" role="status">${n ? `${K.plural(n, 'region')} selected for regional design` : 'No region selected for regional design yet'}</p></div>`;
+    const i = TABS.findIndex(t => t.id === ui.tab), prev = TABS[i - 1], next = TABS[i + 1], n = C.selected().length, prog = C.progress();
+    const locked = next && prog[next.id] === 'lock';
+    // A step that needs a selected region is never one click away while nothing is selected: the button says why instead.
+    const nextBtn = !next ? K.btn({ act: 'export', label: 'Export to Excel', icon: 'export', kind: 'primary' })
+      : locked ? K.btn({ label: 'Next: ' + next.label, kind: 'primary', disabled: true, cls: 'pl-next' })
+      : K.btn({ act: 'tab', arg: next.id, label: 'Next: ' + next.label, kind: 'primary', cls: 'pl-next' });
+    const say = locked ? `Select a Qualified or Conditional region to continue.${ui.tab === 'capability' ? '' : ` <button type="button" class="pl-linkbtn" data-act="tab" data-arg="capability">Go to the outcome</button>`}`
+      : n ? `${K.plural(n, 'region')} selected for regional design` : 'No region selected for regional design yet';
+    return `<div class="pl-foot-in${locked ? ' is-lock' : ''}"><div class="pl-foot-l">${prev ? K.btn({ act: 'tab', arg: prev.id, label: 'Previous', icon: 'arrowleft', cls: 'pl-prev', aria: 'Previous: ' + prev.label }) : ''}${nextBtn}</div>` +
+      `<p class="pl-foot-r" role="status">${say}</p></div>`;
   }
   // Replace a part of the frame only when its markup changed, so typing never disturbs it.
   function put(node, html) { if (node._h !== html) { node.innerHTML = html; node._h = html; return true; } return false; }
@@ -84,6 +111,7 @@
     K.closePop(); K.hideTip();
     put(ess, vEssentials()); put(tabsEl, vTabs()); put(foot, vFoot());
     if (!same) revealTab();
+    root.style.setProperty('--pl-tabs-h', tabsEl.offsetHeight + 'px');
     panel.innerHTML = M.views[ui.tab](); panel.dataset.tab = ui.tab;
     panel.dataset.step = String(TABS.find(t => t.id === ui.tab).step);   // the step group's hue, see "accents" in planner.css
     panel.setAttribute('aria-labelledby', 'tab-' + ui.tab);
@@ -94,7 +122,7 @@
       if (t) { K.setQuiet(true); t.focus({ preventScroll: true }); K.setQuiet(false); if (caret && textual(t)) { try { t.setSelectionRange(caret[0], caret[1]); } catch (e) { /* not a text field */ } } }
     }
     root.dataset.ready = '1';
-    if (ui.tab === 'latency' || ui.tab === 'design') M.latencyMap.mount();
+    if (ui.tab === 'latency' || (ui.tab === 'design' && ui.desMap)) M.latencyMap.mount();
     M.network.mount(el('pl-network'));
   }
   // On narrow screens the tab strip scrolls; keep the selected tab in view.
@@ -130,7 +158,7 @@
   let msgTimer = 0;
   function say(kind, text) {
     clearTimeout(msgTimer);
-    msgEl.innerHTML = K.mb(kind, esc(text));
+    msgEl.innerHTML = K.mb(kind, esc(text), `<button type="button" class="pl-btn subtle icon sm" data-act="msg-x" aria-label="Dismiss">${icon('close')}</button>`);
     msgEl.classList.remove('fade');
     msgTimer = setTimeout(() => { msgEl.classList.add('fade'); msgTimer = setTimeout(() => { msgEl.innerHTML = ''; msgEl.classList.remove('fade'); }, 400); }, 5000);
   }
@@ -184,8 +212,10 @@
     ui.tab = id; history.replaceState(null, '', '#' + id);
     if (id === 'latency') C.loadCities().then(ok => ok && ui.tab === 'latency' && lazyRender());
     if (id === 'pricing') C.loadPricing(C.S.baseline).then(ok => ok && ui.tab === 'pricing' && lazyRender());
-    const top = (tabsEl.getBoundingClientRect().top), head = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--top-h'), 10) || 56;
-    if (top < head + 8) window.scrollBy({ top: top - head - 8 });
+    // The strip sticks under the site header, so a new tab starts with its title just below the strip.
+    const head = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--top-h'), 10) || 56;
+    const lim = head + tabsEl.offsetHeight, top = panel.getBoundingClientRect().top;
+    if (top < lim) window.scrollBy({ top: top - lim });
   }
   function patchNote(rowId) { const c = root.querySelector(`[data-note-cell="${rowId}"]`); if (c) c.innerHTML = T.noteCell(rowId); }
 
@@ -195,7 +225,16 @@
       case 'tab': openTab(arg); break;
       case 'region': ui.region = arg; break;
       case 'goto-design': ui.region = arg; openTab('design'); break;
-      case 'essentials': S.ui.essentials = !S.ui.essentials; break;
+      case 'essentials': S.ui.details = !S.ui.details; break;
+      case 'msg-x': clearTimeout(msgTimer); msgEl.innerHTML = ''; return;
+      case 'show-out': S.ui.showOut = !S.ui.showOut; break;
+      case 'mregion': ui.mregion = arg; break;
+      case 'accept': { const [rid, id] = arg.split('|'), r = C.reg(rid), v = r && C.suggestAnswer(id, r); if (v && !r.checks[id]) r.checks[id] = v; break; }
+      case 'accept-all': C.suggestions(C.active()).forEach(x => { x.r.checks[x.id] = x.v; }); break;
+      case 'narrow': ui.narrow[arg] = true; render(); { const c = root.querySelector(`[data-cb="prod-${CSS.escape(arg)}"]`); if (c) c.focus(); } return;
+      case 'ss-all': ui.ssAll = !ui.ssAll; render(); return;
+      case 'des-map': ui.desMap = !ui.desMap; render(); return;
+      case 'jump': { const t = document.getElementById(arg); if (t) { t.scrollIntoView({ block: 'start' }); const f = t.querySelector('h3, h2'); if (f) { f.tabIndex = -1; f.focus({ preventScroll: true }); } } return; }
       case 'rm-current': S.current = S.current.filter(x => x.id !== arg); break;
       case 'rm-region': S.regions = S.regions.filter(r => r.id !== arg); break;
       case 'rm-svc': S.services = S.services.filter(x => x.id !== arg); break;
@@ -246,6 +285,7 @@
     setK(t.dataset.k, valueOf(t)); C.save(); patch();
   });
   root.addEventListener('change', e => {
+    if (e.target.id === 'pl-stepsel') { openTab(e.target.value); render(); const s = el('pl-stepsel'); if (s) s.focus(); return; }
     if (e.target.id === 'pl-file') {
       const f = e.target.files[0];
       if (f) f.text().then(t => { const raw = JSON.parse(t); if (!raw || typeof raw !== 'object' || !Array.isArray(raw.regions)) throw new Error('not a workbook'); C.replace(raw); ui.region = ''; ui.noteEdit = ''; C.loadPricing(C.S.baseline).then(ok => ok && lazyRender()); if (C.D.lat) C.loadCities().then(ok => ok && lazyRender()); render(); say('success', `Opened ${f.name}.`); })

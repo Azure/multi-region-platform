@@ -12,7 +12,23 @@ Services and pricing use **independent catalogs**. The Services tab uses the mai
 python site\tools\import_service_catalog.py temp\service_availability_product_sku.csv
 ```
 
-The import writes `docs/data/availability-catalog.json` and regenerates `docs/data/service-pricing-map.json`. It does not collect or change retail pricing. The source filename, SHA-256 digest, row count, and import timestamp are recorded; reimporting the same file does not change its timestamp.
+The import writes `docs/data/availability-catalog-latest.json` and regenerates `docs/data/service-pricing-map.json`. It does not collect or change retail pricing. The source filename, SHA-256 digest, row count, and import timestamp are recorded; reimporting the same file does not change its timestamp or create a backup.
+
+### Monthly snapshot backups
+
+Before replacing availability data, the importer copies the previous latest snapshot to `docs/data/availability-catalog-YYYY-MM.json`, using **the previous snapshot's original import month**, not the replacement month. For example, replacing October's data in November archives it as `availability-catalog-2026-10.json`.
+
+Retail API refreshes use the same policy. The complete current snapshot lives in `docs/data/retail-latest/`; before replacement it is backed up to `docs/data/retail-YYYY-MM/`, dated from its original `meta.json.generated` timestamp. Each directory includes `meta.json`, `catalog.json`, `products.json`, and all `pricing/<region>.json` files so prices and catalogs stay together.
+
+Each source keeps **one latest snapshot plus up to six monthly backups** independently. If more than one snapshot from a creation month is replaced, the **first archived snapshot for that month is retained unchanged**. After a successful replacement, archives beyond the six newest month labels are removed. These are six archived months, not a rolling 180-day cutoff; missing months do not produce empty backups. Repeated same-month changes are not all retained.
+
+Collection, parsing, validation, and staging finish before the existing snapshot is archived/replaced. A failed collection or CSV validation leaves latest data and backups unchanged. Publication errors are reported, and retail directory replacement restores the previous latest directory if the new directory cannot be installed. The browser reads only latest paths, and normal website builds preserve latest data and all archives. The maintained service-name mapping and latency files are not part of this backup policy.
+
+The existing snapshots were renamed without recollection or timestamp changes. For an older local checkout with the legacy layout, migrate it once before importing/collecting:
+
+```powershell
+python site\tools\snapshot_history.py
+```
 
 Only these CSV fields are used:
 
@@ -66,11 +82,13 @@ The page is HTML, not a documented data API; the visible table is generated from
 
 | File | Contents |
 |---|---|
-| `docs/data/meta.json` | Snapshot time, coverage, and partial-run status |
-| `docs/data/catalog.json` | Regions and services with regional consumption meters |
-| `docs/data/products.json` | Product-level regional meter coverage |
-| `docs/data/pricing/<region>.json` | Regional price comparisons for each baseline region |
-| `docs/data/availability-catalog.json` | Independent CSV-derived services, products, SKUs, availability and AZ counts |
+| `docs/data/retail-latest/meta.json` | Snapshot time, coverage, and partial-run status |
+| `docs/data/retail-latest/catalog.json` | Regions and services with regional consumption meters |
+| `docs/data/retail-latest/products.json` | Product-level regional meter coverage |
+| `docs/data/retail-latest/pricing/<region>.json` | Regional price comparisons for each baseline region |
+| `docs/data/availability-catalog-latest.json` | Independent CSV-derived services, products, SKUs, availability and AZ counts |
+| `docs/data/availability-catalog-YYYY-MM.json` | Up to six monthly availability backups |
+| `docs/data/retail-YYYY-MM/` | Up to six complete monthly retail backups |
 | `docs/data/svcavail-retailprice.csv` | Canonical, manually maintained service-name mapping |
 | `docs/data/service-pricing-map.json` | Generated browser-readable service-name mapping |
 | `.cache/product-availability.json` | Scraped product/SKU availability by region (local exploratory output) |

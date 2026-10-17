@@ -35,7 +35,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git add docs/data/meta.json docs/data/catalog.json docs/data/products.json docs/data/pricing
+          git add --all -- ':(glob)docs/data/retail-*/**'
           if git diff --cached --quiet; then
             echo "No retail pricing changes."
             exit 0

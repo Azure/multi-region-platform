@@ -8,7 +8,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[2]
-TABS = ("scope", "services", "latency", "pricing", "checks", "design", "review")
+TABS = ("scope", "checks", "services", "latency", "pricing", "capability", "design", "review")
 
 
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
@@ -38,7 +38,11 @@ def main():
                 for width in (375, 768, 1440, 1920):
                     page.set_viewport_size({"width": width, "height": 1100})
                     for tab in TABS:
-                        page.locator(f"#tab-{tab}").click()
+                        # Phones choose the step from one menu; wider screens use the tab strip.
+                        if width <= 720:
+                            page.locator("#pl-stepsel").select_option(tab)
+                        else:
+                            page.locator(f"#tab-{tab}").click()
                         assert page.locator("#pl-panel").get_attribute("data-tab") == tab
                         assert not page.locator("#side-nav").is_visible(), (theme, width, tab)
                         dimensions = page.evaluate("""() => {

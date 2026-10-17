@@ -5,7 +5,10 @@ import csv
 import datetime
 import hashlib
 import json
+import tempfile
 from pathlib import Path
+
+from snapshot_history import publish_snapshot
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "docs" / "data"
@@ -118,11 +121,16 @@ def main():
     args = parser.parse_args()
     catalog = build_catalog(args.csv)
     mapping = build_mapping(args.mapping, catalog["services"])
-    previous_path = args.out / "availability-catalog.json"
+    previous_path = args.out / "availability-catalog-latest.json"
     previous = json.loads(previous_path.read_text(encoding="utf-8")) if previous_path.exists() else {}
     catalog["generated"] = previous.get("generated") if previous.get("sha256") == catalog["sha256"] else (
         datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"))
-    write_json(previous_path, catalog)
+    if previous != catalog:
+        args.out.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix=".availability-", dir=args.out) as temporary:
+            staged = Path(temporary) / "catalog.json"
+            write_json(staged, catalog)
+            publish_snapshot(staged, previous_path)
     write_json(args.out / "service-pricing-map.json", mapping)
     print(f"Imported {catalog['rows']} rows: {len(catalog['services'])} services, "
           f"{len(catalog['regions'])} regions. Retail pricing was not changed.")

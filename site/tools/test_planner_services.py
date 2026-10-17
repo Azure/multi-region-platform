@@ -49,6 +49,8 @@ def check_catalog_selections(page):
       s.services = [{id:'vm',service:'Virtual Machines',product:'',sku:'',weight:''}];
       C.replace(s); MRP.ui.tab = 'services'; MRP.kit.hooks.render();
     }""")
+    # Narrowing is optional: an unnarrowed row shows a link that opens the product and SKU fields.
+    page.get_by_role("button", name="Narrow Virtual Machines to a product and SKU", exact=True).click()
     product = page.get_by_role("combobox", name="Product of Virtual Machines", exact=True)
     sku = page.get_by_role("combobox", name="SKU of Virtual Machines", exact=True)
     assert sku.is_disabled()

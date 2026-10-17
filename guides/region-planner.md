@@ -4,6 +4,20 @@ The [published workbook](https://azure.github.io/multi-region-platform/region-pl
 
 The workbook exports Excel and saves or opens JSON planning records. Visitor-entered planning data stays in the browser; it is not sent to a server. Azure reference data is loaded from published snapshots: see [Azure data collection](azure-data.md) for provenance and limitations.
 
+In Regional design, **Hub Connections** is a searchable multi-select: select or clear regions without
+closing the dropdown. Arrow keys move between options; Enter or Space toggles a selection, and Esc closes
+the list. Saved workbooks, review records, and Excel exports retain every selected region. Older workbooks
+with a single geographic hub keep that selection. Remote shared services still name one supplying region;
+when no supplier is specified, the first selected hub is used.
+
+**Existing connectivity** suggests only locations in the Azure ExpressRoute peering-location snapshot,
+independently of the Latency tab. Customer cities and their estimated routes do not establish existing
+circuits. Suggestions identify valid peering locations, not circuits the customer owns. You can still
+type a circuit description or other existing connectivity, such as a VPN. If the catalog is unavailable,
+the field explains why no locations are suggested.
+After building, run `python site\tools\test_planner_connectivity.py` for the hub multi-select,
+saved-plan compatibility, review/export, diagram inheritance, and peering-suggestion browser checks.
+
 Every workbook tab uses the full page width, with a compact header and the website navigation behind the
 **Table of contents** button. Open that menu to return to the guidance without narrowing the workbook.
 Workbook actions, Essentials, and step tabs remain available throughout.
@@ -42,6 +56,9 @@ When checks, profiles, or default placements change in the articles, mirror the 
 
 The Latency tab ends with a geographic view derived from Scope's current/candidate regions, selected peering locations and customer cities, and the same published, estimated, or edited latency values as the tables. It adds no duplicate tables. Blue current-region, green candidate, and orange peering labels follow the workbook's light/dark styling.
 
+**Add a peering location** lists every location in the published peering snapshot in a scrollable dropdown,
+without a 50-result cutoff. Search remains available; locations already added are omitted to prevent duplicates.
+
 Current-to-candidate and peering-to-current links start on; peering-to-candidate, other region pairs, and city-to-peering links are optional. Location focus, zoom, fit, and reset keep the view readable. Hover or keyboard-focus a latency badge for direction, source, and approximate great-circle distance. City links show only the provider leg. Locations without coordinates are explicitly listed rather than guessed.
 
 The map fits the selected footprint worldwide, including date-line crossings. It uses a local generalized Natural Earth basemap (public domain; boundaries are not legal boundaries). No external map service, API key, or runtime map request is needed.
@@ -79,7 +96,7 @@ editor and does not overwrite the saved design. Close it with **Close presentati
 browser blocks popups, allow them for this site and retry.
 
 The embedded explorer inherits current regions from Scope and the new regions selected for Regional design.
-It uses their effective profiles, geographic hubs, topology, regional links, shared-service placements and
+It uses their effective profiles, hub connections, topology, regional links, shared-service placements and
 hybrid decisions. Named `ExpressRoute circuit in <peering location>` connections are attached to the
 appropriate local or remote gateways; matching Latency locations identify their on-premises sites.
 An unspecified site is explicitly labelled rather than inventing a datacenter. Site-to-site VPN choices
@@ -91,6 +108,8 @@ per diagram and does not model every workbook capability or product choice. Mixe
 paths, incomplete hybrid definitions and other limitations are called out in the panel. Firewall and DNS
 symbols illustrate the capability, not a confirmed product selection. Current-region services are only
 inferred where a new region requires them; the workbook does not inventory all existing services.
+Every selected hub connection is passed to the diagram. For Remote Hub Connected spokes, GeoLZ models
+traffic through one remote hub (the first selection); this limitation is called out in Workbook definitions.
 
 Changes to workbook networking definitions refresh the explorer, including its live presentation window.
 Tool-only refinements survive unrelated renders, hiding and reopening, but are replaced by a networking

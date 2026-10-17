@@ -72,9 +72,11 @@
     const xs = points.map(p => wrap(p.lon)), ys = points.map(p => -p.lat);
     const midX = (Math.min(...xs) + Math.max(...xs)) / 2, midY = (Math.min(...ys) + Math.max(...ys)) / 2;
     const correction = Math.max(0.35, Math.cos(midY * Math.PI / 180));
-    const width = Math.max(12, Math.max(...xs) - Math.min(...xs) + 12);
-    const height = Math.max(10, Math.max(...ys) - Math.min(...ys) + 10);
-    const scale = Math.min(850 / (width * correction), 430 / height) * state.zoom;
+    // Fit the locations, not a padded box around them: a fixed margin in map units leaves room for the labels,
+    // and a minimum span keeps one or two nearby locations from zooming in to street level.
+    const width = Math.max(8, Math.max(...xs) - Math.min(...xs));
+    const height = Math.max(5, Math.max(...ys) - Math.min(...ys));
+    const scale = Math.min(680 / (width * correction), 400 / height) * state.zoom;
     const xy = (lon, lat) => [n(500 + (wrap(lon) - midX) * correction * scale), n(270 + (-lat - midY) * scale)];
     return { xy, wrap, scale, correction, midX };
   }
@@ -101,60 +103,113 @@
       `<path class="pl-map-admin" d="${path(geometry.administrative, false)}"/></g>`;
   }
 
+  // Label widths from the real font, so long names never spill out of their box. Falls back to an estimate.
+  let ctx = null, family = '';
+  function textWidth(text, size) {
+    try {
+      if (!ctx) { ctx = document.createElement('canvas').getContext('2d'); const host = document.getElementById('planner'); family = host ? getComputedStyle(host).fontFamily : 'sans-serif'; }
+      ctx.font = `600 ${size}px ${family}`;
+      const w = ctx.measureText(text).width;
+      if (w > 0) return w;
+    } catch (e) { /* no canvas: estimate */ }
+    return text.length * size * 0.6;
+  }
+
+  // Layout, in viewBox units. Labels are placed in order of importance, each where it collides least:
+  // names first (beside their marker), then latency values (on their own line, never far from it).
+  // A value that finds no free spot on or right beside its line becomes a small dot that shows the value on hover or focus.
   function mapBody(data) {
     if (!data.points.length) return '<p class="pl-muted">No selected locations have coordinates. Add reference regions in Scope or locations above.</p>';
-    const project = projection(data.points), boxes = [], labels = [];
-    const overlap = (a, b) => a.x < b.x + b.w + 3 && a.x + a.w + 3 > b.x && a.y < b.y + b.h + 3 && a.y + a.h + 3 > b.y;
-    const place = (x, y, w, h, offsets) => {
-      const choices = offsets.map(([dx, dy]) => ({ x: Math.max(6, Math.min(994 - w, x + dx)),
-        y: Math.max(6, Math.min(534 - h, y + dy)), w, h }));
-      const box = choices.find(b => !boxes.some(a => overlap(a, b))) ||
-        choices.sort((a, b) => boxes.filter(c => overlap(c, a)).length - boxes.filter(c => overlap(c, b)).length)[0];
-      boxes.push(box); return box;
-    };
-    const points = data.points.map(p => ({ ...p, xy: project.xy(p.lon, p.lat) }));
-    // Separate co-located region/peering markers without changing their metric coordinates.
-    points.forEach((p, i) => {
-      const nearby = points.slice(0, i).filter(q => Math.hypot(q.xy[0] - p.xy[0], q.xy[1] - p.xy[1]) < 28);
-      if (nearby.length) p.xy = [p.xy[0] - 18, p.xy[1] + 24];
-      boxes.push({ x: p.xy[0] - 7, y: p.xy[1] - 7, w: 14, h: 14 });
+    const project = projection(data.points), boxes = [], marks = [];
+    const W = 1000, H = 540, PAD = 2;
+    const hit = (a, b) => a.x < b.x + b.w + PAD && a.x + a.w + PAD > b.x && a.y < b.y + b.h + PAD && a.y + a.h + PAD > b.y;
+    const inside = b => b.x >= 4 && b.y >= 4 && b.x + b.w <= W - 4 && b.y + b.h <= H - 4;
+    const hard = b => boxes.reduce((s, a) => s + (hit(a, b) ? 1 : 0), 0);
+    const soft = b => marks.reduce((s, m) => s + (m[0] > b.x - 1 && m[0] < b.x + b.w + 1 && m[1] > b.y - 1 && m[1] < b.y + b.h + 1 ? 1 : 0), 0);
+
+    // Locations in one metro are fanned out around their shared centre; a thin tether keeps each tied to its real spot.
+    const points = data.points.map(p => ({ ...p, at: project.xy(p.lon, p.lat) }));
+    const groups = [];
+    points.forEach(p => { const g = groups.find(g => Math.hypot(g.c[0] - p.at[0], g.c[1] - p.at[1]) < 26); if (g) { g.m.push(p); g.c = [g.m.reduce((s, q) => s + q.at[0], 0) / g.m.length, g.m.reduce((s, q) => s + q.at[1], 0) / g.m.length]; } else groups.push({ c: p.at.slice(), m: [p] }); });
+    groups.forEach(g => {
+      if (g.m.length === 1) { g.m[0].xy = g.m[0].at; return; }
+      const r = Math.max(16, 7 * g.m.length), rank = { current: 0, candidate: 1, peering: 2, city: 3 };
+      const order = g.m.map((p, i) => ({ p, a: Math.hypot(p.at[0] - g.c[0], p.at[1] - g.c[1]) > 3 ? Math.atan2(p.at[1] - g.c[1], p.at[0] - g.c[0]) : -Math.PI / 2 + i, k: rank[p.kind] }))
+        .sort((x, y) => x.a - y.a || x.k - y.k);
+      const start = order[0].a;
+      order.forEach(({ p }, i) => { const t = start + i * 2 * Math.PI / order.length; p.xy = [n(g.c[0] + r * Math.cos(t)), n(g.c[1] + r * Math.sin(t))]; });
     });
+    points.forEach(p => boxes.push({ x: p.xy[0] - 8, y: p.xy[1] - 8, w: 16, h: 16 }));
     const byId = new Map(points.map(p => [p.id, p]));
+    const cx0 = points.reduce((s, p) => s + p.xy[0], 0) / points.length, cy0 = points.reduce((s, p) => s + p.xy[1], 0) / points.length;
+
+    // Lines bow away from the middle of the selection, so they fan out instead of crossing in the centre.
+    const visible = data.links.filter(l => state.layers[l.layer] && (!state.focus || l.a.id === state.focus || l.b.id === state.focus));
+    const curves = visible.map(l => {
+      const a = byId.get(l.a.id).xy, b = byId.get(l.b.id).xy;
+      const dx = b[0] - a[0], dy = b[1] - a[1], length = Math.max(1, Math.hypot(dx, dy)), nx = -dy / length, ny = dx / length;
+      const side = ((a[0] + b[0]) / 2 - cx0) * nx + ((a[1] + b[1]) / 2 - cy0) * ny >= 0 ? 1 : -1;
+      const bend = Math.min(30, length * 0.14) * side;
+      const c = [(a[0] + b[0]) / 2 + nx * bend, (a[1] + b[1]) / 2 + ny * bend];
+      const at = t => [(1 - t) * (1 - t) * a[0] + 2 * (1 - t) * t * c[0] + t * t * b[0], (1 - t) * (1 - t) * a[1] + 2 * (1 - t) * t * c[1] + t * t * b[1]];
+      for (let s = 1, k = Math.max(4, Math.round(length / 10)); s < k; s++) marks.push(at(s / k));
+      return { l, a, b, c, at, length, nx, ny };
+    });
+
     const markers = points.map(p => {
-      const [x, y] = p.xy, w = Math.min(220, p.name.length * 5.6 + 14);
-      const b = place(x, y, w, 20, [[12, -10], [-w - 12, -10], [12, 14], [-w - 12, -34], [12, -34], [-w / 2, 24]]);
+      const [x, y] = p.xy, w = n(Math.min(240, textWidth(p.name, 11) + 14)), h = 20;
+      // Right, left, above, below, then the four corners; each ring a step further from the marker.
+      const ring = g => [[g, -h / 2], [-w - g, -h / 2], [-w / 2, -h - g], [-w / 2, g], [g * 0.7, -h - g * 0.7], [-w - g * 0.7, -h - g * 0.7], [g * 0.7, g * 0.7], [-w - g * 0.7, g * 0.7]];
+      const choices = [1, 2, 3].flatMap(f => ring(11 * f).map(([dx, dy]) => ({ x: n(x + dx), y: n(y + dy), w, h, f })));
+      const score = b => (inside(b) ? 0 : 5000) + hard(b) * 1000 + soft(b) * 6 + (b.f - 1) * 12;
+      const box = choices.reduce((best, b) => (b.s = score(b)) < best.s ? b : best, { s: Infinity });
+      boxes.push(box);
+      const moved = Math.hypot(p.at[0] - x, p.at[1] - y) > 3;
       const location = p.region ? C.info(p.region).geo + ' geography' : p.kind === 'peering' ? 'ExpressRoute peering location' : 'Customer city';
+      const lx = Math.max(box.x, Math.min(box.x + w, x)), ly = Math.max(box.y, Math.min(box.y + h, y));
       return `<g class="pl-map-node ${p.kind}${state.focus && state.focus !== p.id ? ' dim' : ''}" role="button" tabindex="0" data-map-act="focus" data-map-arg="${esc(p.id)}" aria-pressed="${state.focus === p.id}" aria-label="${esc(p.name + ', ' + location + '. Focus connections.')}">` +
         `<title>${esc(p.name + ' · ' + location + ' · approximate metro')}</title>` +
-        `<line class="pl-map-leader" x1="${x}" y1="${y}" x2="${b.x + b.w / 2}" y2="${b.y + 10}"/>` +
+        (moved ? `<line class="pl-map-tether" x1="${p.at[0]}" y1="${p.at[1]}" x2="${x}" y2="${y}"/><circle class="pl-map-true" cx="${p.at[0]}" cy="${p.at[1]}" r="2"/>` : '') +
+        (Math.hypot(lx - x, ly - y) > 12 ? `<line class="pl-map-leader" x1="${x}" y1="${y}" x2="${n(lx)}" y2="${n(ly)}"/>` : '') +
         (p.kind === 'peering' ? `<rect class="pl-map-pin" x="${x - 5}" y="${y - 5}" width="10" height="10" transform="rotate(45 ${x} ${y})"/>` :
           `<circle class="pl-map-pin" cx="${x}" cy="${y}" r="6"/>`) +
-        `<rect class="pl-map-name" x="${b.x}" y="${b.y}" width="${w}" height="20" rx="4"/>` +
-        `<text x="${b.x + 7}" y="${b.y + 13.5}">${esc(p.name)}</text></g>`;
-    }).join('');
-    const visible = data.links.filter(l => state.layers[l.layer] && (!state.focus || l.a.id === state.focus || l.b.id === state.focus));
-    const connections = visible.map((l, i) => {
-      const a = byId.get(l.a.id).xy, b = byId.get(l.b.id).xy;
-      const dx = b[0] - a[0], dy = b[1] - a[1], length = Math.max(1, Math.hypot(dx, dy));
-      const bend = Math.min(35, length * 0.16) * (i % 2 ? -1 : 1);
-      const cx = (a[0] + b[0]) / 2 - dy / length * bend, cy = (a[1] + b[1]) / 2 + dx / length * bend;
-      const x = (a[0] + 2 * cx + b[0]) / 4, y = (a[1] + 2 * cy + b[1]) / 4;
-      const value = l.value;
+        `<rect class="pl-map-name" x="${box.x}" y="${box.y}" width="${w}" height="${h}" rx="4"/>` +
+        `<text x="${n(box.x + 7)}" y="${n(box.y + 13.5)}">${esc(p.name)}</text></g>`;
+    });
+
+    // Values: the comparisons with current regions first, then the rest; within a layer, short lines (least room) first.
+    const rank = { regions: 0, peering: 1, cities: 2, newPeering: 3, other: 4 };
+    const values = new Array(curves.length);
+    let dots = 0;
+    curves.map((k, i) => ({ k, i })).sort((x, y) => rank[x.k.l.layer] - rank[y.k.l.layer] || x.k.length - y.k.length).forEach(({ k, i }) => {
+      const { l } = k, value = l.value;
       const caption = value ? `${value.ms} ms${value.edited ? '*' : value.src !== 'm' ? '~' : ''}` : 'No data';
       const source = value ? value.edited ? 'Edited in the table above' : C.srcText(value.src || 'd') : 'No latency data';
       const title = `${l.a.name} → ${l.b.name}: ${value ? value.ms + ' ms' : 'No data'} · ${source} · ${l.distance.toLocaleString()} km great-circle distance`;
-      const w = Math.max(42, caption.length * 5.4 + 10);
-      const offsets = Array.from({ length: 13 }, (_, j) => [-w / 2 + (j % 3 - 1) * 20, -8 + (Math.ceil(j / 2) * 22 * (j % 2 ? 1 : -1))]);
-      const box = place(x, y, w, 17, offsets);
-      labels.push(`<g class="pl-map-value ${l.layer}" tabindex="0" aria-label="${esc(title)}"><title>${esc(title)}</title>` +
-        `<line class="pl-map-leader" x1="${n(x)}" y1="${n(y)}" x2="${n(box.x + w / 2)}" y2="${n(box.y + 8.5)}"/>` +
-        `<rect x="${n(box.x)}" y="${n(box.y)}" width="${w}" height="17" rx="4"/>` +
-        `<text x="${n(box.x + w / 2)}" y="${n(box.y + 12)}" text-anchor="middle">${esc(caption)}</text></g>`);
-      return `<path class="pl-map-link ${l.layer}${value ? '' : ' unknown'}" d="M${a}Q${n(cx)},${n(cy)} ${b}"><title>${esc(title)}</title></path>`;
+      const w = n(Math.max(34, textWidth(caption, 10) + 12)), h = 17;
+      const on = [0.5, 0.42, 0.58, 0.34, 0.66, 0.27, 0.73, 0.2, 0.8].map(t => { const [x, y] = k.at(t); return { x: n(x - w / 2), y: n(y - h / 2), w, h, px: x, py: y, near: Math.abs(t - 0.5) }; });
+      const off = [0.5, 0.4, 0.6, 0.3, 0.7].flatMap(t => [16, -16, 26, -26, 36, -36].map(d => { const [x, y] = k.at(t); return { x: n(x + k.nx * d - w / 2), y: n(y + k.ny * d - h / 2), w, h, px: x, py: y, near: 1 + Math.abs(d) / 24 + Math.abs(t - 0.5), lead: 1 }; }));
+      const box = [...on, ...off].filter(b => inside(b) && !hard(b)).sort((a, b) => a.near - b.near)[0];
+      const head = `<g class="pl-map-value ${l.layer}${box ? '' : ' dot'}" tabindex="0" aria-label="${esc(title)}"><title>${esc(title)}</title>`;
+      if (!box) {
+        const [x, y] = k.at(0.5); dots++;
+        values[i] = head + `<circle cx="${n(x)}" cy="${n(y)}" r="4.5"/></g>`;
+        return;
+      }
+      boxes.push(box);
+      values[i] = head + (box.lead ? `<line class="pl-map-leader" x1="${n(box.px)}" y1="${n(box.py)}" x2="${n(box.x + w / 2)}" y2="${n(box.y + h / 2)}"/>` : '') +
+        `<rect x="${box.x}" y="${box.y}" width="${w}" height="${h}" rx="4"/>` +
+        `<text x="${n(box.x + w / 2)}" y="${n(box.y + 12)}" text-anchor="middle">${esc(caption)}</text></g>`;
+    });
+    const connections = curves.map(({ l, a, b, c }) => {
+      const value = l.value;
+      const title = `${l.a.name} → ${l.b.name}: ${value ? value.ms + ' ms' : 'No data'}`;
+      return `<path class="pl-map-link ${l.layer}${value ? '' : ' unknown'}" d="M${a}Q${n(c[0])},${n(c[1])} ${b}"><title>${esc(title)}</title></path>`;
     }).join('');
-    return `<svg class="pl-map-svg" viewBox="0 0 1000 540" role="group" aria-label="Selected regions, peering locations and latency connections">` +
-      basemap(project) + connections + labels.join('') + markers + '</svg>' +
-      `<p class="pl-cap pl-map-count" role="status">${points.length} locations · ${visible.length} visible comparisons. Select a marker to focus; select it again to clear.</p>`;
+    const tip = dots ? ` ${dots} value${dots === 1 ? ' is' : 's are'} shown as a dot where the map is crowded: hover or focus a dot, focus a location, or zoom in.` : '';
+    return `<svg class="pl-map-svg" viewBox="0 0 ${W} ${H}" role="group" aria-label="Selected regions, peering locations and latency connections">` +
+      basemap(project) + connections + values.join('') + markers.join('') + '</svg>' +
+      `<p class="pl-cap pl-map-count" role="status">${points.length} locations · ${visible.length} visible comparisons. Select a marker to focus; select it again to clear.${tip}</p>`;
   }
 
   function view() {

@@ -33,6 +33,9 @@ def main():
               MRP.core.replace(JSON.parse(JSON.stringify(MRP.EXAMPLE)));
               MRP.kit.hooks.render();
             }""")
+            # On Regional design the map waits behind a button; it is the same map as on the Latency tab.
+            assert page.locator("#pl-latency-map").count() == 0
+            page.get_by_role("button", name="Show the map", exact=True).click()
             page.wait_for_selector(".pl-map-land")
             assert page.locator("#pl-network iframe").count() == 0
             assert page.evaluate("""() => document.querySelector('#pl-latency-map')

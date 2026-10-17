@@ -308,7 +308,8 @@ def build():
     open(os.path.join(OUT, ".nojekyll"), "w").close()
     # Missing snapshots get placeholders; the independent collectors/importer replace them.
     os.makedirs(os.path.join(OUT, "data"), exist_ok=True)
-    for name in ("meta.json", "latency.json", "latency-cities.json", "availability-catalog.json"):
+    os.makedirs(os.path.join(OUT, "data", "retail-latest"), exist_ok=True)
+    for name in ("retail-latest/meta.json", "latency.json", "latency-cities.json", "availability-catalog-latest.json"):
         if not os.path.exists(os.path.join(OUT, "data", name)):
             open(os.path.join(OUT, "data", name), "w", encoding="utf-8").write('{"generated":null}')
     mapping_path = os.path.join(OUT, "data", "service-pricing-map.json")
