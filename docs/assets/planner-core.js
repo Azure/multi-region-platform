@@ -89,8 +89,7 @@
   function replace(raw) { S = normalize(raw); tidy(); save(); return S; }
 
   // ───────────── Azure reference data
-  // meta.json, latency.json and latency-cities.json always exist: the build writes a placeholder ({"generated":null}) when a file is missing,
-  // and the data scripts overwrite it under the same name. Nothing else is requested until a placeholder says there is real data.
+  // The build supplies placeholders for missing snapshots. Only latest data is loaded; archives are for maintainer use.
   const D = { meta: null, regions: [], byId: {}, ridx: {}, services: [], svc: {}, pricing: {}, hasCatalog: false,
     availabilityMeta: null, availabilityRegions: {}, hasAvailability: false, availabilityError: '', priceMapping: null, mappingError: '',
     lat: null, cities: null, citiesState: 'idle',
@@ -110,10 +109,10 @@
   }
   async function loadData() {
     if (global.MRP_SEED) useRegions(global.MRP_SEED.regions.map(r => ({ access: '', known: true, ...r })));
-    try { D.meta = await getJson('data/meta.json'); } catch (e) { D.meta = null; }
+    try { D.meta = await getJson('data/retail-latest/meta.json'); } catch (e) { D.meta = null; }
     if (D.meta && D.meta.generated) {
       try {
-        const c = await getJson('data/catalog.json');
+        const c = await getJson('data/retail-latest/catalog.json');
         D.ridx = Object.fromEntries(c.regions.map((r, i) => [r.id, i]));
         // keep reference regions that the snapshot doesn't list, so a saved workbook never loses a name
         const seedOnly = D.regions.filter(r => !(r.id in D.ridx));
@@ -125,7 +124,7 @@
     await Promise.all([
       (async () => {
         try {
-          const c = await getJson('data/availability-catalog.json');
+          const c = await getJson('data/availability-catalog-latest.json');
           if (!c.generated || !Array.isArray(c.regions) || !Array.isArray(c.services)) throw new Error('Invalid availability catalog');
           D.availabilityMeta = c;
           D.availabilityRegions = Object.fromEntries(c.regions.map(r => [r.id, r]));
@@ -135,7 +134,7 @@
             ...c.regions.map(r => ({ ...D.byId[r.id], ...r }))]);
           D.hasAvailability = true;
         } catch (e) {
-          D.availabilityError = 'The service availability catalog could not be loaded. Import the availability CSV and publish docs/data/availability-catalog.json.';
+          D.availabilityError = 'The service availability catalog could not be loaded. Import the availability CSV and publish docs/data/availability-catalog-latest.json.';
           console.error(D.availabilityError, e);
         }
       })(),
@@ -159,7 +158,7 @@
   async function loadPricing(id) {
     if (!D.hasCatalog || !(id in D.ridx) || D.pricing[id]) return false;
     try {
-      const p = await getJson(`data/pricing/${id}.json`);
+      const p = await getJson(`data/retail-latest/pricing/${id}.json`);
       p.idx = Object.fromEntries(p.regions.map((r, i) => [r, i]));
       D.pricing[id] = p;
       return true;

@@ -228,14 +228,11 @@ def dump(obj):
 
 
 def write_if_changed(path, text):
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    try:
-        if open(path, encoding="utf-8").read() == text:
-            return False
-    except OSError:
-        pass
-    with open(path, "w", encoding="utf-8", newline="\n") as f:
-        f.write(text)
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists() and path.read_text(encoding="utf-8") == text:
+        return False
+    path.write_text(text, encoding="utf-8", newline="\n")
     return True
 
 
@@ -265,7 +262,7 @@ def main():
     # don't replace a good snapshot with a broken one
     old_path = os.path.join(args.out, "retail-latest", "catalog.json")
     if os.path.exists(old_path) and not args.force and not args.max_pages:
-        old = json.load(open(old_path, encoding="utf-8"))
+        old = json.loads(Path(old_path).read_text(encoding="utf-8"))
         if len(region_ids) < 0.7 * len(old.get("regions", [])) or len(svc_regions) < 0.7 * len(old.get("services", [])):
             sys.exit(f"snapshot looks incomplete ({len(region_ids)} regions, {len(svc_regions)} services); "
                      "kept the existing data. Use --force to write anyway.")

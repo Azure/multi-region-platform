@@ -30,6 +30,7 @@ Services, Products, and SKUs come from the manually imported availability CSV. S
 
 After building the site, run `python site\tools\test_planner_services.py` for the targeted browser regression checks.
 Importer and data-layer regressions run with `python -m unittest discover -s site\tools -p test_service_catalog.py` and `node --test site\tools\test_service_catalog.cjs`.
+Monthly backup retention and collection failure-safety checks run with `python -m unittest discover -s site\tools -p test_snapshot_history.py`. The website loads `availability-catalog-latest.json` and `retail-latest/` only; each source keeps up to six monthly backups separately.
 
 ## Source organization
 

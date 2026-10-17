@@ -47,4 +47,4 @@ jobs:
           git push origin "$REFRESH_BRANCH"
           gh pr create --base "$BASE_BRANCH" --head "$REFRESH_BRANCH" \
             --title "data: monthly Azure retail price refresh" \
-            --body "Updates the full Azure Retail Prices API snapshot. Review coverage, warnings in the workflow log, and price differences before merging. The manually imported service availability catalog and service-name mapping are not changed."
+            --body "Updates retail-latest and archives its previous snapshot by original creation month, retaining the first backup for each of the six newest months. Review coverage, warnings in the workflow log, and price differences before merging. The manually imported service availability catalog and service-name mapping are not changed."
