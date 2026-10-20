@@ -12,7 +12,7 @@ Services and pricing use **independent catalogs**. The Services tab uses the mai
 python site\tools\import_service_catalog.py temp\service_availability_product_sku.csv
 ```
 
-The import writes `docs/data/availability-catalog-latest.json` and regenerates `docs/data/service-pricing-map.json`. It does not collect or change retail pricing. The source filename, SHA-256 digest, row count, and import timestamp are recorded; reimporting the same file does not change its timestamp or create a backup.
+The import writes `docs/data/availability-catalog-latest.json` and regenerates `docs/data/service-pricing-map.json`. It does not collect or change retail pricing. The source filename, SHA-256 digest, row count, and original CSV import timestamp are recorded. Reimporting the same file with unchanged classifications does not change the catalog or create a backup. A classification change rebuilds the catalog and archives the previous version under the normal monthly policy, without changing the original CSV import timestamp.
 
 ### Monthly snapshot backups
 
@@ -49,6 +49,38 @@ Only these CSV fields are used:
 The importer aggregates availability with an OR: a service is available if any matching service/product/SKU row has `is_available=1`; a product is available if any matching product/SKU row does. Selecting a SKU uses that SKU's rows only. Duplicate rows do not inflate zone counts. AZ counts are shown only for available matching rows with supplied zone information. Different counts are retained (for example, `1/3 AZs`), not combined into a claim of three-zone support for every SKU. Blank, `null`, and empty zone arrays produce no AZ label.
 
 The Services tab has separate Product and SKU selectors; changing or clearing Product clears SKU. Saved plans and Excel exports retain both selections and include availability and reported AZ counts. Saved retail-era service names migrate only when the availability name is already an exact match or the mapping is unambiguous. Obsolete products and ambiguous names remain visible with a correction message, rather than silently choosing another service.
+
+### Generic availability records versus specific SKUs
+
+Some CSV rows explicitly repeat a service or product name in `sku_name`. These are not created by filling blank fields. All source rows remain in the catalog for availability and AZ rollups, but **reviewed generic SKU entries are not selectable as specific SKUs**.
+
+[`docs/data/sku-classifications.json`](../docs/data/sku-classifications.json) is the canonical review file. Each entry contains exact `service`, `product`, and `sku` names plus a `classification` of `generic` (evidence only) or `specific` (a legitimate SKU choice, even if its name repeats a parent). Initial generic classifications cover Azure Load Balancer, Azure Firewall, and Azure Bastion; other repeated names are not automatically hidden. Same-named Products remain selectable.
+
+Every import records unclassified SKUs whose names exactly match their Service or Product in the catalog's `skuReview` array and prints their names to stderr for review. Unreviewed entries remain selectable: matching names alone are not proof of bad data. Classify confirmed cases, then rerun the normal import command using the current CSV. Use `--classifications <file>` for a separate review file. Invalid or duplicate classification entries stop the import before publication; classifications not found in the current CSV produce warnings rather than matching a different name.
+
+With no SKU selected, product availability includes its generic evidence and all specific SKUs. Selecting a specific SKU uses only that SKU's evidence, never the generic record. Products with no selectable specific SKUs show a disabled field labelled **No specific SKU information**. Previously saved generic SKU selections are retained with an explicit correction message and **No data**, not silently broadened to product availability. Clear the SKU to choose aggregate availability, or choose a specific SKU. JSON/Excel exports preserve the saved selection and unknown availability until corrected.
+
+### Manually updating the downstream ADR-EMR planner
+
+`Azure/multi-region-platform` is the only upstream for the Region Planner and Advanced Networking tool. Updates flow to `mcaps-microsoft/adr-emr-region-planning`, never back. ADR-EMR's Capacity tab, its state, validation, Checks gating, review, and exports are downstream customizations; this repository does not acquire that module.
+
+Build the source site, then review and apply the one-way sync from this repository:
+
+```powershell
+$env:PYTHONUTF8 = '1'
+python site\build.py
+python site\tools\sync_planner.py --target C:\github\mcaps\adr-emr-region-planning
+python site\tools\sync_planner.py --target C:\github\mcaps\adr-emr-region-planning --apply
+node --test C:\github\mcaps\adr-emr-region-planning\tools\test_planner_sync.cjs
+python C:\github\mcaps\adr-emr-region-planning\tools\test_planner_capacity.py
+git -C C:\github\mcaps\adr-emr-region-planning diff --check
+```
+
+The default is a dry run. The command reads the **published working-tree files**, including uncommitted updates: `docs/assets` (except the guidance search index), `docs/data` (including monthly archives), and `tools/geolz-explorer`. It copies only the embedded region seed into the downstream `index.html`, preserving its standalone shell. Other downstream files, governance, documentation, and tests are not overwritten. Review the source changes before syncing; collection and CSV imports still happen here, not downstream.
+
+Keep `.planner-upstream/baseline.zip` tracked **in ADR-EMR**. It stores the exact last upstream payload, not the customized downstream files. Future updates use Git's three-way merge against that baseline, preserving local additions and removing only previously managed files whose upstream deletion does not conflict with downstream changes. A conflict stops the entire update before destination files are changed; write failures roll back already-written files. Repository identity checks reject reverse synchronization or unrelated destinations. Sync does not commit, push, or enable automation.
+
+If there is a conflict, rerun with `--resolutions <empty-folder-outside-both-checkouts>`. This exports `.upstream` copies and fingerprints; manually combine each with the downstream customization into a sibling file without the `.upstream` suffix, then rerun with the same arguments and `--apply`. Incoming copies are never approved automatically; stale resolutions and remaining conflict markers are rejected. Re-run the downstream regressions and inspect the diff before manually committing and pushing. First-time onboarding alone uses `--base-ref <upstream-commit>` identifying the reviewed version originally copied downstream; never reset an existing baseline to bypass a conflict.
 
 ### Mapping availability services to retail pricing
 

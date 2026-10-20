@@ -6,12 +6,14 @@ import datetime
 import hashlib
 import json
 import tempfile
+import sys
 from pathlib import Path
 
 from snapshot_history import publish_snapshot
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "docs" / "data"
+CLASSIFICATIONS = DATA / "sku-classifications.json"
 COLUMNS = {
     "service_family", "service_name", "product_name", "sku_name", "region",
     "region_display_name", "geography", "arm_zones", "is_available",
@@ -30,7 +32,7 @@ def merge_region(target, region, available, zones):
         entry["zoneCounts"] = sorted([*entry["zoneCounts"], len(zones)])
 
 
-def build_catalog(path):
+def build_catalog(path, classifications_path=CLASSIFICATIONS):
     services, regions = {}, {}
     count = 0
     with path.open(encoding="utf-8-sig", newline="") as source:
@@ -78,13 +80,46 @@ def build_catalog(path):
                 merge_region(target, rid, flag == "1", zones)
     if not count:
         raise ValueError("Availability CSV contains no data rows.")
-    return {
+    catalog = {
         "source": path.name,
         "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
         "rows": count,
         "regions": [regions[r] for r in sorted(regions)],
         "services": [services[s] for s in sorted(services)],
     }
+    classify_skus(catalog, classifications_path)
+    return catalog
+
+
+def classify_skus(catalog, path):
+    entries = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(entries, list):
+        raise ValueError("SKU classifications must be a JSON array.")
+    classifications = {}
+    for entry in entries:
+        if not isinstance(entry, dict) or set(entry) != {"service", "product", "sku", "classification"}:
+            raise ValueError("Each SKU classification needs service, product, sku and classification.")
+        if any(not isinstance(value, str) or not value.strip() or value != value.strip() for value in entry.values()):
+            raise ValueError("SKU classification fields must be nonempty, trimmed strings.")
+        key = (entry["service"], entry["product"], entry["sku"])
+        if key in classifications or entry["classification"] not in ("generic", "specific"):
+            raise ValueError(f"Duplicate or invalid SKU classification: {key!r}.")
+        classifications[key] = entry["classification"]
+    review, found = [], set()
+    for service in catalog["services"]:
+        for product in service["products"].values():
+            for sku in product["skus"].values():
+                key = (service["name"], product["name"], sku["name"])
+                classification = classifications.get(key)
+                if classification:
+                    found.add(key)
+                if classification == "generic":
+                    sku["generic"] = True
+                elif not classification and sku["name"] in (service["name"], product["name"]):
+                    review.append(dict(zip(("service", "product", "sku"), key)))
+    catalog["skuReview"] = sorted(review, key=lambda entry: (entry["service"], entry["product"], entry["sku"]))
+    for key in sorted(classifications.keys() - found):
+        print(f"Warning: SKU classification not present in this CSV: {key!r}.", file=sys.stderr)
 
 
 def build_mapping(path, services):
@@ -118,8 +153,9 @@ def main():
     parser.add_argument("csv", type=Path, help="Availability CSV supplied in temp/")
     parser.add_argument("--mapping", type=Path, default=DATA / "svcavail-retailprice.csv")
     parser.add_argument("--out", type=Path, default=DATA)
+    parser.add_argument("--classifications", type=Path, default=CLASSIFICATIONS)
     args = parser.parse_args()
-    catalog = build_catalog(args.csv)
+    catalog = build_catalog(args.csv, args.classifications)
     mapping = build_mapping(args.mapping, catalog["services"])
     previous_path = args.out / "availability-catalog-latest.json"
     previous = json.loads(previous_path.read_text(encoding="utf-8")) if previous_path.exists() else {}
@@ -134,6 +170,11 @@ def main():
     write_json(args.out / "service-pricing-map.json", mapping)
     print(f"Imported {catalog['rows']} rows: {len(catalog['services'])} services, "
           f"{len(catalog['regions'])} regions. Retail pricing was not changed.")
+    if catalog["skuReview"]:
+        print(f"Warning: {len(catalog['skuReview'])} parent-name SKU entries need review. "
+              "They remain selectable until classified as generic. See skuReview in the catalog:", file=sys.stderr)
+        for entry in catalog["skuReview"]:
+            print("  " + " / ".join(entry[key] for key in ("service", "product", "sku")), file=sys.stderr)
 
 
 if __name__ == "__main__":

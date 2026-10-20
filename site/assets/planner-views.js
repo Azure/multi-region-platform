@@ -206,11 +206,19 @@
   }
   function skuCell(s) {
     if (!s.product && !ui.narrow[s.id]) return '';
-    const product = D.svc[s.service] && D.svc[s.service].products[s.product], skus = product && product.skus;
-    return K.combo('sku-' + s.id, { mode: 'value', clearable: true, ph: s.product ? 'All SKUs' : 'Select a product first', label: 'SKU of ' + s.service,
-      disabled: !skus || !Object.keys(skus).length, display: () => s.sku || '',
-      items: () => Object.keys(skus || {}).sort().map(sku => ({ value: sku, label: sku })), onPick: it => { s.sku = it.value; },
+    const options = C.skuOptions(s);
+    return K.combo('sku-' + s.id, { mode: 'value', clearable: true, ph: !s.product ? 'Select a product first' : options.length ? 'All SKUs' : 'No specific SKU information', label: 'SKU of ' + s.service,
+      disabled: !options.length, display: () => s.sku || '',
+      items: () => options.map(sku => ({ value: sku, label: sku })), onPick: it => { s.sku = it.value; },
       onClear: () => { s.sku = ''; K.hooks.commit(); } });
+  }
+  function selectionWarning(s) {
+    if (!D.hasAvailability || C.serviceSelection(s)) return '';
+    const service = D.svc[s.service], product = service && service.products[s.product], sku = product && product.skus[s.sku];
+    const message = sku && sku.generic
+      ? 'Generic availability entry, not a specific SKU. Clear the SKU to use all matching availability or select a specific SKU.'
+      : 'Saved selection not in this catalog. Clear the product/SKU or remove and re-add the service.';
+    return `<span class="pl-cap">${esc(message)}</span>`;
   }
   function svcTiles() {
     const rs = C.active();
@@ -229,7 +237,7 @@
         : STARTER_SERVICES.map(n => ({ value: n, label: n }))).filter(x => !used().has(x.value)),
       onPick: it => { if (S.services.length < MAX_SERVICES) S.services.push({ id: C.uid('v'), service: it.value, product: '', sku: '', weight: '' }); },
       onFree: D.hasAvailability ? null : (t => { if (S.services.length < MAX_SERVICES && !used().has(t)) S.services.push({ id: C.uid('v'), service: t, product: '', sku: '', weight: '' }); }) });
-    const rows = S.services.map((s, i) => `<tr><td class="pl-idx">${i + 1}</td><th scope="row" class="pl-sn">${esc(s.service)}${D.hasAvailability && !C.serviceSelection(s) ? '<span class="pl-cap">Saved selection not in this catalog. Clear the product/SKU or remove and re-add the service.</span>' : ''}</th><td class="pl-pr">${productCell(s)}</td><td class="pl-pr pl-sku">${skuCell(s)}</td>` +
+    const rows = S.services.map((s, i) => `<tr><td class="pl-idx">${i + 1}</td><th scope="row" class="pl-sn">${esc(s.service)}${selectionWarning(s)}</th><td class="pl-pr">${productCell(s)}</td><td class="pl-pr pl-sku">${skuCell(s)}</td>` +
       cs.map(x => { const st = C.availability(s, x.id); return `<td class="${x.current ? 'is-cur ' : ''}av-${st}">${avCell(s, x.id, st)}</td>`; }).join('') + `<td class="pl-x">${K.iconBtn('rm-svc', s.id, 'close', 'Remove ' + s.service)}</td></tr>`).join('');
     const table = S.services.length ? K.scroll(`<table class="pl-dl pl-mx"><thead><tr><th scope="col" class="pl-idx">#</th><th scope="col">Service</th><th scope="col">Product</th><th scope="col">SKU</th>` +
       cs.map(x => `<th scope="col" class="${x.current ? 'is-cur' : ''}">${esc(C.rname(x.id))}${x.current ? '<span class="pl-cap">Current region</span>' : ''}</th>`).join('') + `<th scope="col" aria-label="Remove"></th></tr></thead><tbody>${rows}</tbody></table>`, { cls: 'pl-services-scroll', label: 'Service availability by region' })

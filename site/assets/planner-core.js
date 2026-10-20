@@ -262,7 +262,11 @@
     let entry = D.svc[s.service];
     if (s.product) entry = entry && entry.products[s.product];
     if (s.sku) entry = s.product && entry && entry.skus[s.sku];
-    return entry || null;
+    return entry && !entry.generic ? entry : null;
+  }
+  function skuOptions(s) {
+    const service = D.svc[s.service], product = service && service.products[s.product];
+    return Object.keys(product && product.skus || {}).filter(name => !product.skus[name].generic).sort();
   }
   function availabilityDetails(s, rid) {
     const selection = serviceSelection(s);
@@ -605,7 +609,7 @@
   }
 
   M.core = { get S() { return S; }, D, VERSION, load, save, replace, blank, normalize, tidy, newRegion, uid, today, loadData, loadPricing, loadCities, bit,
-    info, rname, reg, cols, suggest, outcome, selectable, selected, ruledOut, active, folded, fitDone, checkState, named, serviceSelection, availability, availabilityDetails, zoneText, availSummary, priceRows, priceDiff, priceSummary,
+    info, rname, reg, cols, suggest, outcome, selectable, selected, ruledOut, active, folded, fitDone, checkState, named, serviceSelection, skuOptions, availability, availabilityDetails, zoneText, availSummary, priceRows, priceDiff, priceSummary,
     regionLatency, peeringLatency, cityLatency, peeringChoices, nearestPeering, sitePeering, siteName, siteLatency, latencySummary, srcText, km, estimate, latScale, latPos,
     num, fmtPct, priceTone, evidence, latencyWorst, suggestAnswer, suggestions, hubRegions, design, suggestProfile, effective, hybridText, record, recordText, list, progress };
 })(window);

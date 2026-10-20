@@ -1,0 +1,20 @@
+[
+  {
+    "service": "Load Balancer",
+    "product": "Azure Load Balancer",
+    "sku": "Azure Load Balancer",
+    "classification": "generic"
+  },
+  {
+    "service": "Azure Firewall",
+    "product": "Azure Firewall",
+    "sku": "Azure Firewall",
+    "classification": "generic"
+  },
+  {
+    "service": "Azure Bastion",
+    "product": "Azure Bastion",
+    "sku": "Azure Bastion",
+    "classification": "generic"
+  }
+]

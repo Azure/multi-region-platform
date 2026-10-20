@@ -111,10 +111,13 @@ class SnapshotHistoryTests(unittest.TestCase):
     def test_csv_import_noop_failure_and_new_data_backup(self):
         source = self.root / "source.csv"
         mapping = self.root / "mapping.csv"
+        classifications = self.root / "sku-classifications.json"
+        classifications.write_text("[]", encoding="utf-8")
         mapping.write_text(",".join(importer.MAPPING_COLUMNS) + "\nExample,Retail Example\n", encoding="utf-8")
         header = "service_family,service_name,product_name,sku_name,region,region_display_name,geography,arm_zones,is_available\n"
         source.write_text(header + "Compute,Example,,,eastus,East US,US,,1\n", encoding="utf-8")
-        argv = ["import_service_catalog.py", str(source), "--mapping", str(mapping), "--out", str(self.root)]
+        argv = ["import_service_catalog.py", str(source), "--mapping", str(mapping),
+                "--classifications", str(classifications), "--out", str(self.root)]
         with patch("sys.argv", argv):
             importer.main()
             latest = self.root / "availability-catalog-latest.json"

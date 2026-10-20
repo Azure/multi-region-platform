@@ -11,9 +11,10 @@ const service = {
   name: 'App Service', family: 'Compute',
   regions: { eastus: entry(true, [1, 3]), westus: entry(true) },
   products: {
-    Web: { name: 'Web', regions: { eastus: entry(true, [1, 3]) }, skus: {
+    Web: { name: 'Web', regions: { eastus: entry(true, [1, 3]), westus: entry(true, [3]) }, skus: {
       Basic: sku('Basic', { eastus: entry(true, [1]), westus: entry(false) }),
       Premium: sku('Premium', { eastus: entry(true, [3]) }),
+      Web: { ...sku('Web', { westus: entry(true, [3]) }), generic: true },
     } },
     Other: { name: 'Other', regions: { westus: entry(true) }, skus: {} },
   },
@@ -62,7 +63,7 @@ test('availability uses separate service, product and SKU aggregates', async () 
   const C = await core(), s = { service: 'App Service' };
   assert.equal(C.availability(s, 'westus'), 'yes');
   s.product = 'Web';
-  assert.equal(C.availability(s, 'westus'), 'no');
+  assert.equal(C.availability(s, 'westus'), 'yes');
   assert.equal(C.availability(s, 'eastus'), 'yes');
   assert.equal(C.zoneText(C.availabilityDetails(s, 'eastus')), '1/3 AZs');
   s.sku = 'Basic';
@@ -81,6 +82,15 @@ test('availability does not require a retail price snapshot', async () => {
   assert.equal(C.D.hasCatalog, false);
   assert.equal(C.D.hasAvailability, true);
   assert.equal(C.availability({ service: 'App Service' }, 'eastus'), 'yes');
+});
+
+test('generic evidence is not selectable and cannot substitute a specific SKU', async () => {
+  const C = await core();
+  assert.deepEqual(Array.from(C.skuOptions({ service: 'App Service', product: 'Web' })), ['Basic', 'Premium']);
+  assert.equal(C.availability({ service: 'App Service', product: 'Web', sku: 'Web' }, 'westus'), 'none');
+  assert.equal(C.availability({ service: 'App Service', product: 'Web' }, 'westus'), 'yes');
+  assert.equal(C.availability({ service: 'App Service', product: 'Web', sku: 'Basic' }, 'westus'), 'no');
+  assert.deepEqual(Array.from(C.skuOptions({ service: 'App Service', product: 'Other' })), []);
 });
 
 test('missing availability never substitutes retail coverage', async () => {

@@ -112,6 +112,44 @@ def check_catalog_selections(page):
     """) == "Available\n" + zone_count
 
 
+def check_generic_skus(page):
+    for service, product, expected in [
+        ("Load Balancer", "Azure Load Balancer", ["Basic", "Standard"]),
+        ("Azure Firewall", "Azure Firewall", ["Azure Firewall Basic", "Azure Firewall Premium", "Azure Firewall Standard"]),
+        ("Azure Bastion", "Azure Bastion", ["Bastion Developer", "Bastion Standard SKU"]),
+    ]:
+        page.evaluate("""({service,product}) => {
+          const C=MRP.core,s=C.blank(); s.current=[{id:'australiacentral2'}];
+          s.services=[{id:'generic-test',service,product,sku:'',weight:''}];
+          C.replace(s); MRP.ui.tab='services'; MRP.kit.hooks.render();
+        }""", {"service": service, "product": product})
+        page.get_by_role("combobox", name="SKU of " + service, exact=True).click()
+        assert page.locator('#pl-pop [role="option"]').all_inner_texts() == expected
+        page.keyboard.press("Escape")
+    # Existing saved generic selections remain visible for correction, not silently broadened.
+    page.evaluate("""() => {
+      MRP.core.S.services[0].sku='Azure Bastion'; MRP.kit.hooks.commit();
+    }""")
+    assert "Generic availability entry" in page.locator(".pl-sn").inner_text()
+    assert page.locator(".pl-services-scroll td.av-none").count() == 1
+    page.get_by_role("button", name="Clear SKU of Azure Bastion", exact=True).click()
+    assert page.locator(".pl-services-scroll td.av-yes").count() == 1
+    # Generic-only data gives no false impression of a specific SKU choice.
+    page.evaluate("""() => {
+      const C=MRP.core, product=C.D.svc['Azure Bastion'].products['Azure Bastion'];
+      window.savedSkus=product.skus;
+      product.skus={'Azure Bastion':product.skus['Azure Bastion']};
+      MRP.kit.hooks.render();
+    }""")
+    box = page.get_by_role("combobox", name="SKU of Azure Bastion", exact=True)
+    assert box.is_disabled()
+    assert box.get_attribute("placeholder") == "No specific SKU information"
+    page.evaluate("""() => {
+      MRP.core.D.svc['Azure Bastion'].products['Azure Bastion'].skus=window.savedSkus;
+      delete window.savedSkus;
+    }""")
+
+
 def main():
     server = http.server.ThreadingHTTPServer(("127.0.0.1", 0),
         functools.partial(QuietHandler, directory=str(ROOT / "docs")))
@@ -127,6 +165,7 @@ def main():
             page.wait_for_function("MRP.core.D.services.length >= 101")
             page.wait_for_function("MRP.core.D.hasAvailability")
             check_catalog_selections(page)
+            check_generic_skus(page)
             add = page.get_by_role("combobox", name="Add a service", exact=True)
 
             seed(page, 20)
