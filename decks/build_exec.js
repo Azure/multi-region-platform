@@ -11,4 +11,4 @@ pres.author = 'Microsoft';
 pres.subject = 'Multi-Region Platform — executive briefing deck';
 const L = makeLib(pres, { brand: 'Multi-Region Platform · Executive Briefing', sections: require('./exec/sections'), tone: 'teal' });
 require('./exec/e')(pres, L);
-L.save(path.join(__dirname, 'out', 'Adaptable-Multi-Region-Azure-Platform-Executive.pptx')).then(f => console.log('wrote', f, L.n, 'slides'));
+L.save(path.join(__dirname, '..', 'temp', 'Adaptable-Multi-Region-Azure-Platform-Executive.pptx')).then(f => console.log('wrote', f, L.n, 'slides'));

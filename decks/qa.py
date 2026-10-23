@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Check a built deck and render it for review.
 
-    python3 decks/qa.py full                 # structure and type checks on out/…-Full.pptx
+    python3 decks/qa.py full                 # structure and type checks on temp/…-Full.pptx
     python3 decks/qa.py exec --render        # also render every slide to out/preview/exec/slide-NN.jpg + contact sheets
     python3 decks/qa.py full --render 12 13  # render only these slides (the whole deck is converted once)
 
@@ -152,7 +152,7 @@ def main():
     if not args:
         raise SystemExit(__doc__)
     key = args[0]
-    path = os.path.join(HERE, "out", DECKS[key]) if key in DECKS else key
+    path = os.path.join(ROOT, "temp", DECKS[key]) if key in DECKS else key
     only = [int(a) for a in args[1:] if a.isdigit()]
     ok = check(path)
     if "--render" in sys.argv:

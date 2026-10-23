@@ -3,7 +3,7 @@
 #   ./build.sh            everything: pdf, site (including shared figures), decks, check
 #   ./build.sh site       figures + website only (fast path after Markdown edits)
 #   ./build.sh pdf        whitepaper + executive brief PDFs; fails on overflow or layout warnings
-#   ./build.sh decks      build both PowerPoint decks, run decks/qa.py on each, copy them to dist/ (not published)
+#   ./build.sh decks      build both PowerPoint decks in temp/, run decks/qa.py on each (not published)
 #   ./build.sh check      navigation, content drift, summary titles, color tokens, PDFs and PPTX files
 #   ./build.sh art        regenerate the art: city analogy, common-drivers figure, deck backgrounds (not part of "all")
 #   ./build.sh clean      delete build outputs (dist/ PDF, HTML, PPTX and DOCX files, whitepaper/out*, decks/out, assembled HTML)
@@ -13,6 +13,7 @@ set -euo pipefail
 cd "$(dirname "$0")"
 ROOT="$(pwd)"
 DIST="$ROOT/dist"
+DECKS="$ROOT/temp"
 NAME="Adaptable-Multi-Region-Azure-Platform"
 what="${1:-all}"
 mkdir -p "$DIST" "$ROOT/docs/downloads"
@@ -34,16 +35,14 @@ pdf() {
 decks() {
   echo "== decks"
   cd "$ROOT/decks"
-  mkdir -p out
   node build_full.js
   node build_exec.js
   cd "$ROOT"
-  # run both QA passes even if the first fails, then stop before anything reaches dist/
+  # Run both QA passes even if the first fails. Decks remain local in temp/.
   local status=0
   python3 decks/qa.py full || status=1
   python3 decks/qa.py exec || status=1
-  [ "$status" -eq 0 ] || { echo "  deck QA failed; the decks were not copied to dist/"; return 1; }
-  cp decks/out/$NAME-Full.pptx decks/out/$NAME-Executive.pptx "$DIST/"
+  [ "$status" -eq 0 ] || { echo "  deck QA failed; inspect the files in temp/"; return 1; }
 }
 
 site() {
@@ -57,9 +56,9 @@ site() {
   python3 site/tools/qa.py
 }
 
-# Runs every check and reports all failures. Built files that are not in dist/ are skipped.
+# Runs every check and reports all failures. Missing built files are skipped.
 check() {
-  local status=0 f opts
+  local status=0 f opts output
   echo "== drift check"
   python3 site/tools/drift.py whitepaper || status=1     # sentences not in site/tools/drift-baseline.txt, retired and required terms
   python3 site/tools/drift.py exec --terms || status=1
@@ -68,10 +67,12 @@ check() {
   python3 -m unittest discover -s site/tools -p test_publication.py || status=1
   python3 -m unittest discover -s site/tools -p test_dns_content.py || status=1
   for f in "$NAME.pdf" "$NAME-Executive-Brief.pdf" "$NAME-Full.pptx" "$NAME-Executive.pptx"; do
-    if [ ! -f "$DIST/$f" ]; then echo "$f: not built, skipped"; continue; fi
+    output="$DIST"
+    if [[ "$f" == *.pptx ]]; then output="$DECKS"; fi
+    if [ ! -f "$output/$f" ]; then echo "$f: not built, skipped"; continue; fi
     echo "$f:"
     opts=--terms
-    python3 site/tools/drift.py "$DIST/$f" $opts || status=1
+    python3 site/tools/drift.py "$output/$f" $opts || status=1
   done
   [ "$status" -eq 0 ] || echo "check: FAILED"
   return "$status"
@@ -90,6 +91,7 @@ art() {
 clean() {
   echo "== clean"
   rm -f "$DIST"/*.pdf "$DIST"/*.html "$DIST"/*.pptx "$DIST"/*.docx
+  rm -f "$DECKS/$NAME-Full.pptx" "$DECKS/$NAME-Executive.pptx"
   rm -rf "$ROOT/whitepaper/out" "$ROOT/whitepaper/out-exec" "$ROOT/decks/out"
   rm -f "$ROOT/whitepaper/whitepaper.html" "$ROOT/whitepaper/executive.html"
 }

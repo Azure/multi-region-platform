@@ -12,7 +12,7 @@ See [Building and publishing](building.md) for prerequisites and commands, [Azur
 | Future CAF article set | `content/*.md`, `content/toc.yml`, and `content/media/` | `dist/caf/` after export |
 | Whitepaper PDF | `whitepaper/pages/*.html` | `dist/Adaptable-Multi-Region-Azure-Platform.pdf` |
 | Executive brief PDF | `whitepaper/exec/pages/*.html` | `dist/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf` |
-| PowerPoint decks | `decks/full/NN-*.js` with `decks/full/sections.js`, and `decks/exec/` | `dist/*.pptx` |
+| PowerPoint decks | `decks/full/NN-*.js` with `decks/full/sections.js`, and `decks/exec/` | `temp/*.pptx` (always; separate from PDFs) |
 | Short lists, edition date, URLs, navigation names, color tokens | `shared/summary.json` | read by PDF and PowerPoint builds |
 | Multi-region planner | `site/planner/`, `site/assets/planner*.js`, regional seed | `docs/region-planner.html` and `docs/data/` |
 
@@ -102,6 +102,8 @@ The removed operating-model material remains in `backup/operating-model.md` and 
 The home page is a short landing page; longer explanations live in `framework-overview.md` and `platform-and-workload.md`. The whitepaper sometimes retains fuller text: `02b` carries all six approach-at-a-glance cards, while the overview article folds three into construct descriptions. Don't shorten a whitepaper page solely because its article is shorter. Profile considerations also appear on `08b`/`08c`; hub design options appear on the Full Regional Hub pages.
 
 Figure IDs and extraction names live in `site/tools/extract_figures.py` (`FIGS`) and `site/figures/manifest.json`.
+
+Keep the full Key Vault guide to at most five rendered PDF pages and five PowerPoint slides: product comparison and paired-region constraints, secrets and certificates, vault-based key patterns, Managed HSM key patterns, and the decision tree with references. Keep all seven pattern diagrams; use speaker notes for detailed slide caveats rather than adding slides. After regeneration, check the actual PDF page count for this section as well as source-page coverage.
 Use `data-export-width` on a figure to set its standalone export width independently of the PDF column width. The seven Key Vault pattern diagrams use 380 pixels so their web and PNG objects have consistent sizes; their PDF placement still follows the two- or three-column layout.
 
 The private DNS article uses `content/media/private-dns-global-zone.png` and `private-dns-regional-zones.png`, imported from the supplied HTML diagrams. The website discovers it through `content/toc.yml`; the PDF mapping places its four pages after Key Vault. The single-file HTML exporter embeds the shared images. `55-service-guides.js` calls `key-vault.js`, then `private-dns.js`. Executive editions point to the guides without reproducing these technical pages. `whitepaper/gen/keyvault.py` generates the five Key Vault pages and eight registered diagrams; edit that generator, rerun it, extract figures, and rebuild both full outputs. To publish website-only changes, run `python3 site/build.py`.

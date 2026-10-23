@@ -239,7 +239,7 @@ def page1():
     cs = "".join(f'<div style="display:flex;gap:10px;align-items:center;padding:5px 0;border-top:1px solid var(--line-soft)"><span style="min-width:36px;text-align:center;background:var(--b600);color:#fff;border-radius:8px;font-size:11px;font-weight:700;padding:4px 0">{a}</span>'
                  f'<div style="font-size:10.8px;line-height:1.35"><b style="color:var(--ink)">{b}</b><br><span style="color:var(--muted)">{c}</span></div></div>' for a, b, c in constraints)
     body = (head("Service guides · Key Vault", "Azure Key Vault across regions",
-                 "Key Vault is often a runtime dependency. Pick the product first, then the pattern. Each product handles regions differently.")
+                 "Key Vault is often a runtime dependency. Key Vault is multi-tenant; Managed HSM is single-tenant. Pick the product first, then the pattern. Each product handles regions differently.")
             + grid
             + '<div class="row mt12" style="gap:24px;align-items:stretch">'
               '<div style="flex:1.45;border:1px solid var(--line);border-radius:12px;padding:12px 16px"><div class="eyebrow" style="color:var(--b600)">Paired-region failover · Standard and Premium</div>'
@@ -265,7 +265,7 @@ def page2():
         ("lm", "Watch for", "Fails over only to a pair in the same geography that is paired in both directions."),
     ], "figKVS2", "S2")
     guide = ('<div class="row mt12" style="gap:20px;align-items:stretch"><div class="note" style="flex:1;padding:10px 14px"><h4>Design guidance</h4>'
-             '<p class="small" style="color:var(--ink);font-size:10.8px">Treat each region as its own deployment stamp with its own vault. Roll secrets out through a pipeline, one region at a time, so one bad change cannot reach every region. App-level fallback to another region\'s vault is optional and needs careful design of networking (private endpoints) and identity (managed identities).</p></div>'
+             '<p class="small" style="color:var(--ink);font-size:10.8px">Treat each region as its own deployment stamp with its own vault. Roll secrets out through a pipeline, one region at a time, so one bad change cannot reach every region. App-level fallback to another region\'s vault is optional and needs careful design of networking (private endpoints) and identity (managed identities). Do not treat the IaC repository itself as a store for secret values.</p></div>'
              '<div style="flex:.8;background:var(--s800);border-radius:12px;padding:10px 16px;color:#fff;display:flex;flex-direction:column;justify-content:center"><p style="font-size:11.4px;line-height:1.4;color:#fff">Managed HSM and EKM do not hold secrets or certificates. Use Standard or Premium for both.</p></div></div>')
     body = (head("Service guides · Key Vault · Secrets and certificates", "Secrets and certificates: two patterns",
                  "Secrets and certificates can be loaded into any vault by a pipeline. That makes a vault in each region practical.")
@@ -289,7 +289,7 @@ def page3():
     body = (head("Service guides · Key Vault · Keys (1 of 2)", "Keys: vault-based patterns",
                  "Patterns 1 and 2 use Key Vault. Customer-managed keys have extra limits, so design them separately from secrets.")
             + f'<div class="kv-grid2 mt12">{k1}{k2}</div>'
-            + '<div class="note mt12" style="padding:9px 14px"><h4>Check before you pick</h4><p class="small" style="color:var(--ink);font-size:10.8px">Confirm that every service using the key supports a vault per region. Standard does not support BYOK; check supported HSMs for Premium. Restoring a vault backup works only within the same subscription and geography.</p></div>')
+            + '<div class="note mt12" style="padding:9px 14px"><h4>Check before you pick</h4><p class="small" style="color:var(--ink);font-size:10.8px">Confirm that every service using the key supports your pattern. Standard does not support BYOK; check supported HSMs for Premium. Customer-managed keys have extra limits, so design them separately from secrets.</p></div>')
     return page(body)
 
 
@@ -298,7 +298,7 @@ def page4():
         ("cr", "Created in", "Managed HSM with multi-region replication."),
         ("ok", "Outage", "Reads and writes stay available in the healthy region."),
         ("bf", "Best for", "Own and hold the master key; mission-critical with customer-controlled recovery."),
-        ("lm", "Watch for", "Cost. Changes replicate within 6 minutes; the last few may be lost."),
+        ("lm", "Watch for", "Cost. Keys, role definitions, and role assignments replicate asynchronously within 6 minutes; last changes may be lost if the primary cannot be recovered."),
     ], "figKVK3", "K3")
     k4 = card("4", "Managed HSM geo-replication + external HSM", [
         ("cr", "Created in", "Imported from your external HSM, then replicated."),
@@ -310,12 +310,12 @@ def page4():
         ("cr", "Created in", "Key never leaves your HSM."),
         ("ok", "Outage", "Depends on the failing part: Managed HSM, EKM proxy, your HSM, or the region. No failover target, so wait for restore."),
         ("bf", "Best for", "You must own and hold the key outside Microsoft."),
-        ("lm", "Watch for", "No end-to-end SLA. Failures in your HSM can interrupt Azure workloads and do not count against their SLAs."),
+        ("lm", "Watch for", "No geo-replication or end-to-end SLA. Proxy or HSM failures can interrupt Azure workloads and do not count against their SLAs."),
     ], "figKVK5", "K5")
     body = (head("Service guides · Key Vault · Keys (2 of 2)", "Keys: Managed HSM patterns",
                  "Patterns 3 to 5 use Managed HSM. Use two regions with replication, or keep the key in your own HSM.")
             + f'<div class="kv-grid3 mt12">{k3}{k4}{k5}</div>'
-            + '<p class="small muted mt8" style="font-size:10.2px">Managed HSM replicates to one extended region. Both regions are active and Azure Traffic Manager routes to the closest one; avoid caching DNS longer than the TTL. EKM adds network round trips to your proxy and HSM on every key operation. Recreate the external key reference instead of restoring a backup.</p>')
+            + '<p class="small muted mt8" style="font-size:10.2px">Enable Managed HSM multi-region replication to one extended region. Both regions are active and Azure Traffic Manager routes to the closest one; avoid caching DNS longer than the TTL. EKM adds network round trips to your proxy and HSM on every key operation. Managed HSM does not support backup and restore of external keys: recreate the external key reference.</p>')
     return page(body)
 
 

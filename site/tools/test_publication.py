@@ -71,6 +71,35 @@ class PublicationTests(unittest.TestCase):
         self.assertNotIn("  word)", script)
         self.assertNotIn("python3 inline.py", script)
 
+    def test_key_vault_fits_five_pages_and_slides(self):
+        pages = [page for page in build.publication_pages() if Path(page).name.startswith("22a4-kv")]
+        self.assertEqual(len(pages), 5)
+        result = subprocess.run(["node", "-e", """
+            let slides = 0, images = 0;
+            const L = {
+              data: {siteUrl: 'https://example.invalid/'},
+              slide() { slides++; return {addTable() {}, addNotes() {}}; },
+              header() {}, txt() {}, box() {},
+              image(slide, file, box) {
+                const ratio = file.endsWith('decision-tree.png') ? 940 / 492 : 380 / 273;
+                if (Math.abs(box.w / box.h - ratio) > 0.001) throw Error('Distorted diagram');
+                images++;
+              }
+            };
+            require('./decks/full/key-vault')({}, L);
+            console.log(JSON.stringify({slides, images}));
+        """], cwd=ROOT, check=True, capture_output=True, text=True)
+        self.assertEqual(json.loads(result.stdout), {"slides": 5, "images": 8})
+
+    def test_decks_are_created_only_in_temp(self):
+        for builder in ("build_full.js", "build_exec.js"):
+            source = (ROOT / "decks" / builder).read_text(encoding="utf-8")
+            self.assertIn("path.join(__dirname, '..', 'temp',", source)
+            self.assertNotIn("path.join(__dirname, 'out',", source)
+        script = (ROOT / "build.sh").read_text(encoding="utf-8")
+        self.assertIn('DECKS="$ROOT/temp"', script)
+        self.assertNotIn('cp decks/out/', script)
+
 
 if __name__ == "__main__":
     unittest.main()

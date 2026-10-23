@@ -42,12 +42,12 @@ Every target stops at the first failing step and exits with a non-zero status. `
 | Website | `docs/` |
 | Whitepaper PDF | `dist/Adaptable-Multi-Region-Azure-Platform.pdf` |
 | Executive brief PDF | `dist/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf` |
-| Full and executive PowerPoint decks | `dist/Adaptable-Multi-Region-Azure-Platform-Full.pptx` and `-Executive.pptx` |
+| Full and executive PowerPoint decks | `temp/Adaptable-Multi-Region-Azure-Platform-Full.pptx` and `-Executive.pptx` |
 | CAF-ready articles | `dist/caf/` after `python3 site/tools/export_caf.py` |
 
 `dist/` is git-ignored. The site target copies existing PDFs from `dist/` into `docs/downloads/`; it does not generate them. Run `./build.sh pdf` before `./build.sh site` when PDF content changes. PowerPoint decks stay local and are not published as website downloads. PDF and PPTX are the supported document formats. Word generation and Pandoc are retired; `word/` is historical source, excluded from builds and checks.
 
-`./build.sh clean` removes the PDF, HTML, PPTX, and DOCX files in `dist/`, `whitepaper/out`, `whitepaper/out-exec`, the two assembled HTML files in `whitepaper/`, and `decks/out`. Other files in `dist/` are left alone.
+`./build.sh clean` removes the PDF, HTML, PPTX, and DOCX files in `dist/`, the two generated decks in `temp/`, `whitepaper/out`, `whitepaper/out-exec`, the two assembled HTML files in `whitepaper/`, and `decks/out`. Other files in `dist/` and `temp/` are left alone.
 
 ## Generate PDFs directly
 
@@ -67,9 +67,9 @@ The edition date, website and planner links, planner name, and service-guides ti
 ## Build the decks
 
 ```bash
-./build.sh decks                          # build both decks, run the QA, copy them to dist/
-(cd decks && node build_full.js)          # decks/out/Adaptable-Multi-Region-Azure-Platform-Full.pptx
-(cd decks && node build_exec.js)          # decks/out/Adaptable-Multi-Region-Azure-Platform-Executive.pptx
+./build.sh decks                          # build both decks in temp/, run the QA
+(cd decks && node build_full.js)          # temp/Adaptable-Multi-Region-Azure-Platform-Full.pptx
+(cd decks && node build_exec.js)          # temp/Adaptable-Multi-Region-Azure-Platform-Executive.pptx
 (cd decks && DECK_ONLY=30-part3 node build_full.js)   # one module only, for a quick look while editing
 python3 decks/qa.py full                  # check a built deck: full or exec
 python3 decks/qa.py exec --render         # render slides to decks/out/preview/ (PowerPoint on Windows, or LibreOffice + pdftoppm)
@@ -81,7 +81,7 @@ The default build extracts website/CAF diagrams before generating the decks, so 
 
 On Windows without LibreOffice, the renderer uses installed PowerPoint through `render_windows.ps1`, exports slides without saving changes to the deck, and closes only the presentation it opened. An already-running PowerPoint application is left running.
 
-`decks/qa.py` fails (exit 1) when a slide has missing or duplicate titles, a title lacks explicit position or left alignment or does not bind to its layout's title slot, a slide uses the wrong layout (DEFAULT for cover and closing, CONTENT elsewhere), a picture has no alt text or has a file path as alt text, any text is under 9 pt, or `site/tools/drift.py --terms` reports a `RETIRED` or `MISSING` term. It also reports the share of small text per slide. `./build.sh decks` copies the decks to `dist/` only when both pass.
+`decks/qa.py` fails (exit 1) when a slide has missing or duplicate titles, a title lacks explicit position or left alignment or does not bind to its layout's title slot, a slide uses the wrong layout (DEFAULT for cover and closing, CONTENT elsewhere), a picture has no alt text or has a file path as alt text, any text is under 9 pt, or `site/tools/drift.py --terms` reports a `RETIRED` or `MISSING` term. It also reports the share of small text per slide. Both direct Node builds and `./build.sh decks` always create PPTX files in the repository's git-ignored `temp/` folder, separate from PDFs in `dist/`. QA reads them from `temp/`; slide previews remain in `decks/out/preview/`.
 
 ## Check the formats against each other
 
@@ -94,7 +94,7 @@ On Windows without LibreOffice, the renderer uses installed PowerPoint through `
 | `drift.py summary` | the titles in `shared/summary.json` against the Markdown |
 | `check_tokens.py` | color tokens in `shared/summary.json`, `whitepaper/styles.css`, and `decks/lib.js` |
 | `test_publication.py` | complete PDF page mapping, website reading order, separate service guides and Resources, deck sections, and no Word generation |
-| `drift.py` on each built `.pdf` and `.pptx` in `dist/` | retired and required terms, including the current planner and service-guides names |
+| `drift.py` on built `.pdf` files in `dist/` and `.pptx` files in `temp/` | retired and required terms, including the current planner and service-guides names |
 
 Files that are not built are skipped with a message. [Authoring](authoring.md#cross-format-checks) explains each line the checks print and how to fix it.
 

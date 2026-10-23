@@ -16,4 +16,4 @@ const only = (process.env.DECK_ONLY || '').split(',').filter(Boolean);
 fs.readdirSync(path.join(__dirname, 'full')).filter(f => /^\d\d-.*\.js$/.test(f)).sort()
   .filter(f => !only.length || only.some(k => f.startsWith(k)))
   .forEach(f => require('./full/' + f)(pres, L));
-L.save(path.join(__dirname, 'out', 'Adaptable-Multi-Region-Azure-Platform-Full.pptx')).then(f => console.log('wrote', f, L.n, 'slides'));
+L.save(path.join(__dirname, '..', 'temp', 'Adaptable-Multi-Region-Azure-Platform-Full.pptx')).then(f => console.log('wrote', f, L.n, 'slides'));
