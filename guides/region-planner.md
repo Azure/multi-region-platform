@@ -109,7 +109,7 @@ per diagram and does not model every planner capability or product choice. Mixed
 paths, incomplete hybrid definitions and other limitations are called out in the panel. Firewall and DNS
 symbols illustrate the capability, not a confirmed product selection. Current-region services are only
 inferred where a new region requires them; the planner does not inventory all existing services.
-Every selected hub connection is passed to the diagram. For Remote Hub Connected spokes, GeoLZ models
+Every selected hub connection is passed to the diagram. For Remote Hub, GeoLZ models
 traffic through one remote hub (the first selection); this limitation is called out in Plan definitions.
 
 Changes to networking definitions in the plan refresh the explorer, including its live presentation window.

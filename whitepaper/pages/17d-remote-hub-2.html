@@ -59,7 +59,7 @@
     <svg class="gl" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"/><circle cx="40" cy="15" r="5" fill="#0F6CBD"/></svg>
   </div>
   <div class="row mt16" style="gap:40px;align-items:flex-end">
-    <h2 class="title" style="font-size:21px;flex:1">Connect to the existing hub</h2>
+    <h2 class="title" style="font-size:21px;flex:1">Connect to the geographic hub</h2>
     <p class="muted" style="flex:1.2;font-size:12.2px">How you connect depends on the topology of the hub you already run.</p>
   </div>
 
@@ -71,7 +71,7 @@
         <div class="zrg"></div><div class="zrl"><svg><use href="#i-pin"/></svg>New region</div>
         <div class="zsp node" id="zra1" style="top:34px"><i></i>Spoke virtual network</div>
         <div class="zsp node" id="zra2" style="top:94px"><i></i>Spoke virtual network</div>
-        <div class="zhb node" id="zrah"><div class="t1">Existing hub region</div><b>Hub virtual network</b><span>VPN or ExpressRoute gateways</span><span>Firewall</span><span>DNS resolution</span><span>Shared services</span></div>
+        <div class="zhb node" id="zrah"><div class="t1">Geographic hub region</div><b>Hub virtual network</b><span>VPN or ExpressRoute gateways</span><span>Firewall</span><span>DNS resolution</span><span>Shared services</span></div>
         <div class="zop node" id="zrao"><svg><use href="#i-building"/></svg>On-premises</div>
         <i class="ln" data-from="zra1" data-to="zrah" data-s="r" data-e="l@0.359" data-k="blue" data-both data-label="Global peering" data-lp=".76"></i>
         <i class="ln" data-from="zra2" data-to="zrah" data-s="r" data-e="l@0.7436" data-k="blue" data-both></i>
@@ -85,7 +85,7 @@
         <div class="zrg"></div><div class="zrl"><svg><use href="#i-pin"/></svg>New region</div>
         <div class="zsp node" id="zrb1" style="top:34px"><i></i>Spoke virtual network</div>
         <div class="zsp node" id="zrb2" style="top:94px"><i></i>Spoke virtual network</div>
-        <div class="zhb node" id="zrbh"><div class="t1">Existing hub region</div><b>Virtual hub</b><span>VPN or ExpressRoute gateways</span><span>Firewall</span><span>Routing between connections</span></div>
+        <div class="zhb node" id="zrbh"><div class="t1">Geographic hub region</div><b>Virtual hub</b><span>VPN or ExpressRoute gateways</span><span>Firewall</span><span>Routing between connections</span></div>
         <div class="zop node" id="zrbo"><svg><use href="#i-building"/></svg>On-premises</div>
         <i class="ln" data-from="zrb1" data-to="zrbh" data-s="r" data-e="l@0.359" data-k="blue" data-both data-label="Connection" data-lp=".5"></i>
         <i class="ln" data-from="zrb2" data-to="zrbh" data-s="r" data-e="l@0.7436" data-k="blue" data-both></i>

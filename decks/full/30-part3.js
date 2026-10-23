@@ -54,14 +54,14 @@ module.exports = (pres, L) => {
     L.line(s, 4.87, by + bh / 2, 5.08, by + bh / 2, { color: C.b600 });
     L.box(s, 5.1, by, 3.69, bh, { fill: C.b50, line: C.b200, r: 0.1 });
     L.icon(s, 'hub', 5.28, by + 0.13, 0.32, 'b');
-    L.txt(s, [{ text: 'Strategic geographic hubs and shared services', options: { fontFace: F.semi, fontSize: 12, color: C.b800, breakLine: true, paraSpaceAfter: 3 } }, { text: 'Reused where they satisfy requirements; each service provided locally, remotely, or centrally', options: { fontSize: 11, color: C.muted } }], 5.28, by + 0.55, 3.35, bh - 0.6);
+    L.txt(s, [{ text: 'Geographic hubs and shared services', options: { fontFace: F.semi, fontSize: 12, color: C.b800, breakLine: true, paraSpaceAfter: 3 } }, { text: 'Reused where they satisfy requirements; each service provided locally, remotely, or centrally', options: { fontSize: 11, color: C.muted } }], 5.28, by + 0.55, 3.35, bh - 0.6);
     // group 3: Workload Landing Zones
     L.line(s, 8.81, by + bh / 2, 9.02, by + bh / 2, { color: C.b600, both: true });
     L.box(s, 9.04, by, 3.69, bh, { fill: C.t50, line: C.t300, r: 0.1 });
     L.icon(s, 'spoke', 9.22, by + 0.13, 0.32, 't');
     L.txt(s, [{ text: 'Workload Landing Zones', options: { fontFace: F.semi, fontSize: 12, color: C.t700, breakLine: true, paraSpaceAfter: 3 } }, { text: 'Supported by the regional platform connectivity profile, selected by dependencies and requirements', options: { fontSize: 11, color: C.muted } }], 9.22, by + 0.55, 3.35, bh - 0.6);
     L.caption(s, 'Figure', 'The three decisions on one path. They are related, but each is a separate decision.', 0.6, 6.5, 12.13);
-    s.addNotes('Selecting the regional design is a set of decisions, not a deployment. For each qualified region you make three choices, each from a short list: the connectivity profile, where each shared service is provided, and whether existing hybrid connectivity is reused. Each choice follows from the workloads you expect in the region, not from the footprint of an existing hub. Nothing is built yet; deployment follows later, through the automation you already run. Connectivity that is specific to one application is not decided here. It is designed when the workload is placed.');
+    s.addNotes('Selecting the regional design is a set of decisions, not a deployment. For each qualified region you make three choices, each from a short list: the connectivity profile, where each shared service is provided, and whether existing hybrid connectivity is reused. Each choice follows from the workloads you expect in the region, not from the footprint of an existing geographic hub. Nothing is built yet; deployment follows later, through the automation you already run. Connectivity that is specific to one application is not decided here. It is designed when the workload is placed.');
   }
 
   // ───────────────────────── The regional design record (after the three choices)
@@ -85,7 +85,7 @@ module.exports = (pres, L) => {
     const head = ['Region', 'Connectivity profile', 'Shared services', 'Hybrid connectivity', 'Open conditions'];
     const rows = [
       ['Region C', PROF[2], 'Local: selected capabilities. Remote from Region A: remaining shared services.', 'Reuse: existing foundation where required.', 'None'],
-      ['Region D', PROF[1], 'Remote from a strategic geographic hub.', 'Reuse: via the hub where required.', 'Latency test with representative traffic.'],
+      ['Region D', PROF[1], 'Remote from a geographic hub.', 'Reuse: via the hub where required.', 'Latency test with representative traffic.'],
       ['Region E', PROF[0], 'None required.', 'Not required.', 'None'],
     ];
     const hOpt = { bold: true, fontSize: 10, color: C.muted, fill: { color: C.wash }, charSpacing: 1, valign: 'middle' };

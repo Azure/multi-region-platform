@@ -24,7 +24,7 @@
     <ol class="zow mt12">
       <li><strong>Allow the region in policy</strong>, for the workload requirements it is qualified for.</li>
       <li><strong>Reserve address space</strong> that doesn’t overlap the rest of the estate, even for Disconnected Spokes.</li>
-      <li><strong>Build the network part</strong> that the profile calls for: nothing, connections to an existing hub, or a hub.</li>
+      <li><strong>Build the network part</strong> that the profile calls for: nothing, connections to an existing geographic hub, or a local hub.</li>
       <li><strong>Extend the shared services</strong> that must be local, such as DNS forwarding or domain controllers.</li>
       <li><strong>Turn on landing-zone provisioning</strong> for the region, so that workload teams receive spokes that match the profile.</li>
       <li><strong>Extend operations</strong>: monitoring, security coverage, backup, and runbooks.</li>
@@ -50,38 +50,38 @@
         </div>
         <div class="rg2 hubr node" id="eA" style="left:150px;top:78px;width:138px;height:92px">
           <div class="rl"><svg><use href="#i-pin"/></svg>Region A</div>
-          <div class="pp">Strategic geographic hub</div>
-          <div class="ps">Full hub · resilient hybrid connectivity</div>
+          <div class="pp">Geographic hub</div>
+          <div class="ps">Full Hub · resilient hybrid connectivity</div>
         </div>
         <div class="rg2 hubr node" id="eB" style="left:150px;top:296px;width:138px;height:92px">
           <div class="rl"><svg><use href="#i-pin"/></svg>Region B</div>
-          <div class="pp">Strategic geographic hub</div>
-          <div class="ps">Full hub · resilient hybrid connectivity</div>
+          <div class="pp">Geographic hub</div>
+          <div class="ps">Full Hub · resilient hybrid connectivity</div>
         </div>
 
         <div class="rg2 node" id="eC" style="left:322px;top:0;width:158px;height:68px">
           <div class="rl"><svg><use href="#i-pin"/></svg>Region C</div>
-          <div class="pp">Minimal regional hub</div>
+          <div class="pp">Selective Hub</div>
           <div class="ps">Local on-premises path; rest from Region A</div>
         </div>
         <div class="rg2 node" id="eD" style="left:322px;top:75px;width:158px;height:68px">
           <div class="rl"><svg><use href="#i-pin"/></svg>Region D</div>
-          <div class="pp">Minimal regional hub</div>
+          <div class="pp">Selective Hub</div>
           <div class="ps">No on-premises path; rest from Region A</div>
         </div>
         <div class="rg2 node" id="eE" style="left:322px;top:150px;width:158px;height:68px">
           <div class="rl"><svg><use href="#i-pin"/></svg>Region E</div>
-          <div class="pp">Remote-hub-connected spokes</div>
+          <div class="pp">Remote Hub</div>
           <div class="ps">Services from Region A</div>
         </div>
         <div class="rg2 node" id="eF" style="left:322px;top:225px;width:158px;height:68px">
           <div class="rl"><svg><use href="#i-pin"/></svg>Region F</div>
-          <div class="pp">Remote-hub-connected spokes</div>
+          <div class="pp">Remote Hub</div>
           <div class="ps">Services from Region B</div>
         </div>
         <div class="rg2 node" id="eG" style="left:322px;top:300px;width:158px;height:68px;border-color:var(--t300)">
           <div class="rl" style="color:var(--t700)"><svg style="color:var(--t600)"><use href="#i-pin"/></svg>Region G</div>
-          <div class="pp">Disconnected spokes</div>
+          <div class="pp">No Hub</div>
           <div class="ps">No private path to hubs or&nbsp;on&#8209;premises</div>
         </div>
         <div class="rg2 node" id="eH" style="left:322px;top:375px;width:158px;height:68px;border-color:var(--b500);background:transparent">
@@ -104,7 +104,7 @@
           <span style="font-size:10.8px;line-height:1.35;color:var(--ink)"><b>Consistent across every profile:</b> governance, security, compliance, automation, and operational standards</span>
         </div>
       </div>
-      <div class="figcap"><span class="fn">Figure 15</span><span class="ft"><b>An illustrative regional estate.</b> Two strategic hubs provide resilient hybrid connectivity; other regions consume what they need. Minimal hubs take selected services from Region A (dashed) — Region C also reaches on-premises by reusing an existing ExpressRoute circuit, Region D does not. Both are valid. Names and placements are examples only.</span></div>
+      <div class="figcap"><span class="fn">Figure 15</span><span class="ft"><b>An illustrative regional estate.</b> Two geographic hubs provide resilient hybrid connectivity; other regions consume what they need. Minimal hubs take selected services from Region A (dashed) — Region C also reaches on-premises by reusing an existing ExpressRoute circuit, Region D does not. Both are valid. Names and placements are examples only.</span></div>
     </div>
   </div>
 </div>

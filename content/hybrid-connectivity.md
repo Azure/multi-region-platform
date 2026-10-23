@@ -1,7 +1,7 @@
 ---
 title: Confirm hybrid connectivity
 description: Decide whether the ExpressRoute, VPN, or SD-WAN connectivity you already have is enough for a new Azure region, and what justifies a change. A new region doesn't by itself require another circuit.
-ms.date: 10/06/2026
+ms.date: 10/23/2026
 ms.topic: conceptual
 ---
 
@@ -15,13 +15,13 @@ The outcome is one of three:
 
 | Outcome | When |
 |---|---|
-| **Not required** | The region uses Disconnected Spokes, or its workloads need no private path to on-premises locations. |
+| **Not required** | The region uses No Hub, or its workloads need no private path to on-premises locations. |
 | **Reuse** | The existing circuits, gateways, and peering locations meet the reachability, latency, bandwidth, routing, and resilience that the workloads in the new region need. |
 | **Change** | A requirement can't be met by the existing foundation: diversity, failure-domain isolation, latency, bandwidth, routing, or resiliency. Record the requirement and the change it justifies. |
 
 ## How a new region reuses what exists
 
-- **A gateway in another region can serve the new region.** Global virtual network peering supports gateway transit, so spokes in the new region can use the gateways of an existing hub.
+- **A gateway in another region can serve the new region.** Global virtual network peering supports gateway transit, so spokes in the new region can use the gateways of an existing geographic hub.
 - **An existing circuit can connect to a gateway in the new region.** An ExpressRoute circuit can connect virtual networks in the same geopolitical region, and across geopolitical regions with the premium add-on. A hub in the new region doesn't need a circuit of its own.
 - **Azure Virtual WAN extends in the same way.** A virtual network in the new region can connect to an existing virtual hub in another region, or a new virtual hub in the region can connect to the existing circuits.
 
@@ -31,7 +31,7 @@ The outcome is one of three:
 - **On-premises locations or users are far from the existing peering locations.** Measure latency on the real path before you decide.
 - **Bandwidth or gateway capacity is exhausted.** Check the circuit and gateway sizes against the traffic the new region adds.
 - **Workloads need a capability that doesn't work across regions.** For example, ExpressRoute FastPath doesn't support global virtual network peering, so workloads that rely on it need a gateway in their own region.
-- **The region must keep its on-premises path when another region is unavailable.** That requirement points to a local gateway, and usually to a Full Regional Hub.
+- **The region must keep its on-premises path when another region is unavailable.** That requirement points to a local gateway, and usually to a Full Hub.
 
 **Decision:** Confirm the hybrid connectivity foundation and identify any required changes to reachability, resiliency, diversity, scale, or ownership.
 

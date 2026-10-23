@@ -27,7 +27,7 @@ module.exports = (pres, L) => {
       L.txt(s, t, 0.98, 5.95 + i * 0.32, 5.4, 0.28, { fontSize: 13, fontFace: F.semi, color: C.ink, valign: 'middle' });
     });
     L.txt(s, D.edition, 0.6, 7.03, 3, 0.26, { fontSize: 11, color: C.muted, valign: 'middle' });
-    s.addNotes('Opening. This briefing summarizes the Multi-Region Platform Whitepaper: how to extend Azure landing zones so that additional Azure regions become governed, qualified options, without separate governance structures or identical infrastructure in every region. The artwork shows the model: two strategic hubs, a minimal hub, workload spokes, and an empty candidate footprint, all standing on one shared foundation.');
+    s.addNotes('Opening. This briefing summarizes the Multi-Region Platform Whitepaper: how to extend Azure landing zones so that additional Azure regions become governed, qualified options, without separate governance structures or identical infrastructure in every region. The artwork shows the model: two geographic hubs, a minimal hub, workload spokes, and an empty candidate footprint, all standing on one shared foundation.');
   }
 
   // ───────────────────────── 2 · Agenda (generated from the sections table)
@@ -152,6 +152,6 @@ module.exports = (pres, L) => {
     L.image(s, IMG('band.jpg', L.tone), { x: 0.6, y: 5.8, w: 12.13, h: 1.0 }, 'Decorative gradient band behind the goal statement', { sizing: { type: 'cover', w: 12.13, h: 1.0 } });
     L.txt(s, 'THE GOAL', 0.85, 5.8, 1.3, 1.0, { fontSize: 10.5, bold: true, color: 'FFFFFF', charSpacing: 2, valign: 'middle' });
     L.txt(s, [{ text: 'The goal is not to select the perfect two regions. ', options: { fontFace: F.light } }, { text: 'It is to make additional regions significantly easier to adopt when business and workload requirements justify them.', options: { fontFace: F.semi } }], 2.2, 5.8, 10.3, 1.0, { fontSize: 18, color: 'FFFFFF', valign: 'middle' });
-    s.addNotes('Connectivity profiles are not maturity stages: select the most efficient profile for current requirements and add local capabilities only when a measurable need justifies them. Strategic geographic hubs and shared services can continue to support other regions where dependencies and service characteristics permit. Qualification makes a region a viable option; placement is decided later for each workload, and new workload findings can feed back into qualification. The operating model stays consistent while placement, profiles, shared-service footprints, services and SKUs, and resiliency choices adapt to current requirements.');
+    s.addNotes('Connectivity profiles are not maturity stages: select the most efficient profile for current requirements and add local capabilities only when a measurable need justifies them. Geographic hubs and shared services can continue to support other regions where dependencies and service characteristics permit. Qualification makes a region a viable option; placement is decided later for each workload, and new workload findings can feed back into qualification. The operating model stays consistent while placement, profiles, shared-service footprints, services and SKUs, and resiliency choices adapt to current requirements.');
   }
 };

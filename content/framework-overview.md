@@ -1,7 +1,7 @@
 ---
 title: Framework overview
 description: The drivers, principles, planning constructs, and adoption journey behind an adaptable multi-region Azure platform that extends the Azure landing zones you already run.
-ms.date: 10/05/2026
+ms.date: 10/23/2026
 ms.topic: conceptual
 ---
 
@@ -48,7 +48,7 @@ Three principles apply in every region. Three planning constructs put them into 
 
 Because platform teams cannot predict every future workload, this guidance uses three planning constructs.
 
-- **[Regional Platform Connectivity Profiles](./connectivity-profiles.md)** describe what the platform provides in a region: Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, or Full Regional Hub. They are not maturity stages; the most efficient profile can remain the target as long as it continues to satisfy requirements.
+- **[Regional Platform Connectivity Profiles](./connectivity-profiles.md)** describe what the platform provides in a region: No Hub, Remote Hub, Selective Hub, or Full Hub. They are not maturity stages; the most efficient profile can remain the target as long as it continues to satisfy requirements.
 - **[Workload Landing Zone archetypes](./application-landing-zone-archetypes.md)** group recurring dependency and connectivity characteristics so platform teams can plan before every workload is known. The four archetypes are Hybrid-Connected Applications, Isolated Cloud-Native or AI Applications, Connected Cloud-Native or AI Applications, and Interconnected Application Portfolios.
 - **[Regional qualification](./regional-qualification.md)** provides a repeatable way to assess candidate regions. Four checks lead to an excluded, candidate, conditional, or qualified regional option, backed by current evidence, known constraints, ownership, and review triggers.
 

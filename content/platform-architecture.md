@@ -1,7 +1,7 @@
 ---
 title: Regional design overview
 description: Select the regional design for a qualified Azure region with three choices from short lists — the connectivity profile, where each shared service is provided, and whether existing hybrid connectivity is reused — and record them so the region can be prepared.
-ms.date: 10/06/2026
+ms.date: 10/23/2026
 ms.topic: conceptual
 ---
 
@@ -9,11 +9,11 @@ ms.topic: conceptual
 
 Selecting the regional design is a set of decisions, not a deployment. For each qualified region, you make three choices, each from a short list. Nothing is built yet: deployment follows later, through the automation you already run.
 
-Each choice follows from the workloads you expect in the region, not from the footprint of an existing hub.
+Each choice follows from the workloads you expect in the region, not from the footprint of an existing geographic hub.
 
 | Choice | You select | Page |
 |---|---|---|
-| 1. Connectivity profile | One of four: Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, or Full Regional Hub. | [Select the connectivity profile](./profile-selection.md) |
+| 1. Connectivity profile | One of four: No Hub, Remote Hub, Selective Hub, or Full Hub. | [Select the connectivity profile](./profile-selection.md) |
 | 2. Shared-service placement | For each shared service the workloads depend on: local, remote, or global. | [Place shared services](./platform-enablement-connectivity.md) |
 | 3. Hybrid connectivity | Reuse the existing foundation, change it, or confirm that none is required. | [Confirm hybrid connectivity](./hybrid-connectivity.md) |
 
@@ -35,7 +35,7 @@ Existing and new workloads follow the same rule: requirements and dependencies d
 
 The three choices sit on one path, from on-premises locations to the workloads in the region. They influence one another, but each has different requirements and tradeoffs. Connectivity that is specific to one application isn't decided here. It is designed when the [workload is placed](./workload-placement.md).
 
-:::image type="content" source="./media/connectivity-planning-layers.png" alt-text="Three decisions shown on one path. Resilient hybrid connectivity links on-premises datacenters and users to the Azure backbone in the selected geography through ExpressRoute or VPN. Platform capabilities covers the strategic geographic hubs and shared services, each provided locally, remotely, or centrally. Regional platform connectivity covers the Workload Landing Zones, supported by the regional platform connectivity profile." lightbox="./media/connectivity-planning-layers.png":::
+:::image type="content" source="./media/connectivity-planning-layers.png" alt-text="Three decisions shown on one path. Resilient hybrid connectivity links on-premises datacenters and users to the Azure backbone in the selected geography through ExpressRoute or VPN. Platform capabilities covers the geographic hubs and shared services, each provided locally, remotely, or centrally. Regional platform connectivity covers the Workload Landing Zones, supported by the regional platform connectivity profile." lightbox="./media/connectivity-planning-layers.png":::
 
 *The three decisions on one path: resilient hybrid connectivity, platform capabilities, and regional platform connectivity. They are related, but each is a separate decision.*
 
@@ -45,9 +45,9 @@ Keep one record per region. Record the selected profile, the placement of each s
 
 | Region | Connectivity profile | Shared services | Hybrid connectivity | Open conditions |
 |---|---|---|---|---|
-| Region C | Minimal Regional Hub | Local: selected capabilities. Remote from Region A: remaining shared services. | Reuse: existing foundation where required. | None |
-| Region D | Remote Hub Connected | Remote from a strategic geographic hub. | Reuse: via the hub where required. | Latency test with representative traffic. |
-| Region E | Disconnected Spokes | None required. | Not required. | None |
+| Region C | Selective Hub | Local: selected capabilities. Remote from Region A: remaining shared services. | Reuse: existing foundation where required. | None |
+| Region D | Remote Hub | Remote from a geographic hub. | Reuse: via the hub where required. | Latency test with representative traffic. |
+| Region E | No Hub | None required. | Not required. | None |
 
 *Illustrative example. Regions and choices are examples only.*
 

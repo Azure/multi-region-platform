@@ -1,17 +1,17 @@
 ---
-title: "Prepare a region: Full Regional Hub"
-description: What to deploy to prepare a new Azure region with a Full Regional Hub — a complete hub that can keep operating when other hubs are unavailable — with the order of work, hub design options, recommendations, and links to the Azure landing zone guidance.
-ms.date: 10/06/2026
+title: "Prepare a region: Full Hub"
+description: What to deploy to prepare a new Azure region with a Full Hub — a full local hub that can keep operating when other hubs are unavailable — with the order of work, hub design options, recommendations, and links to the Azure landing zone guidance.
+ms.date: 10/23/2026
 ms.topic: conceptual
 ---
 
-# Full Regional Hub
+# Full Hub
 
-The region gets a complete hub: local connectivity, inspection, DNS, identity, and the other shared services its workloads need. It can keep operating when other hubs are unavailable. This is the path that the Cloud Adoption Framework describes for adding a region to an existing landing zone, so most of the work is documented there. A Full Regional Hub uses the same operating model and control baselines as your other hubs. It doesn't have to be an identical copy.
+The region gets a full local hub: connectivity, inspection, DNS, identity, and the other shared services its workloads need. It can keep operating when other hubs are unavailable. This is the path that the Cloud Adoption Framework describes for adding a region to an existing landing zone, so most of the work is documented there. A Full Hub uses the same operating model and control baselines as your other hubs. It doesn't have to be an identical copy.
 
 ## What you deploy
 
-Start with what every profile needs: the region in policy, address space, landing-zone provisioning, monitoring, backup, and keys. See [Disconnected Spokes](./disconnected-spokes.md#what-you-deploy). Then build the hub in this order.
+Start with what every profile needs: the region in policy, address space, landing-zone provisioning, monitoring, backup, and keys. See [No Hub](./disconnected-spokes.md#what-you-deploy). Then build the hub in this order.
 
 | Step | Hub-and-spoke virtual networks | Azure Virtual WAN |
 |---|---|---|
@@ -38,7 +38,7 @@ Profiles describe capability, not a specific network build. The same profile can
 | Separate transit and security functions | Transit, hybrid connectivity, routing, and security inspection are separated where scale, ownership, or architecture requirements justify it. |
 
 > [!NOTE]
-> Any of these designs can sit behind a Minimal or Full Regional Hub. Profiles can be implemented using hub-and-spoke virtual networks, Azure Virtual WAN, or other approved Azure networking patterns. Topology determines how the capability is implemented; workload and platform requirements determine which profile is appropriate.
+> Any of these designs can sit behind a Selective Hub or Full Hub. Profiles can be implemented using hub-and-spoke virtual networks, Azure Virtual WAN, or other approved Azure networking patterns. Topology determines how the capability is implemented; workload and platform requirements determine which profile is appropriate.
 
 ## Connect the hub to the rest of the estate
 

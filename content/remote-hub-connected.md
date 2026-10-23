@@ -1,11 +1,11 @@
 ---
-title: "Prepare a region: Remote Hub Connected"
-description: What to deploy to prepare a new Azure region for Remote Hub Connected — spokes that connect across regions to an existing hub, with no hub in the region — with recommendations, considerations, and links to the Azure networking guidance.
-ms.date: 10/06/2026
+title: "Prepare a region: Remote Hub"
+description: What to deploy to prepare a new Azure region for Remote Hub — spokes that connect across regions to an existing geographic hub, with no hub in the region — with recommendations, considerations, and links to the Azure networking guidance.
+ms.date: 10/23/2026
 ms.topic: conceptual
 ---
 
-# Remote Hub Connected
+# Remote Hub
 
 Workload spokes in the region connect across regions to an existing geographic hub and use its gateways, firewall, DNS, and shared services. No hub is built in the region. Preparing the region means connecting its spokes to the hub you already operate.
 
@@ -13,15 +13,15 @@ Workload spokes in the region connect across regions to an existing geographic h
 
 | Area | What to do | Guidance |
 |---|---|---|
-| Policy, address space, monitoring, backup, and keys | The same as for [Disconnected Spokes](./disconnected-spokes.md#what-you-deploy). Address space must not overlap the hub or the other spokes. | [Landing zone regions](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone) |
-| Landing-zone provisioning | Offer the region in subscription vending, with a spoke virtual network that the platform team connects to the remote hub. | [Subscription vending](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/subscription-vending) |
-| Connection to the hub | Connect each spoke to the existing hub in the other region. See [Connect to the existing hub](#connect-to-the-existing-hub). | [Virtual network peering](https://learn.microsoft.com/azure/virtual-network/virtual-network-peering-overview) |
+| Policy, address space, monitoring, backup, and keys | The same as for [No Hub](./disconnected-spokes.md#what-you-deploy). Address space must not overlap the hub or the other spokes. | [Landing zone regions](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone) |
+| Landing-zone provisioning | Offer the region in subscription vending, with a spoke virtual network that the platform team connects to the geographic hub. | [Subscription vending](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/subscription-vending) |
+| Connection to the hub | Connect each spoke to the geographic hub in the other region. See [Connect to the geographic hub](#connect-to-the-geographic-hub). | [Virtual network peering](https://learn.microsoft.com/azure/virtual-network/virtual-network-peering-overview) |
 | Routing and inspection | Apply the same route tables as for spokes in the hub's own region, so that traffic reaches the hub firewall. | [Traditional Azure networking topology](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/traditional-azure-networking-topology) |
 | Name resolution | Point the spokes at the DNS resolver or forwarders in the hub. The private DNS zones are global and don't change. | [DNS for on-premises and Azure resources](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/dns-for-on-premises-and-azure-resources) |
-| Identity | Use the domain controllers in the hub region, if workloads need them. | [Hybrid identity in Azure landing zones](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/identity-access-active-directory-hybrid-identity) |
+| Identity | Use the domain controllers in the geographic hub's region, if workloads need them. | [Hybrid identity in Azure landing zones](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/identity-access-active-directory-hybrid-identity) |
 | Internet ingress | Public application ingress can stay in the region, with a web application firewall close to the workload. | [Plan for inbound and outbound internet connectivity](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/plan-for-inbound-and-outbound-internet-connectivity) |
 
-## Connect to the existing hub
+## Connect to the geographic hub
 
 How you connect depends on the topology of the hub you already run:
 
@@ -48,7 +48,7 @@ Check these limits before you rely on the connection:
 - **Count the cross-region cost.** Global virtual network peering carries traffic charges. Evaluate cross-region data-transfer cost, routing and transit behavior, and inspection paths.
 - **Check the hub's capacity.** Evaluate geographic hub scale: gateway and firewall throughput, peering limits, and dependency criticality.
 - **Agree who operates the path.** Agree operational ownership for the connection, routes, and DNS settings between the team that runs the hub and the teams in the new region.
-- **Keep east-west traffic local where it matters.** For spokes in the region that exchange a lot of traffic, direct connectivity between them avoids a round trip through the remote hub. Limit it to spokes of the same environment and workload.
+- **Keep east-west traffic local where it matters.** For spokes in the region that exchange a lot of traffic, direct connectivity between them avoids a round trip through the geographic hub. Limit it to spokes of the same environment and workload.
 
 **Reassess when:** Cross-region traffic, latency, east-west communication, dependency criticality, regulatory requirements, scale, or availability coupling justify deploying selected connectivity or shared-service capabilities locally.
 

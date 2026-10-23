@@ -447,7 +447,7 @@
     },
     {
      "label": "Connectivity profile",
-     "text": "No new profile. Continue to use the existing strategic geographic hub where it satisfies requirements; no new regional hub solely because another region is available.",
+     "text": "No new profile. Continue to use the existing geographic hub where it satisfies requirements; no new local hub solely because another region is available.",
      "tone": "b"
     },
     {
@@ -464,7 +464,7 @@
      "Check 3 what moves together; Part 3 hybrid connectivity, reachability, resiliency.",
      "Existing target region qualified; additional region a candidate.",
      "Hybrid-Connected Applications.",
-     "No new profile: the existing strategic hub is reused.",
+     "No new profile: the existing geographic hub is reused.",
      "Most workloads land in the existing qualified region."
     ],
     "takeaway": "Remaining in an existing qualified region is a valid outcome; an additional region can stay an option, not a project."

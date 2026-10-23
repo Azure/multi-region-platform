@@ -13,7 +13,7 @@ these workloads can often use disconnected spokes
 these workloads can use remote hub connected minimal regional hub or full regional hub depending on dependency latency traffic patterns resiliency security and operational requirements
 these workloads typically use remote hub connected minimal regional hub or full regional hub depending on dependency latency resiliency regulatory operational and shared service requirements
 understand workload landing zone archetypes
-where significant east west traffic exists within a region evaluate whether direct spoke to spoke connectivity or a regional hub provides a more appropriate path than routing traffic through a remote hub
+where significant east west traffic exists within a region evaluate whether direct spoke to spoke connectivity or a local hub provides a more appropriate path than routing traffic through a geographic hub in another region
 workload landing zone archetypes are a planning abstraction that groups recurring application connectivity and dependency requirements
 workload landing zone archetypes in this guidance describe what a workload requires from the platform which is a different concept
 # business-and-geography
@@ -32,7 +32,7 @@ check 4 validates current model service sku zone regional access and quota suppo
 check 4 validates required regional capabilities services zones access and constraints
 connected cloud native or ai applications where private enterprise dependencies are required
 data residency and regulation
-do not create a new regional hub solely because another azure region is available
+do not create a new local hub solely because another azure region is available
 in scope workloads can relocate selectively
 isolated cloud native or ai applications where the workload is self contained
 isolated or connected cloud native or ai applications
@@ -50,7 +50,7 @@ remote hub connected or minimal regional hub
 revalidate current model sku service regional access and quota support at decision time
 revisit the additional regional option when requirements change
 step 3 validates hybrid connectivity datacenter and user geography reachability resiliency and whether existing connectivity can support the target design
-the existing hub is reused
+the existing geographic hub is reused
 the existing target region can remain qualified for the identified workload requirements while an additional region remains a candidate for future use
 the region can be qualified for defined hybrid connected workload requirements while other portfolio workloads remain candidates until their dependencies are understood
 the region can be qualified for the defined ai workload requirements
@@ -170,7 +170,7 @@ region c s minimal hub reaches on premises by reusing an existing expressroute c
 region d s does not
 what must be true before workloads arrive
 # profile-selection
-a limited hub with only the services that must be local
+a local hub with only the services that must be in the region
 check these points before you settle on a profile and revisit the profile when its reassessment trigger applies
 considerations and reassessment by profile
 each question comes from the fits when criteria of the connectivity profiles

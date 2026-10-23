@@ -1,17 +1,17 @@
 ---
-title: "Prepare a region: Minimal Regional Hub"
-description: What to deploy to prepare a new Azure region with a Minimal Regional Hub — a hub that holds only the components its workloads need and takes the rest from a geographic hub — with optional components, example compositions, recommendations, and links to the Azure landing zone guidance.
-ms.date: 10/06/2026
+title: "Prepare a region: Selective Hub"
+description: What to deploy to prepare a new Azure region with a Selective Hub — a hub that holds only the components its workloads need and takes the rest from a geographic hub — with optional components, example compositions, recommendations, and links to the Azure landing zone guidance.
+ms.date: 10/23/2026
 ms.topic: conceptual
 ---
 
-# Minimal Regional Hub
+# Selective Hub
 
-A Minimal Regional Hub is a hub in the region that holds only what its workloads need locally. Everything else comes from a geographic hub. It isn't a fixed design. Which components are local is a choice for each region. The fewer components you make local, the faster the region is ready and the less it costs to run.
+A Selective Hub is a hub in the region that holds only what its workloads need locally. Everything else comes from a geographic hub. It isn't a fixed design. Which components are local is a choice for each region. The fewer components you make local, the faster the region is ready and the less it costs to run.
 
 ## The base
 
-Every Minimal Regional Hub has the same base:
+Every Selective Hub has the same base:
 
 - A hub in the region, in the connectivity subscription you already use, with a new resource group for the region. The hub is a hub virtual network, or a virtual hub in your existing Azure Virtual WAN.
 - A connection from that hub to the geographic hub.
@@ -42,9 +42,9 @@ These are examples, not designs to copy. Each follows from a workload reason.
 
 | Area | What to do | Guidance |
 |---|---|---|
-| Policy, address space, landing-zone provisioning, monitoring, backup, and keys | The same as for [Disconnected Spokes](./disconnected-spokes.md#what-you-deploy), with spokes that connect to the local hub. | [Landing zone regions](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone) |
+| Policy, address space, landing-zone provisioning, monitoring, backup, and keys | The same as for [No Hub](./disconnected-spokes.md#what-you-deploy), with spokes that connect to the local hub. | [Landing zone regions](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone) |
 | Hub (the base) | Create the hub virtual network or virtual hub, connect it to the geographic hub, connect the spokes, and configure routing. | [Traditional Azure networking topology](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/traditional-azure-networking-topology) or [Virtual WAN network topology](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/virtual-wan-network-topology) |
-| Optional components | Deploy the components that must be local, in the same order as for a [Full Regional Hub](./full-regional-hub.md#what-you-deploy): inspection, gateways, name resolution, then identity. | [Landing zone regions](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone) |
+| Optional components | Deploy the components that must be local, in the same order as for a [Full Hub](./full-regional-hub.md#what-you-deploy): inspection, gateways, name resolution, then identity. | [Landing zone regions](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone) |
 
 ## Hub design
 
@@ -63,13 +63,13 @@ For the options in full, see [hub design options](./full-regional-hub.md#hub-des
 - **Reuse circuits before you add them.** When connectivity to on-premises environments is required, determine whether existing ExpressRoute circuits and gateway topology can provide the required reachability before introducing additional circuits; do not assume that each Azure region requires a dedicated ExpressRoute circuit.
 - **Test both failure directions.** Validate workload and operational behavior when either local capabilities or remote dependencies are unavailable.
 - **Watch for inspection being bypassed.** When hubs in different regions share ExpressRoute circuits, spokes in different regions can learn routes to each other and bypass the firewalls. Plan route tables so that traffic between regions is inspected where it must be.
-- **Know which profile you have.** The hub is minimal as long as the region still depends on a geographic hub for something. When it can keep operating without the other hubs, it is a Full Regional Hub, and its cost and operating scope should be planned as one.
+- **Know which profile you have.** The hub uses the Selective Hub profile as long as the region still depends on a geographic hub for something. When it can keep operating without the other hubs, it is a Full Hub, and its cost and operating scope should be planned as one.
 
 **Reassess when:** Workload growth introduces additional local connectivity or shared-service requirements, multiple interconnected application portfolios require broader regional capabilities, stricter independence requirements emerge, significant hybrid connectivity is required locally, or other requirements justify expanding the regional platform footprint.
 
 ## Reference links
 
-- [Landing zone regions](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions) — The steps to add a hub in a new region. A minimal hub uses the steps for the components it includes.
+- [Landing zone regions](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions) — The steps to add a hub in a new region. A Selective Hub uses the steps for the components it includes.
 - [Use a VPN or ExpressRoute gateway in a different region](https://learn.microsoft.com/azure/vpn-gateway/vpn-gateway-different-region) — Using the gateways of another hub over global peering, and the limits.
 - [Hub-spoke network topology in Azure](https://learn.microsoft.com/azure/architecture/networking/architecture/hub-spoke) — What a hub hosts and how spokes connect.
 

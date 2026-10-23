@@ -32,13 +32,13 @@
 
       <div class="p node" id="pp1" style="left:610px;top:70px;background:var(--t50);border:1.2px solid var(--t300);color:var(--t700)">
         <svg class="pg" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#fff" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="9" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>
-        <div><b>Disconnected spokes</b><span style="color:var(--muted)">Confirm that no hidden dependency requires hub or on-premises connectivity.</span></div></div>
+        <div><b>No Hub</b><span style="color:var(--muted)">Confirm that no hidden dependency requires hub or on-premises connectivity.</span></div></div>
       <div class="p node" id="pp2" style="left:610px;top:176px;background:#fff;border:1.2px solid var(--b200);color:var(--b800)">
         <svg class="pg" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"/><circle cx="40" cy="15" r="5" fill="#0F6CBD"/></svg>
-        <div><b>Remote-hub-connected spokes</b><span style="color:var(--muted)">Measure with representative traffic; document behavior if the hub is degraded.</span></div></div>
+        <div><b>Remote Hub</b><span style="color:var(--muted)">Measure with representative traffic; document behavior if the hub is degraded.</span></div></div>
       <div class="p node" id="pp3" style="left:610px;top:282px;background:var(--b50);border:1.2px solid var(--b300);color:var(--b800)">
         <svg class="pg" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#fff" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="6" fill="#fff" stroke="#2B88D8" stroke-width="1.5"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>
-        <div><b>Minimal regional hub</b><span style="color:var(--muted)">Only services that must be local; define clearly what stays remote.</span></div></div>
+        <div><b>Selective Hub</b><span style="color:var(--muted)">Only services that must be local; define clearly what stays remote.</span></div></div>
 
       <i class="ln" data-from="ps" data-to="pq1" data-s="b" data-e="t@0.5" data-k="blue"></i>
       <i class="ln" data-from="pq1" data-to="pp1" data-s="r" data-e="l" data-k="plain" data-label="No" data-lp=".5"></i>
@@ -48,7 +48,7 @@
       <i class="ln" data-from="pq3" data-to="pp3" data-s="r" data-e="l" data-k="plain" data-label="No" data-lp=".5"></i>
       <div class="node" id="pp4" style="position:absolute;left:0;top:392px;width:470px;height:56px;border-radius:11px;background:var(--b700);color:#fff;display:flex;align-items:center;gap:12px;padding:0 14px">
         <svg width="46" height="30" viewBox="0 0 46 30" style="flex:none"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="7" fill="#0F6CBD"/><circle cx="14" cy="15" r="2.4" fill="#fff"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>
-        <div><b style="font-size:12.6px">Full regional hub</b><span style="display:block;font-size:10.2px;color:var(--b100);margin-top:2px">Confirm that the required independence justifies the cost and operational scope.</span></div>
+        <div><b style="font-size:12.6px">Full Hub</b><span style="display:block;font-size:10.2px;color:var(--b100);margin-top:2px">Confirm that the required independence justifies the cost and operational scope.</span></div>
       </div>
       <i class="ln" data-from="pq3" data-to="pp4" data-s="b" data-e="t" data-k="blue" data-label="Yes" data-lp=".5"></i>
       <div style="position:absolute;left:610px;top:378px;width:330px;font-size:10.6px;line-height:1.42;color:var(--ink);border-left:3px solid var(--b600);padding-left:14px">

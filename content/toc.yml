@@ -39,13 +39,13 @@ items:
   items:
   - name: Overview
     href: prepare-region.md
-  - name: Disconnected Spokes
+  - name: No Hub
     href: disconnected-spokes.md
-  - name: Remote Hub Connected
+  - name: Remote Hub
     href: remote-hub-connected.md
-  - name: Minimal Regional Hub
+  - name: Selective Hub
     href: minimal-regional-hub.md
-  - name: Full Regional Hub
+  - name: Full Hub
     href: full-regional-hub.md
   - name: Platform readiness checklist
     href: platform-readiness.md

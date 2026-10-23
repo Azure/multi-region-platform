@@ -19,7 +19,7 @@
    :::column:::
       **03 Tier the regional footprint**
 
-      A small number of strategic hubs carry the full stack; other regions use more efficient patterns.
+      A small number of strategic geographic hubs carry the full stack; other regions use more efficient patterns.
    :::column-end:::
    :::column:::
       **04 Classify workloads by archetype**
@@ -47,7 +47,7 @@ Azure landing zones have usually been established in a particular region — oft
 
 The challenge now is different. Regulatory requirements and power availability can change across European countries, even as Microsoft continues to invest in and grow capacity across Europe. For regulated organizations, the question becomes how to **de-risk continued growth** in an industry-wide dynamic that keeps changing.
 
-:::image type="content" source="./brief-media/fig1.png" alt-text="Diagram comparing a fixed primary and disaster-recovery region pair, where the full footprint is mirrored, with an adaptable platform in which six regions sit on one governed landing-zone foundation: two strategic hubs, a minimal hub, remote-hub-connected spokes, isolated spokes, and a candidate region." lightbox="./brief-media/fig1.png":::
+:::image type="content" source="./brief-media/fig1.png" alt-text="Diagram comparing a fixed primary and disaster-recovery region pair, where the full footprint is mirrored, with an adaptable platform in which six regions sit on one governed landing-zone foundation: two geographic hubs, a Selective Hub, Remote Hub, No Hub, and a candidate region." lightbox="./brief-media/fig1.png":::
 
 *From a fixed regional pair to governed regional options. Instead of mirroring a complete footprint in each new region, the platform extends one governed foundation and gives each region only the capability its workloads require. Regional capability is a spectrum, not a copy.*
 
@@ -59,7 +59,7 @@ Rather than defining the cloud architecture around a small number of permanently
 
 At that level, policies, security controls, operational rigor, and compliance requirements are the constants. The Azure regions underneath become qualified deployment options, and regional implementation adapts only where business, workload, or regulatory requirements call for it.
 
-:::image type="content" source="./brief-media/xfGeo.png" alt-text="Diagram of a geographic landing zone, for example Europe, run as one governed operating model. A band lists the constants across the geography: policies, security controls, operational rigor, and compliance requirements. Below it, Regions A and B are strategic hubs with full networking, security, management, and shared services; Regions C, D, and E are qualified, with a minimal regional hub, spokes connected to a strategic hub, and self-contained AI workloads; Region F is a candidate that is assessed but not yet enabled." lightbox="./brief-media/xfGeo.png":::
+:::image type="content" source="./brief-media/xfGeo.png" alt-text="Diagram of a geographic landing zone, for example Europe, run as one governed operating model. A band lists the constants across the geography: policies, security controls, operational rigor, and compliance requirements. Below it, Regions A and B are geographic hubs with full networking, security, management, and shared services; Regions C, D, and E are qualified, with a Selective Hub, spokes connected to a geographic hub, and self-contained AI workloads; Region F is a candidate that is assessed but not yet enabled." lightbox="./brief-media/xfGeo.png":::
 
 *A geographic landing zone. The operating model is standardized across the geography; regions underneath are adaptable deployment locations with only the capabilities their workloads need. Region names and roles are illustrative.*
 
@@ -71,9 +71,9 @@ At that level, policies, security controls, operational rigor, and compliance re
 
 Establish redundant connectivity into the Azure backbone through strategically located ExpressRoute or ExpressRoute Direct peering locations. That provides route diversity and lets connectivity be planned for the geography rather than independently for every region. **Enabling an additional Azure region does not by itself require another ExpressRoute circuit**; add circuits, peering locations, gateways, or paths only where reachability, diversity, failure-domain isolation, latency, bandwidth, routing, or resiliency requirements justify them.
 
-:::image type="content" source="./brief-media/xfConn.png" alt-text="Diagram of hybrid connectivity planned once for a geography. Two on-premises datacenters connect over crossed, redundant circuits to two ExpressRoute peering locations, which reach the Azure backbone. The backbone serves a geography, for example Europe, where Regions A and B are strategic hubs with gateways, Region C is a minimal hub that reuses existing circuits, Region D reaches on-premises through a hub, Region E is self-contained with no hybrid path, and Region F is a candidate with no new circuit assumed." lightbox="./brief-media/xfConn.png":::
+:::image type="content" source="./brief-media/xfConn.png" alt-text="Diagram of hybrid connectivity planned once for a geography. Two on-premises datacenters connect over crossed, redundant circuits to two ExpressRoute peering locations, which reach the Azure backbone. The backbone serves a geography, for example Europe, where Regions A and B are geographic hubs with gateways, Region C is a Selective Hub that reuses existing circuits, Region D reaches on-premises through a hub, Region E is self-contained with no hybrid path, and Region F is a candidate with no new circuit assumed." lightbox="./brief-media/xfConn.png":::
 
-*Geographic hybrid connectivity. Diverse paths through strategically located peering locations reach the Azure backbone once; regions consume that foundation through their hubs or a strategic hub. Reachability depends on circuit type — for example, Standard circuits reach regions in the same geopolitical region, Premium extends globally — so validate it per design. Locations and roles are illustrative.*
+*Geographic hybrid connectivity. Diverse paths through strategically located peering locations reach the Azure backbone once; regions consume that foundation through their own hubs or a geographic hub. Reachability depends on circuit type — for example, Standard circuits reach regions in the same geopolitical region, Premium extends globally — so validate it per design. Locations and roles are illustrative.*
 
 :::row:::
    :::column:::
@@ -95,28 +95,28 @@ Establish redundant connectivity into the Azure backbone through strategically l
 
 <!-- eyebrow: 04 · Tier the regional footprint -->
 # Not every region needs a full landing zone
-<!-- standfirst: A few strategic hubs carry the full stack; other regions use the most efficient pattern that meets their requirements. -->
+<!-- standfirst: A few geographic hubs carry the full stack; other regions use the most efficient pattern that meets their requirements. -->
 
 With a geographic foundation in place, the full landing zone does not have to be copied into every Azure region. Maintain a **small number of strategic geographic hubs** — often two or three regions — with the full networking, security, management, and shared-service footprint.
 
-Other regions are consumed through more efficient patterns appropriate to each workload, evaluated application by application. The four connectivity profiles are **not maturity stages**: adoption growth alone does not justify moving toward a Full Regional Hub.
+Other regions are consumed through more efficient patterns appropriate to each workload, evaluated application by application. The four connectivity profiles are **not maturity stages**: adoption growth alone does not justify moving toward a Full Hub.
 
-:::image type="content" source="./brief-media/fig14.png" alt-text="Spectrum of four profiles from no dependency on a geographic hub to greater local capability. Disconnected spokes have no hub or gateway; remote-hub-connected spokes connect privately to a hub region; a minimal regional hub hosts selected shared services such as private DNS, a virtual network gateway, and Azure Monitor; a full regional hub adds comprehensive shared services including Azure Firewall." lightbox="./brief-media/fig14.png":::
+:::image type="content" source="./brief-media/fig14.png" alt-text="Spectrum of four profiles from no dependency on a geographic hub to greater local capability. No Hub has no hub or gateway; Remote Hub connects privately to a geographic hub; a Selective Hub hosts selected shared services such as private DNS, a virtual network gateway, and Azure Monitor; a Full Hub adds comprehensive shared services including Azure Firewall." lightbox="./brief-media/fig14.png":::
 
 *The spectrum of regional platform connectivity profiles. Moving right adds local capability and independence — and cost and operational scope. Services shown are examples; each hub includes only what its workloads require. Any profile can be the right long-term target.*
 
 <!-- eyebrow: 04 · Tier the regional footprint -->
 # Pay for local capability only where it is justified
 
-:::image type="content" source="./brief-media/xfCost.png" alt-text="Curve with local capability and independence on the horizontal axis and fixed platform cost and operational scope on the vertical axis. The curve rises from disconnected spokes at the low end through remote-hub-connected spokes and a minimal regional hub to a full regional hub at the top right." lightbox="./brief-media/xfCost.png":::
+:::image type="content" source="./brief-media/xfCost.png" alt-text="Curve with local capability and independence on the horizontal axis and fixed platform cost and operational scope on the vertical axis. The curve rises from No Hub at the low end through Remote Hub and a Selective Hub to a Full Hub at the top right." lightbox="./brief-media/xfCost.png":::
 
 *A qualitative trade-off, not a price list. More local capability usually raises fixed cost and operational scope, but can reduce cross-region dependency, latency exposure, and availability coupling.*
 
 > There is no required progression between profiles. Select the **most efficient profile** for current requirements; different profiles coexist across the estate under the same landing-zone guardrails.
 
-:::image type="content" source="./brief-media/fig15.png" alt-text="Illustrative estate: on-premises datacenters connect to two strategic geographic hubs in regions A and B. Region C runs a minimal regional hub that reuses an existing ExpressRoute circuit, region D runs a minimal hub without an on-premises path, regions E and F use remote-hub-connected spokes, region G uses disconnected spokes, and region H is a candidate not yet enabled." lightbox="./brief-media/fig15.png":::
+:::image type="content" source="./brief-media/fig15.png" alt-text="Illustrative estate: on-premises datacenters connect to two geographic hubs in regions A and B. Region C runs a Selective Hub that reuses an existing ExpressRoute circuit, region D runs a Selective Hub without an on-premises path, regions E and F use Remote Hub, region G uses No Hub, and region H is a candidate not yet enabled." lightbox="./brief-media/fig15.png":::
 
-*An illustrative estate: two strategic hubs provide resilient hybrid connectivity; other regions consume what they need. Minimal hubs take selected services from Region A (dashed) — Region C also reaches on-premises by reusing an existing ExpressRoute circuit, Region D does not. Both are valid. Names and placements are examples only.*
+*An illustrative estate: two geographic hubs provide resilient hybrid connectivity; other regions consume what they need. Minimal hubs take selected services from Region A (dashed) — Region C also reaches on-premises by reusing an existing ExpressRoute circuit, Region D does not. Both are valid. Names and placements are examples only.*
 
 <!-- eyebrow: 05 · Classify workloads by archetype -->
 # Four Workload Landing Zone archetypes
@@ -152,7 +152,7 @@ Regions enter the model through a repeatable assessment, not by assumption. Four
 
 <!-- eyebrow: 07 · Why this creates agility -->
 # Region becomes a deployment parameter
-<!-- standfirst: Strategic hubs remain deliberate choices. Workloads stop inheriting those choices automatically. -->
+<!-- standfirst: Geographic hubs remain deliberate choices. Workloads stop inheriting those choices automatically. -->
 
 | Today | With this model |
 |---|---|
@@ -164,7 +164,7 @@ Regions enter the model through a repeatable assessment, not by assumption. Four
 
 *Regional optionality. Placement is revalidated at decision time for services, SKUs, AI models, regional access, and quota; capacity remains a deployment-time condition. Staying in the current region is always a valid outcome.*
 
-> **Deliberate where it matters:** where the major strategic hubs live.
+> **Deliberate where it matters:** where the major geographic hubs live.
 
 > **Adaptable where it helps:** which regions individual applications consume.
 
@@ -174,10 +174,10 @@ Regions enter the model through a repeatable assessment, not by assumption. Four
 
 | Scenario | Qualification | Connectivity | Placement | Takeaway |
 |---|---|---|---|---|
-| **Regulated bank adopts a new in-country region.** A new in-country region opens while regulation requires certain data or services to remain there. | Qualified for defined Hybrid-Connected requirements; other workloads remain candidates. | Minimal Regional Hub; existing hybrid connectivity reused where it permits. | In-scope workloads relocate selectively; others remain in place. | Qualify for defined requirements without forcing portfolio-wide relocation; if the new region is nonpaired, design the recovery path explicitly. |
-| **AI team requires a specific model or GPU SKU.** The model, SKU, or service is unavailable — or quota-limited — in existing regions. | Qualified for the defined AI requirements; conditional where private connectivity is not yet designed. | Disconnected Spokes where self-contained; connected only where dependencies justify it. | Net-new deployment, revalidated at decision time. | Do not introduce enterprise connectivity or regional platform capabilities before a workload requirement justifies them. |
-| **Acquisition brings an estate in another geography.** Interdependent applications, shared data, and local users where there is little Azure presence. | Candidate until dependencies are understood; then qualified for defined portfolio requirements. | Remote Hub Connected, or Minimal Regional Hub where east-west traffic or independence justify it. | Remain in place initially; relocate selectively as integration proceeds. | Aggregate portfolio dependencies determine the profile; application count or acquisition status does not. |
-| **Datacenter exit accelerates migration.** Hybrid-connected applications must leave a colocation facility; is another region now required? | Existing target region remains qualified; an additional region stays a candidate. | No new profile: the existing strategic hub is reused; no new hub solely because another region is available. | Most workloads land in the existing qualified region. | Remaining in an existing qualified region is a valid outcome; a new region can stay an option, not a project. |
+| **Regulated bank adopts a new in-country region.** A new in-country region opens while regulation requires certain data or services to remain there. | Qualified for defined Hybrid-Connected requirements; other workloads remain candidates. | Selective Hub; existing hybrid connectivity reused where it permits. | In-scope workloads relocate selectively; others remain in place. | Qualify for defined requirements without forcing portfolio-wide relocation; if the new region is nonpaired, design the recovery path explicitly. |
+| **AI team requires a specific model or GPU SKU.** The model, SKU, or service is unavailable — or quota-limited — in existing regions. | Qualified for the defined AI requirements; conditional where private connectivity is not yet designed. | No Hub where self-contained; connected only where dependencies justify it. | Net-new deployment, revalidated at decision time. | Do not introduce enterprise connectivity or regional platform capabilities before a workload requirement justifies them. |
+| **Acquisition brings an estate in another geography.** Interdependent applications, shared data, and local users where there is little Azure presence. | Candidate until dependencies are understood; then qualified for defined portfolio requirements. | Remote Hub, or Selective Hub where east-west traffic or independence justify it. | Remain in place initially; relocate selectively as integration proceeds. | Aggregate portfolio dependencies determine the profile; application count or acquisition status does not. |
+| **Datacenter exit accelerates migration.** Hybrid-connected applications must leave a colocation facility; is another region now required? | Existing target region remains qualified; an additional region stays a candidate. | No new profile: the existing geographic hub is reused; no new hub solely because another region is available. | Most workloads land in the existing qualified region. | Remaining in an existing qualified region is a valid outcome; a new region can stay an option, not a project. |
 
 <!-- eyebrow: 09 · The strategic benefit -->
 # Architect so that perfect prediction is unnecessary

@@ -1,7 +1,7 @@
 ---
 title: Place shared services
 description: Decide where each shared service is provided for a qualified Azure region — local, remote from another hub, or global — starting from a default for each connectivity profile and changing it only when a workload requirement says so.
-ms.date: 10/22/2026
+ms.date: 10/23/2026
 ms.topic: conceptual
 ---
 
@@ -17,9 +17,9 @@ Determine which shared services and operational capabilities must be provided in
 
 ## Default placement by profile
 
-The table gives a starting point for each profile. The defaults aren't rules: change a cell when a workload requirement calls for it, and record the reason. For a Minimal Regional Hub, each row is a separate choice.
+The table gives a starting point for each profile. The defaults aren't rules: change a cell when a workload requirement calls for it, and record the reason. For a Selective Hub, each row is a separate choice.
 
-| Shared service | Disconnected Spokes | Remote Hub Connected | Minimal Regional Hub | Full Regional Hub |
+| Shared service | No Hub | Remote Hub | Selective Hub | Full Hub |
 |---|---|---|---|---|
 | Management groups, access control, policy | Global | Global | Global | Global |
 | Private DNS zones | Global | Global | Global | Global |

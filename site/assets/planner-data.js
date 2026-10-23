@@ -67,7 +67,7 @@
       reassess: 'Workloads require private access to enterprise services, centralized security inspection, on-premises systems, another application portfolio, or capabilities hosted through a geographic hub.' },
     { id: 'Remote Hub Connected', href: 'remote-hub-connected.html', gets: 'No local hub. Workload spokes consume an existing geographic hub.',
       reassess: 'Cross-region traffic, latency, east-west communication, dependency criticality, regulatory requirements, scale, or availability coupling justify deploying selected connectivity or shared-service capabilities locally.' },
-    { id: 'Minimal Regional Hub', href: 'minimal-regional-hub.html', gets: 'A limited hub with only the services that must be local. Everything else stays remote.',
+    { id: 'Minimal Regional Hub', href: 'minimal-regional-hub.html', gets: 'A local hub with only the services that must be in the region. Everything else stays remote.',
       reassess: 'Workload growth introduces additional local connectivity or shared-service requirements, multiple interconnected application portfolios require broader regional capabilities, stricter independence requirements emerge, or significant hybrid connectivity is required locally.' },
     { id: 'Full Regional Hub', href: 'full-regional-hub.html', gets: 'The complete local connectivity and shared services that the region’s workloads require.',
       reassess: 'Workload demand or requirements decrease, services can be safely centralized, dependencies change, or the full regional footprint no longer provides sufficient value relative to its cost and operational complexity.' },
@@ -122,15 +122,15 @@
   function linkOptions(profile, topology) {
     const wan = topology === 'Azure Virtual WAN';
     if (profile === 'Remote Hub Connected') return wan ? ['Virtual network connections to the remote virtual hub']
-      : ['Global virtual network peering from each spoke to the remote hub', 'Azure Virtual Network Manager hub-and-spoke configuration to the remote hub'];
+      : ['Global virtual network peering from each spoke to the geographic hub', 'Azure Virtual Network Manager hub-and-spoke configuration to the geographic hub'];
     if (profile === 'Minimal Regional Hub' || profile === 'Full Regional Hub') return wan ? ['Automatic between virtual hubs of the same Virtual WAN']
       : ['Global virtual network peering between the hub virtual networks', 'Azure Virtual Network Manager connectivity configuration between the hubs'];
     return [];
   }
   function eastWestOptions(profile) {
     if (profile === 'Disconnected Spokes') return ['Not required', direct];
-    if (profile === 'Remote Hub Connected') return ['Through the remote hub', direct, 'Not required'];
-    if (profile === 'Minimal Regional Hub') return ['Through the local hub (firewall or network virtual appliance)', direct, 'Through the remote hub', 'Not required'];
+    if (profile === 'Remote Hub Connected') return ['Through the geographic hub', direct, 'Not required'];
+    if (profile === 'Minimal Regional Hub') return ['Through the local hub (firewall or network virtual appliance)', direct, 'Through the geographic hub', 'Not required'];
     if (profile === 'Full Regional Hub') return ['Through the local hub (firewall or network virtual appliance)', direct, 'Not required'];
     return [];
   }

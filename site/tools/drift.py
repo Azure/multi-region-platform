@@ -31,6 +31,13 @@ SUMMARY = json.load(open(os.path.join(ROOT, "shared", "summary.json"), encoding=
 # Regular expressions, matched case-insensitively on text with tags, <style> and <script> removed.
 # The executive deck's speaker notes quote the executive talk track verbatim, and it says "lighter-weight" and
 # "lightweight": the patterns in QUOTED_IN_NOTES are not applied to speaker notes (ppt/notesSlides).
+# Hub terms: "geographic hub" is a hub that provides hybrid connectivity and shared services to other regions, and
+# "local hub" is a hub in the region itself. "strategic" stays only in "a small number of strategic geographic hubs".
+# The talk track says "strategic hubs" and "complete regional hub", so these also go in QUOTED_IN_NOTES.
+HUB_TERMS = [
+    r"(?<!small number of )\bstrategic geographic hubs?\b", r"\bstrategic hubs?\b", r"\benterprise (?:geographic )?hubs?\b",
+    r"(?<!geographic )\bhub regions?\b", r"\b(?:limited|complete) (?:regional )?hubs?\b", r"\bexisting hubs?\b",
+    r"\bthe remote hub\b", r"\bminimally viable regional hub\b"]
 RETIRED = [re.escape(t) for t in [
     "Multi-region workload design", "Scenario R1", "Scenario R2", "Scenario R3",
     "Select the supporting connectivity profile", "resiliency role separately",
@@ -39,8 +46,8 @@ RETIRED = [re.escape(t) for t in [
     "region planning workbook", "storage-backup-key-vault.md", "recommended-key-vault-pattern"]] + [
     r"(?-i:\bApplication Landing Zone)",          # the retired construct name; Microsoft Learn's "application landing zones" is fine
     r"\bdimensions?\b", r"\bD[1-5]\b", r"\bfour parts\b", r"\bSection 0\d", r"Enablement Framework", r"\bright-siz",
-    r"\blightest\b", r"\blighter(?:-weight)? (?:patterns?|profiles?)\b", r"\blightweight\b"]
-QUOTED_IN_NOTES = [r"\blighter(?:-weight)? (?:patterns?|profiles?)\b", r"\blightweight\b"]
+    r"\blightest\b", r"\blighter(?:-weight)? (?:patterns?|profiles?)\b", r"\blightweight\b"] + HUB_TERMS
+QUOTED_IN_NOTES = [r"\blighter(?:-weight)? (?:patterns?|profiles?)\b", r"\blightweight\b"] + HUB_TERMS
 
 _names = lambda items: [i["name"] for i in items]
 _outcomes = [o["name"].split(" as of")[0] for o in SUMMARY["outcomes"]]        # "Qualified as of the assessment date"

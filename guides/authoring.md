@@ -58,7 +58,7 @@ The required names are read from `shared/summary.json`:
 | Whitepaper pages, whitepaper PDF, full deck | five part names, "four checks", three choice names, four outcome names, "selected", "ready for workloads", four profiles, four archetypes, planner name, service-guides name, and current service/resource headings |
 | Executive pages and PDF, executive deck | "four checks", four profiles, four archetypes, planner name, and service-guides name |
 
-Names are compared ignoring case and punctuation, so a figure may say "Remote-hub-connected".
+Names are compared ignoring case and punctuation, so a figure may say "Remote Hub".
 
 Targets: `whitepaper`, `exec`, `summary`, or the path of a built `.pdf` or `.pptx`. Useful options are `--terms` (names only, for summaries such as the decks), `--article NAME`, and `--reverse` (text in the target that is not in the Markdown, for information).
 
@@ -86,10 +86,10 @@ review the diff of `drift-baseline.txt`, and commit it with the change. The base
 | `16` shared-service placement | `platform-enablement-connectivity.md` |
 | `16b` hybrid connectivity | `hybrid-connectivity.md` |
 | `17` part 4 opener, `17a` order of work and readiness | `prepare-region.md` |
-| `17b` Disconnected Spokes | `disconnected-spokes.md` |
-| `17c`-`17d` Remote Hub Connected | `remote-hub-connected.md` (`17d` includes an extra connection figure) |
-| `17e`-`17f` Minimal Regional Hub | `minimal-regional-hub.md` |
-| `17g`-`17h` Full Regional Hub | `full-regional-hub.md` (`17h` includes hub design options) |
+| `17b` No Hub | `disconnected-spokes.md` |
+| `17c`-`17d` Remote Hub | `remote-hub-connected.md` (`17d` includes an extra connection figure) |
+| `17e`-`17f` Selective Hub | `minimal-regional-hub.md` |
+| `17g`-`17h` Full Hub | `full-regional-hub.md` (`17h` includes hub design options) |
 | `17i` readiness | `platform-readiness.md` |
 | `18`-`18b` placement | `workload-placement.md` |
 | `19`-`19b` scenarios, `20` misconceptions, `20b` getting started | Resources articles |
@@ -99,7 +99,7 @@ review the diff of `drift-baseline.txt`, and commit it with the change. The base
 
 The removed operating-model material remains in `backup/operating-model.md` and `backup/whitepaper-25-operating-model.html`, not on the website or in the PDF.
 
-The home page is a short landing page; longer explanations live in `framework-overview.md` and `platform-and-workload.md`. The whitepaper sometimes retains fuller text: `02b` carries all six approach-at-a-glance cards, while the overview article folds three into construct descriptions. Don't shorten a whitepaper page solely because its article is shorter. Profile considerations also appear on `08b`/`08c`; hub design options appear on the Full Regional Hub pages.
+The home page is a short landing page; longer explanations live in `framework-overview.md` and `platform-and-workload.md`. The whitepaper sometimes retains fuller text: `02b` carries all six approach-at-a-glance cards, while the overview article folds three into construct descriptions. Don't shorten a whitepaper page solely because its article is shorter. Profile considerations also appear on `08b`/`08c`; hub design options appear on the Full Hub pages.
 
 Figure IDs and extraction names live in `site/tools/extract_figures.py` (`FIGS`) and `site/figures/manifest.json`.
 

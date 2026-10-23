@@ -1,11 +1,11 @@
 ---
-title: "Prepare a region: Disconnected Spokes"
-description: What to deploy to prepare a new Azure region for Disconnected Spokes — no hub, no gateway, and no peering — with recommendations, considerations, and links to the Azure landing zone guidance for each area.
-ms.date: 10/06/2026
+title: "Prepare a region: No Hub"
+description: What to deploy to prepare a new Azure region for No Hub — no hub, no gateway, and no peering — with recommendations, considerations, and links to the Azure landing zone guidance for each area.
+ms.date: 10/23/2026
 ms.topic: conceptual
 ---
 
-# Disconnected Spokes
+# No Hub
 
 Workload spokes run in the region with no private connectivity to a hub, another Azure region, or an on-premises environment. There is no hub to build. Preparing the region means letting the landing zone you already run accept it.
 
@@ -38,7 +38,7 @@ In the Azure landing zone architecture, these spokes are *online* landing zones:
 - **Decide who owns private DNS zones.** A disconnected spoke can't use a DNS resolver in a hub. Its virtual network needs its own links to the private DNS zones for the private endpoints it uses, whether those zones are the central ones or zones that the workload owns.
 - **Plan operator access.** Without a hub there is no shared management path. Decide how operators reach workloads, for example with Azure Bastion in the spoke.
 - **Check identity.** Workloads authenticate with Microsoft Entra ID. A workload that needs domain controllers doesn't fit this profile.
-- **Connect spokes directly only where needed.** Where applications in the region need east-west communication, evaluate direct spoke-to-spoke connectivity without assuming that a regional hub is required. Limit it to spokes of the same environment and workload.
+- **Connect spokes directly only where needed.** Where applications in the region need east-west communication, evaluate direct spoke-to-spoke connectivity without assuming that a local hub is required. Limit it to spokes of the same environment and workload.
 - **Validate the operating procedures.** Validate administration, identity, DNS, secrets, telemetry, data movement, software distribution, private endpoints, incident response, and support procedures.
 - **Look for hidden dependencies.** Confirm that no hidden dependency requires connectivity to a geographic hub or on-premises environment.
 

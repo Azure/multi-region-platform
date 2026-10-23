@@ -59,9 +59,9 @@ module.exports = (pres, L) => {
 
     const cards = [
       ['The region in policy and landing-zone provisioning. Workload spokes with their own internet ingress and egress. No hub, no gateway, no peering.', 'Governance, identity, policy, monitoring, and automation.'],
-      ['The same, plus a cross-region connection from each spoke to an existing hub, with routing and DNS settings. No hub.', 'An existing geographic hub: its gateways, firewall, DNS, and shared services.'],
+      ['The same, plus a cross-region connection from each spoke to an existing geographic hub, with routing and DNS settings. No hub.', 'An existing geographic hub: its gateways, firewall, DNS, and shared services.'],
       ['The same, plus a hub in the region with only the components you selected.', 'The geographic hub, for everything you didn’t make local.'],
-      ['The same, plus a complete hub in the region.', 'The landing-zone foundation and, where they meet requirements, the existing ExpressRoute circuits.'],
+      ['The same, plus a full local hub.', 'The landing-zone foundation and, where they meet requirements, the existing ExpressRoute circuits.'],
     ];
     const gap = 0.17, cw = (12.13 - 3 * gap) / 4, cy = 1.7, ch = 3.25;
     cards.forEach(([add, reuse], k) => {
@@ -99,7 +99,7 @@ module.exports = (pres, L) => {
     const W = [
       ['Allow the region in policy,', ' for the workload requirements it is qualified for.', 2],
       ['Reserve address space', ' that doesn’t overlap the rest of the estate, even for Disconnected Spokes.', 2],
-      ['Build the network part', ' that the profile calls for: nothing, connections to an existing hub, or a hub.', 2],
+      ['Build the network part', ' that the profile calls for: nothing, connections to an existing geographic hub, or a local hub.', 2],
       ['Extend the shared services', ' that must be local, such as DNS forwarding or domain controllers.', 2],
       ['Turn on landing-zone provisioning', ' for the region, so that workload teams receive spokes that match the profile.', 2],
       ['Extend operations:', ' monitoring, security coverage, backup, and runbooks.', 2],
@@ -133,13 +133,13 @@ module.exports = (pres, L) => {
     };
     const hubA = 2.35, hubB = 4.4, hubH = 0.95, hubW = 1.7, hx = X + 1.75;
     reg(X, 3.43, 1.3, 0.9, '', 'On-premises', 'datacenters and user locations', { fill: C.s800, line: null, solid: true, tc: 'FFFFFF', sc: 'C9D4E2' });
-    reg(hx, hubA, hubW, hubH, 'Region A', 'Strategic hub', 'Full regional hub', { fill: C.b600, line: null, solid: true, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9' });
-    reg(hx, hubB, hubW, hubH, 'Region B', 'Strategic hub', 'Full regional hub', { fill: C.b600, line: null, solid: true, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9' });
+    reg(hx, hubA, hubW, hubH, 'Region A', 'Geographic hub', 'Full regional hub', { fill: C.b600, line: null, solid: true, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9' });
+    reg(hx, hubB, hubW, hubH, 'Region B', 'Geographic hub', 'Full regional hub', { fill: C.b600, line: null, solid: true, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9' });
     const R = [['Region C', 'Minimal regional hub', 'On-premises path; rest from A'], ['Region D', 'Minimal regional hub', 'No on-premises path; rest from A'], ['Region E', 'Remote-hub-connected spokes', 'Services from Region A'], ['Region F', 'Remote-hub-connected spokes', 'Services from Region B'], ['Region G', 'Disconnected spokes', 'No private path'], ['Region H', 'Candidate', 'Not yet enabled']];
     const rx = X + 3.95, rw = 12.73 - rx;
     R.forEach(([l, t, sub], i) => reg(rx, y0 + i * pitch, rw, bh, l, t, sub, i === 4 ? { line: C.t300, lc: C.t700, ic: 't' } : i === 5 ? { line: C.b500, tc: C.b700 } : {}));
     const cy = i => y0 + i * pitch + bh / 2, ax = hx + hubW, opx = X + 0.65;
-    // on-premises to the two strategic hubs, and the existing ExpressRoute circuit that reaches Region C
+    // on-premises to the two geographic hubs, and the existing ExpressRoute circuit that reaches Region C
     L.path(s, [[opx, 3.43], [opx, 2.82], [hx, 2.82]], { color: C.s600, both: true });
     L.path(s, [[opx, 4.33], [opx, 4.87], [hx, 4.87]], { color: C.s600, both: true });
     L.txt(s, 'ExpressRoute', opx + 0.1, 2.58, 1.0, 0.2, { fontSize: 9, bold: true, color: C.s600 });
@@ -152,8 +152,8 @@ module.exports = (pres, L) => {
     L.path(s, [[rx, cy(1)], [ax, cy(1)]], { color: C.b600, dash: 'dash', both: true });
     L.path(s, [[rx, cy(2)], [ax + 0.2, cy(2)], [ax + 0.2, 3.1], [ax, 3.1]], { color: C.b600, both: true });
     L.path(s, [[rx, cy(3)], [ax + 0.3, cy(3)], [ax + 0.3, 4.65], [ax, 4.65]], { color: C.b600, both: true });
-    L.caption(s, 'Figure', 'Profiles coexisting across one estate. Two strategic hubs provide resilient hybrid connectivity; other regions consume what they need. Region C’s minimal hub reaches on-premises by reusing an existing ExpressRoute circuit; Region D’s does not. Both are valid. Names and placements are examples only.', X, 6.2, 12.73 - X);
-    s.addNotes('The order is the same for every profile; the profile decides how much each item contains. Item 3 is nothing for Disconnected Spokes, connections to an existing hub for Remote Hub Connected, and a hub for the two hub profiles. Different profiles can coexist across the estate: a region’s profile changes only when workload and platform requirements change, not because regions are expected to progress along a maturity path. Governance, security, compliance, automation, and operational standards are consistent across every profile. A region is ready for workloads when the required capability set is in place through standard automation, its open conditions are resolved, and every applicable readiness item is true; workloads can then onboard without platform exceptions.');
+    L.caption(s, 'Figure', 'Profiles coexisting across one estate. Two geographic hubs provide resilient hybrid connectivity; other regions consume what they need. Region C’s minimal hub reaches on-premises by reusing an existing ExpressRoute circuit; Region D’s does not. Both are valid. Names and placements are examples only.', X, 6.2, 12.73 - X);
+    s.addNotes('The order is the same for every profile; the profile decides how much each item contains. Item 3 is nothing for Disconnected Spokes, connections to an existing geographic hub for Remote Hub Connected, and a local hub for the two hub profiles. Different profiles can coexist across the estate: a region’s profile changes only when workload and platform requirements change, not because regions are expected to progress along a maturity path. Governance, security, compliance, automation, and operational standards are consistent across every profile. A region is ready for workloads when the required capability set is in place through standard automation, its open conditions are resolved, and every applicable readiness item is true; workloads can then onboard without platform exceptions.');
   }
 
   // ───────────────────────── 3 · Disconnected Spokes
@@ -188,7 +188,7 @@ module.exports = (pres, L) => {
       ['Look for hidden dependencies.', 'Confirm that nothing requires connectivity to a geographic hub or an on-premises environment.'],
     ]);
     reassess(s, 'Workloads require private access to enterprise services, centralized security inspection, on-premises systems, another application portfolio, or capabilities hosted through a geographic hub.');
-    s.addNotes('Workload spokes run in the region with no private connectivity to a hub, another Azure region, or an on-premises environment; in the Azure landing zone architecture these are online landing zones. The four items on the left are what every other profile also needs, so the other profile slides show only what they add. New virtual networks default to private subnets without default outbound access, and a NAT gateway is the recommended method for most workloads that don’t need a firewall. A disconnected spoke can’t use a DNS resolver in a hub, so decide who owns the private DNS zones, and check identity: a workload that needs domain controllers doesn’t fit this profile. Where applications in the region need east-west communication, evaluate direct spoke-to-spoke connectivity without assuming that a regional hub is required, limited to spokes of the same environment and workload. Validate administration, identity, DNS, secrets, telemetry, data movement, software distribution, private endpoints, incident response, and support procedures.');
+    s.addNotes('Workload spokes run in the region with no private connectivity to a hub, another Azure region, or an on-premises environment; in the Azure landing zone architecture these are online landing zones. The four items on the left are what every other profile also needs, so the other profile slides show only what they add. New virtual networks default to private subnets without default outbound access, and a NAT gateway is the recommended method for most workloads that don’t need a firewall. A disconnected spoke can’t use a DNS resolver in a hub, so decide who owns the private DNS zones, and check identity: a workload that needs domain controllers doesn’t fit this profile. Where applications in the region need east-west communication, evaluate direct spoke-to-spoke connectivity without assuming that a local hub is required, limited to spokes of the same environment and workload. Validate administration, identity, DNS, secrets, telemetry, data movement, software distribution, private endpoints, incident response, and support procedures.');
   }
 
   // ───────────────────────── 4 · Remote Hub Connected
@@ -198,7 +198,7 @@ module.exports = (pres, L) => {
     const AX = 0.6, AW = 3.95, MX = 4.75, MW = 4.45, LX2 = 9.4, LW2 = 12.73 - LX2;
     zone(s, AX, AW, C.wash, 'What you add', C.b700);
     leadBullets(s, [
-      ['A connection', 'from each spoke to the existing hub in another region.'],
+      ['A connection', 'from each spoke to the geographic hub in another region.'],
       ['Route tables', 'that send traffic to the hub firewall, as for spokes in the hub’s own region.'],
       ['DNS settings', 'that point the spokes at the resolver or forwarders in the hub.'],
     ], AX + 0.2, TY + 0.48, AW - 0.4, 1.7, { gap: 5 });
@@ -292,7 +292,7 @@ module.exports = (pres, L) => {
   // ───────────────────────── 6 · Full Regional Hub: build order
   {
     const s = L.slide('part4');
-    profileHeader(s, 3, 'Profile 4 of 4', PROF[3], 'A complete hub that can keep operating when other hubs are unavailable. It is the path the Cloud Adoption Framework describes.');
+    profileHeader(s, 3, 'Profile 4 of 4', PROF[3], 'A full local hub that can keep operating when other hubs are unavailable. It is the path the Cloud Adoption Framework describes.');
     label(s, 'Build the hub in this order', 0.6, TY + 0.02, 4);
     L.txt(s, 'Start with what every profile needs, then follow the steps for your topology.', 4.6, TY, 12.73 - 4.6, 0.24, { fontSize: 11, color: C.muted, valign: 'middle', align: 'right' });
     const cx = [0.6, 3.25, 8.0], cwid = [2.55, 4.6, 12.73 - 8.0];
@@ -325,13 +325,13 @@ module.exports = (pres, L) => {
       ['Plan inspection between regions.', 'When hubs share circuits, route inter-region traffic through the firewall.'],
     ], CX, CW, BY, BH);
     reassess(s, 'Workload demand or requirements decrease, services can be safely centralized, dependencies change, or the full regional footprint no longer provides sufficient value relative to its cost and operational complexity.', RX, RW, BY, BH);
-    s.addNotes('The region gets a complete hub that can keep operating when other hubs are unavailable. This is the path the Cloud Adoption Framework describes for adding a region to an existing landing zone, so most of the work is documented there, including the detail of each step. Start with what every profile needs, then build the hub in this order for hub-and-spoke virtual networks or for Azure Virtual WAN. The resource group and hub virtual network go in the existing connectivity subscription; for identity, create a virtual network in the identity subscription, peer it to the hub, and deploy domain controllers if workloads need them. To connect the hub to the rest of the estate, use global peering for two regions, shared ExpressRoute circuits or Virtual WAN transit for more, and direct global peering between landing-zone virtual networks for a few workloads across regions. Gateways, firewall and egress, DNS, domain controllers, backup vaults, and Key Vaults are local; the log workspace is local or remote, and you start with the existing workspace unless data must stay in the region. A Full Regional Hub uses the same operating model and control baselines as your other hubs. It doesn’t have to be an identical copy.');
+    s.addNotes('The region gets a full local hub that can keep operating when other hubs are unavailable. This is the path the Cloud Adoption Framework describes for adding a region to an existing landing zone, so most of the work is documented there, including the detail of each step. Start with what every profile needs, then build the hub in this order for hub-and-spoke virtual networks or for Azure Virtual WAN. The resource group and hub virtual network go in the existing connectivity subscription; for identity, create a virtual network in the identity subscription, peer it to the hub, and deploy domain controllers if workloads need them. To connect the hub to the rest of the estate, use global peering for two regions, shared ExpressRoute circuits or Virtual WAN transit for more, and direct global peering between landing-zone virtual networks for a few workloads across regions. Gateways, firewall and egress, DNS, domain controllers, backup vaults, and Key Vaults are local; the log workspace is local or remote, and you start with the existing workspace unless data must stay in the region. A Full Regional Hub uses the same operating model and control baselines as your other hubs. It doesn’t have to be an identical copy.');
   }
 
   // ───────────────────────── 7 · Full Regional Hub: design options, considerations, reassess
   {
     const s = L.slide('part4');
-    profileHeader(s, 3, 'Regional hub options', 'Hub design options', 'These implementations can sit behind a Minimal or Full Regional Hub. The profile describes capability, not a specific network build.');
+    profileHeader(s, 3, 'Local hub options', 'Hub design options', 'These implementations can sit behind a Minimal or Full Regional Hub. The profile describes capability, not a specific network build.');
     const H = [
       ['Azure Firewall hub', 'Platform-native routing, inspection, and egress with Azure Firewall.', [['Hub · Azure Firewall', C.b600]]],
       ['NVA firewall hub', 'Third-party network virtual appliances provide routing, inspection, or security.', [['Hub · NVA firewalls', C.b700]]],

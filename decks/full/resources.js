@@ -95,7 +95,7 @@ module.exports = (pres, L, topic) => {
     L.txt(s, 'This framework extends Azure landing-zone principles rather than replacing them. Regional adoption, workload placement, platform expansion, and resiliency can evolve without redesigning the broader platform for every new region.', 0.6, 3.7, 5.0, 1.3, { fontSize: 12, color: C.text });
     const T = [
       ['app', 't', C.t50, C.t300, C.t700, 'Workload-led placement', 'Qualified regional options, Workload Landing Zone archetypes, and current workload requirements allow applications to use the regional and platform capabilities appropriate to their needs.', 0.6],
-      ['hub', 'b', C.b50, C.b200, C.b700, 'Adaptable regional platform', 'Strategic geographic hubs, resilient hybrid connectivity, and regional connectivity profiles distribute capabilities according to workload requirements, without an identical footprint in every region.', 0.3],
+      ['hub', 'b', C.b50, C.b200, C.b700, 'Adaptable regional platform', 'Geographic hubs, resilient hybrid connectivity, and regional connectivity profiles distribute capabilities according to workload requirements, without an identical footprint in every region.', 0.3],
       ['shield', 'w', C.s800, null, 'FFFFFF', 'Consistent operating model', 'Keep the landing-zone guardrails and operating standards stable across the Azure estate.', 0],
     ];
     T.forEach(([ic, c, bg, ln, tc, t, d, inset], i) => {

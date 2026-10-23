@@ -1,7 +1,7 @@
 """Procedural vector artwork for the cover, contents, and back cover.
 
 An isometric 'estate' of translucent regional platforms standing on one shared
-foundation slab: two tall strategic hubs, a minimal hub, spokes, isolated spokes,
+foundation slab: two tall geographic hubs, a minimal hub, spokes, disconnected spokes,
 and an empty candidate footprint — the paper's model rendered as an object.
 """
 import math

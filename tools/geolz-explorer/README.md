@@ -1,8 +1,8 @@
 # Geo Landing Zone Connectivity Explorer
 
 A small, offline, single-page tool for exploring how traffic flows through a multi-region Azure landing zone.
-Each region picks one of four connectivity patterns: **full hub**, **minimal hub**, **remote hub** or
-**disconnected**. The explorer draws the estate and walks through the ingress, egress, DNS, east-west and
+Each region picks one of four connectivity patterns: **Full Hub**, **Selective Hub**, **Remote Hub** or
+**No Hub**. The explorer draws the estate and walks through the ingress, egress, DNS, east-west and
 on-premises paths of each region, with checks, talking points and Microsoft Learn sources.
 
 > Not an official Microsoft product. Illustrative only: validate every design against current Azure
@@ -28,12 +28,12 @@ The four connectivity patterns:
 
 | Pattern | What the region has |
 | --- | --- |
-| **Full hub** | Its own hub with every shared service (firewall, DNS, hybrid gateways, ingress, Bastion, private access). |
-| **Minimal hub** | Its own small hub. Each capability is *Local*, *From <remote hub>* or *Not needed*. |
-| **Remote hub** | No hub: the spokes peer to another region's hub. |
-| **Disconnected** | An isolated region: no hub, no links; anything it needs sits in its own spoke. |
+| **Full Hub** | Its own hub with every shared service (firewall, DNS, hybrid gateways, ingress, Bastion, private access). |
+| **Selective Hub** | Its own small hub. Each capability is *Local*, *From <remote hub>* or *Not needed*. |
+| **Remote Hub** | No hub: the spokes peer to another region's hub. |
+| **No Hub** | An isolated region: no hub, no links; anything it needs sits in its own spoke. |
 
-A minimal hub's line reads, for example, *Local: firewall · From West Europe: DNS, Bastion · Not needed:
+A Selective Hub's line reads, for example, *Local: firewall · From West Europe: DNS, Bastion · Not needed:
 on-premises*; a path for a capability that is not needed says so (*No on-premises connectivity — not needed for
 this region's workloads*). In Virtual WAN a minimal virtual hub has the built-in hub router and, if secured, its
 firewall; *Hybrid gateway* and *Local shared services* can be made local, and its remote hub must be a full hub

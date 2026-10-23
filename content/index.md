@@ -1,7 +1,7 @@
 ---
 title: Multi-region platform strategy
 description: Extend Azure landing-zone principles so that additional Azure regions become qualified options that workloads can use selectively, without separate governance models or an identical platform footprint in every region.
-ms.date: 10/05/2026
+ms.date: 10/23/2026
 ms.topic: conceptual
 ---
 
@@ -38,7 +38,7 @@ The framework has five parts. Each part answers one question.
 
 ## From a fixed pair to governed options
 
-:::image type="content" source="./media/fixed-pair-to-governed-options.png" alt-text="Diagram comparing a fixed primary and disaster-recovery region pair, where the full footprint is mirrored, with an adaptable platform in which six regions sit on one governed landing-zone foundation: two strategic hubs, a minimal hub, remote-hub-connected spokes, isolated spokes, and a candidate region." lightbox="./media/fixed-pair-to-governed-options.png":::
+:::image type="content" source="./media/fixed-pair-to-governed-options.png" alt-text="Diagram comparing a fixed primary and disaster-recovery region pair, where the full footprint is mirrored, with an adaptable platform in which six regions sit on one governed landing-zone foundation: two geographic hubs, a Selective Hub, Remote Hub, No Hub, and a candidate region." lightbox="./media/fixed-pair-to-governed-options.png":::
 
 *From a fixed regional pair to governed regional options. Instead of mirroring a complete footprint in each new region, the platform extends one governed foundation and gives each region only the capability its workloads require.*
 

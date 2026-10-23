@@ -105,8 +105,8 @@ module.exports = (pres, L) => {
     L.txt(s, 'An adaptable multi-region platform', 6.0, 2.0, 4, 0.32, { fontSize: 14, fontFace: F.semi, color: C.ink, valign: 'middle' });
     L.txt(s, 'REGIONS AS QUALIFIED OPTIONS', 9.6, 2.04, 2.95, 0.25, { fontSize: 10, bold: true, color: C.b600, align: 'right', charSpacing: 1 });
     const regs = [
-      ['Region A', 2.0, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full hub', C.b600, 'FFFFFF']], 'Strategic hub'],
-      ['Region B', 2.0, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full hub', C.b600, 'FFFFFF']], 'Strategic hub'],
+      ['Region A', 2.0, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full hub', C.b600, 'FFFFFF']], 'Geographic hub'],
+      ['Region B', 2.0, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full hub', C.b600, 'FFFFFF']], 'Geographic hub'],
       ['Region C', 1.55, [['Workloads', C.t600, 'FFFFFF'], ['Minimal hub', 'FFFFFF', C.b700, C.b300]], 'Minimal hub'],
       ['Region D', 1.2, [['Spokes', C.t600, 'FFFFFF']], 'Remote hub', 'via remote hub'],
       ['Region E', 1.0, [['Disconnected spokes', C.t100, C.t700]], 'Disconnected spokes'],
