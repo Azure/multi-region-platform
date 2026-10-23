@@ -102,7 +102,7 @@
   <main id="main">
     <div class="crumbs">Multi-region platform <span>/</span> 3. Select the regional design</div>
     <h1 class="title">Place shared services</h1>
-    <p class="meta">October 6, 2026 · 3 min read</p>
+    <p class="meta">October 22, 2026 · 3 min read</p>
     <article class="prose">
 <div class="callout question"><span class="callout-k">Question</span><p>Where is each shared service that the workloads depend on provided?</p></div>
 <p>Determine which shared services and operational capabilities must be provided in the region, consumed from another region, or remain centralized. Each service has one of three placements:</p>
@@ -192,7 +192,7 @@
 <p>Some placements are set by the service, not by the profile:</p>
 <ul>
 <li><strong>Backup vaults are local in every profile.</strong> Azure Backup works within a region, so you need a vault in each region that holds protected resources.</li>
-<li><strong>Key Vault is local in every profile.</strong> Give each workload a vault in the region it runs in. See the <a href="key-vault-across-regions.html#recommended-key-vault-pattern">recommended Key Vault pattern</a>.</li>
+<li><strong>Key Vault is local in every profile.</strong> Give each workload a vault in the region it runs in. See <a href="key-vault-across-regions.html#secrets-and-certificates">Secrets and certificates</a>; <a href="key-vault-across-regions.html#keys">design keys separately</a>.</li>
 <li><strong>Private DNS zones are global.</strong> Create them once, in the connectivity subscription, and link virtual networks to them.</li>
 <li><strong>Start with a single log workspace.</strong> Add a workspace in the region only when data must stay in that geography, or when the charges for sending data to another region are significant.</li>
 <li><strong>Policy, access control, and management groups aren't tied to a region.</strong> The one change is to allow the new region in any policy assignment that restricts locations.</li>

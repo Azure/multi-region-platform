@@ -27,7 +27,7 @@
       <div class="question mt8" style="font-size:14px">Which regions can support the identified workload requirements?</div>
       <p>Evaluate each candidate region against the workload requirements identified in check 3. Consider required Azure services, deployment models and SKUs, availability-zone support, regional service dependencies, latency, pricing, expected scale, regional access, and quota requirements.</p>
       <p>Assess <strong>availability-zone support</strong> and <strong>region pairing</strong> separately. Prefer zone-enabled regions when zone resiliency is required, but do not assume that region pairing alone provides workload recovery or that a nonpaired region cannot be used as a recovery destination. Validate service-specific capabilities such as replication, backup and restore, and other regional dependencies against the resiliency requirements identified for the workload.</p>
-      <p>For requirements that depend on multiple regions, validate the intended regional combination at the service level. This includes built-in paired-region behavior such as Storage GRS and region-of-choice capabilities such as Azure SQL replication. Record material gaps, required changes, and owners for unresolved validation; use the resiliency guidance (Appendix A) for detailed design.</p>
+      <p>For requirements that depend on multiple regions, validate the intended regional combination at the service level. This includes built-in paired-region behavior such as Storage GRS and region-of-choice capabilities such as Azure SQL replication. Record material gaps, required changes, and owners for unresolved validation; see {{SERVICE_GUIDES}} for detailed design.</p>
     </div>
 
     <div style="flex:1">
@@ -77,7 +77,7 @@
           <i class="ln" data-from="dpsBackup" data-to="fk2" data-s="b" data-e="t@0.3" data-k="teal"></i>
           <i class="ln" data-from="dpsVault" data-to="fk2" data-s="b" data-e="t@0.7" data-k="teal"></i>
         </div>
-        <div class="figcap"><span class="fn">Figure 8</span><span class="ft"><b>Zones and pairing are independent questions.</b> Neither guarantees nor rules out workload recovery. Service-level detail is in Appendix A.</span></div>
+        <div class="figcap"><span class="fn">Figure 8</span><span class="ft"><b>Zones and pairing are independent questions.</b> Neither guarantees nor rules out workload recovery. See the service guides and Resources.</span></div>
       </div>
     </div>
   </div>

@@ -10,16 +10,16 @@ This repository provides guidance and a browser-based Multi-region planner for p
 - **[Use the Multi-region planner](https://azure.github.io/multi-region-platform/region-planner.html)** to compare regions, record qualification evidence and regional designs, and export to Excel or save a JSON planning record.
 - Download the [whitepaper](https://azure.github.io/multi-region-platform/downloads/Adaptable-Multi-Region-Azure-Platform.pdf) or [executive brief](https://azure.github.io/multi-region-platform/downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf).
 
-The scope is Azure public-cloud regions. This is guidance and planning tooling, not a deployable landing-zone implementation or a guarantee of service availability. Availability is inferred from a published pricing snapshot; prices and estimated latency are planning inputs that must be revalidated for a workload.
+The scope is Azure public-cloud regions. This is guidance and planning tooling, not a deployable landing-zone implementation or a guarantee of service availability. Availability comes from an imported service, product, and SKU catalog; retail pricing uses a separate snapshot. Prices, availability indicators, and estimated latency must be revalidated for a workload.
 
 ## Work with the repository
 
-The primary article text lives in [`content/`](content/). Website tooling lives in [`site/`](site/), and GitHub Pages serves the generated [`docs/`](docs/) folder. The repository also contains editable whitepaper, PowerPoint, and Word-generation sources.
+The primary article text lives in [`content/`](content/). Website tooling lives in [`site/`](site/), and GitHub Pages serves the generated [`docs/`](docs/) folder. The repository also contains editable sources for the two whitepaper PDFs and their PowerPoint decks. Word documents are no longer generated.
 
 | Task | Guide |
 |---|---|
 | Write or update articles, diagrams, and related formats; prepare a CAF export | [Authoring and maintaining the guidance](guides/authoring.md) |
-| Generate the website, PDFs, decks, or Word edition; publish the site | [Building and publishing](guides/building.md) |
+| Generate the website, PDFs, and PowerPoint decks; publish the site | [Building and publishing](guides/building.md) |
 | Collect Azure service-availability indicators, prices, region metadata, and latency | [Azure data collection](guides/azure-data.md) |
 | Maintain the Multi-region planner and geography views | [Multi-region planner](guides/region-planner.md) |
 

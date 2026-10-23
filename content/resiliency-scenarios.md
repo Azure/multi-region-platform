@@ -1,7 +1,7 @@
 ---
 title: Multi-region resiliency scenarios
 description: Three scenarios that show how service-specific regional behavior changes workload recovery design — nonpaired DR, the paired-region fallacy, and customer-managed keys across regions.
-ms.date: 10/02/2026
+ms.date: 10/22/2026
 ms.topic: conceptual
 ---
 
@@ -44,7 +44,7 @@ A workload uses customer-managed encryption keys and must operate or recover acr
 | Options | Evaluate Key Vault behavior for the selected regions, supported backup and restore patterns, Azure Managed HSM multi-region replication where appropriate, or another workload-specific key-management design. |
 | Validate | Confirm key availability, access, private connectivity, permissions, and application behavior in the secondary region before the recovery path is considered complete. |
 
-**Takeaway:** Design key availability explicitly. For some workloads, the key-management architecture can determine which recovery regions are viable. See the [recommended Key Vault pattern](./key-vault-across-regions.md#recommended-key-vault-pattern) and [Managed HSM multi-region replication](https://learn.microsoft.com/azure/key-vault/managed-hsm/multi-region-replication).
+**Takeaway:** Design key availability explicitly. For some workloads, the key-management architecture can determine which recovery regions are viable. See [Key Vault key patterns](./key-vault-across-regions.md#keys) and [Managed HSM multi-region replication](https://learn.microsoft.com/azure/key-vault/managed-hsm/multi-region-replication).
 
 ## Next step
 

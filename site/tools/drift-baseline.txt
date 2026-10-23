@@ -81,6 +81,62 @@ four workload landing zone archetypes describe what applications require
 from a fixed pair to governed options
 getting started walks through the first additional region in six steps
 multi region platform strategy
+# key-vault-across-regions
+1 outside the geography
+a key vault in a paired region
+a key vault in each region
+a premium vault per region with byok
+after failover the vault is read only
+azure key vault is multi tenant
+azure traffic manager routes each request to the closest region so avoid caching dns longer than the time to live ttl
+changes to keys role definitions and role assignments replicate asynchronously within 6 minutes so the last changes before a region failure can be lost if the primary can t be recovered
+check supported hsms for byok for premium
+ci cd and infrastructure as code iac load the same secrets and certificates into every vault
+confirm that every service that uses the key supports your pattern
+cost and the same replication window as pattern 3
+design guidance for managed hsm
+do not treat the iac repository itself as a store for secret values
+each region keeps full read and write access on its own vault
+each region works on its own vault with full read and write access
+ekm doesn t support geo replication and there is no end to end microsoft sla for external keys
+enable multi region replication
+failures in the ekm proxy or your hsm can interrupt azure workloads and don t count against their slas
+key vault is often a runtime dependency so its regional behavior can decide whether a recovery region is viable
+managed hsm and ekm do not hold secrets or certificates so use key vault standard or premium
+managed hsm doesn t support backup and restore of external keys so recreate the external key reference instead of restoring
+managed hsm ekm proxy your hsm or the whole region
+managed hsm external key management ekm connects customer managed key encryption in azure services to an hsm that you operate outside microsoft
+managed hsm is single tenant and also meets fips 140 3 level 3
+managed hsm with ekm
+managed hsm with geo replication plus an external hsm
+managed hsm with multi region replication and byok
+managed hsm without geo replication plus ekm
+microsoft runs a tested failover for geo replicated regions
+most paired regions replicate vault contents asynchronously to the pair
+one premium vault per region plus an external hsm
+plan for three regional design constraints
+private endpoints take up to an additional 20 minutes
+public endpoints fail over in a few minutes
+roll secrets out through a pipeline one region at a time so one bad change can t reach every region
+secrets and certificates can be loaded into any vault by a pipeline which makes a vault in each region practical
+secrets and certificates pattern 1
+secrets and certificates pattern 2
+services that geo replicate can t use two vaults
+some paired regions and all nonpaired regions do not use this model
+standard doesn t support bring your own key byok
+the key never leaves your hsm
+the pair is in another geography such as brazil south and south central us
+the premium tier protects keys with hsms that meet fips 140 3 level 3
+the region has no pair such as qatar central belgium central and spain central
+the region replicates to a pair that does not replicate back such as west us 3 to east us
+the same as pattern 3 with your hsm as the key origin
+the same service limits as pattern 1 and extra cost
+the standard tier protects keys with software that meets fips 140 level 1
+the vault fails over only to a pair in the same geography that is paired in both directions
+the vault is read only until failover ends
+there is no failover target so you wait for restore
+you can read but you can t create update or rotate
+you must own and hold the master key and you run mission critical workloads with customer controlled recovery
 # minimal-regional-hub
 the same as for disconnected spokes with spokes that connect to the local hub
 # misconceptions
@@ -136,10 +192,9 @@ workload spokes use the estate s standard identity policy security and deploymen
 # regional-capability
 assess required quota based on expected workload scale and identify any quota increases that may be required
 availability zones and region pairing
-for detailed design see service behavior across regions
+for detailed design see service guides for multi region
 manual review covers what can t be determined reliably
 programmatic regional evaluation narrows the options
-the resulting assessment should identify candidate regions unmet requirements conditional constraints and items that require additional validation
 use manual review for considerations that cannot be determined reliably from published or programmatically available information
 where possible evaluate objective regional characteristics programmatically using the requirements above as inputs
 # regional-qualification
@@ -173,37 +228,24 @@ pre provision the required regional vault and ensure runtime secrets certificate
 they re representative situations not drawn from a specific customer
 use a supported cross region recovery technology such as azure site recovery for applicable vms or redeploy stateless compute from infrastructure as code
 use a supported region of choice replication pattern such as object replication where suitable or application level replication for storage types that require it
-# storage-backup-key-vault
-a source account can currently replicate to no more than two destination accounts
-after failover the vault operates with restrictions including read only management behavior
+# restore-across-regions
 azure backup cross region restore uses the azure paired region for supported data sources when the required vault replication and configuration are enabled
-azure managed hsm provides an optional two region replication model with both regions active
 azure site recovery supports azure vm disaster recovery between azure regions subject to its support matrix and regional restrictions
-cryptographic keys particularly customer managed keys can have additional constraints and should not be assumed to be reproducible by the same process
-design customer managed keys separately
-each workload uses the vault associated with its local region rather than depending at runtime on a vault hosted in another region
-for workloads that require controlled region of choice recovery design the runtime dependency so that each active or recovery region has the key vault capability it needs before failover is required
+backup and restore across regions
+backup and restore capabilities differ by workload and region combination so confirm them for each intended recovery region
+# storage-across-regions
+a source account can currently replicate to no more than two destination accounts
 geo redundant storage options such as grs and gzrs replicate data asynchronously to the service defined secondary region
-in most paired regions key vault asynchronously replicates vault contents to the paired region
-infrastructure as code should consistently provision vault configuration access controls private connectivity monitoring and policy
-it applies to keys not to ordinary key vault secrets and certificates
 it requires change feed on the source and blob versioning on source and destination accounts
-key vault is often a runtime dependency
-keys secrets and certificates each require their own recovery analysis
-microsoft managed regional failover is microsoft initiated best effort and can occur only after significant delay
-not every region can serve as an extended region and it has its own cost considerations
 object replication can asynchronously replicate block blobs between selected storage accounts and regions
 object replication does not support append blobs page blobs or accounts with hierarchical namespace enabled
-populate and validate required runtime dependencies before an outage
-recovery should not depend on creating or restoring a regional vault after the primary region has already failed
-secrets and certificates can often be provisioned independently into regional vaults through controlled deployment processes
-select an appropriate key resiliency pattern such as supported key vault backup and restore constraints managed hsm multi region capabilities or another workload specific design based on security and recovery requirements
-some paired regions and all nonpaired regions do not use this microsoft managed cross region replication and failover model
-this pattern applies to secrets and certificates
-use an approved secret management or deployment process to populate the required secrets and certificates in each regional vault
-where built in failover does not meet workload requirements use separate regional vaults or another supported custom multi region design
+storage replication illustrates why regional qualification cannot stop at the service exists in both regions
 # workload-design
-service behavior across regions overview
+cross region restore azure site recovery and region of choice recovery
+for related background see paired and nonpaired regions and resiliency scenarios in resources
+paired region and region of choice behavior and the recommended key vault pattern
+paired region and region of choice behavior for azure storage replication
+service guides for multi region overview
 the articles in this section cover the dependencies that most often decide whether a regional combination works as built
 this section covers the regional and service behaviors a platform team should understand when it qualifies regional combinations
 this section isn t workload design guidance

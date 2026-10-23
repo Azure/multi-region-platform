@@ -96,7 +96,7 @@ module.exports = (pres, L) => {
     L.icon(s, 'doc', 0.8, 6.44, 0.26, 'b');
     L.txt(s, [{ text: 'A region with a complete record is ', options: {} }, { text: 'selected', options: { bold: true } }, { text: '.', options: {} }], 1.25, 6.3, 4.4, 0.55, { fontSize: 12, fontFace: F.semi, color: C.ink, valign: 'middle' });
     L.box(s, 5.95, 6.3, 6.78, 0.55, { fill: C.wash, r: 0.1 });
-    L.txt(s, [{ text: 'The ', options: {} }, { text: 'region planning workbook', options: { bold: true, color: C.b700, hyperlink: { url: L.data.workbookUrl, tooltip: 'Open the region planning workbook' } } }, { text: ' walks through the three choices for each selected region and produces the regional design record.', options: {} }], 6.15, 6.3, 6.4, 0.55, { fontSize: 11, color: C.ink, valign: 'middle' });
+    L.txt(s, [{ text: 'The ', options: {} }, { text: L.data.plannerName, options: { bold: true, color: C.b700, hyperlink: { url: L.data.workbookUrl, tooltip: 'Open the Multi-region planner' } } }, { text: ' walks through the three choices for each selected region and produces the regional design record.', options: {} }], 6.15, 6.3, 6.4, 0.55, { fontSize: 11, color: C.ink, valign: 'middle' });
     s.addNotes('Use the workload requirements identified earlier to decide how workloads consume regional and centralized platform capabilities. Archetypes can inform the assessment, but the design follows each workload’s actual dependencies. Existing and new workloads follow the same rule: requirements and dependencies determine the regional connectivity profile. Keep one record per region. The record also names the open conditions of a conditional region, and it is updated when a reassessment trigger applies. The regions in the table are examples only.');
   };
 

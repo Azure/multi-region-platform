@@ -479,7 +479,7 @@ module.exports = (pres, L) => {
     L.logo(s, 0.6, 0.6, 0.14, 'FFFFFF', 17);
     L.txt(s, 'Executive briefing', 10.3, 0.57, 2.43, 0.35, { fontSize: 13, fontFace: F.semi, color: 'FFFFFF', align: 'right' });
     L.title(s, [{ text: 'The adaptable ', options: { fontFace: F.light } }, { text: 'multi-region', options: { fontFace: F.semi } }, { text: ' Azure platform', options: { fontFace: F.light } }], 0.6, 1.9, 7.4, 1.3, { fontSize: 34, color: 'FFFFFF' });
-    L.txt(s, 'An executive summary of the Multi-Region Platform Whitepaper. The full paper contains the detailed qualification checks, profile criteria, deployment guidance, placement steps, and service-level resiliency guidance.', 0.6, 3.15, 6.6, 0.68, { fontSize: 12.5, color: 'DDEBF9' });
+    L.txt(s, 'The full whitepaper follows the five framework steps, then ' + D.serviceGuidesTitle + '. Resources cover getting started, customer scenarios, misconceptions, region pairing, and resiliency.', 0.6, 3.15, 6.6, 0.68, { fontSize: 12.5, color: 'DDEBF9' });
     L.txt(s, 'Multi-Region Platform · Executive Briefing · ' + D.edition, 0.6, 3.86, 6.6, 0.2, { fontSize: 11, color: 'BCD9F5' });
     L.txt(s, 'Start with one candidate region and the workloads that need it.', 0.6, 4.1, 9.0, 0.25, { fontSize: 12, fontFace: F.semi, color: 'FFFFFF' });
     const link = (label, text, url, x) => {
@@ -487,8 +487,9 @@ module.exports = (pres, L) => {
       L.txt(s, [{ text, options: { hyperlink: { url, tooltip: label }, color: 'FFFFFF', underline: { style: 'sng', color: 'FFFFFF' } } }], x, 4.66, 5.85, 0.3, { fontSize: 13, fontFace: F.semi, color: 'FFFFFF' });
     };
     link('Website', D.siteUrl.replace(/^https:\/\//, '').replace(/\/$/, ''), D.siteUrl, 0.6);
-    link('Region planning workbook', D.workbookUrl.replace(/^https:\/\//, ''), D.workbookUrl, 6.75);
+    link(D.plannerName, D.workbookUrl.replace(/^https:\/\//, ''), D.workbookUrl, 6.75);
+    L.txt(s, 'Compare regional options, record evidence and regional designs, export Excel, or save and reopen JSON planning records.', 0.6, 5.2, 9.2, 0.55, { fontSize: 12, color: 'DDEBF9' });
     L.txt(s, D.legal, 0.6, 6.5, 12.13, 0.7, { fontSize: 9.5, color: 'E3EEF9' });
-    s.addNotes('Close by pointing to the full whitepaper, the website, and the region planning workbook for the detailed qualification checks, profile criteria, what to deploy for each profile, placement steps, and service-level resiliency guidance.');
+    s.addNotes('Close with the website and Multi-region planner. The full paper follows the website’s five steps, then Service Guides for Multi Region: Storage, Backup and restore, Key Vault, and Private DNS zones. Resources includes pairing and resiliency scenarios. The planner supports qualification and regional design, Excel export, JSON planning records, and optional advanced networking visualization. Snapshot availability and prices and estimated latency are planning inputs, not capacity guarantees.');
   }
 };

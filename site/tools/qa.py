@@ -78,3 +78,4 @@ with sync_playwright() as p:
 srv.shutdown()
 print("\n".join(problems) if problems else "no problems")
 print(len(pages), "pages checked")
+sys.exit(1 if problems else 0)

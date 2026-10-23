@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 # Rebuild every deliverable from source. Any failing step stops the build with a non-zero status.
-#   ./build.sh            everything: pdf, decks, site, word, check
+#   ./build.sh            everything: pdf, site (including shared figures), decks, check
 #   ./build.sh site       figures + website only (fast path after Markdown edits)
-#   ./build.sh pdf        whitepaper + executive brief (PDF and single-file HTML); fails on overflow or layout warnings
+#   ./build.sh pdf        whitepaper + executive brief PDFs; fails on overflow or layout warnings
 #   ./build.sh decks      build both PowerPoint decks, run decks/qa.py on each, copy them to dist/ (not published)
-#   ./build.sh word       Word editions: full guidance and executive brief (stay in dist/)
-#   ./build.sh check      drift check, summary titles, color tokens, then the .docx/.pptx files in dist/; runs every check, fails if any fails
+#   ./build.sh check      navigation, content drift, summary titles, color tokens, PDFs and PPTX files
 #   ./build.sh art        regenerate the art: city analogy, common-drivers figure, deck backgrounds (not part of "all")
 #   ./build.sh clean      delete build outputs (dist/ PDF, HTML, PPTX and DOCX files, whitepaper/out*, decks/out, assembled HTML)
-#   ./build.sh data       refresh the Azure data that the region planning workbook reads: prices, then latency (not part of "all")
+#   ./build.sh data       refresh the Azure data that the multi-region planner reads: prices, then latency (not part of "all")
 #   ./build.sh latency    refresh only the latency data (needs GitHub, not prices.azure.com)
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -21,14 +20,14 @@ mkdir -p "$DIST" "$ROOT/docs/downloads"
 pdf() {
   echo "== whitepaper + executive brief"
   cd "$ROOT/whitepaper"
+  python3 gen/scenarios.py
+  python3 gen/keyvault.py
   python3 build.py full
   python3 render.py --pdf
   python3 build.py exec
   python3 render.py --pdf --exec
   cp out/whitepaper.pdf        "$DIST/$NAME.pdf"
   cp out-exec/executive.pdf    "$DIST/$NAME-Executive-Brief.pdf"
-  python3 inline.py whitepaper.html "$DIST/$NAME.html"
-  python3 inline.py executive.html  "$DIST/$NAME-Executive-Brief.html"
   cd "$ROOT"
 }
 
@@ -51,17 +50,11 @@ site() {
   echo "== figures + website"
   python3 site/tools/extract_figures.py
   python3 site/build.py
-  # the website offers only the two PDFs as downloads; the decks and the Word documents stay local (dist/ is git-ignored)
+  # Only the two PDFs are published; decks stay local (dist/ is git-ignored).
   for f in "$NAME.pdf" "$NAME-Executive-Brief.pdf"; do
     if [ -f "$DIST/$f" ]; then cp "$DIST/$f" docs/downloads/; else echo "  (skipped $f — run ./build.sh pdf first)"; fi
   done
   python3 site/tools/qa.py
-}
-
-word() {
-  echo "== Word editions (full guidance and executive brief)"
-  python3 word/build.py full  "$DIST/$NAME.docx"
-  python3 word/build.py brief "$DIST/$NAME-Executive-Brief.docx"
 }
 
 # Runs every check and reports all failures. Built files that are not in dist/ are skipped.
@@ -70,15 +63,14 @@ check() {
   echo "== drift check"
   python3 site/tools/drift.py whitepaper || status=1     # sentences not in site/tools/drift-baseline.txt, retired and required terms
   python3 site/tools/drift.py exec --terms || status=1
-  python3 site/tools/drift.py brief || status=1
   python3 site/tools/drift.py summary || status=1
   python3 site/tools/check_tokens.py || status=1
-  # the full Word edition is compared sentence by sentence (listed, not failed); the brief and the decks are summaries
-  for f in "$NAME.docx" "$NAME-Executive-Brief.docx" "$NAME-Full.pptx" "$NAME-Executive.pptx"; do
+  python3 -m unittest discover -s site/tools -p test_publication.py || status=1
+  python3 -m unittest discover -s site/tools -p test_dns_content.py || status=1
+  for f in "$NAME.pdf" "$NAME-Executive-Brief.pdf" "$NAME-Full.pptx" "$NAME-Executive.pptx"; do
     if [ ! -f "$DIST/$f" ]; then echo "$f: not built, skipped"; continue; fi
     echo "$f:"
     opts=--terms
-    [ "$f" = "$NAME.docx" ] && opts=
     python3 site/tools/drift.py "$DIST/$f" $opts || status=1
   done
   [ "$status" -eq 0 ] || echo "check: FAILED"
@@ -103,7 +95,7 @@ clean() {
 }
 
 latency() {
-  echo "== latency data for the region planning workbook"
+  echo "== latency data for the multi-region planner"
   python3 site/tools/refresh_latency.py "$@"
 }
 
@@ -111,23 +103,22 @@ latency() {
 # doesn't need prices.azure.com; the exit status still reports the failure.
 data() {
   local status=0
-  echo "== Azure price snapshot for the region planning workbook"
+  echo "== Azure price snapshot for the multi-region planner"
   python3 site/tools/refresh_data.py "${@:2}" || status=$?
   latency || status=$?
   return "$status"
 }
 
 case "$what" in
-  all)   pdf; decks; site; word; check ;;
+  all)   pdf; site; decks; check ;;
   pdf)   pdf ;;
   decks) decks ;;
   site)  site ;;
-  word)  word ;;
   check) check ;;
   art)   art ;;
   clean) clean ;;
   data)  data "$@" ;;
   latency) latency "${@:2}" ;;
-  *) echo "usage: ./build.sh [all|pdf|decks|site|word|check|art|clean|data|latency]"; exit 1 ;;
+  *) echo "usage: ./build.sh [all|pdf|decks|site|check|art|clean|data|latency]"; exit 1 ;;
 esac
 echo "done."

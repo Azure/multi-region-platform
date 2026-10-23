@@ -4,6 +4,7 @@
 //   agenda   [number or letter, title, description] for the agenda slide; omit to leave the section off the agenda
 //   color    eyebrow and footer color (default blue)
 const { C } = require('../lib');
+const { serviceGuidesTitle } = require('../../shared/summary.json');
 
 module.exports = [
   { key: 'front', label: 'Opening', footer: 'Agenda' },
@@ -14,9 +15,12 @@ module.exports = [
   { key: 'part3', label: 'Part 3 · Select the regional design', agenda: ['3', 'Select the regional design', 'Three choices from short lists, and one design record'] },
   { key: 'part4', label: 'Part 4 · Prepare the region', agenda: ['4', 'Prepare the region', 'What to deploy for each profile, and a readiness checklist'] },
   { key: 'part5', label: 'Part 5 · Place workloads', color: C.t600, agenda: ['5', 'Place workloads', 'Eight steps from option to placement'] },
-  { key: 'scenarios', label: 'Customer scenarios', color: C.t600, agenda: ['', 'Customer scenarios', 'Four scenarios from driver to placement'] },
-  { key: 'practice', label: 'Putting it into practice', agenda: ['', 'Putting it into practice', 'Misconceptions and getting started'] },
+  { key: 'services', label: serviceGuidesTitle, color: C.s600, agenda: ['', serviceGuidesTitle, 'Storage, Backup and restore, Key Vault, private DNS'] },
+  { key: 'getting-started', label: 'Resources · Getting started', agenda: ['', 'Resources', 'Getting started, scenarios, misconceptions, pairing, resiliency'] },
+  { key: 'scenarios', label: 'Resources · Customer scenarios', color: C.t600 },
+  { key: 'misconceptions', label: 'Resources · Common misconceptions' },
+  { key: 'pairing', label: 'Resources · Paired and nonpaired regions', color: C.s600 },
+  { key: 'resiliency', label: 'Resources · Resiliency scenarios', color: C.s600 },
   { key: 'conclusion', label: 'Conclusion', agenda: ['', 'Conclusion', 'Design for continuing regional choice'] },
-  { key: 'appendix', label: 'Appendix A · Service behavior across regions', color: C.s600, agenda: ['A', 'Service behavior across regions', 'Paired and nonpaired regions, Storage, Backup, Key Vault, private DNS'] },
   { key: 'back', label: 'Closing' },
 ];

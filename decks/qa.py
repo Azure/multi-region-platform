@@ -10,11 +10,12 @@ any text is under 9 pt, or a retired term is found (site/tools/drift.py --terms)
 Reports the share of text under 10.5 pt per slide: body text should be 11 pt or more, so only labels,
 chips, captions and footers belong there.
 
-Rendering needs LibreOffice (soffice) and pdftoppm. Without Segoe UI installed the preview uses a fallback
-font, which is slightly wider: text that fits in the preview fits in PowerPoint.
+Rendering uses installed PowerPoint on Windows when LibreOffice is absent; otherwise it needs LibreOffice
+(soffice) and pdftoppm. Without Segoe UI installed the preview uses a fallback font.
 """
 import collections, glob, os, posixpath, re, shutil, subprocess, sys, tempfile, zipfile
 from xml.etree import ElementTree as ET
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -86,6 +87,8 @@ def check(path):
     if dense:
         print("  slides with more than 25% of text under 10.5 pt: " + ", ".join(f"{i} ({100 * s:.0f}%)" for i, s in dense))
     drift = subprocess.run([sys.executable, os.path.join(ROOT, "site", "tools", "drift.py"), path, "--terms"], capture_output=True, text=True)
+    if drift.returncode and not any(line.startswith(("RETIRED", "MISSING")) for line in drift.stdout.splitlines()):
+        problems.append("drift check failed: " + (drift.stderr.strip() or drift.stdout.strip()))
     for line in drift.stdout.splitlines():
         if line.startswith(("RETIRED", "MISSING")):
             problems.append(line)
@@ -101,12 +104,19 @@ def render(path, key, only):
     os.makedirs(out)
     work = tempfile.mkdtemp(prefix="deck-qa-")
     try:
-        # a private profile so several conversions can run at once
-        subprocess.run(["soffice", f"-env:UserInstallation=file://{work}/profile", "--headless", "--convert-to", "pdf", "--outdir", work, path],
-                       check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        pdf = os.path.join(work, os.path.splitext(os.path.basename(path))[0] + ".pdf")
-        subprocess.run(["pdftoppm", "-jpeg", "-r", "80", pdf, os.path.join(work, "s")], check=True)
+        if os.name == "nt" and not shutil.which("soffice"):
+            subprocess.run(["powershell.exe", "-NoProfile", "-NonInteractive", "-File",
+                            os.path.join(HERE, "render_windows.ps1"), "-Presentation", os.path.abspath(path),
+                            "-OutputDirectory", work], check=True, timeout=240)
+        else:
+            # A private profile permits independent LibreOffice conversions.
+            subprocess.run(["soffice", f"-env:UserInstallation={Path(work, 'profile').as_uri()}", "--headless", "--convert-to", "pdf", "--outdir", work, path],
+                           check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            pdf = os.path.join(work, os.path.splitext(os.path.basename(path))[0] + ".pdf")
+            subprocess.run(["pdftoppm", "-jpeg", "-r", "80", pdf, os.path.join(work, "s")], check=True)
         files = sorted(glob.glob(os.path.join(work, "s-*.jpg")))
+        if len(files) != len(slides(zipfile.ZipFile(path))):
+            raise RuntimeError(f"Rendered {len(files)} images, expected one for every slide in {path}")
         kept = []
         for f in files:
             n = int(re.findall(r"-(\d+)\.jpg$", f)[0])

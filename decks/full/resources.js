@@ -1,9 +1,9 @@
 const { C, F } = require('../lib');
 
-module.exports = (pres, L) => {
+module.exports = (pres, L, topic) => {
   // ───────────────────────── Customer scenarios (PDF p45–46)
   const TONE = { w: [C.w600, C.w50], b: [C.b600, C.b50], g: [C.g600, C.g100], t: [C.t600, C.t50], v: [C.v600, C.v50], s: [C.s800, C.s100] };
-  [[0, 1], [2, 3]].forEach((pair, pi) => {
+  if (topic === 'scenarios') [[0, 1], [2, 3]].forEach((pair, pi) => {
     const s = L.slide('scenarios');
     L.header(s, pi ? 'Continued' : 'The framework in use', pi ? 'Customer scenarios 3 and 4' : 'Customer scenarios 1 and 2', { eyebrow: pi ? 'Customer scenarios · Continued' : 'Customer scenarios · The framework in use', ec: C.t600, tw: 8.6, lede: 'Illustrative scenarios, not customer-specific recommendations.', lx: 9.3, lw: 3.43 });
     const scenarios = pair.map(k => L.data.scenarios[k]);
@@ -43,8 +43,8 @@ module.exports = (pres, L) => {
   // ───────────────────────── Common misconceptions (PDF p47)
   // Four of the eight are covered by the executive summary slide "What adding a region involves"
   // (own landing-zone project, Full Regional Hub, another ExpressRoute circuit, migrating workloads); this slide keeps the other four.
-  {
-    const s = L.slide('practice');
+  if (topic === 'misconceptions') {
+    const s = L.slide('misconceptions');
     L.header(s, '', 'Common misconceptions', { tw: 7, lede: 'Teams often add complexity by starting from assumptions instead of workload and platform requirements.', lx: 8.3, lw: 4.43 });
     const KEEP = ['We must choose the perfect regions up front.', 'Qualified means approved for any workload.', 'A paired region is our disaster recovery.', 'A multi-region platform means active-active.'];
     const M = KEEP.map(claim => { const m = L.data.misconceptions.find(x => x.claim === claim); if (!m) throw new Error('Misconception not found: ' + claim); return m; });
@@ -64,8 +64,8 @@ module.exports = (pres, L) => {
   }
 
   // ───────────────────────── Get started (PDF p48)
-  {
-    const s = L.slide('practice');
+  if (topic === 'getting-started') {
+    const s = L.slide('getting-started');
     L.header(s, '', 'Get started with a multi-region platform', { tw: 7.4, lede: 'Start with one candidate region and the workloads that need it. The same process scales to a broader portfolio, and later regions reuse the decisions made for the first.', lx: 8.3, lw: 4.43 });
     const cw = 3.93, ch = 1.85;
     L.data.gettingStarted.forEach((g, i) => {
@@ -73,10 +73,10 @@ module.exports = (pres, L) => {
       L.box(s, x, y, cw, ch, { fill: C.wash, r: 0.12 });
       L.txt(s, String(i + 1).padStart(2, '0'), x + 0.2, y + 0.12, 0.7, 0.5, { fontSize: 26, fontFace: F.light, color: C.b600 });
       L.txt(s, g.title, x + 0.95, y + 0.14, cw - 1.1, 0.5, { fontSize: 12.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
-      const phrase = 'region planning workbook', at = g.short.indexOf(phrase);
+      const phrase = L.data.plannerName, at = g.short.indexOf(phrase);
       const body = at < 0 ? g.short : [
         { text: g.short.slice(0, at) },
-        { text: phrase, options: { bold: true, color: C.b600, hyperlink: { url: L.data.workbookUrl, tooltip: 'Open the region planning workbook' } } },
+        { text: phrase, options: { bold: true, color: C.b600, hyperlink: { url: L.data.workbookUrl, tooltip: 'Open the Multi-region planner' } } },
         { text: g.short.slice(at + phrase.length) },
       ];
       L.txt(s, body, x + 0.2, y + 0.75, cw - 0.4, ch - 0.82, { fontSize: 11, color: C.text });
@@ -88,7 +88,7 @@ module.exports = (pres, L) => {
   }
 
   // ───────────────────────── Conclusion (PDF p49)
-  {
+  if (topic === 'conclusion') {
     const s = L.slide('conclusion');
     L.header(s, '', 'Design for continuing regional choice', { tw: 8 });
     L.txt(s, [{ text: 'No organization can predict which Azure regions will offer the best mix of services, regulatory fit, business proximity, and workload suitability several years from now. ', options: { fontFace: F.light } }, { text: 'Design the platform so that perfect prediction is unnecessary.', options: { fontFace: F.semi, color: C.ink } }], 0.6, 1.6, 5.0, 2.3, { fontSize: 17, color: C.s600 });

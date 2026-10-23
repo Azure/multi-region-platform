@@ -1,7 +1,7 @@
 ---
 title: Place shared services
 description: Decide where each shared service is provided for a qualified Azure region — local, remote from another hub, or global — starting from a default for each connectivity profile and changing it only when a workload requirement says so.
-ms.date: 10/06/2026
+ms.date: 10/22/2026
 ms.topic: conceptual
 ---
 
@@ -34,7 +34,7 @@ The table gives a starting point for each profile. The defaults aren't rules: ch
 Some placements are set by the service, not by the profile:
 
 - **Backup vaults are local in every profile.** Azure Backup works within a region, so you need a vault in each region that holds protected resources.
-- **Key Vault is local in every profile.** Give each workload a vault in the region it runs in. See the [recommended Key Vault pattern](./key-vault-across-regions.md#recommended-key-vault-pattern).
+- **Key Vault is local in every profile.** Give each workload a vault in the region it runs in. See [Secrets and certificates](./key-vault-across-regions.md#secrets-and-certificates); [design keys separately](./key-vault-across-regions.md#keys).
 - **Private DNS zones are global.** Create them once, in the connectivity subscription, and link virtual networks to them.
 - **Start with a single log workspace.** Add a workspace in the region only when data must stay in that geography, or when the charges for sending data to another region are significant.
 - **Policy, access control, and management groups aren't tied to a region.** The one change is to allow the new region in any policy assignment that restricts locations.

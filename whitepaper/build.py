@@ -2,8 +2,74 @@
 """Assemble whitepaper.html from pages/*.html (editable source)."""
 import glob, html as htmllib, importlib.util, json, math, os, re
 import art
+import yaml
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
+
+# The website TOC controls reading order; page filenames remain stable for figure generators.
+ARTICLE_PAGES = {
+    "index": [],
+    "framework-overview": ["03-*", "03b-*", "04-*", "05-*"],
+    "platform-and-workload": ["06-*", "07-*", "07b-*"],
+    "connectivity-profiles": ["08-*", "08b-*", "08c-*"],
+    "application-landing-zone-archetypes": ["09-*", "09b-*", "09c-*"],
+    "regional-qualification": ["10-*", "10b-*", "10c-*"],
+    "business-and-geography": ["11-*"],
+    "data-and-compliance": [],
+    "workload-requirements": ["12-*", "12b-*"],
+    "regional-capability": ["13-*", "13b-*", "13c-*"],
+    "platform-architecture": ["14-*", "14b-*"],
+    "profile-selection": ["15-*", "15b-*"],
+    "platform-enablement-connectivity": ["16-*"],
+    "hybrid-connectivity": ["16b-*"],
+    "prepare-region": ["17-*", "17a-*"],
+    "disconnected-spokes": ["17b-*"],
+    "remote-hub-connected": ["17c-*", "17d-*"],
+    "minimal-regional-hub": ["17e-*", "17f-*"],
+    "full-regional-hub": ["17g-*", "17h-*"],
+    "platform-readiness": ["17i-*"],
+    "workload-placement": ["18-*", "18b-*"],
+    "workload-design": ["22a0-*"],
+    "storage-across-regions": ["22a2-*"],
+    "restore-across-regions": ["22a3-*"],
+    "key-vault-across-regions": ["22a4-kv*"],
+    "private-dns-multi-region": ["22a4?-dns-*"],
+    "getting-started": ["20b-*"],
+    "customer-scenarios": ["19-*", "19b-*"],
+    "misconceptions": ["20-*"],
+    "paired-nonpaired-regions": ["22a1-*"],
+    "resiliency-scenarios": ["22a5-*"],
+}
+
+
+def publication_pages():
+    """Fail rather than silently omit a new website article or an unmapped PDF page."""
+    with open(os.path.join(ROOT, "..", "content", "toc.yml"), encoding="utf-8") as fh:
+        toc = yaml.safe_load(fh)["items"]
+
+    def articles(items):
+        for item in items:
+            if "href" in item:
+                yield os.path.splitext(item["href"])[0]
+            yield from articles(item.get("items", []))
+
+    names = list(articles(toc))
+    if set(names) != set(ARTICLE_PAGES):
+        raise ValueError(f"Update ARTICLE_PAGES for website TOC changes: {set(names) ^ set(ARTICLE_PAGES)}")
+    patterns = ["01-*", "02-*", "02b-*"]
+    for name in names:
+        patterns.extend(ARTICLE_PAGES[name])
+    patterns.extend(["21-*", "23-*", "23b-*", "24-*"])
+    pages = []
+    for pattern in patterns:
+        matches = sorted(glob.glob(os.path.join(ROOT, "pages", pattern + ".html")))
+        if not matches:
+            raise ValueError(f"No whitepaper pages match {pattern}")
+        pages.extend(matches)
+    available = set(glob.glob(os.path.join(ROOT, "pages", "*.html")))
+    if len(pages) != len(set(pages)) or set(pages) != available:
+        raise ValueError(f"Duplicate or unmapped whitepaper pages: {available ^ set(pages)}")
+    return pages
 
 
 def _art_module(name):
@@ -52,7 +118,8 @@ def describe_figures(html):
 
 
 # Placeholders usable in any page: {{EDITION}}, {{SITE_URL}}, {{WORKBOOK_URL}}
-PLACEHOLDERS = {"EDITION": SUMMARY["edition"], "SITE_URL": SUMMARY["siteUrl"], "WORKBOOK_URL": SUMMARY["workbookUrl"]}
+PLACEHOLDERS = {"EDITION": SUMMARY["edition"], "SITE_URL": SUMMARY["siteUrl"], "WORKBOOK_URL": SUMMARY["workbookUrl"],
+                "SERVICE_GUIDES": SUMMARY["serviceGuidesTitle"], "PLANNER_NAME": SUMMARY["plannerName"]}
 
 SPRITE = """
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -115,7 +182,7 @@ EDITIONS = {
 
 def build(edition="full"):
     ed = EDITIONS[edition]
-    pages = sorted(glob.glob(os.path.join(ROOT, ed["src"], "*.html")))
+    pages = publication_pages() if edition == "full" else sorted(glob.glob(os.path.join(ROOT, ed["src"], "*.html")))
     body = []
     for p in pages:
         with open(p, encoding="utf-8") as fh:
@@ -135,7 +202,7 @@ def build(edition="full"):
     html = re.sub(r"\{\{PY:(.+?)\}\}", lambda m: str(eval(m.group(1), {"art": art, "city": city, "drivers": drivers})), html)
 
     html = hide_pin_numbers(describe_figures(html))
-    html = re.sub(r"\{\{(EDITION|SITE_URL|WORKBOOK_URL)\}\}", lambda m: PLACEHOLDERS[m.group(1)], html)
+    html = re.sub(r"\{\{(" + "|".join(PLACEHOLDERS) + r")\}\}", lambda m: PLACEHOLDERS[m.group(1)], html)
 
     doc = f"""<!doctype html>
 <html lang="en">

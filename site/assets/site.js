@@ -42,9 +42,9 @@
     $$('.fig.live').forEach(f => {
       const stage = $('.fig-stage', f), scaleEl = $('.fig-scale', f), wpf = $('.wpf', f);
       const w = wpf.offsetWidth || +wpf.dataset.w, h = wpf.offsetHeight || +wpf.dataset.h, avail = stage.clientWidth;
-      const s = Math.min(1, avail / w);
-      scaleEl.style.transform = s < 1 ? `scale(${s})` : '';
-      scaleEl.style.width = s < 1 ? w + 'px' : '';
+      const s = f.closest('.kv-pattern') ? avail / w : Math.min(1, avail / w);
+      scaleEl.style.transform = s !== 1 ? `scale(${s})` : '';
+      scaleEl.style.width = s !== 1 ? w + 'px' : '';
       stage.style.height = Math.ceil(h * s) + 'px';
     });
   }

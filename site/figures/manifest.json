@@ -99,9 +99,44 @@
   "h": 97,
   "source": "fig18b"
  },
- "key-vault-regional-pattern": {
-  "w": 544,
-  "h": 450,
-  "source": "figKVPattern"
+ "key-vault-secrets-per-region": {
+  "w": 380,
+  "h": 273,
+  "source": "figKVS1"
+ },
+ "key-vault-secrets-paired-region": {
+  "w": 380,
+  "h": 273,
+  "source": "figKVS2"
+ },
+ "key-vault-keys-vault-per-region": {
+  "w": 380,
+  "h": 273,
+  "source": "figKVK1"
+ },
+ "key-vault-keys-byok-per-region": {
+  "w": 380,
+  "h": 273,
+  "source": "figKVK2"
+ },
+ "key-vault-keys-managed-hsm-geo": {
+  "w": 380,
+  "h": 273,
+  "source": "figKVK3"
+ },
+ "key-vault-keys-managed-hsm-geo-byok": {
+  "w": 380,
+  "h": 273,
+  "source": "figKVK4"
+ },
+ "key-vault-keys-managed-hsm-ekm": {
+  "w": 380,
+  "h": 273,
+  "source": "figKVK5"
+ },
+ "key-vault-decision-tree": {
+  "w": 940,
+  "h": 492,
+  "source": "figKVTree"
  }
 }

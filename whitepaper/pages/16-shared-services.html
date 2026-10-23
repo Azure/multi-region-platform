@@ -68,7 +68,7 @@
       <h4 style="margin-top:3px">Set by the service, not by the profile</h4>
       <ul class="bul zsn mt8">
         <li><strong>Backup vaults are local in every profile.</strong> Azure Backup works within a region, so you need a vault in each region that holds protected resources.</li>
-        <li><strong>Key Vault is local in every profile.</strong> Give each workload a vault in the region it runs in. See the recommended Key Vault pattern (Appendix A).</li>
+        <li><strong>Key Vault is local in every profile.</strong> Give each workload a vault in the region it runs in. See Key Vault across regions in the service guides; design keys separately from secrets and certificates.</li>
         <li><strong>Private DNS zones are global.</strong> Create them once, in the connectivity subscription, and link virtual networks to them.</li>
         <li><strong>Start with a single log workspace.</strong> Add a workspace in the region only when data must stay in that geography, or when the charges for sending data to another region are significant.</li>
         <li><strong>Policy, access control, and management groups aren’t tied to a region.</strong> The one change is to allow the new region in any policy assignment that restricts locations.</li>

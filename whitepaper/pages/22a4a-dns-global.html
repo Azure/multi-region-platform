@@ -1,6 +1,6 @@
-<section class="page" data-section="Appendix A · Service behavior across regions">
+<section class="page" data-section="Service Guides for Multi Region">
 <div class="inner">
-  <div class="eyebrow" style="color:var(--s600)">Appendix A · Private DNS zones</div>
+  <div class="eyebrow" style="color:var(--s600)">Service guides · Private DNS zones</div>
   <h2 class="title mt8">Private DNS zones for multi-region private endpoints</h2>
   <p class="mt12">Private DNS zones are global resources, so adding a region doesn't require new zones. Most workloads can continue using the existing landing zone's centrally managed <code>privatelink.*</code> zones. Resources with <strong>private endpoints in more than one region</strong> need additional DNS planning.</p>
   <p class="small muted mt8">This page covers centralized DNS designs that share private DNS zones across regions. Decentralized designs, such as isolated spokes with their own zones, are outside its scope.</p>

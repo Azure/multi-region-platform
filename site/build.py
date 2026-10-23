@@ -217,6 +217,16 @@ def postprocess(h):
     return h
 
 
+def key_vault_pattern_layout(h):
+    """Pair each pattern summary with its diagram for the website only."""
+    return re.sub(
+        r'(<h3\b[^>]*>Pattern [1-5]:.*?</h3>)\s*(<ul>.*?</ul>)\s*'
+        r'(<figure\b[^>]*data-fig="key-vault-(?:secrets|keys)-[^"]+"[^>]*>.*?</figure>)',
+        r'<div class="kv-pattern"><div class="kv-pattern-copy">\1\2</div>\3</div>',
+        h, flags=re.S,
+    )
+
+
 # ───────────────────────────── navigation
 def load_toc():
     return yaml.safe_load(open(os.path.join(CONTENT, "toc.yml"), encoding="utf-8"))["items"]
@@ -326,6 +336,8 @@ def build():
         h = render_md(body, store)
         h = expand_raw(h, store)
         h = postprocess(h)
+        if pg["href"] == "key-vault-across-regions.md":
+            h = key_vault_pattern_layout(h)
         # split H1
         m = re.search(r"<h1[^>]*>(.*?)</h1>", h, flags=re.S)
         h1 = m.group(1) if m else meta.get("title", pg["name"])

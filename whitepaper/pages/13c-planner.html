@@ -1,0 +1,35 @@
+<section class="page" data-section="2 · Qualify regions">
+<style>
+  .planner-summary p { font-size: 11.6px; line-height: 1.45; }
+</style>
+<div class="inner">
+  <div class="eyebrow">Planning tool · Steps 2 and 3</div>
+  <h1 class="sec-title mt8" id="sPlanner">{{PLANNER_NAME}}</h1>
+  <p class="standfirst mt16">Compare regional options, record qualification evidence, and select the regional design. The planner supports decisions; it does not qualify a workload automatically or guarantee deployment capacity.</p>
+  <div class="planner-summary" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:16px">
+    <div class="card" style="padding:22px;background:var(--b50)">
+      <svg width="36" height="36" style="color:var(--b600)"><use href="#i-search"/></svg>
+      <h2 class="mt12" style="font-size:20px">Compare and qualify</h2>
+      <p class="mt12">Scope current and candidate regions. Compare Services, Latency, and Pricing, then record evidence against the four Checks.</p>
+      <p class="mt12">Service, Product, and SKU selectors use an imported availability CSV. Pricing uses a separate Retail Prices API snapshot and service-level comparisons.</p>
+      <p class="mt12">The geography view compares region, peering-location, and customer-city latency. Estimated routes do not prove that circuits exist.</p>
+    </div>
+    <div class="card" style="padding:22px;background:var(--t50)">
+      <svg width="36" height="36" style="color:var(--t600)"><use href="#i-hub"/></svg>
+      <h2 class="mt12" style="font-size:20px">Record the design</h2>
+      <p class="mt12">Regional design records the connectivity profile, shared-service placement, and hybrid connectivity for each selected region.</p>
+      <p class="mt12">Hub Connections accepts multiple regions. Existing connectivity can use peering-location suggestions or your own circuit or VPN description.</p>
+      <p class="mt12">Enable Advanced Networking Design Tool to explore the inherited design. Tool-only refinements do not modify the authoritative plan; limitations are called out.</p>
+    </div>
+    <div class="card" style="padding:22px;background:var(--wash)">
+      <svg width="36" height="36" style="color:var(--b600)"><use href="#i-doc"/></svg>
+      <h2 class="mt12" style="font-size:20px">Review and export</h2>
+      <p class="mt12">Review + export collects the evidence and design decisions. Export Excel, print the plan, or save and reopen a JSON planning record.</p>
+      <p class="mt12">Visitor-entered planning data stays in the browser; it is not sent to a server. Reference data comes from published snapshots.</p>
+      <p class="mt12">Use the full-width step tabs. Open Table of contents to return to the guidance.</p>
+    </div>
+  </div>
+  <div class="note mt24"><h4>Revalidate before onboarding</h4><p>Availability indicators, snapshot prices, and estimated latency are planning inputs. Confirm current service and SKU support, access, quota, actual capacity, and workload recovery behavior before deployment.</p></div>
+  <p class="mt16"><a href="{{WORKBOOK_URL}}">Open the {{PLANNER_NAME}}</a></p>
+</div>
+</section>

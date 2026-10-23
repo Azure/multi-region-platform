@@ -60,7 +60,7 @@ module.exports = (pres, L) => {
       ['Review the qualified regional options', 'Consider regions previously assessed against the relevant requirements: capabilities, profiles, readiness, constraints, last assessment date, and open validations.', 1],
       ['Validate current regional suitability', 'Qualification was an earlier planning assessment. Re-check the target region before onboarding: services, SKUs, AI models, access, quota, and dependencies.', 1],
       ['Confirm the region’s connectivity profile', 'Check that the region’s connectivity profile satisfies the workload’s requirements.', 1],
-      ['Determine the workload’s resiliency role', 'Primary, recovery, or part of a multi-region active deployment, applying availability, RTO, RPO, replication, consistency, and failover requirements. See Appendix A.', 2],
+      ['Determine the workload’s resiliency role', 'Primary, recovery, or part of a multi-region active deployment, applying availability, RTO, RPO, replication, consistency, and failover requirements. See the service guides.', 2],
       ['Record and govern the decision', 'Document the region, archetype, connectivity profile, placement and resiliency outcomes, assumptions, constraints, owners, and revalidation triggers.', 2],
     ];
     const cw = 2.92, cg = 0.15, ch = 1.78;

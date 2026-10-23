@@ -56,7 +56,7 @@ module.exports = (pres, L) => {
       L.icon(s, ic, 9.37, y + 0.13, 0.26, c);
       L.txt(s, t, 9.76, y + 0.03, 2.6, 0.48, { fontSize: 12, fontFace: F.semi, color: C.ink, valign: 'middle' });
     });
-    s.addNotes('The agenda follows the five parts of the whitepaper: understand concepts, qualify regions, select the regional design, prepare the region, and place workloads. Customer scenarios, practice, the conclusion, and Appendix A close the deck. Four decision tools are collected in the deck: the regional qualification decision tree, the connectivity profile selection tree, the workload placement flow, and the platform readiness checklist.');
+    s.addNotes('The agenda follows the website: understand concepts, qualify regions, select the regional design, prepare the region, and place workloads. Service Guides for Multi Region follows, then Resources: getting started, customer scenarios, misconceptions, pairing, and resiliency. The conclusion closes the story. Four decision tools: regional qualification tree, connectivity profile tree, workload placement flow, and platform readiness checklist.');
   }
 
   // ───────────────────────── 3 · Executive summary — the approach at a glance

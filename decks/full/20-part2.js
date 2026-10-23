@@ -91,10 +91,10 @@ module.exports = (pres, L) => {
     // workbook pointer, once, on its own line
     L.icon(s, 'doc', 0.6, sy + sh + 0.1, 0.24, 'b');
     L.txt(s, [
-      { text: 'Use the ' }, { text: 'region planning workbook', options: { bold: true, color: C.b600, hyperlink: { url: D.workbookUrl, tooltip: 'Open the region planning workbook' } } },
+      { text: 'Use the ' }, { text: D.plannerName, options: { bold: true, color: C.b600, hyperlink: { url: D.workbookUrl, tooltip: 'Open the Multi-region planner' } } },
       { text: ' to answer the four checks, compare availability, prices, and latency, and export to Excel.' }],
     0.95, sy + sh + 0.08, 11.78, 0.28, { fontSize: 11, color: C.text, valign: 'middle' });
-    s.addNotes('Regional qualification determines which Azure regions should be prepared to support workload requirements. It does not decide whether an individual workload should use multiple regions or define its multi-region architecture; those are workload-specific design decisions. Four checks evaluate each candidate region the same way: business and geography, data and compliance, workload requirements and dependencies, and regional capability and availability. Check 3 also records what the workloads need from the platform in three areas: platform enablement, resilient hybrid connectivity, and regional platform connectivity, each decided in Part 3. Outcomes are specific to defined workload requirements and are never a blanket certification. A region that meets all four checks is qualified as of the assessment date. The region planning workbook answers the four checks for each candidate region, compares service availability, prices, and latency, and exports the result to Excel.');
+    s.addNotes('Regional qualification determines which Azure regions should be prepared to support workload requirements. It does not decide an individual workload’s multi-region architecture. Four checks evaluate each candidate: business and geography, data and compliance, workload requirements and dependencies, and regional capability and availability. Check 3 records platform enablement, resilient hybrid connectivity, and regional platform connectivity requirements for Part 3. Outcomes apply to defined requirements and current evidence, never blanket certification. The Multi-region planner compares service availability, prices, and latency, records the checks, and exports Excel or saves a JSON planning record.');
   }
 
   // ───────────────────────── 2 · Assessment outcome (PDF p20)
@@ -323,7 +323,7 @@ module.exports = (pres, L) => {
       'For requirements that depend on multiple regions, validate the intended combination at the service level. Record material gaps, required changes, and owners for unresolved validation.',
     ];
     paras.forEach((p, i) => L.txt(s, p, 0.6, 2.2 + [0, 1.15, 2.3][i], 5.9, 1.05, { fontSize: 12, color: C.text }));
-    L.caption(s, 'Figure', 'Zones and pairing are independent questions. Neither guarantees nor rules out workload recovery. Service-level detail is in Appendix A.', 0.6, 6.3, 5.9);
+    L.caption(s, 'Figure', 'Zones and pairing are independent questions. Neither guarantees nor rules out workload recovery. See the service guides and Resources.', 0.6, 6.3, 5.9);
     // right: zones and pairing
     const rx = 6.9, rw = 5.83, cw = (rw - 0.13) / 2;
     L.txt(s, 'ASSESS SEPARATELY', rx, 2.12, 3, 0.2, { fontSize: 9, bold: true, color: C.muted, charSpacing: 2 });
@@ -364,7 +364,7 @@ module.exports = (pres, L) => {
     L.txt(s, [{ text: 'Built-in capabilities', options: { bold: true } }, { text: ' support the outcome' }], rx + 0.32, 6.28, bw - 0.24, 0.5, { fontSize: 11, color: C.b800, valign: 'middle' });
     L.box(s, rx + 0.3 + bw, 6.28, bw, 0.5, { fill: C.white, line: C.t300, r: 0.08 });
     L.txt(s, [{ text: 'Additional workload design', options: { bold: true } }, { text: ' is required' }], rx + 0.42 + bw, 6.28, bw - 0.24, 0.5, { fontSize: 11, color: C.t700, valign: 'middle' });
-    s.addNotes('Evaluate each candidate region against the workload requirements identified in check 3. Assess availability-zone support and region pairing separately. Prefer zone-enabled regions when zone resiliency is required, but do not assume that region pairing alone provides workload recovery, or that a nonpaired region cannot be used as a recovery destination. Validate service-specific capabilities such as replication, backup and restore, and other regional dependencies against the resiliency requirements identified for the workload. For requirements that depend on multiple regions, validate the intended combination at the service level, including built-in paired-region behavior such as Storage GRS and region-of-choice capabilities such as Azure SQL replication. Record material gaps, required changes, and owners for unresolved validation. Detailed design is in Appendix A, Service behavior across regions.');
+    s.addNotes('Evaluate each candidate against check 3 requirements. Assess zones and pairing independently. Pairing alone does not provide workload recovery; nonpaired regions can be recovery destinations where services support them. Validate replication, backup and restore, and other regional dependencies for the intended combination, including Storage GRS and Azure SQL replication. Record gaps, changes, and validation owners. Detailed design is in Service Guides for Multi Region; pairing and resiliency scenarios are in Resources.');
   }
 
   // ───────────────────────── 8 · Check 4, continued (PDF p26)

@@ -162,6 +162,14 @@ h2:hover .anchor, h3:hover .anchor { opacity: 1; }
 .prose strong { color: var(--ink); font-weight: 600; }
 .prose em { color: var(--muted); }
 
+.kv-pattern { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr)); gap: 24px 32px; align-items: start; margin: 32px 0; }
+.kv-pattern > * { min-width: 0; }
+.kv-pattern .kv-pattern-copy h3 { margin-top: 0; }
+.kv-pattern .fig { margin: 0; }
+@media (max-width: 960px) {
+  .kv-pattern { grid-template-columns: minmax(0, 1fr); }
+}
+
 .table-wrap { margin: 8px 0 24px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
 .prose table { width: 100%; border-collapse: collapse; font-size: 14.5px; line-height: 1.5; }
 .prose th { text-align: left; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 700; background: var(--bg-soft); padding: 11px 16px; border-bottom: 1px solid var(--line); }

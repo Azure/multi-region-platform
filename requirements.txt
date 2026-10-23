@@ -1,4 +1,4 @@
-# Python tooling for the whitepaper, figures, website, and Word editions
+# Python tooling for the whitepapers, figures, website, and PowerPoint QA
 playwright>=1.42
 markdown>=3.5
 PyYAML>=6.0

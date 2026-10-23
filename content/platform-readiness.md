@@ -1,7 +1,7 @@
 ---
 title: Platform readiness checklist for a new region
 description: The platform items that most often stall a newly qualified Azure region — network foundation, governance and automation, operations and data, capacity and security.
-ms.date: 10/05/2026
+ms.date: 10/22/2026
 ms.topic: conceptual
 ---
 
@@ -46,7 +46,7 @@ Private DNS across regions, routing and inspection paths, and hybrid connectivit
 | Item | What must be true |
 |---|---|
 | **Quota and specific capacity** (common blocker) | Quota for the required SKUs and models is requested ahead of onboarding; capacity reservations are used where justified. |
-| Key Vault placement | Workload vaults exist per region rather than as a cross-region dependency. See [Key Vault across regions](./key-vault-across-regions.md#recommended-key-vault-pattern). |
+| Key Vault placement | Workload vaults exist per region rather than as a cross-region dependency. See [Key Vault across regions](./key-vault-across-regions.md). |
 | Security coverage | Security posture, threat detection, and privileged access paths extend to the region. |
 
 > [!TIP]

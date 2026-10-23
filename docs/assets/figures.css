@@ -569,6 +569,7 @@
 .wpf .pe .out { position: absolute; left: 590px; width: 350px; height: 52px; border-radius: 10px; padding: 7px 14px; display: flex; flex-direction: column; justify-content: center; }
 .wpf .pe .out b { font-size: 11.8px; }
 .wpf .pe .out span { font-size: 10.2px; color: var(--muted); line-height: 1.3; }
+.wpf .planner-summary p { font-size: 11.6px; line-height: 1.45; }
 .wpf .sd3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; }
 .wpf .sd3 .c { border: 1px solid var(--line); border-radius: 12px; background: #fff; padding: 16px 18px 12px; display: flex; flex-direction: column; }
 .wpf .sd3 .c .hd { display: flex; align-items: center; gap: 10px; }
@@ -986,6 +987,124 @@
 .wpf .st8 .b .h b { color: var(--b600); }
 .wpf .st8 .g { border-top-color: var(--s800); }
 .wpf .st8 .g .h b { color: var(--s800); }
+.wpf .ax-lk { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 12px; }
+.wpf .ax-lk .lk { border: 1px solid var(--b100); border-radius: 11px; padding: 12px 13px; background: #fff; }
+.wpf .ax-lk .lk .cap { font-size: 9px; color: var(--b600); margin-bottom: 5px; }
+.wpf .ax-lk .lk a { display: block; font-size: 12px; font-weight: 650; line-height: 1.3; }
+.wpf .ax-lk .lk span { display: block; font-size: 10.6px; line-height: 1.42; color: var(--text); margin-top: 5px; }
+.wpf .ax-in { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }
+.wpf .ax-in > div { border-radius: 12px; background: var(--wash); padding: 14px 16px; }
+.wpf .ax-in b { display: block; font-size: 13.4px; color: var(--ink); margin-bottom: 4px; }
+.wpf .ax-in p { font-size: 11.4px; line-height: 1.45; }
+.wpf .kv-card { border: 1px solid var(--b100); border-radius: 14px; padding: 14px 16px 12px; background: #fff; display: flex; flex-direction: column; }
+.wpf .kv-h { display: flex; gap: 10px; align-items: center; }
+.wpf .kv-n { width: 30px; height: 30px; border-radius: 9px; background: var(--b600); color: #fff; font-weight: 700; font-size: 13px; display: grid; place-items: center; flex: none; }
+.wpf .kv-h b { font-size: 14.4px; color: var(--ink); font-weight: 650; line-height: 1.2; }
+.wpf .kv-r { display: grid; grid-template-columns: 74px 1fr; gap: 8px; padding: 5px 0; border-top: 1px solid var(--line-soft); font-size: 10.8px; line-height: 1.38; color: var(--text); }
+.wpf .kv-r:first-of-type { margin-top: 9px; }
+.wpf .kv-r span { font-size: 8.8px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding-top: 2px; }
+.wpf .kv-r.ok span { color: var(--g700); }
+.wpf .kv-r.bf span { color: var(--b700); }
+.wpf .kv-r.lm span { color: var(--w600); }
+.wpf .kv-r.cr span { color: var(--s600); }
+.wpf .kv-card .fig { margin: 8px auto 0; width: 100%; max-width: 360px; }
+.wpf .kv-grid3 .fig { max-width: none; }
+.wpf .kv-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.wpf .kv-grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.wpf .kv-grid3 .kv-r { grid-template-columns: 58px 1fr; font-size: 10.2px; }
+.wpf .kv-grid3 .kv-h b { font-size: 12.6px; }
+.wpf .kv-grid3 .kv-card { padding: 12px 12px 10px; }
+.wpf .kv-lead { font-size: 12.4px; line-height: 1.45; color: var(--muted); }
+.wpf .kv-tag { display: inline-block; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: var(--b50); color: var(--b700); margin-left: 6px; vertical-align: middle; }
+.wpf .kv-card { border: 1px solid var(--b100); border-radius: 14px; padding: 14px 16px 12px; background: #fff; display: flex; flex-direction: column; }
+.wpf .kv-h { display: flex; gap: 10px; align-items: center; }
+.wpf .kv-n { width: 30px; height: 30px; border-radius: 9px; background: var(--b600); color: #fff; font-weight: 700; font-size: 13px; display: grid; place-items: center; flex: none; }
+.wpf .kv-h b { font-size: 14.4px; color: var(--ink); font-weight: 650; line-height: 1.2; }
+.wpf .kv-r { display: grid; grid-template-columns: 74px 1fr; gap: 8px; padding: 5px 0; border-top: 1px solid var(--line-soft); font-size: 10.8px; line-height: 1.38; color: var(--text); }
+.wpf .kv-r:first-of-type { margin-top: 9px; }
+.wpf .kv-r span { font-size: 8.8px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding-top: 2px; }
+.wpf .kv-r.ok span { color: var(--g700); }
+.wpf .kv-r.bf span { color: var(--b700); }
+.wpf .kv-r.lm span { color: var(--w600); }
+.wpf .kv-r.cr span { color: var(--s600); }
+.wpf .kv-card .fig { margin: 8px auto 0; width: 100%; max-width: 360px; }
+.wpf .kv-grid3 .fig { max-width: none; }
+.wpf .kv-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.wpf .kv-grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.wpf .kv-grid3 .kv-r { grid-template-columns: 58px 1fr; font-size: 10.2px; }
+.wpf .kv-grid3 .kv-h b { font-size: 12.6px; }
+.wpf .kv-grid3 .kv-card { padding: 12px 12px 10px; }
+.wpf .kv-lead { font-size: 12.4px; line-height: 1.45; color: var(--muted); }
+.wpf .kv-tag { display: inline-block; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: var(--b50); color: var(--b700); margin-left: 6px; vertical-align: middle; }
+.wpf .kv-card { border: 1px solid var(--b100); border-radius: 14px; padding: 14px 16px 12px; background: #fff; display: flex; flex-direction: column; }
+.wpf .kv-h { display: flex; gap: 10px; align-items: center; }
+.wpf .kv-n { width: 30px; height: 30px; border-radius: 9px; background: var(--b600); color: #fff; font-weight: 700; font-size: 13px; display: grid; place-items: center; flex: none; }
+.wpf .kv-h b { font-size: 14.4px; color: var(--ink); font-weight: 650; line-height: 1.2; }
+.wpf .kv-r { display: grid; grid-template-columns: 74px 1fr; gap: 8px; padding: 5px 0; border-top: 1px solid var(--line-soft); font-size: 10.8px; line-height: 1.38; color: var(--text); }
+.wpf .kv-r:first-of-type { margin-top: 9px; }
+.wpf .kv-r span { font-size: 8.8px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding-top: 2px; }
+.wpf .kv-r.ok span { color: var(--g700); }
+.wpf .kv-r.bf span { color: var(--b700); }
+.wpf .kv-r.lm span { color: var(--w600); }
+.wpf .kv-r.cr span { color: var(--s600); }
+.wpf .kv-card .fig { margin: 8px auto 0; width: 100%; max-width: 360px; }
+.wpf .kv-grid3 .fig { max-width: none; }
+.wpf .kv-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.wpf .kv-grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.wpf .kv-grid3 .kv-r { grid-template-columns: 58px 1fr; font-size: 10.2px; }
+.wpf .kv-grid3 .kv-h b { font-size: 12.6px; }
+.wpf .kv-grid3 .kv-card { padding: 12px 12px 10px; }
+.wpf .kv-lead { font-size: 12.4px; line-height: 1.45; color: var(--muted); }
+.wpf .kv-tag { display: inline-block; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: var(--b50); color: var(--b700); margin-left: 6px; vertical-align: middle; }
+.wpf .kv-card { border: 1px solid var(--b100); border-radius: 14px; padding: 14px 16px 12px; background: #fff; display: flex; flex-direction: column; }
+.wpf .kv-h { display: flex; gap: 10px; align-items: center; }
+.wpf .kv-n { width: 30px; height: 30px; border-radius: 9px; background: var(--b600); color: #fff; font-weight: 700; font-size: 13px; display: grid; place-items: center; flex: none; }
+.wpf .kv-h b { font-size: 14.4px; color: var(--ink); font-weight: 650; line-height: 1.2; }
+.wpf .kv-r { display: grid; grid-template-columns: 74px 1fr; gap: 8px; padding: 5px 0; border-top: 1px solid var(--line-soft); font-size: 10.8px; line-height: 1.38; color: var(--text); }
+.wpf .kv-r:first-of-type { margin-top: 9px; }
+.wpf .kv-r span { font-size: 8.8px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding-top: 2px; }
+.wpf .kv-r.ok span { color: var(--g700); }
+.wpf .kv-r.bf span { color: var(--b700); }
+.wpf .kv-r.lm span { color: var(--w600); }
+.wpf .kv-r.cr span { color: var(--s600); }
+.wpf .kv-card .fig { margin: 8px auto 0; width: 100%; max-width: 360px; }
+.wpf .kv-grid3 .fig { max-width: none; }
+.wpf .kv-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.wpf .kv-grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.wpf .kv-grid3 .kv-r { grid-template-columns: 58px 1fr; font-size: 10.2px; }
+.wpf .kv-grid3 .kv-h b { font-size: 12.6px; }
+.wpf .kv-grid3 .kv-card { padding: 12px 12px 10px; }
+.wpf .kv-lead { font-size: 12.4px; line-height: 1.45; color: var(--muted); }
+.wpf .kv-tag { display: inline-block; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: var(--b50); color: var(--b700); margin-left: 6px; vertical-align: middle; }
+.wpf .kv-card { border: 1px solid var(--b100); border-radius: 14px; padding: 14px 16px 12px; background: #fff; display: flex; flex-direction: column; }
+.wpf .kv-h { display: flex; gap: 10px; align-items: center; }
+.wpf .kv-n { width: 30px; height: 30px; border-radius: 9px; background: var(--b600); color: #fff; font-weight: 700; font-size: 13px; display: grid; place-items: center; flex: none; }
+.wpf .kv-h b { font-size: 14.4px; color: var(--ink); font-weight: 650; line-height: 1.2; }
+.wpf .kv-r { display: grid; grid-template-columns: 74px 1fr; gap: 8px; padding: 5px 0; border-top: 1px solid var(--line-soft); font-size: 10.8px; line-height: 1.38; color: var(--text); }
+.wpf .kv-r:first-of-type { margin-top: 9px; }
+.wpf .kv-r span { font-size: 8.8px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding-top: 2px; }
+.wpf .kv-r.ok span { color: var(--g700); }
+.wpf .kv-r.bf span { color: var(--b700); }
+.wpf .kv-r.lm span { color: var(--w600); }
+.wpf .kv-r.cr span { color: var(--s600); }
+.wpf .kv-card .fig { margin: 8px auto 0; width: 100%; max-width: 360px; }
+.wpf .kv-grid3 .fig { max-width: none; }
+.wpf .kv-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.wpf .kv-grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.wpf .kv-grid3 .kv-r { grid-template-columns: 58px 1fr; font-size: 10.2px; }
+.wpf .kv-grid3 .kv-h b { font-size: 12.6px; }
+.wpf .kv-grid3 .kv-card { padding: 12px 12px 10px; }
+.wpf .kv-lead { font-size: 12.4px; line-height: 1.45; color: var(--muted); }
+.wpf .kv-tag { display: inline-block; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: var(--b50); color: var(--b700); margin-left: 6px; vertical-align: middle; }
+.wpf table.pub.dns-compare td { padding: 7px 14px; }
+.wpf .gs { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px 18px; }
+.wpf .gs .g.w { grid-column: 1 / -1; }
+.wpf .gs .g.w p { columns: 2; column-gap: 34px; }
+.wpf .gs .g { border-radius: 12px; padding: 11px 18px 12px; min-height: 0; background: var(--wash); position: relative; }
+.wpf .gs .g .n { font-size: 24px; font-weight: 300; color: var(--b600); line-height: 26px; float: left; margin-right: 12px; }
+.wpf .gs .g h3 { font-size: 13.8px; line-height: 26px; }
+.wpf .gs .g p { font-size: 11px; line-height: 1.44; margin-top: 5px; clear: both; }
+.wpf .gs .g .tl { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
 .wpf .scard { border: 1px solid var(--line); border-radius: 14px; padding: 13px 16px 13px; background: #fff; }
 .wpf .scard .shead { display: flex; gap: 12px; align-items: flex-start; }
 .wpf .scard .sn { width: 30px; height: 30px; border-radius: 50%; background: var(--t600); color: #fff; font-weight: 700; font-size: 14px; display: grid; place-items: center; flex: none; }
@@ -1018,28 +1137,6 @@
 .wpf .mc4 .mca { padding: 9px 14px 10px; display: flex; gap: 9px; align-items: flex-start; flex: 1; background: #fff; }
 .wpf .mc4 .mca svg { width: 15px; height: 15px; color: var(--g600); flex: none; margin-top: 2px; }
 .wpf .mc4 .mca span { font-size: 11.2px; color: var(--text); line-height: 1.42; }
-.wpf .gs { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px 18px; }
-.wpf .gs .g.w { grid-column: 1 / -1; }
-.wpf .gs .g.w p { columns: 2; column-gap: 34px; }
-.wpf .gs .g { border-radius: 12px; padding: 11px 18px 12px; min-height: 0; background: var(--wash); position: relative; }
-.wpf .gs .g .n { font-size: 24px; font-weight: 300; color: var(--b600); line-height: 26px; float: left; margin-right: 12px; }
-.wpf .gs .g h3 { font-size: 13.8px; line-height: 26px; }
-.wpf .gs .g p { font-size: 11px; line-height: 1.44; margin-top: 5px; clear: both; }
-.wpf .gs .g .tl { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
-.wpf .stack { display: grid; gap: 10px; }
-.wpf .stack .ly { border-radius: 12px; padding: 20px 22px; display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: center; }
-.wpf .stack .ly svg { width: 26px; height: 26px; }
-.wpf .stack .ly b { font-size: 14.5px; display: block; }
-.wpf .stack .ly span { font-size: 11.6px; line-height: 1.45; display: block; margin-top: 2px; }
-.wpf .ax-lk { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 12px; }
-.wpf .ax-lk .lk { border: 1px solid var(--b100); border-radius: 11px; padding: 12px 13px; background: #fff; }
-.wpf .ax-lk .lk .cap { font-size: 9px; color: var(--b600); margin-bottom: 5px; }
-.wpf .ax-lk .lk a { display: block; font-size: 12px; font-weight: 650; line-height: 1.3; }
-.wpf .ax-lk .lk span { display: block; font-size: 10.6px; line-height: 1.42; color: var(--text); margin-top: 5px; }
-.wpf .ax-in { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 14px; }
-.wpf .ax-in > div { border-radius: 12px; background: var(--wash); padding: 14px 16px; }
-.wpf .ax-in b { display: block; font-size: 13.4px; color: var(--ink); margin-bottom: 4px; }
-.wpf .ax-in p { font-size: 11.4px; line-height: 1.45; }
 .wpf .ax-pc { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .wpf .ax-pc .c { border-radius: 14px; padding: 22px 24px; border: 1px solid var(--b100); }
 .wpf .ax-pc .h { display: flex; gap: 14px; align-items: center; }
@@ -1054,31 +1151,6 @@
 .wpf .rec { list-style: none; margin-top: 5px; display: grid; grid-template-columns: 1fr 1fr; gap: 2px 18px; }
 .wpf .rec li { font-size: 10.6px; line-height: 1.4; color: var(--ink); padding-left: 11px; position: relative; margin-bottom: 2px; }
 .wpf .rec li::before { content: ""; position: absolute; left: 1px; top: .55em; width: 4px; height: 4px; border-radius: 50%; background: var(--b600); }
-.wpf .ax-sv { width: calc(100% + 24px); border-collapse: separate; border-spacing: 12px 0; margin: 0 -12px; table-layout: fixed; }
-.wpf .ax-sv td:nth-child(1) { width: 30%; }
-.wpf .ax-sv td:nth-child(2) { width: 28%; }
-.wpf .ax-sv td:nth-child(3) { width: 42%; }
-.wpf .ax-sv td { vertical-align: top; }
-.wpf .ax-sv .hd { border-radius: 12px 12px 0 0; background: var(--b50); padding: 8px 16px; }
-.wpf .ax-sv .hd .w { display: flex; gap: 12px; align-items: center; }
-.wpf .ax-sv .hd .i { width: 32px; height: 32px; border-radius: 10px; background: var(--b600); display: grid; place-items: center; flex: none; }
-.wpf .ax-sv .hd .i svg { width: 22px; height: 22px; color: #fff; }
-.wpf .ax-sv .hd b { font-size: 17px; color: var(--ink); font-weight: 650; }
-.wpf .ax-sv .cl { padding: 10px 16px; border-left: 1px solid var(--line-soft); border-right: 1px solid var(--line-soft); }
-.wpf .ax-sv .cl.last { border-bottom: 1px solid var(--line-soft); border-radius: 0 0 12px 12px; }
-.wpf .ax-sv .cl .k { font-size: 9.2px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; margin-bottom: 5px; }
-.wpf .ax-sv .cl ul { list-style: none; }
-.wpf .ax-sv .cl li { position: relative; padding-left: 12px; font-size: 11px; line-height: 1.42; margin-bottom: 4px; color: var(--text); }
-.wpf .ax-sv .cl li::before { content: ""; position: absolute; left: 1px; top: .6em; width: 4px; height: 4px; border-radius: 50%; background: var(--b500); }
-.wpf .ax-sv .cl.rc li::before { background: var(--t600); }
-.wpf .ax-sv .cl.rc { background: #FBFDFC; }
-.wpf .ax-sv .cl.tk { background: var(--wash); }
-.wpf .ax-sv .cl.tk p { font-size: 11.8px; line-height: 1.45; color: var(--ink); font-weight: 600; }
-.wpf .ax-ck { display: grid; grid-template-columns: 30px 1fr; gap: 12px; align-items: start; padding: 7px 0; border-top: 1px solid var(--line-soft); }
-.wpf .ax-ck .b { width: 26px; height: 26px; border-radius: 7px; background: var(--b600); display: grid; place-items: center; }
-.wpf .ax-ck .b svg { width: 16px; height: 16px; color: #fff; }
-.wpf .ax-ck p { font-size: 11.4px; line-height: 1.42; color: var(--muted); }
-.wpf .ax-ck p b { color: var(--ink); }
 .wpf .ax-rs { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; }
 .wpf .ax-rs .c { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; background: #fff; }
 .wpf .ax-rs .h { min-height: 120px; padding: 14px 16px; background: var(--b50); }
@@ -1092,6 +1164,11 @@
 .wpf .ax-rs .row2 .v { font-size: 10.8px; line-height: 1.42; color: var(--text); }
 .wpf .ax-rs .tk { background: var(--s800); color: #fff; padding: 11px 16px; font-size: 11px; line-height: 1.42; }
 .wpf .ax-rs .tk b { color: #50E6FF; }
+.wpf .stack { display: grid; gap: 10px; }
+.wpf .stack .ly { border-radius: 12px; padding: 20px 22px; display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: center; }
+.wpf .stack .ly svg { width: 26px; height: 26px; }
+.wpf .stack .ly b { font-size: 14.5px; display: block; }
+.wpf .stack .ly span { font-size: 11.6px; line-height: 1.45; display: block; margin-top: 2px; }
 .wpf .rg3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px 30px; }
 .wpf .rg3.refs-first.mt16 { margin-top: 8px; }
 .wpf .rg3.refs-first .rgp h4 { margin-bottom: 2px; padding-bottom: 2px; border-bottom: 1px solid var(--line-soft); }

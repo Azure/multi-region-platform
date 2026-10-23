@@ -83,6 +83,10 @@ def main():
             el = pg.query_selector(f"#{fid}")
             if not el:
                 print("missing", fid); continue
+            original_style = el.get_attribute("style")
+            export_width = el.get_attribute("data-export-width")
+            if export_width:
+                el.evaluate("(f, w) => { f.style.width = w + 'px'; f.style.maxWidth = 'none'; }", int(export_width))
             el.scroll_into_view_if_needed()
             box = el.bounding_box()
             w, h = round(box["width"]), round(box["height"])
@@ -123,6 +127,8 @@ def main():
                 with open(image_path, "wb") as image:
                     image.write(png)
             el.evaluate("() => { for (const [s, v] of window.__hid) s.style.visibility = v; }")
+            if export_width:
+                el.evaluate("(f, style) => { if (style === null) f.removeAttribute('style'); else f.setAttribute('style', style); }", original_style)
             manifest[name] = {"w": w, "h": h, "source": fid}
             print(f"{name:42s} {w}x{h}")
         b.close()

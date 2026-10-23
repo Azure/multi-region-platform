@@ -1,13 +1,13 @@
 ---
 title: Common multi-region misconceptions
 description: Eight common assumptions that make multi-region programs more complex than necessary, and the correction for each.
-ms.date: 10/05/2026
+ms.date: 10/22/2026
 ms.topic: conceptual
 ---
 
 # Common multi-region misconceptions
 
-Multi-region programs often become more complex than necessary when teams start from assumptions instead of workload and platform requirements. The corrections below follow the order of the framework: qualification, platform capabilities and connectivity, workload placement, and service behavior across regions.
+Multi-region programs often become more complex than necessary when teams start from assumptions instead of workload and platform requirements. The corrections cover qualification, platform capabilities and connectivity, workload placement, service guides, and Resources.
 
 | Misconception | Correction |
 |---|---|

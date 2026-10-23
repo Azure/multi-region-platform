@@ -3,7 +3,7 @@ const { C, F } = require('../lib');
 
 module.exports = (pres, L) => {
   const media = name => path.join(__dirname, '..', '..', 'content', 'media', name + '.png');
-  const header = (s, title) => L.header(s, '', title, { eyebrow: 'Appendix A · Private DNS zones', ec: C.s600, tw: 11.8 });
+  const header = (s, title) => L.header(s, '', title, { eyebrow: 'Service guides · Private DNS zones', ec: C.s600, tw: 11.8 });
   const tableOptions = {
     x: 0.6, y: 1.6, w: 12.13, fontFace: F.body, fontSize: 11, color: C.text,
     margin: [0.1, 0.14, 0.1, 0.14], border: { type: 'solid', pt: 0.75, color: C.soft },
@@ -12,7 +12,7 @@ module.exports = (pres, L) => {
   const heading = text => ({ text, options: { bold: true, fill: C.b50, color: C.ink } });
 
   {
-    const s = L.slide('appendix');
+    const s = L.slide('services');
     header(s, 'Private DNS zones for multi-region private endpoints');
     L.txt(s, 'Private DNS zones are global resources. Adding a region does not require new zones; most workloads can keep centrally managed privatelink.* zones.', 0.6, 1.6, 5.3, 0.95, { fontSize: 13 });
     L.bullets(s, [
@@ -30,7 +30,7 @@ module.exports = (pres, L) => {
   }
 
   {
-    const s = L.slide('appendix');
+    const s = L.slide('services');
     header(s, 'Choose global zones or regional zones');
     L.card(s, 0.6, 1.6, 5.3, 1.85, {
       title: 'Global zone: update the record during failover',
@@ -48,7 +48,7 @@ module.exports = (pres, L) => {
   }
 
   {
-    const s = L.slide('appendix');
+    const s = L.slide('services');
     header(s, 'Compare global and regional DNS zones');
     const rows = [
       ['Consideration', 'Global zones', 'Regional zones'].map(heading),
@@ -65,7 +65,7 @@ module.exports = (pres, L) => {
   }
 
   {
-    const s = L.slide('appendix');
+    const s = L.slide('services');
     header(s, 'Disaster recovery examples by service');
     const rows = [
       ['Service', 'Disaster recovery model', 'Private endpoints for disaster recovery', 'Zone'].map(heading),
@@ -79,7 +79,7 @@ module.exports = (pres, L) => {
   }
 
   {
-    const s = L.slide('appendix');
+    const s = L.slide('services');
     header(s, 'Make DNS part of regional operations and recovery');
     L.card(s, 0.6, 1.6, 6.0, 4.65, { title: 'Regional zones: records, policy, and forwarding', fill: C.t50 });
     L.bullets(s, [
