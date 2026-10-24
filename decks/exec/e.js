@@ -337,8 +337,9 @@ module.exports = (pres, L) => {
   {
     const s = L.slide('city');
     L.header(s, '', 'The platform is the city. Workloads are the people and businesses that live in it.', { tw: 8.5, ts: 23, lede: 'The city builds neighborhoods, services, roads, transit, and laws once. A family settles in one neighborhood; a bank spreads across several. Neither builds a new city.', lx: 9.3, lw: 3.43, lh: 1.3 });
-    const pw = 6.55, ph = pw * 1672 / 2144;
-    L.image(s, IMG('city-analogy.png', 'blue').replace(/img\/(teal\/)?/, 'img/'), { x: 0.6, y: 1.8, w: pw, h: ph }, 'Isometric city used as an analogy for a multi-region platform. An office campus outside the city connects to Downtown through express toll lanes with two interchanges. Downtown has every service locally. Riverside has a fire station and a clinic. Hillcrest and Midtown have homes only and reach Downtown\'s services by transit. Lakeside is an off-grid island with no roads or transit. A new plot is zoned but not yet built. Numbered pins mark where four families live, and bank badges mark two branches and a backup operations center.');
+    const pw = 6.15, ph = pw * 1672 / 2144;
+    L.image(s, IMG('city-analogy.png', 'blue').replace(/img\/(teal\/)?/, 'img/'), { x: 0.8, y: 1.8, w: pw, h: ph }, 'Isometric city used as an analogy for a multi-region platform. An office campus outside the city connects to Downtown through express toll lanes with two interchanges. Downtown has every service locally. Riverside has a fire station and a clinic. Hillcrest and Midtown have homes only and reach Downtown\'s services by transit. Lakeside is an off-grid island with no roads or transit. A new plot is zoned but not yet built. Household pins: 1 isolated in Lakeside; 2 connected in Midtown; 3 hybrid-connected in Hillcrest; 4 interconnected portfolio in Riverside. Bank badges mark two branches and a backup operations center.');
+    L.txt(s, '1 Isolated  ·  2 Connected  ·  3 Hybrid-connected  ·  4 Interconnected portfolio', 0.6, 6.68, 6.55, 0.25, { fontSize: 10.5, color: C.t700, valign: 'middle' });
     const rx = 7.35, rw = 5.38;
     cap(s, 'In the city', rx, 1.8, { w: 1.8, color: C.b600 });
     cap(s, 'In Azure', rx + 2.8, 1.8, { w: 2.4, color: C.b600 });

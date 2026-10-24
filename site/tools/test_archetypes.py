@@ -95,6 +95,15 @@ console.log(JSON.stringify({options, saved, question: M.PROFILE_QUESTIONS[0].lab
         self.assertEqual(data["saved"], ARCHETYPES)
         self.assertIn("beyond approved same-region spokes and Azure service endpoints", data["question"])
 
+    def test_executive_city_explains_the_numbered_archetypes(self):
+        source = self.read("decks/exec/e.js")
+        self.assertIn(
+            "1 Isolated  ·  2 Connected  ·  3 Hybrid-connected  ·  4 Interconnected portfolio",
+            source,
+        )
+        self.assertIn("Household pins: 1 isolated in Lakeside; 2 connected in Midtown; "
+                      "3 hybrid-connected in Hillcrest; 4 interconnected portfolio in Riverside.", source)
+
     def test_deck_generators_bind_correct_definitions_and_profiles_to_each_archetype(self):
         script = """
 const data = require('./shared/summary.json');

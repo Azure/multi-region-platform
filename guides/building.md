@@ -47,6 +47,8 @@ Every target stops at the first failing step and exits with a non-zero status. `
 
 `dist/` is git-ignored. The site target copies existing PDFs from `dist/` into `docs/downloads/`; it does not generate them. Run `./build.sh pdf` before `./build.sh site` when PDF content changes. PowerPoint decks stay local and are not published as website downloads. PDF and PPTX are the supported document formats. Word generation and Pandoc are retired; `word/` is historical source, excluded from builds and checks.
 
+`.gitattributes` marks PDF and PPTX files as binary so Git does not normalize document bytes or display compressed document streams as text diffs. The published PDFs in `docs/downloads/` are committed; the distribution copies in `dist/` and local decks in `temp/` remain ignored.
+
 `./build.sh clean` removes the PDF, HTML, PPTX, and DOCX files in `dist/`, the two generated decks in `temp/`, `whitepaper/out`, `whitepaper/out-exec`, the two assembled HTML files in `whitepaper/`, and `decks/out`. Other files in `dist/` and `temp/` are left alone.
 
 ## Generate PDFs directly

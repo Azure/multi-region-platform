@@ -100,6 +100,18 @@ class PublicationTests(unittest.TestCase):
         self.assertIn('DECKS="$ROOT/temp"', script)
         self.assertNotIn('cp decks/out/', script)
 
+    def test_document_artifacts_are_binary_in_git(self):
+        files = [
+            ROOT / "docs" / "downloads" / "Adaptable-Multi-Region-Azure-Platform.pdf",
+            ROOT / "temp" / "Adaptable-Multi-Region-Azure-Platform-Full.pptx",
+        ]
+        result = subprocess.run(
+            ["git", "check-attr", "-z", "text", "diff", "merge", "--", *map(str, files)],
+            cwd=ROOT, check=True, capture_output=True,
+        )
+        fields = result.stdout.decode("utf-8").rstrip("\0").split("\0")
+        self.assertEqual(fields[2::3], ["unset"] * 6)
+
 
 if __name__ == "__main__":
     unittest.main()
