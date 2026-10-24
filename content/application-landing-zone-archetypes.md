@@ -15,7 +15,7 @@ Use archetypes during regional qualification to anticipate the capabilities a ca
 
 :::image type="content" source="./media/application-landing-zone-archetypes.png" alt-text="Four archetype cards — isolated cloud-native or AI applications, connected cloud-native or AI applications, hybrid-connected applications, and interconnected application portfolios — each with its defining characteristics and typical connectivity profiles." lightbox="./media/application-landing-zone-archetypes.png":::
 
-*The four archetypes, ordered by increasing platform connectivity and dependency complexity. This is not a maturity model or a measure of application sophistication.*
+*The four archetypes, grouped by the platform connectivity and dependency capabilities each requires.*
 
 ## Isolated Cloud-Native or AI Applications
 

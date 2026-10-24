@@ -31,7 +31,7 @@ class ArchetypeTests(unittest.TestCase):
         self.assertEqual(summary["choices"][0]["options"], PROFILES)
         article = self.read("content/application-landing-zone-archetypes.md")
         self.assertEqual(re.findall(r"^## (.+)$", article, re.M)[:4], ARCHETYPES)
-        self.assertIn("not a maturity model", article)
+        self.assertIn("The four archetypes, grouped by the platform connectivity and dependency capabilities each requires.", article)
         self.assertIn("without a geographic hub or on-premises path", article)
 
     def test_publication_cards_and_matrix_use_the_same_order(self):
@@ -57,6 +57,34 @@ class ArchetypeTests(unittest.TestCase):
         self.assertIn('class="mk none"', first_cells[2])
         self.assertIn('class="mk cond"', first_cells[3])
         self.assertIn("without hub or on-premises dependencies", rows[3])
+
+    def test_overview_picture_preserves_original_explanations(self):
+        source = self.read("whitepaper/pages/09-archetypes.html")
+        bullets = [
+            [text(item) for item in re.findall(r"<li>(.*?)</li>", group)]
+            for group in re.findall(r"<ul>(.*?)</ul>", source)
+        ]
+        self.assertEqual(bullets, [
+            ["No persistent private dependencies", "Can often use No Hub",
+             "Flexible placement across regions"],
+            ["Private access to selected dependencies",
+             "Profile set by latency, traffic, resiliency, security",
+             "Common for data, analytics, and AI platforms"],
+            ["Persistent private connectivity",
+             "Profile set by dependency latency, resiliency, regulation, operations",
+             "Common in migrations and hybrid scenarios"],
+            ["Portfolio-level archetype", "Aggregate requirements set the profile",
+             "Direct spoke-to-spoke or a regional hub for east-west traffic"],
+        ])
+        profiles = [
+            [text(chip) for chip in re.findall(r"<span[^>]*>(.*?)</span>", group)]
+            for group in re.findall(r'<div class="pr">(.*?)</div>', source)
+        ]
+        self.assertEqual(profiles, [
+            ["No Hub", "Connected, where justified"], PROFILES[1:],
+            PROFILES[1:], PROFILES[1:],
+        ])
+        self.assertIn("Grouped by the platform connectivity and dependency capabilities each requires.", source)
 
     def test_qualification_statuses_move_with_their_archetype_columns(self):
         source = self.read("whitepaper/pages/10b-outcome.html")

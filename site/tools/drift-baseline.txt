@@ -6,8 +6,11 @@ because this is a portfolio level archetype its combined dependencies may requir
 cloud native or ai applications that are primarily self contained but require private connectivity to selected enterprise services data sources apis or other azure environments
 direct connectivity may suit a limited number of tightly coupled workloads while a selective hub or full hub may be more appropriate where broader connectivity shared routing traffic inspection resiliency or operational requirements justify regional platform capabilities
 groups of applications with meaningful dependencies on each other including shared data common services east west communication or coordinated connectivity and operations across applications regions or business domains
+no hub doesn t fit a mandatory private dependency on on premises or geographic hub services
 select the appropriate connectivity profile based on the portfolio s aggregate connectivity shared service resiliency scale and operational requirements rather than the requirements of a single workload
 the archetype to profile matrix shows the typical options for each archetype
+the four archetypes grouped by the platform connectivity and dependency capabilities each requires
+these workloads can often use no hub
 these workloads typically use remote hub selective hub or full hub depending on dependency latency resiliency regulatory operational and shared service requirements
 understand workload landing zone archetypes
 where significant east west traffic exists within a region evaluate whether direct spoke to spoke connectivity or a local hub provides a more appropriate path than routing traffic through a geographic hub in another region
