@@ -58,7 +58,7 @@ function placeHub(L, col) {
   addLabel(L, (geo ? geo.geography + ' · ' : '') + patternOf(region).label, x + 12, RTOP + 37, 'plabel');
   if (patternOf(region).hub === 'none') {
     const remote = regionById(spec, region.remote_hub);
-    addLabel(L, remote ? 'No local hub' : region.remote_hub ? 'No hub · remote hub missing' : 'No hub · isolated',
+    addLabel(L, remote ? 'No local hub' : region.remote_hub ? 'No hub · geographic hub missing' : 'No hub · isolated',
       box.x + 10, HUB_TOP + 19, 'ph');
     if (remote) addLabel(L, `→ ${cut(remote.name, 24)} hub`, box.x + 10, HUB_TOP + 35, 'ph', { layer: 'remote' });
     col.hub = { ...box, h: remote ? 46 : 30, none: true };

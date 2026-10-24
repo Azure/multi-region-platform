@@ -79,13 +79,13 @@ function onEditorChange(e) {
 function applyField(el) {
   const d = el.dataset, pattern = /^regions\.(\d+)\.pattern$/.exec(d.path || '');
   const remote = /^regions\.(\d+)\.remote_hub$/.exec(d.path || '');
-  const before = remote && spec.regions[+remote[1]].remote_hub;  // the previous remote hub (its link may go)
+  const before = remote && spec.regions[+remote[1]].remote_hub;  // the previous geographic hub (its link may go)
   if (d.addconn && el.value) gridAdd(d.addconn, el.value);  // editor.js: a grid cell's "+"
   if (d.ic) setInterconnect(spec, d.ic, el.value, el.checked);  // hybrid.js
   if (d.resiliency) setCircuitResiliency(spec, +d.resiliency, el.value);  // spec.js
   if (pattern) patternChange(+pattern[1], el.value);
   else if (d.path) setPath(spec, d.path, el.value);
-  if (remote) remoteHubChange(+remote[1], before);  // editor.js: a minimal hub is linked to its remote hub
+  if (remote) remoteHubChange(+remote[1], before);  // editor.js: a Selective Hub is linked to its geographic hub
   afterEdit(spec, d.path);  // topology.js: the first virtual WAN
   if (d.rename) renameRegion(spec, +d.rename, el.value);
   if (d.link) setLink(spec, ...d.link.split('|'), el.checked);
@@ -357,11 +357,11 @@ const STEP_FIELDS = {
     ${esc(hybridConnections(spec).length)} connection(s). Finish shows the Overview; the tabs below hold every
     setting.</div>`
 };
-// Step 3: the regions so far, and one more: region, pattern and (for a remote or minimal hub) its remote hub.
+// Step 3: the regions so far, and one more: region, pattern and (for a remote or Selective Hub) its geographic hub.
 function regionStep() {
   const d = startState.draft, used = new Set(spec.regions.map(r => r.id)), hubs = spec.regions.filter(hasHub);
   const patterns = patternPairs();  // editor.js
-  const remote = allowsField({ pattern: d.pattern }, 'remote_hub') ? draftSelect('guideRemote', 'remote', 'Remote hub',
+  const remote = allowsField({ pattern: d.pattern }, 'remote_hub') ? draftSelect('guideRemote', 'remote', 'Geographic hub',
     opts(hubs.map(r => [r.id, r.name]), d.remote)) : '';
   return `<div class="hint left">Regions: ${esc(spec.regions.map(r => `${r.name} (${patternOf(r).label})`)
     .join(', '))}</div>` + draftSelect('guideRegion', 'next', 'Region', '<option value="">Choose a region…</option>' +

@@ -54,6 +54,12 @@ def main():
             assert page.locator('#pl-network-toggle').get_attribute("aria-expanded") == "true"
             frame = page.locator("#pl-network iframe").element_handle().content_frame()
             inherited = frame.evaluate("spec")
+            assert frame.evaluate("Object.fromEntries(Object.entries(RULES.patterns).map(([id,p]) => [id,p.label]))") == {
+                "full-hub": "Full Hub", "minimal-hub": "Selective Hub",
+                "remote-hub": "Remote Hub", "disconnected": "No Hub",
+            }
+            assert "Selective Hub" in explorer.locator("#diagram").text_content()
+            assert "New region - Selective Hub" in explorer.locator("#plannerDefinitions").text_content()
             assert [r["id"] for r in inherited["regions"]] == ["westeurope", "swedencentral"]
             assert inherited["regions"][1]["pattern"] == "minimal-hub"
             assert inherited["regions"][1]["remote_hub"] == "westeurope"
@@ -79,6 +85,9 @@ def main():
             assert not explorer.locator("#btnTheme").is_visible()
             explorer.get_by_role("button", name="Editor", exact=True).click()
             assert explorer.locator("#editor").is_visible()
+            explorer.locator("#etab-regions").click()
+            assert explorer.locator('select[data-path="regions.1.remote_hub"]').evaluate(
+                "e => e.labels[0].firstChild.textContent") == "Geographic hub"
             assert not explorer.locator("aside").is_visible()
             assert explorer.locator(".canvas").bounding_box()["width"] >= 700
             explorer.get_by_role("button", name="Details", exact=True).click()
@@ -209,7 +218,7 @@ def main():
             assert inherited_page.evaluate("localStorage.getItem('geolz-explorer.spec.v1')") == "standalone sentinel"
             inherited_page.evaluate("""() => {
               const C = MRP.core, r = C.reg('swedencentral'), d = C.design(r);
-              d.profile = 'Remote Hub Connected';
+              d.profile = 'Remote Hub';
               d.ss.dnsres = {p:'Remote', from:'westeurope'};
               d.ss.inspect = {p:'Remote', from:'westeurope'};
               d.ss.gateway = {p:'Remote', from:'westeurope'};
@@ -245,13 +254,13 @@ def main():
 
             inherited_page.evaluate("""() => {
               const C = MRP.core, d = C.design(C.reg('swedencentral'));
-              d.profile='Disconnected Spokes'; MRP.kit.hooks.commit();
+              d.profile='No Hub'; MRP.kit.hooks.commit();
             }""")
             assert inherited_frame.evaluate("spec.regions[1].pattern") == "disconnected"
             assert inherited_frame.evaluate("spec.hybrid_connections.length") == 0
             inherited_page.evaluate("""() => {
               const C = MRP.core, d = C.design(C.reg('swedencentral'));
-              d.profile='Full Regional Hub'; d.topology='Azure Virtual WAN';
+              d.profile='Full Hub'; d.topology='Azure Virtual WAN';
               d.hybrid='Change'; d.hybridPath='SD-WAN or network virtual appliance in this region';
               d.hybridChange='Add SD-WAN'; MRP.kit.hooks.commit();
             }""")
@@ -273,7 +282,7 @@ def main():
               C.S.current.push({id:'northeurope',hub:true});
               const r = C.newRegion('francecentral');
               r.outcome='Qualified'; r.selected=true; C.S.regions.push(r);
-              const d = C.design(r); d.profile='Full Regional Hub'; d.topology='Azure Virtual WAN';
+              const d = C.design(r); d.profile='Full Hub'; d.topology='Azure Virtual WAN';
               d.hub='northeurope'; d.hybrid='Reuse';
               d.hybridUse='ExpressRoute circuit in Frankfurt';
               d.hybridPath='New virtual hub in this region, connected to the existing circuits (Virtual WAN)';

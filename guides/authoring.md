@@ -103,6 +103,8 @@ The home page is a short landing page; longer explanations live in `framework-ov
 
 Figure IDs and extraction names live in `site/tools/extract_figures.py` (`FIGS`) and `site/figures/manifest.json`.
 
+The connectivity profile display names are **No Hub**, **Remote Hub**, **Selective Hub**, and **Full Hub**. Keep the existing article filenames and URLs stable when changing these labels; update links to renamed section anchors.
+
 Keep the full Key Vault guide to at most five rendered PDF pages and five PowerPoint slides: product comparison and paired-region constraints, secrets and certificates, vault-based key patterns, Managed HSM key patterns, and the decision tree with references. Keep all seven pattern diagrams; use speaker notes for detailed slide caveats rather than adding slides. After regeneration, check the actual PDF page count for this section as well as source-page coverage.
 Use `data-export-width` on a figure to set its standalone export width independently of the PDF column width. The seven Key Vault pattern diagrams use 380 pixels so their web and PNG objects have consistent sizes; their PDF placement still follows the two- or three-column layout.
 

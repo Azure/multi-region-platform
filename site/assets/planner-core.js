@@ -17,6 +17,12 @@
 
   // A workbook saved by version 1 keeps its answers where the question still exists. Manual availability, price and latency entries are dropped.
   const V1_CAPABILITY = { 'Met': 'Yes', 'Gap (mandatory)': 'No (mandatory gap)', 'Gap (accepted with a condition)': 'Gap accepted with a condition' };
+  const LEGACY_PROFILES = {
+    'Disconnected Spokes': 'No Hub',
+    'Remote Hub Connected': 'Remote Hub',
+    'Minimal Regional Hub': 'Selective Hub',
+    'Full Regional Hub': 'Full Hub',
+  };
   function fromV1(raw) {
     const o = { ...raw };
     o.regions = (Array.isArray(raw.regions) ? raw.regions : []).map(r => {
@@ -62,6 +68,10 @@
       const o = { ...newRegion(r.id), ...r, checks: { ...(r.checks || {}) } };
       if (o.design) {
         o.design = { ...newDesign(), ...o.design, ss: { ...(o.design.ss || {}) }, custom: [...(o.design.custom || [])] };
+        if (Object.hasOwn(LEGACY_PROFILES, o.design.profile)) o.design.profile = LEGACY_PROFILES[o.design.profile];
+        ['link', 'eastWest'].forEach(key => {
+          if (typeof o.design[key] === 'string') o.design[key] = o.design[key].replace(/\bthe remote hub\b/g, 'the geographic hub');
+        });
         o.design.hubConnections = Array.isArray(o.design.hubConnections) ? [...new Set(o.design.hubConnections.filter(id => typeof id === 'string' && id))] : null;
         if (!HYBRID_PATHS.some(p => p.id === o.design.hybridPath)) o.design.hybridPath = '';
       }
@@ -484,18 +494,18 @@
     return r.design;
   }
   function suggestProfile(d) {
-    if (d.q1 === 'No') return 'Disconnected Spokes';
+    if (d.q1 === 'No') return 'No Hub';
     if (d.q1 !== 'Yes') return '';
-    if (d.q2 === 'Yes') return 'Remote Hub Connected';
+    if (d.q2 === 'Yes') return 'Remote Hub';
     if (d.q2 !== 'No') return '';
-    return d.q3 === 'No' ? 'Minimal Regional Hub' : d.q3 === 'Yes' ? 'Full Regional Hub' : '';
+    return d.q3 === 'No' ? 'Selective Hub' : d.q3 === 'Yes' ? 'Full Hub' : '';
   }
   // The design with every default applied: what the page shows and what the record and the export use.
   function effective(r) {
     const d = design(r), suggested = suggestProfile(d), profile = d.profile || suggested, pi = PROFILES.findIndex(p => p.id === profile);
     const hubs = hubRegions(r.id);
     const estateTopo = M.O.topology.includes(S.estate.topology) ? S.estate.topology : '';
-    const none = profile === 'Disconnected Spokes';
+    const none = profile === 'No Hub';
     const connections = Array.isArray(d.hubConnections) ? d.hubConnections.filter(id => hubs.includes(id))
       : [hubs.includes(d.hub) ? d.hub : hubs[0]].filter(Boolean);
     const hubConnections = none ? [] : [...new Set(connections)], defHub = hubConnections[0] || '';
@@ -519,10 +529,10 @@
     // things that don't add up, in the words of the profile selection article
     const hubLocal = e.ss.filter(s => HUB_SERVICES.includes(s.id) && s.p === 'Local'), hubRemote = e.ss.filter(s => HUB_SERVICES.includes(s.id) && s.p === 'Remote');
     e.hints = [];
-    if (profile === 'Remote Hub Connected' && hubLocal.length) e.hints.push('A hub service is placed locally. With a hub in the region, the profile is a Minimal Regional Hub.');
-    if (profile === 'Full Regional Hub' && hubRemote.length) e.hints.push('A hub service is still remote. A region that depends on a geographic hub for something is a Minimal Regional Hub.');
-    if (none && e.ss.some(s => s.p === 'Remote' && s.id !== 'logs')) e.hints.push('Disconnected Spokes have no private path to another region. Check the services placed as remote.');
-    if (profile === 'Minimal Regional Hub' && e.ss.filter(s => HUB_SERVICES.includes(s.id) && s.p).length === 4 && !hubLocal.length) e.hints.push('No hub service is local. Without a hub in the region, the profile is Remote Hub Connected.');
+    if (profile === 'Remote Hub' && hubLocal.length) e.hints.push('A hub service is placed locally. With a hub in the region, the profile is a Selective Hub.');
+    if (profile === 'Full Hub' && hubRemote.length) e.hints.push('A hub service is still remote. A region that depends on a geographic hub for something is a Selective Hub.');
+    if (none && e.ss.some(s => s.p === 'Remote' && s.id !== 'logs')) e.hints.push('The No Hub profile has no private path to another region. Check the services placed as remote.');
+    if (profile === 'Selective Hub' && e.ss.filter(s => HUB_SERVICES.includes(s.id) && s.p).length === 4 && !hubLocal.length) e.hints.push('No hub service is local. Without a hub in the region, the profile is Remote Hub.');
     if (e.hybrid === 'Not required' && gw && gw.p === 'Local') e.hints.push('A local gateway is planned, but hybrid connectivity is set to not required.');
     const missing = [];
     if (!profile) missing.push('connectivity profile');
@@ -559,10 +569,10 @@
     out.push(['Selected region', `${rname(r.id)} (${outcome(r)} as of ${S.meta.date})`]);
     out.push(['Connectivity profile', e.profile || 'Not selected yet']);
     if (!e.none && e.profile) {
-      out.push(['Hub implementation', [e.profile === 'Remote Hub Connected' ? 'No local hub' : e.topology === 'Azure Virtual WAN' ? 'Virtual hub in the region (Azure Virtual WAN)' : e.topology ? 'Hub virtual network in the region' : 'Hub in the region',
+      out.push(['Hub implementation', [e.profile === 'Remote Hub' ? 'No local hub' : e.topology === 'Azure Virtual WAN' ? 'Virtual hub in the region (Azure Virtual WAN)' : e.topology ? 'Hub virtual network in the region' : 'Hub in the region',
         e.managed ? 'managed with ' + e.managed : ''].filter(Boolean).join(', ')]);
       out.push(['Hub Connections', list(e.hubConnections.map(rname)) || 'None']);
-      out.push(['Regional connectivity', [e.hubConnections.length ? `${e.profile === 'Full Regional Hub' ? 'Connected to' : 'Depends on'} ${list(e.hubConnections.map(rname))}` : '', e.link, e.eastWest ? 'spoke to spoke: ' + e.eastWest.charAt(0).toLowerCase() + e.eastWest.slice(1) : ''].filter(Boolean).join('; ')]);
+      out.push(['Regional connectivity', [e.hubConnections.length ? `${e.profile === 'Full Hub' ? 'Connected to' : 'Depends on'} ${list(e.hubConnections.map(rname))}` : '', e.link, e.eastWest ? 'spoke to spoke: ' + e.eastWest.charAt(0).toLowerCase() + e.eastWest.slice(1) : ''].filter(Boolean).join('; ')]);
     } else if (e.none && e.eastWest) out.push(['Regional connectivity', 'No hub. Spoke to spoke: ' + e.eastWest.charAt(0).toLowerCase() + e.eastWest.slice(1)]);
     out.push(['Hybrid connectivity', hybridText(r, e) || 'Not decided yet']);
     out.push(['Local shared services', list(at('Local').map(s => s.short)) || 'None']);

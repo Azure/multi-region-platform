@@ -63,13 +63,13 @@
 
   // ── step 3
   const PROFILES = [
-    { id: 'Disconnected Spokes', href: 'disconnected-spokes.html', gets: 'No hub and no gateway. Workload spokes use the estate’s standard identity, policy, security, and deployment practices.',
+    { id: 'No Hub', href: 'disconnected-spokes.html', gets: 'No hub and no gateway. Workload spokes use the estate’s standard identity, policy, security, and deployment practices.',
       reassess: 'Workloads require private access to enterprise services, centralized security inspection, on-premises systems, another application portfolio, or capabilities hosted through a geographic hub.' },
-    { id: 'Remote Hub Connected', href: 'remote-hub-connected.html', gets: 'No local hub. Workload spokes consume an existing geographic hub.',
+    { id: 'Remote Hub', href: 'remote-hub-connected.html', gets: 'No local hub. Workload spokes consume an existing geographic hub.',
       reassess: 'Cross-region traffic, latency, east-west communication, dependency criticality, regulatory requirements, scale, or availability coupling justify deploying selected connectivity or shared-service capabilities locally.' },
-    { id: 'Minimal Regional Hub', href: 'minimal-regional-hub.html', gets: 'A limited hub with only the services that must be local. Everything else stays remote.',
+    { id: 'Selective Hub', href: 'minimal-regional-hub.html', gets: 'A local hub with only the services that must be in the region. Everything else stays remote.',
       reassess: 'Workload growth introduces additional local connectivity or shared-service requirements, multiple interconnected application portfolios require broader regional capabilities, stricter independence requirements emerge, or significant hybrid connectivity is required locally.' },
-    { id: 'Full Regional Hub', href: 'full-regional-hub.html', gets: 'The complete local connectivity and shared services that the region’s workloads require.',
+    { id: 'Full Hub', href: 'full-regional-hub.html', gets: 'The complete local connectivity and shared services that the region’s workloads require.',
       reassess: 'Workload demand or requirements decrease, services can be safely centralized, dependencies change, or the full regional footprint no longer provides sufficient value relative to its cost and operational complexity.' },
   ];
   const PROFILE_QUESTIONS = [
@@ -106,13 +106,13 @@
   // The paths a profile offers. gateway: the placement of the shared service 'gateway' ('' while it isn't placed).
   function hybridPathOptions(profile, topology, gateway) {
     const g = gateway || '';
-    const remote = profile === 'Remote Hub Connected' || (profile === 'Minimal Regional Hub' && (g === '' || g === 'Remote'));
-    const local = profile === 'Full Regional Hub' || (profile === 'Minimal Regional Hub' && (g === '' || g === 'Local'));
+    const remote = profile === 'Remote Hub' || (profile === 'Selective Hub' && (g === '' || g === 'Remote'));
+    const local = profile === 'Full Hub' || (profile === 'Selective Hub' && (g === '' || g === 'Local'));
     return HYBRID_PATHS.filter(p => ((p.where === 'remote' && remote) || (p.where === 'local' && local)) && (!topology || !p.topo || p.topo === topology)).map(p => p.id);
   }
 
   const HYBRID_DECISIONS = [
-    { id: 'Not required', text: 'The region uses Disconnected Spokes, or its workloads need no private path to on-premises locations.', icon: 'close' },
+    { id: 'Not required', text: 'The region uses No Hub, or its workloads need no private path to on-premises locations.', icon: 'close' },
     { id: 'Reuse', text: 'The existing circuits, gateways, and peering locations meet what the workloads in the new region need.', icon: 'reset' },
     { id: 'Change', text: 'A requirement can’t be met by the existing foundation. Record the requirement and the change it justifies.', icon: 'edit' },
   ];
@@ -121,17 +121,17 @@
   const direct = 'Direct between spokes (peering or Azure Virtual Network Manager mesh)';
   function linkOptions(profile, topology) {
     const wan = topology === 'Azure Virtual WAN';
-    if (profile === 'Remote Hub Connected') return wan ? ['Virtual network connections to the remote virtual hub']
-      : ['Global virtual network peering from each spoke to the remote hub', 'Azure Virtual Network Manager hub-and-spoke configuration to the remote hub'];
-    if (profile === 'Minimal Regional Hub' || profile === 'Full Regional Hub') return wan ? ['Automatic between virtual hubs of the same Virtual WAN']
+    if (profile === 'Remote Hub') return wan ? ['Virtual network connections to the remote virtual hub']
+      : ['Global virtual network peering from each spoke to the geographic hub', 'Azure Virtual Network Manager hub-and-spoke configuration to the geographic hub'];
+    if (profile === 'Selective Hub' || profile === 'Full Hub') return wan ? ['Automatic between virtual hubs of the same Virtual WAN']
       : ['Global virtual network peering between the hub virtual networks', 'Azure Virtual Network Manager connectivity configuration between the hubs'];
     return [];
   }
   function eastWestOptions(profile) {
-    if (profile === 'Disconnected Spokes') return ['Not required', direct];
-    if (profile === 'Remote Hub Connected') return ['Through the remote hub', direct, 'Not required'];
-    if (profile === 'Minimal Regional Hub') return ['Through the local hub (firewall or network virtual appliance)', direct, 'Through the remote hub', 'Not required'];
-    if (profile === 'Full Regional Hub') return ['Through the local hub (firewall or network virtual appliance)', direct, 'Not required'];
+    if (profile === 'No Hub') return ['Not required', direct];
+    if (profile === 'Remote Hub') return ['Through the geographic hub', direct, 'Not required'];
+    if (profile === 'Selective Hub') return ['Through the local hub (firewall or network virtual appliance)', direct, 'Through the geographic hub', 'Not required'];
+    if (profile === 'Full Hub') return ['Through the local hub (firewall or network virtual appliance)', direct, 'Not required'];
     return [];
   }
 
@@ -146,7 +146,7 @@
     regions: [
       { id: 'swedencentral', checks: { '1.1': 'Yes', '1.2': 'Markets and users', '2.1': 'Yes', '2.2': 'Yes', '3.1': 'Known', '3.2': 'Hybrid-Connected Applications', '3.3': 'Yes', '3.4': 'Yes', '4.1': 'Yes', '4.2': 'Yes', '4.3': 'Yes', '4.4': 'Yes', '4.5': 'Yes', '4.6': 'Yes', '4.7': 'Yes' },
         outcome: '', selected: true, conditions: '', owner: 'Platform team', review: '',
-        design: { q1: 'Yes', q2: 'No', q3: 'No', profile: 'Minimal Regional Hub', hub: 'westeurope', topology: 'Hub-and-spoke virtual networks', managed: 'Azure Virtual Network Manager',
+        design: { q1: 'Yes', q2: 'No', q3: 'No', profile: 'Selective Hub', hub: 'westeurope', topology: 'Hub-and-spoke virtual networks', managed: 'Azure Virtual Network Manager',
           link: 'Azure Virtual Network Manager connectivity configuration between the hubs', eastWest: 'Through the local hub (firewall or network virtual appliance)',
           ss: { dnsres: { p: 'Local' }, inspect: { p: 'Local' }, gateway: { p: 'Local' }, directory: { p: 'Remote', from: 'westeurope' } }, custom: [],
           hybrid: 'Reuse', hybridUse: 'ExpressRoute circuit in Frankfurt', hybridPath: 'New gateway in this region, connected to the existing circuit', owner: 'Network team' } },

@@ -248,7 +248,7 @@ function regionEditor(region, i, place, count) {
   const notes = (patternOf(region).editor_notes || []).map(t => `<div class="hint left">${esc(t)}</div>`).join('');
   const base = ['remote_hub', 'capabilities'], fields = patternFields(region);
   const extra = fields.filter(f => !base.includes(f) && (patternOf(region).hub !== 'partial' || !CATALOG.roles[f] ||
-    roleState(spec, region, f) === 'local'));  // a minimal hub: overrides of its local capabilities
+    roleState(spec, region, f) === 'local'));  // a Selective Hub: overrides of its local capabilities
   const title = patternOf(region).spoke_roles ? 'Spoke services' : 'Overrides';
   const body = `<div class="row">${moveButtons('move-region', region.id, place, count, region.name)}
     <button data-act="del-region" data-i="${i}">✕ Remove region</button></div>` +
@@ -269,7 +269,7 @@ function regionPicker(region, i) {
     <div class="hint">${esc(azureFacts(region))}</div>`;
 }
 
-/* ===== ONE-LINE SUMMARY: pattern · firewall (or spoke services) · remote hub · preferred circuit · overrides ===== */
+/* ===== ONE-LINE SUMMARY: pattern · firewall (or spoke services) · geographic hub · preferred circuit · overrides ===== */
 function regionLine(region) {
   const product = role => { const hit = resolveRole(spec, region, role); return hit && CATALOG.products[hit.product]; };
   const pattern = patternOf(region), parts = [pattern.label];
@@ -303,27 +303,27 @@ function regionField(region, i, field) {
   const [label, pairs] = roleChoices(field, place, region[field]);  // editor.js: Virtual WAN "Hub security"
   return overrideField(label, region, i, field, pairs, spokeRole ? '(none)' : '');
 }
-// A minimal hub's capabilities (catalog.js): each Local, From the remote hub or Not needed (DNS: Azure-provided DNS,
-// rules.js notNeeded.as); "From …" only with a remote hub (or when already chosen); a virtual hub can't use another
+// A Selective Hub's capabilities (catalog.js): each Local, From the geographic hub or Not needed (DNS: Azure-provided DNS,
+// rules.js notNeeded.as); "From …" only with a geographic hub (or when already chosen); a virtual hub can't use another
 // hub's firewall (Local or Not needed only).
 function capabilityFields(region, p) {
   const names = CATALOG.capabilities[topoKey(spec)], hub = remoteHubOf(spec, region);  // engine.js
   const from = hub ? `From ${hub.name}` : region.remote_hub ? `From ${region.remote_hub} (missing)`
-    : 'From the remote hub (none set)', as = RULES.notNeeded.as || {};
+    : 'From the geographic hub (none set)', as = RULES.notNeeded.as || {};
   const states = key => [['local', 'Local'], ...(isVwan(spec) && key === 'firewall' ? [] : region.remote_hub ||
     (region.capabilities || {})[key] === 'remote' ? [['remote', from]] : []), ['none', as[key] || 'Not needed']];
   return '<div class="sub">Capabilities</div><div class="caps">' + capKeys(spec).map(key => selectField(
     names[key][0], `${p}.capabilities.${key}`, states(key), capState(spec, region, key))).join('') +
     `</div><div class="hint left">${esc(capabilityLine(spec, region))}</div>`;
 }
-// The remote hub: needed only when a capability comes from it; a minimal virtual hub's is a full hub (named with its
+// The geographic hub: needed only when a capability comes from it; a minimal virtual hub's is a full hub (named with its
 // virtual WAN when there are several).
 function remoteHubField(region, p) {
   const full = isVwan(spec) && patternOf(region).hub === 'partial', many = vwansOf(spec).length > 1;
   const hubs = spec.regions.filter(r => r !== region && hasHub(r) && (!full || patternOf(r).hub === 'full'));
   const pairs = hubs.map(r => [r.id, r.name + (full && many ? ` (virtual WAN ${vwanOf(spec, r).name})` : '')]);
   if (region.remote_hub && !hubs.some(r => r.id === region.remote_hub)) pairs.push([region.remote_hub, '(invalid)']);
-  return selectField('Remote hub', `${p}.remote_hub`, pairs, region.remote_hub, '—');
+  return selectField('Geographic hub', `${p}.remote_hub`, pairs, region.remote_hub, '—');
 }
 // A region override dropdown, plus a hint saying where the effective value comes from. A spoke role of an isolated
 // region has no default: its blank entry is "(none)" and there is no "use default".
@@ -343,14 +343,14 @@ function patternChange(i, next) {
     (added.length ? ` — added: ${added.join(', ')}` : '');
   ui.status = { key: 'p:' + region.id, text: text + '.', undo: true, undone: 'Pattern change undone.' };
 }
-// A minimal hub's remote hub changed: the hub link to the previous one goes, the new one is linked (a cleared
-// remote hub stays cleared). Undo brings a removed link back.
+// A Selective Hub's geographic hub changed: the hub link to the previous one goes, the new one is linked (a cleared
+// geographic hub stays cleared). Undo brings a removed link back.
 function remoteHubChange(i, previous) {
   const region = spec.regions[i], removed = unlinkRemoteHub(spec, region, previous);
   const added = linkRemoteHub(spec, region, false);
   const parts = [removed.length && `removed: ${removed.join(', ')}`, added.length && `added: ${added.join(', ')}`];
   if (removed.length || added.length) ui.status = { key: 'p:' + region.id, text: `${region.name} — ` +
-    `${parts.filter(Boolean).join(' — ')}.`, undo: true, undone: 'Remote hub change undone.' };
+    `${parts.filter(Boolean).join(' — ')}.`, undo: true, undone: 'Geographic hub change undone.' };
 }
 
 /* ===== ACTIONS ===== */
@@ -365,7 +365,7 @@ Object.assign(EDITOR_ACTIONS, {
     hybridConnections(spec).forEach(c => { c.connects_to = (c.connects_to || []).filter(t => t !== id); });
   }
 });
-// The first unused region in the hub's area, as a remote hub of it (a full hub when there is no hub yet).
+// The first unused region in the hub's area, as a geographic hub of it (a full hub when there is no hub yet).
 function addRegion() {
   const list = spec.regions, hub = list.find(r => r.pattern === 'full-hub');
   const area = hub && (azureRegion(hub) || {}).area;
@@ -389,7 +389,7 @@ const shortName = name => name.split(/\s+/).map(w => w[0]).join('').toUpperCase(
 // Virtual WAN: every cell is disabled; its tooltip says why the hubs are (not) linked.
 function linkGrid(vwan) {
   const hubs = spec.regions.filter(hasHub);
-  if (hubs.length < 2) return '<div class="hint left">Hub links need two hubs (full or minimal hub).</div>';
+  if (hubs.length < 2) return '<div class="hint left">Hub links need two hubs (Full Hub or Selective Hub).</div>';
   const head = '<tr><th scope="col">Hub</th>' + hubs.slice(1).map(h => `<th scope="col" title="${esc(h.name)}">
     <abbr title="${esc(h.name)}">${esc(shortName(h.name))}</abbr></th>`).join('') + '</tr>';
   const off = (a, b) => (vwan ? ` disabled title="${esc(vwanCellReason(a, b))}"` : '');
@@ -428,7 +428,7 @@ function connectionGrid() {
   const sites = spec.onprem || [], conns = hybridConnections(spec);
   const hubs = spec.regions.filter(r => canHostGateway(spec, r) ||
     conns.some(c => (c.connects_to || []).includes(r.id)));
-  if (!sites.length || !hubs.length) return '<div class="hint left">Add a site and a hub (full hub, or a minimal hub' +
+  if (!sites.length || !hubs.length) return '<div class="hint left">Add a site and a hub (Full Hub, or a Selective Hub' +
     ' with Hybrid gateway) to connect them.</div>';
   const head = '<tr><th scope="col">Site \\ hub</th>' + hubs.map(h => `<th scope="col" title="${esc(h.name)}">` +
     `${esc(h.name)}${hubLevel(h)}</th>`).join('') + '</tr>';

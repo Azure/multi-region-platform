@@ -5,6 +5,10 @@ Each region picks one of four connectivity patterns: **Full Hub**, **Selective H
 **No Hub**. The explorer draws the estate and walks through the ingress, egress, DNS, east-west and
 on-premises paths of each region, with checks, talking points and Microsoft Learn sources.
 
+Geographic hubs provide hybrid connectivity and shared services to other regions. The **Remote Hub**
+profile consumes those capabilities without a local hub; **Selective Hub** places selected capabilities locally.
+Saved JSON designs keep their existing pattern IDs, so they continue to load with the new display names.
+
 > Not an official Microsoft product. Illustrative only: validate every design against current Azure
 > documentation and your own requirements.
 

@@ -116,7 +116,7 @@ Other regions are consumed through more efficient patterns appropriate to each w
 
 :::image type="content" source="./brief-media/fig15.png" alt-text="Illustrative estate: on-premises datacenters connect to two geographic hubs in regions A and B. Region C runs a Selective Hub that reuses an existing ExpressRoute circuit, region D runs a Selective Hub without an on-premises path, regions E and F use Remote Hub, region G uses No Hub, and region H is a candidate not yet enabled." lightbox="./brief-media/fig15.png":::
 
-*An illustrative estate: two geographic hubs provide resilient hybrid connectivity; other regions consume what they need. Minimal hubs take selected services from Region A (dashed) — Region C also reaches on-premises by reusing an existing ExpressRoute circuit, Region D does not. Both are valid. Names and placements are examples only.*
+*An illustrative estate: two geographic hubs provide resilient hybrid connectivity; other regions consume what they need. Selective Hubs take selected services from Region A (dashed) — Region C also reaches on-premises by reusing an existing ExpressRoute circuit, Region D does not. Both are valid. Names and placements are examples only.*
 
 <!-- eyebrow: 05 · Classify workloads by archetype -->
 # Four Workload Landing Zone archetypes

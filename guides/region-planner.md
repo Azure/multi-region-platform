@@ -109,8 +109,13 @@ per diagram and does not model every planner capability or product choice. Mixed
 paths, incomplete hybrid definitions and other limitations are called out in the panel. Firewall and DNS
 symbols illustrate the capability, not a confirmed product selection. Current-region services are only
 inferred where a new region requires them; the planner does not inventory all existing services.
+Both tools use **No Hub**, **Remote Hub**, **Selective Hub**, and **Full Hub**. Geographic hubs provide
+hybrid connectivity and shared services from other regions; Azure geography names remain reference-data labels,
+not connectivity profiles. Saved plans using the previous profile names are converted when opened, including
+regional connection choices that previously referred to the remote hub.
+
 Every selected hub connection is passed to the diagram. For Remote Hub, GeoLZ models
-traffic through one remote hub (the first selection); this limitation is called out in Plan definitions.
+traffic through one geographic hub (the first selection); this limitation is called out in Plan definitions.
 
 Changes to networking definitions in the plan refresh the explorer, including its live presentation window.
 Tool-only refinements survive unrelated renders, hiding and reopening, but are replaced by a networking

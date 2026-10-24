@@ -70,7 +70,7 @@
         K.row('Hybrid connectivity', 'estate/hybrid', id => K.sel('estate/hybrid', S.estate.hybrid, O.estateHybrid, { id, label: 'Hybrid connectivity' }))) +
       K.section('Current regions', `<div class="pl-add">${regionCombo('cur', 'Add a current region', id => {
         S.current.push({ id, hub: !S.current.length }); C.tidy(); C.loadPricing(S.baseline).then(ok => ok && K.hooks.render());
-      })}</div>${curList}`, { desc: 'Regions you already run in.' }) +
+      })}</div>${curList}`, { desc: 'Regions you already run in. Mark geographic hubs built with the Full Hub profile, providing hybrid connectivity and shared services to other regions.' }) +
       K.section('Regions to qualify', `<div class="pl-add">${regionCombo('cand', 'Add a region to qualify', id => { S.regions.push(C.newRegion(id)); })}</div>` +
         (S.regions.length ? `<div class="pl-rcs">${S.regions.map(regionCard).join('')}</div>` : '<p class="pl-muted">No regions to qualify yet.</p>'),
         { desc: 'Candidate regions. Three to five keep the comparison readable.' });

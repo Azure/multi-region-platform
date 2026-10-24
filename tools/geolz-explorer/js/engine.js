@@ -22,9 +22,9 @@ function setting(spec, region, key) { return region[key] || spec.defaults[key]; 
 // What a pattern lets a region set (rules.js "fields"; a disconnected region's "spoke_roles" are role fields too).
 const patternFields = region => [...(patternOf(region).fields || []), ...(patternOf(region).spoke_roles || [])];
 const allowsField = (region, field) => patternFields(region).includes(field);
-// A minimal hub's capability (catalog.js "capabilities" of the topology): 'local', 'remote' (from its remote hub) or
-// 'none' (not needed; DNS: Azure-provided DNS). Unset: the firewall local; the rest from the remote hub, or not
-// needed when no remote hub is set (a remote hub that is set but missing stays "remote": Checks reports it). A full
+// A Selective Hub's capability (catalog.js "capabilities" of the topology): 'local', 'remote' (from its geographic hub) or
+// 'none' (not needed; DNS: Azure-provided DNS). Unset: the firewall local; the rest from the geographic hub, or not
+// needed when no geographic hub is set (a geographic hub that is set but missing stays "remote": Checks reports it). A full
 // hub has all of them locally.
 const CAP_STATES = ['local', 'remote', 'none'];
 const capKeys = spec => Object.keys(CATALOG.capabilities[topoKey(spec)]);
@@ -45,7 +45,7 @@ function capOf(spec, role) {
   return placementOf(spec, role)[0] === 'shared-services' ? 'shared' : role;
 }
 const roleState = (spec, region, role) => capState(spec, region, capOf(spec, role));
-// A minimal hub's capabilities set to Local whose role has no product (no region override, estate default none):
+// A Selective Hub's capabilities set to Local whose role has no product (no region override, estate default none):
 // the region has none of it.
 const localMissing = (spec, region) => patternOf(region).hub !== 'partial' ? [] : capKeys(spec).filter(k =>
   CATALOG.roles[k] && !CATALOG.roles[k].derived && capState(spec, region, k) === 'local' &&
@@ -60,13 +60,13 @@ function capabilityLine(spec, region) {
     .filter(k => capState(spec, region, k) === st), of = st => keys(st).filter(k => st !== 'none' || !as[k])
     .map(k => names[k][1] + (missing.includes(k) ? ' (none configured)' : ''));
   if (hub !== 'partial') return hub === 'full' ? 'All capabilities local' : '';
-  return [['Local', of('local')], [`From ${remote ? remote.name : 'the remote hub (none set)'}`, of('remote')],
+  return [['Local', of('local')], [`From ${remote ? remote.name : 'the geographic hub (none set)'}`, of('remote')],
     ...keys('none').filter(k => as[k]).map(k => [as[k], []]), ['Not needed', of('none')]]
     .filter(([t, l]) => l.length || Object.values(as).includes(t))
     .map(([t, l]) => (l.length ? `${t}: ${l.join(', ')}` : t)).join(' · ');
 }
 // Which product fills a role for a region, and which region hosts it (owner). Order: region override ('none': none)
-// -> local default (a full hub, or a minimal hub's local capability) -> remote hub (a capability not needed: none).
+// -> local default (a full hub, or a Selective Hub's local capability) -> geographic hub (a capability not needed: none).
 // Gateways follow the hybrid connections (topology.js); the hub security and the virtual hub router of a virtual
 // hub come from topology.js. The product is the one for where the role is drawn (catalog.js "alt"). An override the
 // pattern doesn't allow is ignored (a Checks warning says so).
@@ -110,7 +110,7 @@ function baseStep(spec, region, name, opts) {  // opts: buildPath's (fail: simul
   const hit = resolveRole(spec, from, role), product = hit && CATALOG.products[hit.product];
   return product ? { id: hit.owner + '.' + role, region: hit.owner, label: product.label, product: hit.product } : null;
 }
-// Token scopes: "" = the region, "remote_hub" = its remote hub, "host:<role>" = the region that hosts that role for
+// Token scopes: "" = the region, "remote_hub" = its geographic hub, "host:<role>" = the region that hosts that role for
 // it (e.g. the hub of its connector or gateway), only when that region has a hub.
 function scopeRegion(spec, region, scope) {
   if (!scope) return region;
@@ -123,7 +123,7 @@ function hostOf(spec, region, role) {
   const hit = role === 'hybrid' ? hybridOf(spec, region) : resolveRole(spec, region, role);
   return hit ? hit.owner : null;
 }
-// "peering:remote_hub": to the remote hub. "peering:host:<role>": from the region hosting the role, only when that
+// "peering:remote_hub": to the geographic hub. "peering:host:<role>": from the region hosting the role, only when that
 // is another region (use it with '?'); "peering:to:host:<role>": the same hop towards that region.
 function peeringStep(spec, region, target) {
   const cross = topologyOf(spec).cross, hub = regionById(spec, region.remote_hub), to = target.startsWith('to:');
@@ -177,13 +177,13 @@ function subOffered(spec, region, type, sub) {
   const need = (RULES.pathTypes[type].subNeeds || {})[sub];
   return !need || !!hostOf(spec, region, need.role);
 }
-// Why a sub-option isn't offered: its capability is not needed in this minimal hub, or nothing provides it.
+// Why a sub-option isn't offered: its capability is not needed in this Selective Hub, or nothing provides it.
 function subWhy(spec, region, type, sub) {
   const need = RULES.pathTypes[type].subNeeds[sub], cap = need.role === 'hybrid' ? 'hybrid' : capOf(spec, need.role);
   return capState(spec, region, cap) === 'none' ? notNeededText(spec, cap) : need.why;
 }
 
-/* ===== NOT NEEDED: a minimal hub's capability set to "Not needed" (rules.js notNeeded) ===== */
+/* ===== NOT NEEDED: a Selective Hub's capability set to "Not needed" (rules.js notNeeded) ===== */
 const notNeededText = (spec, cap) => (RULES.notNeeded.texts || {})[cap] || RULES.notNeeded.text.replace('{what}',
   RULES.notNeeded.what[cap] || CATALOG.capabilities[topoKey(spec)][cap][1]);
 // The capability of a template token that resolved to nothing ({dns}, {remote_hub.hybrid}, edge, onprem …).
@@ -199,7 +199,7 @@ const noResolver = (spec, region, type) => type === 'dns' && region.pattern !== 
 // Build the path of one type for one region. variant overrides the spec setting (DNS: centralized / distributed);
 // opts.sub picks a sub-option (DNS query direction, ingress source); opts.dest makes east-west a cross-region path.
 // A template's "awayNote" (Virtual WAN: RULES.vwan.away) is added when a step lives in another region (e.g. a
-// connector in the remote hub).
+// connector in the geographic hub).
 function buildPath(spec, region, type, variant, opts = {}) {
   const regional = buildRegionalPath(spec, region, type, variant, opts);
   return type === 'ingress' ? composeGlobalIngress(spec, region, regional, opts, buildRegionalPath) : regional;
@@ -464,7 +464,7 @@ function placeText(spec, region, role) {
   const box = where === 'shared-services' ? 'shared services VNet' : where === 'spoke' ? 'spoke' : 'hub';
   return mine ? `this ${box}` : `${owner.name} ${box}`;
 }
-// Where admins reach VMs from: the Bastion that resolveRole finds for this region (own hub, remote hub or spoke).
+// Where admins reach VMs from: the Bastion that resolveRole finds for this region (own hub, geographic hub or spoke).
 function adminAccess(spec, region) {
   const hit = resolveRole(spec, region, 'bastion'), product = hit && CATALOG.products[hit.product];
   const where = placeText(spec, region, 'bastion').replace(/^this hub$/, "this region's hub");

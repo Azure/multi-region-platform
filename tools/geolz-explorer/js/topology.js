@@ -24,7 +24,7 @@ function regionLinks(spec, raw = false) {
 }
 const routingIntent = spec => spec.defaults.routing_intent !== false;  // Virtual WAN only; on unless set to false
 function linkBetween(spec, a, b) { return regionLinks(spec).find(l => sameLink(l, a, b)) || null; }
-// The hub a region's traffic transits: its own hub, or the hub of its remote hub region.
+// The hub a region's traffic transits: its own hub, or the hub of its geographic hub region.
 function hubOf(spec, region) {
   if (hasHub(region)) return region;
   const remote = region.pattern === 'remote-hub' && regionById(spec, region.remote_hub);
@@ -62,13 +62,13 @@ const derivedProduct = (spec, role) => CATALOG.roles[role].products[spec.default
   : 'hub-spoke'];
 const hybridConnections = spec => spec.hybrid_connections || [];
 const siteById = (spec, id) => (spec.onprem || []).find(s => s.id === id);
-// A region can host a gateway when it has a full hub, or a minimal hub with Hybrid gateway set to Local.
+// A region can host a gateway when it has a full hub, or a Selective Hub with Hybrid gateway set to Local.
 const canHostGateway = (spec, region) => hasHub(region) && capState(spec, region, 'hybrid') === 'local';
 function connectionsTo(spec, regionId, type) {
   return hybridConnections(spec).filter(c => (!type || c.type === type) && (c.connects_to || []).includes(regionId));
 }
 // Gateways are derived: a hub gets an ExpressRoute gateway when an ER circuit connects to it, a VPN Gateway when a
-// VPN does. A region that can't host one uses its remote hub's gateway (resolveRole calls this for derived roles).
+// VPN does. A region that can't host one uses its geographic hub's gateway (resolveRole calls this for derived roles).
 function gatewayRole(spec, region, role, depth) {
   const product = derivedProduct(spec, role);
   if (!region || depth > 3 || !product || capState(spec, region, 'hybrid') === 'none') return null;
@@ -77,7 +77,7 @@ function gatewayRole(spec, region, role, depth) {
   }
   return followsRemote(region) ? gatewayRole(spec, regionById(spec, region.remote_hub), role, depth + 1) : null;
 }
-// The hybrid route of a region: the hub (its own, or its remote hub's) and the connection its on-premises traffic
+// The hybrid route of a region: the hub (its own, or its geographic hub's) and the connection its on-premises traffic
 // uses there (hybrid.js routeAt: the hub site's primary link, the preferred circuit first; with opts.fail, the
 // first one not failed). Returns { role, owner, product, conn, failed: [connections skipped] }, or null (no
 // connection, or every one failed).
@@ -210,7 +210,7 @@ function ensureVwans(spec) {
   if (!(spec.vwans || []).length) spec.vwans = [{ ...DEFAULT_VWAN }];
   return spec.vwans;
 }
-// The virtual WAN of a region: its hub's (its own, or its remote hub's) "vwan", else the first one.
+// The virtual WAN of a region: its hub's (its own, or its geographic hub's) "vwan", else the first one.
 function vwanOf(spec, region) {
   const hub = region && hubOf(spec, region), list = vwansOf(spec);
   return list.find(w => hub && w.id === hub.vwan) || list[0];
@@ -230,7 +230,7 @@ function placementOf(spec, role) {
 // A product allowed in a virtual hub (allow-list; none: the role's place decides).
 const inVirtualHub = product => !product || VHUB.products.includes(product);
 // A role a region owns sits in its hub (hub VNet or virtual hub) or shared services VNet when its hub has it (a full
-// hub; a minimal hub's local capability; gateways and the hub router: always), else in its spoke-level strip. In a
+// hub; a Selective Hub's local capability; gateways and the hub router: always), else in its spoke-level strip. In a
 // virtual hub only allow-listed products: any other (e.g. a generic third-party firewall NVA) goes to the shared
 // services VNet. product: the role's product here (default: as resolved).
 function roleWhere(spec, region, role, product) {
@@ -256,7 +256,7 @@ const roleLabel = (spec, role) => (isVwan(spec) && (CATALOG.roles[role].vwan || 
 
 /* ===== VIRTUAL HUBS: their security, router and state ===== */
 // A role each virtual hub has on its own (catalog.js "perHub": the hub security), never borrowed from another hub:
-// the region override, else the estate default, else the role's Virtual WAN default; 'none' = none. A minimal hub
+// the region override, else the estate default, else the role's Virtual WAN default; 'none' = none. A Selective Hub
 // has it only when it is ticked as a local capability. undefined: not such a role here (resolveRole goes on).
 function ownHubRole(spec, region, role) {
   const r = CATALOG.roles[role] || {};
@@ -296,7 +296,7 @@ function vhubStep(spec, region, onlyFirewall) {
 }
 
 // "{via:<role>}": the region's own virtual hub ("{vhub}") when the role is served from another hub (a minimal
-// virtual hub's on-premises traffic: hub-to-hub to its remote hub); "{viahost:<role>}": that other hub's.
+// virtual hub's on-premises traffic: hub-to-hub to its geographic hub); "{viahost:<role>}": that other hub's.
 function viaStep(spec, region, token) {
   const [kind, role] = token.split(':'), hub = hubOf(spec, region);
   const hit = role === 'hybrid' ? hybridOf(spec, region) : resolveRole(spec, region, role), owner = hit && hit.owner;
@@ -358,13 +358,13 @@ function vwanFacts(spec, region) {
     routing_intent: yes(isVwan(spec) && routingIntent(spec)), vwan_name: w.name || 'n/a',
     ...minimalVhubFacts(spec, region) };
 }
-// A minimal virtual hub: its firewall state, and what is wrong with its remote hub ('none': a full hub in the same
+// A minimal virtual hub: its firewall state, and what is wrong with its geographic hub ('none': a full hub in the same
 // virtual WAN).
 const isMinimalVhub = (spec, region) => isVwan(spec) && !!region && patternOf(region).hub === 'partial';
 function minimalVhubFacts(spec, region) {
   const on = isMinimalVhub(spec, region), remote = on && regionById(spec, region.remote_hub);
   const issue = !remote || remote === region ? 'none' : patternOf(remote).hub !== 'full'
-    ? `a ${patternOf(remote).label.toLowerCase()} region, not a full hub`
+    ? `a ${patternOf(remote).label} region, not a Full Hub`
     : vwanOf(spec, remote) !== vwanOf(spec, region) ? `in virtual WAN ${vwanOf(spec, remote).name}` : 'none';
   return { vwan_minimal: yes(on), fw_state: on ? capState(spec, region, 'firewall') : 'n/a',
     vwan_remote_issue: issue, remote_hub_name: remote ? remote.name : 'none' };

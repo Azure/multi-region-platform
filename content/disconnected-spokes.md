@@ -35,7 +35,7 @@ In the Azure landing zone architecture, these spokes are *online* landing zones:
 
 - **Keep address space unique.** A spoke that isn't peered today can move to a connected profile later only if its address space doesn't overlap.
 - **Plan outbound access explicitly.** New virtual networks default to private subnets, without default outbound access. A NAT gateway is the recommended method for most workloads that don't need a firewall.
-- **Decide who owns private DNS zones.** A disconnected spoke can't use a DNS resolver in a hub. Its virtual network needs its own links to the private DNS zones for the private endpoints it uses, whether those zones are the central ones or zones that the workload owns.
+- **Decide who owns private DNS zones.** A spoke in the No Hub profile can't use a DNS resolver in a hub. Its virtual network needs its own links to the private DNS zones for the private endpoints it uses, whether those zones are the central ones or zones that the workload owns.
 - **Plan operator access.** Without a hub there is no shared management path. Decide how operators reach workloads, for example with Azure Bastion in the spoke.
 - **Check identity.** Workloads authenticate with Microsoft Entra ID. A workload that needs domain controllers doesn't fit this profile.
 - **Connect spokes directly only where needed.** Where applications in the region need east-west communication, evaluate direct spoke-to-spoke connectivity without assuming that a local hub is required. Limit it to spokes of the same environment and workload.

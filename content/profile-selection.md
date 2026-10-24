@@ -13,7 +13,7 @@ Determine how workloads in the region will reach geographic hubs, shared platfor
 
 Start with the matrix to see which connectivity profiles each [archetype](./application-landing-zone-archetypes.md) typically uses. Then apply the selection principles and use the decision tree to pick the most efficient profile that meets the requirements.
 
-:::image type="content" source="./media/archetype-profile-matrix.png" alt-text="Matrix of the four archetypes against the four connectivity profiles. Hybrid-connected and connected cloud-native or AI applications typically use remote hub, Selective Hub, or full hub; isolated cloud-native or AI applications often use No Hub and other profiles where justified; interconnected portfolios can use spoke-to-spoke connectivity, a remote hub where acceptable, and a Selective Hub or Full Hub when justified." lightbox="./media/archetype-profile-matrix.png":::
+:::image type="content" source="./media/archetype-profile-matrix.png" alt-text="Matrix of the four archetypes against the four connectivity profiles. Hybrid-connected and connected cloud-native or AI applications typically use Remote Hub, Selective Hub, or Full Hub; isolated cloud-native or AI applications often use No Hub and other profiles where justified; interconnected portfolios can use spoke-to-spoke connectivity, a Remote Hub where acceptable, and a Selective Hub or Full Hub when justified." lightbox="./media/archetype-profile-matrix.png":::
 
 *Archetype-to-profile relationships are many-to-many. Each row is a set of options, not an assignment; the selected profile follows dependencies, latency, traffic, resiliency, and independence requirements.*
 

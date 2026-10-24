@@ -93,15 +93,15 @@
     'No hub yet': svg(120, 68, hex(60, 34, 12, 'dg-hub dg-ghost') + [[26, 14], [94, 14], [26, 54], [94, 54]].map(p => spoke(...p)).join('') + ln('M60 34L32 17M60 34L88 17M60 34L32 51M60 34L88 51', 'dg-ghost'), 'Four spoke virtual networks with no hub'),
   };
 
-  // Geographic hub region on the left, the new region on the right, on-premises at the far left.
+  // The geographic hub's region on the left, the new region on the right, on-premises at the far left.
   const GEO = (dim) => `<g class="${dim ? 'dg-dim' : ''}"><rect class="dg-region dg-small" x="48" y="20" width="56" height="70" rx="8"/>${hex(76, 55, 13, 'dg-hub dg-fill')}${building(6, 39)}${ln('M63 55H28')}</g>`;
   const NEW = '<rect class="dg-region" x="124" y="8" width="108" height="94" rx="10"/>';
   const SPOKES = (x, ys) => ys.map(y => spoke(x, y)).join('');
   const PROFILE = {
-    'Disconnected Spokes': svg(240, 112, GEO(true) + NEW + [[158, 36], [198, 36], [158, 74], [198, 74]].map(p => spoke(...p)).join(''), 'Disconnected Spokes: workload spokes in the region, with no link to a hub or to on-premises'),
-    'Remote Hub Connected': svg(240, 112, GEO(false) + NEW + SPOKES(212, [28, 55, 82]) + ln('M184 28V82M184 28H206M184 55H206M184 82H206') + ln('M184 55H89'), 'Remote Hub Connected: spokes in the region link across to the hub in the geographic hub region, which links to on-premises'),
-    'Minimal Regional Hub': svg(240, 112, GEO(false) + NEW + SPOKES(212, [28, 55, 82]) + ln('M160 55H188M188 28V82M188 28H206M188 55H206M188 82H206') + ln('M140 55H89') + hex(150, 55, 11, 'dg-hub dg-open'), 'Minimal Regional Hub: a small hub in the region with spokes on it, linked to the geographic hub, which links to on-premises'),
-    'Full Regional Hub': svg(240, 112, GEO(false) + NEW + SPOKES(212, [28, 55, 82]) + ln('M165 55H188M188 28V82M188 28H206M188 55H206M188 82H206') + ln('M139 55H89', 'dg-peer') + ln('M17 71V107H152V68') + hex(152, 55, 13, 'dg-hub dg-solid'), 'Full Regional Hub: a full hub in the region with spokes on it, its own link to on-premises, and a peer link to the other hub'),
+    'No Hub': svg(240, 112, GEO(true) + NEW + [[158, 36], [198, 36], [158, 74], [198, 74]].map(p => spoke(...p)).join(''), 'No Hub: workload spokes in the region, with no link to a hub or to on-premises'),
+    'Remote Hub': svg(240, 112, GEO(false) + NEW + SPOKES(212, [28, 55, 82]) + ln('M184 28V82M184 28H206M184 55H206M184 82H206') + ln('M184 55H89'), 'Remote Hub: spokes in the region link across to the geographic hub in another region, which links to on-premises'),
+    'Selective Hub': svg(240, 112, GEO(false) + NEW + SPOKES(212, [28, 55, 82]) + ln('M160 55H188M188 28V82M188 28H206M188 55H206M188 82H206') + ln('M140 55H89') + hex(150, 55, 11, 'dg-hub dg-open'), 'Selective Hub: a small hub in the region with spokes on it, linked to the geographic hub, which links to on-premises'),
+    'Full Hub': svg(240, 112, GEO(false) + NEW + SPOKES(212, [28, 55, 82]) + ln('M165 55H188M188 28V82M188 28H206M188 55H206M188 82H206') + ln('M139 55H89', 'dg-peer') + ln('M17 71V107H152V68') + hex(152, 55, 13, 'dg-hub dg-solid'), 'Full Hub: a full hub in the region with spokes on it, its own link to on-premises, and a peer link to the other hub'),
   };
 
   M.icon = icon; M.status = status; M.icons = P;

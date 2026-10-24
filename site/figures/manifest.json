@@ -66,12 +66,12 @@
  },
  "archetype-profile-matrix": {
   "w": 940,
-  "h": 403,
+  "h": 389,
   "source": "fig13"
  },
  "connectivity-profile-spectrum": {
   "w": 940,
-  "h": 344,
+  "h": 339,
   "source": "fig14"
  },
  "profile-cost-tradeoff": {

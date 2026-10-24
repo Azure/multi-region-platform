@@ -24,7 +24,7 @@
     const prof = PROFILES[e.pi];
     const cards = K.cards(k('profile'), e.profile, PROFILES.map(p => ({ id: p.id, title: p.id, text: p.gets, art: M.diagram.profile(p.id), tag: e.suggested === p.id ? 'Suggested' : '' })), { label: 'Connectivity profile', cls: 'profiles' });
     const differs = e.suggested && e.profile && e.profile !== e.suggested ? `<p class="pl-hint">The answers point to ${esc(e.suggested)}.</p>` : '';
-    const secProfile = K.section('Connectivity profile', `<div class="pl-pqs">${qs}</div>${cards}${differs}${prof ? `<p class="pl-after"><a class="pl-link" href="${prof.href}">What to deploy for a ${esc(prof.id)}${icon('arrowright')}</a></p>` : ''}`,
+    const secProfile = K.section('Connectivity profile', `<div class="pl-pqs">${qs}</div>${cards}${differs}${prof ? `<p class="pl-after"><a class="pl-link" href="${prof.href}">What to deploy for the ${esc(prof.id)} profile${icon('arrowright')}</a></p>` : ''}`,
       { id: 'pl-d-profile', link: ['profile-selection.html', 'Guidance'] });
 
     // hub and regional connectivity
@@ -89,7 +89,7 @@
         more += K.row('Requirement that justifies the change', k('hybridReason'), id => K.sel(k('hybridReason'), d.hybridReason, O.hybridReason, { id, label: 'Requirement that justifies the change' }));
         more += K.row('Change', k('hybridChange'), id => K.inp(k('hybridChange'), d.hybridChange, { id, ph: 'For example, a second circuit at another peering location', label: 'Change' }));
       }
-      secHy = K.section('Hybrid connectivity', `${dec}${none ? '<p class="pl-hint">Disconnected Spokes have no private path to on-premises locations.</p>' : ''}${more ? `<div class="pl-subform">${more}</div>` : ''}`, { id: 'pl-d-hybrid', link: ['hybrid-connectivity.html', 'Guidance'] });
+      secHy = K.section('Hybrid connectivity', `${dec}${none ? '<p class="pl-hint">The No Hub profile has no private path to on-premises locations.</p>' : ''}${more ? `<div class="pl-subform">${more}</div>` : ''}`, { id: 'pl-d-hybrid', link: ['hybrid-connectivity.html', 'Guidance'] });
     }
 
     const secRec = K.section('Record',
