@@ -161,16 +161,23 @@ console.log(JSON.stringify(outputs));
 """
         result = subprocess.run(["node", "-e", script], cwd=ROOT,
                                 check=True, capture_output=True, text=True, encoding="utf-8")
-        for cards in json.loads(result.stdout):
+        full_cards, exec_cards = json.loads(result.stdout)
+        for cards in (full_cards, exec_cards):
             self.assertEqual([c["name"] for c in cards], ARCHETYPES)
-            self.assertEqual(cards[0]["profiles"], ["No Hub", "Other profiles, where justified"])
-            self.assertEqual(cards[1]["profiles"], PROFILES)
             self.assertEqual(cards[2]["profiles"], PROFILES[1:])
-            self.assertEqual(cards[3]["profiles"], PROFILES)
             self.assertIn("Self-contained", " ".join(cards[0]["text"]))
-            self.assertIn("No Hub only", " ".join(cards[1]["text"]))
-            self.assertIn("No Hub", " ".join(cards[2]["text"]))
-            self.assertIn("approved same-region", " ".join(cards[3]["text"]))
+        self.assertEqual(full_cards[0]["profiles"], ["No Hub", "Connected, where justified"])
+        self.assertEqual(full_cards[1]["profiles"], PROFILES[1:])
+        self.assertEqual(full_cards[3]["profiles"], PROFILES[1:])
+        self.assertIn("Profile set by latency, traffic, resiliency, security", " ".join(full_cards[1]["text"]))
+        self.assertIn("Common in migrations and hybrid scenarios", " ".join(full_cards[2]["text"]))
+        self.assertIn("Direct spoke-to-spoke or a regional hub", " ".join(full_cards[3]["text"]))
+        self.assertEqual(exec_cards[0]["profiles"], ["No Hub", "Other profiles, where justified"])
+        self.assertEqual(exec_cards[1]["profiles"], PROFILES)
+        self.assertEqual(exec_cards[3]["profiles"], PROFILES)
+        self.assertIn("No Hub only", " ".join(exec_cards[1]["text"]))
+        self.assertIn("No Hub", " ".join(exec_cards[2]["text"]))
+        self.assertIn("approved same-region", " ".join(exec_cards[3]["text"]))
 
 
 if __name__ == "__main__":

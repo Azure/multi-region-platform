@@ -204,10 +204,10 @@ module.exports = (pres, L) => {
     const s = L.slide('part1');
     L.header(s, 'What applications require', 'Workload Landing Zone Archetypes', { ec: C.t600, tw: 8, lede: 'A planning abstraction that groups recurring application connectivity and dependency requirements. It doesn’t replace the Azure landing-zone hierarchy.', lx: 8.6, lw: 4.13 });
     const A = [
-      [ARCH[0], 'Self-contained workloads that can operate without persistent private connectivity to enterprise or centralized dependencies.', ['No Hub', 'Other profiles, where justified'], 'Flexible placement across regions; hub capabilities only where platform requirements justify them.'],
-      [ARCH[1], 'Mostly self-contained applications that need private connectivity to selected enterprise services, data sources, APIs, or Azure environments.', ['No Hub', 'Remote Hub', 'Selective Hub', 'Full Hub'], 'No Hub only for approved local peering or Azure service endpoints without hub or on-premises dependencies.'],
-      [ARCH[2], 'Significant dependencies on on-premises environments, enterprise networks, or centralized shared services that require persistent private connectivity.', ['Remote Hub', 'Selective Hub', 'Full Hub'], 'No Hub cannot meet mandatory private on-premises or geographic-hub dependencies.'],
-      [ARCH[3], 'Groups of applications with meaningful dependencies on each other: shared data, common services, east-west communication.', ['No Hub', 'Remote Hub', 'Selective Hub', 'Full Hub'], 'No Hub only for approved same-region connectivity; aggregate requirements decide hub capabilities.'],
+      [ARCH[0], 'Self-contained workloads that can operate without persistent private connectivity to enterprise or centralized dependencies.', ['No Hub', 'Connected, where justified'], 'No persistent private dependencies. Can often use No Hub. Flexible placement across regions.'],
+      [ARCH[1], 'Mostly self-contained applications that need private connectivity to selected enterprise services, data sources, APIs, or Azure environments.', ['Remote Hub', 'Selective Hub', 'Full Hub'], 'Private access to selected dependencies. Profile set by latency, traffic, resiliency, security. Common for data, analytics, and AI platforms.'],
+      [ARCH[2], 'Significant dependencies on on-premises environments, enterprise networks, or centralized shared services that require persistent private connectivity.', ['Remote Hub', 'Selective Hub', 'Full Hub'], 'Profile set by dependency latency, resiliency, regulation, operations. Common in migrations and hybrid scenarios.'],
+      [ARCH[3], 'Groups of applications with meaningful dependencies on each other: shared data, common services, east-west communication.', ['Remote Hub', 'Selective Hub', 'Full Hub'], 'Portfolio-level archetype. Aggregate requirements set the profile. Direct spoke-to-spoke or a regional hub for east-west traffic.'],
     ];
     A.forEach(([t, d, chips, drv], i) => {
       const x = 0.6 + i * 3.08, y = 1.75, w = 2.9, h = 4.5;
@@ -221,7 +221,7 @@ module.exports = (pres, L) => {
       chips.forEach(c => { const cw = c.length * 0.07 + 0.3; if (cx + cw > x + w - 0.15) { cx = x + 0.2; cy += 0.32; } const dashed = c.includes('where justified'); L.chip(s, c, cx, cy, { w: cw, fill: dashed ? 'FFFFFF' : c === 'No Hub' ? C.t100 : C.b100, color: c === 'No Hub' ? C.t700 : C.b700, line: dashed ? C.b500 : undefined, dash: dashed ? 'dash' : undefined, size: 10.5 }); cx += cw + 0.06; });
       L.txt(s, drv, x + 0.2, y + 3.5, w - 0.4, 1.05, { fontSize: 11, color: C.muted });
     });
-    L.caption(s, 'Figure', 'Increasing platform connectivity and dependency complexity, not maturity or application sophistication.', 0.6, 6.4, 12.1);
+    L.caption(s, 'Figure', 'The four archetypes, grouped by the platform connectivity and dependency capabilities each requires.', 0.6, 6.4, 12.1);
     s.addNotes('An archetype describes what an application or application portfolio requires from the platform. Use known workload requirements and application portfolios to anticipate the capabilities that candidate regions may need to support. Where future requirements are not yet defined, archetypes give planning guardrails without constraining later placement, which happens once the workload’s current requirements, regional capabilities, and platform readiness are known. Archetypes describe what applications require; connectivity profiles describe what the platform provides. The mapping is not one-to-one.');
   }
 
