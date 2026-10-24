@@ -27,13 +27,13 @@
 
   <div class="g2 mt16" style="gap:40px">
     <p>Preparing a region is a targeted change to the platform you already run, not a new landing zone. You build only what the selected connectivity profile and shared-service placement call for, through your existing landing-zone automation. For two of the four profiles there is no hub to build.</p>
-    <p>The Cloud Adoption Framework already describes how to <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone" style="font-weight:650">add a new region to an existing landing zone</a>, including a new hub in the region. That path is the Full Regional Hub. The other three profiles do part of it, for regions whose workloads need less.</p>
+    <p>The Cloud Adoption Framework already describes how to <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone" style="font-weight:650">add a new region to an existing landing zone</a>, including a new hub in the region. That path is the Full Hub. The other three profiles do part of it, for regions whose workloads need less.</p>
   </div>
 
   <h3 class="mt20" style="color:var(--b700);font-size:14px">What each profile adds</h3>
   <div class="zp4 mt8">
     <div class="c">
-      <div class="hd"><span class="n" style="background:var(--t600)">1</span><h3>Disconnected Spokes</h3><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="9" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg></div>
+      <div class="hd"><span class="n" style="background:var(--t600)">1</span><h3>No Hub</h3><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="9" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg></div>
       <div class="lb">What you add in the region</div>
       <p>The region in policy and in landing-zone provisioning. Workload spokes with their own internet ingress and egress. No hub, no gateway, no peering.</p>
       <div class="lb">What you reuse</div>
@@ -41,7 +41,7 @@
       <div class="pg"><span>What to deploy</span><b>page <span data-toc="pDisc"></span></b></div>
     </div>
     <div class="c">
-      <div class="hd"><span class="n" style="background:var(--b600)">2</span><h3>Remote Hub Connected</h3><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"/><circle cx="40" cy="15" r="5" fill="#0F6CBD"/></svg></div>
+      <div class="hd"><span class="n" style="background:var(--b600)">2</span><h3>Remote Hub</h3><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"/><circle cx="40" cy="15" r="5" fill="#0F6CBD"/></svg></div>
       <div class="lb">What you add in the region</div>
       <p>The same, plus a cross-region connection from each spoke to an existing geographic hub, with routing and DNS settings. No hub.</p>
       <div class="lb">What you reuse</div>
@@ -49,7 +49,7 @@
       <div class="pg"><span>What to deploy</span><b>page <span data-toc="pRemote"></span></b></div>
     </div>
     <div class="c">
-      <div class="hd"><span class="n" style="background:var(--b700)">3</span><h3>Minimal Regional Hub</h3><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="6" fill="#fff" stroke="#2B88D8" stroke-width="1.5"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg></div>
+      <div class="hd"><span class="n" style="background:var(--b700)">3</span><h3>Selective Hub</h3><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="6" fill="#fff" stroke="#2B88D8" stroke-width="1.5"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg></div>
       <div class="lb">What you add in the region</div>
       <p>The same, plus a hub in the region with only the components you selected.</p>
       <div class="lb">What you reuse</div>
@@ -57,7 +57,7 @@
       <div class="pg"><span>What to deploy</span><b>page <span data-toc="pMinTable"></span></b></div>
     </div>
     <div class="c">
-      <div class="hd"><span class="n" style="background:var(--b800)">4</span><h3>Full Regional Hub</h3><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="7" fill="#0F6CBD"/><circle cx="14" cy="15" r="2.4" fill="#fff"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg></div>
+      <div class="hd"><span class="n" style="background:var(--b800)">4</span><h3>Full Hub</h3><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="7" fill="#0F6CBD"/><circle cx="14" cy="15" r="2.4" fill="#fff"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg></div>
       <div class="lb">What you add in the region</div>
       <p>The same, plus a full local hub.</p>
       <div class="lb">What you reuse</div>

@@ -35,23 +35,23 @@
 <div class="inner" id="pMinTable">
   <div class="zph">
     <span class="n" style="background:var(--b700)">3</span>
-    <div><div class="eyebrow">Part 4 · Prepare the region</div><h2>Minimal Regional Hub <span style="font-weight:400;color:var(--muted);font-size:15px">continued</span></h2></div>
+    <div><div class="eyebrow">Part 4 · Prepare the region</div><h2>Selective Hub <span style="font-weight:400;color:var(--muted);font-size:15px">continued</span></h2></div>
     <svg class="gl" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="6" fill="#fff" stroke="#2B88D8" stroke-width="1.5"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>
   </div>
   <div class="zh4 mt16">What you deploy</div>
   <table class="zdt">
   <thead><tr><th>Area</th><th>What to do</th><th>Guidance</th></tr></thead>
   <tbody>
-  <tr><td class="za">Policy, address space, landing-zone provisioning, monitoring, backup, and keys</td><td>The same as for Disconnected Spokes (page <span data-toc="pDisc"></span>), with spokes that connect to the local hub.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone">Landing zone regions</a></td></tr>
+  <tr><td class="za">Policy, address space, landing-zone provisioning, monitoring, backup, and keys</td><td>The same as for No Hub (page <span data-toc="pDisc"></span>), with spokes that connect to the local hub.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone">Landing zone regions</a></td></tr>
   <tr><td class="za">Hub (the base)</td><td>Create the hub virtual network or virtual hub, connect it to the geographic hub, connect the spokes, and configure routing.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/traditional-azure-networking-topology">Traditional Azure networking topology</a> or <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/virtual-wan-network-topology">Virtual WAN network topology</a></td></tr>
-  <tr><td class="za">Optional components</td><td>Deploy the components that must be local, in the same order as for a Full Regional Hub (page <span data-toc="pFull"></span>): inspection, gateways, name resolution, then identity.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone">Landing zone regions</a></td></tr>
+  <tr><td class="za">Optional components</td><td>Deploy the components that must be local, in the same order as for a Full Hub (page <span data-toc="pFull"></span>): inspection, gateways, name resolution, then identity.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone">Landing zone regions</a></td></tr>
   </tbody>
   </table>
 
   <div class="row mt16" style="gap:32px;align-items:flex-start">
     <div style="flex:1">
       <div class="zh4">Hub design</div>
-      <p style="font-size:11px;margin-bottom:5px">The same choices apply as for a full hub, on a smaller scale:</p>
+      <p style="font-size:11px;margin-bottom:5px">The same choices apply as for a Full Hub, on a smaller scale:</p>
       <ul class="bul zrc">
       <li><strong>Topology.</strong> <a href="https://learn.microsoft.com/azure/architecture/networking/architecture/hub-spoke">Hub-and-spoke virtual networks</a> or Azure Virtual WAN. Use the topology the rest of the estate uses.</li>
       <li><strong>Inspection.</strong> Azure Firewall or a third-party network virtual appliance, if the hub has inspection at all.</li>
@@ -69,7 +69,7 @@
       <li><strong>Reuse circuits before you add them.</strong> When connectivity to on-premises environments is required, determine whether existing ExpressRoute circuits and gateway topology can provide the required reachability before introducing additional circuits; do not assume that each Azure region requires a dedicated ExpressRoute circuit.</li>
       <li><strong>Test both failure directions.</strong> Validate workload and operational behavior when either local capabilities or remote dependencies are unavailable.</li>
       <li><strong>Watch for inspection being bypassed.</strong> When hubs in different regions share ExpressRoute circuits, spokes in different regions can learn routes to each other and bypass the firewalls. Plan route tables so that traffic between regions is inspected where it must be.</li>
-      <li><strong>Know which profile you have.</strong> The hub is minimal as long as the region still depends on a geographic hub for something. When it can keep operating without the other hubs, it is a Full Regional Hub, and its cost and operating scope should be planned as one.</li>
+      <li><strong>Know which profile you have.</strong> The hub is minimal as long as the region still depends on a geographic hub for something. When it can keep operating without the other hubs, it is a Full Hub, and its cost and operating scope should be planned as one.</li>
     </ul>
       </div>
     </div>

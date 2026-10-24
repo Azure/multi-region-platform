@@ -61,17 +61,17 @@
  },
  "application-landing-zone-archetypes": {
   "w": 940,
-  "h": 373,
+  "h": 411,
   "source": "fig12"
  },
  "archetype-profile-matrix": {
   "w": 940,
-  "h": 389,
+  "h": 391,
   "source": "fig13"
  },
  "connectivity-profile-spectrum": {
   "w": 940,
-  "h": 339,
+  "h": 353,
   "source": "fig14"
  },
  "profile-cost-tradeoff": {

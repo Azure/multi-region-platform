@@ -122,7 +122,7 @@ Other regions are consumed through more efficient patterns appropriate to each w
 # Four Workload Landing Zone archetypes
 <!-- standfirst: Archetypes describe what applications require; connectivity profiles describe what the platform provides. The mapping is not one-to-one. -->
 
-:::image type="content" source="./brief-media/xfArch.png" alt-text="Four Workload Landing Zone archetypes: Hybrid-connected applications, Isolated cloud-native or AI applications, Connected cloud-native or AI applications, and Interconnected application portfolios. Each card describes application dependencies, the typical deployment pattern, and typical connectivity profiles." lightbox="./brief-media/xfArch.png":::
+:::image type="content" source="./brief-media/xfArch.png" alt-text="Four Workload Landing Zone archetypes: Isolated cloud-native or AI applications, Connected cloud-native or AI applications, Hybrid-connected applications, and Interconnected application portfolios. Each card describes application dependencies, the typical deployment pattern, and typical connectivity profiles." lightbox="./brief-media/xfArch.png":::
 
 The profile labels list typical connectivity profiles, most common first; actual dependencies and requirements decide.
 

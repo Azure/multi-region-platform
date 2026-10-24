@@ -19,9 +19,9 @@ Profiles describe platform capabilities, not workload designs; [Workload Landing
 
 ## No Hub
 
-Workload spokes operate without private connectivity to a geographic hub, another Azure region, or an on-premises environment. They can still use direct connectivity to other spokes where required and approved private or public connectivity to Azure platform services.
+Workload spokes operate without a private network path to a geographic hub, another region's networks, or an on-premises environment. They can still use direct connectivity to other spokes where required and approved private or public connectivity to Azure platform services.
 
-**Fits when:** Workloads can operate without private connectivity to a geographic hub, another Azure region, or an on-premises environment, and their required platform services can be consumed locally or through approved Azure service connectivity. This can include self-contained cloud-native, AI, development, test, batch, HPC, VDI, or internet-facing workloads where those conditions are met.
+**Fits when:** Workloads can operate without a private network path to a geographic hub, another region's networks, or an on-premises environment, and their required platform services can be consumed locally or through approved Azure service connectivity. This can include self-contained cloud-native, AI, development, test, batch, HPC, VDI, or internet-facing workloads where those conditions are met.
 
 **Regional footprint:** Workload resources plus the controls needed to deploy, secure, monitor, and operate them. These spokes still use the estate's standard identity, policy, security, and deployment practices.
 

@@ -3,7 +3,7 @@ const { C, F, IMG } = require('../lib');
 // Part 1 · Understand concepts. Eight slides: the two layers (2), the city analogy, the four connectivity profiles
 // and when each fits (2), the four archetypes, the archetype-to-profile matrix, and the architecture terms.
 module.exports = (pres, L) => {
-  const PROF = ['Disconnected spokes', 'Remote-hub-connected spokes', 'Minimal regional hub', 'Full regional hub'];   // figure labels (PDF figure spelling)
+  const PROF = L.data.profiles;
   const NAMES = L.data.profiles;                                                                                     // proper names for headings and running text
   const ARCH = L.data.archetypes;
 
@@ -95,7 +95,7 @@ module.exports = (pres, L) => {
     });
     // household
     L.txt(s, 'The household: a single-region workload', x, 4.05, w, 0.3, { fontSize: 12.5, fontFace: F.semi, color: C.t700, valign: 'middle' });
-    [['Hybrid-connected', 'Hillcrest'], ['Isolated', 'Lakeside'], ['Connected', 'Midtown'], ['Interconnected portfolio', 'Riverside']].forEach(([a, b], i) => {
+    [['Isolated', 'Lakeside'], ['Connected', 'Midtown'], ['Hybrid-connected', 'Hillcrest'], ['Interconnected portfolio', 'Riverside']].forEach(([a, b], i) => {
       const y = 4.42 + i * 0.33;
       L.num(s, i + 1, x, y + 0.03, 0.24, C.t600, 'FFFFFF', 10);
       L.txt(s, [{ text: a, options: { bold: true, color: C.ink } }, { text: '  →  ' + b, options: { color: C.t700 } }], x + 0.36, y, w - 0.36, 0.3, { fontSize: 11, valign: 'middle' });
@@ -103,7 +103,7 @@ module.exports = (pres, L) => {
     // bank
     L.txt(s, 'The bank: a multi-region workload', x, 5.85, w, 0.3, { fontSize: 12.5, fontFace: F.semi, color: C.t700, valign: 'middle' });
     L.txt(s, [{ text: 'Branches in ' }, { text: 'Riverside', options: { bold: true, color: C.ink } }, { text: ' and ' }, { text: 'Midtown', options: { bold: true, color: C.ink } }, { text: ' serve customers together. A backup operations center in ' }, { text: 'Hillcrest', options: { bold: true, color: C.ink } }, { text: ' stands by.' }], x, 6.2, w, 0.62, { fontSize: 11, color: C.text });
-    s.addNotes('Think of the platform as a city and workloads as the people and businesses that live in it. Each neighborhood is an Azure region with its own connectivity profile; the office campus is on-premises. A household is a single-region workload and picks the neighborhood that fits how it lives: Hillcrest for a hybrid-connected family, Lakeside for an isolated one, Midtown for a connected one, Riverside for an interconnected portfolio. The bank is a multi-region workload: branches in Riverside and Midtown serve customers together, and a backup operations center in Hillcrest stands by.');
+    s.addNotes('Think of the platform as a city and workloads as the people and businesses that live in it. Each neighborhood is an Azure region with its own connectivity profile; the office campus is on-premises. A household is a single-region workload and picks the neighborhood that fits how it lives: Lakeside for an isolated family, Midtown for a connected one, Hillcrest for a hybrid-connected one, Riverside for an interconnected portfolio. The bank is a multi-region workload: branches in Riverside and Midtown serve customers together, and a backup operations center in Hillcrest stands by.');
   }
 
   // ───────────────────────── 4 · Connectivity profile spectrum  (PDF p13)
@@ -114,9 +114,9 @@ module.exports = (pres, L) => {
     L.txt(s, 'NO DEPENDENCY ON A GEOGRAPHIC HUB', 0.6, 1.88, 5, 0.22, { fontSize: 9.5, bold: true, color: C.t600, charSpacing: 1.5 });
     L.txt(s, 'GREATER LOCAL CAPABILITY AND INDEPENDENCE', 7.2, 1.88, 5.53, 0.22, { fontSize: 9.5, bold: true, color: C.b700, charSpacing: 1.5, align: 'right' });
     const P = [
-      [C.t600, 'No private connectivity to a geographic hub, other Azure regions, or on-premises.', 'No hub, no gateway, no private connectivity. Best for self-contained workloads.'],
+      [C.t600, 'No private network path to a geographic hub, another region’s networks, or on-premises.', 'No hub or hybrid gateway. Approved local peering and Azure service endpoints only.'],
       [C.c600, 'Spokes connect privately to an existing geographic hub in another region.', 'Centralized services used; local services not required.'],
-      [C.b500, 'Selected local services and connectivity, based on workload requirements.', 'Local shared services with selective connectivity, without a full hub.'],
+      [C.b500, 'Selected local services and connectivity, based on workload requirements.', 'Local shared services with selective connectivity, without a Full Hub.'],
       [C.b700, 'Comprehensive local capabilities, with connectivity to spokes, on-premises, and other regions as needed.', 'Full local capabilities, when required by latency, traffic volume, compliance, or operational needs.'],
     ];
     const lab = (t, x, y, w, o = {}) => L.txt(s, t, x, y, w, o.h || 0.2, Object.assign({ fontSize: 9, bold: true, color: C.b700 }, o));
@@ -167,7 +167,7 @@ module.exports = (pres, L) => {
       L.txt(s, f, x + 0.2, y + h - 0.97, w - 0.4, 0.94, { fontSize: 11, fontFace: F.semi, color: C.ink, valign: 'middle' });
     });
     L.caption(s, 'Figure', 'Moving right adds local capability, independence, cost, and operational scope. Services shown are examples. Profiles are not maturity stages.', 0.6, 6.5, 12.1);
-    s.addNotes('Enabling another region does not require changing or duplicating the full platform footprint of an existing geographic hub. An organization can maintain a small number of strategic geographic hubs, which provide resilient hybrid connectivity and common enterprise services to other regions; other regions use a more efficient profile and consume capabilities from those hubs when workload requirements permit. The four profiles form a spectrum from Disconnected Spokes to Full Regional Hub. They are not maturity stages. A profile can remain the right target for a region as long as it satisfies workload and platform requirements. Profiles describe platform capabilities, not workload designs.');
+    s.addNotes('Enabling another region does not require changing or duplicating the full platform footprint of an existing geographic hub. An organization can maintain a small number of strategic geographic hubs, which provide resilient hybrid connectivity and common enterprise services to other regions; other regions use a more efficient profile and consume capabilities from those hubs when workload requirements permit. The four profiles form a spectrum from No Hub to Full Hub. They are not maturity stages. A profile can remain the right target for a region as long as it satisfies workload and platform requirements. Profiles describe platform capabilities, not workload designs.');
   }
 
   // ───────────────────────── 5 · When each profile fits  (PDF p14–15, Fits when and Regional footprint only)
@@ -175,9 +175,9 @@ module.exports = (pres, L) => {
     const s = L.slide('part1');
     L.header(s, 'Connectivity profiles', 'When each profile fits', { tw: 8 });
     const D = [
-      ['Workloads can operate without private connectivity to a geographic hub, another region, or on-premises, and use platform services locally or through approved Azure service connectivity.', 'Workload resources plus the controls to deploy, secure, monitor, and operate them, using the estate’s standard identity, policy, security, and deployment practices.'],
+      ['Workloads need no private network path to a geographic hub, another region’s networks, or on-premises. Approved same-region peering and Azure service endpoints can meet their requirements.', 'Workload resources plus the controls to deploy, secure, monitor, and operate them, using the estate’s standard identity, policy, security, and deployment practices.'],
       ['Workloads need private access to selected enterprise or on-premises services and can tolerate the latency, availability coupling, data-transfer implications, and dependency on another region.', 'Workload spokes and what must stay close. Gateways, firewalls, hybrid connectivity, routing, and selected shared services can remain in the geographic hub.'],
-      ['Workloads need some local shared services, application-to-application connectivity, lower-latency paths, regional security controls, or more independence than Remote Hub Connected gives.', 'Only the connectivity and shared services that must operate locally. Hybrid connectivity, specialized networking, and central management can remain in a geographic hub.'],
+      ['Workloads need some local shared services, application-to-application connectivity, lower-latency paths, regional security controls, or more independence than Remote Hub gives.', 'Only the connectivity and shared services that must operate locally. Hybrid connectivity, specialized networking, and central management can remain in a geographic hub.'],
       ['Requirements justify a comprehensive local capability set: local hybrid connectivity, substantial shared services, strict latency or data-boundary controls, or independence when another region or hub is unavailable.', 'The approved set of local connectivity, shared services, operational capabilities, and independent critical paths that the region’s workload portfolio requires.'],
     ];
     const heads = ['Fits when', 'Regional footprint'];
@@ -196,7 +196,7 @@ module.exports = (pres, L) => {
       D.forEach((row, j) => L.txt(s, row[i], x0 + lw + j * cw + 0.12, y + 0.06, cw - 0.24, rh[i] - 0.1, { fontSize: 12, color: i === 0 ? C.ink : C.text, lineSpacingMultiple: 1.03 }));
       y += rh[i] + 0.12;
     });
-    s.addNotes('Disconnected Spokes can include self-contained cloud-native, AI, development, test, batch, HPC, VDI, or internet-facing workloads where the conditions are met. Remote Hub Connected: cross-region connectivity can be implemented through appropriate Azure networking capabilities based on the required topology and routing model, and public ingress can remain local through Azure Front Door or Application Gateway. A Minimal Regional Hub provides only the local capabilities its workloads need, such as east-west routing, DNS, monitoring, backup, security inspection, egress, private connectivity, selected identity or directory services, or on-premises connectivity. A Full Regional Hub uses the same operating model and control baselines as other geographic hubs but does not have to be an identical copy. Enabling another region does not by itself require another ExpressRoute circuit.');
+    s.addNotes('No Hub can include self-contained cloud-native, AI, development, test, batch, HPC, VDI, or internet-facing workloads where the conditions are met. Remote Hub: cross-region connectivity can be implemented through appropriate Azure networking capabilities based on the required topology and routing model, and public ingress can remain local through Azure Front Door or Application Gateway. A Selective Hub provides only the local capabilities its workloads need, such as east-west routing, DNS, monitoring, backup, security inspection, egress, private connectivity, selected identity or directory services, or on-premises connectivity. A Full Hub uses the same operating model and control baselines as other geographic hubs but does not have to be an identical copy. Enabling another region does not by itself require another ExpressRoute circuit.');
   }
 
   // ───────────────────────── 6 · Archetypes  (PDF p16)
@@ -204,10 +204,10 @@ module.exports = (pres, L) => {
     const s = L.slide('part1');
     L.header(s, 'What applications require', 'Workload Landing Zone Archetypes', { ec: C.t600, tw: 8, lede: 'A planning abstraction that groups recurring application connectivity and dependency requirements. It doesn’t replace the Azure landing-zone hierarchy.', lx: 8.6, lw: 4.13 });
     const A = [
-      [ARCH[0], 'Significant dependencies on on-premises environments, enterprise networks, or centralized shared services that require persistent private connectivity.', ['Remote hub', 'Minimal hub', 'Full hub'], 'Profile set by dependency latency, resiliency, regulation, and operations. Common in migrations.'],
-      [ARCH[1], 'Self-contained workloads that can operate without persistent private connectivity to enterprise or centralized dependencies.', ['Disconnected spokes', 'Connected, where justified'], 'Flexible placement across regions; connected only where platform requirements justify it.'],
-      [ARCH[2], 'Mostly self-contained applications that need private connectivity to selected enterprise services, data sources, APIs, or Azure environments.', ['Remote hub', 'Minimal hub', 'Full hub'], 'Profile set by latency, traffic, resiliency, and security. Common for data, analytics, and AI.'],
-      [ARCH[3], 'Groups of applications with meaningful dependencies on each other: shared data, common services, east-west communication.', ['Remote hub', 'Minimal hub', 'Full hub'], 'Aggregate requirements set the profile; direct spoke-to-spoke or a local hub for east-west traffic.'],
+      [ARCH[0], 'Self-contained workloads that can operate without persistent private connectivity to enterprise or centralized dependencies.', ['No Hub', 'Other profiles, where justified'], 'Flexible placement across regions; hub capabilities only where platform requirements justify them.'],
+      [ARCH[1], 'Mostly self-contained applications that need private connectivity to selected enterprise services, data sources, APIs, or Azure environments.', ['No Hub', 'Remote Hub', 'Selective Hub', 'Full Hub'], 'No Hub only for approved local peering or Azure service endpoints without hub or on-premises dependencies.'],
+      [ARCH[2], 'Significant dependencies on on-premises environments, enterprise networks, or centralized shared services that require persistent private connectivity.', ['Remote Hub', 'Selective Hub', 'Full Hub'], 'No Hub cannot meet mandatory private on-premises or geographic-hub dependencies.'],
+      [ARCH[3], 'Groups of applications with meaningful dependencies on each other: shared data, common services, east-west communication.', ['No Hub', 'Remote Hub', 'Selective Hub', 'Full Hub'], 'No Hub only for approved same-region connectivity; aggregate requirements decide hub capabilities.'],
     ];
     A.forEach(([t, d, chips, drv], i) => {
       const x = 0.6 + i * 3.08, y = 1.75, w = 2.9, h = 4.5;
@@ -218,10 +218,10 @@ module.exports = (pres, L) => {
       L.box(s, x + 0.2, y + 2.35, w - 0.4, 0.008, { fill: C.t300, r: 0 });
       L.txt(s, 'TYPICAL CONNECTIVITY PROFILES', x + 0.2, y + 2.45, w - 0.3, 0.2, { fontSize: 9, bold: true, color: C.b600, charSpacing: 0.6 });
       let cx = x + 0.2, cy = y + 2.74;
-      chips.forEach(c => { const cw = c.length * 0.08 + 0.3; if (cx + cw > x + w - 0.15) { cx = x + 0.2; cy += 0.32; } const dashed = c.includes('where justified'); L.chip(s, c, cx, cy, { w: cw, fill: dashed ? 'FFFFFF' : c.startsWith('Disc') ? C.t100 : C.b100, color: c.startsWith('Disc') ? C.t700 : C.b700, line: dashed ? C.b500 : undefined, dash: dashed ? 'dash' : undefined, size: 10.5 }); cx += cw + 0.06; });
+      chips.forEach(c => { const cw = c.length * 0.07 + 0.3; if (cx + cw > x + w - 0.15) { cx = x + 0.2; cy += 0.32; } const dashed = c.includes('where justified'); L.chip(s, c, cx, cy, { w: cw, fill: dashed ? 'FFFFFF' : c === 'No Hub' ? C.t100 : C.b100, color: c === 'No Hub' ? C.t700 : C.b700, line: dashed ? C.b500 : undefined, dash: dashed ? 'dash' : undefined, size: 10.5 }); cx += cw + 0.06; });
       L.txt(s, drv, x + 0.2, y + 3.5, w - 0.4, 1.05, { fontSize: 11, color: C.muted });
     });
-    L.caption(s, 'Figure', 'Grouped by the platform connectivity and dependency capabilities each requires.', 0.6, 6.4, 12.1);
+    L.caption(s, 'Figure', 'Increasing platform connectivity and dependency complexity, not maturity or application sophistication.', 0.6, 6.4, 12.1);
     s.addNotes('An archetype describes what an application or application portfolio requires from the platform. Use known workload requirements and application portfolios to anticipate the capabilities that candidate regions may need to support. Where future requirements are not yet defined, archetypes give planning guardrails without constraining later placement, which happens once the workload’s current requirements, regional capabilities, and platform readiness are known. Archetypes describe what applications require; connectivity profiles describe what the platform provides. The mapping is not one-to-one.');
   }
 
@@ -236,12 +236,12 @@ module.exports = (pres, L) => {
     L.txt(s, 'ARCHETYPES\nWHAT APPLICATIONS REQUIRE', x0, 2.65, aw, 0.48, { fontSize: 9, bold: true, color: C.t600, charSpacing: 1.5, valign: 'bottom' });
     L.txt(s, 'WHAT DRIVES THE CHOICE', dx + 0.2, 2.65, dw, 0.48, { fontSize: 9, bold: true, color: C.muted, charSpacing: 1.5, valign: 'bottom' });
     const rows = [
-      [ARCH[0], ['-', 'T', 'T', 'T'], 'Dependency latency, resiliency, regulatory, operational, and shared-service requirements.'],
-      [ARCH[1], ['O', 'R', 'R', 'R'], 'Often Disconnected Spokes; connected where management, security, data access, or central services justify it.'],
-      [ARCH[2], ['-', 'T', 'T', 'T'], 'Private connectivity to selected dependencies; latency, traffic, resiliency, security, and operations decide the profile.'],
-      [ARCH[3], ['P', 'A', 'J', 'J'], 'Aggregate portfolio requirements decide. For east-west traffic, evaluate direct spoke-to-spoke or a local hub.'],
+      [ARCH[0], ['O', 'R', 'R', 'R'], 'Often No Hub; other profiles where management, security, data access, or central services justify it.'],
+      [ARCH[1], ['H', 'T', 'T', 'T'], 'No Hub only where approved local peering or Azure service endpoints meet all requirements.'],
+      [ARCH[2], ['-', 'T', 'T', 'T'], 'Dependency latency, resiliency, regulation, operations, and shared services. No Hub has no hybrid path.'],
+      [ARCH[3], ['P', 'A', 'J', 'J'], 'No Hub only for approved same-region connectivity without hub or on-premises dependencies.'],
     ];
-    const lab = { T: 'Typical', O: 'Often', S: 'Starting point', R: 'Where justified', J: 'When justified', P: 'Spoke-to-spoke', A: 'Where acceptable' };
+    const lab = { T: 'Typical', O: 'Often', H: 'Where hub-free', R: 'Where justified', J: 'When justified', P: 'Spoke-to-spoke', A: 'Where acceptable' };
     rows.forEach(([a, m, d], i) => {
       const y = top + i * rh;
       L.box(s, x0, y, aw - 0.05, rh - 0.05, { fill: C.t50, r: 0 });
@@ -251,7 +251,7 @@ module.exports = (pres, L) => {
         const cx = x0 + aw + j * pw;
         L.box(s, cx, y, pw, rh - 0.05, { fill: j % 2 ? 'F4F8FD' : 'FBFDFF', r: 0 });
         if (v === '-') { L.box(s, cx + pw / 2 - 0.12, y + rh / 2 - 0.03, 0.24, 0.015, { fill: C.line, r: 0 }); return; }
-        const full = 'TOSP'.includes(v);
+        const full = 'TO'.includes(v);
         L.oval(s, cx + pw / 2 - 0.11, y + 0.1, 0.22, full ? { fill: C.b600 } : { fill: 'FFFFFF', line: C.b500, lw: 2 });
         L.txt(s, lab[v], cx, y + 0.38, pw, 0.24, { fontSize: 9.5, bold: true, color: C.b700, align: 'center' });
       });
@@ -263,7 +263,7 @@ module.exports = (pres, L) => {
     L.oval(s, x0 + 1.5, ly + 0.04, 0.16, { fill: 'FFFFFF', line: C.b500, lw: 1.75 }); L.txt(s, 'When specific requirements justify it', x0 + 1.74, ly, 3, 0.24, { fontSize: 10, bold: true, color: C.muted, valign: 'middle' });
     L.box(s, x0 + 4.75, ly + 0.115, 0.2, 0.015, { fill: C.line, r: 0 }); L.txt(s, 'Not indicated as typical', x0 + 5.05, ly, 2.5, 0.24, { fontSize: 10, color: C.muted, valign: 'middle' });
     L.caption(s, 'Figure', 'Many-to-many. Each row is a set of options, not an assignment.', 0.6, 6.6, 12.1);
-    s.addNotes('Each row is a set of options, not an assignment. Use the archetypes expected in a region to understand what it needs, then choose the most efficient profile that meets those needs. For example, a hybrid-connected application might run well on Remote Hub Connected in one region and need a Minimal Regional Hub in another, depending on latency, traffic, and resiliency requirements. Where significant east-west traffic exists within a region, evaluate whether direct spoke-to-spoke connectivity or a local hub is a better path than routing through a geographic hub in another region. Direct connectivity may suit a few tightly coupled workloads; a Minimal or Full Regional Hub fits broader routing, inspection, resiliency, or operational needs. Because a portfolio’s combined dependencies can require capabilities beyond any single application, select its profile from aggregate requirements, not from a single workload.');
+    s.addNotes('Each row is a set of options, not an assignment. Use the archetypes expected in a region to understand what it needs, then choose the most efficient profile that meets those needs. For example, a hybrid-connected application might run well on Remote Hub in one region and need a Selective Hub in another, depending on latency, traffic, and resiliency requirements. Where significant east-west traffic exists within a region, evaluate whether direct spoke-to-spoke connectivity or a local hub is a better path than routing through a geographic hub in another region. Direct connectivity may suit a few tightly coupled workloads; a Selective Hub or Full Hub fits broader routing, inspection, resiliency, or operational needs. Because a portfolio’s combined dependencies can require capabilities beyond any single application, select its profile from aggregate requirements, not from a single workload.');
   }
 
   // ───────────────────────── 8 · Architecture terms  (PDF p18)
@@ -276,7 +276,7 @@ module.exports = (pres, L) => {
       ['Architecture style', 'The fundamental structural organization of an application', 'Microservices, N-tier, event-driven, web-queue-worker, big compute', 'Application architecture'],
       ['Architecture / design pattern', 'A reusable solution to a recurring technical problem', 'Circuit Breaker, Retry, CQRS, Strangler Fig, Competing Consumers', 'Design technique'],
       ['Workload pattern', 'A recurring workload behavior or set of operational characteristics that can influence platform requirements', 'Latency-sensitive, data-intensive, batch-oriented, globally distributed, hybrid-dependent', 'Workload characteristics'],
-      ['Workload Landing Zone archetype', 'A classification of a workload based on the platform connectivity and dependency capabilities it requires', 'Hybrid-Connected Applications, Isolated Cloud-Native or AI Applications, Connected Cloud-Native or AI Applications, Interconnected Application Portfolios', 'Platform-consumption model'],
+      ['Workload Landing Zone archetype', 'A classification of a workload based on the platform connectivity and dependency capabilities it requires', 'Isolated Cloud-Native or AI Applications, Connected Cloud-Native or AI Applications, Hybrid-Connected Applications, Interconnected Application Portfolios', 'Platform-consumption model'],
     ];
     const data = [[cell('TERM', H), cell('WHAT IT DESCRIBES', H), cell('EXAMPLES', H), cell('LEVEL', H)]];
     rows.forEach((r, i) => { const hi = i === 3, f = hi ? { color: C.t50 } : undefined; data.push([cell(r[0], { bold: true, color: hi ? C.t700 : C.ink, fill: f }), cell(r[1], { fill: f }), cell(r[2], { color: hi ? C.text : C.muted, fill: f }), cell(r[3], { bold: true, fontSize: 11, color: hi ? C.t700 : C.b700, fill: f })]); });

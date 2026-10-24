@@ -27,7 +27,7 @@
 
   <div class="g2 mt12" style="gap:34px;font-size:12.4px;line-height:1.5">
     <p>With a geographic foundation in place, the full landing zone does not have to be copied into every Azure region. Maintain a <strong>small number of strategic geographic hubs</strong> — often two or three regions — with the full networking, security, management, and shared-service footprint.</p>
-    <p>Other regions are consumed through more efficient patterns appropriate to each workload, evaluated application by application. The four connectivity profiles are <strong>not maturity stages</strong>: adoption growth alone does not justify moving toward a Full Regional Hub.</p>
+    <p>Other regions are consumed through more efficient patterns appropriate to each workload, evaluated application by application. The four connectivity profiles are <strong>not maturity stages</strong>: adoption growth alone does not justify moving toward a Full Hub.</p>
   </div>
 
   <div class="figure mt24" id="fig14">
@@ -36,7 +36,7 @@
       <!-- 1 -->
       <div class="pc">
         <div class="ph"><span class="pn" style="background:var(--t600)">1</span><span class="pt">No Hub</span></div>
-        <div class="pd">No private connectivity to a geographic hub, other Azure regions, or on-premises environments.</div>
+        <div class="pd">No private network path to a geographic hub, another region’s networks, or on-premises environments.</div>
         <div class="pg"><svg class="mini" width="220" height="137" viewBox="0 0 206 128">
           <rect x="4" y="4" width="198" height="88" rx="10" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"/>
           <use href="#i-pin" x="12" y="10" width="12" height="12" color="#0F6CBD"/><text x="27" y="20" font-size="8.6" font-weight="700" fill="#0F548C">New Region</text>
@@ -48,7 +48,7 @@
           <rect x="24" y="98" width="158" height="24" rx="12" fill="#fff" stroke="#D3DBE4"/>
           <text x="103" y="114" text-anchor="middle" font-size="9.2" font-weight="650" fill="#4A5B72">Azure platform services</text>
         </svg></div>
-        <div class="pf">No hub, no gateway, no private connectivity. Best for self-contained workloads.</div>
+        <div class="pf">No hub or hybrid gateway. Approved local peering and Azure service endpoints only.</div>
       </div>
       <!-- 2 -->
       <div class="pc">

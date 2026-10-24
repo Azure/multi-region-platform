@@ -8,7 +8,7 @@
     yesNo: ['Yes', 'No', 'To confirm'],
     comply: ['Yes', 'No (mandatory gap)', 'To validate', 'Not applicable'],
     known: ['Known', 'Partly known (guardrails set)', 'Not known'],
-    archetype: ['Hybrid-Connected Applications', 'Isolated Cloud-Native or AI Applications', 'Connected Cloud-Native or AI Applications', 'Interconnected Application Portfolios', 'Several (see note)'],
+    archetype: ['Isolated Cloud-Native or AI Applications', 'Connected Cloud-Native or AI Applications', 'Hybrid-Connected Applications', 'Interconnected Application Portfolios', 'Several (see note)'],
     capability: ['Yes', 'No (mandatory gap)', 'Gap accepted with a condition', 'To validate', 'Not applicable'],
     outcome: ['Excluded', 'Candidate', 'Conditional', 'Qualified', 'No deeper assessment'],
     topology: ['Hub-and-spoke virtual networks', 'Azure Virtual WAN'],
@@ -64,7 +64,7 @@
   // ── step 3
   const PROFILES = [
     { id: 'No Hub', href: 'disconnected-spokes.html', gets: 'No hub and no gateway. Workload spokes use the estate’s standard identity, policy, security, and deployment practices.',
-      reassess: 'Workloads require private access to enterprise services, centralized security inspection, on-premises systems, another application portfolio, or capabilities hosted through a geographic hub.' },
+      reassess: 'Workloads require a geographic hub, on-premises connectivity, centralized inspection, or private network paths beyond approved same-region spokes and Azure service endpoints.' },
     { id: 'Remote Hub', href: 'remote-hub-connected.html', gets: 'No local hub. Workload spokes consume an existing geographic hub.',
       reassess: 'Cross-region traffic, latency, east-west communication, dependency criticality, regulatory requirements, scale, or availability coupling justify deploying selected connectivity or shared-service capabilities locally.' },
     { id: 'Selective Hub', href: 'minimal-regional-hub.html', gets: 'A local hub with only the services that must be in the region. Everything else stays remote.',
@@ -73,7 +73,7 @@
       reassess: 'Workload demand or requirements decrease, services can be safely centralized, dependencies change, or the full regional footprint no longer provides sufficient value relative to its cost and operational complexity.' },
   ];
   const PROFILE_QUESTIONS = [
-    { id: 'q1', label: 'Do the workloads need private access to enterprise services, on-premises systems, centralized inspection, another application portfolio, or geographic-hub capabilities?' },
+    { id: 'q1', label: 'Do workloads need a geographic hub, on-premises access, centralized inspection, or private network paths beyond approved same-region spokes and Azure service endpoints?' },
     { id: 'q2', label: 'Can they tolerate the latency, availability coupling, and dependency on connectivity to another region?' },
     { id: 'q3', label: 'Do requirements justify a comprehensive local capability set, or independence from other hubs?' },
   ];

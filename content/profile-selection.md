@@ -13,9 +13,11 @@ Determine how workloads in the region will reach geographic hubs, shared platfor
 
 Start with the matrix to see which connectivity profiles each [archetype](./application-landing-zone-archetypes.md) typically uses. Then apply the selection principles and use the decision tree to pick the most efficient profile that meets the requirements.
 
-:::image type="content" source="./media/archetype-profile-matrix.png" alt-text="Matrix of the four archetypes against the four connectivity profiles. Hybrid-connected and connected cloud-native or AI applications typically use Remote Hub, Selective Hub, or Full Hub; isolated cloud-native or AI applications often use No Hub and other profiles where justified; interconnected portfolios can use spoke-to-spoke connectivity, a Remote Hub where acceptable, and a Selective Hub or Full Hub when justified." lightbox="./media/archetype-profile-matrix.png":::
+:::image type="content" source="./media/archetype-profile-matrix.png" alt-text="Matrix of the four archetypes against the four connectivity profiles. Isolated cloud-native or AI applications often use No Hub and other profiles where justified; connected cloud-native or AI applications can use No Hub where approved local peering or Azure service endpoints suffice, or Remote Hub, Selective Hub, or Full Hub; hybrid-connected applications use Remote Hub, Selective Hub, or Full Hub; interconnected portfolios can use No Hub for approved same-region connectivity, Remote Hub where acceptable, and Selective Hub or Full Hub when justified." lightbox="./media/archetype-profile-matrix.png":::
 
 *Archetype-to-profile relationships are many-to-many. Each row is a set of options, not an assignment; the selected profile follows dependencies, latency, traffic, resiliency, and independence requirements.*
+
+No Hub can still provide approved direct same-region spoke connectivity and private endpoints for Azure services. These paths must satisfy DNS, security, inspection, and operational requirements without a hub or hybrid gateway. A private endpoint alone does not require Remote Hub, Selective Hub, or Full Hub.
 
 ## Profile selection principles
 
@@ -28,7 +30,7 @@ Start with the matrix to see which connectivity profiles each [archetype](./appl
 
 Each question comes from the "fits when" criteria of the [connectivity profiles](./connectivity-profiles.md). Stop at the first profile that satisfies the requirements identified in [check 3](./workload-requirements.md#platform-and-connectivity-requirements).
 
-:::image type="content" source="./media/connectivity-profile-decision-tree.png" alt-text="Decision tree with three questions. If workloads need no private access to enterprise services, use No Hub. If they can tolerate the latency and coupling of another region, use Remote Hub. If requirements do not justify a comprehensive local capability set, use a Selective Hub; otherwise use a Full Hub." lightbox="./media/connectivity-profile-decision-tree.png":::
+:::image type="content" source="./media/connectivity-profile-decision-tree.png" alt-text="Decision tree with three questions. If approved same-region spoke connectivity and Azure service endpoints meet all requirements without hub or on-premises access, use No Hub. If they can tolerate the latency and coupling of another region, use Remote Hub. If requirements do not justify a comprehensive local capability set, use a Selective Hub; otherwise use a Full Hub." lightbox="./media/connectivity-profile-decision-tree.png":::
 
 *Connectivity profile selection tree. Questions escalate from dependency, to tolerance of remote consumption, to required independence. The outcome is a platform capability, not a workload design.*
 
@@ -36,8 +38,8 @@ The same tree as a table, from the smallest regional footprint to the largest:
 
 | Profile | Fits when the workloads expected in the region | What the region gets |
 |---|---|---|
-| [No Hub](./disconnected-spokes.md) | Need no private access to enterprise services, on-premises systems, centralized security inspection, another application portfolio, or geographic-hub capabilities. | No hub and no gateway. Workload spokes use the estate's standard identity, policy, security, and deployment practices. |
-| [Remote Hub](./remote-hub-connected.md) | Need that access, and can tolerate the latency, availability coupling, and dependency on connectivity to another region. | No local hub. Workload spokes consume an existing geographic hub. |
+| [No Hub](./disconnected-spokes.md) | Need no geographic hub, on-premises path, centralized inspection, or private network connectivity beyond approved same-region spokes and Azure service endpoints. | No hub and no gateway. Workload spokes use the estate's standard identity, policy, security, and deployment practices. |
+| [Remote Hub](./remote-hub-connected.md) | Need geographic-hub capabilities or wider private network access, and can tolerate the latency, availability coupling, and dependency on connectivity to another region. | No local hub. Workload spokes consume an existing geographic hub. |
 | [Selective Hub](./minimal-regional-hub.md) | Need some capabilities locally, without a comprehensive local set. | A local hub with only the services that must be in the region. Everything else stays remote. |
 | [Full Hub](./full-regional-hub.md) | Need a comprehensive local capability set, or independence from other hubs. | The complete local connectivity and shared services that the region's workloads require. |
 
@@ -53,7 +55,7 @@ Check these points before you settle on a profile, and revisit the profile when 
 
 **Key considerations:** Validate administration, identity, DNS, secrets, telemetry, data movement, software distribution, private endpoints, incident response, and support procedures. Where applications require east-west communication within the region, evaluate direct spoke-to-spoke connectivity without assuming that a local hub is required. Confirm that no hidden dependency requires connectivity to a geographic hub or on-premises environment.
 
-**Reassess when:** Workloads require private access to enterprise services, centralized security inspection, on-premises systems, another application portfolio, or capabilities hosted through a geographic hub.
+**Reassess when:** Workloads require a geographic hub, on-premises connectivity, centralized inspection, or private network paths beyond approved same-region spokes and Azure service endpoints.
 
 ### Remote Hub
 

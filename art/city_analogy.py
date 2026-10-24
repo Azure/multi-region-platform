@@ -366,7 +366,7 @@ def city():
         add(X + Y + hx + hy + .9, house(X + hx, Y + hy, .8, .7, .38, .26, roof=rc[(i + 2) % 5]))
     add(X + Y + 3.0, bank_bldg(X + 2.4, Y + .3, X + 3.25, Y + 1.0, .45, backup=True))
     add(X + Y + 5.6, tree(X + 2.85, Y + 2.85) + tree(X + 3.15, Y + 2.55, r=.2))
-    badges += [pin_badge(X + 2.82, Y + .65, Z + .73, "bank", lift=.5), numpin(X + .7, Y + 1.75, Z + .64, "1")]
+    badges += [pin_badge(X + 2.82, Y + .65, Z + .73, "bank", lift=.5), numpin(X + .7, Y + 1.75, Z + .64, "3")]
 
     # ── Midtown: Remote Hub — homes, apartments; bank branch B
     X, Y = MT
@@ -375,7 +375,7 @@ def city():
     for i, (hx, hy) in enumerate(((2.45, .45), (.3, 1.55), (1.35, 1.55), (2.4, 1.55), (.3, 2.6), (1.35, 2.6))):
         add(X + Y + hx + hy + .9, house(X + hx, Y + hy, .8, .7, .38, .26, roof=rc[(i + 1) % 5]))
     add(X + Y + 5.9, tree(X + 2.9, Y + 2.95))
-    badges += [pin_badge(X + 1.85, Y + .85, Z + .78, "bank", lift=.5), numpin(X + 1.75, Y + 1.9, Z + .64, "3")]
+    badges += [pin_badge(X + 1.85, Y + .85, Z + .78, "bank", lift=.5), numpin(X + 1.75, Y + 1.9, Z + .64, "2")]
 
     # ── Lakeside: disconnected island — off-grid, unpaved, no transit or lanes
     X, Y = LK
@@ -384,7 +384,7 @@ def city():
     add(X + Y + 3.2, solar_field(X + 2.55, Y + .35, 2) + cylinder(X + 2.9, Y + 1.3, 0, .3, .16, "#1AA5D6", "#BDEBFA"), lift=False)
     for tx, ty in ((.35, 2.6), (.75, 3.1), (1.2, 2.85), (3.1, 2.0), (3.2, 3.15), (-.1, 1.0), (2.2, -.05), (3.45, .6)):
         add(X + Y + tx + ty, tree(X + tx, Y + ty), lift=False)
-    badges += [numpin(X + .72, Y + .68, .66, "2")]
+    badges += [numpin(X + .72, Y + .68, .66, "1")]
 
     # ── New plot
     X, Y = NP
@@ -411,9 +411,9 @@ def household(px, py, pw):
     o.append(f'<text x="{x}" y="{py + 40}" font-family="{FONT}" font-size="11.5" font-weight="700" letter-spacing="2" fill="#04807A">SINGLE-REGION WORKLOAD</text>')
     o.append(f'<text x="{x}" y="{py + 74}" font-family="{FONT}" font-size="26" font-weight="700" fill="#0A2340">The household</text>')
     o.append(f'<text x="{x}" y="{py + 100}" font-family="{FONT}" font-size="13.5" fill="#28323E">Most workloads live in one neighborhood: the one that fits how they live.</text>')
-    fam = [("1", "Commutes to the office every day", "Hybrid-connected", "Hillcrest", "transit, plus express lanes to the office"),
-           ("2", "Works fully remote, self-sufficient", "Isolated", "Lakeside", "off-grid is fine; needs nothing from the city"),
-           ("3", "Remote, but relies on city services", "Connected", "Midtown", "hospital and services one transit ride away"),
+    fam = [("1", "Works fully remote, self-sufficient", "Isolated", "Lakeside", "off-grid is fine; needs nothing from the city"),
+           ("2", "Remote, but relies on city services", "Connected", "Midtown", "hospital and services one transit ride away"),
+           ("3", "Commutes to the office every day", "Hybrid-connected", "Hillcrest", "transit, plus express lanes to the office"),
            ("4", "Extended family, always visiting", "Interconnected portfolio", "Riverside", "local services for a close-knit group")]
     cw, ch = (pw - 60 - 14) / 2, 140
     for i, (n, t, arch, hood, why) in enumerate(fam):
@@ -611,7 +611,7 @@ def pdf_figure():
         '<div class="svn">Together they are the platform&rsquo;s <i>shared services</i>. Downtown has every one. Riverside has a fire station and a clinic. '
         'Hillcrest and Midtown use Downtown&rsquo;s. Lakeside needs none.</div>',
     ])
-    homes = [(1, "Hybrid-connected", "Hillcrest"), (2, "Isolated", "Lakeside"), (3, "Connected", "Midtown"), (4, "Interconnected portfolio", "Riverside")]
+    homes = [(1, "Isolated", "Lakeside"), (2, "Connected", "Midtown"), (3, "Hybrid-connected", "Hillcrest"), (4, "Interconnected portfolio", "Riverside")]
     who = ('<div class="who">'
            '<div><h4>Numbered pins <em>Single-region workloads</em></h4>'
                       '<div class="hh">' + "".join(f'<div>{_pin(n)}<span><b>{a}</b>{hood}</span></div>' for n, a, hood in homes) + '</div></div>'

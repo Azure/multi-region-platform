@@ -11,7 +11,7 @@
     })(window, document, "clarity", "script", "yxw7tz5r2b");
 </script>
 <title>Prepare a region: No Hub · Multi-region platform</title>
-<meta name="description" content="What to deploy to prepare a new Azure region for No Hub — no hub, no gateway, and no peering — with recommendations, considerations, and links to the Azure landing zone guidance for each area.">
+<meta name="description" content="What to deploy to prepare a new Azure region for No Hub — no hub or hybrid gateway, with approved local peering and Azure service endpoints — with recommendations, considerations, and links to the Azure landing zone guidance for each area.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230F6CBD'/%3E%3Ccircle cx='11' cy='13' r='4' fill='%23fff'/%3E%3Ccircle cx='21' cy='13' r='4' fill='%23fff' opacity='.7'/%3E%3Ccircle cx='16' cy='21' r='4' fill='%23fff' opacity='.45'/%3E%3C/svg%3E">
 <script>try{var t=localStorage.getItem('mrp-theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 <link rel="stylesheet" href="assets/figures.css">
@@ -104,7 +104,7 @@
     <h1 class="title">No Hub</h1>
     <p class="meta">October 23, 2026 · 4 min read</p>
     <article class="prose">
-<p>Workload spokes run in the region with no private connectivity to a hub, another Azure region, or an on-premises environment. There is no hub to build. Preparing the region means letting the landing zone you already run accept it.</p>
+<p>Workload spokes run in the region with no private network path to a geographic hub, another region's networks, or an on-premises environment. There is no hub to build. Preparing the region means letting the landing zone you already run accept it.</p>
 <p>In the Azure landing zone architecture, these spokes are <em>online</em> landing zones: workloads that use direct internet connectivity, or that don't need a virtual network, and that don't connect to the corporate network through a hub.</p>
 <h2 id="what-you-deploy">What you deploy<a class="anchor" href="#what-you-deploy" aria-label="Link to this section">#</a></h2>
 <div class="table-wrap"><table>
@@ -176,7 +176,7 @@
 <li><strong>Validate the operating procedures.</strong> Validate administration, identity, DNS, secrets, telemetry, data movement, software distribution, private endpoints, incident response, and support procedures.</li>
 <li><strong>Look for hidden dependencies.</strong> Confirm that no hidden dependency requires connectivity to a geographic hub or on-premises environment.</li>
 </ul>
-<div class="attr attr-reassess-when"><span class="attr-k">Reassess when</span><p>Workloads require private access to enterprise services, centralized security inspection, on-premises systems, another application portfolio, or capabilities hosted through a geographic hub.</p></div>
+<div class="attr attr-reassess-when"><span class="attr-k">Reassess when</span><p>Workloads require a geographic hub, on-premises connectivity, centralized inspection, or private network paths beyond approved same-region spokes and Azure service endpoints.</p></div>
 <h2 id="reference-links">Reference links<a class="anchor" href="#reference-links" aria-label="Link to this section">#</a></h2>
 <ul>
 <li><a href="https://learn.microsoft.com/azure/virtual-network/ip-services/default-outbound-access" target="_blank" rel="noopener">Default outbound access in Azure</a> — Private subnets and the explicit outbound methods.</li>

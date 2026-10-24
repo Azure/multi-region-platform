@@ -43,7 +43,9 @@ RETIRED = [re.escape(t) for t in [
     "Select the supporting connectivity profile", "resiliency role separately",
     "Qualification and Enablement Framework", "Regional Qualification Framework", "five dimensions", "Dimension 5",
     "lightest", "Regional dependencies and resiliency", "Appendix A", "Service behavior across regions",
-    "region planning workbook", "storage-backup-key-vault.md", "recommended-key-vault-pattern"]] + [
+    "region planning workbook", "storage-backup-key-vault.md", "recommended-key-vault-pattern",
+    "Disconnected Spokes", "Remote Hub Connected", "Remote-hub-connected spokes",
+    "Minimal Regional Hub", "Full Regional Hub"]] + [
     r"(?-i:\bApplication Landing Zone)",          # the retired construct name; Microsoft Learn's "application landing zones" is fine
     r"\bdimensions?\b", r"\bD[1-5]\b", r"\bfour parts\b", r"\bSection 0\d", r"Enablement Framework", r"\bright-siz",
     r"\blightest\b", r"\blighter(?:-weight)? (?:patterns?|profiles?)\b", r"\blightweight\b"] + HUB_TERMS

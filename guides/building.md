@@ -94,6 +94,8 @@ On Windows without LibreOffice, the renderer uses installed PowerPoint through `
 | `drift.py summary` | the titles in `shared/summary.json` against the Markdown |
 | `check_tokens.py` | color tokens in `shared/summary.json`, `whitepaper/styles.css`, and `decks/lib.js` |
 | `test_publication.py` | complete PDF page mapping, website reading order, separate service guides and Resources, deck sections, and no Word generation |
+| `test_archetypes.py` | canonical archetype ordering, conditional profile applicability, qualification-status column alignment, planner options, and generated deck content |
+| `test_planner_profiles.py` | canonical hub names, profile decisions, saved-plan migration, and geographic-hub terminology |
 | `drift.py` on built `.pdf` files in `dist/` and `.pptx` files in `temp/` | retired and required terms, including the current planner and service-guides names |
 
 Files that are not built are skipped with a message. [Authoring](authoring.md#cross-format-checks) explains each line the checks print and how to fix it.

@@ -24,7 +24,7 @@
   <div class="cap mt20" style="color:var(--muted)">The outcome is one of three</div>
   <div class="zo3 mt8">
     <div><div class="zh"><svg style="color:var(--s600)"><use href="#i-x"/></svg><b>Not required</b></div>
-      <p>The region uses Disconnected Spokes, or its workloads need no private path to on-premises locations.</p></div>
+      <p>The region uses No Hub, or its workloads need no private path to on-premises locations.</p></div>
     <div class="zre"><div class="zh"><svg style="color:var(--b600)"><use href="#i-loop"/></svg><b>Reuse</b></div>
       <p>The existing circuits, gateways, and peering locations meet the reachability, latency, bandwidth, routing, and resilience that the workloads in the new region need.</p></div>
     <div class="zcg"><div class="zh"><svg style="color:var(--w600)"><use href="#i-route"/></svg><b>Change</b></div>
@@ -48,7 +48,7 @@
         <li><strong>On-premises locations or users are far from the existing peering locations.</strong> Measure latency on the real path before you decide.</li>
         <li><strong>Bandwidth or gateway capacity is exhausted.</strong> Check the circuit and gateway sizes against the traffic the new region adds.</li>
         <li><strong>Workloads need a capability that doesn’t work across regions.</strong> For example, ExpressRoute FastPath doesn’t support global virtual network peering, so workloads that rely on it need a gateway in their own region.</li>
-        <li><strong>The region must keep its on-premises path when another region is unavailable.</strong> That requirement points to a local gateway, and usually to a Full Regional Hub.</li>
+        <li><strong>The region must keep its on-premises path when another region is unavailable.</strong> That requirement points to a local gateway, and usually to a Full Hub.</li>
       </ul>
     </div>
   </div>

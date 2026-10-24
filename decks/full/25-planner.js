@@ -17,5 +17,5 @@ module.exports = (pres, L) => {
     L.txt(s, detail, x + 0.25, 4.65, 3.43, 1.0, { fontSize: 12, color: C.muted });
   });
   L.decision(s, 'Planning inputs are not deployment guarantees. Revalidate service support, access, quota, capacity, latency, and recovery.', 0.6, 6.15, 12.13, 0.7);
-  s.addNotes('Open ' + L.data.workbookUrl + '. Latency geography maps compare current and candidate regions, ExpressRoute peering locations, and customer cities. Suggestions are not evidence of customer-owned circuits. The explorer supports a single topology and one remote traffic hub for Remote Hub Connected, with limitations shown in Plan definitions. JSON Export from the explorer preserves diagram refinements separately from the planner’s JSON and Excel records.');
+  s.addNotes('Open ' + L.data.workbookUrl + '. Latency geography maps compare current and candidate regions, ExpressRoute peering locations, and customer cities. Suggestions are not evidence of customer-owned circuits. The explorer supports a single topology and one remote traffic hub for Remote Hub, with limitations shown in Plan definitions. JSON Export from the explorer preserves diagram refinements separately from the planner’s JSON and Excel records.');
 };

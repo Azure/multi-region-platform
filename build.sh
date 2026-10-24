@@ -65,6 +65,8 @@ check() {
   python3 site/tools/drift.py summary || status=1
   python3 site/tools/check_tokens.py || status=1
   python3 -m unittest discover -s site/tools -p test_publication.py || status=1
+  python3 -m unittest discover -s site/tools -p test_archetypes.py || status=1
+  python3 -m unittest discover -s site/tools -p test_planner_profiles.py || status=1
   python3 -m unittest discover -s site/tools -p test_dns_content.py || status=1
   for f in "$NAME.pdf" "$NAME-Executive-Brief.pdf" "$NAME-Full.pptx" "$NAME-Executive.pptx"; do
     output="$DIST"

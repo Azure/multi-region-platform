@@ -44,21 +44,21 @@
 <div class="inner">
   <div class="zph" id="pMinimal">
     <span class="n" style="background:var(--b700)">3</span>
-    <div><div class="eyebrow">Part 4 · Prepare the region</div><h2>Minimal Regional Hub</h2></div>
+    <div><div class="eyebrow">Part 4 · Prepare the region</div><h2>Selective Hub</h2></div>
     <svg class="gl" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="6" fill="#fff" stroke="#2B88D8" stroke-width="1.5"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>
-    <div class="zin"><p>A Minimal Regional Hub is a hub in the region that holds only what its workloads need locally. Everything else comes from a geographic hub. It isn’t a fixed design. Which components are local is a choice for each region. The fewer components you make local, the faster the region is ready and the less it costs to run.</p></div>
+    <div class="zin"><p>A Selective Hub is a hub in the region that holds only what its workloads need locally. Everything else comes from a geographic hub. It isn’t a fixed design. Which components are local is a choice for each region. The fewer components you make local, the faster the region is ready and the less it costs to run.</p></div>
   </div>
   <div class="row mt16" style="gap:32px;align-items:flex-start">
     <div style="flex:1">
       <div class="zh4">The base</div>
-      <p style="font-size:11px;margin-bottom:5px">Every Minimal Regional Hub has the same base:</p>
+      <p style="font-size:11px;margin-bottom:5px">Every Selective Hub has the same base:</p>
       <ul class="bul zrc" style="font-size:11px">
       <li>A hub in the region, in the connectivity subscription you already use, with a new resource group for the region. The hub is a hub virtual network, or a virtual hub in your existing Azure Virtual WAN.</li>
       <li>A connection from that hub to the geographic hub.</li>
       <li>Connections from the spokes in the region to the local hub.</li>
       <li>The routing that sends traffic to the right hub.</li>
     </ul>
-      <svg class="zbase" width="384" height="112" viewBox="0 0 384 112" style="display:block;margin-top:12px" role="img" aria-label="The base of a Minimal Regional Hub: spokes connect to a local hub, and the local hub connects to the geographic hub.">
+      <svg class="zbase" width="384" height="112" viewBox="0 0 384 112" style="display:block;margin-top:12px" role="img" aria-label="The base of a Selective Hub: spokes connect to a local hub, and the local hub connects to the geographic hub.">
         <rect x="1" y="1" width="250" height="110" rx="10" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"/>
         <use href="#i-pin" x="10" y="8" width="12" height="12" color="#0F6CBD"/><text x="25" y="18" font-size="8.8" font-weight="700" fill="#0F548C">New region</text>
         <rect x="14" y="30" width="86" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3"/><rect x="22" y="38" width="12" height="12" rx="3" fill="#04807A"/><text x="42" y="47.5" font-size="8.8" font-weight="650" fill="#03615F">Spoke</text>
@@ -72,7 +72,7 @@
         <text x="337" y="56" text-anchor="middle" font-size="9.6" font-weight="700" fill="#fff">Geographic hub</text>
         <text x="337" y="71" text-anchor="middle" font-size="8" fill="#DDEBF9">everything that</text><text x="337" y="82" text-anchor="middle" font-size="8" fill="#DDEBF9">isn’t local</text>
       </svg>
-      <div class="figcap" style="margin-top:4px"><span class="ft"><b>The base of a Minimal Regional Hub.</b> Spokes connect to the local hub, which connects to the geographic hub.</span></div>
+      <div class="figcap" style="margin-top:4px"><span class="ft"><b>The base of a Selective Hub.</b> Spokes connect to the local hub, which connects to the geographic hub.</span></div>
     </div>
     <div class="vr" style="flex:1.4;padding-left:24px">
       <div class="zh4">Example compositions</div>

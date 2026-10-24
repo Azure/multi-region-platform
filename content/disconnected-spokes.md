@@ -1,13 +1,13 @@
 ---
 title: "Prepare a region: No Hub"
-description: What to deploy to prepare a new Azure region for No Hub — no hub, no gateway, and no peering — with recommendations, considerations, and links to the Azure landing zone guidance for each area.
+description: What to deploy to prepare a new Azure region for No Hub — no hub or hybrid gateway, with approved local peering and Azure service endpoints — with recommendations, considerations, and links to the Azure landing zone guidance for each area.
 ms.date: 10/23/2026
 ms.topic: conceptual
 ---
 
 # No Hub
 
-Workload spokes run in the region with no private connectivity to a hub, another Azure region, or an on-premises environment. There is no hub to build. Preparing the region means letting the landing zone you already run accept it.
+Workload spokes run in the region with no private network path to a geographic hub, another region's networks, or an on-premises environment. There is no hub to build. Preparing the region means letting the landing zone you already run accept it.
 
 In the Azure landing zone architecture, these spokes are *online* landing zones: workloads that use direct internet connectivity, or that don't need a virtual network, and that don't connect to the corporate network through a hub.
 
@@ -42,7 +42,7 @@ In the Azure landing zone architecture, these spokes are *online* landing zones:
 - **Validate the operating procedures.** Validate administration, identity, DNS, secrets, telemetry, data movement, software distribution, private endpoints, incident response, and support procedures.
 - **Look for hidden dependencies.** Confirm that no hidden dependency requires connectivity to a geographic hub or on-premises environment.
 
-**Reassess when:** Workloads require private access to enterprise services, centralized security inspection, on-premises systems, another application portfolio, or capabilities hosted through a geographic hub.
+**Reassess when:** Workloads require a geographic hub, on-premises connectivity, centralized inspection, or private network paths beyond approved same-region spokes and Azure service endpoints.
 
 ## Reference links
 

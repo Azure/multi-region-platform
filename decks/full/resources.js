@@ -42,7 +42,7 @@ module.exports = (pres, L, topic) => {
 
   // ───────────────────────── Common misconceptions (PDF p47)
   // Four of the eight are covered by the executive summary slide "What adding a region involves"
-  // (own landing-zone project, Full Regional Hub, another ExpressRoute circuit, migrating workloads); this slide keeps the other four.
+  // (own landing-zone project, Full Hub, another ExpressRoute circuit, migrating workloads); this slide keeps the other four.
   if (topic === 'misconceptions') {
     const s = L.slide('misconceptions');
     L.header(s, '', 'Common misconceptions', { tw: 7, lede: 'Teams often add complexity by starting from assumptions instead of workload and platform requirements.', lx: 8.3, lw: 4.43 });
@@ -60,7 +60,7 @@ module.exports = (pres, L, topic) => {
       L.txt(s, 'CORRECTION', x + 0.62, y + qh + 0.2, cw - 0.8, 0.2, { fontSize: 9.5, bold: true, color: C.g600, charSpacing: 1.5 });
       L.txt(s, m.correction, x + 0.62, y + qh + 0.44, cw - 0.82, ah - 0.5, { fontSize: 12, color: C.text, lineSpacingMultiple: 1.03 });
     });
-    s.addNotes(M.map((m, i) => (i + 1) + '. ' + m.claim + ' ' + m.correction).join(' ') + ' The other four misconceptions, about a new landing-zone project, a Full Regional Hub, another ExpressRoute circuit, and migrating workloads, are covered in the executive summary.');
+    s.addNotes(M.map((m, i) => (i + 1) + '. ' + m.claim + ' ' + m.correction).join(' ') + ' The other four misconceptions, about a new landing-zone project, a Full Hub, another ExpressRoute circuit, and migrating workloads, are covered in the executive summary.');
   }
 
   // ───────────────────────── Get started (PDF p48)

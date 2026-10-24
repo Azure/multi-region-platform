@@ -1,5 +1,5 @@
 <!-- extracted from whitepaper #fig13; regenerate with site/tools/extract_figures.py -->
-<div class="wpf" data-w="940" data-h="389" style="width:940px"><div class="figure mt16" role="img" aria-label="Matrix of the four archetypes against the four connectivity profiles. Hybrid-connected and connected cloud-native or AI applications typically use remote hub, Selective Hub, or full hub; isolated cloud-native or AI applications often use No Hub and other profiles where justified; interconnected portfolios can use spoke-to-spoke connectivity, a remote hub where acceptable, and a Selective Hub or Full Hub when justified.">
+<div class="wpf" data-w="940" data-h="391" style="width:940px"><div class="figure mt16" role="img" aria-label="Matrix of the four archetypes against the four connectivity profiles. Isolated cloud-native or AI applications often use No Hub and other profiles where justified; connected cloud-native or AI applications can use No Hub where approved local peering or Azure service endpoints suffice, or Remote Hub, Selective Hub, or Full Hub; hybrid-connected applications use Remote Hub, Selective Hub, or Full Hub; interconnected portfolios can use No Hub for approved same-region connectivity, Remote Hub where acceptable, and Selective Hub or Full Hub when justified.">
     <div style="display:flex;margin-left:214px;margin-bottom:6px">
       <div style="width:448px;border-bottom:2px solid var(--b600);padding-bottom:4px" class="cap"><span style="color:var(--b600)">Regional platform connectivity profiles · what the platform provides</span></div>
     </div>
@@ -13,18 +13,18 @@
         <th class="dr">What drives the choice</th>
       </tr></thead>
       <tbody>
-        <tr><th><span class="n">1</span><span class="t">Hybrid-Connected Applications</span></th>
-          <td class="c"><span class="mk none">—</span></td><td class="c alt"><span class="mk full"><i></i>Typical</span></td><td class="c"><span class="mk full"><i></i>Typical</span></td><td class="c alt"><span class="mk full"><i></i>Typical</span></td>
-          <td class="dr">Dependency latency, resiliency, regulatory, operational, and shared-service requirements.</td></tr>
-        <tr><th><span class="n">2</span><span class="t">Isolated Cloud-Native or AI Applications</span></th>
+        <tr><th><span class="n">1</span><span class="t">Isolated Cloud-Native or AI Applications</span></th>
           <td class="c"><span class="mk full"><i></i>Often</span></td><td class="c alt"><span class="mk cond"><i></i>Where justified</span></td><td class="c"><span class="mk cond"><i></i>Where justified</span></td><td class="c alt"><span class="mk cond"><i></i>Where justified</span></td>
           <td class="dr">Often No Hub. A connected profile where private management, security, data access, or centralized services justify connectivity.</td></tr>
-        <tr><th><span class="n">3</span><span class="t">Connected Cloud-Native or AI Applications</span></th>
+        <tr><th><span class="n">2</span><span class="t">Connected Cloud-Native or AI Applications</span></th>
+          <td class="c"><span class="mk cond"><i></i>Where hub-free</span></td><td class="c alt"><span class="mk full"><i></i>Typical</span></td><td class="c"><span class="mk full"><i></i>Typical</span></td><td class="c alt"><span class="mk full"><i></i>Typical</span></td>
+          <td class="dr">No Hub only where approved local peering or Azure service endpoints meet all requirements; otherwise choose the required hub capabilities.</td></tr>
+        <tr><th><span class="n">3</span><span class="t">Hybrid-Connected Applications</span></th>
           <td class="c"><span class="mk none">—</span></td><td class="c alt"><span class="mk full"><i></i>Typical</span></td><td class="c"><span class="mk full"><i></i>Typical</span></td><td class="c alt"><span class="mk full"><i></i>Typical</span></td>
-          <td class="dr">Private connectivity to selected dependencies; dependency latency, traffic patterns, resiliency, security, and operational requirements decide which profile.</td></tr>
+          <td class="dr">Dependency latency, resiliency, regulatory, operational, and shared-service requirements.</td></tr>
         <tr><th style="border-bottom:1px solid #fff"><span class="n">4</span><span class="t">Interconnected Application Portfolios</span></th>
           <td class="c" style="border-bottom:1px solid var(--line-soft)"><span class="mk cond"><i></i>Spoke-to-spoke</span></td><td class="c alt" style="border-bottom:1px solid var(--line-soft)"><span class="mk cond"><i></i>Where acceptable</span></td><td class="c" style="border-bottom:1px solid var(--line-soft)"><span class="mk cond"><i></i>When justified</span></td><td class="c alt" style="border-bottom:1px solid var(--line-soft)"><span class="mk cond"><i></i>When justified</span></td>
-          <td class="dr" style="border-bottom:1px solid var(--line-soft)">Aggregate portfolio connectivity, shared-service, resiliency, scale, and operational requirements.</td></tr>
+          <td class="dr" style="border-bottom:1px solid var(--line-soft)">No Hub only for approved same-region connectivity without hub or on-premises dependencies. Aggregate portfolio requirements decide.</td></tr>
       </tbody>
     </table>
     <div style="display:flex;gap:22px;margin-top:10px;font-size:10.4px;color:var(--muted);align-items:center">

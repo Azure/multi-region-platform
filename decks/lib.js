@@ -176,7 +176,7 @@ function makeLib(pres, opts = {}) {
     L.txt(s, text, x + 0.56, y + 0.36, w - 0.75, h - 0.45, { fontSize: 12, color: C.ink, fontFace: F.semi });
   };
 
-  // Mini connectivity-profile glyph (native shapes), 0.72 x 0.46 in. k = 0 Disconnected Spokes … 3 Full Regional Hub
+  // Mini connectivity-profile glyph (native shapes), 0.72 x 0.46 in. k = 0 No Hub … 3 Full Hub
   L.PROFILES = SUMMARY.profiles;
   L.glyph = (s, k, x, y) => {
     const bg = k < 2 ? C.t50 : C.b50, ln = k < 2 ? C.t300 : C.b300;

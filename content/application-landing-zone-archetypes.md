@@ -13,15 +13,9 @@ Assign each workload the closest-fitting archetype and record any material requi
 
 Use archetypes during regional qualification to anticipate the capabilities a candidate region may need to support. Where future workload requirements aren't yet defined, they give you planning guardrails without constraining later placement, which happens once the workload's current requirements, regional capabilities, and platform readiness are known.
 
-:::image type="content" source="./media/application-landing-zone-archetypes.png" alt-text="Four archetype cards — hybrid-connected applications, isolated cloud-native or AI applications, connected cloud-native or AI applications, and interconnected application portfolios — each with its defining characteristics and typical connectivity profiles." lightbox="./media/application-landing-zone-archetypes.png":::
+:::image type="content" source="./media/application-landing-zone-archetypes.png" alt-text="Four archetype cards — isolated cloud-native or AI applications, connected cloud-native or AI applications, hybrid-connected applications, and interconnected application portfolios — each with its defining characteristics and typical connectivity profiles." lightbox="./media/application-landing-zone-archetypes.png":::
 
-*The four archetypes, grouped by the platform connectivity and dependency capabilities each requires.*
-
-## Hybrid-Connected Applications
-
-Applications with significant dependencies on on-premises environments, enterprise networks, or centralized shared services that require persistent private connectivity to the wider enterprise environment.
-
-These workloads typically use **Remote Hub, Selective Hub, or Full Hub**, depending on dependency latency, resiliency, regulatory, operational, and shared-service requirements.
+*The four archetypes, ordered by increasing platform connectivity and dependency complexity. This is not a maturity model or a measure of application sophistication.*
 
 ## Isolated Cloud-Native or AI Applications
 
@@ -33,13 +27,21 @@ These workloads can often use **No Hub**. A connected profile may still be selec
 
 Cloud-native or AI applications that are primarily self-contained but require private connectivity to selected enterprise services, data sources, APIs, or other Azure environments.
 
-These workloads can use **Remote Hub, Selective Hub, or Full Hub**, depending on dependency latency, traffic patterns, resiliency, security, and operational requirements.
+These workloads can use **No Hub** when approved direct same-region spoke connectivity or Azure service endpoints meet their dependency and control requirements without a geographic hub or on-premises path. Otherwise, use **Remote Hub, Selective Hub, or Full Hub**, depending on dependency latency, traffic patterns, resiliency, security, and operational requirements.
+
+## Hybrid-Connected Applications
+
+Applications with significant dependencies on on-premises environments, enterprise networks, or centralized shared services that require persistent private connectivity to the wider enterprise environment.
+
+These workloads typically use **Remote Hub, Selective Hub, or Full Hub**, depending on dependency latency, resiliency, regulatory, operational, and shared-service requirements. **No Hub** doesn't fit a mandatory private dependency on on-premises or geographic-hub services.
 
 ## Interconnected Application Portfolios
 
 Groups of applications with meaningful dependencies on each other, including shared data, common services, east-west communication, or coordinated connectivity and operations across applications, regions, or business domains.
 
 Where significant east-west traffic exists within a region, evaluate whether **direct spoke-to-spoke connectivity or a local hub** provides a more appropriate path than routing traffic through a geographic hub in another region. Direct connectivity may suit a limited number of tightly coupled workloads, while a **Selective Hub or Full Hub** may be more appropriate where broader connectivity, shared routing, traffic inspection, resiliency, or operational requirements justify regional platform capabilities.
+
+**No Hub** is an option only when approved same-region spoke-to-spoke connectivity and Azure service endpoints satisfy the portfolio's aggregate requirements without a geographic hub or on-premises path. **Remote Hub** is an option when cross-region latency, traffic, and availability coupling are acceptable; use **Selective Hub or Full Hub** when local capabilities are justified.
 
 Because this is a **portfolio-level archetype**, its combined dependencies may require capabilities beyond those needed by any individual application. Select the appropriate connectivity profile based on the portfolio's aggregate connectivity, shared-service, resiliency, scale, and operational requirements rather than the requirements of a single workload.
 
@@ -58,7 +60,7 @@ Several architecture concepts help identify and organize workload requirements, 
 | Architecture style | The fundamental structural organization of an application | Microservices, N-tier, event-driven, web-queue-worker, big compute | Application architecture |
 | Architecture or design pattern | A reusable solution to a recurring technical problem | Circuit Breaker, Retry, CQRS, Strangler Fig, Competing Consumers | Design technique |
 | Workload pattern | A recurring workload behavior or set of operational characteristics that can influence platform requirements | Latency-sensitive, data-intensive, batch-oriented, globally distributed, hybrid-dependent | Workload characteristics |
-| Workload Landing Zone archetype | A classification of a workload based on the platform connectivity and dependency capabilities it requires | Hybrid-Connected Applications, Isolated Cloud-Native or AI Applications, Connected Cloud-Native or AI Applications, Interconnected Application Portfolios | Platform-consumption model |
+| Workload Landing Zone archetype | A classification of a workload based on the platform connectivity and dependency capabilities it requires | Isolated Cloud-Native or AI Applications, Connected Cloud-Native or AI Applications, Hybrid-Connected Applications, Interconnected Application Portfolios | Platform-consumption model |
 
 > [!NOTE]
 > The Azure landing zones reference architecture also uses *archetypes*: built-in definitions of what must be true for a landing zone to meet environment and compliance requirements at a given scope. Workload Landing Zone archetypes in this guidance describe what a workload requires from the platform, which is a different concept.
@@ -67,6 +69,8 @@ Several architecture concepts help identify and organize workload requirements, 
 
 - [Architecture styles](https://learn.microsoft.com/azure/architecture/guide/architecture-styles/) — Supports the discussion of workload architecture, including N-tier, microservices, and event-driven approaches.
 - [Built-in Azure landing zone archetypes](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/tailoring-alz#built-in-archetypes-for-the-azure-landing-zone-reference-architecture) — Describes what needs to be true for a landing zone to meet the expected environment and compliance requirements at a specific scope.
+- [Azure Private Link](https://learn.microsoft.com/azure/private-link/private-link-overview) — Private endpoints provide access to Azure services without requiring a hub-based network path.
+- [Hub-spoke network topology](https://learn.microsoft.com/azure/architecture/networking/architecture/hub-spoke) — Distinguishes direct spoke connectivity from shared routing, inspection, and hybrid gateways.
 
 ## Next step
 

@@ -3,7 +3,7 @@ const { C, F } = require('../lib');
 // Part 3 · Select the regional design: three choices from short lists, written into one design record.
 module.exports = (pres, L) => {
   const [CH1, CH2, CH3] = L.data.choices;
-  const PROF = L.data.profiles;   // Disconnected Spokes, Remote Hub Connected, Minimal Regional Hub, Full Regional Hub
+  const PROF = L.data.profiles;   // No Hub, Remote Hub, Selective Hub, Full Hub
 
   // The question each choice answers: blue line under the title.
   const question = (s, text, w = 10.6) => L.txt(s, text, 0.6, 1.17, w, 0.5, { fontSize: 14, color: C.b700 });
@@ -149,7 +149,7 @@ module.exports = (pres, L) => {
     L.box(s, 1.85, 1.66, 4.3, 0.38, { fill: C.t600, r: 0.19 });
     L.txt(s, 'Workload scenarios expected in the region', 1.85, 1.66, 4.3, 0.38, { fontSize: 11, fontFace: F.semi, color: 'FFFFFF', align: 'center', valign: 'middle' });
     const Q = [
-      'Do the workloads require private access to enterprise services, on-premises systems, centralized security inspection, another application portfolio, or geographic-hub capabilities?',
+      'Do workloads need a geographic hub, on-premises access, centralized inspection, or private network paths beyond approved same-region spokes and Azure service endpoints?',
       'Can they tolerate the latency, availability coupling, data-transfer implications, and dependency on connectivity to another region?',
       'Do requirements justify a comprehensive local capability set: local hybrid connectivity, substantial shared services, strict latency or data-boundary controls, or independence from other hubs?',
     ];
@@ -180,7 +180,7 @@ module.exports = (pres, L) => {
     L.txt(s, [{ text: PROF[3], options: { fontFace: F.semi, fontSize: 12, breakLine: true } }, { text: 'Confirm that the required independence justifies the cost and operational scope.', options: { fontSize: 11, color: C.b100 } }], qx + 1.02, fy, qw - 1.12, 0.72, { color: 'FFFFFF', valign: 'middle' });
     L.decision(s, 'Select the most efficient regional platform connectivity profile that satisfies the identified requirements and can evolve as regional adoption changes.', rx, fy - 0.05, rw, 1.32, 'b');
     L.caption(s, 'Figure', 'Questions escalate from dependency, to tolerance of remote consumption, to required independence. The outcome is a platform capability, not a workload design.', 0.6, fy + 0.85, 6.5);
-    s.addNotes('Each question comes from the “fits when” criteria of the connectivity profiles. Stop at the first profile that satisfies the requirements identified in check 3. Two of the four profiles need no local hub, and only the Full Regional Hub approaches the footprint of an existing geographic hub. The aim is the most efficient profile, not the maximum possible one: keep capabilities remote when the characteristics permit, and deploy locally only when a measurable requirement justifies it. Profiles can move in both directions, so revisit the selection when a reassessment trigger applies.');
+    s.addNotes('Each question comes from the “fits when” criteria of the connectivity profiles. Stop at the first profile that satisfies the requirements identified in check 3. Two of the four profiles need no local hub, and only the Full Hub approaches the footprint of an existing geographic hub. The aim is the most efficient profile, not the maximum possible one: keep capabilities remote when the characteristics permit, and deploy locally only when a measurable requirement justifies it. Profiles can move in both directions, so revisit the selection when a reassessment trigger applies.');
   }
 
   // ───────────────────────── Choice 2: place shared services
@@ -256,7 +256,7 @@ module.exports = (pres, L) => {
       ['Policy and access control are not tied to a region.', ''],
     ], sx, 2.85, sw, 2.5, { gap: 4 });
     L.decision(s, 'Define the most efficient platform capability set, where each capability will be provided, who will operate it, and what requirements would trigger future expansion.', sx, 5.3, sw, 1.55, 'b');
-    s.addNotes('Each shared service has one of three placements: local, remote, or global. The table is a starting point for each profile; change a cell when a workload requirement calls for it and record the reason. For a Minimal Regional Hub, each row is a separate choice. Some placements are set by the service, not the profile: backup vaults and Key Vault are local in every profile, private DNS zones are global, and a single log workspace is the place to start. The one policy change for a new region is to allow it in any assignment that restricts locations. Also consider operational support, platform resiliency, ownership, and cost, and enable only the regional capabilities that expected workloads need.');
+    s.addNotes('Each shared service has one of three placements: local, remote, or global. The table is a starting point for each profile; change a cell when a workload requirement calls for it and record the reason. For a Selective Hub, each row is a separate choice. Some placements are set by the service, not the profile: backup vaults and Key Vault are local in every profile, private DNS zones are global, and a single log workspace is the place to start. The one policy change for a new region is to allow it in any assignment that restricts locations. Also consider operational support, platform resiliency, ownership, and cost, and enable only the regional capabilities that expected workloads need.');
   }
 
   // ───────────────────────── Choice 3: confirm hybrid connectivity
@@ -266,7 +266,7 @@ module.exports = (pres, L) => {
     question(s, 'Does the operating geography have resilient hybrid connectivity to Azure that satisfies the identified workload requirements?', 12.13);
     L.txt(s, 'Enabling an additional Azure region doesn’t by itself require another ExpressRoute circuit.', 0.6, 1.72, 12.13, 0.32, { fontSize: 15, fontFace: F.semi, color: C.ink });
     const O = [
-      ['Not required', 'x', 'FFFFFF', C.line, C.s600, 'The region uses Disconnected Spokes, or its workloads need no private path to on-premises locations.'],
+      ['Not required', 'x', 'FFFFFF', C.line, C.s600, 'The region uses No Hub, or its workloads need no private path to on-premises locations.'],
       ['Reuse', 'loop', C.b50, C.b200, C.b600, 'Existing circuits, gateways, and peering locations meet the reachability, latency, bandwidth, routing, and resilience the new region’s workloads need.'],
       ['Change', 'route', C.w50, C.w100, C.w600, 'The existing foundation can’t meet a requirement: diversity, failure-domain isolation, latency, bandwidth, routing, or resiliency. Record the requirement and the change it justifies.'],
     ];
@@ -293,7 +293,7 @@ module.exports = (pres, L) => {
       ['On-premises locations or users are far from the existing peering locations.', ''],
       ['Bandwidth or gateway capacity is exhausted.', ''],
       ['Workloads need a capability that doesn’t work across regions.', 'ExpressRoute FastPath, for example, doesn’t support global virtual network peering.'],
-      ['Keep an independent path.', 'The region must retain its on-premises connectivity when another region is unavailable; this usually points to a Full Regional Hub.'],
+      ['Keep an independent path.', 'The region must retain its on-premises connectivity when another region is unavailable; this usually points to a Full Hub.'],
     ], 7.0, 4.55, 5.73, 2.3, { gap: 4, leadColor: C.ink });
     s.addNotes('Enabling an additional Azure region doesn’t by itself require another ExpressRoute circuit. Evaluate the existing ExpressRoute, VPN, SD-WAN, or other hybrid connectivity against datacenter and user locations, latency, bandwidth, and routing requirements. Add circuits, peering locations, gateways, or more connectivity paths only where the existing foundation can’t provide the required reachability, diversity, or resilience. Microsoft recommends ExpressRoute circuits from more than one peering location, and a new region is a reason to check this. Measure latency on the real path before you decide that locations are too far from the peering locations.');
   }

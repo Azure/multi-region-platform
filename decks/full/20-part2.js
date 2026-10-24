@@ -119,11 +119,11 @@ module.exports = (pres, L) => {
     const gx = 6.85, gy = 1.4, gw = 5.88;
     L.txt(s, 'Illustrative: one portfolio, classified per archetype', gx, gy, gw, 0.3, { fontSize: 12.5, fontFace: F.semi, color: C.ink });
     L.box(s, gx, gy + 0.4, gw, 3.72, { fill: C.white, line: C.line, r: 0.12 });
-    const cols = ['Hybrid-\nconnected', 'Isolated\ncloud-native\nor AI', 'Connected\ncloud-native\nor AI', 'Inter-\nconnected\nportfolio'];
+    const cols = ['Isolated\ncloud-native\nor AI', 'Connected\ncloud-native\nor AI', 'Hybrid-\nconnected', 'Inter-\nconnected\nportfolio'];
     const c0 = gx + 1.62, cw = 1.06;
     L.txt(s, 'CANDIDATE REGION', gx + 0.2, gy + 0.5, 1.4, 0.55, { fontSize: 9, bold: true, color: C.t700, valign: 'bottom', charSpacing: 1 });
     cols.forEach((c, j) => L.txt(s, c, c0 + j * cw, gy + 0.5, cw, 0.55, { fontSize: 9, bold: true, color: C.t700, align: 'center', valign: 'bottom' }));
-    const rows = [['Region A', 'geographic hub', 'qqqq'], ['Region B', 'geographic hub', 'qqqa'], ['Region C', 'in-country, new', 'qqka'], ['Region D', 'AI model and SKU', 'xqkx'], ['Region E', 'other geography', 'xxxx']];
+    const rows = [['Region A', 'geographic hub', 'qqqq'], ['Region B', 'geographic hub', 'qqqa'], ['Region C', 'in-country, new', 'qkqa'], ['Region D', 'AI model and SKU', 'qkxx'], ['Region E', 'other geography', 'xxxx']];
     const mk = { q: ['check', 'w', C.g600, null], a: ['clock', 'b', C.white, C.b600], k: ['flag', 'o', C.a100, C.a500], x: ['x', 'o', C.w100, null] };
     rows.forEach(([r, sub, m], i) => {
       const yy = gy + 1.12 + i * 0.5;

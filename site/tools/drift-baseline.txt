@@ -4,14 +4,11 @@ applications with significant dependencies on on premises environments enterpris
 architecture or design pattern
 because this is a portfolio level archetype its combined dependencies may require capabilities beyond those needed by any individual application
 cloud native or ai applications that are primarily self contained but require private connectivity to selected enterprise services data sources apis or other azure environments
-direct connectivity may suit a limited number of tightly coupled workloads while a minimal regional hub or full regional hub may be more appropriate where broader connectivity shared routing traffic inspection resiliency or operational requirements justify regional platform capabilities
+direct connectivity may suit a limited number of tightly coupled workloads while a selective hub or full hub may be more appropriate where broader connectivity shared routing traffic inspection resiliency or operational requirements justify regional platform capabilities
 groups of applications with meaningful dependencies on each other including shared data common services east west communication or coordinated connectivity and operations across applications regions or business domains
 select the appropriate connectivity profile based on the portfolio s aggregate connectivity shared service resiliency scale and operational requirements rather than the requirements of a single workload
 the archetype to profile matrix shows the typical options for each archetype
-the four archetypes grouped by the platform connectivity and dependency capabilities each requires
-these workloads can often use disconnected spokes
-these workloads can use remote hub connected minimal regional hub or full regional hub depending on dependency latency traffic patterns resiliency security and operational requirements
-these workloads typically use remote hub connected minimal regional hub or full regional hub depending on dependency latency resiliency regulatory operational and shared service requirements
+these workloads typically use remote hub selective hub or full hub depending on dependency latency resiliency regulatory operational and shared service requirements
 understand workload landing zone archetypes
 where significant east west traffic exists within a region evaluate whether direct spoke to spoke connectivity or a local hub provides a more appropriate path than routing traffic through a geographic hub in another region
 workload landing zone archetypes are a planning abstraction that groups recurring application connectivity and dependency requirements
@@ -22,7 +19,6 @@ regions that pass continue to data and compliance which can exclude a region out
 # connectivity-profiles
 depending on workload requirements these capabilities can include east west routing dns monitoring backup security inspection egress private connectivity selected identity or directory services on premises connectivity or other services that must remain close to the workloads
 moving right adds local capability and independence and also cost and operational scope
-the minimal regional hub provides only the local capabilities required by its workloads rather than replicating a complete platform footprint
 understand common connectivity profiles
 workload and platform requirements justify a comprehensive local capability set for example where the region requires local hybrid connectivity substantial local shared services strict latency or data boundary controls significant interconnected application portfolios or sufficient independence to continue operating when another region or geographic hub is unavailable
 # customer-scenarios
@@ -37,8 +33,6 @@ in scope workloads can relocate selectively
 isolated cloud native or ai applications where the workload is self contained
 isolated or connected cloud native or ai applications
 it remains conditional for requirements that depend on private connectivity until that design is known and validated
-minimal regional hub where aggregate east west traffic shared services latency or independence requirements justify local capability
-minimal regional hub where selected local capabilities are required and existing hybrid connectivity can be reused where reachability and resiliency requirements permit
 most workloads can land in the existing qualified region where it satisfies their requirements
 multi region customer scenarios
 other workloads can remain in place
@@ -46,9 +40,10 @@ qualified against defined portfolio requirements once sufficient discovery is co
 qualified for defined requirements
 qualified for the ai workload
 recovery architecture remains a workload specific decision
-remote hub connected or minimal regional hub
 revalidate current model sku service regional access and quota support at decision time
 revisit the additional regional option when requirements change
+selective hub where aggregate east west traffic shared services latency or independence requirements justify local capability
+selective hub where selected local capabilities are required and existing hybrid connectivity can be reused where reachability and resiliency requirements permit
 step 3 validates hybrid connectivity datacenter and user geography reachability resiliency and whether existing connectivity can support the target design
 the existing geographic hub is reused
 the existing target region can remain qualified for the identified workload requirements while an additional region remains a candidate for future use
@@ -62,6 +57,8 @@ workloads stay in place at first
 how the first two checks filter the portfolio
 the first two checks act as filters
 the first two checks filter the portfolio before deeper technical assessment
+# disconnected-spokes
+a spoke in the no hub profile can t use a dns resolver in a hub
 # framework-overview
 because platform teams cannot predict every future workload this guidance uses three planning constructs
 extend azure landing zones for adaptable regional placement
@@ -95,7 +92,6 @@ ci cd and infrastructure as code iac load the same secrets and certificates into
 confirm that every service that uses the key supports your pattern
 cost and the same replication window as pattern 3
 design guidance for managed hsm
-do not treat the iac repository itself as a store for secret values
 each region keeps full read and write access on its own vault
 each region works on its own vault with full read and write access
 ekm doesn t support geo replication and there is no end to end microsoft sla for external keys
@@ -138,10 +134,10 @@ there is no failover target so you wait for restore
 you can read but you can t create update or rotate
 you must own and hold the master key and you run mission critical workloads with customer controlled recovery
 # minimal-regional-hub
-the same as for disconnected spokes with spokes that connect to the local hub
+the hub uses the selective hub profile as long as the region still depends on a geographic hub for something
+the same as for no hub with spokes that connect to the local hub
 # misconceptions
 common multi region misconceptions
-the corrections below follow the order of the framework
 # paired-nonpaired-regions
 assess availability zones region pairing and service specific cross region behavior separately as described in regional capability and availability
 azure uses region pairs for considerations such as sequential platform updates and recovery prioritization
@@ -157,7 +153,7 @@ where each shared service is provided with a default for each profile
 some placements are set by the service not by the profile
 # platform-readiness
 confirm the others as the capability set is put in place
-everything else on this page applies to every profile including disconnected spokes
+everything else on this page applies to every profile including no hub
 ip address planning common blocker
 items marked as common blockers should be planned early while the region is still being qualified
 private dns across regions routing and inspection paths and hybrid connectivity apply only to connected profiles
@@ -165,8 +161,8 @@ quota and specific capacity common blocker
 region settings in policy common blocker
 where logs and telemetry live common blocker
 # prepare-region
-disconnected spokes remote hub connected minimal regional hub and full regional hub
-region c s minimal hub reaches on premises by reusing an existing expressroute circuit
+no hub remote hub selective hub and full hub
+region c s selective hub reaches on premises by reusing an existing expressroute circuit
 region d s does not
 what must be true before workloads arrive
 # profile-selection
@@ -177,9 +173,9 @@ each question comes from the fits when criteria of the connectivity profiles
 everything else stays remote
 fits when the workloads expected in the region
 need a comprehensive local capability set or independence from other hubs
-need no private access to enterprise services on premises systems centralized security inspection another application portfolio or geographic hub capabilities
+need geographic hub capabilities or wider private network access and can tolerate the latency availability coupling and dependency on connectivity to another region
+need no geographic hub on premises path centralized inspection or private network connectivity beyond approved same region spokes and azure service endpoints
 need some capabilities locally without a comprehensive local set
-need that access and can tolerate the latency availability coupling and dependency on connectivity to another region
 no hub and no gateway
 start with the matrix to see which connectivity profiles each archetype typically uses
 the complete local connectivity and shared services that the region s workloads require
@@ -228,27 +224,9 @@ pre provision the required regional vault and ensure runtime secrets certificate
 they re representative situations not drawn from a specific customer
 use a supported cross region recovery technology such as azure site recovery for applicable vms or redeploy stateless compute from infrastructure as code
 use a supported region of choice replication pattern such as object replication where suitable or application level replication for storage types that require it
-# restore-across-regions
-azure backup cross region restore uses the azure paired region for supported data sources when the required vault replication and configuration are enabled
-azure site recovery supports azure vm disaster recovery between azure regions subject to its support matrix and regional restrictions
-backup and restore across regions
-backup and restore capabilities differ by workload and region combination so confirm them for each intended recovery region
-# storage-across-regions
-a source account can currently replicate to no more than two destination accounts
-geo redundant storage options such as grs and gzrs replicate data asynchronously to the service defined secondary region
-it requires change feed on the source and blob versioning on source and destination accounts
-object replication can asynchronously replicate block blobs between selected storage accounts and regions
-object replication does not support append blobs page blobs or accounts with hierarchical namespace enabled
-storage replication illustrates why regional qualification cannot stop at the service exists in both regions
 # workload-design
-cross region restore azure site recovery and region of choice recovery
-for related background see paired and nonpaired regions and resiliency scenarios in resources
-paired region and region of choice behavior and the recommended key vault pattern
-paired region and region of choice behavior for azure storage replication
 service guides for multi region overview
 the articles in this section cover the dependencies that most often decide whether a regional combination works as built
-this section covers the regional and service behaviors a platform team should understand when it qualifies regional combinations
-this section isn t workload design guidance
 # workload-placement
 define whether the region will support the workload as its primary location recovery location or as part of a multi region active deployment
 document the selected region workload landing zone archetype connectivity profile placement and resiliency outcomes assumptions constraints owners and revalidation triggers

@@ -4,8 +4,7 @@ const { C, F, IMG } = require('../lib');
 
 module.exports = (pres, L) => {
   const D = L.data;
-  // The four connectivity profiles as the executive brief spells them
-  const PROF = ['Disconnected spokes', 'Remote-hub-connected spokes', 'Minimal regional hub', 'Full regional hub'];
+  const PROF = D.profiles;
   const chipW = (t, size = 10) => t.length * (size * 0.0078) + 0.28;
   const cap = (s, t, x, y, o = {}) => L.txt(s, t.toUpperCase(), x, y, o.w || 4, 0.22, Object.assign({ fontSize: 9.5, bold: true, color: C.muted, charSpacing: 2 }, o));
   const header = L.header;
@@ -14,7 +13,7 @@ module.exports = (pres, L) => {
   // ───────────────────────── 1 · Cover (brief page 1)
   {
     const s = L.slide('front', { bare: true });
-    L.image(s, IMG('cover_panel.png', L.tone), { x: 6.733, y: 0, w: 6.6, h: 7.5 }, 'Illustration: two tall geographic hubs, a minimal hub, workload spokes and an empty candidate plot standing on one shared foundation');
+    L.image(s, IMG('cover_panel.png', L.tone), { x: 6.733, y: 0, w: 6.6, h: 7.5 }, 'Illustration: two tall geographic hubs, a Selective Hub, workload spokes and an empty candidate plot standing on one shared foundation');
     L.logo(s, 0.6, 0.55, 0.14, C.muted, 17);
     L.txt(s, 'Executive briefing', 10.3, 0.52, 2.43, 0.35, { fontSize: 13, fontFace: F.semi, color: 'FFFFFF', align: 'right' });
     let x = 0.6; x += L.chip(s, 'AZURE ARCHITECTURE', x, 1.6, { size: 9.5, w: chipW('AZURE ARCHITECTURE', 9.5) }) + 0.12;
@@ -95,11 +94,11 @@ module.exports = (pres, L) => {
     L.txt(s, 'An adaptable multi-region platform', 6.2, y0 + 0.14, 3.6, 0.3, { fontSize: 13, fontFace: F.semi, color: C.ink });
     L.txt(s, 'REGIONS AS QUALIFIED OPTIONS', 9.75, y0 + 0.18, 2.78, 0.25, { fontSize: 9, bold: true, color: C.b600, align: 'right', charSpacing: 1.5 });
     const regs = [
-      ['Region A', 1.95, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full hub', C.b600, 'FFFFFF']], 'Geographic hub'],
-      ['Region B', 1.95, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full hub', C.b600, 'FFFFFF']], 'Geographic hub'],
-      ['Region C', 1.55, [['Workloads', C.t600, 'FFFFFF'], ['Minimal hub', 'FFFFFF', C.b700, C.b300]], 'Minimal hub'],
-      ['Region D', 1.2, [['Spokes', C.t600, 'FFFFFF']], 'Remote hub', 'via hub'],
-      ['Region E', 0.98, [['Disconnected spokes', C.t100, C.t700]], 'Disconnected'],
+      ['Region A', 1.95, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full Hub', C.b600, 'FFFFFF']], 'Geographic hub'],
+      ['Region B', 1.95, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full Hub', C.b600, 'FFFFFF']], 'Geographic hub'],
+      ['Region C', 1.55, [['Workloads', C.t600, 'FFFFFF'], ['Selective Hub', 'FFFFFF', C.b700, C.b300]], 'Selective Hub'],
+      ['Region D', 1.2, [['Spokes', C.t600, 'FFFFFF']], 'Remote Hub', 'via hub'],
+      ['Region E', 0.98, [['No Hub', C.t100, C.t700]], 'No Hub'],
       ['Region F', 0.8, [], 'Not enabled', 'Candidate'],
     ];
     const base = y0 + 3.0, rw = 1.04, gap = 0.04;
@@ -137,7 +136,7 @@ module.exports = (pres, L) => {
       L.icon(s, ic, x, 2.55, 0.3, 'w');
       L.txt(s, t, x + 0.4, 2.3, 1.9, 0.8, { fontSize: 12, fontFace: F.semi, color: 'FFFFFF', valign: 'middle' });
     });
-    const R = [['Region A', 'Geographic hub', 'Full networking, security, management, and shared services', 'hub'], ['Region B', 'Geographic hub', 'Full networking, security, management, and shared services', 'hub'], ['Region C', 'Qualified', 'Minimal regional hub for a portfolio', 'q'], ['Region D', 'Qualified', 'Spokes connected to a geographic hub', 'q'], ['Region E', 'Qualified', 'Self-contained AI workloads', 'q'], ['Region F', 'Candidate', 'Assessed; not yet enabled', 'c']];
+    const R = [['Region A', 'Geographic hub', 'Full networking, security, management, and shared services', 'hub'], ['Region B', 'Geographic hub', 'Full networking, security, management, and shared services', 'hub'], ['Region C', 'Qualified', 'Selective Hub for a portfolio', 'q'], ['Region D', 'Qualified', 'Spokes connected to a geographic hub', 'q'], ['Region E', 'Qualified', 'Self-contained AI workloads', 'q'], ['Region F', 'Candidate', 'Assessed; not yet enabled', 'c']];
     R.forEach(([r, tag, d, k], i) => {
       const x = 0.85 + i * 1.955, y = 3.28, w = 1.83, h = 1.78;
       const hub = k === 'hub';
@@ -186,7 +185,7 @@ module.exports = (pres, L) => {
     // geography
     L.box(s, 7.6, top, 5.13, hh, { fill: C.b50, line: C.b300, dash: 'dash', r: 0.14 });
     L.txt(s, 'GEOGRAPHY · FOR EXAMPLE, EUROPE', 7.8, top + 0.1, 4.5, 0.22, { fontSize: 9.5, bold: true, color: C.b700, charSpacing: 2 });
-    const G = [['Region A', 'Geographic hub · gateways', C.b600, 'FFFFFF', 'DDEBF9'], ['Region B', 'Geographic hub · gateways', C.b700, 'FFFFFF', 'DDEBF9'], ['Region C', 'Minimal hub · reuses existing circuits', 'FFFFFF', C.b700, C.muted], ['Region D', 'Spokes reach on-premises via a hub', 'FFFFFF', C.b700, C.muted], ['Region E', 'Self-contained · no hybrid path', 'FFFFFF', C.t700, C.muted], ['Region F', 'Candidate · no new circuit assumed', C.b50, C.b700, C.muted]];
+    const G = [['Region A', 'Geographic hub · gateways', C.b600, 'FFFFFF', 'DDEBF9'], ['Region B', 'Geographic hub · gateways', C.b700, 'FFFFFF', 'DDEBF9'], ['Region C', 'Selective Hub · reuses existing circuits', 'FFFFFF', C.b700, C.muted], ['Region D', 'Spokes reach on-premises via a hub', 'FFFFFF', C.b700, C.muted], ['Region E', 'Self-contained · no hybrid path', 'FFFFFF', C.t700, C.muted], ['Region F', 'Candidate · no new circuit assumed', C.b50, C.b700, C.muted]];
     G.forEach(([r, d, f, c1, c2], i) => {
       const x = 7.8 + (i % 2) * 2.42, y = top + 0.45 + Math.floor(i / 2) * 0.9, w = 2.32, h = 0.82;
       L.box(s, x, y, w, h, { fill: f, line: f === 'FFFFFF' ? (i === 4 ? C.t300 : C.b300) : i === 5 ? C.b500 : undefined, dash: i === 5 ? 'dash' : 'solid', r: 0.1 });
@@ -213,9 +212,9 @@ module.exports = (pres, L) => {
     L.txt(s, 'NO DEPENDENCY ON A GEOGRAPHIC HUB', 0.6, 1.97, 5, 0.22, { fontSize: 9.5, bold: true, color: C.t600, charSpacing: 1.5 });
     L.txt(s, 'GREATER LOCAL CAPABILITY AND INDEPENDENCE', 7.2, 1.97, 5.53, 0.22, { fontSize: 9.5, bold: true, color: C.b700, charSpacing: 1.5, align: 'right' });
     const P = [
-      [C.t600, 'No private connectivity to a geographic hub, other Azure regions, or on-premises.', 'No hub, no gateway, no private connectivity. Best for self-contained workloads.'],
+      [C.t600, 'No private network path to a geographic hub, another region’s networks, or on-premises.', 'No hub or hybrid gateway. Approved local peering and Azure service endpoints only.'],
       [C.c600, 'Spokes connect privately to an existing geographic hub in another region.', 'Centralized services used; local services not required.'],
-      [C.b500, 'Selected local services and connectivity, based on workload requirements.', 'Local shared services with selective connectivity, without a full hub.'],
+      [C.b500, 'Selected local services and connectivity, based on workload requirements.', 'Local shared services with selective connectivity, without a Full Hub.'],
       [C.b700, 'Comprehensive local capabilities, with connectivity to spokes, on-premises, and other regions.', 'Full local capabilities when required by latency, traffic volume, compliance, or operations.'],
     ];
     P.forEach(([c, d, f], i) => {
@@ -279,12 +278,12 @@ module.exports = (pres, L) => {
       if (sub) L.txt(s, sub, x + 0.1, ty + 0.24, w - 0.16, o.subH || 0.24, { fontSize: 12, color: o.sc || C.muted, valign: 'top' });
     };
     const top = 1.9, pitch = 0.75, bh = 0.72;
-    const R = [['Region C', 'Minimal regional hub', 'Own on-premises path; rest from A'], ['Region D', 'Minimal regional hub', 'No on-premises path; rest from A'], ['Region E', 'Remote-hub-connected spokes', 'Services from Region A'], ['Region F', 'Remote-hub-connected spokes', 'Services from Region B'], ['Region G', 'Disconnected spokes', 'No private path to hubs'], ['Region H', 'Candidate — not yet enabled', '']];
+    const R = [['Region C', 'Selective Hub', 'Own on-premises path; rest from A'], ['Region D', 'Selective Hub', 'No on-premises path; rest from A'], ['Region E', 'Remote Hub', 'Services from Region A'], ['Region F', 'Remote Hub', 'Services from Region B'], ['Region G', 'No Hub', 'No private path to hubs'], ['Region H', 'Candidate — not yet enabled', '']];
     R.forEach(([l, t, sub], i) => reg(rx, top + i * pitch, rw, bh, l, t, sub, i === 4 ? { line: C.t300, lc: C.t700, ic: 't' } : i === 5 ? { line: C.b500, tc: C.b700 } : {}));
     const ay = 2.4, by = 4.15, hh = 1.15;
     reg(X, 3.25, 1.7, 1.15, '', 'On-premises', 'datacenters and user locations', { fill: C.s800, line: null, tc: 'FFFFFF', sc: 'C9D4E2', subH: 0.5 });
-    reg(hx, ay, hw, hh, 'Region A', 'Geographic hub', 'Full hub · resilient hybrid connectivity', { fill: C.b600, line: null, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9', subH: 0.5 });
-    reg(hx, by, hw, hh, 'Region B', 'Geographic hub', 'Full hub · resilient hybrid connectivity', { fill: C.b600, line: null, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9', subH: 0.5 });
+    reg(hx, ay, hw, hh, 'Region A', 'Geographic hub', 'Full Hub · resilient hybrid connectivity', { fill: C.b600, line: null, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9', subH: 0.5 });
+    reg(hx, by, hw, hh, 'Region B', 'Geographic hub', 'Full Hub · resilient hybrid connectivity', { fill: C.b600, line: null, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9', subH: 0.5 });
     const opx = X + 1.05, mid = i => top + i * pitch + bh / 2, erY = top + 0.28;
     L.path(s, [[opx, 3.25], [opx, 2.95], [hx, 2.95]], { color: C.s600, both: true });
     L.path(s, [[opx, 4.4], [opx, 4.72], [hx, 4.72]], { color: C.s600, both: true });
@@ -300,7 +299,7 @@ module.exports = (pres, L) => {
     L.icon(s, 'shield', X + 0.15, 5.98, 0.26, 's');
     L.txt(s, [{ text: 'Every profile shares one governed foundation: ', options: { bold: true } }, { text: 'governance, security, compliance, automation, and operations' }], X + 0.55, 5.8, 6.6, 0.62, { fontSize: 12, color: C.ink, valign: 'middle' });
     L.caption(s, 'Figure 6', 'An illustrative estate. Names and placements are examples only.', 0.6, 6.58, 12.13);
-    s.addNotes('Talk track: this is important economically as well as architecturally, because customers raise concerns that establishing a complete footprint in every additional region becomes expensive and difficult to sustain. The estate shows two strategic hubs with full footprints; other regions use minimal hubs, remote-hub-connected spokes, or disconnected spokes, and a candidate region stays an option until needed.');
+    s.addNotes('Talk track: this is important economically as well as architecturally, because customers raise concerns that establishing a complete footprint in every additional region becomes expensive and difficult to sustain. The estate shows two geographic hubs with full footprints; other regions use Selective Hub profiles, Remote Hub, or No Hub, and a candidate region stays an option until needed.');
   }
 
   // ───────────────────────── 8 · 05 Workload Landing Zone archetypes (brief page 8)
@@ -308,12 +307,12 @@ module.exports = (pres, L) => {
     const s = L.slide('x5');
     L.header(s, '', 'Four Workload Landing Zone archetypes', { ec: C.t600, tw: 8, lede: [{ text: 'Archetypes describe ' }, { text: 'what applications require', options: { bold: true, color: C.ink } }, { text: '; connectivity profiles describe what the platform provides. The mapping is not one-to-one.' }], lx: 8.9, lw: 3.83 });
     const A = [
-      [C.b700, 'Hybrid-connected applications', 'Traditional line-of-business applications with tight dependencies on on-premises environments.', 'Deploy in regions with a geographic hub, where the complete geographic landing zone exists.', ['Full hub', 'Minimal hub', 'Remote hub'], 1],
-      [C.t600, 'Isolated cloud-native or AI applications', 'Largely self-contained; only application endpoints need secure exposure back into the geographic landing zones.', 'Deploy where required services and capacity are available; expose endpoints through Private Endpoints.', ['Disconnected spokes', 'Connected, where justified'], 4],
-      [C.t700, 'Connected cloud-native or AI applications', 'Need more than endpoint exposure, but do not justify building a full local hub.', 'Private connectivity back to the geographic hubs — for example, Global VNet Peering.', ['Remote hub', 'Minimal hub', 'Full hub'], 3],
-      [C.v600, 'Interconnected application portfolios', 'A portfolio in another region needing east-west connectivity between applications and north-south connectivity to the rest of the estate.', 'A minimal local hub with only the dependencies and connectivity the portfolio needs.', ['Minimal hub', 'Remote hub', 'Full hub'], 2],
+      [C.t600, D.archetypes[0], 'Self-contained applications without persistent private enterprise or on-premises dependencies.', 'Use No Hub where services and capacity fit; add hub capabilities only when justified.', ['No Hub', 'Other profiles, where justified']],
+      [C.t700, D.archetypes[1], 'Mostly self-contained applications needing private access to selected services, data, or APIs.', 'No Hub only for approved local peering or Azure service endpoints; otherwise select hub capabilities.', ['No Hub', 'Remote Hub', 'Selective Hub', 'Full Hub']],
+      [C.b700, D.archetypes[2], 'Applications with persistent private dependencies on on-premises or geographic-hub services.', 'Consume a geographic hub remotely or provide the required local capabilities. No Hub has no hybrid path.', ['Remote Hub', 'Selective Hub', 'Full Hub']],
+      [C.v600, D.archetypes[3], 'Groups of applications with shared data, services, and east-west connectivity requirements.', 'No Hub only for approved same-region connectivity without hub or on-premises dependencies.', ['No Hub', 'Remote Hub', 'Selective Hub', 'Full Hub']],
     ];
-    A.forEach(([c, t, d, p, chips, flex], i) => {
+    A.forEach(([c, t, d, p, chips], i) => {
       const x = 0.6 + i * 3.067, y = 1.7, w = 2.93, h = 3.9;
       L.box(s, x, y, w, h, { fill: 'FFFFFF', line: C.line, r: 0.12 });
       L.num(s, i + 1, x + 0.18, y + 0.2, 0.36, c, 'FFFFFF', 12);
@@ -324,15 +323,14 @@ module.exports = (pres, L) => {
       L.txt(s, p, x + 0.18, y + 2.1, w - 0.36, 0.8, { fontSize: 12, color: C.ink });
       L.box(s, x, y + 2.95, w, 0.95, { fill: C.wash, r: 0.12 }); L.box(s, x, y + 2.95, w, 0.3, { fill: C.wash, r: 0 });
       let cx = x + 0.15, cy = y + 3.02;
-      chips.forEach(ch => { const cw = chipW(ch, 10.5); if (cx + cw > x + w - 0.1) { cx = x + 0.15; cy += 0.3; } const dsh = ch.includes('justified'); L.chip(s, ch, cx, cy, { w: cw, fill: dsh ? 'FFFFFF' : ch.startsWith('Disc') ? C.t100 : C.b100, color: ch.startsWith('Disc') ? C.t700 : C.b700, line: dsh ? C.b500 : undefined, dash: dsh ? 'dash' : undefined, size: 10.5 }); cx += cw + 0.06; });
-      for (let k = 0; k < 4; k++) L.box(s, x + w - 0.95 + k * 0.2, y + 3.68, 0.15, 0.13, { fill: k < flex ? C.t600 : C.line, r: 0.02 });
+      chips.forEach(ch => { const cw = chipW(ch, 10); if (cx + cw > x + w - 0.1) { cx = x + 0.15; cy += 0.3; } const dsh = ch.includes('justified'); L.chip(s, ch, cx, cy, { w: cw, fill: dsh ? 'FFFFFF' : ch === 'No Hub' ? C.t100 : C.b100, color: ch === 'No Hub' ? C.t700 : C.b700, line: dsh ? C.b500 : undefined, dash: dsh ? 'dash' : undefined, size: 10 }); cx += cw + 0.06; });
     });
-    L.txt(s, 'Regional flexibility', 0.78, 5.34, 1.7, 0.2, { fontSize: 9.5, color: C.muted, valign: 'middle' });
+    L.txt(s, 'Increasing connectivity and dependency complexity, not maturity. Profile options are conditional; requirements decide.', 0.6, 5.66, 12.13, 0.25, { fontSize: 10, color: C.muted, valign: 'middle' });
     L.box(s, 0.6, 6.0, 4.1, 0.85, { fill: C.s800, r: 0.12 });
     L.txt(s, [{ text: 'Region-agnostic does not mean ', options: { color: 'FFFFFF' } }, { text: 'region-random.', options: { color: '50E6FF' } }], 0.8, 6.0, 3.8, 0.85, { fontSize: 17, fontFace: F.semi, valign: 'middle' });
     L.box(s, 4.8, 6.0, 7.93, 0.85, { fill: C.b50, r: 0.12 });
     L.txt(s, [{ text: 'Governance moves up a level. ', options: { bold: true, color: C.b700 } }, { text: 'Define a governed operating model and a small number of approved archetypes; each application selects the most efficient pattern that satisfies its connectivity, resiliency, data, security, and service requirements.' }], 5.0, 6.0, 7.55, 0.85, { fontSize: 12, color: C.ink, valign: 'middle' });
-    s.addNotes('Talk track — this is where we can make the model very concrete. Archetype 1, hybrid-connected: "For traditional applications with tight dependencies on on-premises environments, we continue deploying them into our strategic regions where the complete geographic Landing Zone exists." Archetype 2, isolated cloud-native or AI: "Some cloud-native or AI applications are largely self-contained. They may only need their application endpoints exposed securely back into the geographic Landing Zones. Those workloads give us much greater regional flexibility." Archetype 3, connected cloud-native or AI: "Some applications need more than endpoint exposure, but they still do not justify recreating a complete regional hub. For those workloads, Global VNet Peering can provide the private connectivity path back to the geographic hubs." Archetype 4, interconnected portfolios: "We introduce a minimally viable regional hub containing only the dependencies and connectivity capabilities that portfolio actually needs." Then: "Region-agnostic does not mean region-random. We are not eliminating architectural governance. We are actually moving governance up a level into policies that are not dependent on particular regions." The chips show the whitepaper’s typical profiles; actual dependencies decide.');
+    s.addNotes('Present the archetypes in increasing platform connectivity and dependency complexity, not as maturity stages or a measure of application sophistication. Archetype 1: Isolated Cloud-Native or AI Applications often use No Hub; other profiles require a platform justification. Archetype 2: Connected Cloud-Native or AI Applications can use No Hub only when approved same-region peering or Azure service endpoints meet their requirements without a geographic hub or on-premises path; otherwise choose Remote Hub, Selective Hub, or Full Hub. Archetype 3: Hybrid-Connected Applications need persistent private enterprise or on-premises connectivity through Remote Hub, Selective Hub, or Full Hub, not No Hub. Archetype 4: Interconnected Application Portfolios select from aggregate requirements: No Hub only for approved same-region connectivity, Remote Hub when latency and availability coupling are acceptable, and Selective Hub or Full Hub when local capabilities are justified. The mapping is many-to-many. Region-agnostic does not mean region-random; governance remains consistent.');
   }
 
   // ───────────────────────── 9 · An everyday analogy: the city (brief page 9)
@@ -344,7 +342,7 @@ module.exports = (pres, L) => {
     const rx = 7.35, rw = 5.38;
     cap(s, 'In the city', rx, 1.8, { w: 1.8, color: C.b600 });
     cap(s, 'In Azure', rx + 2.8, 1.8, { w: 2.4, color: C.b600 });
-    const M = [['Neighborhoods', 'Azure regions'], ['Transit', 'Connectivity between regions'], ['Express toll lanes', 'ExpressRoute'], ['Office campus', 'On-premises'], ['Downtown', 'Full Regional Hub'], ['Riverside', 'Minimal Regional Hub'], ['Hillcrest and Midtown', 'Remote Hub Connected'], ['Lakeside', 'Disconnected Spokes'], ['New plot', 'Candidate region']];
+    const M = [['Neighborhoods', 'Azure regions'], ['Transit', 'Connectivity between regions'], ['Express toll lanes', 'ExpressRoute'], ['Office campus', 'On-premises'], ['Downtown', 'Full Hub'], ['Riverside', 'Selective Hub'], ['Hillcrest and Midtown', 'Remote Hub'], ['Lakeside', 'No Hub'], ['New plot', 'Candidate region']];
     M.forEach(([a, b], i) => {
       const y = 2.08 + i * 0.48;
       L.box(s, rx, y - 0.03, rw, 0.008, { fill: C.soft, r: 0 });
@@ -352,7 +350,7 @@ module.exports = (pres, L) => {
       L.txt(s, '→', rx + 2.55, y, 0.18, 0.4, { fontSize: 12, bold: true, color: C.b600, valign: 'middle' });
       L.txt(s, b, rx + 2.8, y, 2.58, 0.4, { fontSize: 12, fontFace: F.semi, color: C.ink, valign: 'middle' });
     });
-    s.addNotes('Think of the platform as a city, and workloads as the people and businesses that live in it. The city builds neighborhoods, services, roads, transit, and laws once. A family settles in one neighborhood; a bank spreads across several. Neither builds a new city. Each neighborhood is a region with a different connectivity profile; the office campus is on-premises. The four households map to the four archetypes: hybrid-connected picks Hillcrest, isolated picks Lakeside, connected picks Midtown, and an interconnected portfolio picks Riverside. The bank is a multi-region workload: branches in Riverside and Midtown serve customers together, and a backup operations center in Hillcrest stands by.');
+    s.addNotes('Think of the platform as a city, and workloads as the people and businesses that live in it. The city builds neighborhoods, services, roads, transit, and laws once. A family settles in one neighborhood; a bank spreads across several. Neither builds a new city. Each neighborhood is a region with a different connectivity profile; the office campus is on-premises. The four households map to the four archetypes: isolated picks Lakeside, connected picks Midtown, hybrid-connected picks Hillcrest, and an interconnected portfolio picks Riverside. The bank is a multi-region workload: branches in Riverside and Midtown serve customers together, and a backup operations center in Hillcrest stands by.');
   }
 
   // ───────────────────────── 10 · 06 Regional qualification (brief page 10)
@@ -425,7 +423,7 @@ module.exports = (pres, L) => {
     L.txt(s, [{ text: 'Deliberate where it matters: ', options: { bold: true } }, { text: 'where the major geographic hubs live.' }], 0.85, 6.1, 5.6, 0.75, { fontSize: 12.5, color: 'FFFFFF', valign: 'middle' });
     L.box(s, 6.73, 6.1, 6.0, 0.75, { fill: C.t50, line: C.t300, r: 0.12 });
     L.txt(s, [{ text: 'Adaptable where it helps: ', options: { bold: true } }, { text: 'which regions individual applications consume.' }], 6.98, 6.1, 5.6, 0.75, { fontSize: 12.5, color: C.ink, valign: 'middle' });
-    s.addNotes('Talk track: "The important outcome is that region becomes increasingly a deployment parameter rather than a permanent architectural dependency. We still make deliberate choices about where major strategic hubs exist. But we stop assuming that every workload must inherit those same regional choices. That gives us a much better ability to respond when circumstances change. If capacity is available somewhere else, if a required Azure service is stronger in another region, or if the regulatory or energy environment changes, we have more options for where the next workload can go." From the whitepaper: placement is revalidated at decision time for services, SKUs, AI models, regional access, and quota; capacity remains a deployment-time condition. Staying in the current region is always a valid outcome.');
+    s.addNotes('Talk track: "The important outcome is that region becomes increasingly a deployment parameter rather than a permanent architectural dependency. We still make deliberate choices about where major geographic hubs exist. But we stop assuming that every workload must inherit those same regional choices. That gives us a much better ability to respond when circumstances change. If capacity is available somewhere else, if a required Azure service is stronger in another region, or if the regulatory or energy environment changes, we have more options for where the next workload can go." From the whitepaper: placement is revalidated at decision time for services, SKUs, AI models, regional access, and quota; capacity remains a deployment-time condition. Staying in the current region is always a valid outcome.');
   }
 
   // ───────────────────────── 12 · 08 Agility in practice (brief page 12)
