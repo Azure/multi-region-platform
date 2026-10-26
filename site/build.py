@@ -29,7 +29,7 @@ SITE_TITLE = "Multi-region platform"
 SITE_SUB = "Adaptable multi-region Azure platform"
 
 DOWNLOADS = [
-    ("Full technical guidance (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform.pdf", "pdf", "67 pages"),
+    ("Full technical guidance (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform.pdf", "pdf", "59 pages"),
     ("Executive brief (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf", "pdf", "14 pages"),
 ]
 
