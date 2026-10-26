@@ -1,19 +1,19 @@
 ---
 title: Understand common connectivity profiles
-description: Learn the four regional platform connectivity profiles — No Hub, Remote Hub, Selective Hub, and Full Hub — before you qualify a region.
+description: Learn the four regional platform connectivity profiles — No Hub, Remote Hub, Minimal Hub, and Full Hub — before you qualify a region.
 ms.date: 10/23/2026
 ms.topic: conceptual
 ---
 
 # Understand common connectivity profiles
 
-Enabling an additional Azure region doesn’t require changing or duplicating the full platform footprint of an existing geographic hub. An organization can maintain a small number of strategic geographic hubs, built with the Full Hub profile, that provide resilient hybrid connectivity and common enterprise services. Other regions can use a more efficient profile, such as Remote Hub or Selective Hub, and consume capabilities from those hubs when workload requirements permit.
+Enabling an additional Azure region doesn’t require changing or duplicating the full platform footprint of an existing geographic hub. An organization can maintain a small number of strategic geographic hubs, built with the Full Hub profile, that provide resilient hybrid connectivity and common enterprise services. Other regions can use a more efficient profile, such as Remote Hub or Minimal Hub, and consume capabilities from those hubs when workload requirements permit.
 
-The four profiles form a spectrum: from No Hub, with no dependency on another region’s hub, through Remote Hub and Selective Hub, to Full Hub, with greater local capability and independence. They aren’t maturity stages. A profile can remain the right target for a region as long as it continues to satisfy workload and platform requirements.
+The four profiles form a spectrum: from No Hub, with no dependency on another region’s hub, through Remote Hub and Minimal Hub, to Full Hub, with greater local capability and independence. They aren’t maturity stages. A profile can remain the right target for a region as long as it continues to satisfy workload and platform requirements.
 
 Profiles describe platform capabilities, not workload designs; [Workload Landing Zone archetypes](./application-landing-zone-archetypes.md) describe what applications need.
 
-:::image type="content" source="./media/connectivity-profile-spectrum.png" alt-text="Spectrum of four profiles from no dependency on a geographic hub to greater local capability. No Hub has no hub or gateway; Remote Hub connects privately to a geographic hub; a Selective Hub hosts selected shared services such as private DNS, a virtual network gateway, and Azure Monitor; a Full Hub adds comprehensive shared services including Azure Firewall." lightbox="./media/connectivity-profile-spectrum.png":::
+:::image type="content" source="./media/connectivity-profile-spectrum.png" alt-text="Spectrum of four profiles from no dependency on a geographic hub to greater local capability. No Hub has no hub or gateway; Remote Hub connects privately to a geographic hub; a Minimal Hub hosts selected shared services such as private DNS, a virtual network gateway, and Azure Monitor; a Full Hub adds comprehensive shared services including Azure Firewall." lightbox="./media/connectivity-profile-spectrum.png":::
 
 *The spectrum of regional platform connectivity profiles. Moving right adds local capability and independence, and also cost and operational scope. Services shown are examples; each hub includes only what its workloads require.*
 
@@ -35,11 +35,11 @@ Cross-region connectivity can be implemented through appropriate Azure networkin
 
 **Regional footprint:** Workload spokes and any capabilities that must remain close to the workloads. Gateways, firewalls, hybrid connectivity, routing services, and selected shared services can remain in an existing geographic hub when workload requirements permit.
 
-## Selective Hub
+## Minimal Hub
 
 The additional region includes a local hub that provides selected connectivity and shared services while continuing to consume other capabilities from an existing geographic hub.
 
-The Selective Hub provides only the local capabilities required by its workloads rather than replicating a complete platform footprint. Depending on workload requirements, these capabilities can include east-west routing, DNS, monitoring, backup, security inspection, egress, private connectivity, selected identity or directory services, on-premises connectivity, or other services that must remain close to the workloads.
+The Minimal Hub provides only the local capabilities required by its workloads rather than replicating a complete platform footprint. Depending on workload requirements, these capabilities can include east-west routing, DNS, monitoring, backup, security inspection, egress, private connectivity, selected identity or directory services, on-premises connectivity, or other services that must remain close to the workloads.
 
 **Fits when:** Workloads require some local shared services, application-to-application connectivity, lower-latency dependency paths, regional security controls, or greater independence than a Remote Hub profile can provide.
 

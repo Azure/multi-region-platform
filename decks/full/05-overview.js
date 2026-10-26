@@ -107,7 +107,7 @@ module.exports = (pres, L) => {
     const regs = [
       ['Region A', 2.0, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full Hub', C.b600, 'FFFFFF']], 'Geographic hub'],
       ['Region B', 2.0, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full Hub', C.b600, 'FFFFFF']], 'Geographic hub'],
-      ['Region C', 1.55, [['Workloads', C.t600, 'FFFFFF'], ['Selective Hub', 'FFFFFF', C.b700, C.b300]], 'Selective Hub'],
+      ['Region C', 1.55, [['Workloads', C.t600, 'FFFFFF'], ['Minimal Hub', 'FFFFFF', C.b700, C.b300]], 'Minimal Hub'],
       ['Region D', 1.2, [['Spokes', C.t600, 'FFFFFF']], 'Remote Hub', 'via Remote Hub'],
       ['Region E', 1.0, [['No Hub', C.t100, C.t700]], 'No Hub'],
       ['Region F', 0.75, [], 'Not enabled', 'Candidate'],
@@ -120,7 +120,7 @@ module.exports = (pres, L) => {
       L.txt(s, n, x + 0.26, y + 0.05, 0.8, 0.22, { fontSize: 10, bold: true, color: C.b700, valign: 'middle' });
       let by = base - 0.1;
       blocks.slice().reverse().forEach(([t, f, c, ln]) => {
-        const bh = t.length > 12 && t !== 'Selective Hub' ? 0.46 : 0.3;
+        const bh = t.length > 12 && t !== 'Minimal Hub' ? 0.46 : 0.3;
         by -= bh;
         L.box(s, x + 0.07, by, rw - 0.14, bh, { fill: f, line: ln, r: 0.05 });
         L.txt(s, t, x + 0.07, by, rw - 0.14, bh, { fontSize: 9.5, bold: true, color: c, align: 'center', valign: 'middle' });
@@ -142,7 +142,7 @@ module.exports = (pres, L) => {
     L.header(s, '', 'Three constructs balance advance planning with flexibility', { tw: 8.2, lede: 'Platform teams cannot predict every future workload. Plan for what is known, stay flexible for what is not.', lx: 9.2, lw: 3.53 });
     L.txt(s, 'PLATFORM READINESS · ADVANCE PLANNING', 0.6, 1.72, 6, 0.24, { fontSize: 10.5, bold: true, color: C.b600, charSpacing: 2 });
     const cards = [
-      ['hub', C.v600, 'Regional Platform Connectivity Profiles', 'Describe **what the platform provides** to support those archetypes in a region.', [['No Hub', C.b100, C.b700], ['Remote Hub', C.b100, C.b700], ['Selective Hub', C.b100, C.b700], ['Full Hub', C.b100, C.b700]], C.line],
+      ['hub', C.v600, 'Regional Platform Connectivity Profiles', 'Describe **what the platform provides** to support those archetypes in a region.', [['No Hub', C.b100, C.b700], ['Remote Hub', C.b100, C.b700], ['Minimal Hub', C.b100, C.b700], ['Full Hub', C.b100, C.b700]], C.line],
       ['app', C.t600, 'Workload Landing Zone Archetypes', 'Describe **what applications require**: recurring dependency and connectivity characteristics.', [['Isolated', C.t100, C.t700], ['Connected', C.t100, C.t700], ['Hybrid-connected', C.t100, C.t700], ['Portfolios', C.t100, C.t700]], C.t300],
       ['search', C.b600, 'Regional Qualification', 'Evaluates candidate regions against four checks for defined workload requirements.', [['Excluded', C.w100, C.w600], ['Candidate', 'FFFFFF', C.b700, C.b500], ['Conditional', C.a100, C.a700], ['Qualified', C.g100, C.g600]], C.line],
     ];
@@ -177,7 +177,7 @@ module.exports = (pres, L) => {
       L.chip(s, t, qx, qy, { fill: 'FFFFFF', color: C.t700, line: C.t300, size: 10.5, w, h: 0.28 }); qx += w + 0.1;
     });
     L.caption(s, 'Figure', 'Archetypes (application requirements) and profiles (platform capability) stay distinct. Migration and resiliency remain workload-specific decisions.', 0.6, 6.62, 12.1);
-    s.addNotes('Regional Platform Connectivity Profiles describe what the platform provides in a region: No Hub, Remote Hub, Selective Hub, or Full Hub. The most efficient profile can remain the target as long as it continues to satisfy requirements. Workload Landing Zone Archetypes group workloads by recurring dependency and connectivity characteristics. Regional Qualification is a repeatable way to assess candidate regions through four checks: business and geography, data and compliance, workload requirements and dependencies, and regional capability and availability. The result is an excluded, candidate, conditional, or qualified regional option, backed by current evidence, known constraints, ownership, and review triggers. During onboarding, teams revalidate options against the application and decide whether it remains in place, uses another region for net-new deployment, relocates, recovers elsewhere, or operates across active regions.');
+    s.addNotes('Regional Platform Connectivity Profiles describe what the platform provides in a region: No Hub, Remote Hub, Minimal Hub, or Full Hub. The most efficient profile can remain the target as long as it continues to satisfy requirements. Workload Landing Zone Archetypes group workloads by recurring dependency and connectivity characteristics. Regional Qualification is a repeatable way to assess candidate regions through four checks: business and geography, data and compliance, workload requirements and dependencies, and regional capability and availability. The result is an excluded, candidate, conditional, or qualified regional option, backed by current evidence, known constraints, ownership, and review triggers. During onboarding, teams revalidate options against the application and decide whether it remains in place, uses another region for net-new deployment, relocates, recovers elsewhere, or operates across active regions.');
   }
 
   // ───────────────────────── Progressive adoption journey

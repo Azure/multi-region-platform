@@ -350,7 +350,7 @@ def city():
     ]
     rc = [("#2B88D8", "#0F548C"), ("#C2410C", "#8E2F09"), ("#04807A", "#03615F"), ("#C98A00", "#8F6200"), ("#8661C5", "#5C2E91")]
 
-    # ── Riverside: Selective Hub — fire station + clinic; bank branch A
+    # ── Riverside: Minimal Hub — fire station + clinic; bank branch A
     X, Y = RV
     add(X + Y + 1.2, box(X + .3, Y + .3, X + 1.2, Y + 1.05, 0, .5, "#FFE3D6", "#E8590C", "#B8470A", op=1))
     add(X + Y + 2.4, box(X + 1.5, Y + .3, X + 2.5, Y + 1.05, 0, .62, "#FFFFFF", "#DCE8F3", "#B8CDE2", op=1) + box(X + 1.85, Y + .55, X + 2.15, Y + .85, .62, .72, "#FFFFFF", "#D13438", "#A4262C", op=1))
@@ -509,7 +509,7 @@ def build(web=False, pdf=False):
     L = [("Office campus", "On-premises · outside the city", 165, 222, p(-3.7, 1.0, 1.5)),
          ("Express toll lanes", "Two interchanges into Downtown", 400, 266, p(-1.4, 1.3, 0)),
          ("Downtown", "Full Hub · every service local", 650, 236, p(2.0, .9, 2.9)),
-         ("Riverside", "Selective Hub · fire station, clinic", 790, 330, p(6.6, 1.2, .9)),
+         ("Riverside", "Minimal Hub · fire station, clinic", 790, 330, p(6.6, 1.2, .9)),
          ("Hillcrest", "Remote Hub · services by transit", 930, 470, p(10.9, 1.4, .6)),
          ("Midtown", "Remote Hub · services by transit", 430, 900, p(5.4, 8.1, .3)),
          ("Lakeside", "No Hub · off-grid, no city roads", 150, 800, p(.4, 8.9, .3)),
@@ -520,7 +520,7 @@ def build(web=False, pdf=False):
         L = [("Office campus", "On-premises", 150, 240, p(-3.7, 1.0, 1.5)),
              ("Express toll lanes", "ExpressRoute", 415, 280, p(-1.4, 1.3, 0)),
              ("Downtown", "Full Hub", 668, 240, p(2.0, .9, 2.9)),
-             ("Riverside", "Selective Hub", 842, 340, p(6.6, 1.2, .9)),
+             ("Riverside", "Minimal Hub", 842, 340, p(6.6, 1.2, .9)),
              ("Hillcrest", "Remote Hub", 960, 470, p(10.9, 1.4, .6)),
              ("Midtown", "Remote Hub", 400, 970, p(5.4, 8.1, .3)),
              ("Lakeside", "No Hub", 128, 880, p(.4, 8.9, .3)),

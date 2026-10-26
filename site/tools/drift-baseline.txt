@@ -4,14 +4,14 @@ applications with significant dependencies on on premises environments enterpris
 architecture or design pattern
 because this is a portfolio level archetype its combined dependencies may require capabilities beyond those needed by any individual application
 cloud native or ai applications that are primarily self contained but require private connectivity to selected enterprise services data sources apis or other azure environments
-direct connectivity may suit a limited number of tightly coupled workloads while a selective hub or full hub may be more appropriate where broader connectivity shared routing traffic inspection resiliency or operational requirements justify regional platform capabilities
+direct connectivity may suit a limited number of tightly coupled workloads while a minimal hub or full hub may be more appropriate where broader connectivity shared routing traffic inspection resiliency or operational requirements justify regional platform capabilities
 groups of applications with meaningful dependencies on each other including shared data common services east west communication or coordinated connectivity and operations across applications regions or business domains
 no hub doesn t fit a mandatory private dependency on on premises or geographic hub services
 select the appropriate connectivity profile based on the portfolio s aggregate connectivity shared service resiliency scale and operational requirements rather than the requirements of a single workload
 the archetype to profile matrix shows the typical options for each archetype
 the four archetypes grouped by the platform connectivity and dependency capabilities each requires
 these workloads can often use no hub
-these workloads typically use remote hub selective hub or full hub depending on dependency latency resiliency regulatory operational and shared service requirements
+these workloads typically use remote hub minimal hub or full hub depending on dependency latency resiliency regulatory operational and shared service requirements
 understand workload landing zone archetypes
 where significant east west traffic exists within a region evaluate whether direct spoke to spoke connectivity or a local hub provides a more appropriate path than routing traffic through a geographic hub in another region
 workload landing zone archetypes are a planning abstraction that groups recurring application connectivity and dependency requirements
@@ -45,8 +45,8 @@ qualified for the ai workload
 recovery architecture remains a workload specific decision
 revalidate current model sku service regional access and quota support at decision time
 revisit the additional regional option when requirements change
-selective hub where aggregate east west traffic shared services latency or independence requirements justify local capability
-selective hub where selected local capabilities are required and existing hybrid connectivity can be reused where reachability and resiliency requirements permit
+minimal hub where aggregate east west traffic shared services latency or independence requirements justify local capability
+minimal hub where selected local capabilities are required and existing hybrid connectivity can be reused where reachability and resiliency requirements permit
 step 3 validates hybrid connectivity datacenter and user geography reachability resiliency and whether existing connectivity can support the target design
 the existing geographic hub is reused
 the existing target region can remain qualified for the identified workload requirements while an additional region remains a candidate for future use
@@ -137,7 +137,7 @@ there is no failover target so you wait for restore
 you can read but you can t create update or rotate
 you must own and hold the master key and you run mission critical workloads with customer controlled recovery
 # minimal-regional-hub
-the hub uses the selective hub profile as long as the region still depends on a geographic hub for something
+the hub uses the minimal hub profile as long as the region still depends on a geographic hub for something
 the same as for no hub with spokes that connect to the local hub
 # misconceptions
 common multi region misconceptions
@@ -164,8 +164,8 @@ quota and specific capacity common blocker
 region settings in policy common blocker
 where logs and telemetry live common blocker
 # prepare-region
-no hub remote hub selective hub and full hub
-region c s selective hub reaches on premises by reusing an existing expressroute circuit
+no hub remote hub minimal hub and full hub
+region c s minimal hub reaches on premises by reusing an existing expressroute circuit
 region d s does not
 what must be true before workloads arrive
 # profile-selection

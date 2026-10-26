@@ -17,9 +17,9 @@ Determine which shared services and operational capabilities must be provided in
 
 ## Default placement by profile
 
-The table gives a starting point for each profile. The defaults aren't rules: change a cell when a workload requirement calls for it, and record the reason. For a Selective Hub, each row is a separate choice.
+The table gives a starting point for each profile. The defaults aren't rules: change a cell when a workload requirement calls for it, and record the reason. For a Minimal Hub, each row is a separate choice.
 
-| Shared service | No Hub | Remote Hub | Selective Hub | Full Hub |
+| Shared service | No Hub | Remote Hub | Minimal Hub | Full Hub |
 |---|---|---|---|---|
 | Management groups, access control, policy | Global | Global | Global | Global |
 | Private DNS zones | Global | Global | Global | Global |

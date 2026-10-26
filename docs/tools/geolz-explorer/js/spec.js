@@ -191,7 +191,7 @@ function moveSite(spec, i, delta) { return swapIn(spec.onprem || [], i, delta); 
 
 /* ===== PATTERN CHANGE: remove what the new pattern doesn't allow (rules.js "fields", "links") ===== */
 // Returns short texts for what was removed. Regions that use this one as their geographic hub are not changed: Checks
-// reports them. A Selective Hub that becomes another pattern loses the hub link to its geographic hub (linkRemoteHub
+// reports them. A Minimal Hub that becomes another pattern loses the hub link to its geographic hub (linkRemoteHub
 // added it).
 function changePattern(spec, region, next) {
   const was = region.pattern === 'minimal-hub' && region.remote_hub;
@@ -199,8 +199,8 @@ function changePattern(spec, region, next) {
   const removed = [...dropConnections(spec, region), ...dropLinks(spec, region), ...dropSettings(spec, region)];
   return was && next !== 'minimal-hub' ? [...removed, ...unlinkRemoteHub(spec, region, was, true)] : removed;
 }
-// A Selective Hub takes capabilities from its geographic hub over a hub link (hub-spoke; Virtual WAN links its hubs
-// implicitly). assign: give it a geographic hub when it has none (on becoming a Selective Hub: the first full hub, in its
+// A Minimal Hub takes capabilities from its geographic hub over a hub link (hub-spoke; Virtual WAN links its hubs
+// implicitly). assign: give it a geographic hub when it has none (on becoming a Minimal Hub: the first full hub, in its
 // virtual WAN when there are several); a geographic hub the user cleared stays cleared. Returns what was added.
 function linkRemoteHub(spec, region, assign = true) {
   if (region.pattern !== 'minimal-hub') return [];
@@ -219,8 +219,8 @@ function linkRemoteHub(spec, region, assign = true) {
   }
   return added;
 }
-// The other half: a Selective Hub's previous geographic hub (no longer its geographic hub, or the region is no longer a
-// Selective Hub: wasMinimal) loses its hub link. Returns what was removed, as short texts.
+// The other half: a Minimal Hub's previous geographic hub (no longer its geographic hub, or the region is no longer a
+// Minimal Hub: wasMinimal) loses its hub link. Returns what was removed, as short texts.
 function unlinkRemoteHub(spec, region, previous, wasMinimal = region.pattern === 'minimal-hub') {
   const old = regionById(spec, previous), links = spec.region_links || [];
   if (!wasMinimal || !old || previous === region.remote_hub ||

@@ -13,7 +13,7 @@ Each choice follows from the workloads you expect in the region, not from the fo
 
 | Choice | You select | Page |
 |---|---|---|
-| 1. Connectivity profile | One of four: No Hub, Remote Hub, Selective Hub, or Full Hub. | [Select the connectivity profile](./profile-selection.md) |
+| 1. Connectivity profile | One of four: No Hub, Remote Hub, Minimal Hub, or Full Hub. | [Select the connectivity profile](./profile-selection.md) |
 | 2. Shared-service placement | For each shared service the workloads depend on: local, remote, or global. | [Place shared services](./platform-enablement-connectivity.md) |
 | 3. Hybrid connectivity | Reuse the existing foundation, change it, or confirm that none is required. | [Confirm hybrid connectivity](./hybrid-connectivity.md) |
 
@@ -45,7 +45,7 @@ Keep one record per region. Record the selected profile, the placement of each s
 
 | Region | Connectivity profile | Shared services | Hybrid connectivity | Open conditions |
 |---|---|---|---|---|
-| Region C | Selective Hub | Local: selected capabilities. Remote from Region A: remaining shared services. | Reuse: existing foundation where required. | None |
+| Region C | Minimal Hub | Local: selected capabilities. Remote from Region A: remaining shared services. | Reuse: existing foundation where required. | None |
 | Region D | Remote Hub | Remote from a geographic hub. | Reuse: via the hub where required. | Latency test with representative traffic. |
 | Region E | No Hub | None required. | Not required. | None |
 

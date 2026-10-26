@@ -10,6 +10,9 @@ the list. Saved plans, review records, and Excel exports retain every selected r
 with a single geographic hub keep that selection. Remote shared services still name one supplying region;
 when no supplier is specified, the first selected hub is used.
 
+Saved plans using earlier names for Minimal Hub migrate automatically without changing custom notes,
+service placements, or hub selections. The advanced networking tool keeps its stable `minimal-hub` pattern ID.
+
 **Existing connectivity** suggests only locations in the Azure ExpressRoute peering-location snapshot,
 independently of the Latency tab. Customer cities and their estimated routes do not establish existing
 circuits. Suggestions identify valid peering locations, not circuits the customer owns. You can still
@@ -109,7 +112,7 @@ per diagram and does not model every planner capability or product choice. Mixed
 paths, incomplete hybrid definitions and other limitations are called out in the panel. Firewall and DNS
 symbols illustrate the capability, not a confirmed product selection. Current-region services are only
 inferred where a new region requires them; the planner does not inventory all existing services.
-Both tools use **No Hub**, **Remote Hub**, **Selective Hub**, and **Full Hub**. Geographic hubs provide
+Both tools use **No Hub**, **Remote Hub**, **Minimal Hub**, and **Full Hub**. Geographic hubs provide
 hybrid connectivity and shared services from other regions; Azure geography names remain reference-data labels,
 not connectivity profiles. Saved plans using the previous profile names are converted when opened, including
 regional connection choices that previously referred to the remote hub.

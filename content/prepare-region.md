@@ -15,7 +15,7 @@ Preparing a region is a targeted change to the platform you already run, not a n
 |---|---|---|
 | [No Hub](./disconnected-spokes.md) | The region in policy and in landing-zone provisioning. Workload spokes with their own internet ingress and egress. No hub, no gateway, no peering. | Governance, identity, policy, monitoring, and automation. |
 | [Remote Hub](./remote-hub-connected.md) | The same, plus a cross-region connection from each spoke to an existing geographic hub, with routing and DNS settings. No hub. | An existing geographic hub: its gateways, firewall, DNS, and shared services. |
-| [Selective Hub](./minimal-regional-hub.md) | The same, plus a hub in the region with only the components you selected. | The geographic hub, for everything you didn't make local. |
+| [Minimal Hub](./minimal-regional-hub.md) | The same, plus a hub in the region with only the components you selected. | The geographic hub, for everything you didn't make local. |
 | [Full Hub](./full-regional-hub.md) | The same, plus a full local hub. | The landing-zone foundation and, where they meet requirements, the existing ExpressRoute circuits. |
 
 The Cloud Adoption Framework already describes how to [add a new region to an existing landing zone](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone), including a new hub in the region. That path is the Full Hub. The other three profiles do part of it, for regions whose workloads need less.
@@ -45,9 +45,9 @@ The order is the same for every profile. The profile decides how much each item 
 
 Different profiles can coexist across the estate. A region's profile changes only when workload and platform requirements change, not because regions are expected to progress along a maturity path.
 
-:::image type="content" source="./media/profiles-coexisting-estate.png" alt-text="Illustrative estate: on-premises datacenters connect to two geographic hubs in regions A and B. Region C runs a Selective Hub that reuses an existing ExpressRoute circuit, region D runs a Selective Hub without an on-premises path, regions E and F use Remote Hub, region G uses No Hub, and region H is a candidate not yet enabled." lightbox="./media/profiles-coexisting-estate.png":::
+:::image type="content" source="./media/profiles-coexisting-estate.png" alt-text="Illustrative estate: on-premises datacenters connect to two geographic hubs in regions A and B. Region C runs a Minimal Hub that reuses an existing ExpressRoute circuit, region D runs a Minimal Hub without an on-premises path, regions E and F use Remote Hub, region G uses No Hub, and region H is a candidate not yet enabled." lightbox="./media/profiles-coexisting-estate.png":::
 
-*An illustrative estate. Two geographic hubs provide resilient hybrid connectivity; other regions consume what they need. Region C's Selective Hub reaches on-premises by reusing an existing ExpressRoute circuit; region D's does not. Both are valid. Names and placements are examples only.*
+*An illustrative estate. Two geographic hubs provide resilient hybrid connectivity; other regions consume what they need. Region C's Minimal Hub reaches on-premises by reusing an existing ExpressRoute circuit; region D's does not. Both are valid. Names and placements are examples only.*
 
 ## When the region is ready
 
@@ -55,7 +55,7 @@ A region is **ready for workloads** when the required capability set is in place
 
 ## In this section
 
-- [No Hub](./disconnected-spokes.md), [Remote Hub](./remote-hub-connected.md), [Selective Hub](./minimal-regional-hub.md), and [Full Hub](./full-regional-hub.md): what to deploy for each profile.
+- [No Hub](./disconnected-spokes.md), [Remote Hub](./remote-hub-connected.md), [Minimal Hub](./minimal-regional-hub.md), and [Full Hub](./full-regional-hub.md): what to deploy for each profile.
 - [Platform readiness checklist](./platform-readiness.md): what must be true before workloads arrive.
 
 ## Reference links

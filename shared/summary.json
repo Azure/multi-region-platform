@@ -104,10 +104,10 @@
    "options": [
     "No Hub",
     "Remote Hub",
-    "Selective Hub",
+    "Minimal Hub",
     "Full Hub"
    ],
-   "select": "One of four: No Hub, Remote Hub, Selective Hub, or Full Hub.",
+   "select": "One of four: No Hub, Remote Hub, Minimal Hub, or Full Hub.",
    "article": "profile-selection"
   },
   {
@@ -136,7 +136,7 @@
  "profiles": [
   "No Hub",
   "Remote Hub",
-  "Selective Hub",
+  "Minimal Hub",
   "Full Hub"
  ],
  "archetypes": [
@@ -294,7 +294,7 @@
     },
     {
      "label": "Connectivity profile",
-     "text": "Selective Hub where selected local capabilities are required; existing hybrid connectivity reused where reachability and resiliency permit.",
+     "text": "Minimal Hub where selected local capabilities are required; existing hybrid connectivity reused where reachability and resiliency permit.",
      "tone": "b"
     },
     {
@@ -311,7 +311,7 @@
      "Check 2 mandatory location; Check 3 affected workloads; Check 4 services, zones, access.",
      "The region can be qualified for defined Hybrid-Connected workload requirements while other portfolio workloads remain candidates until their dependencies are understood.",
      "Hybrid-Connected Applications.",
-     "Selective Hub; reuse existing hybrid connectivity where it permits.",
+     "Minimal Hub; reuse existing hybrid connectivity where it permits.",
      "In-scope workloads relocate selectively; recovery stays workload-specific."
     ],
     "takeaway": "Qualify for defined requirements without forcing portfolio-wide relocation; if the new region is nonpaired, design the recovery path explicitly (Resources)."
@@ -396,7 +396,7 @@
     },
     {
      "label": "Connectivity profile",
-     "text": "Remote Hub where cross-region dependencies are acceptable; Selective Hub where east-west traffic, shared services, latency, or independence justify it.",
+     "text": "Remote Hub where cross-region dependencies are acceptable; Minimal Hub where east-west traffic, shared services, latency, or independence justify it.",
      "tone": "b"
     },
     {
@@ -413,7 +413,7 @@
      "Check 1 business need; Check 2 local data obligations; Check 3 portfolio dependencies.",
      "Candidate until dependencies are known; then qualified.",
      "Interconnected Application Portfolios.",
-     "Remote Hub; Selective Hub where east-west or independence justify it.",
+     "Remote Hub; Minimal Hub where east-west or independence justify it.",
      "Remain in place initially; relocate selectively with integration."
     ],
     "takeaway": "Aggregate portfolio dependencies determine the profile; application count or acquisition status does not."
@@ -528,7 +528,7 @@
   },
   {
    "title": "Prepare the region",
-   "text": "Build what the record says, through the automation you already run. Read only the page for the profile you selected: No Hub, Remote Hub, Selective Hub, or Full Hub. Use the platform readiness checklist to confirm the region is ready before the first workload arrives.",
+   "text": "Build what the record says, through the automation you already run. Read only the page for the profile you selected: No Hub, Remote Hub, Minimal Hub, or Full Hub. Use the platform readiness checklist to confirm the region is ready before the first workload arrives.",
    "short": "Build what the record says through the automation you already run. Confirm with the platform readiness checklist."
   },
   {

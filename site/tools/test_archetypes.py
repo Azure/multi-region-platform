@@ -13,7 +13,7 @@ ARCHETYPES = [
     "Hybrid-Connected Applications",
     "Interconnected Application Portfolios",
 ]
-PROFILES = ["No Hub", "Remote Hub", "Selective Hub", "Full Hub"]
+PROFILES = ["No Hub", "Remote Hub", "Minimal Hub", "Full Hub"]
 
 
 def text(fragment):

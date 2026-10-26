@@ -85,7 +85,7 @@ function applyField(el) {
   if (d.resiliency) setCircuitResiliency(spec, +d.resiliency, el.value);  // spec.js
   if (pattern) patternChange(+pattern[1], el.value);
   else if (d.path) setPath(spec, d.path, el.value);
-  if (remote) remoteHubChange(+remote[1], before);  // editor.js: a Selective Hub is linked to its geographic hub
+  if (remote) remoteHubChange(+remote[1], before);  // editor.js: a Minimal Hub is linked to its geographic hub
   afterEdit(spec, d.path);  // topology.js: the first virtual WAN
   if (d.rename) renameRegion(spec, +d.rename, el.value);
   if (d.link) setLink(spec, ...d.link.split('|'), el.checked);
@@ -357,7 +357,7 @@ const STEP_FIELDS = {
     ${esc(hybridConnections(spec).length)} connection(s). Finish shows the Overview; the tabs below hold every
     setting.</div>`
 };
-// Step 3: the regions so far, and one more: region, pattern and (for a remote or Selective Hub) its geographic hub.
+// Step 3: the regions so far, and one more: region, pattern and (for a remote or Minimal Hub) its geographic hub.
 function regionStep() {
   const d = startState.draft, used = new Set(spec.regions.map(r => r.id)), hubs = spec.regions.filter(hasHub);
   const patterns = patternPairs();  // editor.js

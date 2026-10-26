@@ -27,7 +27,7 @@ module.exports = (pres, L) => {
       L.txt(s, t, 0.98, 5.95 + i * 0.32, 5.4, 0.28, { fontSize: 13, fontFace: F.semi, color: C.ink, valign: 'middle' });
     });
     L.txt(s, D.edition, 0.6, 7.03, 3, 0.26, { fontSize: 11, color: C.muted, valign: 'middle' });
-    s.addNotes('Opening. This briefing summarizes the Multi-Region Platform Whitepaper: how to extend Azure landing zones so that additional Azure regions become governed, qualified options, without separate governance structures or identical infrastructure in every region. The artwork shows the model: two geographic hubs, a Selective Hub, workload spokes, and an empty candidate footprint, all standing on one shared foundation.');
+    s.addNotes('Opening. This briefing summarizes the Multi-Region Platform Whitepaper: how to extend Azure landing zones so that additional Azure regions become governed, qualified options, without separate governance structures or identical infrastructure in every region. The artwork shows the model: two geographic hubs, a Minimal Hub, workload spokes, and an empty candidate footprint, all standing on one shared foundation.');
   }
 
   // ───────────────────────── 2 · Agenda (generated from the sections table)
@@ -138,7 +138,7 @@ module.exports = (pres, L) => {
     const s = L.slide('summary');
     L.header(s, 'Continued', 'Choose efficient connectivity, keep readiness and placement separate, keep one operating model', { tw: 11, ts: 24 });
     const cards = [
-      ['hub', C.v600, C.wash, 'Choose the most efficient regional connectivity', 'Profiles range from **No Hub** through **Remote Hub** and **Selective Hub** to a **Full Hub**. They are not maturity stages. Select the **most efficient profile** for current requirements, and add local capabilities only when a measurable need justifies them.'],
+      ['hub', C.v600, C.wash, 'Choose the most efficient regional connectivity', 'Profiles range from **No Hub** through **Remote Hub** and **Minimal Hub** to a **Full Hub**. They are not maturity stages. Select the **most efficient profile** for current requirements, and add local capabilities only when a measurable need justifies them.'],
       ['route', C.t700, C.t50, 'Keep platform readiness and workload placement separate', 'Qualification determines whether a region can become a viable platform option. Placement happens later, when a specific workload and its current requirements are known. Placement, relocation, recovery, and multi-region operation remain **workload-specific decisions**.'],
       ['shield', C.s800, C.wash, 'Keep the operating model consistent while allowing regional adaptation', 'The operating model stays consistent across regions; implementation can vary where business, workload, or regulatory requirements call for it. **Region-agnostic does not mean region-random.** Choice operates within qualified options, documented constraints, and current evidence.'],
     ];

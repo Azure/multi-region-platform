@@ -7,7 +7,7 @@
 
   function workbookSpec() {
     const C = M.core, S = C.S, picked = C.selected(), notes = [];
-    const patterns = { 'Full Hub': 'full-hub', 'Selective Hub': 'minimal-hub',
+    const patterns = { 'Full Hub': 'full-hub', 'Minimal Hub': 'minimal-hub',
       'Remote Hub': 'remote-hub', 'No Hub': 'disconnected' };
     const topology = S.estate.topology || picked.map(r => C.effective(r).topology).find(Boolean);
     const result = { format: 1, title: S.meta.name || 'Regional networking design',

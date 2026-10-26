@@ -38,7 +38,7 @@ The framework has five parts. Each part answers one question.
 
 ## From a fixed pair to governed options
 
-:::image type="content" source="./media/fixed-pair-to-governed-options.png" alt-text="Diagram comparing a fixed primary and disaster-recovery region pair, where the full footprint is mirrored, with an adaptable platform in which six regions sit on one governed landing-zone foundation: two geographic hubs, a Selective Hub, Remote Hub, No Hub, and a candidate region." lightbox="./media/fixed-pair-to-governed-options.png":::
+:::image type="content" source="./media/fixed-pair-to-governed-options.png" alt-text="Diagram comparing a fixed primary and disaster-recovery region pair, where the full footprint is mirrored, with an adaptable platform in which six regions sit on one governed landing-zone foundation: two geographic hubs, a Minimal Hub, Remote Hub, No Hub, and a candidate region." lightbox="./media/fixed-pair-to-governed-options.png":::
 
 *From a fixed regional pair to governed regional options. Instead of mirroring a complete footprint in each new region, the platform extends one governed foundation and gives each region only the capability its workloads require.*
 

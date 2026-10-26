@@ -23,7 +23,7 @@
       <div class="eyebrow" style="color:var(--t600)">How archetypes map to connectivity profiles</div>
       <h2 class="title mt8" style="font-size:21px;color:var(--ink)">Archetypes describe what applications require. Profiles describe what the platform provides.</h2>
     </div>
-    <p style="flex:1;font-size:12px;line-height:1.45"><strong>An archetype doesn’t dictate a profile:</strong> one archetype can use different profiles, and one profile can serve several archetypes. Use the archetypes expected in a region to understand what it needs, then choose the most efficient profile that meets those needs. For example, a hybrid-connected application might run well on a Remote Hub profile in one region and need a Selective Hub in another, depending on latency, traffic, and resiliency requirements.</p>
+    <p style="flex:1;font-size:12px;line-height:1.45"><strong>An archetype doesn’t dictate a profile:</strong> one archetype can use different profiles, and one profile can serve several archetypes. Use the archetypes expected in a region to understand what it needs, then choose the most efficient profile that meets those needs. For example, a hybrid-connected application might run well on a Remote Hub profile in one region and need a Minimal Hub in another, depending on latency, traffic, and resiliency requirements.</p>
   </div>
 
   <div class="figure mt16" id="fig13">
@@ -35,7 +35,7 @@
         <th style="text-align:left;vertical-align:bottom;padding-bottom:10px"><span class="cap" style="color:var(--t600);line-height:1.6">Archetypes<br>What applications require</span></th>
         <th class="pf"><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="9" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>No Hub</th>
         <th class="pf"><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"/><circle cx="40" cy="15" r="5" fill="#0F6CBD"/></svg>Remote Hub</th>
-        <th class="pf"><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="6" fill="#fff" stroke="#2B88D8" stroke-width="1.5"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>Selective Hub</th>
+        <th class="pf"><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="6" fill="#fff" stroke="#2B88D8" stroke-width="1.5"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>Minimal Hub</th>
         <th class="pf"><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="7" fill="#0F6CBD"/><circle cx="14" cy="15" r="2.4" fill="#fff"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>Full Hub</th>
         <th class="dr">What drives the choice</th>
       </tr></thead>
@@ -63,8 +63,8 @@
   </div>
 
   <div class="row mt16" style="gap:30px;align-items:stretch">
-    <div style="flex:1;border-top:2px solid var(--t100);padding-top:10px"><h3 style="font-size:13.4px">Connected applications: hub-free options</h3><p class="small mt4">These workloads can use No Hub when approved direct same-region spoke connectivity or Azure service endpoints meet their dependency and control requirements without a geographic hub or on-premises path. Otherwise, use Remote Hub, Selective Hub, or Full Hub, depending on dependency latency, traffic patterns, resiliency, security, and operational requirements.</p></div>
-    <div style="flex:1;border-top:2px solid var(--b100);padding-top:10px"><h3 style="font-size:13.4px">Interconnected portfolios: aggregate requirements</h3><p class="small mt4">No Hub is an option only when approved same-region spoke-to-spoke connectivity and Azure service endpoints satisfy the portfolio’s aggregate requirements without a geographic hub or on-premises path. Remote Hub is an option when cross-region latency, traffic, and availability coupling are acceptable; use Selective Hub or Full Hub when local capabilities are justified.</p></div>
+    <div style="flex:1;border-top:2px solid var(--t100);padding-top:10px"><h3 style="font-size:13.4px">Connected applications: hub-free options</h3><p class="small mt4">These workloads can use No Hub when approved direct same-region spoke connectivity or Azure service endpoints meet their dependency and control requirements without a geographic hub or on-premises path. Otherwise, use Remote Hub, Minimal Hub, or Full Hub, depending on dependency latency, traffic patterns, resiliency, security, and operational requirements.</p></div>
+    <div style="flex:1;border-top:2px solid var(--b100);padding-top:10px"><h3 style="font-size:13.4px">Interconnected portfolios: aggregate requirements</h3><p class="small mt4">No Hub is an option only when approved same-region spoke-to-spoke connectivity and Azure service endpoints satisfy the portfolio’s aggregate requirements without a geographic hub or on-premises path. Remote Hub is an option when cross-region latency, traffic, and availability coupling are acceptable; use Minimal Hub or Full Hub when local capabilities are justified.</p></div>
   </div>
 </div>
 </section>

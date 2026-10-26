@@ -38,7 +38,7 @@ The full PDF's reading order comes from `content/toc.yml` through `ARTICLE_PAGES
 
 Keep archetype lists, cards, matrix rows and columns, planner choices, and numbered city examples in this order: **Isolated Cloud-Native or AI Applications**, **Connected Cloud-Native or AI Applications**, **Hybrid-Connected Applications**, **Interconnected Application Portfolios**. This is increasing platform connectivity and dependency complexity, not application sophistication or maturity. When reordering a qualification matrix, move the evidence/status cells with their archetype, not just the headings.
 
-Profile applicability is many-to-many. No Hub is often suitable for isolated applications and is conditional for connected applications and portfolios: approved same-region spoke connectivity or Azure service endpoints must meet all requirements without geographic-hub or on-premises dependencies. Hybrid-connected workloads require Remote Hub, Selective Hub, or Full Hub. Keep these qualifications in cards, matrices, slide notes, and the profile-selection questions. Run `python -m unittest discover -s site/tools -p test_archetypes.py` after changing these surfaces.
+Profile applicability is many-to-many. No Hub is often suitable for isolated applications and is conditional for connected applications and portfolios: approved same-region spoke connectivity or Azure service endpoints must meet all requirements without geographic-hub or on-premises dependencies. Hybrid-connected workloads require Remote Hub, Minimal Hub, or Full Hub. Keep these qualifications in cards, matrices, slide notes, and the profile-selection questions. Run `python -m unittest discover -s site/tools -p test_archetypes.py` after changing these surfaces.
 
 The Markdown stays the source for prose. The titles in `shared/summary.json` (each scenario `title`, misconception `claim`, getting-started `title`, part and check `name`) must still appear in the matching article; `drift.py summary` checks that and the service-guides name against `content/toc.yml`. `tokens` is the reference for the color tokens in `whitepaper/styles.css` and `decks/lib.js`.
 
@@ -92,7 +92,7 @@ review the diff of `drift-baseline.txt`, and commit it with the change. The base
 | `17` part 4 opener, `17a` order of work and readiness | `prepare-region.md` |
 | `17b` No Hub | `disconnected-spokes.md` |
 | `17c`-`17d` Remote Hub | `remote-hub-connected.md` (`17d` includes an extra connection figure) |
-| `17e`-`17f` Selective Hub | `minimal-regional-hub.md` |
+| `17e`-`17f` Minimal Hub | `minimal-regional-hub.md` |
 | `17g`-`17h` Full Hub | `full-regional-hub.md` (`17h` includes hub design options) |
 | `17i` readiness | `platform-readiness.md` |
 | `18`-`18b` placement | `workload-placement.md` |
@@ -107,7 +107,7 @@ The home page is a short landing page; longer explanations live in `framework-ov
 
 Figure IDs and extraction names live in `site/tools/extract_figures.py` (`FIGS`) and `site/figures/manifest.json`.
 
-The connectivity profile display names are **No Hub**, **Remote Hub**, **Selective Hub**, and **Full Hub**. Keep the existing article filenames and URLs stable when changing these labels; update links to renamed section anchors.
+The connectivity profile display names are **No Hub**, **Remote Hub**, **Minimal Hub**, and **Full Hub**. Keep the existing article filenames and URLs stable when changing these labels; update links to renamed section anchors.
 
 Keep the full Key Vault guide to at most five rendered PDF pages and five PowerPoint slides: product comparison and paired-region constraints, secrets and certificates, vault-based key patterns, Managed HSM key patterns, and the decision tree with references. Keep all seven pattern diagrams; use speaker notes for detailed slide caveats rather than adding slides. After regeneration, check the actual PDF page count for this section as well as source-page coverage.
 Use `data-export-width` on a figure to set its standalone export width independently of the PDF column width. The seven Key Vault pattern diagrams use 380 pixels so their web and PNG objects have consistent sizes; their PDF placement still follows the two- or three-column layout.

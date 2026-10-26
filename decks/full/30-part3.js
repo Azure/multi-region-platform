@@ -3,7 +3,7 @@ const { C, F } = require('../lib');
 // Part 3 · Select the regional design: three choices from short lists, written into one design record.
 module.exports = (pres, L) => {
   const [CH1, CH2, CH3] = L.data.choices;
-  const PROF = L.data.profiles;   // No Hub, Remote Hub, Selective Hub, Full Hub
+  const PROF = L.data.profiles;   // No Hub, Remote Hub, Minimal Hub, Full Hub
 
   // The question each choice answers: blue line under the title.
   const question = (s, text, w = 10.6) => L.txt(s, text, 0.6, 1.17, w, 0.5, { fontSize: 14, color: C.b700 });
@@ -256,7 +256,7 @@ module.exports = (pres, L) => {
       ['Policy and access control are not tied to a region.', ''],
     ], sx, 2.85, sw, 2.5, { gap: 4 });
     L.decision(s, 'Define the most efficient platform capability set, where each capability will be provided, who will operate it, and what requirements would trigger future expansion.', sx, 5.3, sw, 1.55, 'b');
-    s.addNotes('Each shared service has one of three placements: local, remote, or global. The table is a starting point for each profile; change a cell when a workload requirement calls for it and record the reason. For a Selective Hub, each row is a separate choice. Some placements are set by the service, not the profile: backup vaults and Key Vault are local in every profile, private DNS zones are global, and a single log workspace is the place to start. The one policy change for a new region is to allow it in any assignment that restricts locations. Also consider operational support, platform resiliency, ownership, and cost, and enable only the regional capabilities that expected workloads need.');
+    s.addNotes('Each shared service has one of three placements: local, remote, or global. The table is a starting point for each profile; change a cell when a workload requirement calls for it and record the reason. For a Minimal Hub, each row is a separate choice. Some placements are set by the service, not the profile: backup vaults and Key Vault are local in every profile, private DNS zones are global, and a single log workspace is the place to start. The one policy change for a new region is to allow it in any assignment that restricts locations. Also consider operational support, platform resiliency, ownership, and cost, and enable only the regional capabilities that expected workloads need.');
   }
 
   // ───────────────────────── Choice 3: confirm hybrid connectivity

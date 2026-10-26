@@ -62,7 +62,7 @@ const derivedProduct = (spec, role) => CATALOG.roles[role].products[spec.default
   : 'hub-spoke'];
 const hybridConnections = spec => spec.hybrid_connections || [];
 const siteById = (spec, id) => (spec.onprem || []).find(s => s.id === id);
-// A region can host a gateway when it has a full hub, or a Selective Hub with Hybrid gateway set to Local.
+// A region can host a gateway when it has a full hub, or a Minimal Hub with Hybrid gateway set to Local.
 const canHostGateway = (spec, region) => hasHub(region) && capState(spec, region, 'hybrid') === 'local';
 function connectionsTo(spec, regionId, type) {
   return hybridConnections(spec).filter(c => (!type || c.type === type) && (c.connects_to || []).includes(regionId));
@@ -230,7 +230,7 @@ function placementOf(spec, role) {
 // A product allowed in a virtual hub (allow-list; none: the role's place decides).
 const inVirtualHub = product => !product || VHUB.products.includes(product);
 // A role a region owns sits in its hub (hub VNet or virtual hub) or shared services VNet when its hub has it (a full
-// hub; a Selective Hub's local capability; gateways and the hub router: always), else in its spoke-level strip. In a
+// hub; a Minimal Hub's local capability; gateways and the hub router: always), else in its spoke-level strip. In a
 // virtual hub only allow-listed products: any other (e.g. a generic third-party firewall NVA) goes to the shared
 // services VNet. product: the role's product here (default: as resolved).
 function roleWhere(spec, region, role, product) {
@@ -256,7 +256,7 @@ const roleLabel = (spec, role) => (isVwan(spec) && (CATALOG.roles[role].vwan || 
 
 /* ===== VIRTUAL HUBS: their security, router and state ===== */
 // A role each virtual hub has on its own (catalog.js "perHub": the hub security), never borrowed from another hub:
-// the region override, else the estate default, else the role's Virtual WAN default; 'none' = none. A Selective Hub
+// the region override, else the estate default, else the role's Virtual WAN default; 'none' = none. A Minimal Hub
 // has it only when it is ticked as a local capability. undefined: not such a role here (resolveRole goes on).
 function ownHubRole(spec, region, role) {
   const r = CATALOG.roles[role] || {};

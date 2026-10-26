@@ -22,7 +22,7 @@ function setting(spec, region, key) { return region[key] || spec.defaults[key]; 
 // What a pattern lets a region set (rules.js "fields"; a disconnected region's "spoke_roles" are role fields too).
 const patternFields = region => [...(patternOf(region).fields || []), ...(patternOf(region).spoke_roles || [])];
 const allowsField = (region, field) => patternFields(region).includes(field);
-// A Selective Hub's capability (catalog.js "capabilities" of the topology): 'local', 'remote' (from its geographic hub) or
+// A Minimal Hub's capability (catalog.js "capabilities" of the topology): 'local', 'remote' (from its geographic hub) or
 // 'none' (not needed; DNS: Azure-provided DNS). Unset: the firewall local; the rest from the geographic hub, or not
 // needed when no geographic hub is set (a geographic hub that is set but missing stays "remote": Checks reports it). A full
 // hub has all of them locally.
@@ -45,7 +45,7 @@ function capOf(spec, role) {
   return placementOf(spec, role)[0] === 'shared-services' ? 'shared' : role;
 }
 const roleState = (spec, region, role) => capState(spec, region, capOf(spec, role));
-// A Selective Hub's capabilities set to Local whose role has no product (no region override, estate default none):
+// A Minimal Hub's capabilities set to Local whose role has no product (no region override, estate default none):
 // the region has none of it.
 const localMissing = (spec, region) => patternOf(region).hub !== 'partial' ? [] : capKeys(spec).filter(k =>
   CATALOG.roles[k] && !CATALOG.roles[k].derived && capState(spec, region, k) === 'local' &&
@@ -66,7 +66,7 @@ function capabilityLine(spec, region) {
     .map(([t, l]) => (l.length ? `${t}: ${l.join(', ')}` : t)).join(' · ');
 }
 // Which product fills a role for a region, and which region hosts it (owner). Order: region override ('none': none)
-// -> local default (a full hub, or a Selective Hub's local capability) -> geographic hub (a capability not needed: none).
+// -> local default (a full hub, or a Minimal Hub's local capability) -> geographic hub (a capability not needed: none).
 // Gateways follow the hybrid connections (topology.js); the hub security and the virtual hub router of a virtual
 // hub come from topology.js. The product is the one for where the role is drawn (catalog.js "alt"). An override the
 // pattern doesn't allow is ignored (a Checks warning says so).
@@ -177,13 +177,13 @@ function subOffered(spec, region, type, sub) {
   const need = (RULES.pathTypes[type].subNeeds || {})[sub];
   return !need || !!hostOf(spec, region, need.role);
 }
-// Why a sub-option isn't offered: its capability is not needed in this Selective Hub, or nothing provides it.
+// Why a sub-option isn't offered: its capability is not needed in this Minimal Hub, or nothing provides it.
 function subWhy(spec, region, type, sub) {
   const need = RULES.pathTypes[type].subNeeds[sub], cap = need.role === 'hybrid' ? 'hybrid' : capOf(spec, need.role);
   return capState(spec, region, cap) === 'none' ? notNeededText(spec, cap) : need.why;
 }
 
-/* ===== NOT NEEDED: a Selective Hub's capability set to "Not needed" (rules.js notNeeded) ===== */
+/* ===== NOT NEEDED: a Minimal Hub's capability set to "Not needed" (rules.js notNeeded) ===== */
 const notNeededText = (spec, cap) => (RULES.notNeeded.texts || {})[cap] || RULES.notNeeded.text.replace('{what}',
   RULES.notNeeded.what[cap] || CATALOG.capabilities[topoKey(spec)][cap][1]);
 // The capability of a template token that resolved to nothing ({dns}, {remote_hub.hybrid}, edge, onprem …).

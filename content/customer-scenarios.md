@@ -11,9 +11,9 @@ These examples show how the framework moves from a business or technical driver 
 
 | Scenario | Driver | Archetype | Connectivity profile | Outcome |
 |---|---|---|---|---|
-| [Regulated bank adopts a new in-country region](#regulated-bank-adopts-a-new-in-country-region) | Data residency and regulation | [Hybrid-Connected Applications](./application-landing-zone-archetypes.md#hybrid-connected-applications) | [Selective Hub](./connectivity-profiles.md#selective-hub) | Qualified for defined requirements; selective relocation. |
+| [Regulated bank adopts a new in-country region](#regulated-bank-adopts-a-new-in-country-region) | Data residency and regulation | [Hybrid-Connected Applications](./application-landing-zone-archetypes.md#hybrid-connected-applications) | [Minimal Hub](./connectivity-profiles.md#minimal-hub) | Qualified for defined requirements; selective relocation. |
 | [AI team requires a specific model or GPU SKU](#ai-team-requires-a-specific-model-or-gpu-sku) | Service, AI model, SKU, and quota availability | [Isolated](./application-landing-zone-archetypes.md#isolated-cloud-native-or-ai-applications) or [Connected Cloud-Native or AI Applications](./application-landing-zone-archetypes.md#connected-cloud-native-or-ai-applications) | [No Hub](./connectivity-profiles.md#no-hub) | Qualified for the AI workload; net-new deployment. |
-| [Acquisition brings an estate in another geography](#acquisition-brings-an-estate-in-another-geography) | Business growth | [Interconnected Application Portfolios](./application-landing-zone-archetypes.md#interconnected-application-portfolios) | [Remote Hub](./connectivity-profiles.md#remote-hub) or [Selective Hub](./connectivity-profiles.md#selective-hub) | Candidate until dependencies are known; workloads stay in place at first. |
+| [Acquisition brings an estate in another geography](#acquisition-brings-an-estate-in-another-geography) | Business growth | [Interconnected Application Portfolios](./application-landing-zone-archetypes.md#interconnected-application-portfolios) | [Remote Hub](./connectivity-profiles.md#remote-hub) or [Minimal Hub](./connectivity-profiles.md#minimal-hub) | Candidate until dependencies are known; workloads stay in place at first. |
 | [Datacenter exit accelerates migration](#datacenter-exit-accelerates-migration) | Datacenter and connectivity event | [Hybrid-Connected Applications](./application-landing-zone-archetypes.md#hybrid-connected-applications) | No new profile; the existing geographic hub is reused | Workloads land in the existing qualified region. |
 
 ## Regulated bank adopts a new in-country region
@@ -26,7 +26,7 @@ A financial-services organization operates workloads outside its home country. A
 | Deciding checks | [Check 2](./data-and-compliance.md) confirms mandatory location requirements. [Check 3](./workload-requirements.md) identifies affected workloads and dependencies. [Check 4](./regional-capability.md) validates required regional capabilities, services, zones, access, and constraints. |
 | Qualification | The region can be qualified for defined Hybrid-Connected workload requirements while other portfolio workloads remain candidates until their dependencies are understood. |
 | Workload Landing Zone archetype | **Hybrid-Connected Applications** |
-| Connectivity profile | **Selective Hub** where selected local capabilities are required and existing hybrid connectivity can be reused where reachability and resiliency requirements permit. |
+| Connectivity profile | **Minimal Hub** where selected local capabilities are required and existing hybrid connectivity can be reused where reachability and resiliency requirements permit. |
 | Placement | In-scope workloads can relocate selectively; other workloads can remain in place. Recovery architecture remains a workload-specific decision. |
 
 **Takeaway:** A new in-country region can be qualified for defined workload requirements without forcing portfolio-wide relocation. If the new region is nonpaired, design the recovery path explicitly. See [Resiliency scenarios](./resiliency-scenarios.md).
@@ -56,7 +56,7 @@ An acquisition introduces a portfolio of interdependent applications, shared dat
 | Deciding checks | [Check 1](./business-and-geography.md) confirms the business need. [Check 2](./data-and-compliance.md) evaluates local data obligations. [Check 3](./workload-requirements.md) maps portfolio-level dependencies, shared services, and connectivity requirements. |
 | Qualification | Candidate while material dependencies remain unknown; qualified against defined portfolio requirements once sufficient discovery is complete. |
 | Workload Landing Zone archetype | **Interconnected Application Portfolios** |
-| Connectivity profile | **Remote Hub** where cross-region dependencies are acceptable; **Selective Hub** where aggregate east-west traffic, shared services, latency, or independence requirements justify local capability. |
+| Connectivity profile | **Remote Hub** where cross-region dependencies are acceptable; **Minimal Hub** where aggregate east-west traffic, shared services, latency, or independence requirements justify local capability. |
 | Placement | Workloads can remain in place initially and relocate selectively as business and integration requirements become known. |
 
 **Takeaway:** Aggregate portfolio dependencies determine the appropriate regional connectivity profile; application count or acquisition status does not.

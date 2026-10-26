@@ -48,7 +48,7 @@ Three principles apply in every region. Three planning constructs put them into 
 
 Because platform teams cannot predict every future workload, this guidance uses three planning constructs.
 
-- **[Regional Platform Connectivity Profiles](./connectivity-profiles.md)** describe what the platform provides in a region: No Hub, Remote Hub, Selective Hub, or Full Hub. They are not maturity stages; the most efficient profile can remain the target as long as it continues to satisfy requirements.
+- **[Regional Platform Connectivity Profiles](./connectivity-profiles.md)** describe what the platform provides in a region: No Hub, Remote Hub, Minimal Hub, or Full Hub. They are not maturity stages; the most efficient profile can remain the target as long as it continues to satisfy requirements.
 - **[Workload Landing Zone archetypes](./application-landing-zone-archetypes.md)** group recurring dependency and connectivity characteristics so platform teams can plan before every workload is known. The four archetypes are Isolated Cloud-Native or AI Applications, Connected Cloud-Native or AI Applications, Hybrid-Connected Applications, and Interconnected Application Portfolios.
 - **[Regional qualification](./regional-qualification.md)** provides a repeatable way to assess candidate regions. Four checks lead to an excluded, candidate, conditional, or qualified regional option, backed by current evidence, known constraints, ownership, and review triggers.
 

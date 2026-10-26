@@ -55,11 +55,11 @@ def main():
             frame = page.locator("#pl-network iframe").element_handle().content_frame()
             inherited = frame.evaluate("spec")
             assert frame.evaluate("Object.fromEntries(Object.entries(RULES.patterns).map(([id,p]) => [id,p.label]))") == {
-                "full-hub": "Full Hub", "minimal-hub": "Selective Hub",
+                "full-hub": "Full Hub", "minimal-hub": "Minimal Hub",
                 "remote-hub": "Remote Hub", "disconnected": "No Hub",
             }
-            assert "Selective Hub" in explorer.locator("#diagram").text_content()
-            assert "New region - Selective Hub" in explorer.locator("#plannerDefinitions").text_content()
+            assert "Minimal Hub" in explorer.locator("#diagram").text_content()
+            assert "New region - Minimal Hub" in explorer.locator("#plannerDefinitions").text_content()
             assert [r["id"] for r in inherited["regions"]] == ["westeurope", "swedencentral"]
             assert inherited["regions"][1]["pattern"] == "minimal-hub"
             assert inherited["regions"][1]["remote_hub"] == "westeurope"

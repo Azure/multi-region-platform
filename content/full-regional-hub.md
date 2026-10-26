@@ -38,7 +38,7 @@ Profiles describe capability, not a specific network build. The same profile can
 | Separate transit and security functions | Transit, hybrid connectivity, routing, and security inspection are separated where scale, ownership, or architecture requirements justify it. |
 
 > [!NOTE]
-> Any of these designs can sit behind a Selective Hub or Full Hub. Profiles can be implemented using hub-and-spoke virtual networks, Azure Virtual WAN, or other approved Azure networking patterns. Topology determines how the capability is implemented; workload and platform requirements determine which profile is appropriate.
+> Any of these designs can sit behind a Minimal Hub or Full Hub. Profiles can be implemented using hub-and-spoke virtual networks, Azure Virtual WAN, or other approved Azure networking patterns. Topology determines how the capability is implemented; workload and platform requirements determine which profile is appropriate.
 
 ## Connect the hub to the rest of the estate
 

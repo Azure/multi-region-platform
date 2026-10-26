@@ -27,27 +27,27 @@ These workloads can often use **No Hub**. A connected profile may still be selec
 
 Cloud-native or AI applications that are primarily self-contained but require private connectivity to selected enterprise services, data sources, APIs, or other Azure environments.
 
-These workloads can use **No Hub** when approved direct same-region spoke connectivity or Azure service endpoints meet their dependency and control requirements without a geographic hub or on-premises path. Otherwise, use **Remote Hub, Selective Hub, or Full Hub**, depending on dependency latency, traffic patterns, resiliency, security, and operational requirements.
+These workloads can use **No Hub** when approved direct same-region spoke connectivity or Azure service endpoints meet their dependency and control requirements without a geographic hub or on-premises path. Otherwise, use **Remote Hub, Minimal Hub, or Full Hub**, depending on dependency latency, traffic patterns, resiliency, security, and operational requirements.
 
 ## Hybrid-Connected Applications
 
 Applications with significant dependencies on on-premises environments, enterprise networks, or centralized shared services that require persistent private connectivity to the wider enterprise environment.
 
-These workloads typically use **Remote Hub, Selective Hub, or Full Hub**, depending on dependency latency, resiliency, regulatory, operational, and shared-service requirements. **No Hub** doesn't fit a mandatory private dependency on on-premises or geographic-hub services.
+These workloads typically use **Remote Hub, Minimal Hub, or Full Hub**, depending on dependency latency, resiliency, regulatory, operational, and shared-service requirements. **No Hub** doesn't fit a mandatory private dependency on on-premises or geographic-hub services.
 
 ## Interconnected Application Portfolios
 
 Groups of applications with meaningful dependencies on each other, including shared data, common services, east-west communication, or coordinated connectivity and operations across applications, regions, or business domains.
 
-Where significant east-west traffic exists within a region, evaluate whether **direct spoke-to-spoke connectivity or a local hub** provides a more appropriate path than routing traffic through a geographic hub in another region. Direct connectivity may suit a limited number of tightly coupled workloads, while a **Selective Hub or Full Hub** may be more appropriate where broader connectivity, shared routing, traffic inspection, resiliency, or operational requirements justify regional platform capabilities.
+Where significant east-west traffic exists within a region, evaluate whether **direct spoke-to-spoke connectivity or a local hub** provides a more appropriate path than routing traffic through a geographic hub in another region. Direct connectivity may suit a limited number of tightly coupled workloads, while a **Minimal Hub or Full Hub** may be more appropriate where broader connectivity, shared routing, traffic inspection, resiliency, or operational requirements justify regional platform capabilities.
 
-**No Hub** is an option only when approved same-region spoke-to-spoke connectivity and Azure service endpoints satisfy the portfolio's aggregate requirements without a geographic hub or on-premises path. **Remote Hub** is an option when cross-region latency, traffic, and availability coupling are acceptable; use **Selective Hub or Full Hub** when local capabilities are justified.
+**No Hub** is an option only when approved same-region spoke-to-spoke connectivity and Azure service endpoints satisfy the portfolio's aggregate requirements without a geographic hub or on-premises path. **Remote Hub** is an option when cross-region latency, traffic, and availability coupling are acceptable; use **Minimal Hub or Full Hub** when local capabilities are justified.
 
 Because this is a **portfolio-level archetype**, its combined dependencies may require capabilities beyond those needed by any individual application. Select the appropriate connectivity profile based on the portfolio's aggregate connectivity, shared-service, resiliency, scale, and operational requirements rather than the requirements of a single workload.
 
 ## How archetypes map to connectivity profiles
 
-Archetypes describe what applications require; connectivity profiles describe what the platform provides. An archetype doesn't dictate a profile: one archetype can use different profiles, and one profile can serve several archetypes. Use the archetypes expected in a region to understand what it needs, then choose the most efficient profile that meets those needs. For example, a hybrid-connected application might run well on a Remote Hub profile in one region and need a Selective Hub in another, depending on latency, traffic, and resiliency requirements.
+Archetypes describe what applications require; connectivity profiles describe what the platform provides. An archetype doesn't dictate a profile: one archetype can use different profiles, and one profile can serve several archetypes. Use the archetypes expected in a region to understand what it needs, then choose the most efficient profile that meets those needs. For example, a hybrid-connected application might run well on a Remote Hub profile in one region and need a Minimal Hub in another, depending on latency, traffic, and resiliency requirements.
 
 The [archetype-to-profile matrix](./profile-selection.md) shows the typical options for each archetype.
 

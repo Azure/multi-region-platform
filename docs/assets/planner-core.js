@@ -20,7 +20,8 @@
   const LEGACY_PROFILES = {
     'Disconnected Spokes': 'No Hub',
     'Remote Hub Connected': 'Remote Hub',
-    'Minimal Regional Hub': 'Selective Hub',
+    'Minimal Regional Hub': 'Minimal Hub',
+    'Selective Hub': 'Minimal Hub',
     'Full Regional Hub': 'Full Hub',
   };
   function fromV1(raw) {
@@ -498,7 +499,7 @@
     if (d.q1 !== 'Yes') return '';
     if (d.q2 === 'Yes') return 'Remote Hub';
     if (d.q2 !== 'No') return '';
-    return d.q3 === 'No' ? 'Selective Hub' : d.q3 === 'Yes' ? 'Full Hub' : '';
+    return d.q3 === 'No' ? 'Minimal Hub' : d.q3 === 'Yes' ? 'Full Hub' : '';
   }
   // The design with every default applied: what the page shows and what the record and the export use.
   function effective(r) {
@@ -529,10 +530,10 @@
     // things that don't add up, in the words of the profile selection article
     const hubLocal = e.ss.filter(s => HUB_SERVICES.includes(s.id) && s.p === 'Local'), hubRemote = e.ss.filter(s => HUB_SERVICES.includes(s.id) && s.p === 'Remote');
     e.hints = [];
-    if (profile === 'Remote Hub' && hubLocal.length) e.hints.push('A hub service is placed locally. With a hub in the region, the profile is a Selective Hub.');
-    if (profile === 'Full Hub' && hubRemote.length) e.hints.push('A hub service is still remote. A region that depends on a geographic hub for something is a Selective Hub.');
+    if (profile === 'Remote Hub' && hubLocal.length) e.hints.push('A hub service is placed locally. With a hub in the region, the profile is a Minimal Hub.');
+    if (profile === 'Full Hub' && hubRemote.length) e.hints.push('A hub service is still remote. A region that depends on a geographic hub for something is a Minimal Hub.');
     if (none && e.ss.some(s => s.p === 'Remote' && s.id !== 'logs')) e.hints.push('The No Hub profile has no private path to another region. Check the services placed as remote.');
-    if (profile === 'Selective Hub' && e.ss.filter(s => HUB_SERVICES.includes(s.id) && s.p).length === 4 && !hubLocal.length) e.hints.push('No hub service is local. Without a hub in the region, the profile is Remote Hub.');
+    if (profile === 'Minimal Hub' && e.ss.filter(s => HUB_SERVICES.includes(s.id) && s.p).length === 4 && !hubLocal.length) e.hints.push('No hub service is local. Without a hub in the region, the profile is Remote Hub.');
     if (e.hybrid === 'Not required' && gw && gw.p === 'Local') e.hints.push('A local gateway is planned, but hybrid connectivity is set to not required.');
     const missing = [];
     if (!profile) missing.push('connectivity profile');

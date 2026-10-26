@@ -13,7 +13,7 @@ global.localStorage = {setItem() {}};
 for (const file of ['planner-data.js', 'planner-icons.js', 'planner-core.js'])
   vm.runInThisContext(fs.readFileSync('site/assets/' + file, 'utf8'), {filename: file});
 const M = window.MRP, C = M.core;
-const names = ['No Hub', 'Remote Hub', 'Selective Hub', 'Full Hub'];
+const names = ['No Hub', 'Remote Hub', 'Minimal Hub', 'Full Hub'];
 const legacy = ['Disconnected Spokes', 'Remote Hub Connected', 'Minimal Regional Hub', 'Full Regional Hub'];
 """
 
@@ -44,7 +44,9 @@ assert.ok(M.eastWestOptions('Remote Hub').includes('Through the geographic hub')
     def test_legacy_profiles_load_without_losing_design_or_custom_text(self):
         self.run_js("""
 for (const version of [1, 2, 3]) {
-  legacy.forEach((old, index) => {
+  [...legacy.map((name, index) => [name, index]),
+   ...names.map((name, index) => [name, index]),
+   ['Selective Hub', 2]].forEach(([old, index]) => {
     const input = JSON.parse(JSON.stringify(M.EXAMPLE));
     input.v = version;
     Object.assign(input.regions[0].design, {

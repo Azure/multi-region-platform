@@ -100,7 +100,7 @@
   const PROFILE = {
     'No Hub': svg(240, 112, GEO(true) + NEW + [[158, 36], [198, 36], [158, 74], [198, 74]].map(p => spoke(...p)).join(''), 'No Hub: workload spokes in the region, with no link to a hub or to on-premises'),
     'Remote Hub': svg(240, 112, GEO(false) + NEW + SPOKES(212, [28, 55, 82]) + ln('M184 28V82M184 28H206M184 55H206M184 82H206') + ln('M184 55H89'), 'Remote Hub: spokes in the region link across to the geographic hub in another region, which links to on-premises'),
-    'Selective Hub': svg(240, 112, GEO(false) + NEW + SPOKES(212, [28, 55, 82]) + ln('M160 55H188M188 28V82M188 28H206M188 55H206M188 82H206') + ln('M140 55H89') + hex(150, 55, 11, 'dg-hub dg-open'), 'Selective Hub: a small hub in the region with spokes on it, linked to the geographic hub, which links to on-premises'),
+    'Minimal Hub': svg(240, 112, GEO(false) + NEW + SPOKES(212, [28, 55, 82]) + ln('M160 55H188M188 28V82M188 28H206M188 55H206M188 82H206') + ln('M140 55H89') + hex(150, 55, 11, 'dg-hub dg-open'), 'Minimal Hub: a small hub in the region with spokes on it, linked to the geographic hub, which links to on-premises'),
     'Full Hub': svg(240, 112, GEO(false) + NEW + SPOKES(212, [28, 55, 82]) + ln('M165 55H188M188 28V82M188 28H206M188 55H206M188 82H206') + ln('M139 55H89', 'dg-peer') + ln('M17 71V107H152V68') + hex(152, 55, 13, 'dg-hub dg-solid'), 'Full Hub: a full hub in the region with spokes on it, its own link to on-premises, and a peer link to the other hub'),
   };
 
