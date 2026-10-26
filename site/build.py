@@ -29,7 +29,7 @@ SITE_TITLE = "Multi-region platform"
 SITE_SUB = "Adaptable multi-region Azure platform"
 
 DOWNLOADS = [
-    ("Full technical guidance (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform.pdf", "pdf", "57 pages"),
+    ("Full technical guidance (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform.pdf", "pdf", "67 pages"),
     ("Executive brief (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf", "pdf", "14 pages"),
 ]
 
@@ -418,6 +418,13 @@ def build():
         search_index.append({"t": t["name"], "u": t["href"], "s": t.get("parent", "Tools"), "h": [], "x": t["description"] + " " + t.get("search", "")})
         print(f"  {t['href']:42s} {'tool' if t in TOOLS else 'website page'}")
     json.dump(search_index, open(os.path.join(OUT, "assets", "search-index.json"), "w"), ensure_ascii=False)
+    with open(os.path.join(OUT, "remote-hub-connected.html"), "w", encoding="utf-8") as redirect:
+        redirect.write('<!doctype html><html lang="en"><head><meta charset="utf-8">'
+                       '<meta http-equiv="refresh" content="0;url=remote-hub.html">'
+                       '<title>Remote Hub</title><link rel="canonical" href="remote-hub.html"></head>'
+                       '<body><a href="remote-hub.html">Remote Hub</a>'
+                       '<script>location.replace("remote-hub.html" + location.search + location.hash);</script>'
+                       '</body></html>')
     # 404
     shutil.copy(os.path.join(OUT, "index.html"), os.path.join(OUT, "404.html"))
     print(f"built {len(pages)} pages, {len(TOOLS)} tool(s), and {len(SITE_PAGES)} website page(s) -> {OUT}")
