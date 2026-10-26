@@ -143,7 +143,7 @@ module.exports = (pres, L) => {
     L.txt(s, 'PLATFORM READINESS · ADVANCE PLANNING', 0.6, 1.72, 6, 0.24, { fontSize: 10.5, bold: true, color: C.b600, charSpacing: 2 });
     const cards = [
       ['hub', C.v600, 'Regional Platform Connectivity Profiles', 'Describe **what the platform provides** to support those archetypes in a region.', [['No Hub', C.b100, C.b700], ['Remote Hub', C.b100, C.b700], ['Minimal Hub', C.b100, C.b700], ['Full Hub', C.b100, C.b700]], C.line],
-      ['app', C.t600, 'Workload Landing Zone Archetypes', 'Describe **what applications require**: recurring dependency and connectivity characteristics.', [['Isolated', C.t100, C.t700], ['Connected', C.t100, C.t700], ['Hybrid-connected', C.t100, C.t700], ['Portfolios', C.t100, C.t700]], C.t300],
+      ['app', C.t600, 'Workload Landing Zone Archetypes', 'Describe **what applications require**: recurring dependency and connectivity characteristics.', L.data.archetypeLabels.map(label => [label, C.t100, C.t700]), C.t300],
       ['search', C.b600, 'Regional Qualification', 'Evaluates candidate regions against four checks for defined workload requirements.', [['Excluded', C.w100, C.w600], ['Candidate', 'FFFFFF', C.b700, C.b500], ['Conditional', C.a100, C.a700], ['Qualified', C.g100, C.g600]], C.line],
     ];
     cards.forEach(([ic, c, t, d, chips, ln], i) => {

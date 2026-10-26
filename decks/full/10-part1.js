@@ -95,7 +95,7 @@ module.exports = (pres, L) => {
     });
     // household
     L.txt(s, 'The household: a single-region workload', x, 4.05, w, 0.3, { fontSize: 12.5, fontFace: F.semi, color: C.t700, valign: 'middle' });
-    [['Isolated', 'Lakeside'], ['Connected', 'Midtown'], ['Hybrid-connected', 'Hillcrest'], ['Interconnected portfolio', 'Riverside']].forEach(([a, b], i) => {
+    L.data.archetypeLabels.map((label, i) => [label, ['Lakeside', 'Midtown', 'Hillcrest', 'Riverside'][i]]).forEach(([a, b], i) => {
       const y = 4.42 + i * 0.33;
       L.num(s, i + 1, x, y + 0.03, 0.24, C.t600, 'FFFFFF', 10);
       L.txt(s, [{ text: a, options: { bold: true, color: C.ink } }, { text: '  →  ' + b, options: { color: C.t700 } }], x + 0.36, y, w - 0.36, 0.3, { fontSize: 11, valign: 'middle' });
@@ -103,7 +103,7 @@ module.exports = (pres, L) => {
     // bank
     L.txt(s, 'The bank: a multi-region workload', x, 5.85, w, 0.3, { fontSize: 12.5, fontFace: F.semi, color: C.t700, valign: 'middle' });
     L.txt(s, [{ text: 'Branches in ' }, { text: 'Riverside', options: { bold: true, color: C.ink } }, { text: ' and ' }, { text: 'Midtown', options: { bold: true, color: C.ink } }, { text: ' serve customers together. A backup operations center in ' }, { text: 'Hillcrest', options: { bold: true, color: C.ink } }, { text: ' stands by.' }], x, 6.2, w, 0.62, { fontSize: 11, color: C.text });
-    s.addNotes('Think of the platform as a city and workloads as the people and businesses that live in it. Each neighborhood is an Azure region with its own connectivity profile; the office campus is on-premises. A household is a single-region workload and picks the neighborhood that fits how it lives: Lakeside for an isolated family, Midtown for a connected one, Hillcrest for a hybrid-connected one, Riverside for an interconnected portfolio. The bank is a multi-region workload: branches in Riverside and Midtown serve customers together, and a backup operations center in Hillcrest stands by.');
+    s.addNotes('Think of the platform as a city and workloads as the people and businesses that live in it. Each neighborhood is an Azure region with its own connectivity profile; the office campus is on-premises. A household is a single-region workload and picks the neighborhood that fits how it lives: Lakeside for a self-contained family, Midtown for a selectively connected one, Hillcrest for a hybrid-dependent one, Riverside for an interdependent group. The bank is a multi-region workload: branches in Riverside and Midtown serve customers together, and a backup operations center in Hillcrest stands by.');
   }
 
   // ───────────────────────── 4 · Connectivity profile spectrum  (PDF p13)
@@ -202,12 +202,12 @@ module.exports = (pres, L) => {
   // ───────────────────────── 6 · Archetypes  (PDF p16)
   {
     const s = L.slide('part1');
-    L.header(s, 'What applications require', 'Workload Landing Zone Archetypes', { ec: C.t600, tw: 8, lede: 'A planning abstraction that groups recurring application connectivity and dependency requirements. It doesn’t replace the Azure landing-zone hierarchy.', lx: 8.6, lw: 4.13 });
+    L.header(s, 'What applications require', 'Workload Landing Zone Archetypes', { ec: C.t600, tw: 8, lede: 'A planning abstraction that groups recurring application connectivity and dependency requirements. Each workload or group gets one archetype.', lx: 8.6, lw: 4.13 });
     const A = [
-      [ARCH[0], 'Self-contained workloads that can operate without persistent private connectivity to enterprise or centralized dependencies.', ['No Hub', 'Connected, where justified'], 'No persistent private dependencies. Can often use No Hub. Flexible placement across regions.'],
-      [ARCH[1], 'Mostly self-contained applications that need private connectivity to selected enterprise services, data sources, APIs, or Azure environments.', ['Remote Hub', 'Minimal Hub', 'Full Hub'], 'Private access to selected dependencies. Profile set by latency, traffic, resiliency, security. Common for data, analytics, and AI platforms.'],
-      [ARCH[2], 'Significant dependencies on on-premises environments, enterprise networks, or centralized shared services that require persistent private connectivity.', ['Remote Hub', 'Minimal Hub', 'Full Hub'], 'Profile set by dependency latency, resiliency, regulation, operations. Common in migrations and hybrid scenarios.'],
-      [ARCH[3], 'Groups of applications with meaningful dependencies on each other: shared data, common services, east-west communication.', ['Remote Hub', 'Minimal Hub', 'Full Hub'], 'Portfolio-level archetype. Aggregate requirements set the profile. Direct spoke-to-spoke or a regional hub for east-west traffic.'],
+      [ARCH[0], "Self-contained workloads with no persistent private dependency outside the workload.", L.data.archetypeProfileOrder[0].map(j => L.data.profiles[j]), "No persistent private dependencies. Can often use No Hub. Flexible placement across regions."],
+      [ARCH[1], "Workloads that reach selected services through private endpoints or specific private APIs, without routed access to the enterprise network.", L.data.archetypeProfileOrder[1].map(j => L.data.profiles[j]), "Private access to selected dependencies. Profile set by latency, traffic, resiliency, security. Common for data, analytics, and AI platforms."],
+      [ARCH[2], "Workloads that need routed access to on-premises environments or the enterprise network, including shared services hosted in a hub.", L.data.archetypeProfileOrder[2].map(j => L.data.profiles[j]), "Profile set by dependency latency, resiliency, regulation, operations. Common in migrations and hybrid scenarios."],
+      [ARCH[3], "Groups of workloads with material east-west dependencies: shared data, synchronous calls, or private east-west traffic. Combine members' requirements.", L.data.archetypeProfileOrder[3].map(j => L.data.profiles[j]), "Classified at group level. Aggregate requirements set the profile. Direct spoke-to-spoke or a regional hub for east-west traffic."]
     ];
     A.forEach(([t, d, chips, drv], i) => {
       const x = 0.6 + i * 3.08, y = 1.75, w = 2.9, h = 4.5;
@@ -221,8 +221,8 @@ module.exports = (pres, L) => {
       chips.forEach(c => { const cw = c.length * 0.07 + 0.3; if (cx + cw > x + w - 0.15) { cx = x + 0.2; cy += 0.32; } const dashed = c.includes('where justified'); L.chip(s, c, cx, cy, { w: cw, fill: dashed ? 'FFFFFF' : c === 'No Hub' ? C.t100 : C.b100, color: c === 'No Hub' ? C.t700 : C.b700, line: dashed ? C.b500 : undefined, dash: dashed ? 'dash' : undefined, size: 10.5 }); cx += cw + 0.06; });
       L.txt(s, drv, x + 0.2, y + 3.5, w - 0.4, 1.05, { fontSize: 11, color: C.muted });
     });
-    L.caption(s, 'Figure', 'The four archetypes, grouped by the platform connectivity and dependency capabilities each requires.', 0.6, 6.4, 12.1);
-    s.addNotes('An archetype describes what an application or application portfolio requires from the platform. Use known workload requirements and application portfolios to anticipate the capabilities that candidate regions may need to support. Where future requirements are not yet defined, archetypes give planning guardrails without constraining later placement, which happens once the workload’s current requirements, regional capabilities, and platform readiness are known. Archetypes describe what applications require; connectivity profiles describe what the platform provides. The mapping is not one-to-one.');
+    L.caption(s, 'Figure', 'Each workload or group gets one archetype. Traffic between its regional instances does not change it.', 0.6, 6.4, 12.1);
+    s.addNotes("Classify each workload on its own. When workloads have material east-west dependencies on each other, classify the group as an Interdependent Workload Group and combine its members' requirements. Each workload or group gets exactly one archetype. Traffic between instances of the same workload in different regions does not change its archetype. These archetypes describe what a workload depends on. They are separate from the Internal (Corp), Online, and Local management groups of an Azure landing zone, which set the policies a subscription inherits, and a workload has one of each.");
   }
 
   // ───────────────────────── 7 · Archetype-to-profile matrix  (PDF p17)
@@ -263,7 +263,7 @@ module.exports = (pres, L) => {
     L.oval(s, x0 + 1.5, ly + 0.04, 0.16, { fill: 'FFFFFF', line: C.b500, lw: 1.75 }); L.txt(s, 'When specific requirements justify it', x0 + 1.74, ly, 3, 0.24, { fontSize: 10, bold: true, color: C.muted, valign: 'middle' });
     L.box(s, x0 + 4.75, ly + 0.115, 0.2, 0.015, { fill: C.line, r: 0 }); L.txt(s, 'Not indicated as typical', x0 + 5.05, ly, 2.5, 0.24, { fontSize: 10, color: C.muted, valign: 'middle' });
     L.caption(s, 'Figure', 'Many-to-many. Each row is a set of options, not an assignment.', 0.6, 6.6, 12.1);
-    s.addNotes('Each row is a set of options, not an assignment. Use the archetypes expected in a region to understand what it needs, then choose the most efficient profile that meets those needs. For example, a hybrid-connected application might run well on Remote Hub in one region and need a Minimal Hub in another, depending on latency, traffic, and resiliency requirements. Where significant east-west traffic exists within a region, evaluate whether direct spoke-to-spoke connectivity or a local hub is a better path than routing through a geographic hub in another region. Direct connectivity may suit a few tightly coupled workloads; a Minimal Hub or Full Hub fits broader routing, inspection, resiliency, or operational needs. Because a portfolio’s combined dependencies can require capabilities beyond any single application, select its profile from aggregate requirements, not from a single workload.');
+    s.addNotes('Each row is a set of options, not an assignment. Use the archetypes expected in a region to understand what it needs, then choose the most efficient profile that meets those needs. For example, a hybrid-dependent workload might run well on Remote Hub in one region and need a Minimal Hub in another, depending on latency, traffic, and resiliency requirements. Where significant east-west traffic exists within a region, evaluate whether direct spoke-to-spoke connectivity or a local hub is a better path than routing through a geographic hub in another region. Direct connectivity may suit a few tightly coupled workloads; a Minimal Hub or Full Hub fits broader routing, inspection, resiliency, or operational needs. Because a portfolio’s combined dependencies can require capabilities beyond any single application, select its profile from aggregate requirements, not from a single workload.');
   }
 
   // ───────────────────────── 8 · Architecture terms  (PDF p18)
@@ -276,7 +276,7 @@ module.exports = (pres, L) => {
       ['Architecture style', 'The fundamental structural organization of an application', 'Microservices, N-tier, event-driven, web-queue-worker, big compute', 'Application architecture'],
       ['Architecture / design pattern', 'A reusable solution to a recurring technical problem', 'Circuit Breaker, Retry, CQRS, Strangler Fig, Competing Consumers', 'Design technique'],
       ['Workload pattern', 'A recurring workload behavior or set of operational characteristics that can influence platform requirements', 'Latency-sensitive, data-intensive, batch-oriented, globally distributed, hybrid-dependent', 'Workload characteristics'],
-      ['Workload Landing Zone archetype', 'A classification of a workload based on the platform connectivity and dependency capabilities it requires', 'Isolated Cloud-Native or AI Applications, Connected Cloud-Native or AI Applications, Hybrid-Connected Applications, Interconnected Application Portfolios', 'Platform-consumption model'],
+      ['Workload Landing Zone archetype', 'A classification of a workload based on the platform connectivity and dependency capabilities it requires', ARCH.join(', '), 'Platform-consumption model'],
     ];
     const data = [[cell('TERM', H), cell('WHAT IT DESCRIBES', H), cell('EXAMPLES', H), cell('LEVEL', H)]];
     rows.forEach((r, i) => { const hi = i === 3, f = hi ? { color: C.t50 } : undefined; data.push([cell(r[0], { bold: true, color: hi ? C.t700 : C.ink, fill: f }), cell(r[1], { fill: f }), cell(r[2], { color: hi ? C.text : C.muted, fill: f }), cell(r[3], { bold: true, fontSize: 11, color: hi ? C.t700 : C.b700, fill: f })]); });
