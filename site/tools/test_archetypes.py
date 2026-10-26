@@ -7,13 +7,9 @@ import subprocess
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
-ARCHETYPES = [
-    "Isolated Cloud-Native or AI Applications",
-    "Connected Cloud-Native or AI Applications",
-    "Hybrid-Connected Applications",
-    "Interconnected Application Portfolios",
-]
-PROFILES = ["No Hub", "Remote Hub", "Minimal Hub", "Full Hub"]
+SUMMARY = json.loads((ROOT / "shared" / "summary.json").read_text(encoding="utf-8"))
+ARCHETYPES = SUMMARY["archetypes"]
+PROFILES = SUMMARY["profiles"]
 
 
 def text(fragment):
@@ -22,7 +18,16 @@ def text(fragment):
 
 class ArchetypeTests(unittest.TestCase):
     def read(self, name):
-        return (ROOT / name).read_text(encoding="utf-8")
+        source = (ROOT / name).read_text(encoding="utf-8")
+        if name.endswith(".html"):
+            for key, values in (("ARCHETYPE", ARCHETYPES), ("ARCHETYPE_LABEL", SUMMARY["archetypeLabels"]),
+                                ("PROFILE", PROFILES)):
+                for i, value in enumerate(values, 1):
+                    source = source.replace("{{" + f"{key}_{i}" + "}}", value)
+            for i, order in enumerate(SUMMARY["archetypeProfileOrder"], 1):
+                source = source.replace("{{" + f"ARCHETYPE_CHIPS_{i}" + "}}",
+                                        "".join(f"<span>{PROFILES[j]}</span>" for j in order))
+        return source
 
     def test_shared_lists_and_markdown_use_connectivity_complexity_order(self):
         summary = json.loads(self.read("shared/summary.json"))
@@ -33,6 +38,45 @@ class ArchetypeTests(unittest.TestCase):
         self.assertEqual(re.findall(r"^## (.+)$", article, re.M)[:4], ARCHETYPES)
         self.assertIn("The four archetypes, grouped by the platform connectivity and dependency capabilities each requires.", article)
         self.assertIn("without a geographic hub or on-premises path", article)
+
+    def test_profile_chip_order_follows_markdown_matrix(self):
+        matrix = self.read("content/profile-selection.md")
+        rows = [line.split("|")[1:-1] for line in matrix.splitlines()
+                if line.startswith("| ") and any(line.startswith("| " + name + " |") for name in ARCHETYPES)]
+        self.assertEqual(len(rows), 4)
+        orders = []
+        for row in rows:
+            cells = [cell.strip() for cell in row[1:]]
+            eligible = [i for i, value in enumerate(cells) if value != "Not indicated"]
+            orders.append(sorted(eligible, key=lambda i: cells[i] not in ("Often", "Typical")))
+        self.assertEqual(SUMMARY["archetypeProfileOrder"], orders)
+
+    def test_management_groups_and_regional_traffic(self):
+        article = self.read("content/application-landing-zone-archetypes.md")
+        self.assertIn("Each workload or group gets exactly one archetype.", article)
+        self.assertIn("without routed access to the enterprise network", article)
+        self.assertIn("named endpoints versus routed network access, not Azure versus on-premises", article)
+        self.assertIn("Traffic between instances of the same workload in different regions does not change its archetype.", article)
+        matrix = self.read("whitepaper/pages/09b-matrix.html")
+        rows = re.findall(r"<tr>(.*?)</tr>", re.search(r'class="pub mg-map".*?<tbody>(.*?)</tbody>', matrix, re.S)[1])
+        self.assertEqual([[text(cell) for cell in re.findall(r"<td>(.*?)</td>", row)] for row in rows],
+                         [[name, "Common" if i == 0 else "Possible", "Rare" if i == 0 else "Common"]
+                          for i, name in enumerate(ARCHETYPES)])
+        requirements = self.read("whitepaper/pages/12b-check3-platform.html")
+        self.assertIn("Record the management group each workload's subscriptions will sit under.", requirements)
+        self.assertIn("SQL Server Always On on VMs", requirements)
+        self.assertIn("Managed replication on the Microsoft backbone", requirements)
+        for path in ("whitepaper/exec/pages/08-archetypes.html", "word/brief.md", "decks/exec/e.js"):
+            self.assertNotIn("Internal (Corp)", self.read(path))
+
+    def test_retired_patterns_accept_current_names_and_labels(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("drift", ROOT / "site" / "tools" / "drift.py")
+        drift = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(drift)
+        current = " · ".join(ARCHETYPES + SUMMARY["archetypeLabels"] + PROFILES)
+        for pattern in drift.RETIRED:
+            self.assertIsNone(re.search(pattern, current, re.I), pattern)
 
     def test_publication_cards_and_matrix_use_the_same_order(self):
         full = self.read("whitepaper/pages/09-archetypes.html")
@@ -73,17 +117,14 @@ class ArchetypeTests(unittest.TestCase):
             ["Persistent private connectivity",
              "Profile set by dependency latency, resiliency, regulation, operations",
              "Common in migrations and hybrid scenarios"],
-            ["Portfolio-level archetype", "Aggregate requirements set the profile",
+            ["Classified at group level", "Aggregate requirements set the profile",
              "Direct spoke-to-spoke or a regional hub for east-west traffic"],
         ])
         profiles = [
             [text(chip) for chip in re.findall(r"<span[^>]*>(.*?)</span>", group)]
             for group in re.findall(r'<div class="pr">(.*?)</div>', source)
         ]
-        self.assertEqual(profiles, [
-            ["No Hub", "Connected, where justified"], PROFILES[1:],
-            PROFILES[1:], PROFILES[1:],
-        ])
+        self.assertEqual(profiles, [[PROFILES[j] for j in order] for order in SUMMARY["archetypeProfileOrder"]])
         self.assertIn("Grouped by the platform connectivity and dependency capabilities each requires.", source)
 
     def test_qualification_statuses_move_with_their_archetype_columns(self):
@@ -91,10 +132,7 @@ class ArchetypeTests(unittest.TestCase):
         table = re.search(r'<table class="pm">(.*?)</table>', source, re.S)[1]
         rows = re.findall(r"<tr>(.*?)</tr>", table, re.S)
         headings = [text(c) for c in re.findall(r"<th\b[^>]*>(.*?)</th>", rows[0], re.S)]
-        self.assertEqual(headings[1:], [
-            "Isolatedcloud-native / AI", "Connectedcloud-native / AI",
-            "Hybrid-connected", "Interconnectedportfolio",
-        ])
+        self.assertEqual(headings[1:], SUMMARY["archetypeLabels"])
         statuses = [re.findall(r'class="m (\w+)"', row) for row in rows[1:]]
         self.assertEqual(statuses, [
             ["qu", "qu", "qu", "qu"], ["qu", "qu", "qu", "ca"],
@@ -119,18 +157,20 @@ console.log(JSON.stringify({options, saved, question: M.PROFILE_QUESTIONS[0].lab
         result = subprocess.run(["node", "-e", script], cwd=ROOT,
                                 check=True, capture_output=True, text=True, encoding="utf-8")
         data = json.loads(result.stdout)
-        self.assertEqual(data["options"], ARCHETYPES + ["Several (see note)"])
-        self.assertEqual(data["saved"], ARCHETYPES)
+        legacy = ["Isolated Cloud-Native or AI Applications", "Connected Cloud-Native or AI Applications",
+                  "Hybrid-Connected Applications", "Interconnected Application Portfolios"]
+        self.assertEqual(data["options"], legacy + ["Several (see note)"])
+        self.assertEqual(data["saved"], legacy)
         self.assertIn("beyond approved same-region spokes and Azure service endpoints", data["question"])
 
     def test_executive_city_explains_the_numbered_archetypes(self):
         source = self.read("decks/exec/e.js")
         self.assertIn(
-            "1 Isolated  ·  2 Connected  ·  3 Hybrid-connected  ·  4 Interconnected portfolio",
+            "D.archetypeLabels.map((label, i) => `${i + 1} ${label}`).join('  ·  ')",
             source,
         )
-        self.assertIn("Household pins: 1 isolated in Lakeside; 2 connected in Midtown; "
-                      "3 hybrid-connected in Hillcrest; 4 interconnected portfolio in Riverside.", source)
+        self.assertIn("Household pins: 1 self-contained in Lakeside; 2 selectively connected in Midtown; "
+                      "3 hybrid-dependent in Hillcrest; 4 interdependent groups in Riverside.", source)
 
     def test_deck_generators_bind_correct_definitions_and_profiles_to_each_archetype(self):
         script = """
@@ -166,15 +206,12 @@ console.log(JSON.stringify(outputs));
             self.assertEqual([c["name"] for c in cards], ARCHETYPES)
             self.assertEqual(cards[2]["profiles"], PROFILES[1:])
             self.assertIn("Self-contained", " ".join(cards[0]["text"]))
-        self.assertEqual(full_cards[0]["profiles"], ["No Hub", "Connected, where justified"])
-        self.assertEqual(full_cards[1]["profiles"], PROFILES[1:])
-        self.assertEqual(full_cards[3]["profiles"], PROFILES[1:])
+        expected = [[PROFILES[j] for j in order] for order in SUMMARY["archetypeProfileOrder"]]
+        self.assertEqual([c["profiles"] for c in full_cards], expected)
         self.assertIn("Profile set by latency, traffic, resiliency, security", " ".join(full_cards[1]["text"]))
         self.assertIn("Common in migrations and hybrid scenarios", " ".join(full_cards[2]["text"]))
         self.assertIn("Direct spoke-to-spoke or a regional hub", " ".join(full_cards[3]["text"]))
-        self.assertEqual(exec_cards[0]["profiles"], ["No Hub", "Other profiles, where justified"])
-        self.assertEqual(exec_cards[1]["profiles"], PROFILES)
-        self.assertEqual(exec_cards[3]["profiles"], PROFILES)
+        self.assertEqual([c["profiles"] for c in exec_cards], expected)
         self.assertIn("No Hub only", " ".join(exec_cards[1]["text"]))
         self.assertIn("No Hub", " ".join(exec_cards[2]["text"]))
         self.assertIn("approved same-region", " ".join(exec_cards[3]["text"]))

@@ -26,7 +26,8 @@ import yaml
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 BASELINE = os.path.join(ROOT, "site", "tools", "drift-baseline.txt")
-SUMMARY = json.load(open(os.path.join(ROOT, "shared", "summary.json"), encoding="utf-8"))
+with open(os.path.join(ROOT, "shared", "summary.json"), encoding="utf-8") as source:
+    SUMMARY = json.load(source)
 
 # Regular expressions, matched case-insensitively on text with tags, <style> and <script> removed.
 # The executive deck's speaker notes quote the executive talk track verbatim, and it says "lighter-weight" and
@@ -47,6 +48,11 @@ RETIRED = [re.escape(t) for t in [
     "Disconnected Spokes", "Remote Hub Connected", "Remote-hub-connected spokes",
     "Minimal Regional Hub", "Selective Hub", "Full Regional Hub"]] + [
     r"(?-i:\bApplication Landing Zone)",          # the retired construct name; Microsoft Learn's "application landing zones" is fine
+    r"\bIsolated Cloud-Native(?: or AI Applications)?\b",
+    r"\bConnected Cloud-Native(?: or AI Applications)?\b",
+    r"\bHybrid-Connected Applications?\b", r"\bInterconnected Application Portfolios?\b",
+    r"\bIsolated(?=\s*(?:cloud-native|[·→]))", r"(?<!selectively )\bConnected(?=\s*(?:cloud-native|[·→]))",
+    r"\bHybrid-connected\b", r"\bInterconnected portfolios?\b",
     r"\bdimensions?\b", r"\bD[1-5]\b", r"\bfour parts\b", r"\bSection 0\d", r"Enablement Framework", r"\bright-siz",
     r"\blightest\b", r"\blighter(?:-weight)? (?:patterns?|profiles?)\b", r"\blightweight\b"] + HUB_TERMS
 QUOTED_IN_NOTES = [r"\blighter(?:-weight)? (?:patterns?|profiles?)\b", r"\blightweight\b"] + HUB_TERMS
@@ -119,6 +125,13 @@ def text_of(target):
             for key, value in {"SERVICE_GUIDES": SUMMARY["serviceGuidesTitle"], "PLANNER_NAME": SUMMARY["plannerName"],
                                "EDITION": SUMMARY["edition"], "SITE_URL": SUMMARY["siteUrl"], "WORKBOOK_URL": SUMMARY["workbookUrl"]}.items():
                 t = t.replace("{{" + key + "}}", value)
+            for key, values in (("ARCHETYPE", SUMMARY["archetypes"]), ("ARCHETYPE_LABEL", SUMMARY["archetypeLabels"]),
+                                ("PROFILE", SUMMARY["profiles"])):
+                for i, value in enumerate(values, 1):
+                    t = t.replace("{{" + f"{key}_{i}" + "}}", value)
+            for i, order in enumerate(SUMMARY["archetypeProfileOrder"], 1):
+                t = t.replace("{{" + f"ARCHETYPE_CHIPS_{i}" + "}}",
+                              " ".join(SUMMARY["profiles"][j] for j in order))
             t = re.sub(r"<(style|script).*?</\1>", " ", t, flags=re.S)
             t = re.sub(r"<!--.*?-->", " ", t, flags=re.S)
             if "{{PY:drivers.pdf_figure" in t:          # the drivers figure is drawn at build time from shared/summary.json

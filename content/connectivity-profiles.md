@@ -51,7 +51,7 @@ The region provides the complete set of local connectivity and shared services r
 
 A Full Hub uses the same operating model and control baselines as other geographic hubs. It does not have to be an identical copy; its capabilities should reflect the workloads and geography it supports.
 
-**Fits when:** Workload and platform requirements justify a comprehensive local capability set—for example, where the region requires local hybrid connectivity, substantial local shared services, strict latency or data-boundary controls, significant interconnected application portfolios, or sufficient independence to continue operating when another region or geographic hub is unavailable.
+**Fits when:** Workload and platform requirements justify a comprehensive local capability set—for example, where the region requires local hybrid connectivity, substantial local shared services, strict latency or data-boundary controls, significant Interdependent Workload Groups, or sufficient independence to continue operating when another region or geographic hub is unavailable.
 
 **Regional footprint:** The approved set of local connectivity, shared services, operational capabilities, and independent critical paths required by the region's workload portfolio.
 

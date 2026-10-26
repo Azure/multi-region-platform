@@ -23,6 +23,7 @@ Multi-region platform work rarely starts as an architecture initiative. It usual
 
 > [!NOTE]
 > This guidance covers Azure public-cloud regions. Sovereign cloud offerings and Azure Local have their own constraints and aren't covered, although the same qualification logic can inform them.
+> Workloads on Azure Local run on the customer's own hardware, not in an Azure region, and are outside regional qualification.
 
 ## Principles and constructs
 
@@ -49,7 +50,7 @@ Three principles apply in every region. Three planning constructs put them into 
 Because platform teams cannot predict every future workload, this guidance uses three planning constructs.
 
 - **[Regional Platform Connectivity Profiles](./connectivity-profiles.md)** describe what the platform provides in a region: No Hub, Remote Hub, Minimal Hub, or Full Hub. They are not maturity stages; the most efficient profile can remain the target as long as it continues to satisfy requirements.
-- **[Workload Landing Zone archetypes](./application-landing-zone-archetypes.md)** group recurring dependency and connectivity characteristics so platform teams can plan before every workload is known. The four archetypes are Isolated Cloud-Native or AI Applications, Connected Cloud-Native or AI Applications, Hybrid-Connected Applications, and Interconnected Application Portfolios.
+- **[Workload Landing Zone archetypes](./application-landing-zone-archetypes.md)** group recurring dependency and connectivity characteristics so platform teams can plan before every workload is known. The four archetypes are Self-Contained Workloads, Selectively Connected Workloads, Hybrid-Dependent Workloads, and Interdependent Workload Groups.
 - **[Regional qualification](./regional-qualification.md)** provides a repeatable way to assess candidate regions. Four checks lead to an excluded, candidate, conditional, or qualified regional option, backed by current evidence, known constraints, ownership, and review triggers.
 
 :::image type="content" source="./media/three-planning-constructs.png" alt-text="Diagram showing the three constructs — Regional Platform Connectivity Profiles, Workload Landing Zone archetypes, and regional qualification with its four checks — converging into governed regional options, which workloads revalidate at onboarding to remain in place, deploy net-new, relocate, recover elsewhere, or operate across active regions." lightbox="./media/three-planning-constructs.png":::

@@ -40,7 +40,7 @@ Classify each regional option as:
 
 Record the evidence date, review date, workload requirements in scope, key constraints, outstanding validations, owner, and revalidation triggers. Add the platform connectivity profile when you select it in [step 3](./platform-architecture.md).
 
-:::image type="content" source="./media/assessment-outcome-example.png" alt-text="Example grid of five candidate regions against the four archetypes. Two regions with geographic hubs are qualified for most archetypes; an in-country region is qualified for two, conditional for one, and a candidate for another; an AI region is qualified for isolated AI and conditional for connected AI; a region in another geography is excluded for all." lightbox="./media/assessment-outcome-example.png":::
+:::image type="content" source="./media/assessment-outcome-example.png" alt-text="Example grid of five candidate regions against the four archetypes, ordered self-contained, selectively connected, hybrid-dependent, and interdependent groups. Two regions with geographic hubs are qualified for most archetypes; an in-country region is qualified for two, conditional for one, and a candidate for another; an AI region is qualified for Self-Contained Workloads and conditional for Selectively Connected Workloads; a region in another geography is excluded for all." lightbox="./media/assessment-outcome-example.png":::
 
 *Illustrative example: one portfolio, classified per archetype. Regions and statuses are illustrative.*
 

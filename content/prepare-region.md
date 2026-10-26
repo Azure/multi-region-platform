@@ -14,7 +14,7 @@ Preparing a region is a targeted change to the platform you already run, not a n
 | Profile | What you add in the region | What you reuse |
 |---|---|---|
 | [No Hub](./disconnected-spokes.md) | The region in policy and in landing-zone provisioning. Workload spokes with their own internet ingress and egress. No hub, no gateway, no peering. | Governance, identity, policy, monitoring, and automation. |
-| [Remote Hub](./remote-hub-connected.md) | The same, plus a cross-region connection from each spoke to an existing geographic hub, with routing and DNS settings. No hub. | An existing geographic hub: its gateways, firewall, DNS, and shared services. |
+| [Remote Hub](./remote-hub.md) | The same, plus a cross-region connection from each spoke to an existing geographic hub, with routing and DNS settings. No hub. | An existing geographic hub: its gateways, firewall, DNS, and shared services. |
 | [Minimal Hub](./minimal-regional-hub.md) | The same, plus a hub in the region with only the components you selected. | The geographic hub, for everything you didn't make local. |
 | [Full Hub](./full-regional-hub.md) | The same, plus a full local hub. | The landing-zone foundation and, where they meet requirements, the existing ExpressRoute circuits. |
 
@@ -55,7 +55,7 @@ A region is **ready for workloads** when the required capability set is in place
 
 ## In this section
 
-- [No Hub](./disconnected-spokes.md), [Remote Hub](./remote-hub-connected.md), [Minimal Hub](./minimal-regional-hub.md), and [Full Hub](./full-regional-hub.md): what to deploy for each profile.
+- [No Hub](./disconnected-spokes.md), [Remote Hub](./remote-hub.md), [Minimal Hub](./minimal-regional-hub.md), and [Full Hub](./full-regional-hub.md): what to deploy for each profile.
 - [Platform readiness checklist](./platform-readiness.md): what must be true before workloads arrive.
 
 ## Reference links

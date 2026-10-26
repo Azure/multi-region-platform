@@ -65,7 +65,7 @@ For the options in full, see [hub design options](./full-regional-hub.md#hub-des
 - **Watch for inspection being bypassed.** When hubs in different regions share ExpressRoute circuits, spokes in different regions can learn routes to each other and bypass the firewalls. Plan route tables so that traffic between regions is inspected where it must be.
 - **Know which profile you have.** The hub uses the Minimal Hub profile as long as the region still depends on a geographic hub for something. When it can keep operating without the other hubs, it is a Full Hub, and its cost and operating scope should be planned as one.
 
-**Reassess when:** Workload growth introduces additional local connectivity or shared-service requirements, multiple interconnected application portfolios require broader regional capabilities, stricter independence requirements emerge, significant hybrid connectivity is required locally, or other requirements justify expanding the regional platform footprint.
+**Reassess when:** Workload growth introduces additional local connectivity or shared-service requirements, multiple Interdependent Workload Groups require broader regional capabilities, stricter independence requirements emerge, significant hybrid connectivity is required locally, or other requirements justify expanding the regional platform footprint.
 
 ## Reference links
 

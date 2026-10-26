@@ -42,7 +42,7 @@ items:
   - name: No Hub
     href: disconnected-spokes.md
   - name: Remote Hub
-    href: remote-hub-connected.md
+    href: remote-hub.md
   - name: Minimal Hub
     href: minimal-regional-hub.md
   - name: Full Hub

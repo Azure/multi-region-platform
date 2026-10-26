@@ -140,10 +140,10 @@
   "Full Hub"
  ],
  "archetypes": [
-  "Isolated Cloud-Native or AI Applications",
-  "Connected Cloud-Native or AI Applications",
-  "Hybrid-Connected Applications",
-  "Interconnected Application Portfolios"
+  "Self-Contained Workloads",
+  "Selectively Connected Workloads",
+  "Hybrid-Dependent Workloads",
+  "Interdependent Workload Groups"
  ],
  "drivers": [
   {
@@ -284,12 +284,12 @@
     },
     {
      "label": "Qualification",
-     "text": "Qualified for defined Hybrid-Connected requirements; other portfolio workloads remain candidates until dependencies are understood.",
+     "text": "Qualified for defined hybrid-dependent requirements; other portfolio workloads remain candidates until dependencies are understood.",
      "tone": "g"
     },
     {
      "label": "Archetype",
-     "text": "Hybrid-Connected Applications.",
+     "text": "Hybrid-Dependent Workloads.",
      "tone": "t"
     },
     {
@@ -309,8 +309,8 @@
     "steps": [
      "Data residency and regulation; new in-country region.",
      "Check 2 mandatory location; Check 3 affected workloads; Check 4 services, zones, access.",
-     "The region can be qualified for defined Hybrid-Connected workload requirements while other portfolio workloads remain candidates until their dependencies are understood.",
-     "Hybrid-Connected Applications.",
+     "The region can be qualified for defined hybrid-dependent workload requirements while other portfolio workloads remain candidates until their dependencies are understood.",
+     "Hybrid-Dependent Workloads.",
      "Minimal Hub; reuse existing hybrid connectivity where it permits.",
      "In-scope workloads relocate selectively; recovery stays workload-specific."
     ],
@@ -340,7 +340,7 @@
     },
     {
      "label": "Archetype",
-     "text": "Isolated Cloud-Native or AI where self-contained; Connected Cloud-Native or AI where private enterprise dependencies are required.",
+     "text": "Self-Contained Workloads where self-contained; Selectively Connected Workloads where named private endpoints or APIs are required.",
      "tone": "t"
     },
     {
@@ -361,7 +361,7 @@
      "AI model, service, SKU, or quota availability.",
      "Check 1 business need; Check 2 data constraints; Check 4 model, SKU, zone, access, quota.",
      "Qualified for the AI requirements; conditional where private connectivity is not yet designed.",
-     "Isolated Cloud-Native or AI; Connected where private dependencies exist.",
+     "Self-Contained Workloads; Selectively connected where named private dependencies exist.",
      "No Hub; connected only where dependencies justify it.",
      "Net-new; revalidate model, SKU, access, quota at decision time."
     ],
@@ -391,7 +391,7 @@
     },
     {
      "label": "Archetype",
-     "text": "Interconnected Application Portfolios.",
+     "text": "Interdependent Workload Groups.",
      "tone": "t"
     },
     {
@@ -412,7 +412,7 @@
      "Business expansion through acquisition.",
      "Check 1 business need; Check 2 local data obligations; Check 3 portfolio dependencies.",
      "Candidate until dependencies are known; then qualified.",
-     "Interconnected Application Portfolios.",
+     "Interdependent Workload Groups.",
      "Remote Hub; Minimal Hub where east-west or independence justify it.",
      "Remain in place initially; relocate selectively with integration."
     ],
@@ -422,7 +422,7 @@
   {
    "n": 4,
    "title": "Datacenter exit accelerates migration",
-   "situation": "A colocation contract is ending. Hybrid-connected applications must leave the datacenter, and the organization asks whether the event also requires adoption of another Azure region.",
+   "situation": "A colocation contract is ending. Hybrid-Dependent Workloads must leave the datacenter, and the organization asks whether the event also requires adoption of another Azure region.",
    "tag": "Datacenter event · relocation",
    "steps": [
     {
@@ -442,7 +442,7 @@
     },
     {
      "label": "Archetype",
-     "text": "Hybrid-Connected Applications.",
+     "text": "Hybrid-Dependent Workloads.",
      "tone": "t"
     },
     {
@@ -458,12 +458,12 @@
    ],
    "takeaway": "Remaining in an existing qualified region is a valid outcome. An additional region can remain an option rather than automatically becoming a deployment project.",
    "short": {
-    "situation": "Hybrid-connected applications must leave a colocation facility; is another region now required?",
+    "situation": "Hybrid-Dependent Workloads must leave a colocation facility; is another region now required?",
     "steps": [
      "Datacenter and connectivity event.",
      "Check 3 what moves together; Part 3 hybrid connectivity, reachability, resiliency.",
      "Existing target region qualified; additional region a candidate.",
-     "Hybrid-Connected Applications.",
+     "Hybrid-Dependent Workloads.",
      "No new profile: the existing geographic hub is reused.",
      "Most workloads land in the existing qualified region."
     ],
@@ -579,5 +579,17 @@
   "v600": "#8661C5",
   "v100": "#EBE5F7",
   "v50": "#F3EFFA"
- }
+ },
+ "archetypeLabels": [
+  "Self-contained",
+  "Selectively connected",
+  "Hybrid-dependent",
+  "Interdependent groups"
+ ],
+ "archetypeProfileOrder": [
+  [0, 1, 2, 3],
+  [1, 2, 3, 0],
+  [1, 2, 3],
+  [0, 1, 2, 3]
+ ]
 }

@@ -24,10 +24,10 @@ Think of the platform as a city, and workloads as the people and businesses that
 
       Most workloads live in one neighborhood: the one that fits how they live.
 
-      1. **Commutes to the office every day** (hybrid-connected) picks Hillcrest, for transit plus the express lanes.
-      2. **Works fully remote and is self-sufficient** (isolated) picks Lakeside; off-grid is fine.
-      3. **Works remote but relies on city services** (connected) picks Midtown, one transit ride from the hospital.
-      4. **Extended family, always visiting** (interconnected portfolio) picks Riverside, with local services for a close-knit group.
+      1. **Works fully remote and is self-sufficient** (self-contained) picks Lakeside; off-grid is fine.
+      2. **Works remote but relies on city services** (selectively connected) picks Midtown, one transit ride from the hospital.
+      3. **Commutes to the office every day** (hybrid-dependent) picks Hillcrest, for transit plus the express lanes.
+      4. **Extended family, always visiting** (interdependent groups) picks Riverside, with local services for a close-knit group.
    :::column-end:::
    :::column:::
       **The bank: a multi-region workload**

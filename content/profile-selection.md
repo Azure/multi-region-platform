@@ -13,9 +13,16 @@ Determine how workloads in the region will reach geographic hubs, shared platfor
 
 Start with the matrix to see which connectivity profiles each [archetype](./application-landing-zone-archetypes.md) typically uses. Then apply the selection principles and use the decision tree to pick the most efficient profile that meets the requirements.
 
-:::image type="content" source="./media/archetype-profile-matrix.png" alt-text="Matrix of the four archetypes against the four connectivity profiles. Isolated cloud-native or AI applications often use No Hub and other profiles where justified; connected cloud-native or AI applications can use No Hub where approved local peering or Azure service endpoints suffice, or Remote Hub, Minimal Hub, or Full Hub; hybrid-connected applications use Remote Hub, Minimal Hub, or Full Hub; interconnected portfolios can use No Hub for approved same-region connectivity, Remote Hub where acceptable, and Minimal Hub or Full Hub when justified." lightbox="./media/archetype-profile-matrix.png":::
+:::image type="content" source="./media/archetype-profile-matrix.png" alt-text="Matrix of the four archetypes against the four connectivity profiles. Self-Contained Workloads often use No Hub and other profiles where justified; Selectively Connected Workloads can use No Hub where approved local peering or Azure service endpoints suffice, or Remote Hub, Minimal Hub, or Full Hub; Hybrid-Dependent Workloads use Remote Hub, Minimal Hub, or Full Hub; interdependent groups can use No Hub for approved same-region connectivity, Remote Hub where acceptable, and Minimal Hub or Full Hub when justified." lightbox="./media/archetype-profile-matrix.png":::
 
 *Archetype-to-profile relationships are many-to-many. Each row is a set of options, not an assignment; the selected profile follows dependencies, latency, traffic, resiliency, and independence requirements.*
+
+| Archetype | No Hub | Remote Hub | Minimal Hub | Full Hub |
+|---|---|---|---|---|
+| Self-Contained Workloads | Often | Where justified | Where justified | Where justified |
+| Selectively Connected Workloads | Where hub-free | Typical | Typical | Typical |
+| Hybrid-Dependent Workloads | Not indicated | Typical | Typical | Typical |
+| Interdependent Workload Groups | Approved same-region connectivity | Where acceptable | When justified | When justified |
 
 No Hub can still provide approved direct same-region spoke connectivity and private endpoints for Azure services. These paths must satisfy DNS, security, inspection, and operational requirements without a hub or hybrid gateway. A private endpoint alone does not require Remote Hub, Minimal Hub, or Full Hub.
 
@@ -39,7 +46,7 @@ The same tree as a table, from the smallest regional footprint to the largest:
 | Profile | Fits when the workloads expected in the region | What the region gets |
 |---|---|---|
 | [No Hub](./disconnected-spokes.md) | Need no geographic hub, on-premises path, centralized inspection, or private network connectivity beyond approved same-region spokes and Azure service endpoints. | No hub and no gateway. Workload spokes use the estate's standard identity, policy, security, and deployment practices. |
-| [Remote Hub](./remote-hub-connected.md) | Need geographic-hub capabilities or wider private network access, and can tolerate the latency, availability coupling, and dependency on connectivity to another region. | No local hub. Workload spokes consume an existing geographic hub. |
+| [Remote Hub](./remote-hub.md) | Need geographic-hub capabilities or wider private network access, and can tolerate the latency, availability coupling, and dependency on connectivity to another region. | No local hub. Workload spokes consume an existing geographic hub. |
 | [Minimal Hub](./minimal-regional-hub.md) | Need some capabilities locally, without a comprehensive local set. | A local hub with only the services that must be in the region. Everything else stays remote. |
 | [Full Hub](./full-regional-hub.md) | Need a comprehensive local capability set, or independence from other hubs. | The complete local connectivity and shared services that the region's workloads require. |
 
@@ -67,7 +74,7 @@ Check these points before you settle on a profile, and revisit the profile when 
 
 **Key considerations:** Clearly define which capabilities operate locally and which remain remote. Avoid ambiguous routing, overlapping responsibilities, and unnecessary duplication of platform controls. Validate workload and operational behavior when either local capabilities or remote dependencies are unavailable. When connectivity to on-premises environments is required, determine whether existing ExpressRoute circuits and gateway topology can provide the required reachability before introducing additional circuits; do not assume that each Azure region requires a dedicated ExpressRoute circuit.
 
-**Reassess when:** Workload growth introduces additional local connectivity or shared-service requirements, multiple interconnected application portfolios require broader regional capabilities, stricter independence requirements emerge, significant hybrid connectivity is required locally, or other requirements justify expanding the regional platform footprint.
+**Reassess when:** Workload growth introduces additional local connectivity or shared-service requirements, multiple Interdependent Workload Groups require broader regional capabilities, stricter independence requirements emerge, significant hybrid connectivity is required locally, or other requirements justify expanding the regional platform footprint.
 
 ### Full Hub
 

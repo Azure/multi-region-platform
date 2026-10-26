@@ -13,6 +13,8 @@ Regional qualification should reflect the requirements of the workloads expected
 
 Review the architecture, connectivity, data, shared-service, security, resiliency, scale, and operational requirements and dependencies of workloads expected to consume the region. Where useful, map the key workloads you expect to move to or deploy in the new region, whether existing or new, to the closest-fitting [Workload Landing Zone archetype](./application-landing-zone-archetypes.md) based on its platform connectivity and dependency requirements. If a workload has requirements beyond its primary archetype, record them as explicit additions to that archetype rather than forcing the workload into multiple classifications. For how an archetype differs from an architecture style, a design pattern, and a workload pattern, see [How archetypes differ from other architecture terms](./application-landing-zone-archetypes.md#how-archetypes-differ-from-other-architecture-terms).
 
+Record the management group each workload's subscriptions will sit under. Its policies can require hub connectivity, for example to resolve private endpoint names through the central private DNS zones.
+
 :::image type="content" source="./media/workloads-to-platform-requirements.png" alt-text="Flow from two workload sources — existing workloads, including those moving into the region, and future workloads — into a review of requirements and dependencies, which produces workload-driven platform requirements; requirements that affect suitability go to check 4 and implementation details are deferred to onboarding." lightbox="./media/workloads-to-platform-requirements.png":::
 
 *From workloads to platform requirements. Requirements that could materially affect regional suitability are validated in check 4; implementation-specific decisions can wait for onboarding.*
@@ -34,6 +36,8 @@ Workload requirements also define what the platform must provide in the region. 
 | **Platform enablement** | The shared services and operational capabilities the workloads depend on, such as identity, security controls, monitoring, backup, and key management, and which of them must be close to the workloads. | [Place shared services](./platform-enablement-connectivity.md) |
 | **Resilient hybrid connectivity** | The datacenters and users the workloads must reach, and the latency, bandwidth, routing, and resilience they need on that path. | [Confirm hybrid connectivity](./hybrid-connectivity.md) |
 | **Regional platform connectivity** | How the workloads must reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments. | [Select the connectivity profile](./profile-selection.md) |
+
+Replication or failover traffic between a workload's regional instances over the customer's own networks (for example SQL Server Always On on VMs) is a regional platform connectivity requirement. Managed replication on the Microsoft backbone (for example storage geo-replication or Azure SQL failover groups) needs nothing from the platform.
 
 > [!IMPORTANT]
 > This check doesn't approve workload relocation or define migration execution. Relocation readiness, migration sequencing, recovery design, and ongoing multi-region operation remain workload-specific activities.
