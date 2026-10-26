@@ -39,11 +39,12 @@
     <div class="c"><div class="top"></div><div class="bd">
       <h3><svg><use href="#i-hub"/></svg>Regional platform connectivity</h3>
       <div class="lb">What to identify</div>
-      <p>How the workloads must reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments.</p></div>
+      <p>How the workloads must reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments.</p><p>Replication or failover traffic between a workload's regional instances over the customer's own networks (for example SQL Server Always On on VMs) is a regional platform connectivity requirement. Managed replication on the Microsoft backbone (for example storage geo-replication or Azure SQL failover groups) needs nothing from the platform.</p></div>
       <div class="ft"><svg viewBox="0 0 16 12"><path d="M1 6h12M9 2l4 4-4 4" fill="none" stroke="#0F6CBD" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><div><div class="lb">Decided in Part 3</div><b>Select the connectivity profile</b></div></div></div>
   </div>
 
-  <div class="row mt20" style="gap:34px;align-items:center">
+<p class="mt12" style="font-size:11.8px;line-height:1.5">Record the management group each workload's subscriptions will sit under. Its policies can require hub connectivity, for example to resolve private endpoint names through the central private DNS zones.</p>
+  <div class="row mt12" style="gap:34px;align-items:center">
     <div class="pull" style="flex:1.1;border-left-color:var(--t600)"><p style="font-size:16px">This check gathers requirements. It doesn’t decide how they are met, and it doesn’t disqualify a region directly.</p></div>
   </div>
 

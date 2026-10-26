@@ -24,7 +24,7 @@ ARTICLE_PAGES = {
     "hybrid-connectivity": ["16b-*"],
     "prepare-region": ["17-*", "17a-*"],
     "disconnected-spokes": ["17b-*"],
-    "remote-hub-connected": ["17c-*", "17d-*"],
+    "remote-hub": ["17c-*", "17d-*"],
     "minimal-regional-hub": ["17e-*", "17f-*"],
     "full-regional-hub": ["17g-*", "17h-*"],
     "platform-readiness": ["17i-*"],
@@ -120,6 +120,14 @@ def describe_figures(html):
 # Placeholders usable in any page: {{EDITION}}, {{SITE_URL}}, {{WORKBOOK_URL}}
 PLACEHOLDERS = {"EDITION": SUMMARY["edition"], "SITE_URL": SUMMARY["siteUrl"], "WORKBOOK_URL": SUMMARY["workbookUrl"],
                 "SERVICE_GUIDES": SUMMARY["serviceGuidesTitle"], "PLANNER_NAME": SUMMARY["plannerName"]}
+for key, values in (("ARCHETYPE", SUMMARY["archetypes"]), ("ARCHETYPE_LABEL", SUMMARY["archetypeLabels"]),
+                    ("PROFILE", SUMMARY["profiles"])):
+    PLACEHOLDERS.update({f"{key}_{i}": value for i, value in enumerate(values, 1)})
+for i, order in enumerate(SUMMARY["archetypeProfileOrder"], 1):
+    PLACEHOLDERS[f"ARCHETYPE_CHIPS_{i}"] = "".join(
+        f'<span class="chip {"teal" if j == 0 else "blue"}">{SUMMARY["profiles"][j]}</span>'
+        for j in order
+    )
 
 SPRITE = """
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">

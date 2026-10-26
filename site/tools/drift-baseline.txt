@@ -1,20 +1,26 @@
 # application-landing-zone-archetypes
 a connected profile may still be selected where platform requirements such as private management security data access or centralized services justify connectivity
-applications with significant dependencies on on premises environments enterprise networks or centralized shared services that require persistent private connectivity to the wider enterprise environment
 architecture or design pattern
-because this is a portfolio level archetype its combined dependencies may require capabilities beyond those needed by any individual application
-cloud native or ai applications that are primarily self contained but require private connectivity to selected enterprise services data sources apis or other azure environments
+because this is a group level archetype its combined dependencies may require capabilities beyond those needed by any individual workload
+classify at group level and combine the members requirements
 direct connectivity may suit a limited number of tightly coupled workloads while a minimal hub or full hub may be more appropriate where broader connectivity shared routing traffic inspection resiliency or operational requirements justify regional platform capabilities
-groups of applications with meaningful dependencies on each other including shared data common services east west communication or coordinated connectivity and operations across applications regions or business domains
+groups of workloads with material east west dependencies on each other such as shared data synchronous calls or private east west traffic
 no hub doesn t fit a mandatory private dependency on on premises or geographic hub services
-select the appropriate connectivity profile based on the portfolio s aggregate connectivity shared service resiliency scale and operational requirements rather than the requirements of a single workload
+no hub is an option only when approved same region spoke to spoke connectivity and azure service endpoints satisfy the group s aggregate requirements without a geographic hub or on premises path
+otherwise use remote hub minimal hub or full hub depending on dependency latency traffic patterns resiliency security and operational requirements
+remote hub is an option when cross region latency traffic and availability coupling are acceptable
+select the profile from the group s aggregate connectivity shared service resiliency scale and operational requirements
 the archetype to profile matrix shows the typical options for each archetype
 the four archetypes grouped by the platform connectivity and dependency capabilities each requires
 these workloads can often use no hub
+these workloads can use no hub when approved direct same region spoke connectivity or azure service endpoints meet their dependency and control requirements without a geographic hub or on premises path
 these workloads typically use remote hub minimal hub or full hub depending on dependency latency resiliency regulatory operational and shared service requirements
 understand workload landing zone archetypes
+use archetypes during regional qualification to anticipate the capabilities a candidate region may need to support
+use minimal hub or full hub when local capabilities are justified
+where future workload requirements aren t yet defined they give you planning guardrails without constraining later placement which happens once the workload s current requirements regional capabilities and platform readiness are known
 where significant east west traffic exists within a region evaluate whether direct spoke to spoke connectivity or a local hub provides a more appropriate path than routing traffic through a geographic hub in another region
-workload landing zone archetypes are a planning abstraction that groups recurring application connectivity and dependency requirements
+workload landing zone archetypes group recurring workload connectivity and dependency requirements
 workload landing zone archetypes in this guidance describe what a workload requires from the platform which is a different concept
 # business-and-geography
 regions that don t pass this check don t need deeper assessment
@@ -23,19 +29,18 @@ regions that pass continue to data and compliance which can exclude a region out
 depending on workload requirements these capabilities can include east west routing dns monitoring backup security inspection egress private connectivity selected identity or directory services on premises connectivity or other services that must remain close to the workloads
 moving right adds local capability and independence and also cost and operational scope
 understand common connectivity profiles
-workload and platform requirements justify a comprehensive local capability set for example where the region requires local hybrid connectivity substantial local shared services strict latency or data boundary controls significant interconnected application portfolios or sufficient independence to continue operating when another region or geographic hub is unavailable
+workload and platform requirements justify a comprehensive local capability set for example where the region requires local hybrid connectivity substantial local shared services strict latency or data boundary controls significant interdependent workload groups or sufficient independence to continue operating when another region or geographic hub is unavailable
 # customer-scenarios
 candidate until dependencies are known
 check 3 identifies applications and components that must move together
 check 4 validates current model service sku zone regional access and quota support
 check 4 validates required regional capabilities services zones access and constraints
-connected cloud native or ai applications where private enterprise dependencies are required
 data residency and regulation
 do not create a new local hub solely because another azure region is available
 in scope workloads can relocate selectively
-isolated cloud native or ai applications where the workload is self contained
-isolated or connected cloud native or ai applications
 it remains conditional for requirements that depend on private connectivity until that design is known and validated
+minimal hub where aggregate east west traffic shared services latency or independence requirements justify local capability
+minimal hub where selected local capabilities are required and existing hybrid connectivity can be reused where reachability and resiliency requirements permit
 most workloads can land in the existing qualified region where it satisfies their requirements
 multi region customer scenarios
 other workloads can remain in place
@@ -45,12 +50,12 @@ qualified for the ai workload
 recovery architecture remains a workload specific decision
 revalidate current model sku service regional access and quota support at decision time
 revisit the additional regional option when requirements change
-minimal hub where aggregate east west traffic shared services latency or independence requirements justify local capability
-minimal hub where selected local capabilities are required and existing hybrid connectivity can be reused where reachability and resiliency requirements permit
+self contained workloads or selectively connected workloads
+self contained workloads where the workload is self contained
 step 3 validates hybrid connectivity datacenter and user geography reachability resiliency and whether existing connectivity can support the target design
 the existing geographic hub is reused
 the existing target region can remain qualified for the identified workload requirements while an additional region remains a candidate for future use
-the region can be qualified for defined hybrid connected workload requirements while other portfolio workloads remain candidates until their dependencies are understood
+the region can be qualified for defined hybrid dependent workload requirements while other portfolio workloads remain candidates until their dependencies are understood
 the region can be qualified for the defined ai workload requirements
 these examples show how the framework moves from a business or technical driver to a governed regional and workload decision
 they are illustrative not customer specific recommendations

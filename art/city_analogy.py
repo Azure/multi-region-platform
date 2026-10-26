@@ -4,11 +4,13 @@
 Same isometric language and palette as the whitepaper cover (whitepaper/art.py).
     python3 art/city_analogy.py      -> art/out/city-analogy.svg + city-analogy.png (2x)
 """
-import math, os, sys
+import json, math, os, sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "whitepaper"))
 from art import P, poly, prism, defs, background  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+with open(os.path.join(HERE, "..", "shared", "summary.json"), encoding="utf-8") as source:
+    LABELS = json.load(source)["archetypeLabels"]
 OUT = os.path.join(HERE, "out")
 FONT = "Pub Sans, Segoe UI, Open Sans, sans-serif"
 U = "ca"                      # gradient id prefix
@@ -411,10 +413,10 @@ def household(px, py, pw):
     o.append(f'<text x="{x}" y="{py + 40}" font-family="{FONT}" font-size="11.5" font-weight="700" letter-spacing="2" fill="#04807A">SINGLE-REGION WORKLOAD</text>')
     o.append(f'<text x="{x}" y="{py + 74}" font-family="{FONT}" font-size="26" font-weight="700" fill="#0A2340">The household</text>')
     o.append(f'<text x="{x}" y="{py + 100}" font-family="{FONT}" font-size="13.5" fill="#28323E">Most workloads live in one neighborhood: the one that fits how they live.</text>')
-    fam = [("1", "Works fully remote, self-sufficient", "Isolated", "Lakeside", "off-grid is fine; needs nothing from the city"),
-           ("2", "Remote, but relies on city services", "Connected", "Midtown", "hospital and services one transit ride away"),
-           ("3", "Commutes to the office every day", "Hybrid-connected", "Hillcrest", "transit, plus express lanes to the office"),
-           ("4", "Extended family, always visiting", "Interconnected portfolio", "Riverside", "local services for a close-knit group")]
+    fam = [("1", "Works fully remote, self-sufficient", LABELS[0], "Lakeside", "off-grid is fine; needs nothing from the city"),
+           ("2", "Remote, but relies on city services", LABELS[1], "Midtown", "hospital and services one transit ride away"),
+           ("3", "Commutes to the office every day", LABELS[2], "Hillcrest", "transit, plus express lanes to the office"),
+           ("4", "Extended family, always visiting", LABELS[3], "Riverside", "local services for a close-knit group")]
     cw, ch = (pw - 60 - 14) / 2, 140
     for i, (n, t, arch, hood, why) in enumerate(fam):
         cx = x + (i % 2) * (cw + 14)
@@ -611,7 +613,7 @@ def pdf_figure():
         '<div class="svn">Together they are the platform&rsquo;s <i>shared services</i>. Downtown has every one. Riverside has a fire station and a clinic. '
         'Hillcrest and Midtown use Downtown&rsquo;s. Lakeside needs none.</div>',
     ])
-    homes = [(1, "Isolated", "Lakeside"), (2, "Connected", "Midtown"), (3, "Hybrid-connected", "Hillcrest"), (4, "Interconnected portfolio", "Riverside")]
+    homes = [(1, LABELS[0], "Lakeside"), (2, LABELS[1], "Midtown"), (3, LABELS[2], "Hillcrest"), (4, LABELS[3], "Riverside")]
     who = ('<div class="who">'
            '<div><h4>Numbered pins <em>Single-region workloads</em></h4>'
                       '<div class="hh">' + "".join(f'<div>{_pin(n)}<span><b>{a}</b>{hood}</span></div>' for n, a, hood in homes) + '</div></div>'

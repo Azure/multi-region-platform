@@ -27,10 +27,10 @@
 
   <div class="g2 mt12" style="gap:34px;font-size:11.8px;line-height:1.5">
     <div>
-      <p>Enabling an additional Azure region doesn’t require changing or duplicating the full platform footprint of an existing geographic hub. An organization can maintain a small number of strategic geographic hubs, built with the Full Hub profile, that provide resilient hybrid connectivity and common enterprise services. Other regions can use a more efficient profile, such as Remote Hub or Minimal Hub, and consume capabilities from those hubs when workload requirements permit.</p>
+      <p>Enabling an additional Azure region doesn’t require changing or duplicating the full platform footprint of an existing geographic hub. An organization can maintain a small number of strategic geographic hubs, built with the {{PROFILE_4}} profile, that provide resilient hybrid connectivity and common enterprise services. Other regions can use a more efficient profile, such as {{PROFILE_2}} or {{PROFILE_3}}, and consume capabilities from those hubs when workload requirements permit.</p>
     </div>
     <div>
-      <p>The four profiles form a spectrum: from No Hub, with no dependency on another region’s hub, through Remote Hub and Minimal Hub, to Full Hub, with greater local capability and independence. They aren’t maturity stages. A profile can remain the right target for a region as long as it continues to satisfy workload and platform requirements.</p>
+      <p>The four profiles form a spectrum: from {{PROFILE_1}}, with no dependency on another region’s hub, through {{PROFILE_2}} and {{PROFILE_3}}, to {{PROFILE_4}}, with greater local capability and independence. They aren’t maturity stages. A profile can remain the right target for a region as long as it continues to satisfy workload and platform requirements.</p>
       <p>Profiles describe platform capabilities, not workload designs; Workload Landing Zone archetypes describe what applications need.</p>
     </div>
   </div>
@@ -40,7 +40,7 @@
     <div class="sp4">
       <!-- 1 -->
       <div class="pc">
-        <div class="ph"><span class="pn" style="background:var(--t600)">1</span><span class="pt">No Hub</span></div>
+        <div class="ph"><span class="pn" style="background:var(--t600)">1</span><span class="pt">{{PROFILE_1}}</span></div>
         <div class="pd">No private network path to a geographic hub, another region’s networks, or on-premises environments.</div>
         <div class="pg"><svg class="mini" width="206" height="128" viewBox="0 0 206 128">
           <rect x="4" y="4" width="198" height="88" rx="10" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"/>
@@ -57,7 +57,7 @@
       </div>
       <!-- 2 -->
       <div class="pc">
-        <div class="ph"><span class="pn" style="background:var(--b600)">2</span><span class="pt">Remote Hub</span></div>
+        <div class="ph"><span class="pn" style="background:var(--b600)">2</span><span class="pt">{{PROFILE_2}}</span></div>
         <div class="pd">Spokes connect privately to an existing geographic hub in another region.</div>
         <div class="pg"><svg class="mini" width="206" height="128" viewBox="0 0 206 128">
           <rect x="4" y="4" width="92" height="118" rx="10" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"/>
@@ -75,7 +75,7 @@
       </div>
       <!-- 3 -->
       <div class="pc">
-        <div class="ph"><span class="pn" style="background:var(--b700)">3</span><span class="pt">Minimal Hub</span></div>
+        <div class="ph"><span class="pn" style="background:var(--b700)">3</span><span class="pt">{{PROFILE_3}}</span></div>
         <div class="pd">Selected local services and connectivity, based on workload requirements.</div>
         <div class="pg"><svg class="mini" width="206" height="128" viewBox="0 0 206 128">
           <rect x="4" y="4" width="150" height="118" rx="10" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"/>
@@ -94,11 +94,11 @@
           <circle cx="182" cy="52" r="15" fill="#0F6CBD"/><circle cx="182" cy="52" r="5" fill="#fff"/>
           <text x="182" y="80" text-anchor="middle" font-size="8" fill="#5B6778">geographic</text><text x="182" y="90" text-anchor="middle" font-size="8" fill="#5B6778">hub</text>
         </svg></div>
-        <div class="pf">Local shared services with selective connectivity, without a Full Hub.</div>
+        <div class="pf">Local shared services with selective connectivity, without a {{PROFILE_4}}.</div>
       </div>
       <!-- 4 -->
       <div class="pc">
-        <div class="ph"><span class="pn" style="background:var(--b800)">4</span><span class="pt">Full Hub</span></div>
+        <div class="ph"><span class="pn" style="background:var(--b800)">4</span><span class="pt">{{PROFILE_4}}</span></div>
         <div class="pd">Comprehensive local capabilities, with connectivity to spokes, on-premises, and other regions as needed.</div>
         <div class="pg"><svg class="mini" width="206" height="128" viewBox="0 0 206 128">
           <rect x="4" y="4" width="198" height="118" rx="10" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"/>

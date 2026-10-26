@@ -35,7 +35,7 @@
 <div class="inner">
   <div class="zph" id="pRemote">
     <span class="n" style="background:var(--b600)">2</span>
-    <div><div class="eyebrow">Part 4 · Prepare the region</div><h2>Remote Hub</h2></div>
+    <div><div class="eyebrow">Part 4 · Prepare the region</div><h2>{{PROFILE_2}}</h2></div>
     <svg class="gl" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"/><circle cx="40" cy="15" r="5" fill="#0F6CBD"/></svg>
     <div class="zin"><p>Workload spokes in the region connect across regions to an existing geographic hub and use its gateways, firewall, DNS, and shared services. No hub is built in the region. Preparing the region means connecting its spokes to the hub you already operate.</p></div>
   </div>
@@ -43,7 +43,7 @@
   <table class="zdt">
   <thead><tr><th>Area</th><th>What to do</th><th>Guidance</th></tr></thead>
   <tbody>
-  <tr><td class="za">Policy, address space, monitoring, backup, and keys</td><td>The same as for No Hub (page <span data-toc="pDisc"></span>). Address space must not overlap the hub or the other spokes.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone">Landing zone regions</a></td></tr>
+  <tr><td class="za">Policy, address space, monitoring, backup, and keys</td><td>The same as for {{PROFILE_1}} (page <span data-toc="pDisc"></span>). Address space must not overlap the hub or the other spokes.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone">Landing zone regions</a></td></tr>
   <tr><td class="za">Landing-zone provisioning</td><td>Offer the region in subscription vending, with a spoke virtual network that the platform team connects to the geographic hub.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/subscription-vending">Subscription vending</a></td></tr>
   <tr><td class="za">Connection to the hub</td><td>Connect each spoke to the geographic hub in the other region. See Connect to the geographic hub (page <span data-toc="figRemoteConnect"></span>).</td><td class="zg"><a href="https://learn.microsoft.com/azure/virtual-network/virtual-network-peering-overview">Virtual network peering</a></td></tr>
   <tr><td class="za">Routing and inspection</td><td>Apply the same route tables as for spokes in the hub’s own region, so that traffic reaches the hub firewall.</td><td class="zg"><a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/traditional-azure-networking-topology">Traditional Azure networking topology</a></td></tr>

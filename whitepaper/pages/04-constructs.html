@@ -2,7 +2,7 @@
 <style>
   .f2 { height: 312px; }
   .f2 .zone { position: absolute; top: 0; height: 22px; display: flex; align-items: center; gap: 8px; }
-  .f2 .card { position: absolute; top: 30px; width: 270px; height: 152px; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+  .f2 .card { position: absolute; top: 30px; width: 270px; height: 172px; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
   .f2 .card .top { position: absolute; left: -1px; right: -1px; top: -1px; height: 4px; border-radius: 10px 10px 0 0; }
   .f2 .card .hd { display: flex; gap: 9px; align-items: center; }
   .f2 .card .hd svg { width: 22px; height: 22px; }
@@ -39,13 +39,13 @@
         <div class="top" style="background:var(--t600)"></div>
         <div class="hd"><svg style="color:var(--t600)"><use href="#i-app"/></svg><div class="nm">Workload Landing Zone Archetypes</div></div>
         <div class="role">Describe <b style="color:var(--t700)">what applications require</b> — recurring dependency and connectivity characteristics.</div>
-        <div class="outs"><span class="chip teal">Isolated</span><span class="chip teal">Connected</span><span class="chip teal">Hybrid-connected</span><span class="chip teal">Portfolios</span></div>
+        <div class="outs"><span class="chip teal">{{ARCHETYPE_LABEL_1}}</span><span class="chip teal">{{ARCHETYPE_LABEL_2}}</span><span class="chip teal">{{ARCHETYPE_LABEL_3}}</span><span class="chip teal">{{ARCHETYPE_LABEL_4}}</span></div>
       </div>
       <div class="card node" id="c3" style="left:0">
         <div class="top" style="background:var(--c600)"></div>
         <div class="hd"><svg style="color:var(--c600)"><use href="#i-hub"/></svg><div class="nm">Regional Platform Connectivity Profiles</div></div>
         <div class="role">Describe <b style="color:var(--b700)">what the platform provides</b> to support those archetypes in a region.</div>
-        <div class="outs"><span class="chip blue">No Hub</span><span class="chip blue">Remote Hub</span><span class="chip blue">Minimal Hub</span><span class="chip blue">Full Hub</span></div>
+        <div class="outs"><span class="chip blue">{{PROFILE_1}}</span><span class="chip blue">{{PROFILE_2}}</span><span class="chip blue">{{PROFILE_3}}</span><span class="chip blue">{{PROFILE_4}}</span></div>
       </div>
       <i class="ln" data-from="c2" data-to="c1" data-s="r@0.42" data-e="l@0.42" data-k="teal"></i>
       <i class="ln" data-from="c2" data-to="c3" data-s="l@0.42" data-e="r@0.42" data-k="teal"></i>
@@ -77,9 +77,9 @@
 
   <div class="g3 mt12" style="gap:26px">
     <div><h4 style="color:var(--b700)">Regional Platform Connectivity Profiles</h4>
-      <p class="mt4" style="font-size:11.6px;line-height:1.5">Describe what the platform provides in a region: No Hub, Remote Hub, Minimal Hub, or Full Hub. They are not maturity stages; the most efficient profile can remain the target as long as it continues to satisfy requirements.</p></div>
+      <p class="mt4" style="font-size:11.6px;line-height:1.5">Describe what the platform provides in a region: {{PROFILE_1}}, {{PROFILE_2}}, {{PROFILE_3}}, or {{PROFILE_4}}. They are not maturity stages; the most efficient profile can remain the target as long as it continues to satisfy requirements.</p></div>
     <div><h4 style="color:var(--t600)">Workload Landing Zone Archetypes</h4>
-      <p class="mt4" style="font-size:11.6px;line-height:1.5">Group recurring dependency and connectivity characteristics so platform teams can plan before every workload is known. The four archetypes are <em>Isolated Cloud-Native or AI Applications</em>, <em>Connected Cloud-Native or AI Applications</em>, <em>Hybrid-Connected Applications</em>, and <em>Interconnected Application Portfolios</em>.</p></div>
+      <p class="mt4" style="font-size:11.6px;line-height:1.5">Group recurring dependency and connectivity characteristics so platform teams can plan before every workload is known. The four archetypes are <em>{{ARCHETYPE_1}}</em>, <em>{{ARCHETYPE_2}}</em>, <em>{{ARCHETYPE_3}}</em>, and <em>{{ARCHETYPE_4}}</em>.</p></div>
     <div><h4 style="color:var(--b600)">Regional Qualification</h4>
       <p class="mt4" style="font-size:11.6px;line-height:1.5">Provides a repeatable way to assess candidate regions. Four checks lead to an excluded, candidate, conditional, or qualified regional option, backed by current evidence, known constraints, ownership, and review triggers.</p></div>
   </div>

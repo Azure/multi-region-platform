@@ -27,7 +27,7 @@
 
   <div class="g2 mt12" style="gap:34px;font-size:12.4px;line-height:1.5">
     <p>With a geographic foundation in place, the full landing zone does not have to be copied into every Azure region. Maintain a <strong>small number of strategic geographic hubs</strong> — often two or three regions — with the full networking, security, management, and shared-service footprint.</p>
-    <p>Other regions are consumed through more efficient patterns appropriate to each workload, evaluated application by application. The four connectivity profiles are <strong>not maturity stages</strong>: adoption growth alone does not justify moving toward a Full Hub.</p>
+    <p>Other regions are consumed through more efficient patterns appropriate to each workload, evaluated application by application. The four connectivity profiles are <strong>not maturity stages</strong>: adoption growth alone does not justify moving toward a {{PROFILE_4}}.</p>
   </div>
 
   <div class="figure mt24" id="fig14">
@@ -35,7 +35,7 @@
     <div class="sp4">
       <!-- 1 -->
       <div class="pc">
-        <div class="ph"><span class="pn" style="background:var(--t600)">1</span><span class="pt">No Hub</span></div>
+        <div class="ph"><span class="pn" style="background:var(--t600)">1</span><span class="pt">{{PROFILE_1}}</span></div>
         <div class="pd">No private network path to a geographic hub, another region’s networks, or on-premises environments.</div>
         <div class="pg"><svg class="mini" width="220" height="137" viewBox="0 0 206 128">
           <rect x="4" y="4" width="198" height="88" rx="10" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"/>
@@ -52,7 +52,7 @@
       </div>
       <!-- 2 -->
       <div class="pc">
-        <div class="ph"><span class="pn" style="background:var(--b600)">2</span><span class="pt">Remote Hub</span></div>
+        <div class="ph"><span class="pn" style="background:var(--b600)">2</span><span class="pt">{{PROFILE_2}}</span></div>
         <div class="pd">Spokes connect privately to an existing geographic hub in another region.</div>
         <div class="pg"><svg class="mini" width="220" height="137" viewBox="0 0 206 128">
           <rect x="4" y="4" width="92" height="118" rx="10" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"/>
@@ -70,7 +70,7 @@
       </div>
       <!-- 3 -->
       <div class="pc">
-        <div class="ph"><span class="pn" style="background:var(--b700)">3</span><span class="pt">Minimal Hub</span></div>
+        <div class="ph"><span class="pn" style="background:var(--b700)">3</span><span class="pt">{{PROFILE_3}}</span></div>
         <div class="pd">Selected local services and connectivity, based on workload requirements.</div>
         <div class="pg"><svg class="mini" width="220" height="137" viewBox="0 0 206 128">
           <rect x="4" y="4" width="150" height="118" rx="10" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"/>
@@ -89,11 +89,11 @@
           <circle cx="182" cy="52" r="15" fill="#0F6CBD"/><circle cx="182" cy="52" r="5" fill="#fff"/>
           <text x="182" y="80" text-anchor="middle" font-size="8" fill="#5B6778">geographic</text><text x="182" y="90" text-anchor="middle" font-size="8" fill="#5B6778">hub</text>
         </svg></div>
-        <div class="pf">Local shared services with selective connectivity, without a Full Hub.</div>
+        <div class="pf">Local shared services with selective connectivity, without a {{PROFILE_4}}.</div>
       </div>
       <!-- 4 -->
       <div class="pc">
-        <div class="ph"><span class="pn" style="background:var(--b800)">4</span><span class="pt">Full Hub</span></div>
+        <div class="ph"><span class="pn" style="background:var(--b800)">4</span><span class="pt">{{PROFILE_4}}</span></div>
         <div class="pd">Comprehensive local capabilities, with connectivity to spokes, on-premises, and other regions as needed.</div>
         <div class="pg"><svg class="mini" width="220" height="137" viewBox="0 0 206 128">
           <rect x="4" y="4" width="198" height="118" rx="10" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"/>

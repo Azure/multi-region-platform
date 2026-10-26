@@ -5,17 +5,18 @@
   .mx thead th.pf { width: 112px; vertical-align: top; padding: 0 6px 10px; text-align: center; font-size: 11px; font-weight: 700; color: var(--b800); line-height: 1.25; }
   .mx thead th.pf svg { display: block; margin: 0 auto 6px; }
   .mx thead th.dr { text-align: left; vertical-align: bottom; padding: 0 0 10px 18px; font-size: 9.4px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
-  .mx tbody th { text-align: left; padding: 12px 12px; background: var(--t50); border-top: 1px solid #fff; width: 214px; }
+  .mx tbody th { text-align: left; padding: 8px 12px; background: var(--t50); border-top: 1px solid #fff; width: 214px; }
   .mx tbody th .n { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--t600); color: #fff; font-size: 11px; font-weight: 700; margin-right: 9px; vertical-align: top; }
   .mx tbody th span.t { display: inline-block; width: calc(100% - 40px); font-size: 12.4px; font-weight: 700; color: var(--t700); vertical-align: top; }
   .mx tbody td.c { text-align: center; border-top: 1px solid var(--line-soft); background: #FBFDFF; }
   .mx tbody td.c.alt { background: #F4F8FD; }
-  .mx tbody td.dr { border-top: 1px solid var(--line-soft); padding: 9px 0 9px 18px; font-size: 11px; line-height: 1.42; color: var(--text); }
+  .mx tbody td.dr { border-top: 1px solid var(--line-soft); padding: 5px 0 5px 18px; font-size: 11px; line-height: 1.42; color: var(--text); }
   .mk { display: inline-flex; flex-direction: column; align-items: center; gap: 3px; font-size: 9.2px; font-weight: 650; color: var(--b700); }
   .mk i { width: 16px; height: 16px; border-radius: 50%; display: block; }
   .mk.full i { background: var(--b600); }
   .mk.cond i { border: 2px solid var(--b500); background: #fff; }
   .mk.none { color: var(--faint); font-size: 14px; }
+  table.pub.mg-map th, table.pub.mg-map td { padding: 3px 8px; }
 </style>
 <div class="inner">
   <div class="row" style="gap:34px;align-items:flex-end">
@@ -23,7 +24,7 @@
       <div class="eyebrow" style="color:var(--t600)">How archetypes map to connectivity profiles</div>
       <h2 class="title mt8" style="font-size:21px;color:var(--ink)">Archetypes describe what applications require. Profiles describe what the platform provides.</h2>
     </div>
-    <p style="flex:1;font-size:12px;line-height:1.45"><strong>An archetype doesn’t dictate a profile:</strong> one archetype can use different profiles, and one profile can serve several archetypes. Use the archetypes expected in a region to understand what it needs, then choose the most efficient profile that meets those needs. For example, a hybrid-connected application might run well on a Remote Hub profile in one region and need a Minimal Hub in another, depending on latency, traffic, and resiliency requirements.</p>
+    <p style="flex:1;font-size:12px;line-height:1.45"><strong>An archetype doesn’t dictate a profile:</strong> one archetype can use different profiles, and one profile can serve several archetypes. Use the archetypes expected in a region to understand what it needs, then choose the most efficient profile that meets those needs. For example, a hybrid-dependent workload might run well on a {{PROFILE_2}} profile in one region and need a {{PROFILE_3}} in another, depending on latency, traffic, and resiliency requirements.</p>
   </div>
 
   <div class="figure mt16" id="fig13">
@@ -33,25 +34,25 @@
     <table class="mx">
       <thead><tr>
         <th style="text-align:left;vertical-align:bottom;padding-bottom:10px"><span class="cap" style="color:var(--t600);line-height:1.6">Archetypes<br>What applications require</span></th>
-        <th class="pf"><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="9" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>No Hub</th>
-        <th class="pf"><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"/><circle cx="40" cy="15" r="5" fill="#0F6CBD"/></svg>Remote Hub</th>
-        <th class="pf"><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="6" fill="#fff" stroke="#2B88D8" stroke-width="1.5"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>Minimal Hub</th>
-        <th class="pf"><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="7" fill="#0F6CBD"/><circle cx="14" cy="15" r="2.4" fill="#fff"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>Full Hub</th>
+        <th class="pf"><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="9" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>{{PROFILE_1}}</th>
+        <th class="pf"><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"/><circle cx="40" cy="15" r="5" fill="#0F6CBD"/></svg>{{PROFILE_2}}</th>
+        <th class="pf"><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="6" fill="#fff" stroke="#2B88D8" stroke-width="1.5"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>{{PROFILE_3}}</th>
+        <th class="pf"><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="7" fill="#0F6CBD"/><circle cx="14" cy="15" r="2.4" fill="#fff"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>{{PROFILE_4}}</th>
         <th class="dr">What drives the choice</th>
       </tr></thead>
       <tbody>
-        <tr><th><span class="n">1</span><span class="t">Isolated Cloud-Native or AI Applications</span></th>
+        <tr><th><span class="n">1</span><span class="t">{{ARCHETYPE_1}}</span></th>
           <td class="c"><span class="mk full"><i></i>Often</span></td><td class="c alt"><span class="mk cond"><i></i>Where justified</span></td><td class="c"><span class="mk cond"><i></i>Where justified</span></td><td class="c alt"><span class="mk cond"><i></i>Where justified</span></td>
-          <td class="dr">Often No Hub. A connected profile where private management, security, data access, or centralized services justify connectivity.</td></tr>
-        <tr><th><span class="n">2</span><span class="t">Connected Cloud-Native or AI Applications</span></th>
+          <td class="dr">Often {{PROFILE_1}}. A connected profile where private management, security, data access, or centralized services justify connectivity.</td></tr>
+        <tr><th><span class="n">2</span><span class="t">{{ARCHETYPE_2}}</span></th>
           <td class="c"><span class="mk cond"><i></i>Where hub-free</span></td><td class="c alt"><span class="mk full"><i></i>Typical</span></td><td class="c"><span class="mk full"><i></i>Typical</span></td><td class="c alt"><span class="mk full"><i></i>Typical</span></td>
-          <td class="dr">No Hub only where approved local peering or Azure service endpoints meet all requirements; otherwise choose the required hub capabilities.</td></tr>
-        <tr><th><span class="n">3</span><span class="t">Hybrid-Connected Applications</span></th>
+          <td class="dr">{{PROFILE_1}} only where approved local peering or Azure service endpoints meet all requirements; otherwise choose the required hub capabilities.</td></tr>
+        <tr><th><span class="n">3</span><span class="t">{{ARCHETYPE_3}}</span></th>
           <td class="c"><span class="mk none">—</span></td><td class="c alt"><span class="mk full"><i></i>Typical</span></td><td class="c"><span class="mk full"><i></i>Typical</span></td><td class="c alt"><span class="mk full"><i></i>Typical</span></td>
           <td class="dr">Dependency latency, resiliency, regulatory, operational, and shared-service requirements.</td></tr>
-        <tr><th style="border-bottom:1px solid #fff"><span class="n">4</span><span class="t">Interconnected Application Portfolios</span></th>
+        <tr><th style="border-bottom:1px solid #fff"><span class="n">4</span><span class="t">{{ARCHETYPE_4}}</span></th>
           <td class="c" style="border-bottom:1px solid var(--line-soft)"><span class="mk cond"><i></i>Spoke-to-spoke</span></td><td class="c alt" style="border-bottom:1px solid var(--line-soft)"><span class="mk cond"><i></i>Where acceptable</span></td><td class="c" style="border-bottom:1px solid var(--line-soft)"><span class="mk cond"><i></i>When justified</span></td><td class="c alt" style="border-bottom:1px solid var(--line-soft)"><span class="mk cond"><i></i>When justified</span></td>
-          <td class="dr" style="border-bottom:1px solid var(--line-soft)">No Hub only for approved same-region connectivity without hub or on-premises dependencies. Aggregate portfolio requirements decide.</td></tr>
+          <td class="dr" style="border-bottom:1px solid var(--line-soft)">{{PROFILE_1}} only for approved same-region connectivity without hub or on-premises dependencies. Aggregate portfolio requirements decide.</td></tr>
       </tbody>
     </table>
     <div style="display:flex;gap:22px;margin-top:10px;font-size:10.4px;color:var(--muted);align-items:center">
@@ -62,9 +63,6 @@
     <div class="figcap"><span class="fn">Figure 13</span><span class="ft"><b>Archetype-to-profile relationships are many-to-many.</b> Each row is a set of options, not an assignment; the selected profile follows dependencies, latency, traffic, resiliency, and independence requirements.</span></div>
   </div>
 
-  <div class="row mt16" style="gap:30px;align-items:stretch">
-    <div style="flex:1;border-top:2px solid var(--t100);padding-top:10px"><h3 style="font-size:13.4px">Connected applications: hub-free options</h3><p class="small mt4">These workloads can use No Hub when approved direct same-region spoke connectivity or Azure service endpoints meet their dependency and control requirements without a geographic hub or on-premises path. Otherwise, use Remote Hub, Minimal Hub, or Full Hub, depending on dependency latency, traffic patterns, resiliency, security, and operational requirements.</p></div>
-    <div style="flex:1;border-top:2px solid var(--b100);padding-top:10px"><h3 style="font-size:13.4px">Interconnected portfolios: aggregate requirements</h3><p class="small mt4">No Hub is an option only when approved same-region spoke-to-spoke connectivity and Azure service endpoints satisfy the portfolio’s aggregate requirements without a geographic hub or on-premises path. Remote Hub is an option when cross-region latency, traffic, and availability coupling are acceptable; use Minimal Hub or Full Hub when local capabilities are justified.</p></div>
-  </div>
+<div class="mt12" style="font-size:11.8px;line-height:1.5"><p>These archetypes describe what a workload depends on. They are separate from the Internal (Corp), Online, and Local management groups of an Azure landing zone, which set the policies a subscription inherits, and a workload has one of each.</p><table class="pub mg-map" style="font-size:11px;margin-top:8px"><thead><tr><th>Archetype</th><th>Online</th><th>Internal (Corp)</th></tr></thead><tbody><tr><td>{{ARCHETYPE_1}}</td><td>Common</td><td>Rare</td></tr><tr><td>{{ARCHETYPE_2}}</td><td>Possible</td><td>Common</td></tr><tr><td>{{ARCHETYPE_3}}</td><td>Possible</td><td>Common</td></tr><tr><td>{{ARCHETYPE_4}}</td><td>Possible</td><td>Common</td></tr></tbody></table></div>
 </div>
 </section>

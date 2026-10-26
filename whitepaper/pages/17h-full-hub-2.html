@@ -41,7 +41,7 @@
 <div class="inner">
   <div class="zph">
     <span class="n" style="background:var(--b800)">4</span>
-    <div><div class="eyebrow">Part 4 · Prepare the region</div><h2>Full Hub <span style="font-weight:400;color:var(--muted);font-size:15px">continued</span></h2></div>
+    <div><div class="eyebrow">Part 4 · Prepare the region</div><h2>{{PROFILE_4}} <span style="font-weight:400;color:var(--muted);font-size:15px">continued</span></h2></div>
     <svg class="gl" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EEF5FC" stroke="#8CC0EE" stroke-dasharray="3 2"/><circle cx="14" cy="15" r="7" fill="#0F6CBD"/><circle cx="14" cy="15" r="2.4" fill="#fff"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>
   </div>
   <div class="row mt16" style="gap:36px;align-items:flex-start">
@@ -51,7 +51,7 @@
       <li><strong>Confirm the hub is justified.</strong> Confirm that the required level of independence justifies the additional cost and operational scope.</li>
       <li><strong>Reuse circuits before you add them.</strong> Where on-premises connectivity is required, determine whether existing ExpressRoute circuits can provide the required reachability and resiliency before introducing additional connectivity.</li>
       <li><strong>Build hybrid connectivity to the resiliency recommendations.</strong> Use circuits from more than one peering location and zone-redundant gateways where the region supports them. See <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/connectivity-to-azure">Connectivity to Azure</a>.</li>
-      <li><strong>Remove the dependencies you built the hub to avoid.</strong> A Full Hub that still resolves names, authenticates, or sends egress through another region isn’t independent. Test the region with the other hubs unavailable.</li>
+      <li><strong>Remove the dependencies you built the hub to avoid.</strong> A {{PROFILE_4}} that still resolves names, authenticates, or sends egress through another region isn’t independent. Test the region with the other hubs unavailable.</li>
       <li><strong>Plan inspection between regions.</strong> When hubs share ExpressRoute circuits, spokes in different regions can learn routes to each other and bypass the firewalls. Use route tables to send that traffic through the firewall where it must be inspected.</li>
       <li><strong>Operate it like the other hubs.</strong> Validate automation, observability, support ownership, security operations, configuration consistency, dependency behavior, and lifecycle management.</li>
     </ul>
@@ -72,7 +72,7 @@
           <div class="hc" style="border-color:var(--b300);background:var(--b50)"><b>Separate transit and security functions</b><span class="d">Separated where scale, ownership, or architecture requirements justify it.</span>
             <div class="stk"><div style="background:var(--t100);color:var(--t700)">Workload spokes</div><div style="background:var(--s800);color:#fff">Security · inspection</div><div style="background:var(--b600);color:#fff">Transit · hybrid, routing</div></div></div>
         </div>
-        <div class="figcap"><span class="fn">Figure</span><span class="ft"><b>Hub implementations vary between organizations.</b> Any of these designs can sit behind a Minimal Hub or Full Hub.</span></div>
+        <div class="figcap"><span class="fn">Figure</span><span class="ft"><b>Hub implementations vary between organizations.</b> Any of these designs can sit behind a {{PROFILE_3}} or {{PROFILE_4}}.</span></div>
       </div>
       <div class="note mt12" style="padding:11px 14px">
         <h4>Topology notes</h4>
