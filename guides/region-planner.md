@@ -1,16 +1,16 @@
 # Multi-region planner
 
-The [published planner](https://azure.github.io/multi-region-platform/region-planner.html) supports regional qualification and design selection (steps 2 and 3 of the framework). Teams answer the four qualification checks, compare availability indicators, prices, and latency, select regions, and record their connectivity profiles, shared-service placement, and hybrid connectivity.
+The [published planner](https://azure.github.io/multi-region-platform/region-planner.html) supports regional qualification and design selection (steps 2 and 3 of the framework). Teams answer the four qualification checks, compare availability indicators, prices, and latency, select regions, and record their Platform Services profiles, shared-service placement, and hybrid connectivity.
 
 The planner exports Excel and saves or opens JSON planning records. Visitor-entered planning data stays in the browser; it is not sent to a server. Azure reference data is loaded from published snapshots: see [Azure data collection](azure-data.md) for provenance and limitations.
 
 In Regional design, **Hub Connections** is a searchable multi-select: select or clear regions without
 closing the dropdown. Arrow keys move between options; Enter or Space toggles a selection, and Esc closes
 the list. Saved plans, review records, and Excel exports retain every selected region. Older plans
-with a single geographic hub keep that selection. Remote shared services still name one supplying region;
+with a single Full-Platform region keep that selection. Remote shared services still name one supplying region;
 when no supplier is specified, the first selected hub is used.
 
-Saved plans using earlier names for Minimal Hub migrate automatically without changing custom notes,
+Saved plans using earlier names for Minimal platform migrate automatically without changing custom notes,
 service placements, or hub selections. The advanced networking tool keeps its stable `minimal-hub` pattern ID.
 
 **Existing connectivity** suggests only locations in the Azure ExpressRoute peering-location snapshot,
@@ -112,13 +112,13 @@ per diagram and does not model every planner capability or product choice. Mixed
 paths, incomplete hybrid definitions and other limitations are called out in the panel. Firewall and DNS
 symbols illustrate the capability, not a confirmed product selection. Current-region services are only
 inferred where a new region requires them; the planner does not inventory all existing services.
-Both tools use **No Hub**, **Remote Hub**, **Minimal Hub**, and **Full Hub**. Geographic hubs provide
+Both tools use **No platform**, **Remote platform**, **Minimal platform**, and **Full platform**. Full-Platform regions provide
 hybrid connectivity and shared services from other regions; Azure geography names remain reference-data labels,
-not connectivity profiles. Saved plans using the previous profile names are converted when opened, including
+not Platform Services profiles. Saved plans using the previous profile names are converted when opened, including
 regional connection choices that previously referred to the remote hub.
 
-Every selected hub connection is passed to the diagram. For Remote Hub, GeoLZ models
-traffic through one geographic hub (the first selection); this limitation is called out in Plan definitions.
+Every selected hub connection is passed to the diagram. For Remote platform, GeoLZ models
+traffic through one Full-Platform region (the first selection); this limitation is called out in Plan definitions.
 
 Changes to networking definitions in the plan refresh the explorer, including its live presentation window.
 Tool-only refinements survive unrelated renders, hiding and reopening, but are replaced by a networking

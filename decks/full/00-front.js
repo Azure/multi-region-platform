@@ -27,7 +27,7 @@ module.exports = (pres, L) => {
       L.txt(s, t, 0.98, 5.95 + i * 0.32, 5.4, 0.28, { fontSize: 13, fontFace: F.semi, color: C.ink, valign: 'middle' });
     });
     L.txt(s, D.edition, 0.6, 7.03, 3, 0.26, { fontSize: 11, color: C.muted, valign: 'middle' });
-    s.addNotes('Opening. This briefing summarizes the Multi-Region Platform Whitepaper: how to extend Azure landing zones so that additional Azure regions become governed, qualified options, without separate governance structures or identical infrastructure in every region. The artwork shows the model: two geographic hubs, a Minimal Hub, workload spokes, and an empty candidate footprint, all standing on one shared foundation.');
+    s.addNotes('Opening. This briefing summarizes the Multi-Region Platform Whitepaper: how to extend Azure landing zones so that additional Azure regions become governed, qualified options, without separate governance structures or identical infrastructure in every region. The artwork shows the model: two Full-Platform regions, a Minimal platform, workload spokes, and an empty candidate footprint, all standing on one shared foundation.');
   }
 
   // ───────────────────────── 2 · Agenda (generated from the sections table)
@@ -50,13 +50,13 @@ module.exports = (pres, L) => {
     L.txt(s, 'MULTI-REGION PLATFORM WHITEPAPER', 9.2, 0.72, 3.4, 0.24, { fontSize: 10, bold: true, color: C.b100, charSpacing: 1 });
     L.box(s, 9.15, 3.95, 3.36, 2.75, { fill: 'FFFFFF', r: 0.14 });
     L.txt(s, 'DECISION TOOLS IN THIS DECK', 9.37, 4.12, 3, 0.24, { fontSize: 10, bold: true, color: C.b700, charSpacing: 2 });
-    [['search', 'b', 'Regional qualification decision tree'], ['hub', 'b', 'Connectivity profile selection tree'], ['route', 't', 'Workload placement flow'], ['check', 'b', 'Platform readiness checklist']].forEach(([ic, c, t], i) => {
+    [['search', 'b', 'Regional qualification decision tree'], ['hub', 'b', 'Platform Services profile selection tree'], ['route', 't', 'Workload placement flow'], ['check', 'b', 'Platform readiness checklist']].forEach(([ic, c, t], i) => {
       const y = 4.5 + i * 0.54;
       L.box(s, 9.37, y, 2.92, 0.008, { fill: C.soft, r: 0 });
       L.icon(s, ic, 9.37, y + 0.13, 0.26, c);
       L.txt(s, t, 9.76, y + 0.03, 2.6, 0.48, { fontSize: 12, fontFace: F.semi, color: C.ink, valign: 'middle' });
     });
-    s.addNotes('The agenda follows the website: understand concepts, qualify regions, select the regional design, prepare the region, and place workloads. Service Guides for Multi Region follows, then Resources: getting started, customer scenarios, misconceptions, pairing, and resiliency. The conclusion closes the story. Four decision tools: regional qualification tree, connectivity profile tree, workload placement flow, and platform readiness checklist.');
+    s.addNotes('The agenda follows the website: understand concepts, qualify regions, select the regional design, prepare the region, and place workloads. Service Guides for Multi Region follows, then Resources: getting started, customer scenarios, misconceptions, pairing, and resiliency. The conclusion closes the story. Four decision tools: regional qualification tree, Platform Services profile tree, workload placement flow, and platform readiness checklist.');
   }
 
   // ───────────────────────── 3 · Executive summary — the approach at a glance
@@ -70,7 +70,7 @@ module.exports = (pres, L) => {
     const cards = [
       ['layers', C.b600, C.wash, 'Extend, do not replicate', 'The landing-zone operating model stays consistent across the Azure estate. New regions add only the **most efficient platform capabilities** required by the workloads expected to use them, rather than replicating an existing regional footprint.'],
       ['search', C.b700, C.wash, 'Qualify regions against defined requirements', 'Four checks: business and geography, data and compliance, workload requirements and dependencies, and regional capability and availability. Qualification creates a **governed regional option**; it does not permanently approve the region for every workload.'],
-      ['app', C.t600, C.t50, 'Plan by workload requirements, not individual applications', 'Workload Landing Zone archetypes provide a planning abstraction for recurring connectivity and dependency requirements. Archetypes describe **what applications require**; connectivity profiles describe **what the platform provides**.'],
+      ['app', C.t600, C.t50, 'Plan by workload requirements, not individual applications', 'Workload Landing Zone archetypes provide a planning abstraction for recurring connectivity and dependency requirements. Archetypes describe **what applications require**; Platform Services profiles describe **what the platform provides**.'],
     ];
     cards.forEach(([ic, c, bg, t, d], i) => {
       const x = 0.6 + i * 4.1, y = 3.5, w = 3.93, h = 3.3;
@@ -79,7 +79,7 @@ module.exports = (pres, L) => {
       L.txt(s, t, x + 0.22, y + 0.82, w - 0.44, 0.52, { fontSize: 14, fontFace: F.semi, color: C.ink, valign: 'top', lineSpacingMultiple: 0.95 });
       L.txt(s, rich(d), x + 0.22, y + 1.42, w - 0.44, h - 1.52, { fontSize: 12, color: C.text, lineSpacingMultiple: 1.05 });
     });
-    s.addNotes('Many Azure estates are designed around a fixed primary and disaster-recovery region pair. This approach extends Azure landing-zone principles so additional regions become qualified options that workloads can use selectively. Regional qualification applies four checks: business and geography, data and compliance, workload requirements and dependencies, and regional capability and availability. A region can remain excluded, conditional, or qualified based on documented evidence, constraints, owners, and revalidation triggers. Archetypes describe what applications require; connectivity profiles describe what the platform provides; the relationship is intentionally not one-to-one.');
+    s.addNotes('Many Azure estates are designed around a fixed primary and disaster-recovery region pair. This approach extends Azure landing-zone principles so additional regions become qualified options that workloads can use selectively. Regional qualification applies four checks: business and geography, data and compliance, workload requirements and dependencies, and regional capability and availability. A region can remain excluded, conditional, or qualified based on documented evidence, constraints, owners, and revalidation triggers. Archetypes describe what applications require; Platform Services profiles describe what the platform provides; the relationship is intentionally not one-to-one.');
   }
 
   // ───────────────────────── 4 · What adding a region involves
@@ -88,7 +88,7 @@ module.exports = (pres, L) => {
     L.header(s, '', 'What adding a region involves', { tw: 7.3, ts: 24, lede: 'A new region is often assumed to be a large project. With this approach, it is a short series of decisions and a targeted change to the platform you already run.', lx: 8.3, lw: 4.43, ls: 12 });
     const R = [
       ['A new region needs its own landing-zone design.', 'Reuse the existing landing zone. The region is added to the policies, automation, and monitoring you already run.'],
-      ['Every region needs a Full Hub.', 'Start with the most efficient connectivity profile that meets the requirements. Two of the four profiles need no local hub.'],
+      ['Every region needs a Full platform.', 'Start with the most efficient Platform Services profile that meets the requirements. Two of the four profiles need no local hub.'],
       ['Every region needs another ExpressRoute circuit.', 'Reuse existing hybrid connectivity where reachability and resiliency requirements allow. Add circuits only when a requirement justifies them.'],
       ['Enabling a region means migrating workloads.', 'Nothing has to move. Workloads use the region when their own requirements call for it.'],
       ['Qualification is a long assessment.', 'It is four checks, each with one question, answered from what your teams already know. Unknowns are recorded and revisited, not treated as blockers.'],
@@ -107,7 +107,7 @@ module.exports = (pres, L) => {
     });
     L.box(s, 0.6, 6.1, 12.13, 0.7, { fill: C.s800, r: 0.12 });
     L.txt(s, [{ text: 'The first additional region takes the most thought, ', options: { fontFace: F.semi } }, { text: 'because the decisions are made for the first time. Later regions reuse those decisions and become mostly configuration.' }], 0.85, 6.1, 11.6, 0.7, { fontSize: 14, color: 'FFFFFF', valign: 'middle' });
-    s.addNotes('Adding an Azure region should not mean starting another landing-zone project. The table contrasts five common assumptions with this approach: reuse the existing landing zone, start with the most efficient connectivity profile, reuse hybrid connectivity where requirements allow, move nothing until a workload calls for the region, and treat qualification as four checks answered from what teams already know. The first additional region takes the most thought because the decisions are made for the first time; later regions reuse them.');
+    s.addNotes('Adding an Azure region should not mean starting another landing-zone project. The table contrasts five common assumptions with this approach: reuse the existing landing zone, start with the most efficient Platform Services profile, reuse hybrid connectivity where requirements allow, move nothing until a workload calls for the region, and treat qualification as four checks answered from what teams already know. The first additional region takes the most thought because the decisions are made for the first time; later regions reuse them.');
   }
 
   // ───────────────────────── 5 · How it works — the five parts
@@ -130,7 +130,7 @@ module.exports = (pres, L) => {
       L.txt(s, p.summary, cols.sum, y, 3.95, rh, { fontSize: 12, color: C.text, valign: 'middle', lineSpacingMultiple: 0.95 });
       if (p.state) { const [f, c] = stateTone[p.state] || [C.b100, C.b700]; L.chip(s, p.state, cols.st, y + rh / 2 - 0.16, { w: 1.66, h: 0.32, size: 10.5, fill: f, color: c }); }
     });
-    s.addNotes('The framework has five parts, and each part answers one question. Part 1 explains the concepts: four connectivity profiles describe the platform options and four archetypes describe what applications require. Part 2 qualifies regions with four checks that lead to one of four outcomes. Part 3 selects the regional design through three choices; the region is then selected. Part 4 prepares the region by building only what the selected design calls for; the region is then ready for workloads. Part 5 places workloads one at a time, with current evidence; the region is then in use.');
+    s.addNotes('The framework has five parts, and each part answers one question. Part 1 explains the concepts: four Platform Services profiles describe the platform options and four archetypes describe what applications require. Part 2 qualifies regions with four checks that lead to one of four outcomes. Part 3 selects the regional design through three choices; the region is then selected. Part 4 prepares the region by building only what the selected design calls for; the region is then ready for workloads. Part 5 places workloads one at a time, with current evidence; the region is then in use.');
   }
 
   // ───────────────────────── 6 · Executive summary, continued
@@ -138,7 +138,7 @@ module.exports = (pres, L) => {
     const s = L.slide('summary');
     L.header(s, 'Continued', 'Choose efficient connectivity, keep readiness and placement separate, keep one operating model', { tw: 11, ts: 24 });
     const cards = [
-      ['hub', C.v600, C.wash, 'Choose the most efficient regional connectivity', 'Profiles range from **No Hub** through **Remote Hub** and **Minimal Hub** to a **Full Hub**. They are not maturity stages. Select the **most efficient profile** for current requirements, and add local capabilities only when a measurable need justifies them.'],
+      ['hub', C.v600, C.wash, 'Choose the most efficient regional connectivity', 'Profiles range from **No platform** through **Remote platform** and **Minimal platform** to a **Full platform**. They are not maturity stages. Select the **most efficient profile** for current requirements, and add local capabilities only when a measurable need justifies them.'],
       ['route', C.t700, C.t50, 'Keep platform readiness and workload placement separate', 'Qualification determines whether a region can become a viable platform option. Placement happens later, when a specific workload and its current requirements are known. Placement, relocation, recovery, and multi-region operation remain **workload-specific decisions**.'],
       ['shield', C.s800, C.wash, 'Keep the operating model consistent while allowing regional adaptation', 'The operating model stays consistent across regions; implementation can vary where business, workload, or regulatory requirements call for it. **Region-agnostic does not mean region-random.** Choice operates within qualified options, documented constraints, and current evidence.'],
     ];
@@ -152,6 +152,6 @@ module.exports = (pres, L) => {
     L.image(s, IMG('band.jpg', L.tone), { x: 0.6, y: 5.8, w: 12.13, h: 1.0 }, 'Decorative gradient band behind the goal statement', { sizing: { type: 'cover', w: 12.13, h: 1.0 } });
     L.txt(s, 'THE GOAL', 0.85, 5.8, 1.3, 1.0, { fontSize: 10.5, bold: true, color: 'FFFFFF', charSpacing: 2, valign: 'middle' });
     L.txt(s, [{ text: 'The goal is not to select the perfect two regions. ', options: { fontFace: F.light } }, { text: 'It is to make additional regions significantly easier to adopt when business and workload requirements justify them.', options: { fontFace: F.semi } }], 2.2, 5.8, 10.3, 1.0, { fontSize: 18, color: 'FFFFFF', valign: 'middle' });
-    s.addNotes('Connectivity profiles are not maturity stages: select the most efficient profile for current requirements and add local capabilities only when a measurable need justifies them. Geographic hubs and shared services can continue to support other regions where dependencies and service characteristics permit. Qualification makes a region a viable option; placement is decided later for each workload, and new workload findings can feed back into qualification. The operating model stays consistent while placement, profiles, shared-service footprints, services and SKUs, and resiliency choices adapt to current requirements.');
+    s.addNotes('Platform Services profiles are not maturity stages: select the most efficient profile for current requirements and add local capabilities only when a measurable need justifies them. Full-Platform regions and shared services can continue to support other regions where dependencies and service characteristics permit. Qualification makes a region a viable option; placement is decided later for each workload, and new workload findings can feed back into qualification. The operating model stays consistent while placement, profiles, shared-service footprints, services and SKUs, and resiliency choices adapt to current requirements.');
   }
 };

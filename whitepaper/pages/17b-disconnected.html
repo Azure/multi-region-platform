@@ -41,7 +41,7 @@
     <span class="n" style="background:var(--t600)">1</span>
     <div><div class="eyebrow">Part 4 · Prepare the region</div><h2>{{PROFILE_1}}</h2></div>
     <svg class="gl" width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="44" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="9" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><rect x="26" y="10" width="11" height="11" rx="2.5" fill="#04807A"/></svg>
-    <div class="zin" style="columns:2;column-gap:22px;font-size:10.8px"><p style="break-inside:avoid">Workload spokes run in the region with no private network path to a geographic hub, another region’s networks, or an on-premises environment. There is no hub to build. Preparing the region means letting the landing zone you already run accept it.</p><p style="break-inside:avoid">In the Azure landing zone architecture, these spokes are <em>online</em> landing zones: workloads that use direct internet connectivity, or that don’t need a virtual network, and that don’t connect to the corporate network through a hub.</p></div>
+    <div class="zin" style="columns:2;column-gap:22px;font-size:10.8px"><p style="break-inside:avoid">Workload spokes run in the region with no private network path to a Full-Platform region, another region’s networks, or an on-premises environment. There is no hub to build. Preparing the region means letting the landing zone you already run accept it.</p><p style="break-inside:avoid">In the Azure landing zone architecture, these spokes are <em>online</em> landing zones: workloads that use direct internet connectivity, or that don’t need a virtual network, and that don’t connect to the corporate network through a hub.</p></div>
   </div>
   <div class="zh4" style="margin-top:9px">What you deploy</div>
   <table class="zdt">
@@ -69,9 +69,9 @@
       <li><strong>Check identity.</strong> Workloads authenticate with Microsoft Entra ID. A workload that needs domain controllers doesn’t fit this profile.</li>
       <li><strong>Connect spokes directly only where needed.</strong> Where applications in the region need east-west communication, evaluate <a href="https://learn.microsoft.com/azure/architecture/networking/architecture/hub-spoke">direct spoke-to-spoke connectivity</a> without assuming that a local hub is required. Limit it to spokes of the same environment and workload.</li>
       <li><strong>Validate the operating procedures.</strong> Validate administration, identity, DNS, secrets, telemetry, data movement, software distribution, private endpoints, incident response, and support procedures.</li>
-      <li><strong>Look for hidden dependencies.</strong> Confirm that no hidden dependency requires connectivity to a geographic hub or on-premises environment.</li>
+      <li><strong>Look for hidden dependencies.</strong> Confirm that no hidden dependency requires connectivity to a Full-Platform region or on-premises environment.</li>
     </ul>
-    <div class="zra" style="margin-top:8px"><b>Reassess when</b>Workloads require a geographic hub, on-premises connectivity, centralized inspection, or private network paths beyond approved same-region spokes and Azure service endpoints.</div>
+    <div class="zra" style="margin-top:8px"><b>Reassess when</b>Workloads require a Full-Platform region, on-premises connectivity, centralized inspection, or private network paths beyond approved same-region spokes and Azure service endpoints.</div>
   </div>
 </div>
 </section>

@@ -1,24 +1,24 @@
 ---
 title: Prepare the region overview
-description: Build what the regional design record says, through the landing-zone automation you already run. See what each connectivity profile adds in a new Azure region, what is global and needs no action, and the order of work.
-ms.date: 10/23/2026
+description: Build what the regional design record says, through the landing-zone automation you already run. See what each Platform Services profile adds in a new Azure region, what is global and needs no action, and the order of work.
+ms.date: 10/27/2026
 ms.topic: conceptual
 ---
 
 # Prepare the region overview
 
-Preparing a region is a targeted change to the platform you already run, not a new landing zone. You build only what the selected connectivity profile and shared-service placement call for, through your existing landing-zone automation. For two of the four profiles there is no hub to build.
+Preparing a region is a targeted change to the platform you already run, not a new landing zone. You build only what the selected Platform Services profile and shared-service placement call for, through your existing landing-zone automation. For two of the four profiles there is no hub to build.
 
 ## What each profile adds
 
 | Profile | What you add in the region | What you reuse |
 |---|---|---|
-| [No Hub](./disconnected-spokes.md) | The region in policy and in landing-zone provisioning. Workload spokes with their own internet ingress and egress. No hub, no gateway, no peering. | Governance, identity, policy, monitoring, and automation. |
-| [Remote Hub](./remote-hub.md) | The same, plus a cross-region connection from each spoke to an existing geographic hub, with routing and DNS settings. No hub. | An existing geographic hub: its gateways, firewall, DNS, and shared services. |
-| [Minimal Hub](./minimal-regional-hub.md) | The same, plus a hub in the region with only the components you selected. | The geographic hub, for everything you didn't make local. |
-| [Full Hub](./full-regional-hub.md) | The same, plus a full local hub. | The landing-zone foundation and, where they meet requirements, the existing ExpressRoute circuits. |
+| [No platform](./disconnected-spokes.md) | The region in policy and in landing-zone provisioning. Workload spokes with their own internet ingress and egress. No hub, no gateway, no peering. | Governance, identity, policy, monitoring, and automation. |
+| [Remote platform](./remote-hub.md) | The same, plus a cross-region connection from each spoke to an existing Full-Platform region, with routing and DNS settings. No hub. | An existing Full-Platform region: its gateways, firewall, DNS, and shared services. |
+| [Minimal platform](./minimal-regional-hub.md) | The same, plus a hub in the region with only the components you selected. | The Full-Platform region, for everything you didn't make local. |
+| [Full platform](./full-regional-hub.md) | The same, plus a full local hub. | The landing-zone foundation and, where they meet requirements, the existing ExpressRoute circuits. |
 
-The Cloud Adoption Framework already describes how to [add a new region to an existing landing zone](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone), including a new hub in the region. That path is the Full Hub. The other three profiles do part of it, for regions whose workloads need less.
+The Cloud Adoption Framework already describes how to [add a new region to an existing landing zone](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone), including a new hub in the region. That path is the Full platform. The other three profiles do part of it, for regions whose workloads need less.
 
 ## What is global and needs no action
 
@@ -34,8 +34,8 @@ Most of the landing zone isn't tied to a region:
 The order is the same for every profile. The profile decides how much each item contains.
 
 1. **Allow the region in policy**, for the workload requirements it is qualified for.
-1. **Reserve address space** that doesn't overlap the rest of the estate, even for No Hub.
-1. **Build the network part** that the profile calls for: nothing, connections to an existing geographic hub, or a local hub.
+1. **Reserve address space** that doesn't overlap the rest of the estate, even for No platform.
+1. **Build the network part** that the profile calls for: nothing, connections to an existing Full-Platform region, or a local hub.
 1. **Extend the shared services** that must be local, such as DNS forwarding or domain controllers.
 1. **Turn on landing-zone provisioning** for the region, so that workload teams receive spokes that match the profile.
 1. **Extend operations**: monitoring, security coverage, backup, and runbooks.
@@ -45,9 +45,9 @@ The order is the same for every profile. The profile decides how much each item 
 
 Different profiles can coexist across the estate. A region's profile changes only when workload and platform requirements change, not because regions are expected to progress along a maturity path.
 
-:::image type="content" source="./media/profiles-coexisting-estate.png" alt-text="Illustrative estate: on-premises datacenters connect to two geographic hubs in regions A and B. Region C runs a Minimal Hub that reuses an existing ExpressRoute circuit, region D runs a Minimal Hub without an on-premises path, regions E and F use Remote Hub, region G uses No Hub, and region H is a candidate not yet enabled." lightbox="./media/profiles-coexisting-estate.png":::
+:::image type="content" source="./media/profiles-coexisting-estate.png" alt-text="Illustrative estate: on-premises datacenters connect to two Full-Platform regions in regions A and B. Region C runs a Minimal platform that reuses an existing ExpressRoute circuit, region D runs a Minimal platform without an on-premises path, regions E and F use Remote platform, region G uses No platform, and region H is a candidate not yet enabled." lightbox="./media/profiles-coexisting-estate.png":::
 
-*An illustrative estate. Two geographic hubs provide resilient hybrid connectivity; other regions consume what they need. Region C's Minimal Hub reaches on-premises by reusing an existing ExpressRoute circuit; region D's does not. Both are valid. Names and placements are examples only.*
+*An illustrative estate. Two Full-Platform regions provide resilient hybrid connectivity; other regions consume what they need. Region C's Minimal platform reaches on-premises by reusing an existing ExpressRoute circuit; region D's does not. Both are valid. Names and placements are examples only.*
 
 ## When the region is ready
 
@@ -55,7 +55,7 @@ A region is **ready for workloads** when the required capability set is in place
 
 ## In this section
 
-- [No Hub](./disconnected-spokes.md), [Remote Hub](./remote-hub.md), [Minimal Hub](./minimal-regional-hub.md), and [Full Hub](./full-regional-hub.md): what to deploy for each profile.
+- [No platform](./disconnected-spokes.md), [Remote platform](./remote-hub.md), [Minimal platform](./minimal-regional-hub.md), and [Full platform](./full-regional-hub.md): what to deploy for each profile.
 - [Platform readiness checklist](./platform-readiness.md): what must be true before workloads arrive.
 
 ## Reference links
@@ -67,4 +67,4 @@ A region is **ready for workloads** when the required capability set is in place
 ## Next step
 
 > [!div class="nextstepaction"]
-> [No Hub](./disconnected-spokes.md)
+> [No platform](./disconnected-spokes.md)

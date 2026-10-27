@@ -3,23 +3,23 @@ a connected profile may still be selected where platform requirements such as pr
 architecture or design pattern
 because this is a group level archetype its combined dependencies may require capabilities beyond those needed by any individual workload
 classify at group level and combine the members requirements
-direct connectivity may suit a limited number of tightly coupled workloads while a minimal hub or full hub may be more appropriate where broader connectivity shared routing traffic inspection resiliency or operational requirements justify regional platform capabilities
+direct connectivity may suit a limited number of tightly coupled workloads while a minimal platform or full platform may be more appropriate where broader connectivity shared routing traffic inspection resiliency or operational requirements justify regional platform capabilities
 groups of workloads with material east west dependencies on each other such as shared data synchronous calls or private east west traffic
-no hub doesn t fit a mandatory private dependency on on premises or geographic hub services
-no hub is an option only when approved same region spoke to spoke connectivity and azure service endpoints satisfy the group s aggregate requirements without a geographic hub or on premises path
-otherwise use remote hub minimal hub or full hub depending on dependency latency traffic patterns resiliency security and operational requirements
-remote hub is an option when cross region latency traffic and availability coupling are acceptable
+otherwise use remote platform minimal platform or full platform depending on dependency latency traffic patterns resiliency security and operational requirements
+remote platform is an option when cross region latency traffic and availability coupling are acceptable
 select the profile from the group s aggregate connectivity shared service resiliency scale and operational requirements
 the archetype to profile matrix shows the typical options for each archetype
 the four archetypes grouped by the platform connectivity and dependency capabilities each requires
-these workloads can often use no hub
-these workloads can use no hub when approved direct same region spoke connectivity or azure service endpoints meet their dependency and control requirements without a geographic hub or on premises path
-these workloads typically use remote hub minimal hub or full hub depending on dependency latency resiliency regulatory operational and shared service requirements
+the no regional platform profile does not fit a mandatory private dependency on on premises services and or shared platform services
+the no regional platform profile is an option only when approved same region spoke to spoke connectivity and azure service endpoints satisfy the group s aggregate requirements without private connectivity to a more strategic region or an on premises environment
+these workloads can often use no platform
+these workloads can use the no regional platform profile when approved direct same region spoke connectivity or azure service endpoints meet their dependency and control requirements without connectivity to a more strategic region with platform services and or connectivity to an on premises environment
+these workloads typically use remote platform minimal platform or full platform depending on dependency latency resiliency regulatory operational and shared service requirements
 understand workload landing zone archetypes
 use archetypes during regional qualification to anticipate the capabilities a candidate region may need to support
-use minimal hub or full hub when local capabilities are justified
+use minimal platform or full platform when local capabilities are justified
 where future workload requirements aren t yet defined they give you planning guardrails without constraining later placement which happens once the workload s current requirements regional capabilities and platform readiness are known
-where significant east west traffic exists within a region evaluate whether direct spoke to spoke connectivity or a local hub provides a more appropriate path than routing traffic through a geographic hub in another region
+where significant east west traffic exists within a region evaluate whether direct spoke to spoke connectivity or a local virtual network hub or virtual wan hub provides a more appropriate path than routing traffic through the virtual network hub or virtual wan hub in another region
 workload landing zone archetypes group recurring workload connectivity and dependency requirements
 workload landing zone archetypes in this guidance describe what a workload requires from the platform which is a different concept
 # business-and-geography
@@ -28,8 +28,7 @@ regions that pass continue to data and compliance which can exclude a region out
 # connectivity-profiles
 depending on workload requirements these capabilities can include east west routing dns monitoring backup security inspection egress private connectivity selected identity or directory services on premises connectivity or other services that must remain close to the workloads
 moving right adds local capability and independence and also cost and operational scope
-understand common connectivity profiles
-workload and platform requirements justify a comprehensive local capability set for example where the region requires local hybrid connectivity substantial local shared services strict latency or data boundary controls significant interdependent workload groups or sufficient independence to continue operating when another region or geographic hub is unavailable
+understand common platform services profiles
 # customer-scenarios
 candidate until dependencies are known
 check 3 identifies applications and components that must move together
@@ -39,8 +38,8 @@ data residency and regulation
 do not create a new local hub solely because another azure region is available
 in scope workloads can relocate selectively
 it remains conditional for requirements that depend on private connectivity until that design is known and validated
-minimal hub where aggregate east west traffic shared services latency or independence requirements justify local capability
-minimal hub where selected local capabilities are required and existing hybrid connectivity can be reused where reachability and resiliency requirements permit
+minimal platform where aggregate east west traffic shared services latency or independence requirements justify local capability
+minimal platform where selected local capabilities are required and existing hybrid connectivity can be reused where reachability and resiliency requirements permit
 most workloads can land in the existing qualified region where it satisfies their requirements
 multi region customer scenarios
 other workloads can remain in place
@@ -53,7 +52,7 @@ revisit the additional regional option when requirements change
 self contained workloads or selectively connected workloads
 self contained workloads where the workload is self contained
 step 3 validates hybrid connectivity datacenter and user geography reachability resiliency and whether existing connectivity can support the target design
-the existing geographic hub is reused
+the existing full platform region is reused
 the existing target region can remain qualified for the identified workload requirements while an additional region remains a candidate for future use
 the region can be qualified for defined hybrid dependent workload requirements while other portfolio workloads remain candidates until their dependencies are understood
 the region can be qualified for the defined ai workload requirements
@@ -66,7 +65,7 @@ how the first two checks filter the portfolio
 the first two checks act as filters
 the first two checks filter the portfolio before deeper technical assessment
 # disconnected-spokes
-a spoke in the no hub profile can t use a dns resolver in a hub
+a spoke in the no platform profile can t use a dns resolver in a hub
 # framework-overview
 because platform teams cannot predict every future workload this guidance uses three planning constructs
 extend azure landing zones for adaptable regional placement
@@ -77,11 +76,13 @@ this guidance shows how to reuse the azure landing zone foundation you already r
 three planning constructs put them into practice
 three principles apply in every region
 # full-regional-hub
+a full hub that still resolves names authenticates or sends egress through another region isn t independent
 branch datacenter and cloud connectivity are integrated through the organization s sd wan architecture
 platform native routing traffic inspection and egress services implemented with azure firewall and related azure networking capabilities
 topology determines how the capability is implemented
 transit hybrid connectivity routing and security inspection are separated where scale ownership or architecture requirements justify it
 # index
+every region needs a full hub
 four workload landing zone archetypes describe what applications require
 from a fixed pair to governed options
 getting started walks through the first additional region in six steps
@@ -364,8 +365,9 @@ you operate the proxy hsm and their recovery path
 your application decides whether each region uses an independent key or a common key
 your application selects the healthy vault
 # minimal-regional-hub
-the hub uses the minimal hub profile as long as the region still depends on a geographic hub for something
-the same as for no hub with spokes that connect to the local hub
+the hub uses the minimal platform profile as long as the region still depends on a full platform region for something
+the same as for no platform with spokes that connect to the local hub
+the same choices apply as for a full hub on a smaller scale
 # misconceptions
 common multi region misconceptions
 # paired-nonpaired-regions
@@ -383,7 +385,7 @@ where each shared service is provided with a default for each profile
 some placements are set by the service not by the profile
 # platform-readiness
 confirm the others as the capability set is put in place
-everything else on this page applies to every profile including no hub
+everything else on this page applies to every profile including no platform
 ip address planning common blocker
 items marked as common blockers should be planned early while the region is still being qualified
 private dns across regions routing and inspection paths and hybrid connectivity apply only to connected profiles
@@ -391,29 +393,29 @@ quota and specific capacity common blocker
 region settings in policy common blocker
 where logs and telemetry live common blocker
 # prepare-region
-no hub remote hub minimal hub and full hub
-region c s minimal hub reaches on premises by reusing an existing expressroute circuit
+no platform remote platform minimal platform and full platform
+region c s minimal platform reaches on premises by reusing an existing expressroute circuit
 region d s does not
 what must be true before workloads arrive
 # profile-selection
 a local hub with only the services that must be in the region
 check these points before you settle on a profile and revisit the profile when its reassessment trigger applies
 considerations and reassessment by profile
-each question comes from the fits when criteria of the connectivity profiles
+each question comes from the fits when criteria of the platform services profiles
 everything else stays remote
 fits when the workloads expected in the region
 need a comprehensive local capability set or independence from other hubs
-need geographic hub capabilities or wider private network access and can tolerate the latency availability coupling and dependency on connectivity to another region
-need no geographic hub on premises path centralized inspection or private network connectivity beyond approved same region spokes and azure service endpoints
+need full platform region capabilities or wider private network access and can tolerate the latency availability coupling and dependency on connectivity to another region
+need no full platform region on premises path centralized inspection or private network connectivity beyond approved same region spokes and azure service endpoints
 need some capabilities locally without a comprehensive local set
 no hub and no gateway
-start with the matrix to see which connectivity profiles each archetype typically uses
+start with the matrix to see which platform services profiles each archetype typically uses
 the complete local connectivity and shared services that the region s workloads require
 the same tree as a table from the smallest regional footprint to the largest
 then apply the selection principles and use the decision tree to pick the most efficient profile that meets the requirements
 what the region gets
-which connectivity profile should this region provide
-workload spokes consume an existing geographic hub
+which platform services profile should this region provide
+workload spokes consume an existing full platform region
 workload spokes use the estate s standard identity policy security and deployment practices
 # regional-capability
 assess required quota based on expected workload scale and identify any quota increases that may be required
@@ -424,7 +426,7 @@ programmatic regional evaluation narrows the options
 use manual review for considerations that cannot be determined reliably from published or programmatically available information
 where possible evaluate objective regional characteristics programmatically using the requirements above as inputs
 # regional-qualification
-add the platform connectivity profile when you select it in step 3
+add the platform services profile when you select it in step 3
 apply the tree per candidate region and set of defined workload requirements
 candidate and conditional options return to the tree when validation is complete or when conditions change
 candidate while requirements aren t known
@@ -459,7 +461,7 @@ service guides for multi region overview
 the articles in this section cover the dependencies that most often decide whether a regional combination works as built
 # workload-placement
 define whether the region will support the workload as its primary location recovery location or as part of a multi region active deployment
-document the selected region workload landing zone archetype connectivity profile placement and resiliency outcomes assumptions constraints owners and revalidation triggers
+document the selected region workload landing zone archetype platform services profile placement and resiliency outcomes assumptions constraints owners and revalidation triggers
 for each workload or related application portfolio
 review qualified regional options
 # workload-requirements

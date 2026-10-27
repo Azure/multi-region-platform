@@ -18,11 +18,15 @@
   // A workbook saved by version 1 keeps its answers where the question still exists. Manual availability, price and latency entries are dropped.
   const V1_CAPABILITY = { 'Met': 'Yes', 'Gap (mandatory)': 'No (mandatory gap)', 'Gap (accepted with a condition)': 'Gap accepted with a condition' };
   const LEGACY_PROFILES = {
-    'Disconnected Spokes': 'No Hub',
-    'Remote Hub Connected': 'Remote Hub',
-    'Minimal Regional Hub': 'Minimal Hub',
-    'Selective Hub': 'Minimal Hub',
-    'Full Regional Hub': 'Full Hub',
+    'No Hub': 'No platform',
+    'Remote Hub': 'Remote platform',
+    'Minimal Hub': 'Minimal platform',
+    'Full Hub': 'Full platform',
+    'Disconnected Spokes': 'No platform',
+    'Remote Hub Connected': 'Remote platform',
+    'Minimal Regional Hub': 'Minimal platform',
+    'Selective Hub': 'Minimal platform',
+    'Full Regional Hub': 'Full platform',
   };
   function fromV1(raw) {
     const o = { ...raw };
@@ -70,8 +74,10 @@
       if (o.design) {
         o.design = { ...newDesign(), ...o.design, ss: { ...(o.design.ss || {}) }, custom: [...(o.design.custom || [])] };
         if (Object.hasOwn(LEGACY_PROFILES, o.design.profile)) o.design.profile = LEGACY_PROFILES[o.design.profile];
-        ['link', 'eastWest'].forEach(key => {
-          if (typeof o.design[key] === 'string') o.design[key] = o.design[key].replace(/\bthe remote hub\b/g, 'the geographic hub');
+        ['link', 'eastWest', 'hybridPath'].forEach(key => {
+          if (typeof o.design[key] === 'string') o.design[key] = o.design[key]
+            .replace(/\bthe remote hub\b/g, 'the Full-Platform region')
+            .replace(/\bgeographic[ -]hubs?\b/gi, match => /s$/i.test(match) ? 'Full-Platform regions' : 'Full-Platform region');
         });
         o.design.hubConnections = Array.isArray(o.design.hubConnections) ? [...new Set(o.design.hubConnections.filter(id => typeof id === 'string' && id))] : null;
         if (!HYBRID_PATHS.some(p => p.id === o.design.hybridPath)) o.design.hybridPath = '';
@@ -495,18 +501,18 @@
     return r.design;
   }
   function suggestProfile(d) {
-    if (d.q1 === 'No') return 'No Hub';
+    if (d.q1 === 'No') return 'No platform';
     if (d.q1 !== 'Yes') return '';
-    if (d.q2 === 'Yes') return 'Remote Hub';
+    if (d.q2 === 'Yes') return 'Remote platform';
     if (d.q2 !== 'No') return '';
-    return d.q3 === 'No' ? 'Minimal Hub' : d.q3 === 'Yes' ? 'Full Hub' : '';
+    return d.q3 === 'No' ? 'Minimal platform' : d.q3 === 'Yes' ? 'Full platform' : '';
   }
   // The design with every default applied: what the page shows and what the record and the export use.
   function effective(r) {
     const d = design(r), suggested = suggestProfile(d), profile = d.profile || suggested, pi = PROFILES.findIndex(p => p.id === profile);
     const hubs = hubRegions(r.id);
     const estateTopo = M.O.topology.includes(S.estate.topology) ? S.estate.topology : '';
-    const none = profile === 'No Hub';
+    const none = profile === 'No platform';
     const connections = Array.isArray(d.hubConnections) ? d.hubConnections.filter(id => hubs.includes(id))
       : [hubs.includes(d.hub) ? d.hub : hubs[0]].filter(Boolean);
     const hubConnections = none ? [] : [...new Set(connections)], defHub = hubConnections[0] || '';
@@ -530,13 +536,13 @@
     // things that don't add up, in the words of the profile selection article
     const hubLocal = e.ss.filter(s => HUB_SERVICES.includes(s.id) && s.p === 'Local'), hubRemote = e.ss.filter(s => HUB_SERVICES.includes(s.id) && s.p === 'Remote');
     e.hints = [];
-    if (profile === 'Remote Hub' && hubLocal.length) e.hints.push('A hub service is placed locally. With a hub in the region, the profile is a Minimal Hub.');
-    if (profile === 'Full Hub' && hubRemote.length) e.hints.push('A hub service is still remote. A region that depends on a geographic hub for something is a Minimal Hub.');
-    if (none && e.ss.some(s => s.p === 'Remote' && s.id !== 'logs')) e.hints.push('The No Hub profile has no private path to another region. Check the services placed as remote.');
-    if (profile === 'Minimal Hub' && e.ss.filter(s => HUB_SERVICES.includes(s.id) && s.p).length === 4 && !hubLocal.length) e.hints.push('No hub service is local. Without a hub in the region, the profile is Remote Hub.');
+    if (profile === 'Remote platform' && hubLocal.length) e.hints.push('A hub service is placed locally. With a hub in the region, the profile is a Minimal platform.');
+    if (profile === 'Full platform' && hubRemote.length) e.hints.push('A hub service is still remote. A region that depends on a Full-Platform region for something is a Minimal platform.');
+    if (none && e.ss.some(s => s.p === 'Remote' && s.id !== 'logs')) e.hints.push('The No platform profile has no private path to another region. Check the services placed as remote.');
+    if (profile === 'Minimal platform' && e.ss.filter(s => HUB_SERVICES.includes(s.id) && s.p).length === 4 && !hubLocal.length) e.hints.push('No hub service is local. Without a hub in the region, the profile is Remote platform.');
     if (e.hybrid === 'Not required' && gw && gw.p === 'Local') e.hints.push('A local gateway is planned, but hybrid connectivity is set to not required.');
     const missing = [];
-    if (!profile) missing.push('connectivity profile');
+    if (!profile) missing.push('Platform Services profile');
     const unplaced = e.ss.filter(s => !s.p || (s.custom && !s.name)).length;
     if (profile && unplaced) missing.push(`${unplaced} shared service${unplaced > 1 ? 's' : ''} to place`);
     if (profile && !e.hybrid) missing.push('hybrid connectivity');
@@ -559,7 +565,7 @@
     const gateway = e.ss.find(s => s.id === 'gateway');
     const provider = gateway && gateway.p === 'Remote' ? gateway.from : '';
     const hubNames = provider ? rname(provider) : list(e.hubConnections.map(rname));
-    if (say && hubNames) say = say.replace('the geographic hub', hubNames).replace('another region', hubNames);
+    if (say && hubNames) say = say.replace('the Full-Platform region', hubNames).replace('another region', hubNames);
     if (e.hybrid === 'Reuse') return `Reuse the existing ${d.hybridUse || 'connectivity'}${say ? ', ' + say : ''}`;
     return `Change: ${d.hybridChange || 'to be defined'}${d.hybridReason ? ` (${d.hybridReason.charAt(0).toLowerCase() + d.hybridReason.slice(1)})` : ''}${say ? ', ' + say : ''}`;
   }
@@ -568,12 +574,12 @@
     const e = effective(r), d = design(r), out = [];
     const at = p => e.ss.filter(s => s.p === p && (s.short || s.name));
     out.push(['Selected region', `${rname(r.id)} (${outcome(r)} as of ${S.meta.date})`]);
-    out.push(['Connectivity profile', e.profile || 'Not selected yet']);
+    out.push(['Platform Services profile', e.profile || 'Not selected yet']);
     if (!e.none && e.profile) {
-      out.push(['Hub implementation', [e.profile === 'Remote Hub' ? 'No local hub' : e.topology === 'Azure Virtual WAN' ? 'Virtual hub in the region (Azure Virtual WAN)' : e.topology ? 'Hub virtual network in the region' : 'Hub in the region',
+      out.push(['Hub implementation', [e.profile === 'Remote platform' ? 'No local hub' : e.topology === 'Azure Virtual WAN' ? 'Virtual hub in the region (Azure Virtual WAN)' : e.topology ? 'Hub virtual network in the region' : 'Hub in the region',
         e.managed ? 'managed with ' + e.managed : ''].filter(Boolean).join(', ')]);
       out.push(['Hub Connections', list(e.hubConnections.map(rname)) || 'None']);
-      out.push(['Regional connectivity', [e.hubConnections.length ? `${e.profile === 'Full Hub' ? 'Connected to' : 'Depends on'} ${list(e.hubConnections.map(rname))}` : '', e.link, e.eastWest ? 'spoke to spoke: ' + e.eastWest.charAt(0).toLowerCase() + e.eastWest.slice(1) : ''].filter(Boolean).join('; ')]);
+      out.push(['Regional connectivity', [e.hubConnections.length ? `${e.profile === 'Full platform' ? 'Connected to' : 'Depends on'} ${list(e.hubConnections.map(rname))}` : '', e.link, e.eastWest ? 'spoke to spoke: ' + e.eastWest.charAt(0).toLowerCase() + e.eastWest.slice(1) : ''].filter(Boolean).join('; ')]);
     } else if (e.none && e.eastWest) out.push(['Regional connectivity', 'No hub. Spoke to spoke: ' + e.eastWest.charAt(0).toLowerCase() + e.eastWest.slice(1)]);
     out.push(['Hybrid connectivity', hybridText(r, e) || 'Not decided yet']);
     out.push(['Local shared services', list(at('Local').map(s => s.short)) || 'None']);

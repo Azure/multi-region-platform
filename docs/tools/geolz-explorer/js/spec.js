@@ -190,8 +190,8 @@ function moveRegion(spec, id, delta) {
 function moveSite(spec, i, delta) { return swapIn(spec.onprem || [], i, delta); }
 
 /* ===== PATTERN CHANGE: remove what the new pattern doesn't allow (rules.js "fields", "links") ===== */
-// Returns short texts for what was removed. Regions that use this one as their geographic hub are not changed: Checks
-// reports them. A Minimal Hub that becomes another pattern loses the hub link to its geographic hub (linkRemoteHub
+// Returns short texts for what was removed. Regions that use this one as their Full-Platform region are not changed: Checks
+// reports them. A Minimal platform that becomes another pattern loses the hub link to its Full-Platform region (linkRemoteHub
 // added it).
 function changePattern(spec, region, next) {
   const was = region.pattern === 'minimal-hub' && region.remote_hub;
@@ -199,9 +199,9 @@ function changePattern(spec, region, next) {
   const removed = [...dropConnections(spec, region), ...dropLinks(spec, region), ...dropSettings(spec, region)];
   return was && next !== 'minimal-hub' ? [...removed, ...unlinkRemoteHub(spec, region, was, true)] : removed;
 }
-// A Minimal Hub takes capabilities from its geographic hub over a hub link (hub-spoke; Virtual WAN links its hubs
-// implicitly). assign: give it a geographic hub when it has none (on becoming a Minimal Hub: the first full hub, in its
-// virtual WAN when there are several); a geographic hub the user cleared stays cleared. Returns what was added.
+// A Minimal platform takes capabilities from its Full-Platform region over a hub link (hub-spoke; Virtual WAN links its hubs
+// implicitly). assign: give it a Full-Platform region when it has none (on becoming a Minimal platform: the first full hub, in its
+// virtual WAN when there are several); a Full-Platform region the user cleared stays cleared. Returns what was added.
 function linkRemoteHub(spec, region, assign = true) {
   if (region.pattern !== 'minimal-hub') return [];
   const added = [], fits = r => r !== region && r.pattern === 'full-hub' && (!isVwan(spec) ||
@@ -210,7 +210,7 @@ function linkRemoteHub(spec, region, assign = true) {
     const hub = spec.regions.find(fits) || spec.regions.find(r => r !== region && r.pattern === 'full-hub');
     if (!hub) return added;
     region.remote_hub = hub.id;
-    added.push(`geographic hub ${hub.name}`);
+    added.push(`Full-Platform region ${hub.name}`);
   }
   const remote = regionById(spec, region.remote_hub);
   if (remote && !isVwan(spec) && hasHub(remote) && remote !== region && !linkBetween(spec, region.id, remote.id)) {
@@ -219,8 +219,8 @@ function linkRemoteHub(spec, region, assign = true) {
   }
   return added;
 }
-// The other half: a Minimal Hub's previous geographic hub (no longer its geographic hub, or the region is no longer a
-// Minimal Hub: wasMinimal) loses its hub link. Returns what was removed, as short texts.
+// The other half: a Minimal platform's previous Full-Platform region (no longer its Full-Platform region, or the region is no longer a
+// Minimal platform: wasMinimal) loses its hub link. Returns what was removed, as short texts.
 function unlinkRemoteHub(spec, region, previous, wasMinimal = region.pattern === 'minimal-hub') {
   const old = regionById(spec, previous), links = spec.region_links || [];
   if (!wasMinimal || !old || previous === region.remote_hub ||
@@ -249,7 +249,7 @@ function dropLinks(spec, region) {
   spec.region_links = (spec.region_links || []).filter(l => !gone.includes(l));
   return gone.map(l => 'region link to ' + name(l.from === region.id ? l.to : l.from));
 }
-// Region settings: geographic hub, capabilities, role overrides and DNS model the pattern has no field for.
+// Region settings: Full-Platform region, capabilities, role overrides and DNS model the pattern has no field for.
 function dropSettings(spec, region) {
   const removed = [];
   const drop = (key, text) => {
@@ -257,7 +257,7 @@ function dropSettings(spec, region) {
     delete region[key];
     removed.push(text);
   };
-  drop('remote_hub', 'geographic hub ' + ((regionById(spec, region.remote_hub) || {}).name || region.remote_hub));
+  drop('remote_hub', 'Full-Platform region ' + ((regionById(spec, region.remote_hub) || {}).name || region.remote_hub));
   drop('capabilities', 'capabilities');
   for (const role of Object.keys(CATALOG.roles)) drop(role, CATALOG.roles[role].label + ' override');
   drop('dns_model', 'DNS model override');

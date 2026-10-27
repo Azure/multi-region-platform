@@ -5,10 +5,10 @@ window.RULES = /* rules.js: pattern rules as data. Everything below this line is
                    "subOptions": { "internet": "From internet", "users": "From users (private access)",
                                    "admin": "Admin access (Bastion)", "onprem": "From on-premises users" },
                    "subNeeds": {
-                     "internet": { "role": "ingress", "why": "No public ingress (WAF) for this region: none in its hub, geographic hub or spoke." },
-                     "users": { "role": "private_user_access", "why": "No private network connector for this region: none in its hub, geographic hub or spoke." },
-                     "admin": { "role": "bastion", "why": "No Azure Bastion for this region: none in its hub, geographic hub or spoke." },
-                     "onprem": { "role": "hybrid", "why": "No hybrid connection reaches this region's hub or its geographic hub." } } },
+                     "internet": { "role": "ingress", "why": "No public ingress (WAF) for this region: none in its hub, Full-Platform region or spoke." },
+                     "users": { "role": "private_user_access", "why": "No private network connector for this region: none in its hub, Full-Platform region or spoke." },
+                     "admin": { "role": "bastion", "why": "No Azure Bastion for this region: none in its hub, Full-Platform region or spoke." },
+                     "onprem": { "role": "hybrid", "why": "No hybrid connection reaches this region's hub or its Full-Platform region." } } },
     "egress":    { "label": "Egress",     "color": "#D13438", "dash": "8 3 2 3" },
     "dns":       { "label": "DNS",        "color": "#107C10", "dash": "1 7", "variantBy": "dns_model", "subBy": "dns_query",
                    "subOptions": { "azure": "Azure names", "onprem": "On-prem names", "inbound": "On-prem → Azure" } },
@@ -37,10 +37,10 @@ window.RULES = /* rules.js: pattern rules as data. Everything below this line is
   },
   "patterns": {
     "full-hub": {
-      "label": "Full Hub", "hub": "full", "vwanPaths": true,
+      "label": "Full platform", "hub": "full", "vwanPaths": true,
       "color": "#2F6FB3", "tint": "#E9F1FA", "dark": { "color": "#6FA8E0", "tint": "#1C2A3A" },
       "description": "All shared connectivity services run in the region's own hub.",
-      "vwanDescription": "The Full Hub region's own virtual hub (virtual hub router, firewall, the gateways of its hybrid connections) and its shared services VNet run all shared connectivity services.",
+      "vwanDescription": "The Full platform region's own virtual hub (virtual hub router, firewall, the gateways of its hybrid connections) and its shared services VNet run all shared connectivity services.",
       "fields": ["firewall", "ingress", "dns", "bastion", "private_user_access", "dns_model"],
       "links": ["hub"],
       "paths": {
@@ -63,48 +63,48 @@ window.RULES = /* rules.js: pattern rules as data. Everything below this line is
         },
         "east_west": { "byRole": ["firewall"],
           "firewall": { "steps": ["spoke", "peering:to:host:firewall?", "{firewall}", "peering:host:firewall?", "spoke2"], "note": "Spoke-to-spoke traffic is sent to the hub firewall by the spokes' route tables (peering is not transitive), so it is inspected.", "ref": "learn-fw-multi-hub",
-            "awayNote": "This Minimal Hub has no local firewall: traffic between its spokes goes to the geographic hub's firewall and back over global peering. Expect extra peering hops (added cost) and higher latency than regional peering; validate them, or set Firewall to Local to keep it in the region.", "awayRef": "aac-spoke-to-spoke" },
+            "awayNote": "This Minimal platform has no local firewall: traffic between its spokes goes to the Full-Platform region's firewall and back over global peering. Expect extra peering hops (added cost) and higher latency than regional peering; validate them, or set Firewall to Local to keep it in the region.", "awayRef": "aac-spoke-to-spoke" },
           "*": { "steps": [], "note": "No route: there is no firewall in this hub to carry spoke-to-spoke traffic (peering is not transitive). Set a firewall for the hub.", "ref": "aac-hub-spoke" }
         },
         "onprem": { "byRole": ["firewall"],
           "firewall": { "steps": ["spoke", "peering:to:host:firewall?", "{firewall}", "{hybrid}", "edge?", "provider?", "onprem"], "note": "Hybrid traffic is inspected by the hub firewall in both directions: GatewaySubnet routes send spoke prefixes to the firewall, and spoke route tables don't learn on-premises routes.", "ref": "learn-fw-multi-hub",
-            "awayNote": "This Minimal Hub has no local firewall: hybrid traffic is inspected by the geographic hub's firewall over global peering. Validate the added latency and peering charges.", "awayRef": "aac-spoke-to-spoke" },
+            "awayNote": "This Minimal platform has no local firewall: hybrid traffic is inspected by the Full-Platform region's firewall over global peering. Validate the added latency and peering charges.", "awayRef": "aac-spoke-to-spoke" },
           "*": { "steps": ["spoke", "{hybrid}", "edge?", "provider?", "onprem"], "note": "No firewall in this hub: spokes reach on-premises through the gateway without inspection. Set a firewall for the hub so hybrid traffic is inspected.", "ref": "learn-fw-multi-hub" }
         }
       },
       "talking_points": [
         "Inspection, hybrid gateway, DNS and ingress are all local, so the region keeps working if another region is lost.",
         "Highest run cost and operational surface of the four patterns.",
-        "Full Hub regions need not be identical: products and SKUs can differ per region."
+        "Full platform regions need not be identical: products and SKUs can differ per region."
       ],
       "vwan_talking_points": [
-        { "key": true, "text": "A Full Hub region has a virtual hub with the built-in virtual hub router, a firewall (secured hub, the default), the gateways of its hybrid connections and a shared services VNet in the region." }
+        { "key": true, "text": "A Full platform region has a virtual hub with the built-in virtual hub router, a firewall (secured hub, the default), the gateways of its hybrid connections and a shared services VNet in the region." }
       ],
       "refs": ["aac-hub-spoke"]
     },
     "minimal-hub": {
-      "label": "Minimal Hub", "hub": "partial", "vwanPaths": true,
+      "label": "Minimal platform", "hub": "partial", "vwanPaths": true,
       "color": "#6B6FA8", "tint": "#EFEFF7", "dark": { "color": "#A3A7D6", "tint": "#25263A" },
-      "description": "A small local hub: each capability is local, taken from a geographic hub, or not needed.",
-      "vwanDescription": "A Minimal Hub region has a virtual hub with the built-in virtual hub router and, if secured, a firewall; on-premises connectivity and shared services are local, come from a Full Hub region in the same virtual WAN (its geographic hub) over hub-to-hub, or are not needed.",
+      "description": "A small local hub: each capability is local, taken from a Full-Platform region, or not needed.",
+      "vwanDescription": "A Minimal platform region has a virtual hub with the built-in virtual hub router and, if secured, a firewall; on-premises connectivity and shared services are local, come from a Full platform region in the same virtual WAN (its Full-Platform region) over hub-to-hub, or are not needed.",
       "fields": ["remote_hub", "capabilities", "firewall", "ingress", "dns", "bastion", "private_user_access", "dns_model"],
       "links": ["hub"],
       "sameAs": "full-hub",
       "talking_points": [
-        "Hosts only the capabilities set to Local; the ones set to From the geographic hub are borrowed, the ones not needed are left out.",
-        "Local capabilities keep working if the geographic hub's region is down; borrowed ones do not.",
+        "Hosts only the capabilities set to Local; the ones set to From the Full-Platform region are borrowed, the ones not needed are left out.",
+        "Local capabilities keep working if the Full-Platform region's region is down; borrowed ones do not.",
         { "text": "Borrowed capabilities are reached over global peering: consider the added latency (regional peering is lowest) and peering data transfer charges.", "ref": "learn-vnet-peering" }
       ],
       "vwan_talking_points": [
-        { "key": true, "text": "A Minimal Hub region has a virtual hub with the built-in virtual hub router and, if secured, its own firewall; a hybrid gateway and a shared services VNet only where they are set to Local." }
+        { "key": true, "text": "A Minimal platform region has a virtual hub with the built-in virtual hub router and, if secured, its own firewall; a hybrid gateway and a shared services VNet only where they are set to Local." }
       ],
       "refs": ["aac-hub-spoke"]
     },
     "remote-hub": {
-      "label": "Remote Hub", "hub": "none", "vwanPaths": true,
+      "label": "Remote platform", "hub": "none", "vwanPaths": true,
       "color": "#9C7A45", "tint": "#F7F1E6", "dark": { "color": "#CDAE7C", "tint": "#2E2920" },
-      "description": "No local hub: spokes connect to a geographic hub in another region.",
-      "vwanDescription": "No local virtual hub: spokes connect to a geographic hub's virtual hub in another region (VNet connections).",
+      "description": "No local hub: spokes connect to a Full-Platform region in another region.",
+      "vwanDescription": "No local virtual hub: spokes connect to a Full-Platform region's virtual hub in another region (VNet connections).",
       "fields": ["remote_hub", "ingress", "bastion", "private_user_access", "dns_model"],
       "links": [],
       "paths": {
@@ -112,21 +112,21 @@ window.RULES = /* rules.js: pattern rules as data. Everything below this line is
           "internet": "ingress-internet",
           "users": "ingress-users", "admin": "ingress-admin", "onprem": "ingress-onprem"
         },
-        "egress": { "steps": ["spoke", "peering:remote_hub", "{remote_hub.firewall}", "internet"], "note": "The default route points to the geographic hub firewall over global peering: consider the added latency and peering data transfer charges.", "ref": "aac-hub-spoke" },
+        "egress": { "steps": ["spoke", "peering:remote_hub", "{remote_hub.firewall}", "internet"], "note": "The default route points to the Full-Platform region firewall over global peering: consider the added latency and peering data transfer charges.", "ref": "aac-hub-spoke" },
         "dns": {
           "centralized": {
-            "azure": { "steps": ["spoke@VM", "peering:remote_hub", "{remote_hub.dns}@inbound endpoint", "azure_dns", "dns_zones"], "note": "The spoke VNets use the geographic hub's inbound endpoint as custom DNS. A forwarding ruleset can't be linked to a VNet in another region, so the distributed model isn't available here.", "ref": "learn-resolver-rulesets" },
-            "onprem": { "steps": ["spoke@VM", "peering:remote_hub", "{remote_hub.dns}@inbound to outbound endpoint", "ruleset", "{remote_hub.hybrid}?", "edge?", "provider?", "onprem@DNS servers"], "note": "On-premises names are resolved by the geographic hub's resolver: its ruleset sends them through the outbound endpoint and the geographic hub's hybrid connection.", "ref": "learn-resolver-arch" },
-            "inbound": { "steps": ["onprem@DNS server, conditional forwarder", "provider?", "edge?", "{remote_hub.hybrid}", "{remote_hub.dns}@inbound endpoint", "azure_dns", "dns_zones"], "note": "On-premises queries land on the geographic hub's resolver. Private DNS zones are global resources, so if the zones holding this region's private endpoint records are linked to the geographic hub VNet, those records are answered there too.", "ref": "learn-private-dns-overview" }
+            "azure": { "steps": ["spoke@VM", "peering:remote_hub", "{remote_hub.dns}@inbound endpoint", "azure_dns", "dns_zones"], "note": "The spoke VNets use the Full-Platform region's inbound endpoint as custom DNS. A forwarding ruleset can't be linked to a VNet in another region, so the distributed model isn't available here.", "ref": "learn-resolver-rulesets" },
+            "onprem": { "steps": ["spoke@VM", "peering:remote_hub", "{remote_hub.dns}@inbound to outbound endpoint", "ruleset", "{remote_hub.hybrid}?", "edge?", "provider?", "onprem@DNS servers"], "note": "On-premises names are resolved by the Full-Platform region's resolver: its ruleset sends them through the outbound endpoint and the Full-Platform region's hybrid connection.", "ref": "learn-resolver-arch" },
+            "inbound": { "steps": ["onprem@DNS server, conditional forwarder", "provider?", "edge?", "{remote_hub.hybrid}", "{remote_hub.dns}@inbound endpoint", "azure_dns", "dns_zones"], "note": "On-premises queries land on the Full-Platform region's resolver. Private DNS zones are global resources, so if the zones holding this region's private endpoint records are linked to the Full-Platform region VNet, those records are answered there too.", "ref": "learn-private-dns-overview" }
           }
         },
-        "east_west": { "steps": ["spoke", "peering:remote_hub", "{remote_hub.firewall}", "peering:host:firewall?", "spoke2"], "note": "Traffic between two local spokes is inspected by the geographic hub's firewall, so it crosses regions and back over global peering: validate the added latency and peering charges.", "ref": "aac-spoke-to-spoke" },
-        "onprem": { "steps": ["spoke", "peering:remote_hub", "{remote_hub.firewall}", "{remote_hub.hybrid}", "edge?", "provider?", "onprem"], "note": "Hybrid traffic is inspected by the geographic hub's firewall and uses its gateway.", "ref": "learn-vnet-peering" }
+        "east_west": { "steps": ["spoke", "peering:remote_hub", "{remote_hub.firewall}", "peering:host:firewall?", "spoke2"], "note": "Traffic between two local spokes is inspected by the Full-Platform region's firewall, so it crosses regions and back over global peering: validate the added latency and peering charges.", "ref": "aac-spoke-to-spoke" },
+        "onprem": { "steps": ["spoke", "peering:remote_hub", "{remote_hub.firewall}", "{remote_hub.hybrid}", "edge?", "provider?", "onprem"], "note": "Hybrid traffic is inspected by the Full-Platform region's firewall and uses its gateway.", "ref": "learn-vnet-peering" }
       },
       "talking_points": [
         { "text": "No hub in the region: spokes peer to a hub in another region for inspection, hybrid access and DNS.", "ref": "learn-vnet-peering" },
-        "Smallest platform footprint and quickest to stand up; availability follows the geographic hub's region.",
-        "Traffic between local spokes hairpins to the geographic hub's firewall; if that latency matters, use a Minimal Hub with a local firewall."
+        "Smallest platform footprint and quickest to stand up; availability follows the Full-Platform region's region.",
+        "Traffic between local spokes hairpins to the Full-Platform region's firewall; if that latency matters, use a Minimal platform with a local firewall."
       ],
       "vwan_talking_points": [
         { "key": true, "text": "No virtual hub in the region: spokes connect to a virtual hub in another region (VNet connections) for inspection, hybrid access and shared services." }
@@ -134,7 +134,7 @@ window.RULES = /* rules.js: pattern rules as data. Everything below this line is
       "refs": ["aac-hub-spoke", "aac-spoke-to-spoke"]
     },
     "disconnected": {
-      "label": "No Hub", "hub": "none", "dashed": true, "spokeExtras": ["own_zones"],
+      "label": "No platform", "hub": "none", "dashed": true, "spokeExtras": ["own_zones"],
       "color": "#7A7774", "tint": "#F3F2F1", "dark": { "color": "#A19F9D", "tint": "#2A2928" },
       "description": "No hub, no gateway, no peering: the region's spoke holds whatever services its workload needs.",
       "fields": [], "links": [],
@@ -198,13 +198,13 @@ window.RULES = /* rules.js: pattern rules as data. Everything below this line is
   },
   "checks": [
     { "id": "remote-hub-target", "when": "uses_remote == 'yes'", "require": "remote_hub_pattern in ['full-hub','minimal-hub']", "severity": "error",
-      "message": "{name} takes capabilities from a hub in another region, which must use the Full Hub or Minimal Hub profile (currently '{remote_hub}').", "ref": "aac-hub-spoke" },
+      "message": "{name} takes capabilities from a hub in another region, which must use the Full platform or Minimal platform profile (currently '{remote_hub}').", "ref": "aac-hub-spoke" },
     { "id": "minimal-needs-link", "when": "pattern == 'minimal-hub' && uses_remote == 'yes' && remote_hub_pattern in ['full-hub','minimal-hub']", "require": "linked_to_remote_hub == 'yes'", "severity": "error",
       "message": "{name} takes capabilities from {remote_hub} but has no region link to it: add a link under Region links.", "ref": "aac-hub-spoke" },
     { "id": "disconnected-no-remote", "when": "pattern == 'disconnected'", "require": "remote_hub == 'none'", "severity": "error",
-      "message": "{name} uses the No Hub profile and cannot use a geographic hub.", "ref": "learn-private-link" },
+      "message": "{name} uses the No platform profile and cannot use a Full-Platform region.", "ref": "learn-private-link" },
     { "id": "disconnected-no-links", "when": "pattern == 'disconnected'", "require": "has_links == 'no'", "severity": "error",
-      "message": "{name} uses the No Hub profile and can't take part in region links.", "ref": "learn-private-link" },
+      "message": "{name} uses the No platform profile and can't take part in region links.", "ref": "learn-private-link" },
     { "id": "unknown-region", "when": "known_region == 'no'", "require": "known_region == 'yes'", "severity": "warning",
       "message": "{name} ({id}) is not in the Azure region list (catalog.js); pick a region from the list.", "ref": "learn-regions-list" },
     { "id": "override-ignored", "when": "ignored_overrides != 'none'", "require": "ignored_overrides == 'none'", "severity": "warning",
@@ -226,9 +226,9 @@ window.RULES = /* rules.js: pattern rules as data. Everything below this line is
     { "id": "link-ends", "when": "ends_exist == 'no'", "require": "ends_exist == 'yes'", "severity": "error",
       "message": "Region link {name}: both ends must be existing, different regions.", "ref": "aac-hub-spoke" },
     { "id": "link-hubs-only", "when": "kind == 'hub' && ends_exist == 'yes'", "require": "ends_have_hubs == 'yes'", "severity": "error",
-      "message": "Region link {name}: hub links connect regions that use Full Hub or Minimal Hub; a Remote Hub region uses a geographic hub in another region.", "ref": "aac-hub-spoke" },
+      "message": "Region link {name}: hub links connect regions that use Full platform or Minimal platform; a Remote platform region uses a Full-Platform region in another region.", "ref": "aac-hub-spoke" },
     { "id": "link-firewalls", "when": "kind == 'hub' && topology == 'hub-spoke' && ends_have_hubs == 'yes'", "require": "both_firewalls == 'yes'", "severity": "error",
-      "message": "Region link {name}: in this design both hubs need their own firewall/NVA ({without_firewall} has none). Peering is not transitive: a hub only knows its directly peered VNets, so a UDR on each firewall subnet sends traffic for the remote region's spokes to the firewall in the geographic hub (and back through the local one).", "ref": "learn-fw-multi-hub" },
+      "message": "Region link {name}: in this design both hubs need their own firewall/NVA ({without_firewall} has none). Peering is not transitive: a hub only knows its directly peered VNets, so a UDR on each firewall subnet sends traffic for the remote region's spokes to the firewall in the Full-Platform region (and back through the local one).", "ref": "learn-fw-multi-hub" },
     
   ],
   "crossRegion": {
@@ -244,7 +244,7 @@ window.RULES = /* rules.js: pattern rules as data. Everything below this line is
       "no-hub": { "steps": [], "matrix": "No route",
         "note": "No route: {src} or {dst} has no hub to transit.", "ref": "aac-spoke-to-spoke" },
       "disconnected": { "steps": [], "matrix": "No route by design",
-        "note": "No route by design: a No Hub region has no peering. Share services through Private Link instead.", "ref": "learn-private-link" }
+        "note": "No route by design: a No platform region has no peering. Share services through Private Link instead.", "ref": "learn-private-link" }
     },
     "talking_points": [
       { "key": true, "text": "With VNet peering, the multi-hub design sends hub-link traffic through both firewalls: hub A only knows its directly peered VNets, so a UDR on its firewall subnet sends region B's prefixes to the firewall in hub B.", "ref": "learn-fw-multi-hub" },
@@ -289,7 +289,7 @@ Object.assign(window.RULES, /* rules.js: hybrid connectivity and global entry ru
     { "id": "hybrid-no-gateway", "when": "type in ['expressroute','vpn']", "require": "no_hub_targets == 'none'", "severity": "error",
       "message": "{name}: {no_hub_targets} has no hub, so it can't host a gateway. Connect the hub it uses instead.", "ref": "aac-hub-spoke" },
     { "id": "hybrid-minimal-gateway", "when": "type in ['expressroute','vpn']", "require": "minimal_targets == 'none'", "severity": "error",
-      "message": "{name}: {minimal_targets} is a Minimal Hub without Hybrid gateway set to Local, so it has no gateway. Set its Hybrid gateway to Local, or connect the hub it takes on-premises connectivity from." },
+      "message": "{name}: {minimal_targets} is a Minimal platform without Hybrid gateway set to Local, so it has no gateway. Set its Hybrid gateway to Local, or connect the hub it takes on-premises connectivity from." },
     { "id": "er-location-known", "when": "type == 'expressroute' && location_named == 'yes'", "require": "location_known == 'yes'", "severity": "warning",
       "message": "{name}: '{peering_location}' is not an ExpressRoute peering location in the list.", "ref": "learn-er-locations" },
     { "id": "er-cross-geo", "when": "type == 'expressroute' && location_known == 'yes'", "require": "cross_geo == 'none'", "severity": "warning",
@@ -510,9 +510,9 @@ Object.assign(window.RULES, /* rules.js: the Virtual WAN rules as data (path tem
     { "id": "vwan-intent-no-security", "when": "vwan_hub == 'yes' && routing_intent == 'yes'", "require": "hub_security != 'none'", "severity": "error",
       "message": "{name}: routing intent is on, but this virtual hub has no security solution. Routing policies need Azure Firewall, an NVA or a SaaS solution deployed in the hub (a firewall NVA in a spoke VNet can't be the next hop), so this hub's east-west, egress and on-premises paths aren't inspected. Set its Hub security, or turn routing intent off.", "ref": "learn-vwan-routing-intent" },
     { "id": "vwan-remote-full-hub", "when": "vwan_minimal == 'yes' && uses_remote == 'yes' && remote_hub_pattern in ['full-hub','minimal-hub']", "require": "vwan_remote_issue == 'none'", "severity": "error",
-      "message": "{name}: a Minimal Hub region takes capabilities from a Full Hub region in the same virtual WAN, over hub-to-hub, but its geographic hub {remote_hub_name} is {vwan_remote_issue}. Pick a Full Hub in virtual WAN {vwan_name}." },
+      "message": "{name}: a Minimal platform region takes capabilities from a Full platform region in the same virtual WAN, over hub-to-hub, but its Full-Platform region {remote_hub_name} is {vwan_remote_issue}. Pick a Full platform in virtual WAN {vwan_name}." },
     { "id": "vwan-minimal-firewall", "when": "vwan_minimal == 'yes'", "require": "fw_state != 'remote'", "severity": "warning",
-      "message": "{name}: Firewall is set to From the geographic hub, but a virtual hub can't use the firewall of another secured hub, so this hub has none. Set Firewall to Local (secured hub) or Not needed.", "ref": "learn-vwan-faq" }
+      "message": "{name}: Firewall is set to From the Full-Platform region, but a virtual hub can't use the firewall of another secured hub, so this hub has none. Set Firewall to Local (secured hub) or Not needed.", "ref": "learn-vwan-faq" }
   ],
   "vwanLinkChecks": [
     { "id": "vwan-bowtie", "when": "kind == 'hub' && topology == 'vwan' && shared_circuits != 'none' && aspath_both == 'no'", "require": "shared_circuits == 'none'", "severity": "warning",

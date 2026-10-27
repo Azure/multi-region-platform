@@ -42,7 +42,7 @@ module.exports = (pres, L, topic) => {
 
   // ───────────────────────── Common misconceptions (PDF p47)
   // Four of the eight are covered by the executive summary slide "What adding a region involves"
-  // (own landing-zone project, Full Hub, another ExpressRoute circuit, migrating workloads); this slide keeps the other four.
+  // (own landing-zone project, Full platform, another ExpressRoute circuit, migrating workloads); this slide keeps the other four.
   if (topic === 'misconceptions') {
     const s = L.slide('misconceptions');
     L.header(s, '', 'Common misconceptions', { tw: 7, lede: 'Teams often add complexity by starting from assumptions instead of workload and platform requirements.', lx: 8.3, lw: 4.43 });
@@ -60,7 +60,7 @@ module.exports = (pres, L, topic) => {
       L.txt(s, 'CORRECTION', x + 0.62, y + qh + 0.2, cw - 0.8, 0.2, { fontSize: 9.5, bold: true, color: C.g600, charSpacing: 1.5 });
       L.txt(s, m.correction, x + 0.62, y + qh + 0.44, cw - 0.82, ah - 0.5, { fontSize: 12, color: C.text, lineSpacingMultiple: 1.03 });
     });
-    s.addNotes(M.map((m, i) => (i + 1) + '. ' + m.claim + ' ' + m.correction).join(' ') + ' The other four misconceptions, about a new landing-zone project, a Full Hub, another ExpressRoute circuit, and migrating workloads, are covered in the executive summary.');
+    s.addNotes(M.map((m, i) => (i + 1) + '. ' + m.claim + ' ' + m.correction).join(' ') + ' The other four misconceptions, about a new landing-zone project, a Full platform, another ExpressRoute circuit, and migrating workloads, are covered in the executive summary.');
   }
 
   // ───────────────────────── Get started (PDF p48)
@@ -95,7 +95,7 @@ module.exports = (pres, L, topic) => {
     L.txt(s, 'This framework extends Azure landing-zone principles rather than replacing them. Regional adoption, workload placement, platform expansion, and resiliency can evolve without redesigning the broader platform for every new region.', 0.6, 3.7, 5.0, 1.3, { fontSize: 12, color: C.text });
     const T = [
       ['app', 't', C.t50, C.t300, C.t700, 'Workload-led placement', 'Qualified regional options, Workload Landing Zone archetypes, and current workload requirements allow applications to use the regional and platform capabilities appropriate to their needs.', 0.6],
-      ['hub', 'b', C.b50, C.b200, C.b700, 'Adaptable regional platform', 'Geographic hubs, resilient hybrid connectivity, and regional connectivity profiles distribute capabilities according to workload requirements, without an identical footprint in every region.', 0.3],
+      ['hub', 'b', C.b50, C.b200, C.b700, 'Adaptable regional platform', 'Full-Platform regions, resilient hybrid connectivity, and Platform Services profiles distribute capabilities according to workload requirements, without an identical footprint in every region.', 0.3],
       ['shield', 'w', C.s800, null, 'FFFFFF', 'Consistent operating model', 'Keep the landing-zone guardrails and operating standards stable across the Azure estate.', 0],
     ];
     T.forEach(([ic, c, bg, ln, tc, t, d, inset], i) => {

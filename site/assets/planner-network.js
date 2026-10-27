@@ -7,8 +7,8 @@
 
   function workbookSpec() {
     const C = M.core, S = C.S, picked = C.selected(), notes = [];
-    const patterns = { 'Full Hub': 'full-hub', 'Minimal Hub': 'minimal-hub',
-      'Remote Hub': 'remote-hub', 'No Hub': 'disconnected' };
+    const patterns = { 'Full platform': 'full-hub', 'Minimal platform': 'minimal-hub',
+      'Remote platform': 'remote-hub', 'No platform': 'disconnected' };
     const topology = S.estate.topology || picked.map(r => C.effective(r).topology).find(Boolean);
     const result = { format: 1, title: S.meta.name || 'Regional networking design',
       defaults: { topology: topology === 'Azure Virtual WAN' ? 'vwan' : 'hub-spoke',
@@ -26,7 +26,7 @@
     };
     S.current.forEach(c => {
       addRegion(c.id, c.hub ? 'full-hub' : 'disconnected');
-      result.workbook.records.push({ id: c.id, lines: ['Current region' + (c.hub ? ' - geographic hub' : ''),
+      result.workbook.records.push({ id: c.id, lines: ['Current region' + (c.hub ? ' - Full-Platform region' : ''),
         'Estate topology: ' + (S.estate.topology || 'Not decided'),
         'Managed with: ' + (S.estate.managed || 'Not decided'),
         'Hybrid connectivity: ' + (S.estate.hybrid || 'Not decided')] });
@@ -34,7 +34,7 @@
     const designs = picked.map(r => ({ r, d: C.design(r), e: C.effective(r) }));
     designs.forEach(({ r, e }) => {
       if (!result.regions.some(x => x.id === r.id)) addRegion(r.id, patterns[e.profile] || 'disconnected');
-      if (!e.profile) notes.push(C.rname(r.id) + ': connectivity profile is not decided; no hub is assumed.');
+      if (!e.profile) notes.push(C.rname(r.id) + ': Platform Services profile is not decided; no hub is assumed.');
       if (e.topology && e.topology !== topology) notes.push(C.rname(r.id) +
         ': mixed topologies are not modelled by GeoLZ. The diagram uses ' + topology + '; the record retains your choice.');
     });
@@ -125,7 +125,7 @@
           result.hybrid_connections.push(connection);
         }
         if (!connection.connects_to.includes(target)) connection.connects_to.push(target);
-        // Reusing a circuit also requires the existing geographic hub's attachment.
+        // Reusing a circuit also requires the existing Full-Platform region's attachment.
         if (e.hybrid === 'Reuse') e.hubConnections.forEach(id => {
           if (S.current.some(c => c.id === id && c.hub) && !connection.connects_to.includes(id)) connection.connects_to.push(id);
         });

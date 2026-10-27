@@ -1,7 +1,7 @@
 ---
 title: Understand Workload Landing Zone archetypes
 description: Four archetypes that group recurring application connectivity and dependency requirements, so platform teams can plan regional capability before every workload is known.
-ms.date: 10/23/2026
+ms.date: 10/27/2026
 ms.topic: conceptual
 ---
 
@@ -24,7 +24,7 @@ These archetypes describe what a workload depends on. They are separate from the
 
 Use archetypes during regional qualification to anticipate the capabilities a candidate region may need to support. Where future workload requirements aren't yet defined, they give you planning guardrails without constraining later placement, which happens once the workload's current requirements, regional capabilities, and platform readiness are known.
 
-:::image type="content" source="./media/application-landing-zone-archetypes.png" alt-text="Four archetype cards — Self-Contained Workloads, Selectively Connected Workloads, Hybrid-Dependent Workloads, and Interdependent Workload Groups — each with its defining characteristics and typical connectivity profiles." lightbox="./media/application-landing-zone-archetypes.png":::
+:::image type="content" source="./media/application-landing-zone-archetypes.png" alt-text="Four archetype cards — Self-Contained Workloads, Selectively Connected Workloads, Hybrid-Dependent Workloads, and Interdependent Workload Groups — each with its defining characteristics and typical Platform Services profiles." lightbox="./media/application-landing-zone-archetypes.png":::
 
 *The four archetypes, grouped by the platform connectivity and dependency capabilities each requires.*
 
@@ -32,33 +32,33 @@ Use archetypes during regional qualification to anticipate the capabilities a ca
 
 Workloads with no persistent private dependency outside the workload. These can include cloud-native or AI applications.
 
-These workloads can often use **No Hub**. A connected profile may still be selected where platform requirements such as private management, security, data access, or centralized services justify connectivity.
+These workloads can often use **No platform**. A connected profile may still be selected where platform requirements such as private management, security, data access, or centralized services justify connectivity.
 
 ## Selectively Connected Workloads
 
 Workloads that reach selected services through private endpoints or specific private APIs, without routed access to the enterprise network. Common for data, analytics, and AI platforms.
 
-These workloads can use **No Hub** when approved direct same-region spoke connectivity or Azure service endpoints meet their dependency and control requirements without a geographic hub or on-premises path. Otherwise, use **Remote Hub, Minimal Hub, or Full Hub**, depending on dependency latency, traffic patterns, resiliency, security, and operational requirements.
+These workloads can use the No regional platform profile when approved direct same-region spoke connectivity or Azure service endpoints meet their dependency and control requirements without connectivity to a more strategic region with Platform Services and/or connectivity to an on-premises environment. Otherwise, use **Remote platform, Minimal platform, or Full platform**, depending on dependency latency, traffic patterns, resiliency, security, and operational requirements.
 
 ## Hybrid-Dependent Workloads
 
 Workloads that need routed access to on-premises environments or the enterprise network, including shared services hosted in a hub. Common in migrations and hybrid scenarios. The boundary with Selectively Connected Workloads is named endpoints versus routed network access, not Azure versus on-premises.
 
-These workloads typically use **Remote Hub, Minimal Hub, or Full Hub**, depending on dependency latency, resiliency, regulatory, operational, and shared-service requirements. **No Hub** doesn't fit a mandatory private dependency on on-premises or geographic-hub services.
+These workloads typically use **Remote platform, Minimal platform, or Full platform**, depending on dependency latency, resiliency, regulatory, operational, and shared-service requirements. The No regional platform profile does not fit a mandatory private dependency on on-premises services and/or shared platform services.
 
 ## Interdependent Workload Groups
 
 Groups of workloads with material east-west dependencies on each other, such as shared data, synchronous calls, or private east-west traffic. Classify at group level and combine the members' requirements.
 
-Where significant east-west traffic exists within a region, evaluate whether **direct spoke-to-spoke connectivity or a local hub** provides a more appropriate path than routing traffic through a geographic hub in another region. Direct connectivity may suit a limited number of tightly coupled workloads, while a **Minimal Hub or Full Hub** may be more appropriate where broader connectivity, shared routing, traffic inspection, resiliency, or operational requirements justify regional platform capabilities.
+Where significant east-west traffic exists within a region, evaluate whether direct spoke-to-spoke connectivity or a local virtual network hub or Virtual WAN hub provides a more appropriate path than routing traffic through the virtual network hub or Virtual WAN hub in another region. Direct connectivity may suit a limited number of tightly coupled workloads, while a **Minimal platform or Full platform** may be more appropriate where broader connectivity, shared routing, traffic inspection, resiliency, or operational requirements justify regional platform capabilities.
 
-**No Hub** is an option only when approved same-region spoke-to-spoke connectivity and Azure service endpoints satisfy the group's aggregate requirements without a geographic hub or on-premises path. **Remote Hub** is an option when cross-region latency, traffic, and availability coupling are acceptable; use **Minimal Hub or Full Hub** when local capabilities are justified.
+The No regional platform profile is an option only when approved same-region spoke-to-spoke connectivity and Azure service endpoints satisfy the group's aggregate requirements without private connectivity to a more strategic region or an on-premises environment. **Remote platform** is an option when cross-region latency, traffic, and availability coupling are acceptable; use **Minimal platform or Full platform** when local capabilities are justified.
 
 Because this is a **group-level archetype**, its combined dependencies may require capabilities beyond those needed by any individual workload. Select the profile from the group's aggregate connectivity, shared-service, resiliency, scale, and operational requirements.
 
-## How archetypes map to connectivity profiles
+## How archetypes map to Platform Services profiles
 
-Archetypes describe what applications require; connectivity profiles describe what the platform provides. An archetype doesn't dictate a profile: one archetype can use different profiles, and one profile can serve several archetypes. Use the archetypes expected in a region to understand what it needs, then choose the most efficient profile that meets those needs. For example, a hybrid-dependent workload might run well on a Remote Hub profile in one region and need a Minimal Hub in another, depending on latency, traffic, and resiliency requirements.
+Archetypes describe what applications require; Platform Services profiles describe what the platform provides. An archetype doesn't dictate a profile: one archetype can use different profiles, and one profile can serve several archetypes. Use the archetypes expected in a region to understand what it needs, then choose the most efficient profile that meets those needs. For example, a hybrid-dependent workload might run well on a Remote platform profile in one region and need a Minimal platform in another, depending on latency, traffic, and resiliency requirements.
 
 The [archetype-to-profile matrix](./profile-selection.md) shows the typical options for each archetype.
 

@@ -31,13 +31,13 @@
 
   <div class="g2 mt16" style="gap:40px">
     <p>Selecting the regional design is a set of decisions, not a deployment. For each qualified region, you make three choices, each from a short list. Nothing is built yet: deployment follows later, through the automation you already run.</p>
-    <p>Each choice follows from the workloads you expect in the region, not from the footprint of an existing geographic hub. Keep one record per region. A region with a complete record is <strong>selected</strong>.</p>
+    <p>Each choice follows from the workloads you expect in the region, not from the footprint of an existing Full-Platform region. Keep one record per region. A region with a complete record is <strong>selected</strong>.</p>
   </div>
 
   <div class="sd3 mt16">
-    <div class="c"><div class="hd"><span class="n">1</span><h3>Connectivity profile</h3></div>
+    <div class="c"><div class="hd"><span class="n">1</span><h3>Platform Services profile</h3></div>
       <div class="q">One of four: {{PROFILE_1}}, {{PROFILE_2}}, {{PROFILE_3}}, or {{PROFILE_4}}.</div>
-      <div class="pg"><span>Select the connectivity profile</span><b>page <span data-toc="pprof"></span></b></div></div>
+      <div class="pg"><span>Select the Platform Services profile</span><b>page <span data-toc="pprof"></span></b></div></div>
     <div class="c"><div class="hd"><span class="n">2</span><h3>Shared-service placement</h3></div>
       <div class="q">For each shared service the workloads depend on: local, remote, or global.</div>
       <div class="pg"><span>Place shared services</span><b>page <span data-toc="pcap"></span></b></div></div>
@@ -66,13 +66,13 @@
       </div>
       <div class="col node" id="k3" style="left:410px;width:250px;background:var(--b50);border:1.2px solid var(--b200);color:var(--b800)">
         <svg class="ic" style="color:var(--b600)"><use href="#i-hub"/></svg>
-        <div class="ct">Geographic hubs and shared services</div>
+        <div class="ct">Full-Platform regions and shared services</div>
         <div class="cs" style="color:var(--muted)">Reused where they satisfy requirements; each service provided locally, remotely, or centrally</div>
       </div>
       <div class="col node" id="k4" style="left:678px;width:262px;background:var(--t50);border:1.2px solid var(--t300);color:var(--t700)">
         <svg class="ic" style="color:var(--t600)"><use href="#i-spoke"/></svg>
         <div class="ct">Workload Landing Zones</div>
-        <div class="cs" style="color:var(--muted)">Supported by the regional platform connectivity profile — selected by dependencies and requirements</div>
+        <div class="cs" style="color:var(--muted)">Supported by the Platform Services profile — selected by dependencies and requirements</div>
       </div>
       <div style="position:absolute;left:164px;width:64px;top:74px;text-align:center;font-size:8.2px;font-weight:700;color:var(--s600);line-height:1.2">ExpressRoute or VPN</div>
       <i class="ln" data-from="k1" data-to="k2" data-s="r" data-e="l" data-k="slate" data-both></i>

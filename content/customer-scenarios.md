@@ -1,7 +1,7 @@
 ---
 title: Multi-region customer scenarios
 description: Four illustrative scenarios that follow the multi-region framework from a business or technical driver to a governed regional and workload decision.
-ms.date: 10/23/2026
+ms.date: 10/27/2026
 ms.topic: conceptual
 ---
 
@@ -9,12 +9,12 @@ ms.topic: conceptual
 
 These examples show how the framework moves from a business or technical driver to a governed regional and workload decision. They are illustrative, not customer-specific recommendations.
 
-| Scenario | Driver | Archetype | Connectivity profile | Outcome |
+| Scenario | Driver | Archetype | Platform Services profile | Outcome |
 |---|---|---|---|---|
-| [Regulated bank adopts a new in-country region](#regulated-bank-adopts-a-new-in-country-region) | Data residency and regulation | [Hybrid-Dependent Workloads](./application-landing-zone-archetypes.md#hybrid-dependent-workloads) | [Minimal Hub](./connectivity-profiles.md#minimal-hub) | Qualified for defined requirements; selective relocation. |
-| [AI team requires a specific model or GPU SKU](#ai-team-requires-a-specific-model-or-gpu-sku) | Service, AI model, SKU, and quota availability | [Self-Contained Workloads](./application-landing-zone-archetypes.md#self-contained-workloads) or [Selectively Connected Workloads](./application-landing-zone-archetypes.md#selectively-connected-workloads) | [No Hub](./connectivity-profiles.md#no-hub) | Qualified for the AI workload; net-new deployment. |
-| [Acquisition brings an estate in another geography](#acquisition-brings-an-estate-in-another-geography) | Business growth | [Interdependent Workload Groups](./application-landing-zone-archetypes.md#interdependent-workload-groups) | [Remote Hub](./connectivity-profiles.md#remote-hub) or [Minimal Hub](./connectivity-profiles.md#minimal-hub) | Candidate until dependencies are known; workloads stay in place at first. |
-| [Datacenter exit accelerates migration](#datacenter-exit-accelerates-migration) | Datacenter and connectivity event | [Hybrid-Dependent Workloads](./application-landing-zone-archetypes.md#hybrid-dependent-workloads) | No new profile; the existing geographic hub is reused | Workloads land in the existing qualified region. |
+| [Regulated bank adopts a new in-country region](#regulated-bank-adopts-a-new-in-country-region) | Data residency and regulation | [Hybrid-Dependent Workloads](./application-landing-zone-archetypes.md#hybrid-dependent-workloads) | [Minimal platform](./connectivity-profiles.md#minimal-platform) | Qualified for defined requirements; selective relocation. |
+| [AI team requires a specific model or GPU SKU](#ai-team-requires-a-specific-model-or-gpu-sku) | Service, AI model, SKU, and quota availability | [Self-Contained Workloads](./application-landing-zone-archetypes.md#self-contained-workloads) or [Selectively Connected Workloads](./application-landing-zone-archetypes.md#selectively-connected-workloads) | [No platform](./connectivity-profiles.md#no-platform) | Qualified for the AI workload; net-new deployment. |
+| [Acquisition brings an estate in another geography](#acquisition-brings-an-estate-in-another-geography) | Business growth | [Interdependent Workload Groups](./application-landing-zone-archetypes.md#interdependent-workload-groups) | [Remote platform](./connectivity-profiles.md#remote-platform) or [Minimal platform](./connectivity-profiles.md#minimal-platform) | Candidate until dependencies are known; workloads stay in place at first. |
+| [Datacenter exit accelerates migration](#datacenter-exit-accelerates-migration) | Datacenter and connectivity event | [Hybrid-Dependent Workloads](./application-landing-zone-archetypes.md#hybrid-dependent-workloads) | No new profile; the existing Full-Platform region is reused | Workloads land in the existing qualified region. |
 
 ## Regulated bank adopts a new in-country region
 
@@ -26,7 +26,7 @@ A financial-services organization operates workloads outside its home country. A
 | Deciding checks | [Check 2](./data-and-compliance.md) confirms mandatory location requirements. [Check 3](./workload-requirements.md) identifies affected workloads and dependencies. [Check 4](./regional-capability.md) validates required regional capabilities, services, zones, access, and constraints. |
 | Qualification | The region can be qualified for defined hybrid-dependent workload requirements while other portfolio workloads remain candidates until their dependencies are understood. |
 | Workload Landing Zone archetype | **Hybrid-Dependent Workloads** |
-| Connectivity profile | **Minimal Hub** where selected local capabilities are required and existing hybrid connectivity can be reused where reachability and resiliency requirements permit. |
+| Platform Services profile | **Minimal platform** where selected local capabilities are required and existing hybrid connectivity can be reused where reachability and resiliency requirements permit. |
 | Placement | In-scope workloads can relocate selectively; other workloads can remain in place. Recovery architecture remains a workload-specific decision. |
 
 **Takeaway:** A new in-country region can be qualified for defined workload requirements without forcing portfolio-wide relocation. If the new region is nonpaired, design the recovery path explicitly. See [Resiliency scenarios](./resiliency-scenarios.md).
@@ -41,7 +41,7 @@ A product team requires an AI model, GPU SKU, or related Azure service that is u
 | Deciding checks | [Check 1](./business-and-geography.md) confirms the business requirement. [Check 2](./data-and-compliance.md) validates data and compliance constraints. [Check 4](./regional-capability.md) validates current model, service, SKU, zone, regional access, and quota support. |
 | Qualification | The region can be qualified for the defined AI workload requirements. It remains conditional for requirements that depend on private connectivity until that design is known and validated. |
 | Workload Landing Zone archetype | **Self-Contained Workloads** where the workload is self-contained; **Selectively Connected Workloads** where named private endpoints or APIs are required. |
-| Connectivity profile | **No Hub** where the workload is self-contained; a connected profile only where actual dependencies justify it. |
+| Platform Services profile | **No platform** where the workload is self-contained; a connected profile only where actual dependencies justify it. |
 | Placement | Net-new deployment. Revalidate current model, SKU, service, regional access, and quota support at decision time. |
 
 **Takeaway:** Qualify against the requirements that exist today; do not introduce enterprise connectivity or regional platform capabilities before a workload requirement justifies them.
@@ -56,10 +56,10 @@ An acquisition introduces a portfolio of interdependent applications, shared dat
 | Deciding checks | [Check 1](./business-and-geography.md) confirms the business need. [Check 2](./data-and-compliance.md) evaluates local data obligations. [Check 3](./workload-requirements.md) maps portfolio-level dependencies, shared services, and connectivity requirements. |
 | Qualification | Candidate while material dependencies remain unknown; qualified against defined portfolio requirements once sufficient discovery is complete. |
 | Workload Landing Zone archetype | **Interdependent Workload Groups** |
-| Connectivity profile | **Remote Hub** where cross-region dependencies are acceptable; **Minimal Hub** where aggregate east-west traffic, shared services, latency, or independence requirements justify local capability. |
+| Platform Services profile | **Remote platform** where cross-region dependencies are acceptable; **Minimal platform** where aggregate east-west traffic, shared services, latency, or independence requirements justify local capability. |
 | Placement | Workloads can remain in place initially and relocate selectively as business and integration requirements become known. |
 
-**Takeaway:** Aggregate portfolio dependencies determine the appropriate regional connectivity profile; application count or acquisition status does not.
+**Takeaway:** Aggregate portfolio dependencies determine the appropriate Platform Services profile; application count or acquisition status does not.
 
 ## Datacenter exit accelerates migration
 
@@ -71,7 +71,7 @@ A colocation contract is ending. Hybrid-Dependent Workloads must leave the datac
 | Deciding checks | [Check 3](./workload-requirements.md) identifies applications and components that must move together. [Step 3](./hybrid-connectivity.md) validates hybrid connectivity, datacenter and user geography, reachability, resiliency, and whether existing connectivity can support the target design. |
 | Qualification | The existing target region can remain qualified for the identified workload requirements while an additional region remains a candidate for future use. |
 | Workload Landing Zone archetype | **Hybrid-Dependent Workloads** |
-| Connectivity profile | No new profile. Continue to use the existing geographic hub where it satisfies requirements; do not create a new local hub solely because another Azure region is available. |
+| Platform Services profile | No new profile. Continue to use the existing Full-Platform region where it satisfies requirements; do not create a new local hub solely because another Azure region is available. |
 | Placement | Most workloads can land in the existing qualified region where it satisfies their requirements. Revisit the additional regional option when requirements change. |
 
 **Takeaway:** Remaining in an existing qualified region is a valid outcome. An additional region can remain an option rather than automatically becoming a deployment project.

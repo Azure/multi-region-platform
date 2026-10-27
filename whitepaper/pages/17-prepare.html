@@ -26,7 +26,7 @@
   </div>
 
   <div class="g2 mt16" style="gap:40px">
-    <p>Preparing a region is a targeted change to the platform you already run, not a new landing zone. You build only what the selected connectivity profile and shared-service placement call for, through your existing landing-zone automation. For two of the four profiles there is no hub to build.</p>
+    <p>Preparing a region is a targeted change to the platform you already run, not a new landing zone. You build only what the selected Platform Services profile and shared-service placement call for, through your existing landing-zone automation. For two of the four profiles there is no hub to build.</p>
     <p>The Cloud Adoption Framework already describes how to <a href="https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone" style="font-weight:650">add a new region to an existing landing zone</a>, including a new hub in the region. That path is the {{PROFILE_4}}. The other three profiles do part of it, for regions whose workloads need less.</p>
   </div>
 
@@ -43,9 +43,9 @@
     <div class="c">
       <div class="hd"><span class="n" style="background:var(--b600)">2</span><h3>{{PROFILE_2}}</h3><svg width="46" height="30" viewBox="0 0 46 30"><rect x="1" y="1" width="26" height="28" rx="6" fill="#EDF8F6" stroke="#7CC9C3" stroke-dasharray="3 2"/><rect x="8" y="10" width="11" height="11" rx="2.5" fill="#04807A"/><path d="M27 15h8" stroke="#2B88D8" stroke-width="1.4"/><circle cx="40" cy="15" r="5" fill="#0F6CBD"/></svg></div>
       <div class="lb">What you add in the region</div>
-      <p>The same, plus a cross-region connection from each spoke to an existing geographic hub, with routing and DNS settings. No hub.</p>
+      <p>The same, plus a cross-region connection from each spoke to an existing Full-Platform region, with routing and DNS settings. No hub.</p>
       <div class="lb">What you reuse</div>
-      <p>An existing geographic hub: its gateways, firewall, DNS, and shared services.</p>
+      <p>An existing Full-Platform region: its gateways, firewall, DNS, and shared services.</p>
       <div class="pg"><span>What to deploy</span><b>page <span data-toc="pRemote"></span></b></div>
     </div>
     <div class="c">
@@ -53,7 +53,7 @@
       <div class="lb">What you add in the region</div>
       <p>The same, plus a hub in the region with only the components you selected.</p>
       <div class="lb">What you reuse</div>
-      <p>The geographic hub, for everything you didn’t make local.</p>
+      <p>The Full-Platform region, for everything you didn’t make local.</p>
       <div class="pg"><span>What to deploy</span><b>page <span data-toc="pMinTable"></span></b></div>
     </div>
     <div class="c">

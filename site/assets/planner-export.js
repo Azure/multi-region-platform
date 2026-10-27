@@ -37,13 +37,13 @@
     scField('Hybrid connectivity', S.estate.hybrid);
     scRows.push([]);
     scGroup('Current regions');
-    scRows.push([c('Region', 'head'), c('Geographic hub', 'head'), c('Price baseline', 'head')]);
+    scRows.push([c('Region', 'head'), c('Full-Platform region', 'head'), c('Price baseline', 'head')]);
     (S.current.length ? S.current : [{ id: null, hub: false }]).forEach(x =>
       scRows.push([c(x.id ? C.rname(x.id) : 'Add a current region', 'input'),
         c(x.hub ? 'Yes' : x.id ? 'No' : '', 'input'), c(x.id === S.baseline ? 'Yes' : x.id ? 'No' : '', 'input')]));
     scRows.push([]);
     scGroup('Regions to qualify');
-    scRows.push([c('Region', 'head'), c('Outcome', 'head'), c('Selected for design', 'head'), c('Connectivity profile', 'head'),
+    scRows.push([c('Region', 'head'), c('Outcome', 'head'), c('Selected for design', 'head'), c('Platform Services profile', 'head'),
       c('Owner', 'head'), c('Review date', 'head'), c('Open conditions', 'head')]);
     (S.regions.length ? S.regions : [{ id: null }]).forEach(r => {
       const selected = r.id && r.selected && C.selectable(r);
@@ -54,13 +54,13 @@
     const scope = { name: 'Scope', tabColor: '0F6CBD', cols: [34, 28, 24, 30, 22, 16, 48], freeze: { x: 1, y: 3 }, rows: scRows, merges: scMerges };
 
     // ── Review
-    const oHead = ['Region', 'Outcome', 'Selected', 'Connectivity profile', 'Hub implementation', 'Regional connectivity', 'Hybrid connectivity', 'Local shared services', 'Remote shared services', 'Global services', 'Open conditions', 'Owner', 'Review date'];
+    const oHead = ['Region', 'Outcome', 'Selected', 'Platform Services profile', 'Hub implementation', 'Regional connectivity', 'Hybrid connectivity', 'Local shared services', 'Remote shared services', 'Global services', 'Open conditions', 'Owner', 'Review date'];
     const oRows = [[c('Review + export', 'title')], [c(sub, 'muted')], [c(snapshot, 'muted')], [], oHead.map(h => c(h, 'head'))];
     S.regions.slice().sort((a, b) => (b.selected ? 1 : 0) - (a.selected ? 1 : 0)).forEach(r => {
       const out = C.outcome(r), sel = r.selected && C.selectable(r);
       const rec = sel ? Object.fromEntries(C.record(r).map(([k, v]) => [k.replace(/ \(from .*\)$/, ''), v])) : {};
       const remote = sel ? C.record(r).filter(([k]) => k.startsWith('Remote shared services')).map(([k, v]) => (k.match(/from (.*)\)$/) ? k.match(/from (.*)\)$/)[1] + ': ' : '') + v).join('\n') : '';
-      oRows.push([c(C.rname(r.id), 'label'), c(out, 'input'), c(sel ? 'Yes' : 'No', 'input'), c(rec['Connectivity profile'], 'input'), c(rec['Hub implementation']), c(rec['Regional connectivity']),
+      oRows.push([c(C.rname(r.id), 'label'), c(out, 'input'), c(sel ? 'Yes' : 'No', 'input'), c(rec['Platform Services profile'], 'input'), c(rec['Hub implementation']), c(rec['Regional connectivity']),
         c(rec['Hybrid connectivity']), c(rec['Local shared services']), c(remote), c(rec['Global services']), c(r.conditions, 'input'), c(sel ? C.design(r).owner || r.owner : r.owner, 'input'), c(r.review, 'input')]);
     });
     if (!S.regions.length) oRows.push(pad([c('Region 1', 'label')], oHead.length));
@@ -157,9 +157,9 @@
       dRows.push([c(label, 'label'), ...des.map(x => { const v = x.r ? fn(x) : ''; return c(v, style ? style(v) : 'input'); })]);
       if (items) dLists.push({ ref: `B${dRows.length}:${dLast}${dRows.length}`, items });
     };
-    group2('Choice 1 · Connectivity profile');
+    group2('Choice 1 · Platform Services profile');
     PROFILE_QUESTIONS.forEach(q => dLine(q.label, x => x.d[q.id], ['Yes', 'No']));
-    dLine('Connectivity profile', x => x.e.profile, PROFILES.map(p => p.id));
+    dLine('Platform Services profile', x => x.e.profile, PROFILES.map(p => p.id));
     group2('Hub implementation and regional connectivity');
     dLine('Hub Connections', x => C.list(x.e.hubConnections.map(C.rname)));
     dLine('Hub topology', x => x.e.topology, O.topology);

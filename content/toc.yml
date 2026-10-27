@@ -9,7 +9,7 @@ items:
   items:
   - name: Multi-region platform and workload
     href: platform-and-workload.md
-  - name: Common connectivity profiles
+  - name: Common Platform Services profiles
     href: connectivity-profiles.md
   - name: Workload Landing Zone archetypes
     href: application-landing-zone-archetypes.md
@@ -29,7 +29,7 @@ items:
   items:
   - name: Overview
     href: platform-architecture.md
-  - name: Select the connectivity profile
+  - name: Select the Platform Services profile
     href: profile-selection.md
   - name: Place shared services
     href: platform-enablement-connectivity.md
@@ -39,13 +39,13 @@ items:
   items:
   - name: Overview
     href: prepare-region.md
-  - name: No Hub
+  - name: No platform
     href: disconnected-spokes.md
-  - name: Remote Hub
+  - name: Remote platform
     href: remote-hub.md
-  - name: Minimal Hub
+  - name: Minimal platform
     href: minimal-regional-hub.md
-  - name: Full Hub
+  - name: Full platform
     href: full-regional-hub.md
   - name: Platform readiness checklist
     href: platform-readiness.md

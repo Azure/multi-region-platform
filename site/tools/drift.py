@@ -32,21 +32,22 @@ with open(os.path.join(ROOT, "shared", "summary.json"), encoding="utf-8") as sou
 # Regular expressions, matched case-insensitively on text with tags, <style> and <script> removed.
 # The executive deck's speaker notes quote the executive talk track verbatim, and it says "lighter-weight" and
 # "lightweight": the patterns in QUOTED_IN_NOTES are not applied to speaker notes (ppt/notesSlides).
-# Hub terms: "geographic hub" is a hub that provides hybrid connectivity and shared services to other regions, and
-# "local hub" is a hub in the region itself. "strategic" stays only in "a small number of strategic geographic hubs".
+# Platform profile labels are distinct from the virtual network or Virtual WAN hubs.
 # The talk track says "strategic hubs" and "complete regional hub", so these also go in QUOTED_IN_NOTES.
 HUB_TERMS = [
-    r"(?<!small number of )\bstrategic geographic hubs?\b", r"\bstrategic hubs?\b", r"\benterprise (?:geographic )?hubs?\b",
+    r"(?<!small number of )\bstrategic Full-Platform regions?\b", r"\bstrategic hubs?\b", r"\benterprise (?:geographic )?hubs?\b",
     r"(?<!geographic )\bhub regions?\b", r"\b(?:limited|complete) (?:regional )?hubs?\b", r"\bexisting hubs?\b",
     r"\bthe remote hub\b", r"\bminimally viable regional hub\b"]
 RETIRED = [re.escape(t) for t in [
     "Multi-region workload design", "Scenario R1", "Scenario R2", "Scenario R3",
-    "Select the supporting connectivity profile", "resiliency role separately",
+    "Select the supporting Platform Services profile", "resiliency role separately",
     "Qualification and Enablement Framework", "Regional Qualification Framework", "five dimensions", "Dimension 5",
     "lightest", "Regional dependencies and resiliency", "Appendix A", "Service behavior across regions",
     "region planning workbook", "storage-backup-key-vault.md", "recommended-key-vault-pattern",
     "Disconnected Spokes", "Remote Hub Connected", "Remote-hub-connected spokes",
-    "Minimal Regional Hub", "Selective Hub", "Full Regional Hub"]] + [
+    "Minimal Regional Hub", "Selective Hub", "Full Regional Hub",
+    "Connectivity profile", "geographic hub", "geographic-hub"]] + [
+    r"(?-i:\b(?:No Hub|Remote Hub|Minimal Hub|Full Hub)\b)",
     r"(?-i:\bApplication Landing Zone)",          # the retired construct name; Microsoft Learn's "application landing zones" is fine
     r"\bIsolated Cloud-Native(?: or AI Applications)?\b",
     r"\bConnected Cloud-Native(?: or AI Applications)?\b",
@@ -116,7 +117,7 @@ def _drivers_figure_text():
     return " . ".join(words)
 
 
-def text_of(target):
+def text_of(target, *, layout=False):
     if target in ("whitepaper", "exec"):
         d = "whitepaper/pages" if target == "whitepaper" else "whitepaper/exec/pages"
         parts = []
@@ -141,7 +142,8 @@ def text_of(target):
     if target.endswith((".pdf", ".pptx")) and not os.path.exists(target):
         raise SystemExit(f"{target}: file not found")
     if target.endswith(".pdf"):
-        return [(target, subprocess.run(["pdftotext", "-enc", "UTF-8", target, "-"], capture_output=True, text=True, encoding="utf-8", check=True).stdout)]
+        options = ["-layout"] if layout else []
+        return [(target, subprocess.run(["pdftotext", *options, "-enc", "UTF-8", target, "-"], capture_output=True, text=True, encoding="utf-8", check=True).stdout)]
     if target.endswith(".pptx"):
         z = zipfile.ZipFile(target); parts = []
         for n in sorted(z.namelist()):
@@ -240,7 +242,9 @@ def main():
         sys.exit(1 if bad else 0)
     parts = text_of(target)
     blob = " " + " ".join(norm(t) for _, t in parts) + " "
-    bad += retired_terms(parts) + required_terms(target, blob)
+    # Keep visual gaps for retired terms, but reading order for required phrases wrapped across lines.
+    term_parts = text_of(target, layout=True) if target.endswith(".pdf") else parts
+    bad += retired_terms(term_parts) + required_terms(target, blob)
     if target == "whitepaper":
         bad += summary_drift()
     if "--terms" in argv:

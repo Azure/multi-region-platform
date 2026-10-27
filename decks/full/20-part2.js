@@ -123,7 +123,7 @@ module.exports = (pres, L) => {
     const c0 = gx + 1.62, cw = 1.06;
     L.txt(s, 'CANDIDATE REGION', gx + 0.2, gy + 0.5, 1.4, 0.55, { fontSize: 9, bold: true, color: C.t700, valign: 'bottom', charSpacing: 1 });
     cols.forEach((c, j) => L.txt(s, c, c0 + j * cw, gy + 0.5, cw, 0.55, { fontSize: 9, bold: true, color: C.t700, align: 'center', valign: 'bottom' }));
-    const rows = [['Region A', 'geographic hub', 'qqqq'], ['Region B', 'geographic hub', 'qqqa'], ['Region C', 'in-country, new', 'qkqa'], ['Region D', 'AI model and SKU', 'qkxx'], ['Region E', 'other geography', 'xxxx']];
+    const rows = [['Region A', 'Full-Platform region', 'qqqq'], ['Region B', 'Full-Platform region', 'qqqa'], ['Region C', 'in-country, new', 'qkqa'], ['Region D', 'AI model and SKU', 'qkxx'], ['Region E', 'other geography', 'xxxx']];
     const mk = { q: ['check', 'w', C.g600, null], a: ['clock', 'b', C.white, C.b600], k: ['flag', 'o', C.a100, C.a500], x: ['x', 'o', C.w100, null] };
     rows.forEach(([r, sub, m], i) => {
       const yy = gy + 1.12 + i * 0.5;
@@ -144,7 +144,7 @@ module.exports = (pres, L) => {
     L.box(s, gx, 5.68, 0.05, 0.72, { fill: C.b600, r: 0 });
     L.txt(s, 'The same region can be qualified for one set of requirements, conditional or a candidate for another, and excluded for a third.', gx + 0.22, 5.68, gw - 0.22, 0.72, { fontSize: 13, color: C.ink, valign: 'middle' });
     L.caption(s, 'Note', 'Qualification is a dated planning input, not permanent approval. Regions and statuses are illustrative.', gx, 6.5, gw);
-    s.addNotes('The purpose is not to certify a region for every possible workload. It is to know which options are excluded, which remain candidates or conditional, and which are qualified for defined workload requirements. Assess each candidate region against the same criteria and reuse the assessment in architecture reviews and regional planning. Add the platform connectivity profile to the record when you select it in Part 3. Decision-time validation at onboarding remains authoritative, and onboarding feeds new findings back into the assessment. The regions and statuses in the grid are illustrative.');
+    s.addNotes('The purpose is not to certify a region for every possible workload. It is to know which options are excluded, which remain candidates or conditional, and which are qualified for defined workload requirements. Assess each candidate region against the same criteria and reuse the assessment in architecture reviews and regional planning. Add the Platform Services profile to the record when you select it in Part 3. Decision-time validation at onboarding remains authoritative, and onboarding feeds new findings back into the assessment. The regions and statuses in the grid are illustrative.');
   }
 
   // ───────────────────────── 3 · Decision tree (PDF p21)
@@ -290,7 +290,7 @@ module.exports = (pres, L) => {
     const cards = [
       ['layers', 'Platform enablement', 'The shared services and operational capabilities the workloads depend on, such as identity, security controls, monitoring, backup, and key management, and which of them must be close to the workloads.', 'Place shared services'],
       ['network', 'Resilient hybrid connectivity', 'The datacenters and users the workloads must reach, and the latency, bandwidth, routing, and resilience they need on that path.', 'Confirm hybrid connectivity'],
-      ['route', 'Regional platform connectivity', 'How the workloads must reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments.', 'Select the connectivity profile'],
+      ['route', 'Regional platform connectivity', 'How the workloads must reach Full-Platform regions, shared platform services, application dependencies, other Azure regions, and hybrid environments.', 'Select the Platform Services profile'],
     ];
     const cw = (12.13 - 2 * 0.2) / 3, cy = 2.05, chh = 3.55;
     cards.forEach(([ic, t, d, dec], i) => {
@@ -307,7 +307,7 @@ module.exports = (pres, L) => {
     });
     L.box(s, 0.6, 5.95, 0.06, 0.6, { fill: C.t600, r: 0 });
     L.txt(s, "This check gathers requirements. It doesn't decide how they are met, and it doesn't disqualify a region directly.", 0.88, 5.95, 11.8, 0.6, { fontSize: 15, color: C.ink, valign: 'middle' });
-    s.addNotes('Workload requirements also define what the platform must provide in the region, so check 3 records them in three areas. Platform enablement covers the shared services and operational capabilities the workloads depend on, such as identity, security controls, monitoring, backup, and key management, and which of them must be close to the workloads. Resilient hybrid connectivity covers the datacenters and users the workloads must reach and the latency, bandwidth, routing, and resilience they need on that path. Regional platform connectivity covers how the workloads must reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments. Each area is decided in Part 3: place shared services, confirm hybrid connectivity, and select the connectivity profile. This check gathers requirements. It does not decide how they are met, and it does not disqualify a region directly.');
+    s.addNotes('Workload requirements also define what the platform must provide in the region, so check 3 records them in three areas. Platform enablement covers the shared services and operational capabilities the workloads depend on, such as identity, security controls, monitoring, backup, and key management, and which of them must be close to the workloads. Resilient hybrid connectivity covers the datacenters and users the workloads must reach and the latency, bandwidth, routing, and resilience they need on that path. Regional platform connectivity covers how the workloads must reach Full-Platform regions, shared platform services, application dependencies, other Azure regions, and hybrid environments. Each area is decided in Part 3: place shared services, confirm hybrid connectivity, and select the Platform Services profile. This check gathers requirements. It does not decide how they are met, and it does not disqualify a region directly.');
   }
 
   // ───────────────────────── 7 · Check 4 (PDF p25)

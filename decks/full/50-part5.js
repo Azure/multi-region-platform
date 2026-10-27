@@ -13,7 +13,7 @@ module.exports = (pres, L) => {
       L.txt(s, t.toUpperCase(), xa, 1.66, xb - xa, 0.24, { fontSize: 10, bold: true, color: c, charSpacing: 1.5 });
       L.box(s, xa, 1.93, xb - xa, 0.03, { fill: c, r: 0 });
     });
-    const S = ['Define the placement objective', 'Identify the Workload Landing Zone archetype', 'Establish mandatory requirements', 'Review the qualified regional options', 'Validate current regional suitability', 'Confirm the connectivity profile', 'Determine the resiliency role', 'Record and govern the decision'];
+    const S = ['Define the placement objective', 'Identify the Workload Landing Zone archetype', 'Establish mandatory requirements', 'Review the qualified regional options', 'Validate current regional suitability', 'Confirm the Platform Services profile', 'Determine the resiliency role', 'Record and govern the decision'];
     S.forEach((t, i) => {
       const x = X(i), grp = i < 3 ? 0 : i < 6 ? 1 : 2;
       const [bg, ln, nf] = [[C.t50, C.t300, C.t600], [C.b50, C.b200, C.b600], [C.s100, C.s300, C.s800]][grp];
@@ -59,9 +59,9 @@ module.exports = (pres, L) => {
       ['Establish mandatory requirements', 'Confirm data-location restrictions, required services and features, zones, latency thresholds, expected scale, connectivity, resiliency, and critical dependencies.', 0],
       ['Review the qualified regional options', 'Consider regions previously assessed against the relevant requirements: capabilities, profiles, readiness, constraints, last assessment date, and open validations.', 1],
       ['Validate current regional suitability', 'Qualification was an earlier planning assessment. Re-check the target region before onboarding: services, SKUs, AI models, access, quota, and dependencies.', 1],
-      ['Confirm the region’s connectivity profile', 'Check that the region’s connectivity profile satisfies the workload’s requirements.', 1],
+      ['Confirm the region’s Platform Services profile', 'Check that the region’s Platform Services profile satisfies the workload’s requirements.', 1],
       ['Determine the workload’s resiliency role', 'Primary, recovery, or part of a multi-region active deployment, applying availability, RTO, RPO, replication, consistency, and failover requirements. See the service guides.', 2],
-      ['Record and govern the decision', 'Document the region, archetype, connectivity profile, placement and resiliency outcomes, assumptions, constraints, owners, and revalidation triggers.', 2],
+      ['Record and govern the decision', 'Document the region, archetype, Platform Services profile, placement and resiliency outcomes, assumptions, constraints, owners, and revalidation triggers.', 2],
     ];
     const cw = 2.92, cg = 0.15, ch = 1.78;
     S.forEach(([t, d, g], i) => {

@@ -37,14 +37,14 @@ DOWNLOADS = [
 TOOLS = [{
     "name": "Multi-region planner", "href": "region-planner.html", "fragment": "planner/planner.html", "parent": "Resources",
     "description": "Interactive planner for steps 2 and 3: qualify candidate Azure regions with the four checks, compare service availability, "
-                   "prices, and latency, select regions, and record the connectivity profile, shared-service placement, and hybrid connectivity of each one. Exports to Excel.",
+                   "prices, and latency, select regions, and record the Platform Services profile, shared-service placement, and hybrid connectivity of each one. Exports to Excel.",
     "meta": "Interactive · Steps 2 and 3 · Exports to Excel",
     "css": ["assets/planner.css"],
     "js": ["assets/xlsx-lite.js", "assets/planner-icons.js", "assets/planner-data.js", "assets/planner-core.js", "assets/planner-kit.js",
            "assets/planner-map.js", "assets/planner-views.js", "assets/planner-design.js", "assets/planner-network.js", "assets/planner-export.js", "assets/planner.js"],
     "seed": "data/regions-seed.json",
     "search": "planner workbook tool checklist excel export questions decisions latency pricing price comparison service availability "
-              "selected region connectivity profile hub virtual network Virtual WAN Azure Virtual Network Manager shared services hybrid connectivity ExpressRoute",
+              "selected region Platform Services profile hub virtual network Virtual WAN Azure Virtual Network Manager shared services hybrid connectivity ExpressRoute",
 }]
 # Folders in docs/ that a build keeps: the PDFs, and the Azure data snapshot written by site/tools/refresh_data.py.
 KEEP = ("downloads", "data")
@@ -431,8 +431,8 @@ def build():
     with open(os.path.join(OUT, "remote-hub-connected.html"), "w", encoding="utf-8") as redirect:
         redirect.write('<!doctype html><html lang="en"><head><meta charset="utf-8">'
                        '<meta http-equiv="refresh" content="0;url=remote-hub.html">'
-                       '<title>Remote Hub</title><link rel="canonical" href="remote-hub.html"></head>'
-                       '<body><a href="remote-hub.html">Remote Hub</a>'
+                       '<title>Remote platform</title><link rel="canonical" href="remote-hub.html"></head>'
+                       '<body><a href="remote-hub.html">Remote platform</a>'
                        '<script>location.replace("remote-hub.html" + location.search + location.hash);</script>'
                        '</body></html>')
     # 404

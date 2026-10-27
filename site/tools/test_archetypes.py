@@ -37,7 +37,7 @@ class ArchetypeTests(unittest.TestCase):
         article = self.read("content/application-landing-zone-archetypes.md")
         self.assertEqual(re.findall(r"^## (.+)$", article, re.M)[:4], ARCHETYPES)
         self.assertIn("The four archetypes, grouped by the platform connectivity and dependency capabilities each requires.", article)
-        self.assertIn("without a geographic hub or on-premises path", article)
+        self.assertIn("without private connectivity to a more strategic region or an on-premises environment", article)
 
     def test_profile_chip_order_follows_markdown_matrix(self):
         matrix = self.read("content/profile-selection.md")
@@ -109,7 +109,7 @@ class ArchetypeTests(unittest.TestCase):
             for group in re.findall(r"<ul>(.*?)</ul>", source)
         ]
         self.assertEqual(bullets, [
-            ["No persistent private dependencies", "Can often use No Hub",
+            ["No persistent private dependencies", "Can often use No platform",
              "Flexible placement across regions"],
             ["Private access to selected dependencies",
              "Profile set by latency, traffic, resiliency, security",
@@ -212,8 +212,8 @@ console.log(JSON.stringify(outputs));
         self.assertIn("Common in migrations and hybrid scenarios", " ".join(full_cards[2]["text"]))
         self.assertIn("Direct spoke-to-spoke or a regional hub", " ".join(full_cards[3]["text"]))
         self.assertEqual([c["profiles"] for c in exec_cards], expected)
-        self.assertIn("No Hub only", " ".join(exec_cards[1]["text"]))
-        self.assertIn("No Hub", " ".join(exec_cards[2]["text"]))
+        self.assertIn("No platform only", " ".join(exec_cards[1]["text"]))
+        self.assertIn("No platform", " ".join(exec_cards[2]["text"]))
         self.assertIn("approved same-region", " ".join(exec_cards[3]["text"]))
 
 

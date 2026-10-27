@@ -329,7 +329,7 @@ def city():
     add(4.375 + 3.3 + .6, box(4.25, 2.7, 4.5, 3.9, .03, .34, "#FFFFFF", "#8661C5", "#6E4CB6", op=1, edge=.7), lift=False)
     add(8.4 + 4.375 + .6, box(7.6, 4.25, 9.2, 4.5, .03, .34, "#FFFFFF", "#8661C5", "#6E4CB6", op=1, edge=.7), lift=False)
 
-    # ── Downtown: Full Hub
+    # ── Downtown: Full platform
     X, Y = DT
     at = lambda dx, dy: (X + dx, Y + dy)
     add(X + Y + .9, tower(*at(.25, .25), *at(1.05, 1.05), 2.6))
@@ -352,7 +352,7 @@ def city():
     ]
     rc = [("#2B88D8", "#0F548C"), ("#C2410C", "#8E2F09"), ("#04807A", "#03615F"), ("#C98A00", "#8F6200"), ("#8661C5", "#5C2E91")]
 
-    # ── Riverside: Minimal Hub — fire station + clinic; bank branch A
+    # ── Riverside: Minimal platform — fire station + clinic; bank branch A
     X, Y = RV
     add(X + Y + 1.2, box(X + .3, Y + .3, X + 1.2, Y + 1.05, 0, .5, "#FFE3D6", "#E8590C", "#B8470A", op=1))
     add(X + Y + 2.4, box(X + 1.5, Y + .3, X + 2.5, Y + 1.05, 0, .62, "#FFFFFF", "#DCE8F3", "#B8CDE2", op=1) + box(X + 1.85, Y + .55, X + 2.15, Y + .85, .62, .72, "#FFFFFF", "#D13438", "#A4262C", op=1))
@@ -362,7 +362,7 @@ def city():
     badges += [pin_badge(X + .75, Y + .68, Z + .5, "fire", lift=.55), pin_badge(X + 2.0, Y + .68, Z + .72, "hospital", lift=.5),
                pin_badge(X + 2.9, Y + .68, Z + .78, "bank", lift=.5), numpin(X + 1.75, Y + 2.85, Z + .64, "4")]
 
-    # ── Hillcrest: Remote Hub — homes; bank backup operations center
+    # ── Hillcrest: Remote platform — homes; bank backup operations center
     X, Y = HC
     for i, (hx, hy) in enumerate(((.3, .3), (1.35, .3), (.3, 1.4), (1.35, 1.4), (2.4, 1.4), (.3, 2.5), (1.35, 2.5))):
         add(X + Y + hx + hy + .9, house(X + hx, Y + hy, .8, .7, .38, .26, roof=rc[(i + 2) % 5]))
@@ -370,7 +370,7 @@ def city():
     add(X + Y + 5.6, tree(X + 2.85, Y + 2.85) + tree(X + 3.15, Y + 2.55, r=.2))
     badges += [pin_badge(X + 2.82, Y + .65, Z + .73, "bank", lift=.5), numpin(X + .7, Y + 1.75, Z + .64, "3")]
 
-    # ── Midtown: Remote Hub — homes, apartments; bank branch B
+    # ── Midtown: Remote platform — homes, apartments; bank branch B
     X, Y = MT
     add(X + Y + 1.5, tower(X + .3, Y + .45, X + 1.2, Y + 1.25, 1.15, "white"))
     add(X + Y + 2.5, bank_bldg(X + 1.45, Y + .5, X + 2.25, Y + 1.2, .5))
@@ -510,22 +510,22 @@ def build(web=False, pdf=False):
     # neighborhood + campus labels: (title, sub, centre x, top y, leader target)
     L = [("Office campus", "On-premises · outside the city", 165, 222, p(-3.7, 1.0, 1.5)),
          ("Express toll lanes", "Two interchanges into Downtown", 400, 266, p(-1.4, 1.3, 0)),
-         ("Downtown", "Full Hub · every service local", 650, 236, p(2.0, .9, 2.9)),
-         ("Riverside", "Minimal Hub · fire station, clinic", 790, 330, p(6.6, 1.2, .9)),
-         ("Hillcrest", "Remote Hub · services by transit", 930, 470, p(10.9, 1.4, .6)),
-         ("Midtown", "Remote Hub · services by transit", 430, 900, p(5.4, 8.1, .3)),
-         ("Lakeside", "No Hub · off-grid, no city roads", 150, 800, p(.4, 8.9, .3)),
+         ("Downtown", "Full platform · every service local", 650, 236, p(2.0, .9, 2.9)),
+         ("Riverside", "Minimal platform · fire station, clinic", 790, 330, p(6.6, 1.2, .9)),
+         ("Hillcrest", "Remote platform · services by transit", 930, 470, p(10.9, 1.4, .6)),
+         ("Midtown", "Remote platform · services by transit", 430, 900, p(5.4, 8.1, .3)),
+         ("Lakeside", "No platform · off-grid, no city roads", 150, 800, p(.4, 8.9, .3)),
          ("New plot", "Candidate · zoned, not yet built", 968, 905, p(11.6, 7.4, .05))]
     k = 1.0
     if pdf:   # the label names what the place stands for; the legend beside the picture explains the icons
         k = PDF_LABEL
         L = [("Office campus", "On-premises", 150, 240, p(-3.7, 1.0, 1.5)),
              ("Express toll lanes", "ExpressRoute", 415, 280, p(-1.4, 1.3, 0)),
-             ("Downtown", "Full Hub", 668, 240, p(2.0, .9, 2.9)),
-             ("Riverside", "Minimal Hub", 842, 340, p(6.6, 1.2, .9)),
-             ("Hillcrest", "Remote Hub", 960, 470, p(10.9, 1.4, .6)),
-             ("Midtown", "Remote Hub", 400, 970, p(5.4, 8.1, .3)),
-             ("Lakeside", "No Hub", 128, 880, p(.4, 8.9, .3)),
+             ("Downtown", "Full platform", 668, 240, p(2.0, .9, 2.9)),
+             ("Riverside", "Minimal platform", 842, 340, p(6.6, 1.2, .9)),
+             ("Hillcrest", "Remote platform", 960, 470, p(10.9, 1.4, .6)),
+             ("Midtown", "Remote platform", 400, 970, p(5.4, 8.1, .3)),
+             ("Lakeside", "No platform", 128, 880, p(.4, 8.9, .3)),
              ("New plot", "Candidate region", 968, 960, p(11.6, 7.4, .05))]
     for t, sub, cx, ty, (ax, ay) in L:
         ly = ty + 40 * k if ay > ty + 40 * k else ty
@@ -599,7 +599,7 @@ def pdf_figure():
                 ("power", "Power plant"), ("water", "Water tower"), ("sewer", "Sewer plant")]
     legend_col = "".join([
         '<h4>Places <em>Regions and on-premises</em></h4>',
-        row(_ic("hood", "#2B88D8"), "Neighborhood", "An <i>Azure region</i>. The label names its connectivity profile."),
+        row(_ic("hood", "#2B88D8"), "Neighborhood", "An <i>Azure region</i>. The label names its Platform Services profile."),
         row(_ic("campus"), "Office campus", "<i>On-premises</i> datacenters and users, outside the city."),
         row(_ic("stake", "#17458A"), "Staked plot", "A <i>candidate region</i>: zoned, but not built yet."),
         '<h4>Routes <em>Connectivity</em></h4>',

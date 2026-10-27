@@ -1,19 +1,19 @@
 ---
 title: Platform readiness checklist for a new region
 description: The platform items that most often stall a newly qualified Azure region — network foundation, governance and automation, operations and data, capacity and security.
-ms.date: 10/23/2026
+ms.date: 10/27/2026
 ms.topic: conceptual
 ---
 
 # Platform readiness checklist for a new region
 
-These are the platform items that most often stall a new region after it has been qualified. Most are inexpensive to plan early and expensive to retrofit. Get these right once, and each later region becomes mostly configuration instead of a new project. Apply only those the region's connectivity profile and workload requirements call for.
+These are the platform items that most often stall a new region after it has been qualified. Most are inexpensive to plan early and expensive to retrofit. Get these right once, and each later region becomes mostly configuration instead of a new project. Apply only those the region's Platform Services profile and workload requirements call for.
 
 The checklist names what must be true, not how a specific hub is built. Items marked as **common blockers** should be planned early, while the region is still being qualified; confirm the others as the capability set is put in place.
 
 ## Network foundation
 
-Private DNS across regions, routing and inspection paths, and hybrid connectivity apply only to connected profiles. Everything else on this page applies to every profile, including No Hub.
+Private DNS across regions, routing and inspection paths, and hybrid connectivity apply only to connected profiles. Everything else on this page applies to every profile, including No platform.
 
 | Item | What must be true |
 |---|---|

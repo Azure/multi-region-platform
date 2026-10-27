@@ -1,7 +1,7 @@
 ---
 title: Multi-region platform and multi-region workload
 description: A multi-region platform creates governed regional choices for the Azure estate. A multi-region workload applies one or more of those choices. Keep the two layers separate when you plan regions.
-ms.date: 10/05/2026
+ms.date: 10/27/2026
 ms.topic: conceptual
 ---
 
@@ -16,7 +16,7 @@ Think of the platform as a city, and workloads as the people and businesses that
 
 :::image type="content" source="./media/city-analogy.png" alt-text="Isometric city used as an analogy for a multi-region platform. An office campus outside the city connects to Downtown through express toll lanes with two interchanges. Downtown has every service locally. Riverside has a fire station and a clinic. Hillcrest and Midtown have homes only and reach Downtown's services by transit. Lakeside is an off-grid island with no roads or transit. A new plot is zoned but not yet built. Numbered pins mark where four families live, and bank badges mark two branches and a backup operations center." lightbox="./media/city-analogy.png":::
 
-*The platform as a city. Each neighborhood stands for a region with a different connectivity profile; the office campus is on-premises. Use the download button for the complete picture, including both workloads.*
+*The platform as a city. Each neighborhood stands for a region with a different Platform Services profile; the office campus is on-premises. Use the download button for the complete picture, including both workloads.*
 
 :::row:::
    :::column:::
@@ -68,4 +68,4 @@ Reuse the existing Azure landing-zone operating model by default. Extend regiona
 ## Next step
 
 > [!div class="nextstepaction"]
-> [Common connectivity profiles](./connectivity-profiles.md)
+> [Common Platform Services profiles](./connectivity-profiles.md)

@@ -13,7 +13,7 @@ module.exports = (pres, L) => {
   // ───────────────────────── 1 · Cover (brief page 1)
   {
     const s = L.slide('front', { bare: true });
-    L.image(s, IMG('cover_panel.png', L.tone), { x: 6.733, y: 0, w: 6.6, h: 7.5 }, 'Illustration: two tall geographic hubs, a Minimal Hub, workload spokes and an empty candidate plot standing on one shared foundation');
+    L.image(s, IMG('cover_panel.png', L.tone), { x: 6.733, y: 0, w: 6.6, h: 7.5 }, 'Illustration: two tall Full-Platform regions, a Minimal platform, workload spokes and an empty candidate plot standing on one shared foundation');
     L.logo(s, 0.6, 0.55, 0.14, C.muted, 17);
     L.txt(s, 'Executive briefing', 10.3, 0.52, 2.43, 0.35, { fontSize: 13, fontFace: F.semi, color: 'FFFFFF', align: 'right' });
     let x = 0.6; x += L.chip(s, 'AZURE ARCHITECTURE', x, 1.6, { size: 9.5, w: chipW('AZURE ARCHITECTURE', 9.5) }) + 0.12;
@@ -41,7 +41,7 @@ module.exports = (pres, L) => {
       lede: [{ text: 'Adding an Azure region shouldn’t mean starting another landing-zone project. ', options: { bold: true, color: C.ink } }, { text: 'In a governed geographic operating model — for example, across Europe — ' }, { text: 'regional placement becomes an adaptable, application-level decision', options: { bold: true, color: C.ink } }, { text: ' instead of a permanent architectural dependency.' }],
     });
     cap(s, 'Five moves', 0.6, 2.0);
-    const K = [['shield', C.s800, 'Standardize governance', 'Policies, security controls, operational rigor, and compliance are the constants across the geography.'], ['route', C.b600, 'Decouple connectivity', 'Plan resilient hybrid connectivity to Azure geographically, not again for every region.'], ['hub', C.v600, 'Tier the regional footprint', 'A small number of strategic geographic hubs carry the full stack; other regions use more efficient patterns.'], ['app', C.t600, 'Classify workloads by archetype', 'Four Workload Landing Zone archetypes describe what each workload needs from the platform.'], ['pin', C.b700, 'Preserve regional optionality', 'Qualified regions stay available for the next workload when capacity, services, or regulation change.']];
+    const K = [['shield', C.s800, 'Standardize governance', 'Policies, security controls, operational rigor, and compliance are the constants across the geography.'], ['route', C.b600, 'Decouple connectivity', 'Plan resilient hybrid connectivity to Azure geographically, not again for every region.'], ['hub', C.v600, 'Tier the regional footprint', 'A small number of strategic Full-Platform regions carry the full stack; other regions use more efficient patterns.'], ['app', C.t600, 'Classify workloads by archetype', 'Four Workload Landing Zone archetypes describe what each workload needs from the platform.'], ['pin', C.b700, 'Preserve regional optionality', 'Qualified regions stay available for the next workload when capacity, services, or regulation change.']];
     K.forEach(([ic, c, t, d], i) => {
       const x = 0.6 + i * 2.46, y = 2.3, w = 2.33, h = 2.5;
       L.box(s, x, y, w, h, { fill: i === 3 ? C.t50 : C.wash, r: 0.12 });
@@ -94,11 +94,11 @@ module.exports = (pres, L) => {
     L.txt(s, 'An adaptable multi-region platform', 6.2, y0 + 0.14, 3.6, 0.3, { fontSize: 13, fontFace: F.semi, color: C.ink });
     L.txt(s, 'REGIONS AS QUALIFIED OPTIONS', 9.75, y0 + 0.18, 2.78, 0.25, { fontSize: 9, bold: true, color: C.b600, align: 'right', charSpacing: 1.5 });
     const regs = [
-      ['Region A', 1.95, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full Hub', C.b600, 'FFFFFF']], 'Geographic hub'],
-      ['Region B', 1.95, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full Hub', C.b600, 'FFFFFF']], 'Geographic hub'],
-      ['Region C', 1.55, [['Workloads', C.t600, 'FFFFFF'], ['Minimal Hub', 'FFFFFF', C.b700, C.b300]], 'Minimal Hub'],
-      ['Region D', 1.2, [['Spokes', C.t600, 'FFFFFF']], 'Remote Hub', 'via hub'],
-      ['Region E', 0.98, [['No Hub', C.t100, C.t700]], 'No Hub'],
+      ['Region A', 1.95, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full platform', C.b600, 'FFFFFF']], 'Full-Platform region'],
+      ['Region B', 1.95, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full platform', C.b600, 'FFFFFF']], 'Full-Platform region'],
+      ['Region C', 1.55, [['Workloads', C.t600, 'FFFFFF'], ['Minimal platform', 'FFFFFF', C.b700, C.b300]], 'Minimal platform'],
+      ['Region D', 1.2, [['Spokes', C.t600, 'FFFFFF']], 'Remote platform', 'via hub'],
+      ['Region E', 0.98, [['No platform', C.t100, C.t700]], 'No platform'],
       ['Region F', 0.8, [], 'Not enabled', 'Candidate'],
     ];
     const base = y0 + 3.0, rw = 1.04, gap = 0.04;
@@ -136,7 +136,7 @@ module.exports = (pres, L) => {
       L.icon(s, ic, x, 2.55, 0.3, 'w');
       L.txt(s, t, x + 0.4, 2.3, 1.9, 0.8, { fontSize: 12, fontFace: F.semi, color: 'FFFFFF', valign: 'middle' });
     });
-    const R = [['Region A', 'Geographic hub', 'Full networking, security, management, and shared services', 'hub'], ['Region B', 'Geographic hub', 'Full networking, security, management, and shared services', 'hub'], ['Region C', 'Qualified', 'Minimal Hub for a portfolio', 'q'], ['Region D', 'Qualified', 'Spokes connected to a geographic hub', 'q'], ['Region E', 'Qualified', 'Self-contained AI workloads', 'q'], ['Region F', 'Candidate', 'Assessed; not yet enabled', 'c']];
+    const R = [['Region A', 'Full-Platform region', 'Full networking, security, management, and shared services', 'hub'], ['Region B', 'Full-Platform region', 'Full networking, security, management, and shared services', 'hub'], ['Region C', 'Qualified', 'Minimal platform for a portfolio', 'q'], ['Region D', 'Qualified', 'Spokes connected to a Full-Platform region', 'q'], ['Region E', 'Qualified', 'Self-contained AI workloads', 'q'], ['Region F', 'Candidate', 'Assessed; not yet enabled', 'c']];
     R.forEach(([r, tag, d, k], i) => {
       const x = 0.85 + i * 1.955, y = 3.28, w = 1.83, h = 1.78;
       const hub = k === 'hub';
@@ -185,7 +185,7 @@ module.exports = (pres, L) => {
     // geography
     L.box(s, 7.6, top, 5.13, hh, { fill: C.b50, line: C.b300, dash: 'dash', r: 0.14 });
     L.txt(s, 'GEOGRAPHY · FOR EXAMPLE, EUROPE', 7.8, top + 0.1, 4.5, 0.22, { fontSize: 9.5, bold: true, color: C.b700, charSpacing: 2 });
-    const G = [['Region A', 'Geographic hub · gateways', C.b600, 'FFFFFF', 'DDEBF9'], ['Region B', 'Geographic hub · gateways', C.b700, 'FFFFFF', 'DDEBF9'], ['Region C', 'Minimal Hub · reuses existing circuits', 'FFFFFF', C.b700, C.muted], ['Region D', 'Spokes reach on-premises via a hub', 'FFFFFF', C.b700, C.muted], ['Region E', 'Self-contained · no hybrid path', 'FFFFFF', C.t700, C.muted], ['Region F', 'Candidate · no new circuit assumed', C.b50, C.b700, C.muted]];
+    const G = [['Region A', 'Full-Platform region · gateways', C.b600, 'FFFFFF', 'DDEBF9'], ['Region B', 'Full-Platform region · gateways', C.b700, 'FFFFFF', 'DDEBF9'], ['Region C', 'Minimal platform · reuses existing circuits', 'FFFFFF', C.b700, C.muted], ['Region D', 'Spokes reach on-premises via a hub', 'FFFFFF', C.b700, C.muted], ['Region E', 'Self-contained · no hybrid path', 'FFFFFF', C.t700, C.muted], ['Region F', 'Candidate · no new circuit assumed', C.b50, C.b700, C.muted]];
     G.forEach(([r, d, f, c1, c2], i) => {
       const x = 7.8 + (i % 2) * 2.42, y = top + 0.45 + Math.floor(i / 2) * 0.9, w = 2.32, h = 0.82;
       L.box(s, x, y, w, h, { fill: f, line: f === 'FFFFFF' ? (i === 4 ? C.t300 : C.b300) : i === 5 ? C.b500 : undefined, dash: i === 5 ? 'dash' : 'solid', r: 0.1 });
@@ -207,14 +207,14 @@ module.exports = (pres, L) => {
   // ───────────────────────── 6 · 04 Tier the regional footprint: the four profiles (brief page 6)
   {
     const s = L.slide('x4');
-    L.header(s, '', 'Not every region needs a full landing zone', { tw: 8, lede: 'A small number of strategic geographic hubs — often two or three regions — carry the full footprint. Other regions use the most efficient pattern that meets their requirements.', lx: 8.6, lw: 4.13 });
+    L.header(s, '', 'Not every region needs a full landing zone', { tw: 8, lede: 'A small number of strategic Full-Platform regions — often two or three regions — carry the full footprint. Other regions use the most efficient pattern that meets their requirements.', lx: 8.6, lw: 4.13 });
     L.line(s, 0.6, 1.88, 12.73, 1.88, { color: C.b500, w: 3 });
-    L.txt(s, 'NO DEPENDENCY ON A GEOGRAPHIC HUB', 0.6, 1.97, 5, 0.22, { fontSize: 9.5, bold: true, color: C.t600, charSpacing: 1.5 });
+    L.txt(s, 'NO DEPENDENCY ON A Full-Platform region', 0.6, 1.97, 5, 0.22, { fontSize: 9.5, bold: true, color: C.t600, charSpacing: 1.5 });
     L.txt(s, 'GREATER LOCAL CAPABILITY AND INDEPENDENCE', 7.2, 1.97, 5.53, 0.22, { fontSize: 9.5, bold: true, color: C.b700, charSpacing: 1.5, align: 'right' });
     const P = [
-      [C.t600, 'No private network path to a geographic hub, another region’s networks, or on-premises.', 'No hub or hybrid gateway. Approved local peering and Azure service endpoints only.'],
-      [C.c600, 'Spokes connect privately to an existing geographic hub in another region.', 'Centralized services used; local services not required.'],
-      [C.b500, 'Selected local services and connectivity, based on workload requirements.', 'Local shared services with selective connectivity, without a Full Hub.'],
+      [C.t600, 'No private network path to a Full-Platform region, another region’s networks, or on-premises.', 'No hub or hybrid gateway. Approved local peering and Azure service endpoints only.'],
+      [C.c600, 'Spokes connect privately to an existing Full-Platform region in another region.', 'Centralized services used; local services not required.'],
+      [C.b500, 'Selected local services and connectivity, based on workload requirements.', 'Local shared services with selective connectivity, without a Full platform.'],
       [C.b700, 'Comprehensive local capabilities, with connectivity to spokes, on-premises, and other regions.', 'Full local capabilities when required by latency, traffic volume, compliance, or operations.'],
     ];
     P.forEach(([c, d, f], i) => {
@@ -237,7 +237,7 @@ module.exports = (pres, L) => {
         mini(1.1);
         spoke(ax + 0.25, ay + 0.34, 0.6, 0.48); spoke(ax + 0.25, ay + 0.91, 0.6, 0.48);
         L.box(s, ax + 1.45, ay, aw - 1.45, mh, { fill: C.b600, r: 0.1 });
-        L.txt(s, [{ text: 'Other region', options: { bold: true, fontSize: 11, breakLine: true } }, { text: 'Geographic hub', options: { fontSize: 10.5, color: 'FFFFFF', breakLine: true } }, { text: 'Hybrid · egress · DNS', options: { fontSize: 10, color: 'DDEBF9' } }], ax + 1.48, ay + 0.08, aw - 1.5, 1.35, { color: 'FFFFFF', align: 'center', valign: 'middle' });
+        L.txt(s, [{ text: 'Other region', options: { bold: true, fontSize: 11, breakLine: true } }, { text: 'Full-Platform region', options: { fontSize: 10.5, color: 'FFFFFF', breakLine: true } }, { text: 'Hybrid · egress · DNS', options: { fontSize: 10, color: 'DDEBF9' } }], ax + 1.48, ay + 0.08, aw - 1.5, 1.35, { color: 'FFFFFF', align: 'center', valign: 'middle' });
         L.line(s, ax + 1.12, ay + 0.78, ax + 1.43, ay + 0.78, { color: C.b600, both: true });
       }
       if (i === 2) {
@@ -256,8 +256,8 @@ module.exports = (pres, L) => {
         spoke(ax + 0.35, ay + 0.98, 0.7, 0.46); spoke(ax + 1.45, ay + 0.98, 0.7, 0.46);
       }
     });
-    L.caption(s, 'Figure 4', 'The spectrum of regional platform connectivity profiles. Moving right adds local capability and independence — and cost and operational scope. Services shown are examples; each hub includes only what its workloads require. Any profile can be the right long-term target.', 0.6, 6.4, 12.1);
-    s.addNotes('Talk track — this is the core architectural pivot: "Once we have that geographic foundation, we do not have to copy and paste the same full Landing Zone into every Azure region. We can maintain a small number of strategic geographic hubs with the full networking, security, management and shared-service footprint, while allowing applications to consume additional regions using lighter-weight patterns appropriate to the workload." Describe customers using two or three regions for full geographic Landing Zone hubs, then evaluating application requirements individually rather than automatically recreating the entire platform footprint everywhere.');
+    L.caption(s, 'Figure 4', 'The spectrum of Platform Services profiles. Moving right adds local capability and independence — and cost and operational scope. Services shown are examples; each hub includes only what its workloads require. Any profile can be the right long-term target.', 0.6, 6.4, 12.1);
+    s.addNotes('Talk track — this is the core architectural pivot: "Once we have that geographic foundation, we do not have to copy and paste the same full Landing Zone into every Azure region. We can maintain a small number of strategic Full-Platform regions with the full networking, security, management and shared-service footprint, while allowing applications to consume additional regions using lighter-weight patterns appropriate to the workload." Describe customers using two or three regions for full geographic Landing Zone hubs, then evaluating application requirements individually rather than automatically recreating the entire platform footprint everywhere.');
   }
 
   // ───────────────────────── 7 · 04 Tier the regional footprint: trade-off and estate (brief page 7)
@@ -278,12 +278,12 @@ module.exports = (pres, L) => {
       if (sub) L.txt(s, sub, x + 0.1, ty + 0.24, w - 0.16, o.subH || 0.24, { fontSize: 12, color: o.sc || C.muted, valign: 'top' });
     };
     const top = 1.9, pitch = 0.75, bh = 0.72;
-    const R = [['Region C', 'Minimal Hub', 'Own on-premises path; rest from A'], ['Region D', 'Minimal Hub', 'No on-premises path; rest from A'], ['Region E', 'Remote Hub', 'Services from Region A'], ['Region F', 'Remote Hub', 'Services from Region B'], ['Region G', 'No Hub', 'No private path to hubs'], ['Region H', 'Candidate — not yet enabled', '']];
+    const R = [['Region C', 'Minimal platform', 'Own on-premises path; rest from A'], ['Region D', 'Minimal platform', 'No on-premises path; rest from A'], ['Region E', 'Remote platform', 'Services from Region A'], ['Region F', 'Remote platform', 'Services from Region B'], ['Region G', 'No platform', 'No private path to hubs'], ['Region H', 'Candidate — not yet enabled', '']];
     R.forEach(([l, t, sub], i) => reg(rx, top + i * pitch, rw, bh, l, t, sub, i === 4 ? { line: C.t300, lc: C.t700, ic: 't' } : i === 5 ? { line: C.b500, tc: C.b700 } : {}));
     const ay = 2.4, by = 4.15, hh = 1.15;
     reg(X, 3.25, 1.7, 1.15, '', 'On-premises', 'datacenters and user locations', { fill: C.s800, line: null, tc: 'FFFFFF', sc: 'C9D4E2', subH: 0.5 });
-    reg(hx, ay, hw, hh, 'Region A', 'Geographic hub', 'Full Hub · resilient hybrid connectivity', { fill: C.b600, line: null, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9', subH: 0.5 });
-    reg(hx, by, hw, hh, 'Region B', 'Geographic hub', 'Full Hub · resilient hybrid connectivity', { fill: C.b600, line: null, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9', subH: 0.5 });
+    reg(hx, ay, hw, hh, 'Region A', 'Full-Platform region', 'Full platform · resilient hybrid connectivity', { fill: C.b600, line: null, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9', subH: 0.5 });
+    reg(hx, by, hw, hh, 'Region B', 'Full-Platform region', 'Full platform · resilient hybrid connectivity', { fill: C.b600, line: null, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9', subH: 0.5 });
     const opx = X + 1.05, mid = i => top + i * pitch + bh / 2, erY = top + 0.28;
     L.path(s, [[opx, 3.25], [opx, 2.95], [hx, 2.95]], { color: C.s600, both: true });
     L.path(s, [[opx, 4.4], [opx, 4.72], [hx, 4.72]], { color: C.s600, both: true });
@@ -299,18 +299,18 @@ module.exports = (pres, L) => {
     L.icon(s, 'shield', X + 0.15, 5.98, 0.26, 's');
     L.txt(s, [{ text: 'Every profile shares one governed foundation: ', options: { bold: true } }, { text: 'governance, security, compliance, automation, and operations' }], X + 0.55, 5.8, 6.6, 0.62, { fontSize: 12, color: C.ink, valign: 'middle' });
     L.caption(s, 'Figure 6', 'An illustrative estate. Names and placements are examples only.', 0.6, 6.58, 12.13);
-    s.addNotes('Talk track: this is important economically as well as architecturally, because customers raise concerns that establishing a complete footprint in every additional region becomes expensive and difficult to sustain. The estate shows two geographic hubs with full footprints; other regions use Minimal Hub profiles, Remote Hub, or No Hub, and a candidate region stays an option until needed.');
+    s.addNotes('Talk track: this is important economically as well as architecturally, because customers raise concerns that establishing a complete footprint in every additional region becomes expensive and difficult to sustain. The estate shows two Full-Platform regions with full footprints; other regions use Minimal platform profiles, Remote platform, or No platform, and a candidate region stays an option until needed.');
   }
 
   // ───────────────────────── 8 · 05 Workload Landing Zone archetypes (brief page 8)
   {
     const s = L.slide('x5');
-    L.header(s, '', 'Four Workload Landing Zone archetypes', { ec: C.t600, tw: 8, lede: [{ text: 'Archetypes describe ' }, { text: 'what applications require', options: { bold: true, color: C.ink } }, { text: '; connectivity profiles describe what the platform provides. The mapping is not one-to-one.' }], lx: 8.9, lw: 3.83 });
+    L.header(s, '', 'Four Workload Landing Zone archetypes', { ec: C.t600, tw: 8, lede: [{ text: 'Archetypes describe ' }, { text: 'what applications require', options: { bold: true, color: C.ink } }, { text: '; Platform Services profiles describe what the platform provides. The mapping is not one-to-one.' }], lx: 8.9, lw: 3.83 });
     const A = [
-      [C.t600, D.archetypes[0], "Self-contained workloads with no persistent private dependency outside the workload.", "Use No Hub where services and capacity fit; add hub capabilities only when justified.", D.archetypeProfileOrder[0].map(j => D.profiles[j])],
-      [C.t700, D.archetypes[1], "Workloads that reach selected services through private endpoints or specific private APIs, without routed access to the enterprise network.", "No Hub only for approved local peering or Azure service endpoints; otherwise select hub capabilities.", D.archetypeProfileOrder[1].map(j => D.profiles[j])],
-      [C.b700, D.archetypes[2], "Workloads that need routed access to on-premises environments or the enterprise network, including shared services hosted in a hub.", "Consume a geographic hub remotely or provide the required local capabilities. No Hub has no hybrid path.", D.archetypeProfileOrder[2].map(j => D.profiles[j])],
-      [C.v600, D.archetypes[3], "Groups of workloads with material east-west dependencies: shared data, synchronous calls, or private east-west traffic. Combine members' requirements.", "Classified at group level. No Hub only for approved same-region connectivity without hub or on-premises dependencies.", D.archetypeProfileOrder[3].map(j => D.profiles[j])]
+      [C.t600, D.archetypes[0], "Self-contained workloads with no persistent private dependency outside the workload.", "Use No platform where services and capacity fit; add hub capabilities only when justified.", D.archetypeProfileOrder[0].map(j => D.profiles[j])],
+      [C.t700, D.archetypes[1], "Workloads that reach selected services through private endpoints or specific private APIs, without routed access to the enterprise network.", "No platform only for approved local peering or Azure service endpoints; otherwise select hub capabilities.", D.archetypeProfileOrder[1].map(j => D.profiles[j])],
+      [C.b700, D.archetypes[2], "Workloads that need routed access to on-premises environments or the enterprise network, including shared services hosted in a hub.", "Consume a Full-Platform region remotely or provide the required local capabilities. No platform has no hybrid path.", D.archetypeProfileOrder[2].map(j => D.profiles[j])],
+      [C.v600, D.archetypes[3], "Groups of workloads with material east-west dependencies: shared data, synchronous calls, or private east-west traffic. Combine members' requirements.", "Classified at group level. No platform only for approved same-region connectivity without hub or on-premises dependencies.", D.archetypeProfileOrder[3].map(j => D.profiles[j])]
     ];
     A.forEach(([c, t, d, p, chips], i) => {
       const x = 0.6 + i * 3.067, y = 1.7, w = 2.93, h = 3.9;
@@ -323,14 +323,14 @@ module.exports = (pres, L) => {
       L.txt(s, p, x + 0.18, y + 2.1, w - 0.36, 0.8, { fontSize: 12, color: C.ink });
       L.box(s, x, y + 2.95, w, 0.95, { fill: C.wash, r: 0.12 }); L.box(s, x, y + 2.95, w, 0.3, { fill: C.wash, r: 0 });
       let cx = x + 0.15, cy = y + 3.02;
-      chips.forEach(ch => { const cw = chipW(ch, 10); if (cx + cw > x + w - 0.1) { cx = x + 0.15; cy += 0.3; } const dsh = ch.includes('justified'); L.chip(s, ch, cx, cy, { w: cw, fill: dsh ? 'FFFFFF' : ch === 'No Hub' ? C.t100 : C.b100, color: ch === 'No Hub' ? C.t700 : C.b700, line: dsh ? C.b500 : undefined, dash: dsh ? 'dash' : undefined, size: 10 }); cx += cw + 0.06; });
+      chips.forEach(ch => { const cw = chipW(ch, 10); if (cx + cw > x + w - 0.1) { cx = x + 0.15; cy += 0.3; } const dsh = ch.includes('justified'); L.chip(s, ch, cx, cy, { w: cw, fill: dsh ? 'FFFFFF' : ch === 'No platform' ? C.t100 : C.b100, color: ch === 'No platform' ? C.t700 : C.b700, line: dsh ? C.b500 : undefined, dash: dsh ? 'dash' : undefined, size: 10 }); cx += cw + 0.06; });
     });
     L.txt(s, 'Each workload or group gets one archetype. Traffic between its regional instances does not change it.', 0.6, 5.66, 12.13, 0.25, { fontSize: 10, color: C.muted, valign: 'middle' });
     L.box(s, 0.6, 6.0, 4.1, 0.85, { fill: C.s800, r: 0.12 });
     L.txt(s, [{ text: 'Region-agnostic does not mean ', options: { color: 'FFFFFF' } }, { text: 'region-random.', options: { color: '50E6FF' } }], 0.8, 6.0, 3.8, 0.85, { fontSize: 17, fontFace: F.semi, valign: 'middle' });
     L.box(s, 4.8, 6.0, 7.93, 0.85, { fill: C.b50, r: 0.12 });
     L.txt(s, [{ text: 'Governance moves up a level. ', options: { bold: true, color: C.b700 } }, { text: 'Define a governed operating model and a small number of approved archetypes; each application selects the most efficient pattern that satisfies its connectivity, resiliency, data, security, and service requirements.' }], 5.0, 6.0, 7.55, 0.85, { fontSize: 12, color: C.ink, valign: 'middle' });
-    s.addNotes('Present the archetypes in increasing platform connectivity and dependency complexity, not as maturity stages or a measure of application sophistication. Archetype 1: Self-Contained Workloads often use No Hub; other profiles require a platform justification. Archetype 2: Selectively Connected Workloads can use No Hub only when approved same-region peering or Azure service endpoints meet their requirements without a geographic hub or on-premises path; otherwise choose Remote Hub, Minimal Hub, or Full Hub. Archetype 3: Hybrid-Dependent Workloads need persistent private enterprise or on-premises connectivity through Remote Hub, Minimal Hub, or Full Hub, not No Hub. Archetype 4: Interdependent Workload Groups select from aggregate requirements: No Hub only for approved same-region connectivity, Remote Hub when latency and availability coupling are acceptable, and Minimal Hub or Full Hub when local capabilities are justified. The mapping is many-to-many. Region-agnostic does not mean region-random; governance remains consistent.');
+    s.addNotes('Present the archetypes in increasing platform connectivity and dependency complexity, not as maturity stages or a measure of application sophistication. Archetype 1: Self-Contained Workloads often use No platform; other profiles require a platform justification. Archetype 2: Selectively Connected Workloads can use No platform only when approved same-region peering or Azure service endpoints meet their requirements without a Full-Platform region or on-premises path; otherwise choose Remote platform, Minimal platform, or Full platform. Archetype 3: Hybrid-Dependent Workloads need persistent private enterprise or on-premises connectivity through Remote platform, Minimal platform, or Full platform, not No platform. Archetype 4: Interdependent Workload Groups select from aggregate requirements: No platform only for approved same-region connectivity, Remote platform when latency and availability coupling are acceptable, and Minimal platform or Full platform when local capabilities are justified. The mapping is many-to-many. Region-agnostic does not mean region-random; governance remains consistent.');
   }
 
   // ───────────────────────── 9 · An everyday analogy: the city (brief page 9)
@@ -343,7 +343,7 @@ module.exports = (pres, L) => {
     const rx = 7.35, rw = 5.38;
     cap(s, 'In the city', rx, 1.8, { w: 1.8, color: C.b600 });
     cap(s, 'In Azure', rx + 2.8, 1.8, { w: 2.4, color: C.b600 });
-    const M = [['Neighborhoods', 'Azure regions'], ['Transit', 'Connectivity between regions'], ['Express toll lanes', 'ExpressRoute'], ['Office campus', 'On-premises'], ['Downtown', 'Full Hub'], ['Riverside', 'Minimal Hub'], ['Hillcrest and Midtown', 'Remote Hub'], ['Lakeside', 'No Hub'], ['New plot', 'Candidate region']];
+    const M = [['Neighborhoods', 'Azure regions'], ['Transit', 'Connectivity between regions'], ['Express toll lanes', 'ExpressRoute'], ['Office campus', 'On-premises'], ['Downtown', 'Full platform'], ['Riverside', 'Minimal platform'], ['Hillcrest and Midtown', 'Remote platform'], ['Lakeside', 'No platform'], ['New plot', 'Candidate region']];
     M.forEach(([a, b], i) => {
       const y = 2.08 + i * 0.48;
       L.box(s, rx, y - 0.03, rw, 0.008, { fill: C.soft, r: 0 });
@@ -351,7 +351,7 @@ module.exports = (pres, L) => {
       L.txt(s, '→', rx + 2.55, y, 0.18, 0.4, { fontSize: 12, bold: true, color: C.b600, valign: 'middle' });
       L.txt(s, b, rx + 2.8, y, 2.58, 0.4, { fontSize: 12, fontFace: F.semi, color: C.ink, valign: 'middle' });
     });
-    s.addNotes('Think of the platform as a city, and workloads as the people and businesses that live in it. The city builds neighborhoods, services, roads, transit, and laws once. A family settles in one neighborhood; a bank spreads across several. Neither builds a new city. Each neighborhood is a region with a different connectivity profile; the office campus is on-premises. The four households map to the four archetypes: self-contained picks Lakeside, selectively connected picks Midtown, hybrid-dependent picks Hillcrest, and an interdependent group picks Riverside. The bank is a multi-region workload: branches in Riverside and Midtown serve customers together, and a backup operations center in Hillcrest stands by.');
+    s.addNotes('Think of the platform as a city, and workloads as the people and businesses that live in it. The city builds neighborhoods, services, roads, transit, and laws once. A family settles in one neighborhood; a bank spreads across several. Neither builds a new city. Each neighborhood is a region with a different Platform Services profile; the office campus is on-premises. The four households map to the four archetypes: self-contained picks Lakeside, selectively connected picks Midtown, hybrid-dependent picks Hillcrest, and an interdependent group picks Riverside. The bank is a multi-region workload: branches in Riverside and Midtown serve customers together, and a backup operations center in Hillcrest stands by.');
   }
 
   // ───────────────────────── 10 · 06 Regional qualification (brief page 10)
@@ -388,13 +388,13 @@ module.exports = (pres, L) => {
       L.box(s, x, oy, outcomeW, oh, { fill: C.wash, r: 0.08 });
       L.txt(s, name, x + 0.1, oy, outcomeW - 0.2, oh, { fontSize: 13, fontFace: F.semi, color: [C.w600, C.b700, C.a700, C.g600][i], align: 'center', valign: 'middle' });
     });
-    s.addNotes('Governance does not disappear in this model — it moves up a level. Regional qualification is how a region enters the governed operating model. Four checks decide which Azure regions should be prepared for which workload requirements: business and geography, data and compliance, workload requirements and dependencies, and regional capability and availability. Check 3 records what the workloads need from the platform: platform enablement (services needed locally, remotely, or centrally), resilient hybrid connectivity (reachability and resilience to Azure), and regional platform connectivity (access to hubs, shared services, and other regions). Each regional option is recorded as excluded, candidate, conditional, or qualified as of the assessment date. The connectivity profile, shared-service placement, and hybrid connectivity are selected next and are not a qualification check. Whether an individual workload uses multiple regions remains a workload-specific design decision.');
+    s.addNotes('Governance does not disappear in this model — it moves up a level. Regional qualification is how a region enters the governed operating model. Four checks decide which Azure regions should be prepared for which workload requirements: business and geography, data and compliance, workload requirements and dependencies, and regional capability and availability. Check 3 records what the workloads need from the platform: platform enablement (services needed locally, remotely, or centrally), resilient hybrid connectivity (reachability and resilience to Azure), and regional platform connectivity (access to hubs, shared services, and other regions). Each regional option is recorded as excluded, candidate, conditional, or qualified as of the assessment date. The Platform Services profile, shared-service placement, and hybrid connectivity are selected next and are not a qualification check. Whether an individual workload uses multiple regions remains a workload-specific design decision.');
   }
 
   // ───────────────────────── 11 · 07 Why this creates agility (brief page 11)
   {
     const s = L.slide('x7');
-    L.header(s, '', 'Region becomes a deployment parameter', { tw: 8, lede: 'Geographic hubs remain deliberate choices. Workloads stop inheriting those choices automatically.', lx: 8.9, lw: 3.83 });
+    L.header(s, '', 'Region becomes a deployment parameter', { tw: 8, lede: 'Full-Platform regions remain deliberate choices. Workloads stop inheriting those choices automatically.', lx: 8.9, lw: 3.83 });
     L.box(s, 0.6, 1.7, 5.8, 1.95, { fill: C.w50, r: 0.12 });
     cap(s, 'Today', 0.85, 1.83, { w: 2, color: C.w600 });
     L.txt(s, 'Region as a permanent architectural dependency', 0.85, 2.07, 5.4, 0.35, { fontSize: 14, fontFace: F.semi, color: C.ink });
@@ -421,10 +421,10 @@ module.exports = (pres, L) => {
     L.box(s, 9.15, 4.05, 3.58, 1.95, { fill: C.t600, r: 0.12 });
     L.txt(s, [{ text: 'More options for where the next workload can go', options: { fontFace: F.semi, fontSize: 14, breakLine: true, paraSpaceAfter: 6 } }, { text: 'Existing workloads can stay put; new and movable ones use the best qualified option available.', options: { fontSize: 12, color: 'D6F0EC' } }], 9.35, 4.05, 3.25, 1.95, { color: 'FFFFFF', valign: 'middle' });
     L.box(s, 0.6, 6.1, 6.0, 0.75, { fill: C.s800, r: 0.12 });
-    L.txt(s, [{ text: 'Deliberate where it matters: ', options: { bold: true } }, { text: 'where the major geographic hubs live.' }], 0.85, 6.1, 5.6, 0.75, { fontSize: 12.5, color: 'FFFFFF', valign: 'middle' });
+    L.txt(s, [{ text: 'Deliberate where it matters: ', options: { bold: true } }, { text: 'where the major Full-Platform regions live.' }], 0.85, 6.1, 5.6, 0.75, { fontSize: 12.5, color: 'FFFFFF', valign: 'middle' });
     L.box(s, 6.73, 6.1, 6.0, 0.75, { fill: C.t50, line: C.t300, r: 0.12 });
     L.txt(s, [{ text: 'Adaptable where it helps: ', options: { bold: true } }, { text: 'which regions individual applications consume.' }], 6.98, 6.1, 5.6, 0.75, { fontSize: 12.5, color: C.ink, valign: 'middle' });
-    s.addNotes('Talk track: "The important outcome is that region becomes increasingly a deployment parameter rather than a permanent architectural dependency. We still make deliberate choices about where major geographic hubs exist. But we stop assuming that every workload must inherit those same regional choices. That gives us a much better ability to respond when circumstances change. If capacity is available somewhere else, if a required Azure service is stronger in another region, or if the regulatory or energy environment changes, we have more options for where the next workload can go." From the whitepaper: placement is revalidated at decision time for services, SKUs, AI models, regional access, and quota; capacity remains a deployment-time condition. Staying in the current region is always a valid outcome.');
+    s.addNotes('Talk track: "The important outcome is that region becomes increasingly a deployment parameter rather than a permanent architectural dependency. We still make deliberate choices about where major Full-Platform regions exist. But we stop assuming that every workload must inherit those same regional choices. That gives us a much better ability to respond when circumstances change. If capacity is available somewhere else, if a required Azure service is stronger in another region, or if the regulatory or energy environment changes, we have more options for where the next workload can go." From the whitepaper: placement is revalidated at decision time for services, SKUs, AI models, regional access, and quota; capacity remains a deployment-time condition. Staying in the current region is always a valid outcome.');
   }
 
   // ───────────────────────── 12 · 08 Agility in practice (brief page 12)
@@ -446,7 +446,7 @@ module.exports = (pres, L) => {
       L.icon(s, 'flag', x + 0.35, y + 1.17, 0.28, 't');
       L.txt(s, outcome, x + 0.78, y + 0.87, w - 1.15, 0.98, { fontSize: 12, color: C.ink, valign: 'middle' });
     });
-    s.addNotes('Use one of these scenarios to make the agility point concrete for the audience. The full deck and whitepaper walk each scenario from driver through the deciding checks, qualification, archetype, connectivity profile, and placement.');
+    s.addNotes('Use one of these scenarios to make the agility point concrete for the audience. The full deck and whitepaper walk each scenario from driver through the deciding checks, qualification, archetype, Platform Services profile, and placement.');
   }
 
   // ───────────────────────── 13 · 09 The strategic benefit (brief page 13)
@@ -458,7 +458,7 @@ module.exports = (pres, L) => {
     L.box(s, 0.6, 4.55, 5.4, 1.2, { fill: C.w50, r: 0.1 });
     L.box(s, 0.6, 4.55, 0.05, 1.2, { fill: C.w600, r: 0 });
     L.txt(s, [{ text: 'For regulated organizations, ', options: { bold: true, color: C.w600 } }, { text: 'application-level, region-agnostic placement is a way to de-risk cloud growth if future power restrictions affect hyperscale expansion in a particular country.' }], 0.85, 4.55, 5.0, 1.2, { fontSize: 12, color: C.ink, valign: 'middle' });
-    const T = [['app', 't', C.t50, C.t300, C.t700, 'Workload Landing Zone archetypes', 'Applications select the most efficient pattern that meets their requirements.', 0.6], ['route', 'b', C.b50, C.b200, C.b700, 'Geographically resilient connectivity', 'Diverse peering locations into the Azure backbone, planned for the geography.', 0.4], ['hub', 'b', 'FFFFFF', C.b300, C.b800, 'A small number of strategic geographic hubs', 'The full footprint lives where it is justified, not in every region.', 0.2], ['shield', 'w', C.s800, null, 'FFFFFF', 'One governed operating model', 'Landing-zone guardrails and operating standards stay stable across the estate.', 0]];
+    const T = [['app', 't', C.t50, C.t300, C.t700, 'Workload Landing Zone archetypes', 'Applications select the most efficient pattern that meets their requirements.', 0.6], ['route', 'b', C.b50, C.b200, C.b700, 'Geographically resilient connectivity', 'Diverse peering locations into the Azure backbone, planned for the geography.', 0.4], ['hub', 'b', 'FFFFFF', C.b300, C.b800, 'A small number of strategic Full-Platform regions', 'The full footprint lives where it is justified, not in every region.', 0.2], ['shield', 'w', C.s800, null, 'FFFFFF', 'One governed operating model', 'Landing-zone guardrails and operating standards stay stable across the estate.', 0]];
     T.forEach(([ic, c, bg, ln, tc, t, d, inset], i) => {
       const y = 1.5 + i * 1.0, x = 6.4 + inset, w = 12.73 - x - inset;
       L.box(s, x, y, w, 0.9, { fill: bg, line: ln || undefined, r: 0.12 });
@@ -468,7 +468,7 @@ module.exports = (pres, L) => {
     L.txt(s, 'Together: an architecture that can evolve as Europe evolves.', 6.4, 5.5, 6.33, 0.3, { fontSize: 12, italic: true, color: C.muted, align: 'right' });
     L.image(s, IMG('band.jpg', L.tone), { x: 0.6, y: 5.95, w: 12.13, h: 0.9 }, 'Decorative gradient band', { sizing: { type: 'cover', w: 12.13, h: 0.9 } });
     L.txt(s, [{ text: 'The goal is not to select the perfect two regions. ', options: { fontFace: F.light } }, { text: 'It is to make additional regions significantly easier to adopt when business and workload requirements justify them.', options: { fontFace: F.semi } }], 0.95, 5.95, 11.4, 0.9, { fontSize: 16, color: 'FFFFFF', valign: 'middle' });
-    s.addNotes('Talk track — finish with this: "We should not try to predict perfectly which European regions will have the best combination of capacity, service availability, energy supply and regulatory environment three-to-five years from now. The external environment is inherently dynamic. Instead, we should architect so that we do not need to predict it perfectly. That means separating the things that must remain consistent, our governance, security, compliance and operating model, from the things that should remain adaptable, namely which regions individual applications consume. With a small number of strategic geographic hubs, geographically resilient connectivity, and a set of lightweight Workload Landing Zone archetypes, we create an architecture that can evolve as Europe evolves." For regulated customers, reinforce that this application-level, region-agnostic approach provides a way to de-risk cloud growth if future power restrictions affect the industry’s ability to continue hyperscale expansion in a particular country.');
+    s.addNotes('Talk track — finish with this: "We should not try to predict perfectly which European regions will have the best combination of capacity, service availability, energy supply and regulatory environment three-to-five years from now. The external environment is inherently dynamic. Instead, we should architect so that we do not need to predict it perfectly. That means separating the things that must remain consistent, our governance, security, compliance and operating model, from the things that should remain adaptable, namely which regions individual applications consume. With a small number of strategic Full-Platform regions, geographically resilient connectivity, and a set of lightweight Workload Landing Zone archetypes, we create an architecture that can evolve as Europe evolves." For regulated customers, reinforce that this application-level, region-agnostic approach provides a way to de-risk cloud growth if future power restrictions affect the industry’s ability to continue hyperscale expansion in a particular country.');
   }
 
   // ───────────────────────── 14 · Closing (brief page 14)

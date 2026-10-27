@@ -55,11 +55,11 @@
     const topo = M.O.estateTopology.map(id => ({ id, title: id, art: M.diagram.topology(id) }));
     const cur = S.current.map(x => { const i = C.info(x.id);
       return `<tr><th scope="row"><span class="pl-rn">${icon('region', { cls: 'pl-rn-ic' })}<span><b>${esc(i.name)}</b><span class="pl-cap">${esc(i.geo || 'Not in the reference data')}</span></span></span></th>` +
-        `<td>${K.toggle('hub/' + x.id, x.hub, 'Geographic hub: ' + i.name)}</td>` +
+        `<td>${K.toggle('hub/' + x.id, x.hub, 'Full-Platform region: ' + i.name)}</td>` +
         `<td><input class="pl-radio" type="radio" name="pl-baseline" data-k="baseline" value="${esc(x.id)}" aria-label="Price baseline: ${esc(i.name)}"${S.baseline === x.id ? ' checked' : ''}></td>` +
         `<td class="pl-x">${K.iconBtn('rm-current', x.id, 'close', 'Remove ' + i.name)}</td></tr>`; }).join('');
     const curList = S.current.length
-      ? K.scroll(`<table class="pl-dl"><thead><tr><th scope="col">Region</th><th scope="col">Geographic hub</th><th scope="col">Price baseline</th><th scope="col" aria-label="Remove"></th></tr></thead><tbody>${cur}</tbody></table>`, { label: 'Current regions' })
+      ? K.scroll(`<table class="pl-dl"><thead><tr><th scope="col">Region</th><th scope="col">Full-Platform region</th><th scope="col">Price baseline</th><th scope="col" aria-label="Remove"></th></tr></thead><tbody>${cur}</tbody></table>`, { label: 'Current regions' })
       : '<p class="pl-muted">No current regions yet.</p>';
     return K.head('Scope', 'The platform you run today and the regions you are considering.') +
       K.section('Plan', K.row('Plan name', 'meta/name', id => K.inp('meta/name', S.meta.name, { id, ph: 'For example, Contoso Nordic expansion', label: 'Plan name' })) +
@@ -70,7 +70,7 @@
         K.row('Hybrid connectivity', 'estate/hybrid', id => K.sel('estate/hybrid', S.estate.hybrid, O.estateHybrid, { id, label: 'Hybrid connectivity' }))) +
       K.section('Current regions', `<div class="pl-add">${regionCombo('cur', 'Add a current region', id => {
         S.current.push({ id, hub: !S.current.length }); C.tidy(); C.loadPricing(S.baseline).then(ok => ok && K.hooks.render());
-      })}</div>${curList}`, { desc: 'Regions you already run in. Mark geographic hubs built with the Full Hub profile, providing hybrid connectivity and shared services to other regions.' }) +
+      })}</div>${curList}`, { desc: 'Regions you already run in. Mark Full-Platform regions built with the Full platform profile, providing hybrid connectivity and shared services to other regions.' }) +
       K.section('Regions to qualify', `<div class="pl-add">${regionCombo('cand', 'Add a region to qualify', id => { S.regions.push(C.newRegion(id)); })}</div>` +
         (S.regions.length ? `<div class="pl-rcs">${S.regions.map(regionCard).join('')}</div>` : '<p class="pl-muted">No regions to qualify yet.</p>'),
         { desc: 'Candidate regions. Three to five keep the comparison readable.' });

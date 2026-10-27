@@ -1,7 +1,7 @@
 ---
 title: Regional qualification overview
 description: Use four checks and one decision tree to determine which Azure regions should be prepared to support workload requirements, classify each regional option as excluded, candidate, conditional, or qualified, and record it with evidence, owners, and revalidation triggers.
-ms.date: 10/06/2026
+ms.date: 10/27/2026
 ms.topic: conceptual
 ---
 
@@ -38,9 +38,9 @@ Classify each regional option as:
 - **Conditional:** Current evidence supports the defined workload requirements if one or more documented conditions are resolved.
 - **Qualified as of the assessment date:** Current evidence supports the defined workload requirements, platform ownership is established, and workload-onboarding revalidation is still required.
 
-Record the evidence date, review date, workload requirements in scope, key constraints, outstanding validations, owner, and revalidation triggers. Add the platform connectivity profile when you select it in [step 3](./platform-architecture.md).
+Record the evidence date, review date, workload requirements in scope, key constraints, outstanding validations, owner, and revalidation triggers. Add the Platform Services profile when you select it in [step 3](./platform-architecture.md).
 
-:::image type="content" source="./media/assessment-outcome-example.png" alt-text="Example grid of five candidate regions against the four archetypes, ordered self-contained, selectively connected, hybrid-dependent, and interdependent groups. Two regions with geographic hubs are qualified for most archetypes; an in-country region is qualified for two, conditional for one, and a candidate for another; an AI region is qualified for Self-Contained Workloads and conditional for Selectively Connected Workloads; a region in another geography is excluded for all." lightbox="./media/assessment-outcome-example.png":::
+:::image type="content" source="./media/assessment-outcome-example.png" alt-text="Example grid of five candidate regions against the four archetypes, ordered self-contained, selectively connected, hybrid-dependent, and interdependent groups. Two regions with Full-Platform regions are qualified for most archetypes; an in-country region is qualified for two, conditional for one, and a candidate for another; an AI region is qualified for Self-Contained Workloads and conditional for Selectively Connected Workloads; a region in another geography is excluded for all." lightbox="./media/assessment-outcome-example.png":::
 
 *Illustrative example: one portfolio, classified per archetype. Regions and statuses are illustrative.*
 

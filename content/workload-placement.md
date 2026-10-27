@@ -1,7 +1,7 @@
 ---
 title: Place workloads using qualified options
 description: Eight steps to place a workload in a qualified Azure region, with decision-time validation and feedback into regional qualification.
-ms.date: 10/05/2026
+ms.date: 10/27/2026
 ms.topic: conceptual
 ---
 
@@ -28,11 +28,11 @@ For each workload or related application portfolio:
 1. **Define the placement objective.** Is the workload new, staying where it is, or moving or expanding to another region?
 1. **Identify the [Workload Landing Zone archetype](./application-landing-zone-archetypes.md).** Assess the workload's connectivity, shared-service, data, security, operational, and dependency characteristics and pick the closest-fitting archetype. Record any material requirements it doesn't cover as explicit additions to it.
 1. **Establish mandatory requirements.** Confirm data-location restrictions, required Azure services and features, availability-zone requirements, latency thresholds, expected scale, connectivity, resiliency requirements, and critical dependencies.
-1. **Review qualified regional options.** Consider regions previously assessed against the relevant workload requirements. Review their supported capabilities, connectivity profiles, readiness, known constraints, when each was last assessed, and any outstanding validations. See [Assessment outcome](./regional-qualification.md#assessment-outcome).
+1. **Review qualified regional options.** Consider regions previously assessed against the relevant workload requirements. Review their supported capabilities, Platform Services profiles, readiness, known constraints, when each was last assessed, and any outstanding validations. See [Assessment outcome](./regional-qualification.md#assessment-outcome).
 1. **Validate current regional suitability.** Qualification was an earlier planning assessment, so re-check the target region before onboarding, whether the workload is new or moving. Confirm that the services, SKUs, AI models, regional access, quota, and dependencies it needs are available now. Quota allows deployment but doesn't guarantee capacity. If the workload needs guaranteed capacity, decide here whether to reserve it.
-1. **Confirm the region's connectivity profile supports the workload.** Check that the region's [connectivity profile](./connectivity-profiles.md) satisfies the workload's requirements. If additional platform capabilities are required, treat their introduction as a separate governed platform decision rather than allowing the workload team to redefine the regional profile independently.
+1. **Confirm the region's Platform Services profile supports the workload.** Check that the region's [Platform Services profile](./connectivity-profiles.md) satisfies the workload's requirements. If additional platform capabilities are required, treat their introduction as a separate governed platform decision rather than allowing the workload team to redefine the regional profile independently.
 1. **Determine the workload's resiliency role.** Define whether the region will support the workload as its primary location, recovery location, or as part of a multi-region active deployment. Apply workload-specific availability, RTO, RPO, replication, data-consistency, and failover requirements. See [Service Guides for Multi Region](./workload-design.md).
-1. **Record and govern the decision.** Document the selected region, Workload Landing Zone archetype, connectivity profile, placement and resiliency outcomes, assumptions, constraints, owners, and revalidation triggers.
+1. **Record and govern the decision.** Document the selected region, Workload Landing Zone archetype, Platform Services profile, placement and resiliency outcomes, assumptions, constraints, owners, and revalidation triggers.
 
 ## Feed findings back into qualification
 

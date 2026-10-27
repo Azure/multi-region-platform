@@ -7,7 +7,7 @@ the keyboard and the files. Everything here describes this version; there is no 
 
 - [The spec (format 1)](#the-spec-format-1)
 - [Global entry](#global-entry)
-- [Minimal Hub capabilities](#minimal-hub-capabilities)
+- [Minimal platform capabilities](#minimal-platform-capabilities)
 - [Virtual WAN](#virtual-wan)
 - [Hybrid connectivity](#hybrid-connectivity)
 - [Simulated failures](#simulated-failures)
@@ -22,9 +22,9 @@ the keyboard and the files. Everything here describes this version; there is no 
 
 ## The spec (format 1)
 
-Profile display names are **No Hub**, **Remote Hub**, **Minimal Hub**, and **Full Hub**.
+Profile display names are **No platform**, **Remote platform**, **Minimal platform**, and **Full platform**.
 For compatibility with saved designs, their JSON `pattern` values remain `disconnected`, `remote-hub`,
-`minimal-hub`, and `full-hub`, respectively. The `remote_hub` field identifies the supplying geographic hub.
+`minimal-hub`, and `full-hub`, respectively. The `remote_hub` field identifies the supplying Full-Platform region.
 Azure `geography` and `area` values remain the region catalog's geographic groupings.
 
 ```json
@@ -65,7 +65,7 @@ Azure `geography` and `area` values remain the region catalog's geographic group
 | global entry | `type` (`none`, `front-door`, `traffic-manager`, `third-party`), `origins` |
 | global origin | `region`, `role` (`active` or `backup`; unset: active) |
 | `defaults` | `topology` (`hub-spoke` or `vwan`), `routing_intent` (Virtual WAN), the role products (`firewall`, `ingress`, `dns`, `bastion`, `private_user_access`, …), `dns_model` (`centralized` / `distributed`), `hub_routing_preference` (Virtual WAN) |
-| region | `id`, `name`, `pattern`, `remote_hub`, `capabilities` (Minimal Hub), `vwan`, `er_preferred`, and the overrides its pattern allows |
+| region | `id`, `name`, `pattern`, `remote_hub`, `capabilities` (Minimal platform), `vwan`, `er_preferred`, and the overrides its pattern allows |
 | site (`onprem`) | `id`, `name`, `interconnect` (other site ids) |
 | connection | `id`, `type` (`expressroute`, `vpn`), `site`, `name`, `peering_location`, `connection` (`provider` or `direct`), `provider`, `connects_to` (hub region ids) |
 | region link | `from`, `to`, `kind` (absent for a hub link), `reason` |
@@ -83,22 +83,22 @@ Azure `geography` and `area` values remain the region catalog's geographic group
 - The order of `regions` is the diagram order (areas by first appearance, then spec order); the order of
   `onprem` breaks ties when sites are placed.
 - A region can set the fields its pattern lists (`js/data/rules.js → patterns.<id>.fields`): full hub `firewall`,
-  `ingress`, `dns`, `bastion`, `private_user_access`, `dns_model`; Minimal Hub adds `remote_hub` and
+  `ingress`, `dns`, `bastion`, `private_user_access`, `dns_model`; Minimal platform adds `remote_hub` and
   `capabilities`; remote hub `remote_hub`, `ingress`, `bastion`, `private_user_access`, `dns_model`. A
   disconnected region sets its own spoke services (`spoke_roles`). An override the pattern doesn't allow is
   ignored, with a Checks warning.
-- **Role resolution:** region override → local default (a full hub, or a Minimal Hub's *Local* capability) →
+- **Role resolution:** region override → local default (a full hub, or a Minimal platform's *Local* capability) →
   the remote hub's product (a capability *From <remote hub>*) → none (*Not needed*). A *Local* capability with no
   product (no override, estate default none) resolves to none: the capability line says *(none configured)* and
   Checks warns.
 - **DNS model** (`dns_model`) applies only where the region hosts its own DNS Private Resolver. Without a
   resolver the spokes use Azure-provided DNS (no model; the paths, notes and DNS context say so, for full hubs too).
-  With the resolver in another region (a remote-hub region, or a Minimal Hub's DNS *From <remote hub>*) the model
+  With the resolver in another region (a remote-hub region, or a Minimal platform's DNS *From <remote hub>*) the model
   is centralized, because a forwarding ruleset can't be linked to a VNet in another region. In both cases the
   editor shows the reason instead of the dropdown, and an override that can't apply is removed (on import with a
   Checks note).
 - **Gateways are derived:** a hub gets an ExpressRoute gateway when a circuit lists it and a VPN Gateway when a
-  VPN does. Only a full hub, or a Minimal Hub whose *Hybrid gateway* is *Local*, can host one; other regions
+  VPN does. Only a full hub, or a Minimal platform whose *Hybrid gateway* is *Local*, can host one; other regions
   use their remote hub's.
 - **Region links** connect regions that have a hub. In hub-spoke, peering is not transitive: a hub link is
   drawn through both hub firewalls (*Use Azure Firewall to route a multi hub and spoke topology*), so both hubs
@@ -136,13 +136,13 @@ connectivity provider box is the provider's part (no provider band). Path crossi
 with ticks; VPN hops are not marked. The diagram has no hover tooltips: a click on a component opens its details
 or, with the editor open, its settings.
 
-## Minimal Hub capabilities
+## Minimal platform capabilities
 
 `regions[i].capabilities` maps each capability to `"local"`, `"remote"` (from the remote hub) or `"none"`
 (not needed; for DNS the editor calls it *Azure-provided DNS*: no resolver, the spokes use 168.63.129.16).
 Unset: the firewall is local; everything else comes from the remote hub, or is not needed when no `remote_hub`
 is set (a `remote_hub` that is set but missing still counts as remote, and Checks reports it). `remote_hub` is
-required only when at least one capability is `"remote"`. In hub-spoke, switching a region to Minimal Hub gives it a
+required only when at least one capability is `"remote"`. In hub-spoke, switching a region to Minimal platform gives it a
 remote hub (the first full hub, if it has none) and adds the hub link to it. Changing the remote hub moves the link
 (the link to the previous one is removed, the new one added); clearing the remote hub removes its link and leaves
 it cleared. The status line names what changed, with Undo.
@@ -156,7 +156,7 @@ it cleared. The status line names what changed, with Undo.
   needed: on-premises*; a full hub shows *All capabilities local*.
 - A path for a capability that is not needed says so, e.g. *No on-premises connectivity — not needed for this
   region's workloads*. With DNS not needed, Azure-provided DNS still answers.
-- A connection may target a Minimal Hub only when its *Hybrid gateway* is *Local* (the same rule in both
+- A connection may target a Minimal platform only when its *Hybrid gateway* is *Local* (the same rule in both
   topologies). When it is, an info note suggests checking whether an existing ExpressRoute circuit can provide
   the reachability before adding a new one (pattern guidance).
 - In Virtual WAN the minimal virtual hub holds the hub router and, if secured, its firewall; its remote hub
@@ -313,7 +313,7 @@ The checks catch design mistakes; everything else is a talking point with its so
 | Routing intent without hub security | `vwan-intent-no-security` (error) |
 | ExpressRoute bow tie | `vwan-bowtie`, `vwan-bowtie-aspath` (Virtual WAN) |
 | Invalid remote hub (missing, wrong pattern, other virtual WAN) | `remote-hub-target`, `minimal-needs-link`, `vwan-remote-full-hub` |
-| A connection to a Minimal Hub without a local hybrid gateway | `hybrid-minimal-gateway` (error); `minimal-hybrid-local` (info, pattern guidance) |
+| A connection to a Minimal platform without a local hybrid gateway | `hybrid-minimal-gateway` (error); `minimal-hybrid-local` (info, pattern guidance) |
 | A connection to a region that can't host a gateway | `hybrid-no-gateway` (error) |
 | A hub link without a firewall in both hubs (hub-spoke) | `link-firewalls` (error) |
 | Different virtual WANs: no route | `vwan-apart` (info) |
@@ -321,7 +321,7 @@ The checks catch design mistakes; everything else is a talking point with its so
 | Preferred circuit from a site that isn't interconnected | `er-not-interconnected` (info) |
 | Unknown region or peering location | `unknown-region`, `er-location-known` (warnings) |
 
-Also kept: a minimal virtual hub whose firewall is set to come from the remote hub (`vwan-minimal-firewall`), a Minimal Hub capability set to Local with no product configured (`minimal-local-missing`,
+Also kept: a minimal virtual hub whose firewall is set to come from the remote hub (`vwan-minimal-firewall`), a Minimal platform capability set to Local with no product configured (`minimal-local-missing`,
 warning), a circuit in another geopolitical region (premium add-on, `er-cross-geo`), and the
 consistency checks of the spec itself (`hybrid-site`, `hybrid-targets`, `link-ends`, `link-hubs-only`,
 `override-ignored`).
@@ -378,7 +378,7 @@ docs/
 | `docs/guide.md` | Detailed user and maintainer guide. |
 | `js/theme.js` | Applies the theme before the first paint. |
 | `js/data/rules.js` | All rule data: path types, patterns, templates, checks, talking points, references, Virtual WAN and global-entry rules. |
-| `js/data/catalog.js` | Roles, products, Minimal Hub capabilities, Azure regions and ExpressRoute peering locations. |
+| `js/data/catalog.js` | Roles, products, Minimal platform capabilities, Azure regions and ExpressRoute peering locations. |
 | `js/data/examples.js` | Built-in fictional example specs: Contoso and Fabrikam. |
 | `js/engine.js` | Rule engine, global-entry path composition, DNS/admin/access summaries and matrix helpers. |
 | `js/spec.js` | Spec format validation and spec edits without DOM. |

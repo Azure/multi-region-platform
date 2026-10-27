@@ -50,7 +50,7 @@
   <div class="wa mt12">
     <div class="wr hd"><div>Common assumption</div><div>With this approach</div></div>
     <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>A new region needs its own landing-zone design.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>Reuse the existing landing zone. The region is added to the policies, automation, and monitoring you already run. <em>Framework overview</em></span></div></div>
-    <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>Every region needs a {{PROFILE_4}}.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>Start with the most efficient connectivity profile that meets the requirements. Two of the four profiles need no local hub. <em>Part 1</em></span></div></div>
+    <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>Every region needs a {{PROFILE_4}}.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>Start with the most efficient Platform Services profile that meets the requirements. Two of the four profiles need no local hub. <em>Part 1</em></span></div></div>
     <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>Every region needs another ExpressRoute circuit.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>Reuse existing hybrid connectivity where reachability and resiliency requirements allow. Add circuits only when a requirement justifies them. <em>Part 3</em></span></div></div>
     <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>Enabling a region means migrating workloads.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>Nothing has to move. Workloads use the region when their own requirements call for it. <em>Part 5</em></span></div></div>
     <div class="wr"><div class="q"><svg><use href="#i-x"/></svg><span>Qualification is a long assessment.</span></div><div class="a"><svg><use href="#i-check"/></svg><span>It is four checks, each with one question, answered from what your teams already know. Unknowns are recorded and revisited, not treated as blockers. <em>Part 2</em></span></div></div>
@@ -67,9 +67,9 @@
     <p style="font-size:12.2px;color:var(--text)">The framework has five parts. Each part answers one question.</p>
   </div>
   <div class="hw mt12">
-    <div class="h"><div class="n">1</div><b>Understand concepts</b><i>What is a multi-region platform, what can a region provide, and what do applications need?</i><p>Four connectivity profiles describe the platform options. Four archetypes describe what applications require. <em>Part 1</em></p></div>
+    <div class="h"><div class="n">1</div><b>Understand concepts</b><i>What is a multi-region platform, what can a region provide, and what do applications need?</i><p>Four Platform Services profiles describe the platform options. Four archetypes describe what applications require. <em>Part 1</em></p></div>
     <div class="h"><div class="n">2</div><b>Qualify regions</b><i>Can this region support the workloads we expect?</i><p>Four checks lead to one of four outcomes: excluded, candidate, conditional, or qualified. <em>Part 2</em></p></div>
-    <div class="h"><div class="n">3</div><b>Select the regional design</b><i>What should the platform provide in a qualified region?</i><p>Make three choices from short lists: the connectivity profile, where each shared service is provided, and whether the hybrid connectivity you already have is reused. The region is then <strong>selected</strong>. <em>Part 3</em></p></div>
+    <div class="h"><div class="n">3</div><b>Select the regional design</b><i>What should the platform provide in a qualified region?</i><p>Make three choices from short lists: the Platform Services profile, where each shared service is provided, and whether the hybrid connectivity you already have is reused. The region is then <strong>selected</strong>. <em>Part 3</em></p></div>
     <div class="h"><div class="n">4</div><b>Prepare the region</b><i>What has to exist before workloads arrive?</i><p>Build only what the selected design calls for, through the automation you already run. Two of the four profiles need no hub. The region is then <strong>ready for workloads</strong>. <em>Part 4</em></p></div>
     <div class="h"><div class="n">5</div><b>Place workloads</b><i>Should this workload use the region now?</i><p>Decide per workload, with current evidence. The region is then <strong>in use</strong>. <em>Part 5</em></p></div>
   </div>
@@ -86,7 +86,7 @@
     <div class="c" style="background:var(--t50)"><span class="ic" style="background:var(--t600)"><svg><use href="#i-app"/></svg></span>
       <h3>Plan by workload requirements, not individual applications</h3>
       <p>Workload Landing Zone archetypes provide a planning abstraction for recurring connectivity and dependency requirements. They help platform teams anticipate what future workloads may require without attempting to predict every application in advance.</p>
-      <p>Archetypes describe <strong>what applications require</strong>. Regional connectivity profiles describe <strong>what the platform provides</strong>. The relationship is intentionally not one-to-one.</p></div>
+      <p>Archetypes describe <strong>what applications require</strong>. Platform Services profiles describe <strong>what the platform provides</strong>. The relationship is intentionally not one-to-one.</p></div>
   </div>
 </div>
 </section>
@@ -106,9 +106,9 @@
   <div class="es2 mt16">
     <div class="c"><span class="ic" style="background:var(--v600)"><svg><use href="#i-hub"/></svg></span>
       <h3>Choose the most efficient regional connectivity</h3>
-      <p>Regional Platform Connectivity Profiles range from <strong>{{PROFILE_1}}</strong> through <strong>{{PROFILE_2}}</strong> and <strong>{{PROFILE_3}}</strong> to a <strong>{{PROFILE_4}}</strong>.</p>
+      <p>Platform Services profiles range from <strong>{{PROFILE_1}}</strong> through <strong>{{PROFILE_2}}</strong> and <strong>{{PROFILE_3}}</strong> to a <strong>{{PROFILE_4}}</strong>.</p>
       <p>These profiles are not maturity stages. Select the <strong>most efficient profile</strong> for current workload and platform requirements. Add local capabilities only when a measurable need for connectivity, latency, resiliency, security, data handling, or operations justifies them.</p>
-      <p>Geographic hubs and shared services can continue to support other regions where dependencies and service characteristics permit, avoiding unnecessary duplication.</p></div>
+      <p>Full-Platform regions and shared services can continue to support other regions where dependencies and service characteristics permit, avoiding unnecessary duplication.</p></div>
     <div class="c" style="background:var(--t50)"><span class="ic" style="background:var(--t700)"><svg><use href="#i-route"/></svg></span>
       <h3>Keep platform readiness and workload placement separate</h3>
       <p>Regional qualification determines whether a region can become a viable platform option. Actual workload placement occurs later, when a specific workload and its current requirements are known.</p>
@@ -117,7 +117,7 @@
     <div class="c"><span class="ic" style="background:var(--s800)"><svg><use href="#i-shield"/></svg></span>
       <h3>Keep the operating model consistent while allowing regional adaptation</h3>
       <p>The operating model stays consistent across regions; implementation can vary where business, workload, or regulatory requirements call for it.</p>
-      <p>Workload placement, connectivity profiles, local shared-service footprints, Azure services and SKUs, resiliency choices, and other regional parameters can adapt to current requirements.</p>
+      <p>Workload placement, Platform Services profiles, local shared-service footprints, Azure services and SKUs, resiliency choices, and other regional parameters can adapt to current requirements.</p>
       <p><strong>Region-agnostic does not mean region-random.</strong> Regional choice operates within a governed framework of qualified options, documented constraints, and current evidence.</p></div>
   </div>
 

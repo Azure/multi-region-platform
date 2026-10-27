@@ -1,7 +1,7 @@
 ---
 title: "Check 3: Workload requirements and dependencies"
 description: Identify the workload requirements and dependencies a candidate Azure region must support, from existing and future workloads, including workloads moving into the region, and what those workloads require from the platform.
-ms.date: 10/05/2026
+ms.date: 10/27/2026
 ms.topic: conceptual
 ---
 
@@ -35,7 +35,7 @@ Workload requirements also define what the platform must provide in the region. 
 |---|---|---|
 | **Platform enablement** | The shared services and operational capabilities the workloads depend on, such as identity, security controls, monitoring, backup, and key management, and which of them must be close to the workloads. | [Place shared services](./platform-enablement-connectivity.md) |
 | **Resilient hybrid connectivity** | The datacenters and users the workloads must reach, and the latency, bandwidth, routing, and resilience they need on that path. | [Confirm hybrid connectivity](./hybrid-connectivity.md) |
-| **Regional platform connectivity** | How the workloads must reach geographic hubs, shared platform services, application dependencies, other Azure regions, and hybrid environments. | [Select the connectivity profile](./profile-selection.md) |
+| **Regional platform connectivity** | How the workloads must reach Full-Platform regions, shared platform services, application dependencies, other Azure regions, and hybrid environments. | [Select the Platform Services profile](./profile-selection.md) |
 
 Replication or failover traffic between a workload's regional instances over the customer's own networks (for example SQL Server Always On on VMs) is a regional platform connectivity requirement. Managed replication on the Microsoft backbone (for example storage geo-replication or Azure SQL failover groups) needs nothing from the platform.
 

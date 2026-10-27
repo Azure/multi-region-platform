@@ -9,7 +9,7 @@
 
   function vDesign() {
     const picked = C.selected();
-    const h = K.head('Regional design', 'Three choices for each selected region: connectivity profile, shared services, and hybrid connectivity.');
+    const h = K.head('Regional design', 'Three choices for each selected region: Platform Services profile, shared services, and hybrid connectivity.');
     if (!picked.length) return h + K.empty('lock', 'No region is selected yet.', 'capability', 'Go to the outcome');
     if (!picked.some(r => r.id === ui.region)) ui.region = picked[0].id;
     const r = C.reg(ui.region), d = C.design(r), e = C.effective(r), k = f => `des/${r.id}/${f}`, name = C.rname(r.id);
@@ -22,9 +22,9 @@
     const qs = PROFILE_QUESTIONS.map((q, i) => { const off = (i === 1 && d.q1 !== 'Yes') || (i === 2 && (d.q1 !== 'Yes' || d.q2 !== 'No'));
       return `<div class="pl-pq${off ? ' off' : ''}"><span class="pl-pq-n">${i + 1}</span><p>${esc(q.label)}</p>${K.seg(k(q.id), off ? '' : d[q.id], ['Yes', 'No'], { label: q.label, disabled: off })}</div>`; }).join('');
     const prof = PROFILES[e.pi];
-    const cards = K.cards(k('profile'), e.profile, PROFILES.map(p => ({ id: p.id, title: p.id, text: p.gets, art: M.diagram.profile(p.id), tag: e.suggested === p.id ? 'Suggested' : '' })), { label: 'Connectivity profile', cls: 'profiles' });
+    const cards = K.cards(k('profile'), e.profile, PROFILES.map(p => ({ id: p.id, title: p.id, text: p.gets, art: M.diagram.profile(p.id), tag: e.suggested === p.id ? 'Suggested' : '' })), { label: 'Platform Services profile', cls: 'profiles' });
     const differs = e.suggested && e.profile && e.profile !== e.suggested ? `<p class="pl-hint">The answers point to ${esc(e.suggested)}.</p>` : '';
-    const secProfile = K.section('Connectivity profile', `<div class="pl-pqs">${qs}</div>${cards}${differs}${prof ? `<p class="pl-after"><a class="pl-link" href="${prof.href}">What to deploy for the ${esc(prof.id)} profile${icon('arrowright')}</a></p>` : ''}`,
+    const secProfile = K.section('Platform Services profile', `<div class="pl-pqs">${qs}</div>${cards}${differs}${prof ? `<p class="pl-after"><a class="pl-link" href="${prof.href}">What to deploy for the ${esc(prof.name)} profile${icon('arrowright')}</a></p>` : ''}`,
       { id: 'pl-d-profile', link: ['profile-selection.html', 'Guidance'] });
 
     // hub and regional connectivity
@@ -89,7 +89,7 @@
         more += K.row('Requirement that justifies the change', k('hybridReason'), id => K.sel(k('hybridReason'), d.hybridReason, O.hybridReason, { id, label: 'Requirement that justifies the change' }));
         more += K.row('Change', k('hybridChange'), id => K.inp(k('hybridChange'), d.hybridChange, { id, ph: 'For example, a second circuit at another peering location', label: 'Change' }));
       }
-      secHy = K.section('Hybrid connectivity', `${dec}${none ? '<p class="pl-hint">The No Hub profile has no private path to on-premises locations.</p>' : ''}${more ? `<div class="pl-subform">${more}</div>` : ''}`, { id: 'pl-d-hybrid', link: ['hybrid-connectivity.html', 'Guidance'] });
+      secHy = K.section('Hybrid connectivity', `${dec}${none ? '<p class="pl-hint">The No platform profile has no private path to on-premises locations.</p>' : ''}${more ? `<div class="pl-subform">${more}</div>` : ''}`, { id: 'pl-d-hybrid', link: ['hybrid-connectivity.html', 'Guidance'] });
     }
 
     const secRec = K.section('Record',
@@ -105,7 +105,7 @@
     // The outline: the parts of the record and their state, and the optional views.
     const hy = e.missing.filter(x => /hybrid|on-premises/.test(x)).length;
     const ol = [
-      ['pl-d-profile', 'Connectivity profile', e.profile ? 'success' : 'none', e.profile ? e.profile + (e.profile === e.suggested ? ' (suggested)' : '') : 'Answer the three questions'],
+      ['pl-d-profile', 'Platform Services profile', e.profile ? 'success' : 'none', e.profile ? e.profile + (e.profile === e.suggested ? ' (suggested)' : '') : 'Answer the three questions'],
       e.profile ? ['pl-d-hub', 'Hub and regional connectivity', 'success', e.none ? 'No hub' : [e.topology, e.managed].filter(Boolean).join(' · ') || 'Hub in the region'] : null,
       e.profile ? ['pl-d-ss', 'Shared services', e.ss.some(x => !x.p) ? 'half' : 'success', `${fromProfile.length} from the profile · ${decided.length} decided here`] : null,
       e.profile ? ['pl-d-hybrid', 'Hybrid connectivity', !e.hybrid ? 'none' : hy ? 'half' : 'success', e.hybrid || 'Not decided yet'] : null,
@@ -139,7 +139,7 @@
     return h + `<header class="pl-print-head"><p class="pl-print-kicker">Regional platform planning</p><h1>Multi-region planner report</h1>` +
       `${reportMeta ? `<div class="pl-print-meta">${reportMeta}</div>` : ''}<p class="pl-print-count">${K.plural(picked.length, 'region')} included · ${bad.length ? `${bad.length} record${bad.length === 1 ? '' : 's'} incomplete` : 'All records complete'}</p></header>` +
       valid + `<div class="pl-bar pl-noprint">${K.btn({ act: 'export', label: 'Export to Excel', icon: 'export' })}${K.btn({ act: 'copy', label: 'Copy as text', icon: 'copy' })}${K.btn({ act: 'print', label: 'Print', icon: 'print' })}</div>` +
-      blocks + K.section('All regions in this plan', K.scroll(`<table class="pl-dl"><thead><tr><th scope="col">Region</th><th scope="col">Outcome</th><th scope="col">Selected</th><th scope="col">Connectivity profile</th></tr></thead><tbody>${all}</tbody></table>`, { label: 'All regions' }));
+      blocks + K.section('All regions in this plan', K.scroll(`<table class="pl-dl"><thead><tr><th scope="col">Region</th><th scope="col">Outcome</th><th scope="col">Selected</th><th scope="col">Platform Services profile</th></tr></thead><tbody>${all}</tbody></table>`, { label: 'All regions' }));
   }
 
   M.views.design = vDesign;

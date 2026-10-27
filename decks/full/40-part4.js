@@ -1,7 +1,7 @@
 const { C, F, IMG } = require('../lib');
 
 module.exports = (pres, L) => {
-  const PROF = L.data.profiles;   // No Hub, Remote Hub, Minimal Hub, Full Hub
+  const PROF = L.data.profiles;   // No platform, Remote platform, Minimal platform, Full platform
 
   // ───────────── helpers
   // Small uppercase label (9 pt).
@@ -55,12 +55,12 @@ module.exports = (pres, L) => {
   {
     const s = L.slide('part4');
     L.header(s, '', 'Prepare the region', { tw: 5.2 });
-    L.txt(s, 'Preparing a region is a targeted change to the platform you already run, not a new landing zone. Build only what the selected connectivity profile and shared-service placement call for, through your existing landing-zone automation. For two of the four profiles there is no hub to build.', 5.9, 0.46, 6.83, 1.1, { fontSize: 13, color: C.muted, lineSpacingMultiple: 1.05 });
+    L.txt(s, 'Preparing a region is a targeted change to the platform you already run, not a new landing zone. Build only what the selected Platform Services profile and shared-service placement call for, through your existing landing-zone automation. For two of the four profiles there is no hub to build.', 5.9, 0.46, 6.83, 1.1, { fontSize: 13, color: C.muted, lineSpacingMultiple: 1.05 });
 
     const cards = [
       ['The region in policy and landing-zone provisioning. Workload spokes with their own internet ingress and egress. No hub, no gateway, no peering.', 'Governance, identity, policy, monitoring, and automation.'],
-      ['The same, plus a cross-region connection from each spoke to an existing geographic hub, with routing and DNS settings. No hub.', 'An existing geographic hub: its gateways, firewall, DNS, and shared services.'],
-      ['The same, plus a hub in the region with only the components you selected.', 'The geographic hub, for everything you didn’t make local.'],
+      ['The same, plus a cross-region connection from each spoke to an existing Full-Platform region, with routing and DNS settings. No hub.', 'An existing Full-Platform region: its gateways, firewall, DNS, and shared services.'],
+      ['The same, plus a hub in the region with only the components you selected.', 'The Full-Platform region, for everything you didn’t make local.'],
       ['The same, plus a full local hub.', 'The landing-zone foundation and, where they meet requirements, the existing ExpressRoute circuits.'],
     ];
     const gap = 0.17, cw = (12.13 - 3 * gap) / 4, cy = 1.7, ch = 3.25;
@@ -89,7 +89,7 @@ module.exports = (pres, L) => {
       L.txt(s, t, x, 5.62, cw, 0.45, { fontSize: 11.5, fontFace: F.semi, color: C.ink, lineSpacingMultiple: 0.98 });
       L.txt(s, d, x, 6.08, cw, 0.78, { fontSize: 11, color: C.text, lineSpacingMultiple: 1.02 });
     });
-    s.addNotes('Preparing a region is a targeted change to the platform you already run, not a new landing zone. You build only what the selected connectivity profile and shared-service placement call for, through your existing landing-zone automation, so for No Hub and Remote Hub there is no hub to build. The Cloud Adoption Framework already describes how to add a new region to an existing landing zone, including a new hub in the region; that path is the Full Hub, and the other three profiles do part of it for regions whose workloads need less. Management groups, subscriptions, and access control need no action, policy needs only the allowed-locations assignments updated, private DNS zones are created once, and the existing connectivity and identity subscriptions get a new resource group for the region.');
+    s.addNotes('Preparing a region is a targeted change to the platform you already run, not a new landing zone. You build only what the selected Platform Services profile and shared-service placement call for, through your existing landing-zone automation, so for No platform and Remote platform there is no hub to build. The Cloud Adoption Framework already describes how to add a new region to an existing landing zone, including a new hub in the region; that path is the Full platform, and the other three profiles do part of it for regions whose workloads need less. Management groups, subscriptions, and access control need no action, policy needs only the allowed-locations assignments updated, private DNS zones are created once, and the existing connectivity and identity subscriptions get a new resource group for the region.');
   }
 
   // ───────────────────────── 2 · Order of work, estate, ready
@@ -98,8 +98,8 @@ module.exports = (pres, L) => {
     L.header(s, '', 'Order of work', { tw: 8.2, lede: 'The order is the same for every profile. The profile decides how much each item contains.', lx: 9.1, lw: 3.63 });
     const W = [
       ['Allow the region in policy,', ' for the workload requirements it is qualified for.', 2],
-      ['Reserve address space', ' that doesn’t overlap the rest of the estate, even for No Hub.', 2],
-      ['Build the network part', ' that the profile calls for: nothing, connections to an existing geographic hub, or a local hub.', 2],
+      ['Reserve address space', ' that doesn’t overlap the rest of the estate, even for No platform.', 2],
+      ['Build the network part', ' that the profile calls for: nothing, connections to an existing Full-Platform region, or a local hub.', 2],
       ['Extend the shared services', ' that must be local, such as DNS forwarding or domain controllers.', 2],
       ['Turn on landing-zone provisioning', ' for the region, so that workload teams receive spokes that match the profile.', 2],
       ['Extend operations:', ' monitoring, security coverage, backup, and runbooks.', 2],
@@ -133,13 +133,13 @@ module.exports = (pres, L) => {
     };
     const hubA = 2.35, hubB = 4.4, hubH = 0.95, hubW = 1.7, hx = X + 1.75;
     reg(X, 3.43, 1.3, 0.9, '', 'On-premises', 'datacenters and user locations', { fill: C.s800, line: null, solid: true, tc: 'FFFFFF', sc: 'C9D4E2' });
-    reg(hx, hubA, hubW, hubH, 'Region A', 'Geographic hub', 'Full Hub', { fill: C.b600, line: null, solid: true, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9' });
-    reg(hx, hubB, hubW, hubH, 'Region B', 'Geographic hub', 'Full Hub', { fill: C.b600, line: null, solid: true, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9' });
-    const R = [['Region C', 'Minimal Hub', 'On-premises path; rest from A'], ['Region D', 'Minimal Hub', 'No on-premises path; rest from A'], ['Region E', 'Remote Hub', 'Services from Region A'], ['Region F', 'Remote Hub', 'Services from Region B'], ['Region G', 'No Hub', 'No private path'], ['Region H', 'Candidate', 'Not yet enabled']];
+    reg(hx, hubA, hubW, hubH, 'Region A', 'Full-Platform region', 'Full platform', { fill: C.b600, line: null, solid: true, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9' });
+    reg(hx, hubB, hubW, hubH, 'Region B', 'Full-Platform region', 'Full platform', { fill: C.b600, line: null, solid: true, ic: 'w', lc: 'DDEBF9', tc: 'FFFFFF', sc: 'DDEBF9' });
+    const R = [['Region C', 'Minimal platform', 'On-premises path; rest from A'], ['Region D', 'Minimal platform', 'No on-premises path; rest from A'], ['Region E', 'Remote platform', 'Services from Region A'], ['Region F', 'Remote platform', 'Services from Region B'], ['Region G', 'No platform', 'No private path'], ['Region H', 'Candidate', 'Not yet enabled']];
     const rx = X + 3.95, rw = 12.73 - rx;
     R.forEach(([l, t, sub], i) => reg(rx, y0 + i * pitch, rw, bh, l, t, sub, i === 4 ? { line: C.t300, lc: C.t700, ic: 't' } : i === 5 ? { line: C.b500, tc: C.b700 } : {}));
     const cy = i => y0 + i * pitch + bh / 2, ax = hx + hubW, opx = X + 0.65;
-    // on-premises to the two geographic hubs, and the existing ExpressRoute circuit that reaches Region C
+    // on-premises to the two Full-Platform regions, and the existing ExpressRoute circuit that reaches Region C
     L.path(s, [[opx, 3.43], [opx, 2.82], [hx, 2.82]], { color: C.s600, both: true });
     L.path(s, [[opx, 4.33], [opx, 4.87], [hx, 4.87]], { color: C.s600, both: true });
     L.txt(s, 'ExpressRoute', opx + 0.1, 2.58, 1.0, 0.2, { fontSize: 9, bold: true, color: C.s600 });
@@ -147,16 +147,16 @@ module.exports = (pres, L) => {
     L.path(s, [[X + 0.25, 3.43], [X + 0.25, 1.95], [rx, 1.95]], { color: C.s600, both: true });
     L.tag(s, 'Existing ExpressRoute circuit', X + 2.45, 1.95, { color: C.s600, w: 2.05 });
     L.line(s, hx + hubW / 2, hubA + hubH, hx + hubW / 2, hubB, { color: C.b600, both: true });
-    // minimal and remote-hub regions to their geographic hub (dashed = takes selected services)
+    // minimal and remote-hub regions to their Full-Platform region (dashed = takes selected services)
     L.path(s, [[rx, 2.25], [ax + 0.3, 2.25], [ax + 0.3, 2.58], [ax, 2.58]], { color: C.b600, dash: 'dash', both: true });
     L.path(s, [[rx, cy(1)], [ax, cy(1)]], { color: C.b600, dash: 'dash', both: true });
     L.path(s, [[rx, cy(2)], [ax + 0.2, cy(2)], [ax + 0.2, 3.1], [ax, 3.1]], { color: C.b600, both: true });
     L.path(s, [[rx, cy(3)], [ax + 0.3, cy(3)], [ax + 0.3, 4.65], [ax, 4.65]], { color: C.b600, both: true });
-    L.caption(s, 'Figure', 'Profiles coexisting across one estate. Two geographic hubs provide resilient hybrid connectivity; other regions consume what they need. Region C’s Minimal Hub reaches on-premises by reusing an existing ExpressRoute circuit; Region D’s does not. Both are valid. Names and placements are examples only.', X, 6.2, 12.73 - X);
-    s.addNotes('The order is the same for every profile; the profile decides how much each item contains. Item 3 is nothing for No Hub, connections to an existing geographic hub for Remote Hub, and a local hub for the two hub profiles. Different profiles can coexist across the estate: a region’s profile changes only when workload and platform requirements change, not because regions are expected to progress along a maturity path. Governance, security, compliance, automation, and operational standards are consistent across every profile. A region is ready for workloads when the required capability set is in place through standard automation, its open conditions are resolved, and every applicable readiness item is true; workloads can then onboard without platform exceptions.');
+    L.caption(s, 'Figure', 'Profiles coexisting across one estate. Two Full-Platform regions provide resilient hybrid connectivity; other regions consume what they need. Region C’s Minimal platform reaches on-premises by reusing an existing ExpressRoute circuit; Region D’s does not. Both are valid. Names and placements are examples only.', X, 6.2, 12.73 - X);
+    s.addNotes('The order is the same for every profile; the profile decides how much each item contains. Item 3 is nothing for No platform, connections to an existing Full-Platform region for Remote platform, and a local hub for the two hub profiles. Different profiles can coexist across the estate: a region’s profile changes only when workload and platform requirements change, not because regions are expected to progress along a maturity path. Governance, security, compliance, automation, and operational standards are consistent across every profile. A region is ready for workloads when the required capability set is in place through standard automation, its open conditions are resolved, and every applicable readiness item is true; workloads can then onboard without platform exceptions.');
   }
 
-  // ───────────────────────── 3 · No Hub
+  // ───────────────────────── 3 · No platform
   {
     const s = L.slide('part4');
     profileHeader(s, 0, 'Profile 1 of 4', PROF[0], 'There is no hub to build. Preparing the region means letting the landing zone you already run accept it.');
@@ -168,7 +168,7 @@ module.exports = (pres, L) => {
       ['Monitoring and security.', 'Send logs to the existing workspace, or to one in the region when data must stay there. Extend security posture and threat detection.'],
       ['Backup and keys.', 'Create backup vaults and Key Vaults in the region.'],
     ], AX + 0.2, TY + 0.5, AW - 0.4, TH - 0.6, { gap: 9, fs: 12 });
-    zone(s, BX, BW, C.t50, 'Specific to No Hub', C.t700);
+    zone(s, BX, BW, C.t50, 'Specific to No platform', C.t700);
     leadParas(s, [
       ['Management groups.', 'Put subscriptions under the landing-zone management group for regions without corporate connectivity.'],
       ['Landing-zone provisioning.', 'Offer the region through subscription vending, with an unpeered spoke or no virtual network.'],
@@ -185,20 +185,20 @@ module.exports = (pres, L) => {
     consider(s, [
       ['Keep address space unique.', 'A spoke that isn’t peered today can move to a connected profile later only if its address space doesn’t overlap.'],
       ['Plan operator access.', 'Without a hub there is no shared management path. Decide how operators reach workloads, for example with Azure Bastion in the spoke.'],
-      ['Look for hidden dependencies.', 'Confirm that nothing requires connectivity to a geographic hub or an on-premises environment.'],
+      ['Look for hidden dependencies.', 'Confirm that nothing requires connectivity to a Full-Platform region or an on-premises environment.'],
     ]);
-    reassess(s, 'Workloads require a geographic hub, on-premises connectivity, centralized inspection, or private network paths beyond approved same-region spokes and Azure service endpoints.');
-    s.addNotes('Workload spokes run in the region with no private network path to a geographic hub, another region’s networks, or an on-premises environment; in the Azure landing zone architecture these are online landing zones. The four items on the left are what every other profile also needs, so the other profile slides show only what they add. New virtual networks default to private subnets without default outbound access, and a NAT gateway is the recommended method for most workloads that don’t need a firewall. A spoke using No Hub can’t use a DNS resolver in a hub, so decide who owns the private DNS zones, and check identity: a workload that needs domain controllers doesn’t fit this profile. Where applications in the region need east-west communication, evaluate direct spoke-to-spoke connectivity without assuming that a local hub is required, limited to spokes of the same environment and workload. Validate administration, identity, DNS, secrets, telemetry, data movement, software distribution, private endpoints, incident response, and support procedures.');
+    reassess(s, 'Workloads require a Full-Platform region, on-premises connectivity, centralized inspection, or private network paths beyond approved same-region spokes and Azure service endpoints.');
+    s.addNotes('Workload spokes run in the region with no private network path to a Full-Platform region, another region’s networks, or an on-premises environment; in the Azure landing zone architecture these are online landing zones. The four items on the left are what every other profile also needs, so the other profile slides show only what they add. New virtual networks default to private subnets without default outbound access, and a NAT gateway is the recommended method for most workloads that don’t need a firewall. A spoke using No platform can’t use a DNS resolver in a hub, so decide who owns the private DNS zones, and check identity: a workload that needs domain controllers doesn’t fit this profile. Where applications in the region need east-west communication, evaluate direct spoke-to-spoke connectivity without assuming that a local hub is required, limited to spokes of the same environment and workload. Validate administration, identity, DNS, secrets, telemetry, data movement, software distribution, private endpoints, incident response, and support procedures.');
   }
 
-  // ───────────────────────── 4 · Remote Hub
+  // ───────────────────────── 4 · Remote platform
   {
     const s = L.slide('part4');
     profileHeader(s, 1, 'Profile 2 of 4', PROF[1], 'No hub is built in the region. Preparing the region means connecting its spokes to the hub you already operate.');
     const AX = 0.6, AW = 3.95, MX = 4.75, MW = 4.45, LX2 = 9.4, LW2 = 12.73 - LX2;
     zone(s, AX, AW, C.wash, 'What you add', C.b700);
     leadBullets(s, [
-      ['A connection', 'from each spoke to the geographic hub in another region.'],
+      ['A connection', 'from each spoke to the Full-Platform region in another region.'],
       ['Route tables', 'that send traffic to the hub firewall, as for spokes in the hub’s own region.'],
       ['DNS settings', 'that point the spokes at the resolver or forwarders in the hub.'],
     ], AX + 0.2, TY + 0.48, AW - 0.4, 1.7, { gap: 5 });
@@ -238,27 +238,27 @@ module.exports = (pres, L) => {
       L.txt(s, t, LX2 + 0.45, y, LW2 - 0.55, lh, { fontSize: 11, color: C.ink, valign: 'middle', lineSpacingMultiple: 1.0 });
     });
     consider(s, [
-      ['Accept the dependency knowingly.', 'Document how workloads behave if the geographic hub or the connection to it is degraded.'],
+      ['Accept the dependency knowingly.', 'Document how workloads behave if the Full-Platform region or the connection to it is degraded.'],
       ['Measure before you commit.', 'Test latency and bandwidth with representative traffic.'],
       ['Count the cross-region cost.', 'Global peering carries traffic charges. Also evaluate routing, inspection paths, and hub capacity.'],
     ]);
     reassess(s, 'Cross-region traffic, latency, east-west communication, dependency criticality, regulatory requirements, scale, or availability coupling justify deploying selected connectivity or shared-service capabilities locally.');
-    s.addNotes('Workload spokes in the region connect across regions to an existing geographic hub and use its gateways, firewall, DNS, and shared services. Policy, address space, monitoring, backup, and keys are the same as for No Hub, and address space must not overlap the hub or the other spokes. How you connect depends on the topology of the hub you already run: global virtual network peering with gateway transit, or a connection to the existing virtual hub in Azure Virtual WAN, which describes this as a good option when the footprint is mostly in one region with a few remote spokes. Microsoft’s hub-spoke guidance recommends at least one hub per region so that a failure in one region’s hub doesn’t affect other regions; this profile trades that isolation for speed and cost, so use it for workloads that can tolerate the dependency. Also agree who operates the connection, routes, and DNS settings, and for spokes that exchange a lot of traffic consider direct connectivity between them.');
+    s.addNotes('Workload spokes in the region connect across regions to an existing Full-Platform region and use its gateways, firewall, DNS, and shared services. Policy, address space, monitoring, backup, and keys are the same as for No platform, and address space must not overlap the hub or the other spokes. How you connect depends on the topology of the hub you already run: global virtual network peering with gateway transit, or a connection to the existing virtual hub in Azure Virtual WAN, which describes this as a good option when the footprint is mostly in one region with a few remote spokes. Microsoft’s hub-spoke guidance recommends at least one hub per region so that a failure in one region’s hub doesn’t affect other regions; this profile trades that isolation for speed and cost, so use it for workloads that can tolerate the dependency. Also agree who operates the connection, routes, and DNS settings, and for spokes that exchange a lot of traffic consider direct connectivity between them.');
   }
 
-  // ───────────────────────── 5 · Minimal Hub
+  // ───────────────────────── 5 · Minimal platform
   {
     const s = L.slide('part4');
-    profileHeader(s, 2, 'Profile 3 of 4', PROF[2], 'A hub that holds only what its workloads need locally. Everything else comes from a geographic hub.');
+    profileHeader(s, 2, 'Profile 3 of 4', PROF[2], 'A hub that holds only what its workloads need locally. Everything else comes from a Full-Platform region.');
     const AX = 0.6, AW = 3.55, TX = 4.35, TW = 12.73 - TX;
     zone(s, AX, AW, C.wash, 'The base', C.b700);
     leadBullets(s, [
       ['A hub in the region:', 'a hub virtual network, or a virtual hub in your Virtual WAN.'],
-      ['A connection', 'to the geographic hub.'],
+      ['A connection', 'to the Full-Platform region.'],
       ['Connections', 'from the region’s spokes to the local hub.'],
       ['Routing', 'that sends traffic to the right hub.'],
     ], AX + 0.2, TY + 0.48, AW - 0.4, 1.9, { gap: 4 });
-    L.txt(s, [{ text: 'Same as No Hub: ', options: { bold: true, color: C.ink } }, { text: 'policy, address space, provisioning, monitoring, backup, and keys.' }], AX + 0.2, TY + 2.5, AW - 0.4, 0.75, { fontSize: 11, color: C.text, lineSpacingMultiple: 1.0 });
+    L.txt(s, [{ text: 'Same as No platform: ', options: { bold: true, color: C.ink } }, { text: 'policy, address space, provisioning, monitoring, backup, and keys.' }], AX + 0.2, TY + 2.5, AW - 0.4, 0.75, { fontSize: 11, color: C.text, lineSpacingMultiple: 1.0 });
     // optional components table
     label(s, 'Optional components', TX, TY + 0.02, 2.4);
     L.txt(s, 'Add one only when a workload requirement calls for it in the region.', TX + 2.4, TY, TW - 2.4, 0.24, { fontSize: 11, color: C.muted, valign: 'middle', align: 'right' });
@@ -267,9 +267,9 @@ module.exports = (pres, L) => {
     ['Component', 'Make it local when', 'Keep it remote when'].forEach((h, i) => label(s, h, cx[i], hy, cwid[i], C.faint));
     L.box(s, TX, hy + 0.25, TW, 0.012, { fill: C.s300, r: 0 });
     const T = [
-      ['ExpressRoute or VPN gateway', 'Workloads need an on-premises path for latency, bandwidth, or independence.', 'On-premises traffic is light or tolerates the path through the geographic hub.', 0.56],
-      ['Azure Firewall or network virtual appliance', 'Traffic between spokes is heavy, egress must leave the region, or data must be inspected inside a boundary.', 'Inspection in the geographic hub meets latency, cost, and data requirements.', 0.7],
-      ['DNS private resolver or forwarders', 'Name resolution must not depend on the link to another region.', 'Spokes can use the resolver in the geographic hub.', 0.56],
+      ['ExpressRoute or VPN gateway', 'Workloads need an on-premises path for latency, bandwidth, or independence.', 'On-premises traffic is light or tolerates the path through the Full-Platform region.', 0.56],
+      ['Azure Firewall or network virtual appliance', 'Traffic between spokes is heavy, egress must leave the region, or data must be inspected inside a boundary.', 'Inspection in the Full-Platform region meets latency, cost, and data requirements.', 0.7],
+      ['DNS private resolver or forwarders', 'Name resolution must not depend on the link to another region.', 'Spokes can use the resolver in the Full-Platform region.', 0.56],
       ['Domain controllers', 'Applications authenticate often, or must keep working when the other region is unavailable.', 'Authentication traffic is light and tolerates the dependency.', 0.68],
     ];
     let ty = hy + 0.3;
@@ -282,14 +282,14 @@ module.exports = (pres, L) => {
     });
     consider(s, [
       ['Write down the split.', 'Define which capabilities operate locally and which stay remote, so routing and responsibilities don’t overlap.'],
-      ['Plan the on-premises path when the hub has no gateway.', 'Peering isn’t transitive: connect the local hub to an existing circuit, also peer the spokes to the geographic hub, or use Virtual WAN.'],
-      ['Know which profile you have.', 'When the region can keep operating without the other hubs, it is a Full Hub; plan its cost and scope as one.'],
+      ['Plan the on-premises path when the hub has no gateway.', 'Peering isn’t transitive: connect the local hub to an existing circuit, also peer the spokes to the Full-Platform region, or use Virtual WAN.'],
+      ['Know which profile you have.', 'When the region can keep operating without the other hubs, it is a Full platform; plan its cost and scope as one.'],
     ]);
     reassess(s, 'Workload growth adds local connectivity or shared-service requirements, Interdependent Workload Groups need broader regional capabilities, independence requirements tighten, or significant local hybrid connectivity is required.');
-    s.addNotes('A Minimal Hub isn’t a fixed design: which components are local is a choice for each region, and the fewer you make local, the faster the region is ready and the less it costs to run. Every one has the same base, in the connectivity subscription you already use with a new resource group for the region. Deploy the components that must be local in the same order as for a Full Hub: inspection, gateways, name resolution, then identity. Example compositions, none of them a design to copy: a local on-premises path, a hub with a gateway on an existing circuit; local inspection and egress, a hub with a firewall and DNS forwarding; and local shared services only, a hub virtual network with DNS forwarding and connections to domain controllers. A requirement for latency, residency, or independence can also make another shared service local. When on-premises connectivity is required, check whether existing ExpressRoute circuits and gateway topology can provide it before adding circuits, and do not assume each Azure region needs a dedicated circuit. Test both failure directions, and plan route tables so that traffic between regions is inspected where it must be when hubs share circuits.');
+    s.addNotes('A Minimal platform isn’t a fixed design: which components are local is a choice for each region, and the fewer you make local, the faster the region is ready and the less it costs to run. Every one has the same base, in the connectivity subscription you already use with a new resource group for the region. Deploy the components that must be local in the same order as for a Full platform: inspection, gateways, name resolution, then identity. Example compositions, none of them a design to copy: a local on-premises path, a hub with a gateway on an existing circuit; local inspection and egress, a hub with a firewall and DNS forwarding; and local shared services only, a hub virtual network with DNS forwarding and connections to domain controllers. A requirement for latency, residency, or independence can also make another shared service local. When on-premises connectivity is required, check whether existing ExpressRoute circuits and gateway topology can provide it before adding circuits, and do not assume each Azure region needs a dedicated circuit. Test both failure directions, and plan route tables so that traffic between regions is inspected where it must be when hubs share circuits.');
   }
 
-  // ───────────────────────── 6 · Full Hub: build order
+  // ───────────────────────── 6 · Full platform: build order
   {
     const s = L.slide('part4');
     profileHeader(s, 3, 'Profile 4 of 4', PROF[3], 'A full local hub that can keep operating when other hubs are unavailable. It is the path the Cloud Adoption Framework describes.');
@@ -325,13 +325,13 @@ module.exports = (pres, L) => {
       ['Plan inspection between regions.', 'When hubs share circuits, route inter-region traffic through the firewall.'],
     ], CX, CW, BY, BH);
     reassess(s, 'Workload demand or requirements decrease, services can be safely centralized, dependencies change, or the full regional footprint no longer provides sufficient value relative to its cost and operational complexity.', RX, RW, BY, BH);
-    s.addNotes('The region gets a full local hub that can keep operating when other hubs are unavailable. This is the path the Cloud Adoption Framework describes for adding a region to an existing landing zone, so most of the work is documented there, including the detail of each step. Start with what every profile needs, then build the hub in this order for hub-and-spoke virtual networks or for Azure Virtual WAN. The resource group and hub virtual network go in the existing connectivity subscription; for identity, create a virtual network in the identity subscription, peer it to the hub, and deploy domain controllers if workloads need them. To connect the hub to the rest of the estate, use global peering for two regions, shared ExpressRoute circuits or Virtual WAN transit for more, and direct global peering between landing-zone virtual networks for a few workloads across regions. Gateways, firewall and egress, DNS, domain controllers, backup vaults, and Key Vaults are local; the log workspace is local or remote, and you start with the existing workspace unless data must stay in the region. A Full Hub uses the same operating model and control baselines as your other hubs. It doesn’t have to be an identical copy.');
+    s.addNotes('The region gets a full local hub that can keep operating when other hubs are unavailable. This is the path the Cloud Adoption Framework describes for adding a region to an existing landing zone, so most of the work is documented there, including the detail of each step. Start with what every profile needs, then build the hub in this order for hub-and-spoke virtual networks or for Azure Virtual WAN. The resource group and hub virtual network go in the existing connectivity subscription; for identity, create a virtual network in the identity subscription, peer it to the hub, and deploy domain controllers if workloads need them. To connect the hub to the rest of the estate, use global peering for two regions, shared ExpressRoute circuits or Virtual WAN transit for more, and direct global peering between landing-zone virtual networks for a few workloads across regions. Gateways, firewall and egress, DNS, domain controllers, backup vaults, and Key Vaults are local; the log workspace is local or remote, and you start with the existing workspace unless data must stay in the region. A Full platform uses the same operating model and control baselines as your other hubs. It doesn’t have to be an identical copy.');
   }
 
-  // ───────────────────────── 7 · Full Hub: design options, considerations, reassess
+  // ───────────────────────── 7 · Full platform: design options, considerations, reassess
   {
     const s = L.slide('part4');
-    profileHeader(s, 3, 'Local hub options', 'Hub design options', 'These implementations can sit behind a Minimal Hub or Full Hub. The profile describes capability, not a specific network build.');
+    profileHeader(s, 3, 'Local hub options', 'Hub design options', 'These implementations can sit behind a Minimal platform or Full platform. The profile describes capability, not a specific network build.');
     const H = [
       ['Azure Firewall hub', 'Platform-native routing, inspection, and egress with Azure Firewall.', [['Hub · Azure Firewall', C.b600]]],
       ['NVA firewall hub', 'Third-party network virtual appliances provide routing, inspection, or security.', [['Hub · NVA firewalls', C.b700]]],
@@ -352,14 +352,14 @@ module.exports = (pres, L) => {
       });
     });
     L.box(s, 0.6, 4.17, 12.13, 0.75, { fill: C.b50, r: 0.1 });
-    L.txt(s, [{ text: 'Any of these designs can sit behind a Minimal Hub or Full Hub. ', options: { bold: true, color: C.ink } }, { text: 'Profiles can be implemented using hub-and-spoke virtual networks, Azure Virtual WAN, or other approved Azure networking patterns. Topology determines how the capability is implemented; workload and platform requirements determine which profile is appropriate.' }], 0.82, 4.17, 11.7, 0.75, { fontSize: 11, color: C.text, valign: 'middle', lineSpacingMultiple: 1.0 });
-    s.addNotes('Profiles describe capability, not a specific network build, and these four implementations show how the same profile can be built differently. Any of them can sit behind a Minimal Hub or Full Hub; topology determines how the capability is implemented, while workload and platform requirements determine which profile is appropriate. Where on-premises connectivity is required, check whether existing ExpressRoute circuits can provide the reachability and resiliency before adding connectivity, and build hybrid connectivity to the resiliency recommendations: circuits from more than one peering location and zone-redundant gateways where the region supports them. Operate the hub like the other hubs by validating automation, observability, support ownership, security operations, configuration consistency, dependency behavior, and lifecycle management.');
+    L.txt(s, [{ text: 'Any of these designs can sit behind a Minimal platform or Full platform. ', options: { bold: true, color: C.ink } }, { text: 'Profiles can be implemented using hub-and-spoke virtual networks, Azure Virtual WAN, or other approved Azure networking patterns. Topology determines how the capability is implemented; workload and platform requirements determine which profile is appropriate.' }], 0.82, 4.17, 11.7, 0.75, { fontSize: 11, color: C.text, valign: 'middle', lineSpacingMultiple: 1.0 });
+    s.addNotes('Profiles describe capability, not a specific network build, and these four implementations show how the same profile can be built differently. Any of them can sit behind a Minimal platform or Full platform; topology determines how the capability is implemented, while workload and platform requirements determine which profile is appropriate. Where on-premises connectivity is required, check whether existing ExpressRoute circuits can provide the reachability and resiliency before adding connectivity, and build hybrid connectivity to the resiliency recommendations: circuits from more than one peering location and zone-redundant gateways where the region supports them. Operate the hub like the other hubs by validating automation, observability, support ownership, security operations, configuration consistency, dependency behavior, and lifecycle management.');
   }
 
   // ───────────────────────── 8 · Platform readiness checklist
   {
     const s = L.slide('part4');
-    L.header(s, 'Before workloads arrive', 'Platform readiness checklist for a new region', { tw: 8.3, lede: 'Plan early for the capabilities that the region’s connectivity profile and workload requirements call for.', lx: 9.1, lw: 3.63, ls: 12 });
+    L.header(s, 'Before workloads arrive', 'Platform readiness checklist for a new region', { tw: 8.3, lede: 'Plan early for the capabilities that the region’s Platform Services profile and workload requirements call for.', lx: 9.1, lw: 3.63, ls: 12 });
     const G = [
       ['network', C.b600, 'Network foundation', [
         ['IP address planning', 'Non-overlapping address space for future regions and profiles.', 1],
@@ -394,7 +394,7 @@ module.exports = (pres, L) => {
     L.box(s, 0.6, top, 12.13, nh, { fill: C.wash, r: 0.1 });
     L.badge(s, G[0][0], 0.75, top + 0.1, 0.36, G[0][1]);
     L.txt(s, G[0][2], 1.22, top + 0.1, 2.1, 0.36, { fontSize: 12, fontFace: F.semi, color: C.ink, valign: 'middle' });
-    L.txt(s, 'Private DNS, routing and inspection paths, and hybrid connectivity apply only to connected profiles. Everything else applies to every profile, including No Hub.', 3.5, top + 0.06, 9.1, 0.44, { fontSize: 11, color: C.muted, valign: 'middle', lineSpacingMultiple: 1.0 });
+    L.txt(s, 'Private DNS, routing and inspection paths, and hybrid connectivity apply only to connected profiles. Everything else applies to every profile, including No platform.', 3.5, top + 0.06, 9.1, 0.44, { fontSize: 11, color: C.muted, valign: 'middle', lineSpacingMultiple: 1.0 });
     const nw = (12.13 - 0.3 - 2 * 0.2) / 3;
     G[0][3].forEach(([n, d, k], j) => item(0.75 + (j % 3) * (nw + 0.2), top + 0.55 + Math.floor(j / 3) * rowH, nw, n, d, k));
     // the other three groups side by side
@@ -415,6 +415,6 @@ module.exports = (pres, L) => {
     L.box(s, 0.6, ry, 12.13, 6.85 - ry, { fill: C.g100, r: 0.1 });
     L.icon(s, 'check', 0.78, ry + (6.85 - ry - 0.26) / 2, 0.26, 'b', 'Check icon');
     L.txt(s, 'A region is ready for workloads when the required capability set is in place through standard automation, its open conditions are resolved, and every applicable item on the platform readiness checklist is true. Workloads can then onboard without platform exceptions.', 1.2, ry, 11.4, 6.85 - ry, { fontSize: 11, color: C.ink, valign: 'middle', lineSpacingMultiple: 1.0 });
-    s.addNotes('The checklist names what must be true, not how a specific hub is built. Plan common blockers during qualification. Private DNS across regions, routing and inspection, and hybrid connectivity apply only to connected profiles; the other items apply to every profile, including No Hub. Request quota before onboarding and reserve capacity where justified. Follow the Backup and restore and Key Vault service guides, designing keys separately from secrets and certificates. Later regions reuse this foundation instead of starting new projects.');
+    s.addNotes('The checklist names what must be true, not how a specific hub is built. Plan common blockers during qualification. Private DNS across regions, routing and inspection, and hybrid connectivity apply only to connected profiles; the other items apply to every profile, including No platform. Request quota before onboarding and reserve capacity where justified. Follow the Backup and restore and Key Vault service guides, designing keys separately from secrets and certificates. Later regions reuse this foundation instead of starting new projects.');
   }
 };

@@ -31,7 +31,7 @@ window.CATALOG = /* catalog.js: roles and products. Everything below this line i
   },
   "places": { "hub": "Hub VNet", "virtual-hub": "Virtual hub", "shared-services": "Shared services VNet", "spoke": "Spoke VNet" },
   "capabilities": {
-    "about": "A Minimal Hub's capabilities per topology: [editor label, short name]. Each is Local, From the geographic hub or Not needed.",
+    "about": "A Minimal platform's capabilities per topology: [editor label, short name]. Each is Local, From the Full-Platform region or Not needed.",
     "hub-spoke": { "firewall": ["Firewall", "firewall"], "dns": ["DNS", "DNS"], "hybrid": ["Hybrid gateway", "on-premises"],
       "ingress": ["Ingress (WAF)", "public ingress"], "bastion": ["Bastion", "Bastion"],
       "private_user_access": ["Private access", "private access"] },

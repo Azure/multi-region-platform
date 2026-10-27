@@ -1,7 +1,7 @@
 ---
 title: Multi-region platform strategy
 description: Extend Azure landing-zone principles so that additional Azure regions become qualified options that workloads can use selectively, without separate governance models or an identical platform footprint in every region.
-ms.date: 10/23/2026
+ms.date: 10/27/2026
 ms.topic: conceptual
 ---
 
@@ -16,7 +16,7 @@ A new region is often assumed to be a large project. With this approach, it is a
 | Common assumption | With this approach |
 |---|---|
 | A new region needs its own landing-zone design. | Reuse the existing landing zone. The region is added to the policies, automation, and monitoring you already run. See [Framework overview](./framework-overview.md#principles-and-constructs). |
-| Every region needs a full hub. | Start with the most efficient [connectivity profile](./connectivity-profiles.md) that meets the requirements. Two of the four profiles need no local hub. |
+| Every region needs a full hub. | Start with the most efficient [Platform Services profile](./connectivity-profiles.md) that meets the requirements. Two of the four profiles need no local hub. |
 | Every region needs another ExpressRoute circuit. | Reuse existing hybrid connectivity where reachability and resiliency requirements allow. Add circuits only when a requirement justifies them. See [Confirm hybrid connectivity](./hybrid-connectivity.md). |
 | Enabling a region means migrating workloads. | Nothing has to move. Workloads use the region when their own requirements call for it. See [Place workloads](./workload-placement.md). |
 | Qualification is a long assessment. | It is four checks, each with one question, answered from what your teams already know. Unknowns are recorded and revisited, not treated as blockers. See [Regional qualification](./regional-qualification.md). |
@@ -27,9 +27,9 @@ The first additional region takes the most thought, because the decisions are ma
 
 The framework has five parts. Each part answers one question.
 
-1. **[Understand concepts](./platform-and-workload.md).** What is a multi-region platform, what can a region provide, and what do applications need? Four [connectivity profiles](./connectivity-profiles.md) describe the platform options. Four [Workload Landing Zone archetypes](./application-landing-zone-archetypes.md) describe what applications require.
+1. **[Understand concepts](./platform-and-workload.md).** What is a multi-region platform, what can a region provide, and what do applications need? Four [Platform Services profiles](./connectivity-profiles.md) describe the platform options. Four [Workload Landing Zone archetypes](./application-landing-zone-archetypes.md) describe what applications require.
 1. **[Qualify regions](./regional-qualification.md).** Can this region support the workloads we expect? Four checks lead to one of four outcomes: excluded, candidate, conditional, or qualified.
-1. **[Select the regional design](./platform-architecture.md).** What should the platform provide in a qualified region? Make three choices from short lists: the connectivity profile, where each shared service is provided, and whether the hybrid connectivity you already have is reused. The region is then **selected**.
+1. **[Select the regional design](./platform-architecture.md).** What should the platform provide in a qualified region? Make three choices from short lists: the Platform Services profile, where each shared service is provided, and whether the hybrid connectivity you already have is reused. The region is then **selected**.
 1. **[Prepare the region](./prepare-region.md).** What has to exist before workloads arrive? Build only what the selected design calls for, through the automation you already run. Two of the four profiles need no hub. The region is then **ready for workloads**.
 1. **[Place workloads](./workload-placement.md).** Should this workload use the region now? Decide per workload, with current evidence. The region is then **in use**.
 
@@ -38,7 +38,7 @@ The framework has five parts. Each part answers one question.
 
 ## From a fixed pair to governed options
 
-:::image type="content" source="./media/fixed-pair-to-governed-options.png" alt-text="Diagram comparing a fixed primary and disaster-recovery region pair, where the full footprint is mirrored, with an adaptable platform in which six regions sit on one governed landing-zone foundation: two geographic hubs, a Minimal Hub, Remote Hub, No Hub, and a candidate region." lightbox="./media/fixed-pair-to-governed-options.png":::
+:::image type="content" source="./media/fixed-pair-to-governed-options.png" alt-text="Diagram comparing a fixed primary and disaster-recovery region pair, where the full footprint is mirrored, with an adaptable platform in which six regions sit on one governed landing-zone foundation: two Full-Platform regions, a Minimal platform, Remote platform, No platform, and a candidate region." lightbox="./media/fixed-pair-to-governed-options.png":::
 
 *From a fixed regional pair to governed regional options. Instead of mirroring a complete footprint in each new region, the platform extends one governed foundation and gives each region only the capability its workloads require.*
 

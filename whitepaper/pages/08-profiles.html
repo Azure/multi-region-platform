@@ -20,14 +20,14 @@
     <div class="num">01</div>
     <div style="flex:1">
       <div class="eyebrow">Understand concepts · What the platform provides</div>
-      <h1 class="sec-title mt8" style="font-size:28px;white-space:nowrap">Regional Platform Connectivity Profiles</h1>
+      <h1 class="sec-title mt8" style="font-size:28px;white-space:nowrap">Platform Services profiles</h1>
     </div>
     <p class="standfirst" style="width:270px;font-size:13.6px">Choose the most efficient profile that supports the workloads expected to use the region.</p>
   </div>
 
   <div class="g2 mt12" style="gap:34px;font-size:11.8px;line-height:1.5">
     <div>
-      <p>Enabling an additional Azure region doesn’t require changing or duplicating the full platform footprint of an existing geographic hub. An organization can maintain a small number of strategic geographic hubs, built with the {{PROFILE_4}} profile, that provide resilient hybrid connectivity and common enterprise services. Other regions can use a more efficient profile, such as {{PROFILE_2}} or {{PROFILE_3}}, and consume capabilities from those hubs when workload requirements permit.</p>
+      <p>Enabling an additional Azure region does not require changing or duplicating the full platform footprint of an existing full-service region. An organization can maintain a small number of strategic regions providing a more complete set of Platform Services, using the Full regional platform profile, that provide resilient hybrid connectivity and common enterprise services. Other regions can use a more efficient profile, such as {{PROFILE_2}} or {{PROFILE_3}}, and consume capabilities from those hubs when workload requirements permit.</p>
     </div>
     <div>
       <p>The four profiles form a spectrum: from {{PROFILE_1}}, with no dependency on another region’s hub, through {{PROFILE_2}} and {{PROFILE_3}}, to {{PROFILE_4}}, with greater local capability and independence. They aren’t maturity stages. A profile can remain the right target for a region as long as it continues to satisfy workload and platform requirements.</p>
@@ -36,12 +36,12 @@
   </div>
 
   <div class="figure mt24" id="fig14">
-    <div class="spec"><span class="bar"></span><span class="hd"></span><span class="l">No dependency on a geographic hub</span><span class="r">Greater local capability and independence</span></div>
+    <div class="spec"><span class="bar"></span><span class="hd"></span><span class="l">No dependency on a Full-Platform region</span><span class="r">Greater local capability and independence</span></div>
     <div class="sp4">
       <!-- 1 -->
       <div class="pc">
         <div class="ph"><span class="pn" style="background:var(--t600)">1</span><span class="pt">{{PROFILE_1}}</span></div>
-        <div class="pd">No private network path to a geographic hub, another region’s networks, or on-premises environments.</div>
+        <div class="pd">No private network path to a Full-Platform region, another region’s networks, or on-premises environments.</div>
         <div class="pg"><svg class="mini" width="206" height="128" viewBox="0 0 206 128">
           <rect x="4" y="4" width="198" height="88" rx="10" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"/>
           <use href="#i-pin" x="12" y="10" width="12" height="12" color="#0F6CBD"/><text x="27" y="20" font-size="8.6" font-weight="700" fill="#0F548C">New Region</text>
@@ -58,7 +58,7 @@
       <!-- 2 -->
       <div class="pc">
         <div class="ph"><span class="pn" style="background:var(--b600)">2</span><span class="pt">{{PROFILE_2}}</span></div>
-        <div class="pd">Spokes connect privately to an existing geographic hub in another region.</div>
+        <div class="pd">Spokes connect privately to an existing Full-Platform region in another region.</div>
         <div class="pg"><svg class="mini" width="206" height="128" viewBox="0 0 206 128">
           <rect x="4" y="4" width="92" height="118" rx="10" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"/>
           <use href="#i-pin" x="11" y="10" width="12" height="12" color="#0F6CBD"/><text x="26" y="20" font-size="8.6" font-weight="700" fill="#0F548C">New Region</text>
@@ -67,7 +67,7 @@
           <text x="50" y="112" text-anchor="middle" font-size="8" fill="#5B6778">local ingress</text>
           <rect x="120" y="4" width="82" height="118" rx="10" fill="#0F6CBD"/>
           <text x="161" y="19" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">Other region</text>
-          <text x="161" y="29" text-anchor="middle" font-size="8" fill="#fff">geographic hub</text>
+          <text x="161" y="29" text-anchor="middle" font-size="8" fill="#fff">Full-Platform region</text>
           <g font-size="8" fill="#fff" text-anchor="middle"><text x="161" y="46">Hybrid connectivity</text><text x="161" y="58">Inspection · egress</text><text x="161" y="70">Routing · DNS</text><text x="161" y="82">Identity</text><text x="161" y="94">Monitoring</text><text x="161" y="106">Shared services</text></g>
           <path d="M98 63h20" stroke="#0F6CBD" stroke-width="1.6"/><path d="M102 59l-4 4 4 4M114 59l4 4-4 4" fill="none" stroke="#0F6CBD" stroke-width="1.5"/>
         </svg></div>
@@ -92,7 +92,7 @@
           <rect x="82" y="84" width="52" height="34" rx="6" fill="#EDF8F6" stroke="#7CC9C3"/><rect x="100" y="93" width="16" height="16" rx="3.5" fill="#04807A"/>
           <path d="M144 52h22" stroke="#2B88D8" stroke-width="1.3" stroke-dasharray="3 3"/>
           <circle cx="182" cy="52" r="15" fill="#0F6CBD"/><circle cx="182" cy="52" r="5" fill="#fff"/>
-          <text x="182" y="80" text-anchor="middle" font-size="8" fill="#5B6778">geographic</text><text x="182" y="90" text-anchor="middle" font-size="8" fill="#5B6778">hub</text>
+          <text x="182" y="80" text-anchor="middle" font-size="7" fill="#5B6778">Full-Platform</text><text x="182" y="90" text-anchor="middle" font-size="8" fill="#5B6778">region</text>
         </svg></div>
         <div class="pf">Local shared services with selective connectivity, without a {{PROFILE_4}}.</div>
       </div>
@@ -118,7 +118,7 @@
         <div class="pf">Full local capabilities, when required by latency, traffic volume, compliance, or operational needs.</div>
       </div>
     </div>
-    <div class="figcap"><span class="fn">Figure 14</span><span class="ft"><b>The spectrum of regional platform connectivity profiles.</b> Moving right adds local capability and independence — and cost and operational scope. Services shown are examples; each hub includes only what its workloads require. Any profile can be the right long-term target.</span></div>
+    <div class="figcap"><span class="fn">Figure 14</span><span class="ft"><b>The spectrum of Platform Services profiles.</b> Moving right adds local capability and independence — and cost and operational scope. Services shown are examples; each hub includes only what its workloads require. Any profile can be the right long-term target.</span></div>
   </div>
 </div>
 </section>

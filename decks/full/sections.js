@@ -10,7 +10,7 @@ module.exports = [
   { key: 'front', label: 'Opening', footer: 'Agenda' },
   { key: 'summary', label: 'Executive summary', agenda: ['', 'Executive summary', 'The model on one page'] },
   { key: 'overview', label: 'Framework overview', agenda: ['', 'Framework overview', 'Drivers, constructs, and the adoption journey'] },
-  { key: 'part1', label: 'Part 1 · Understand concepts', agenda: ['1', 'Understand concepts', 'Two layers, four connectivity profiles, four archetypes'] },
+  { key: 'part1', label: 'Part 1 · Understand concepts', agenda: ['1', 'Understand concepts', 'Two layers, four Platform Services profiles, four archetypes'] },
   { key: 'part2', label: 'Part 2 · Qualify regions', agenda: ['2', 'Qualify regions', 'Four checks, the assessment outcome, and a decision tree'] },
   { key: 'part3', label: 'Part 3 · Select the regional design', agenda: ['3', 'Select the regional design', 'Three choices from short lists, and one design record'] },
   { key: 'part4', label: 'Part 4 · Prepare the region', agenda: ['4', 'Prepare the region', 'What to deploy for each profile, and a readiness checklist'] },

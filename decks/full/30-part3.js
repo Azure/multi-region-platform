@@ -3,7 +3,7 @@ const { C, F } = require('../lib');
 // Part 3 · Select the regional design: three choices from short lists, written into one design record.
 module.exports = (pres, L) => {
   const [CH1, CH2, CH3] = L.data.choices;
-  const PROF = L.data.profiles;   // No Hub, Remote Hub, Minimal Hub, Full Hub
+  const PROF = L.data.profiles;   // No platform, Remote platform, Minimal platform, Full platform
 
   // The question each choice answers: blue line under the title.
   const question = (s, text, w = 10.6) => L.txt(s, text, 0.6, 1.17, w, 0.5, { fontSize: 14, color: C.b700 });
@@ -33,7 +33,7 @@ module.exports = (pres, L) => {
       L.txt(s, c.select, x + 0.2, y + 0.75, cw - 0.4, 0.7, { fontSize: 12.5, color: C.b700 });
     });
 
-    // The three decisions on one path (hybrid connectivity → shared services → regional connectivity profile)
+    // The three decisions on one path (hybrid connectivity → shared services → Platform Services profile)
     const gy = 3.66, by = 4.14, bh = 2.2;
     const groups = [[0.6, 4.25, 3, C.s600], [5.1, 3.69, 2, C.b600], [9.04, 3.69, 1, C.t600]];
     groups.forEach(([x, w, n, c]) => {
@@ -54,14 +54,14 @@ module.exports = (pres, L) => {
     L.line(s, 4.87, by + bh / 2, 5.08, by + bh / 2, { color: C.b600 });
     L.box(s, 5.1, by, 3.69, bh, { fill: C.b50, line: C.b200, r: 0.1 });
     L.icon(s, 'hub', 5.28, by + 0.13, 0.32, 'b');
-    L.txt(s, [{ text: 'Geographic hubs and shared services', options: { fontFace: F.semi, fontSize: 12, color: C.b800, breakLine: true, paraSpaceAfter: 3 } }, { text: 'Reused where they satisfy requirements; each service provided locally, remotely, or centrally', options: { fontSize: 11, color: C.muted } }], 5.28, by + 0.55, 3.35, bh - 0.6);
+    L.txt(s, [{ text: 'Full-Platform regions and shared services', options: { fontFace: F.semi, fontSize: 12, color: C.b800, breakLine: true, paraSpaceAfter: 3 } }, { text: 'Reused where they satisfy requirements; each service provided locally, remotely, or centrally', options: { fontSize: 11, color: C.muted } }], 5.28, by + 0.55, 3.35, bh - 0.6);
     // group 3: Workload Landing Zones
     L.line(s, 8.81, by + bh / 2, 9.02, by + bh / 2, { color: C.b600, both: true });
     L.box(s, 9.04, by, 3.69, bh, { fill: C.t50, line: C.t300, r: 0.1 });
     L.icon(s, 'spoke', 9.22, by + 0.13, 0.32, 't');
-    L.txt(s, [{ text: 'Workload Landing Zones', options: { fontFace: F.semi, fontSize: 12, color: C.t700, breakLine: true, paraSpaceAfter: 3 } }, { text: 'Supported by the regional platform connectivity profile, selected by dependencies and requirements', options: { fontSize: 11, color: C.muted } }], 9.22, by + 0.55, 3.35, bh - 0.6);
+    L.txt(s, [{ text: 'Workload Landing Zones', options: { fontFace: F.semi, fontSize: 12, color: C.t700, breakLine: true, paraSpaceAfter: 3 } }, { text: 'Supported by the Platform Services profile, selected by dependencies and requirements', options: { fontSize: 11, color: C.muted } }], 9.22, by + 0.55, 3.35, bh - 0.6);
     L.caption(s, 'Figure', 'The three decisions on one path. They are related, but each is a separate decision.', 0.6, 6.5, 12.13);
-    s.addNotes('Selecting the regional design is a set of decisions, not a deployment. For each qualified region you make three choices, each from a short list: the connectivity profile, where each shared service is provided, and whether existing hybrid connectivity is reused. Each choice follows from the workloads you expect in the region, not from the footprint of an existing geographic hub. Nothing is built yet; deployment follows later, through the automation you already run. Connectivity that is specific to one application is not decided here. It is designed when the workload is placed.');
+    s.addNotes('Selecting the regional design is a set of decisions, not a deployment. For each qualified region you make three choices, each from a short list: the Platform Services profile, where each shared service is provided, and whether existing hybrid connectivity is reused. Each choice follows from the workloads you expect in the region, not from the footprint of an existing Full-Platform region. Nothing is built yet; deployment follows later, through the automation you already run. Connectivity that is specific to one application is not decided here. It is designed when the workload is placed.');
   }
 
   // ───────────────────────── The regional design record (after the three choices)
@@ -71,21 +71,21 @@ module.exports = (pres, L) => {
     // left: start from workload requirements
     L.box(s, 0.6, 1.6, 6.9, 2.0, { fill: C.wash, r: 0.12 });
     L.txt(s, 'Start from workload requirements', 0.8, 1.72, 6.5, 0.32, { fontSize: 14, fontFace: F.semi, color: C.ink });
-    L.txt(s, 'Requirements and dependencies determine the regional connectivity profile, for existing and for new workloads.', 0.8, 2.1, 6.5, 0.5, { fontSize: 11.5, color: C.b700 });
+    L.txt(s, 'Requirements and dependencies determine the Platform Services profile, for existing and for new workloads.', 0.8, 2.1, 6.5, 0.5, { fontSize: 11.5, color: C.b700 });
     leadBullets(s, [
-      ['Existing workloads:', 'use validated dependencies to decide whether existing geographic hubs still support them.'],
+      ['Existing workloads:', 'use validated dependencies to decide whether existing Full-Platform regions still support them.'],
       ['New workloads:', 'derive needs from the intended architecture; a new region does not automatically need a new platform footprint.'],
     ], 0.8, 2.68, 6.5, 0.85);
     // right: what to record
     L.box(s, 7.7, 1.6, 5.03, 2.0, { fill: C.b50, r: 0.12 });
     L.txt(s, 'What to record', 7.9, 1.72, 4.6, 0.32, { fontSize: 14, fontFace: F.semi, color: C.ink });
-    L.bullets(s, ['Selected connectivity profile', 'Placement of each shared service, and which hub provides the remote ones', 'Hybrid connectivity decision', 'Owner and date', 'Triggers that would reopen the decision'], 7.9, 2.12, 4.65, 1.4, { gap: 3 });
+    L.bullets(s, ['Selected Platform Services profile', 'Placement of each shared service, and which hub provides the remote ones', 'Hybrid connectivity decision', 'Owner and date', 'Triggers that would reopen the decision'], 7.9, 2.12, 4.65, 1.4, { gap: 3 });
     // example record
     L.txt(s, 'Example record', 0.6, 3.76, 4, 0.3, { fontSize: 14, fontFace: F.semi, color: C.ink, valign: 'middle' });
-    const head = ['Region', 'Connectivity profile', 'Shared services', 'Hybrid connectivity', 'Open conditions'];
+    const head = ['Region', 'Platform Services profile', 'Shared services', 'Hybrid connectivity', 'Open conditions'];
     const rows = [
       ['Region C', PROF[2], 'Local: selected capabilities. Remote from Region A: remaining shared services.', 'Reuse: existing foundation where required.', 'None'],
-      ['Region D', PROF[1], 'Remote from a geographic hub.', 'Reuse: via the hub where required.', 'Latency test with representative traffic.'],
+      ['Region D', PROF[1], 'Remote from a Full-Platform region.', 'Reuse: via the hub where required.', 'Latency test with representative traffic.'],
       ['Region E', PROF[0], 'None required.', 'Not required.', 'None'],
     ];
     const hOpt = { bold: true, fontSize: 10, color: C.muted, fill: { color: C.wash }, charSpacing: 1, valign: 'middle' };
@@ -97,13 +97,13 @@ module.exports = (pres, L) => {
     L.txt(s, [{ text: 'A region with a complete record is ', options: {} }, { text: 'selected', options: { bold: true } }, { text: '.', options: {} }], 1.25, 6.3, 4.4, 0.55, { fontSize: 12, fontFace: F.semi, color: C.ink, valign: 'middle' });
     L.box(s, 5.95, 6.3, 6.78, 0.55, { fill: C.wash, r: 0.1 });
     L.txt(s, [{ text: 'The ', options: {} }, { text: L.data.plannerName, options: { bold: true, color: C.b700, hyperlink: { url: L.data.workbookUrl, tooltip: 'Open the Multi-region planner' } } }, { text: ' walks through the three choices for each selected region and produces the regional design record.', options: {} }], 6.15, 6.3, 6.4, 0.55, { fontSize: 11, color: C.ink, valign: 'middle' });
-    s.addNotes('Use the workload requirements identified earlier to decide how workloads consume regional and centralized platform capabilities. Archetypes can inform the assessment, but the design follows each workload’s actual dependencies. Existing and new workloads follow the same rule: requirements and dependencies determine the regional connectivity profile. Keep one record per region. The record also names the open conditions of a conditional region, and it is updated when a reassessment trigger applies. The regions in the table are examples only.');
+    s.addNotes('Use the workload requirements identified earlier to decide how workloads consume regional and centralized platform capabilities. Archetypes can inform the assessment, but the design follows each workload’s actual dependencies. Existing and new workloads follow the same rule: requirements and dependencies determine the Platform Services profile. Keep one record per region. The record also names the open conditions of a conditional region, and it is updated when a reassessment trigger applies. The regions in the table are examples only.');
   };
 
   // ───────────────────────── Choice 1: principles and cost
   {
     const s = L.slide('part3');
-    L.header(s, 'Choice 1', 'Select the connectivity profile');
+    L.header(s, 'Choice 1', 'Select the Platform Services profile');
     question(s, 'What is the most efficient regional platform design that supports the identified requirements?', 11.5);
     // principles
     L.txt(s, 'Profile selection principles', 0.6, 1.8, 5.8, 0.32, { fontSize: 14, fontFace: F.semi, color: C.b700 });
@@ -145,11 +145,11 @@ module.exports = (pres, L) => {
   // ───────────────────────── Choice 1: decision tree
   {
     const s = L.slide('part3');
-    L.header(s, 'Choice 1 · Decision tool', 'Which connectivity profile should this region provide?', { tw: 8.2, lede: 'Stop at the first profile that satisfies the requirements. Two of the four profiles need no local hub.', lx: 9.1, lw: 3.63 });
+    L.header(s, 'Choice 1 · Decision tool', 'Which Platform Services profile should this region provide?', { tw: 8.2, lede: 'Stop at the first profile that satisfies the requirements. Two of the four profiles need no local hub.', lx: 9.1, lw: 3.63 });
     L.box(s, 1.85, 1.66, 4.3, 0.38, { fill: C.t600, r: 0.19 });
     L.txt(s, 'Workload scenarios expected in the region', 1.85, 1.66, 4.3, 0.38, { fontSize: 11, fontFace: F.semi, color: 'FFFFFF', align: 'center', valign: 'middle' });
     const Q = [
-      'Do workloads need a geographic hub, on-premises access, centralized inspection, or private network paths beyond approved same-region spokes and Azure service endpoints?',
+      'Do workloads need a Full-Platform region, on-premises access, centralized inspection, or private network paths beyond approved same-region spokes and Azure service endpoints?',
       'Can they tolerate the latency, availability coupling, data-transfer implications, and dependency on connectivity to another region?',
       'Do requirements justify a comprehensive local capability set: local hybrid connectivity, substantial shared services, strict latency or data-boundary controls, or independence from other hubs?',
     ];
@@ -178,9 +178,9 @@ module.exports = (pres, L) => {
     L.box(s, qx, fy, qw, 0.72, { fill: C.b700, r: 0.12 });
     L.glyph(s, 3, qx + 0.16, fy + 0.13);
     L.txt(s, [{ text: PROF[3], options: { fontFace: F.semi, fontSize: 12, breakLine: true } }, { text: 'Confirm that the required independence justifies the cost and operational scope.', options: { fontSize: 11, color: C.b100 } }], qx + 1.02, fy, qw - 1.12, 0.72, { color: 'FFFFFF', valign: 'middle' });
-    L.decision(s, 'Select the most efficient regional platform connectivity profile that satisfies the identified requirements and can evolve as regional adoption changes.', rx, fy - 0.05, rw, 1.32, 'b');
+    L.decision(s, 'Select the most efficient Platform Services profile that satisfies the identified requirements and can evolve as regional adoption changes.', rx, fy - 0.05, rw, 1.32, 'b');
     L.caption(s, 'Figure', 'Questions escalate from dependency, to tolerance of remote consumption, to required independence. The outcome is a platform capability, not a workload design.', 0.6, fy + 0.85, 6.5);
-    s.addNotes('Each question comes from the “fits when” criteria of the connectivity profiles. Stop at the first profile that satisfies the requirements identified in check 3. Two of the four profiles need no local hub, and only the Full Hub approaches the footprint of an existing geographic hub. The aim is the most efficient profile, not the maximum possible one: keep capabilities remote when the characteristics permit, and deploy locally only when a measurable requirement justifies it. Profiles can move in both directions, so revisit the selection when a reassessment trigger applies.');
+    s.addNotes('Each question comes from the “fits when” criteria of the Platform Services profiles. Stop at the first profile that satisfies the requirements identified in check 3. Two of the four profiles need no local hub, and only the Full platform approaches the footprint of an existing Full-Platform region. The aim is the most efficient profile, not the maximum possible one: keep capabilities remote when the characteristics permit, and deploy locally only when a measurable requirement justifies it. Profiles can move in both directions, so revisit the selection when a reassessment trigger applies.');
   }
 
   // ───────────────────────── Choice 2: place shared services
@@ -256,7 +256,7 @@ module.exports = (pres, L) => {
       ['Policy and access control are not tied to a region.', ''],
     ], sx, 2.85, sw, 2.5, { gap: 4 });
     L.decision(s, 'Define the most efficient platform capability set, where each capability will be provided, who will operate it, and what requirements would trigger future expansion.', sx, 5.3, sw, 1.55, 'b');
-    s.addNotes('Each shared service has one of three placements: local, remote, or global. The table is a starting point for each profile; change a cell when a workload requirement calls for it and record the reason. For a Minimal Hub, each row is a separate choice. Some placements are set by the service, not the profile: backup vaults and Key Vault are local in every profile, private DNS zones are global, and a single log workspace is the place to start. The one policy change for a new region is to allow it in any assignment that restricts locations. Also consider operational support, platform resiliency, ownership, and cost, and enable only the regional capabilities that expected workloads need.');
+    s.addNotes('Each shared service has one of three placements: local, remote, or global. The table is a starting point for each profile; change a cell when a workload requirement calls for it and record the reason. For a Minimal platform, each row is a separate choice. Some placements are set by the service, not the profile: backup vaults and Key Vault are local in every profile, private DNS zones are global, and a single log workspace is the place to start. The one policy change for a new region is to allow it in any assignment that restricts locations. Also consider operational support, platform resiliency, ownership, and cost, and enable only the regional capabilities that expected workloads need.');
   }
 
   // ───────────────────────── Choice 3: confirm hybrid connectivity
@@ -266,7 +266,7 @@ module.exports = (pres, L) => {
     question(s, 'Does the operating geography have resilient hybrid connectivity to Azure that satisfies the identified workload requirements?', 12.13);
     L.txt(s, 'Enabling an additional Azure region doesn’t by itself require another ExpressRoute circuit.', 0.6, 1.72, 12.13, 0.32, { fontSize: 15, fontFace: F.semi, color: C.ink });
     const O = [
-      ['Not required', 'x', 'FFFFFF', C.line, C.s600, 'The region uses No Hub, or its workloads need no private path to on-premises locations.'],
+      ['Not required', 'x', 'FFFFFF', C.line, C.s600, 'The region uses No platform, or its workloads need no private path to on-premises locations.'],
       ['Reuse', 'loop', C.b50, C.b200, C.b600, 'Existing circuits, gateways, and peering locations meet the reachability, latency, bandwidth, routing, and resilience the new region’s workloads need.'],
       ['Change', 'route', C.w50, C.w100, C.w600, 'The existing foundation can’t meet a requirement: diversity, failure-domain isolation, latency, bandwidth, routing, or resiliency. Record the requirement and the change it justifies.'],
     ];
@@ -293,7 +293,7 @@ module.exports = (pres, L) => {
       ['On-premises locations or users are far from the existing peering locations.', ''],
       ['Bandwidth or gateway capacity is exhausted.', ''],
       ['Workloads need a capability that doesn’t work across regions.', 'ExpressRoute FastPath, for example, doesn’t support global virtual network peering.'],
-      ['Keep an independent path.', 'The region must retain its on-premises connectivity when another region is unavailable; this usually points to a Full Hub.'],
+      ['Keep an independent path.', 'The region must retain its on-premises connectivity when another region is unavailable; this usually points to a Full platform.'],
     ], 7.0, 4.55, 5.73, 2.3, { gap: 4, leadColor: C.ink });
     s.addNotes('Enabling an additional Azure region doesn’t by itself require another ExpressRoute circuit. Evaluate the existing ExpressRoute, VPN, SD-WAN, or other hybrid connectivity against datacenter and user locations, latency, bandwidth, and routing requirements. Add circuits, peering locations, gateways, or more connectivity paths only where the existing foundation can’t provide the required reachability, diversity, or resilience. Microsoft recommends ExpressRoute circuits from more than one peering location, and a new region is a reason to check this. Measure latency on the real path before you decide that locations are too far from the peering locations.');
   }
