@@ -29,7 +29,7 @@ SITE_TITLE = "Multi-region platform"
 SITE_SUB = "Adaptable multi-region Azure platform"
 
 DOWNLOADS = [
-    ("Full technical guidance (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform.pdf", "pdf", "59 pages"),
+    ("Full technical guidance (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform.pdf", "pdf", "67 pages"),
     ("Executive brief (PDF)", "downloads/Adaptable-Multi-Region-Azure-Platform-Executive-Brief.pdf", "pdf", "14 pages"),
 ]
 
@@ -218,13 +218,25 @@ def postprocess(h):
 
 
 def key_vault_pattern_layout(h):
-    """Pair each pattern summary with its diagram for the website only."""
-    return re.sub(
-        r'(<h3\b[^>]*>Pattern [1-5]:.*?</h3>)\s*(<ul>.*?</ul>)\s*'
+    """Pair pattern diagrams and make article tables independently scrollable."""
+    h = re.sub(
+        r'(<h3\b[^>]*>Pattern [1-7]:.*?</h3>)\s*(<ul>.*?</ul>)\s*'
         r'(<figure\b[^>]*data-fig="key-vault-(?:secrets|keys)-[^"]+"[^>]*>.*?</figure>)',
         r'<div class="kv-pattern"><div class="kv-pattern-copy">\1\2</div>\3</div>',
         h, flags=re.S,
     )
+    def scroll_table(m):
+        table = m.group(1)
+        table = table.replace("<th>", '<th scope="col">')
+        table = re.sub(r"<tr>\s*<td>(.*?)</td>", r'<tr><th scope="row">\1</th>', table, flags=re.S)
+        wide = "keys-pattern-7" in table
+        label = "Key pattern comparison" if wide else "Key Vault comparison"
+        if "Application-level encryption" in table:
+            label = "Common key-management scenarios"
+        cls = "kv-table kv-wide" if wide else "kv-table"
+        return (f'<div class="table-wrap {cls}" tabindex="0" role="region" aria-label="{label}">'
+                f'<table>{table}</table></div>')
+    return re.sub(r'<div class="table-wrap"><table>(.*?)</table></div>', scroll_table, h, flags=re.S)
 
 
 # ───────────────────────────── navigation

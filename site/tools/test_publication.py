@@ -71,25 +71,34 @@ class PublicationTests(unittest.TestCase):
         self.assertNotIn("  word)", script)
         self.assertNotIn("python3 inline.py", script)
 
-    def test_key_vault_fits_five_pages_and_slides(self):
+    def test_key_vault_fits_five_pdf_pages_and_preserves_deck_coverage(self):
         pages = [page for page in build.publication_pages() if Path(page).name.startswith("22a4-kv")]
         self.assertEqual(len(pages), 5)
         result = subprocess.run(["node", "-e", """
-            let slides = 0, images = 0;
+            let slides = 0, images = 0, scenarioRows = 0;
             const L = {
               data: {siteUrl: 'https://example.invalid/'},
-              slide() { slides++; return {addTable() {}, addNotes() {}}; },
+              slide() {
+                slides++;
+                return {
+                  addTable(rows) {
+                    if (rows[0][0].text === 'Scenario') scenarioRows += rows.length - 1;
+                  },
+                  addNotes() {}
+                };
+              },
               header() {}, txt() {}, box() {},
               image(slide, file, box) {
-                const ratio = file.endsWith('decision-tree.png') ? 940 / 492 : 380 / 273;
+                const png = require('fs').readFileSync(file);
+                const ratio = png.readUInt32BE(16) / png.readUInt32BE(20);
                 if (Math.abs(box.w / box.h - ratio) > 0.001) throw Error('Distorted diagram');
                 images++;
               }
             };
             require('./decks/full/key-vault')({}, L);
-            console.log(JSON.stringify({slides, images}));
+            console.log(JSON.stringify({slides, images, scenarioRows}));
         """], cwd=ROOT, check=True, capture_output=True, text=True)
-        self.assertEqual(json.loads(result.stdout), {"slides": 5, "images": 8})
+        self.assertEqual(json.loads(result.stdout), {"slides": 9, "images": 10, "scenarioRows": 9})
 
     def test_decks_are_created_only_in_temp(self):
         for builder in ("build_full.js", "build_exec.js"):

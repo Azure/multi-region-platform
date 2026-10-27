@@ -49,6 +49,7 @@ with sync_playwright() as p:
           });
           document.querySelectorAll('main *').forEach(e => {
             if (e.closest('.fig-scale') || e.classList.contains('fig-stage')) return;
+            if (e.classList.contains('kv-table') && getComputedStyle(e).overflowX === 'auto') return;
             if (innerWidth <= 960 && e.classList.contains('table-wrap')) return;   // tables scroll sideways on small screens
             if (e.scrollWidth > e.clientWidth + 2 && getComputedStyle(e).overflowX !== 'visible') out.overflow.push((e.className || e.tagName) + '');
           });

@@ -1015,6 +1015,15 @@
 .wpf .kv-grid3 .kv-r { grid-template-columns: 58px 1fr; font-size: 10.2px; }
 .wpf .kv-grid3 .kv-h b { font-size: 12.6px; }
 .wpf .kv-grid3 .kv-card { padding: 12px 12px 10px; }
+.wpf .kv-quad { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.wpf .kv-quad .kv-card { display:grid; grid-template-columns:1.05fr 1fr; gap:0 10px; padding:12px; }
+.wpf .kv-quad .kv-h { grid-column:1 / -1; margin-bottom:6px; }
+.wpf .kv-quad .kv-h b { font-size:12px; }
+.wpf .kv-quad .kv-r { grid-template-columns:52px 1fr; font-size:10.4px; padding:4px 0; }
+.wpf .kv-quad .fig { grid-column:2; grid-row:2 / 6; align-self:center; margin:0; }
+.wpf .kv-scenarios { width:100%; border-collapse:collapse; font-size:9.6px; line-height:1.28; }
+.wpf .kv-scenarios th, .wpf .kv-scenarios td { border:1px solid var(--line); padding:3px 6px; text-align:left; vertical-align:top; }
+.wpf .kv-scenarios th { background:var(--b50); color:var(--ink); }
 .wpf .kv-lead { font-size: 12.4px; line-height: 1.45; color: var(--muted); }
 .wpf .kv-tag { display: inline-block; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: var(--b50); color: var(--b700); margin-left: 6px; vertical-align: middle; }
 .wpf .kv-card { border: 1px solid var(--b100); border-radius: 14px; padding: 14px 16px 12px; background: #fff; display: flex; flex-direction: column; }
@@ -1035,6 +1044,15 @@
 .wpf .kv-grid3 .kv-r { grid-template-columns: 58px 1fr; font-size: 10.2px; }
 .wpf .kv-grid3 .kv-h b { font-size: 12.6px; }
 .wpf .kv-grid3 .kv-card { padding: 12px 12px 10px; }
+.wpf .kv-quad { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.wpf .kv-quad .kv-card { display:grid; grid-template-columns:1.05fr 1fr; gap:0 10px; padding:12px; }
+.wpf .kv-quad .kv-h { grid-column:1 / -1; margin-bottom:6px; }
+.wpf .kv-quad .kv-h b { font-size:12px; }
+.wpf .kv-quad .kv-r { grid-template-columns:52px 1fr; font-size:10.4px; padding:4px 0; }
+.wpf .kv-quad .fig { grid-column:2; grid-row:2 / 6; align-self:center; margin:0; }
+.wpf .kv-scenarios { width:100%; border-collapse:collapse; font-size:9.6px; line-height:1.28; }
+.wpf .kv-scenarios th, .wpf .kv-scenarios td { border:1px solid var(--line); padding:3px 6px; text-align:left; vertical-align:top; }
+.wpf .kv-scenarios th { background:var(--b50); color:var(--ink); }
 .wpf .kv-lead { font-size: 12.4px; line-height: 1.45; color: var(--muted); }
 .wpf .kv-tag { display: inline-block; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: var(--b50); color: var(--b700); margin-left: 6px; vertical-align: middle; }
 .wpf .kv-card { border: 1px solid var(--b100); border-radius: 14px; padding: 14px 16px 12px; background: #fff; display: flex; flex-direction: column; }
@@ -1055,6 +1073,15 @@
 .wpf .kv-grid3 .kv-r { grid-template-columns: 58px 1fr; font-size: 10.2px; }
 .wpf .kv-grid3 .kv-h b { font-size: 12.6px; }
 .wpf .kv-grid3 .kv-card { padding: 12px 12px 10px; }
+.wpf .kv-quad { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.wpf .kv-quad .kv-card { display:grid; grid-template-columns:1.05fr 1fr; gap:0 10px; padding:12px; }
+.wpf .kv-quad .kv-h { grid-column:1 / -1; margin-bottom:6px; }
+.wpf .kv-quad .kv-h b { font-size:12px; }
+.wpf .kv-quad .kv-r { grid-template-columns:52px 1fr; font-size:10.4px; padding:4px 0; }
+.wpf .kv-quad .fig { grid-column:2; grid-row:2 / 6; align-self:center; margin:0; }
+.wpf .kv-scenarios { width:100%; border-collapse:collapse; font-size:9.6px; line-height:1.28; }
+.wpf .kv-scenarios th, .wpf .kv-scenarios td { border:1px solid var(--line); padding:3px 6px; text-align:left; vertical-align:top; }
+.wpf .kv-scenarios th { background:var(--b50); color:var(--ink); }
 .wpf .kv-lead { font-size: 12.4px; line-height: 1.45; color: var(--muted); }
 .wpf .kv-tag { display: inline-block; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: var(--b50); color: var(--b700); margin-left: 6px; vertical-align: middle; }
 .wpf .kv-card { border: 1px solid var(--b100); border-radius: 14px; padding: 14px 16px 12px; background: #fff; display: flex; flex-direction: column; }
@@ -1075,6 +1102,15 @@
 .wpf .kv-grid3 .kv-r { grid-template-columns: 58px 1fr; font-size: 10.2px; }
 .wpf .kv-grid3 .kv-h b { font-size: 12.6px; }
 .wpf .kv-grid3 .kv-card { padding: 12px 12px 10px; }
+.wpf .kv-quad { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.wpf .kv-quad .kv-card { display:grid; grid-template-columns:1.05fr 1fr; gap:0 10px; padding:12px; }
+.wpf .kv-quad .kv-h { grid-column:1 / -1; margin-bottom:6px; }
+.wpf .kv-quad .kv-h b { font-size:12px; }
+.wpf .kv-quad .kv-r { grid-template-columns:52px 1fr; font-size:10.4px; padding:4px 0; }
+.wpf .kv-quad .fig { grid-column:2; grid-row:2 / 6; align-self:center; margin:0; }
+.wpf .kv-scenarios { width:100%; border-collapse:collapse; font-size:9.6px; line-height:1.28; }
+.wpf .kv-scenarios th, .wpf .kv-scenarios td { border:1px solid var(--line); padding:3px 6px; text-align:left; vertical-align:top; }
+.wpf .kv-scenarios th { background:var(--b50); color:var(--ink); }
 .wpf .kv-lead { font-size: 12.4px; line-height: 1.45; color: var(--muted); }
 .wpf .kv-tag { display: inline-block; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: var(--b50); color: var(--b700); margin-left: 6px; vertical-align: middle; }
 .wpf .kv-card { border: 1px solid var(--b100); border-radius: 14px; padding: 14px 16px 12px; background: #fff; display: flex; flex-direction: column; }
@@ -1095,6 +1131,15 @@
 .wpf .kv-grid3 .kv-r { grid-template-columns: 58px 1fr; font-size: 10.2px; }
 .wpf .kv-grid3 .kv-h b { font-size: 12.6px; }
 .wpf .kv-grid3 .kv-card { padding: 12px 12px 10px; }
+.wpf .kv-quad { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.wpf .kv-quad .kv-card { display:grid; grid-template-columns:1.05fr 1fr; gap:0 10px; padding:12px; }
+.wpf .kv-quad .kv-h { grid-column:1 / -1; margin-bottom:6px; }
+.wpf .kv-quad .kv-h b { font-size:12px; }
+.wpf .kv-quad .kv-r { grid-template-columns:52px 1fr; font-size:10.4px; padding:4px 0; }
+.wpf .kv-quad .fig { grid-column:2; grid-row:2 / 6; align-self:center; margin:0; }
+.wpf .kv-scenarios { width:100%; border-collapse:collapse; font-size:9.6px; line-height:1.28; }
+.wpf .kv-scenarios th, .wpf .kv-scenarios td { border:1px solid var(--line); padding:3px 6px; text-align:left; vertical-align:top; }
+.wpf .kv-scenarios th { background:var(--b50); color:var(--ink); }
 .wpf .kv-lead { font-size: 12.4px; line-height: 1.45; color: var(--muted); }
 .wpf .kv-tag { display: inline-block; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: var(--b50); color: var(--b700); margin-left: 6px; vertical-align: middle; }
 .wpf table.pub.dns-compare td { padding: 7px 14px; }

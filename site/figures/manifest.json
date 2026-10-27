@@ -109,34 +109,44 @@
   "h": 273,
   "source": "figKVS2"
  },
- "key-vault-keys-vault-per-region": {
+ "key-vault-keys-standard-paired-region": {
   "w": 380,
   "h": 273,
   "source": "figKVK1"
  },
- "key-vault-keys-byok-per-region": {
+ "key-vault-keys-premium-paired-region": {
   "w": 380,
   "h": 273,
   "source": "figKVK2"
  },
- "key-vault-keys-managed-hsm-geo": {
+ "key-vault-keys-vault-per-region": {
   "w": 380,
   "h": 273,
   "source": "figKVK3"
  },
- "key-vault-keys-managed-hsm-geo-byok": {
+ "key-vault-keys-byok-per-region": {
   "w": 380,
   "h": 273,
   "source": "figKVK4"
  },
- "key-vault-keys-managed-hsm-ekm": {
+ "key-vault-keys-managed-hsm-geo": {
   "w": 380,
   "h": 273,
   "source": "figKVK5"
  },
  "key-vault-decision-tree": {
   "w": 940,
-  "h": 492,
+  "h": 562,
   "source": "figKVTree"
+ },
+ "key-vault-keys-managed-hsm-geo-byok": {
+  "w": 380,
+  "h": 273,
+  "source": "figKVK6"
+ },
+ "key-vault-keys-managed-hsm-ekm": {
+  "w": 380,
+  "h": 273,
+  "source": "figKVK7"
  }
 }

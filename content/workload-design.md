@@ -1,7 +1,7 @@
 ---
 title: Service Guides for Multi Region overview
 description: The regional and service behaviors a platform team should understand when it qualifies regional combinations, including paired and nonpaired regions, storage, backup, Key Vault, and private DNS, with links to workload design guidance.
-ms.date: 10/22/2026
+ms.date: 10/27/2026
 ms.topic: conceptual
 ---
 
@@ -27,7 +27,7 @@ The articles in this section cover the dependencies that most often decide wheth
 |---|---|
 | [Storage](./storage-across-regions.md) | Paired-region and region-of-choice behavior for Azure Storage replication. |
 | [Backup and restore](./restore-across-regions.md) | Cross Region Restore, Azure Site Recovery, and region-of-choice recovery. |
-| [Key Vault](./key-vault-across-regions.md) | Product selection, secrets and certificates, five key patterns, and a decision tree. |
+| [Key Vault](./key-vault-across-regions.md) | Product selection, secrets and certificates, seven key patterns, common scenarios, and a decision tree. |
 | [Private DNS zones](./private-dns-multi-region.md) | Global and regional zone designs for resources with private endpoints in multiple regions, including failover and policy considerations. |
 
 For related background, see [Paired and nonpaired regions](./paired-nonpaired-regions.md) and [Resiliency scenarios](./resiliency-scenarios.md) in Resources.

@@ -40,7 +40,7 @@ def pill(x, y, w, h, l1, l2, fill="#0F6CBD", c1="#fff", c2="#DDEBF9"):
 
 
 def region(x, title, vault1, vault2, note, status, kind, faded=False, vault_stroke="#0F6CBD"):
-    """Use the same regional container and vault geometry in all seven patterns."""
+    """Use the same regional container and vault geometry in all nine patterns."""
     op = ' opacity=".85"' if faded else ""
     s = f'<g{op}><rect x="{x}" y="96" width="150" height="140" rx="12" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"/>'
     s += f'<use href="#i-pin" x="{x + 8}" y="108" width="12" height="12" color="#0F6CBD"/><text x="{x + 24}" y="118" font-size="10" font-weight="700" fill="#0F548C">{title}</text>'
@@ -103,7 +103,23 @@ def d_s2():
     return svg(s, "A deployment pipeline loads secrets and certificates into the primary Key Vault. Microsoft asynchronously replicates them to its paired-region copy, which is read-only after Microsoft-managed failover.")
 
 
+def paired_key(tier):
+    s = source("Key Vault key generation", "Create the key in the primary vault")
+    s += region(A, "Region A", "Key Vault", tier + " (primary)", "key created here", "Read + write", "rw")
+    s += region(B, "Paired region", "Key Vault", "(Microsoft copy)", tier + " vault copy", "Read-only on failover", "ro", faded=True)
+    s += distribution() + replication() + legend("Dashed: Microsoft-managed asynchronous replication")
+    return svg(s, f"{tier} Key Vault generates a key in the primary region; Microsoft asynchronously replicates it to a paired-region copy of the same vault. Read-only after Microsoft-managed failover.")
+
+
 def d_k1():
+    return paired_key("Standard")
+
+
+def d_k2():
+    return paired_key("Premium")
+
+
+def d_k3():
     s = source("Key Vault key generation", "Create a different key in each regional vault")
     s += region(A, "Region A", "Key Vault", "Std or Premium", "key created here", "Full read + write", "rw")
     s += region(B, "Region B", "Key Vault", "Std or Premium", "key created here", "Full read + write", "rw")
@@ -111,7 +127,7 @@ def d_k1():
     return svg(s, "A separate Key Vault, Standard or Premium, in each region. Each vault creates its own key, so the two regions hold different keys and each reads and writes independently.")
 
 
-def d_k2():
+def d_k4():
     s = source(HSM_SOURCE, "BYOK: import the same key into each vault")
     s += region(A, "Region A", "Key Vault", "Premium", "key imported (BYOK)", "Full read + write", "rw")
     s += region(B, "Region B", "Key Vault", "Premium", "key imported (BYOK)", "Full read + write", "rw")
@@ -119,7 +135,7 @@ def d_k2():
     return svg(s, "A customer-owned external HSM is the key origin. The BYOK process imports the same key into a Premium vault in each region, with no vault-to-vault replication.")
 
 
-def d_k3():
+def d_k5():
     s = source("Managed HSM key generation", "Create the key in the primary region")
     s += region(A, "Region A", "Managed HSM", "(primary)", "key created here", "Read + write", "rw")
     s += region(B, "Region B", "Managed HSM", "(extended)", "same keys and roles", "Read + write", "rw")
@@ -127,7 +143,7 @@ def d_k3():
     return svg(s, "Managed HSM creates the key in the primary region. Asynchronous multi-region replication synchronizes keys and roles between the primary and extended regions. Both regions support reads and writes.")
 
 
-def d_k4():
+def d_k6():
     s = source(HSM_SOURCE, "BYOK: import the key into the primary region")
     s += region(A, "Region A", "Managed HSM", "(primary)", "key imported (BYOK)", "Read + write", "rw")
     s += region(B, "Region B", "Managed HSM", "(extended)", "replicated copy", "Read + write", "rw")
@@ -135,7 +151,7 @@ def d_k4():
     return svg(s, "A customer-owned external HSM imports the key into a Managed HSM in region A. Multi-region replication copies it to region B. Both regions stay active for reads and writes.")
 
 
-def d_k5():
+def d_k7():
     s = source(HSM_SOURCE, "Key stays here; never imported into Azure")
     s += region(A, "Region A", "Managed HSM", "+ EKM proxy", "external key reference", "Depends on failing part", "warn")
     s += (f'<g><rect x="{B}" y="96" width="150" height="140" rx="12" fill="#fff" stroke="#C7CFD9" stroke-dasharray="4 3"/>'
@@ -149,15 +165,18 @@ def d_k5():
     return svg(s, "A Managed HSM with an External Key Management proxy in region A uses a key that stays in the customer's own HSM outside Azure. Region B has no failover target because External Key Management does not support geo-replication.")
 
 
-DIAGRAMS = {"S1": d_s1, "S2": d_s2, "K1": d_k1, "K2": d_k2, "K3": d_k3, "K4": d_k4, "K5": d_k5}
+DIAGRAMS = {"S1": d_s1, "S2": d_s2, "K1": d_k1, "K2": d_k2, "K3": d_k3,
+            "K4": d_k4, "K5": d_k5, "K6": d_k6, "K7": d_k7}
 FIGNAMES = {
     "figKVS1": ("key-vault-secrets-per-region", "S1"),
     "figKVS2": ("key-vault-secrets-paired-region", "S2"),
-    "figKVK1": ("key-vault-keys-vault-per-region", "K1"),
-    "figKVK2": ("key-vault-keys-byok-per-region", "K2"),
-    "figKVK3": ("key-vault-keys-managed-hsm-geo", "K3"),
-    "figKVK4": ("key-vault-keys-managed-hsm-geo-byok", "K4"),
-    "figKVK5": ("key-vault-keys-managed-hsm-ekm", "K5"),
+    "figKVK1": ("key-vault-keys-standard-paired-region", "K1"),
+    "figKVK2": ("key-vault-keys-premium-paired-region", "K2"),
+    "figKVK3": ("key-vault-keys-vault-per-region", "K3"),
+    "figKVK4": ("key-vault-keys-byok-per-region", "K4"),
+    "figKVK5": ("key-vault-keys-managed-hsm-geo", "K5"),
+    "figKVK6": ("key-vault-keys-managed-hsm-geo-byok", "K6"),
+    "figKVK7": ("key-vault-keys-managed-hsm-ekm", "K7"),
     "figKVTree": ("key-vault-decision-tree", None),
 }
 
@@ -183,6 +202,15 @@ STYLE = """<style>
   .kv-grid3 .kv-r { grid-template-columns: 58px 1fr; font-size: 10.2px; }
   .kv-grid3 .kv-h b { font-size: 12.6px; }
   .kv-grid3 .kv-card { padding: 12px 12px 10px; }
+  .kv-quad { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .kv-quad .kv-card { display:grid; grid-template-columns:1.05fr 1fr; gap:0 10px; padding:12px; }
+  .kv-quad .kv-h { grid-column:1 / -1; margin-bottom:6px; }
+  .kv-quad .kv-h b { font-size:12px; }
+  .kv-quad .kv-r { grid-template-columns:52px 1fr; font-size:10.4px; padding:4px 0; }
+  .kv-quad .fig { grid-column:2; grid-row:2 / 6; align-self:center; margin:0; }
+  .kv-scenarios { width:100%; border-collapse:collapse; font-size:9.6px; line-height:1.28; }
+  .kv-scenarios th, .kv-scenarios td { border:1px solid var(--line); padding:3px 6px; text-align:left; vertical-align:top; }
+  .kv-scenarios th { background:var(--b50); color:var(--ink); }
   .kv-lead { font-size: 12.4px; line-height: 1.45; color: var(--muted); }
   .kv-tag { display: inline-block; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: var(--b50); color: var(--b700); margin-left: 6px; vertical-align: middle; }
 </style>"""
@@ -213,7 +241,7 @@ def page1():
     rows = [
         ("i-shield", "Protection", ["Software, FIPS 140 Level 1", "HSM-backed keys, FIPS 140-3 Level 3", "Single-tenant HSM, FIPS 140-3 Level 3", "Key stays in your own HSM outside Microsoft"]),
         ("i-gauge", "SLA", ["99.99%", "99.99%", "99.9% in one region; 99.99% when replicated across regions", "No end-to-end SLA; the Managed HSM SLA covers only the service"]),
-        ("i-doc", "Holds", ["Asymmetric keys, secrets, certificates", "Asymmetric and symmetric keys (preview), secrets, certificates", "Asymmetric and symmetric keys", "Asymmetric and symmetric keys"]),
+        ("i-doc", "Holds", ["Asymmetric keys, secrets, certificates", "Asymmetric and symmetric keys (preview), secrets, certificates", "Asymmetric and symmetric keys", "External key references"]),
         ("i-layers", "Zones", ["Automatic zone redundancy in zone regions", "Automatic zone redundancy in zone regions", "Not zone-based; partitions sit on separate servers in different racks", "Depends on your HSM"]),
         ("i-route", "Replication", ["To the paired region only (same geography); none without a pair", "To the paired region only (same geography); none without a pair", "Multi-region replication to one extended region, paired or not", "None; EKM does not support geo-replication"]),
         ("i-loop", "Failover", ["Microsoft-managed; read-only after failover", "Microsoft-managed; read-only after failover", "Both regions stay active; reads and writes continue", "No failover target; recovery depends on the failing part"]),
@@ -227,45 +255,50 @@ def page1():
     grid = (f'<div id="figKVTiers" class="figure" style="display:grid;grid-template-columns:116px repeat(4,1fr);margin-top:12px;border:1px solid var(--line);border-radius:10px;padding:0 0 4px;overflow:hidden">'
             f'<div></div>{th}{cells}</div>')
 
-    steps = [("Outage begins", "var(--s600)", "0"), ("Public endpoints fail over", "var(--b600)", "a few minutes"),
-             ("Private endpoints follow", "var(--b700)", "up to +20 minutes"), ("Vault is read-only", "var(--w600)", "until failover ends")]
-    tl = ""
-    for i, (t, c, sub) in enumerate(steps):
-        tl += (f'<div style="flex:1;position:relative"><div style="height:6px;background:{c};border-radius:3px"></div>'
-               f'<div style="font-size:11px;font-weight:650;color:var(--ink);margin-top:6px">{t}</div><div style="font-size:10.4px;color:var(--muted)">{sub}</div></div>')
-    constraints = [("3+0", "No paired region", "Qatar Central, Belgium Central, Spain Central"),
-                   ("3+1", "Paired, asymmetric", "West US 3 → East US"),
-                   ("3+1", "Paired outside the geography", "Brazil South ↔ South Central US")]
-    cs = "".join(f'<div style="display:flex;gap:10px;align-items:center;padding:5px 0;border-top:1px solid var(--line-soft)"><span style="min-width:36px;text-align:center;background:var(--b600);color:#fff;border-radius:8px;font-size:11px;font-weight:700;padding:4px 0">{a}</span>'
-                 f'<div style="font-size:10.8px;line-height:1.35"><b style="color:var(--ink)">{b}</b><br><span style="color:var(--muted)">{c}</span></div></div>' for a, b, c in constraints)
     body = (head("Service guides · Key Vault", "Azure Key Vault across regions",
-                 "Key Vault is often a runtime dependency. Key Vault is multi-tenant; Managed HSM is single-tenant. Pick the product first, then the pattern. Each product handles regions differently.")
+                 "Data can be recoverable while the application cannot start without its keys, secrets, and certificates. Key Vault is multi-tenant; Managed HSM is single-tenant.")
+            + '<div class="row mt12" style="gap:20px;align-items:stretch">'
+              '<div class="note" style="flex:1;padding:9px 12px"><h4>Paired regions</h4><p style="font-size:10.8px;line-height:1.4">Eligible Standard/Premium vaults replicate asynchronously to a Microsoft-managed copy. Microsoft may take hours or longer to initiate failover; afterward access is read-only. Private Link reconnection can add 20 minutes.</p></div>'
+              '<div class="note" style="flex:1;padding:9px 12px"><h4>Nonpaired regions and exceptions</h4><p style="font-size:10.8px;line-height:1.4">Use independent vaults or supported Managed HSM replication. Check 3+0, asymmetric 3+1, and cross-geography 3+1. Brazil South, Brazil Southeast, West US 3, and nonpaired regions lack Microsoft-managed vault failover.</p></div></div>'
             + grid
-            + '<div class="row mt12" style="gap:24px;align-items:stretch">'
-              '<div style="flex:1.45;border:1px solid var(--line);border-radius:12px;padding:12px 16px"><div class="eyebrow" style="color:var(--b600)">Paired-region failover · Standard and Premium</div>'
-              f'<div style="display:flex;gap:10px;margin-top:10px">{tl}</div>'
-              '<p style="font-size:10.6px;color:var(--muted);margin-top:8px;line-height:1.4">Microsoft replicates vault contents to the paired region and runs a tested failover. Some pairs, and all nonpaired regions, do not use this model. For the current list, see Reliability in Azure Key Vault.</p></div>'
-              f'<div style="flex:1;border:1px solid var(--line);border-radius:12px;padding:12px 16px"><div class="eyebrow" style="color:var(--b600)">Regional design constraints</div><div style="margin-top:6px">{cs}</div></div></div>'
-            + '<div class="note mt12" style="padding:9px 14px"><h4>Data can be safe while the app is down</h4>'
-              '<p class="small" style="color:var(--ink);font-size:10.8px">Applications can require keys, secrets, and certificates simply to initialize, so data can be recoverable while the application still cannot start.</p></div>')
+            + scenario_summary())
     return page(body)
+
+
+def scenario_summary():
+    rows = [
+        ("Application encryption", "1-6; 7 conditional", "Match application operations; preserve identifiers and versions."),
+        ("Storage GRS", "1, 2, 5, 6; 7 conditional", "One account/key dependency. Patterns 3-4 do not assign separate keys to GRS replicas."),
+        ("Storage object replication", "1-6; 7 conditional", "Separate accounts can use independent keys and vaults."),
+        ("VM disk encryption", "3, 4; others conditional", "Regional Disk Encryption Sets; distinguish guest encryption and Secure Key Release."),
+        ("Azure Site Recovery", "3 documented; 4 conditional", "Pre-create target-region Disk Encryption Set and vault access. Do not infer HSM support."),
+        ("PostgreSQL / MySQL Flexible", "Feature-specific", "Replica, geo-backup, and geo-restore have different key, region, and identity rules."),
+        ("Database geo-replication", "Service-specific", "SQL permits documented regional key copies; Cosmos DB has account-level CMK requirements."),
+        ("Database geo-restore", "Service-specific", "Retain historical keys; validate target region, identities, and backup requirements."),
+        ("Purview Information Protection", "Feature-specific; 4 for vault BYOK", "Identify tenant-key BYOK versus Customer Key. Preserve keys for old content."),
+    ]
+    cells = "".join(f"<tr><td>{s}</td><td>{p}</td><td>{c}</td></tr>" for s, p, c in rows)
+    return ('<div class="eyebrow mt12" style="color:var(--s600)">Common key-management scenarios · candidate Keys patterns, not universal support</div>'
+            '<table class="kv-scenarios" style="margin-top:5px"><thead><tr><th>Scenario</th><th>Patterns</th><th>Critical condition</th></tr></thead>'
+            f'<tbody>{cells}</tbody></table><p style="font-size:9.6px;color:var(--muted);margin-top:5px">'
+            'The <a href="https://azure.github.io/multi-region-platform/key-vault-across-regions.html#common-key-management-scenarios">online scenario matrix and detailed sections</a> compare all seven patterns with service-specific references. Conditional = validate the exact feature, topology, and key operations.</p>')
 
 
 def page2():
     c1 = card("1", "Key Vault in each region", [
-        ("cr", "Created in", "Each vault. CI/CD and IaC load the same secrets and certificates into every vault."),
+        ("cr", "Created in", "An approved pipeline loads secrets and certificates into each regional vault. IaC configures the vaults."),
         ("ok", "Outage", "Each region keeps full read and write on its own vault."),
         ("bf", "Best for", "Mission-critical workloads that need a short recovery time."),
         ("lm", "Watch for", "You must keep the vaults in sync with your pipeline."),
     ], "figKVS1", "S1")
     c2 = card("2", "Key Vault in a paired region", [
-        ("cr", "Created in", "One vault. Microsoft fails it over to the paired region."),
+        ("cr", "Created in", "Pipeline populates primary; Microsoft asynchronously replicates to its paired-region copy."),
         ("ok", "Outage", "Read-only until failover ends: you can read, but not create, update, or rotate."),
         ("bf", "Best for", "Less critical workloads that accept read-only access and Microsoft's failover timing."),
-        ("lm", "Watch for", "Fails over only to a pair in the same geography that is paired in both directions."),
+        ("lm", "Watch for", "Check eligible same-geography pairing and exclusions. Microsoft can delay failover for hours or longer."),
     ], "figKVS2", "S2")
     guide = ('<div class="row mt12" style="gap:20px;align-items:stretch"><div class="note" style="flex:1;padding:10px 14px"><h4>Design guidance</h4>'
-             '<p class="small" style="color:var(--ink);font-size:10.8px">Treat each region as its own deployment stamp with its own vault. Roll secrets out through a pipeline, one region at a time, so one bad change cannot reach every region. App-level fallback to another region\'s vault is optional and needs careful design of networking (private endpoints) and identity (managed identities). Do not treat the IaC repository itself as a store for secret values.</p></div>'
+             '<p class="small" style="color:var(--ink);font-size:10.8px">Treat each region as a deployment stamp. Roll secrets out one region at a time; a bad change must not reach every vault at once. Optional app-level fallback needs private connectivity, managed identities, and version selection. Never store secret values in the IaC repository.</p></div>'
              '<div style="flex:.8;background:var(--s800);border-radius:12px;padding:10px 16px;color:#fff;display:flex;flex-direction:column;justify-content:center"><p style="font-size:11.4px;line-height:1.4;color:#fff">Managed HSM and EKM do not hold secrets or certificates. Use Standard or Premium for both.</p></div></div>')
     body = (head("Service guides · Key Vault · Secrets and certificates", "Secrets and certificates: two patterns",
                  "Secrets and certificates can be loaded into any vault by a pipeline. That makes a vault in each region practical.")
@@ -274,52 +307,61 @@ def page2():
 
 
 def page3():
-    k1 = card("1", "One Key Vault per region", [
-        ("cr", "Created in", "Key Vault Standard or Premium, one vault per workload per region."),
-        ("ok", "Outage", "Each region works on its own vault, full read and write."),
-        ("bf", "Best for", "Workloads whose services can use a separate key in each region."),
-        ("lm", "Watch for", "Services that geo-replicate cannot use two vaults. Storage with GRS uses one key from one vault for both copies, so a vault outage affects both."),
+    k1 = card("1", "Standard vault + paired-region replication", [
+        ("cr", "Origin", "Software-protected key generated in the primary vault."),
+        ("ok", "Outage", "Read-only after Microsoft-managed failover."),
+        ("bf", "Best for", "Software protection; accepts Microsoft recovery timing."),
+        ("lm", "Watch for", "Eligible pair only. No key creation or rotation during failover."),
     ], "figKVK1", "K1")
-    k2 = card("2", "One Premium vault per region + external HSM", [
-        ("cr", "Created in", "Imported from your external HSM (BYOK) into a Premium vault in each region."),
-        ("ok", "Outage", "Each region works on its own vault, full read and write."),
-        ("bf", "Best for", "You must own and hold the master key, or meet BYOK rules, and want to control recovery time."),
-        ("lm", "Watch for", "Same service limits as pattern 1, and extra cost."),
+    k2 = card("2", "Premium vault + paired-region replication", [
+        ("cr", "Origin", "HSM-protected key generated in the primary vault."),
+        ("ok", "Outage", "Read-only after Microsoft-managed failover."),
+        ("bf", "Best for", "HSM protection; accepts Microsoft recovery timing."),
+        ("lm", "Watch for", "Premium uses the same regional recovery model as Standard."),
     ], "figKVK2", "K2")
+    k3 = card("3", "One Key Vault per region", [
+        ("cr", "Origin", "Generate a different key in each Standard or Premium vault."),
+        ("ok", "Outage", "Full local read and write in the surviving region."),
+        ("bf", "Best for", "Services allowing independent regional keys."),
+        ("lm", "Watch for", "Not separate keys for replicas of one GRS storage account."),
+    ], "figKVK3", "K3")
+    k4 = card("4", "Premium vault per region + external HSM / BYOK", [
+        ("cr", "Origin", "Customer-owned external HSM; import into each vault."),
+        ("ok", "Outage", "Full local read and write in the surviving region."),
+        ("bf", "Best for", "External key origin with independent regional vaults."),
+        ("lm", "Watch for", "Pattern 3 service constraints; coordinate imports and rotation."),
+    ], "figKVK4", "K4")
     body = (head("Service guides · Key Vault · Keys (1 of 2)", "Keys: vault-based patterns",
-                 "Patterns 1 and 2 use Key Vault. Customer-managed keys have extra limits, so design them separately from secrets.")
-            + f'<div class="kv-grid2 mt12">{k1}{k2}</div>'
-            + '<div class="note mt12" style="padding:9px 14px"><h4>Check before you pick</h4><p class="small" style="color:var(--ink);font-size:10.8px">Confirm that every service using the key supports your pattern. Standard does not support BYOK; check supported HSMs for Premium. Customer-managed keys have extra limits, so design them separately from secrets.</p></div>')
+                 "Keys - Patterns 1-4 use vaults. Compare Microsoft-managed recovery with independent regional vaults; confirm the consuming service supports the topology.")
+            + f'<div class="kv-quad mt12">{k1}{k2}{k3}{k4}</div>'
+            + '<div class="note mt12" style="padding:9px 14px"><h4>Key origin is not the same as recovery</h4><p class="small" style="color:var(--ink);font-size:10.8px">CMKs protect a service data encryption key. Standard supports software-key import; the HSM-to-HSM BYOK transfer patterns use Premium or Managed HSM. Importing the same material into two vaults does not automatically make a service support two vaults. Preserve required historical key versions.</p></div>')
     return page(body)
 
 
 def page4():
-    k3 = card("3", "Managed HSM with geo-replication", [
+    k5 = card("5", "Managed HSM with geo-replication", [
         ("cr", "Created in", "Managed HSM with multi-region replication."),
         ("ok", "Outage", "Reads and writes stay available in the healthy region."),
-        ("bf", "Best for", "Own and hold the master key; mission-critical with customer-controlled recovery."),
+        ("bf", "Best for", "Supported shared-key dependencies with a customer-selected extended region."),
         ("lm", "Watch for", "Cost. Keys, role definitions, and role assignments replicate asynchronously within 6 minutes; last changes may be lost if the primary cannot be recovered."),
-    ], "figKVK3", "K3")
-    k4 = card("4", "Managed HSM geo-replication + external HSM", [
+    ], "figKVK5", "K5")
+    k6 = card("6", "Managed HSM geo-replication + external HSM / BYOK", [
         ("cr", "Created in", "Imported from your external HSM, then replicated."),
         ("ok", "Outage", "Reads and writes stay available in the healthy region."),
-        ("bf", "Best for", "Same as pattern 3, with your HSM as the key origin."),
-        ("lm", "Watch for", "Cost. Same replication window as pattern 3."),
-    ], "figKVK4", "K4")
-    k5 = card("5", "Managed HSM without geo-replication + EKM", [
+        ("bf", "Best for", "Same as Pattern 5, with a customer-owned external HSM as origin."),
+        ("lm", "Watch for", "Cost, imports, and the same replication window as Pattern 5."),
+    ], "figKVK6", "K6")
+    k7 = card("7", "Managed HSM without geo-replication + EKM", [
         ("cr", "Created in", "Key never leaves your HSM."),
         ("ok", "Outage", "Depends on the failing part: Managed HSM, EKM proxy, your HSM, or the region. No failover target, so wait for restore."),
         ("bf", "Best for", "You must own and hold the key outside Microsoft."),
-        ("lm", "Watch for", "No geo-replication or end-to-end SLA. Proxy or HSM failures can interrupt Azure workloads and do not count against their SLAs."),
-    ], "figKVK5", "K5")
+        ("lm", "Watch for", "No geo-replication or end-to-end SLA. External dependency failures can interrupt workloads; verify each service integration."),
+    ], "figKVK7", "K7")
     body = (head("Service guides · Key Vault · Keys (2 of 2)", "Keys: Managed HSM patterns",
-                 "Patterns 3 to 5 use Managed HSM. Use two regions with replication, or keep the key in your own HSM.")
-            + f'<div class="kv-grid3 mt12">{k3}{k4}{k5}</div>'
+                 "Keys - Patterns 5-7 use Managed HSM. Replicate Azure-held keys, or keep physical key custody outside Microsoft. EKM does not support Secure Key Release.")
+            + f'<div class="kv-grid3 mt12">{k5}{k6}{k7}</div>'
             + '<p class="small muted mt8" style="font-size:10.2px">Enable Managed HSM multi-region replication to one extended region. Both regions are active and Azure Traffic Manager routes to the closest one; avoid caching DNS longer than the TTL. EKM adds network round trips to your proxy and HSM on every key operation. Managed HSM does not support backup and restore of external keys: recreate the external key reference.</p>')
     return page(body)
-
-
-NODE = dict(h=52)
 
 
 def node(x, y, w, t1, t2="", kind="q"):
@@ -330,92 +372,92 @@ def node(x, y, w, t1, t2="", kind="q"):
                             "r": ("#0F6CBD", "#0F6CBD", "#fff", "#DDEBF9")}[kind]
     s = f'<rect x="{x}" y="{y}" width="{w}" height="52" rx="10" fill="{fill}" stroke="{stroke}" stroke-width="1.3"/>'
     if t2:
-        s += f'<text x="{x + 10}" y="{y + 21}" font-size="10.6" font-weight="700" fill="{c1}">{t1}</text><text x="{x + 10}" y="{y + 38}" font-size="9.6" fill="{c2}">{t2}</text>'
+        s += f'<text x="{x + 10}" y="{y + 21}" font-size="14.4" font-weight="700" fill="{c1}">{t1}</text><text x="{x + 10}" y="{y + 38}" font-size="13" fill="{c2}">{t2}</text>'
     else:
-        s += f'<text x="{x + 10}" y="{y + 31}" font-size="10.6" font-weight="650" fill="{c1}">{t1}</text>'
-    return s
-
-
-def qnode(x, y, w, l1, l2):
-    return (f'<rect x="{x}" y="{y}" width="{w}" height="52" rx="10" fill="#fff" stroke="#0F6CBD" stroke-width="1.3"/>'
-            f'<text x="{x + 10}" y="{y + 22}" font-size="10.4" font-weight="650" fill="#0A2340">{l1}</text>'
-            f'<text x="{x + 10}" y="{y + 37}" font-size="10.4" font-weight="650" fill="#0A2340">{l2}</text>')
-
-
-def lab(x, y, t, c="#0F548C"):
-    return f'<text x="{x}" y="{y}" font-size="9.4" font-weight="700" fill="{c}">{t}</text>'
-
-
-def ln(d, head=None, c="#2B88D8"):
-    s = f'<path d="{d}" fill="none" stroke="{c}" stroke-width="1.6"/>'
-    if head:
-        s += f'<path d="{head}" fill="none" stroke="{c}" stroke-width="1.6" stroke-linejoin="round"/>'
+        s += f'<text x="{x + 10}" y="{y + 31}" font-size="14.4" font-weight="650" fill="{c1}">{t1}</text>'
     return s
 
 
 def tree_svg():
-    BX, BW = 180, 250
-    CX, CW = 470, 210
-    DX, DW = 720, 220
-    r = [0, 74, 168, 242, 304, 376, 438]
-    mid = BX + BW // 2
+    def box(x, y, title, detail, kind="q"):
+        return node(x, y, 340 if x == 850 else 310, title, detail, kind)
 
-    def yes(x0, x1, y, lx=None):
-        return ln(f"M{x0} {y + 26} H{x1}", f"M{x1 - 6} {y + 21}l6 5-6 5") + lab(lx or x0 + 8, y + 19, "Yes")
+    def link(d, x, y, label):
+        return (f'<path d="{d}" fill="none" stroke="#2B88D8" stroke-width="2" marker-end="url(#kv-tree-arrow)"/>'
+                f'<text x="{x}" y="{y}" font-size="13" font-weight="700" fill="#0F548C">{label}</text>')
 
-    def no_down(x, y0, y1):
-        return ln(f"M{x} {y0 + 52} V{y1}", f"M{x - 5} {y1 - 6}l5 6 5-6") + lab(x + 8, y0 + 52 + 17, "No")
+    def right(x, y, target, label="Yes"):
+        return link(f"M{x} {y + 26} C{x + 30} {y + 26} {target - 30} {y + 26} {target} {y + 26}",
+                    x + 12, y + 17, label)
 
-    s = ""
-    s += '<rect x="0" y="214" width="140" height="52" rx="26" fill="#243A57"/><text x="70" y="237" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">What are you</text><text x="70" y="252" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">protecting?</text>'
-    s += ln("M140 240 C164 240 156 26 180 26", "M174 21l6 5-6 5") + lab(150, 110, "Secrets or", "#04807A").replace("<text", '<text text-anchor="end"') + lab(150, 122, "certificates", "#04807A").replace("<text", '<text text-anchor="end"')
-    s += ln(f"M140 240 C164 240 156 {r[2] + 26} 180 {r[2] + 26}", f"M174 {r[2] + 21}l6 5-6 5") + lab(140, 200, "Keys", "#0F548C").replace("<text", '<text text-anchor="end"')
-    s += qnode(BX, r[0], BW, "Need full read and write in the", "surviving region (short recovery time)?")
-    s += yes(BX + BW, DX, r[0]) + node(DX, r[0], DW, "Secrets pattern 1", "Key Vault in each region", "s")
-    s += no_down(mid, r[0], r[1])
-    s += qnode(BX, r[1], BW, "Is there a pair in the same geography,", "paired in both directions?")
-    s += yes(BX + BW, DX, r[1]) + node(DX, r[1], DW, "Secrets pattern 2", "Key Vault in a paired region", "s")
-    s += lab(mid + 8, r[1] + 70, "No: use secrets pattern 1", "#04807A")
-    s += qnode(BX, r[2], BW, "Must the key stay in your own HSM", "outside Microsoft?")
-    s += yes(BX + BW, DX, r[2]) + node(DX, r[2], DW, "Keys pattern 5", "Managed HSM + EKM", "w")
-    s += no_down(mid, r[2], r[3])
-    s += qnode(BX, r[3], BW, "Mission-critical: need read and write in", "a healthy region during failover?")
-    s += yes(BX + BW, CX, r[3])
-    s += qnode(CX, r[3], CW, "Must you import the key from", "your own HSM (BYOK)?")
-    s += yes(CX + CW, DX, r[3], CX + CW + 4) + node(DX, r[3], DW, "Keys pattern 4", "Managed HSM geo-replication + external HSM", "k")
-    cm = CX + CW // 2
-    s += ln(f"M{cm} {r[3] + 52} V{r[4] + 26} H{DX}", f"M{DX - 6} {r[4] + 21}l6 5-6 5") + lab(cm + 8, r[3] + 69, "No")
-    s += node(DX, r[4], DW, "Keys pattern 3", "Managed HSM with geo-replication", "k")
-    s += no_down(mid, r[3], r[5])
-    s += qnode(BX, r[5], BW, "Must you import the key from", "your own HSM (BYOK)?")
-    s += yes(BX + BW, DX, r[5]) + node(DX, r[5], DW, "Keys pattern 2", "Premium vault per region + external HSM", "k")
-    s += ln(f"M{mid} {r[5] + 52} V{r[6] + 26} H{DX}", f"M{DX - 6} {r[6] + 21}l6 5-6 5") + lab(mid + 8, r[5] + 69, "No")
-    s += node(DX, r[6], DW, "Keys pattern 1", "One Key Vault per region", "k")
+    def down(x, y, target):
+        return link(f"M{x} {y + 52} C{x} {y + 62} {x} {target - 10} {x} {target}",
+                    x + 10, y + 70, "No")
+
+    s = '<defs><marker id="kv-tree-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#2B88D8" stroke-width="1.5"/></marker></defs>'
+    s += '<text x="50" y="20" font-size="17" font-weight="700" fill="#04807A">Secrets and certificates</text>'
+    s += box(50, 36, "Need full read and write", "in the surviving region?")
+    s += right(360, 36, 450, "No")
+    s += box(450, 36, "Eligible same-geography pair", "and accept read-only recovery?")
+    s += box(850, 0, "Secrets and certificates - Pattern 2", "One vault with a paired-region copy", "s")
+    s += box(850, 92, "Secrets and certificates - Pattern 1", "Independent regional vaults", "s")
+    s += link("M760 62 C810 62 810 26 850 26", 773, 48, "Yes")
+    s += link("M605 88 C605 118 810 118 850 118", 615, 107, "No")
+    s += link("M205 88 C205 174 810 174 850 118", 215, 145, "Yes")
+    s += '<text x="50" y="194" font-size="17" font-weight="700" fill="#0F548C">Keys - validate the consuming service first</text>'
+    s += box(50, 210, "Must physical key custody remain", "in an HSM outside Microsoft?")
+    s += right(360, 210, 850)
+    s += box(850, 210, "Keys - Pattern 7", "Managed HSM + EKM; no geo-replication", "w")
+    s += down(205, 210, 284)
+    s += box(50, 284, "Need a shared replicated key store", "with healthy-region read and write?")
+    s += right(360, 284, 450)
+    s += box(450, 284, "External HSM as key origin?", "Import key material through BYOK")
+    s += right(760, 284, 850)
+    s += box(850, 284, "Keys - Pattern 6", "Replicated Managed HSM + BYOK", "k")
+    s += link("M605 336 C605 384 810 384 850 384", 615, 359, "No")
+    s += box(850, 358, "Keys - Pattern 5", "Replicated Managed HSM; generate key", "k")
+    s += down(205, 284, 432)
+    s += box(50, 432, "Can the service use independent", "regional vaults and keys?")
+    s += right(360, 432, 450)
+    s += box(450, 432, "External HSM as key origin?", "Import key material through BYOK")
+    s += right(760, 432, 850)
+    s += box(850, 432, "Keys - Pattern 4", "Premium vault per region + BYOK", "k")
+    s += link("M605 484 C605 532 810 532 850 532", 615, 507, "No")
+    s += box(850, 506, "Keys - Pattern 3", "Regional vaults; generate independent keys", "k")
+    s += down(205, 432, 580)
+    s += box(50, 580, "Eligible pair and accept Microsoft", "recovery timing and read-only access?")
+    s += right(360, 580, 450)
+    s += box(450, 580, "Require HSM-protected keys?", "Otherwise use software-protected keys")
+    s += right(760, 580, 850)
+    s += box(850, 580, "Keys - Pattern 2", "Premium vault + paired-region copy", "k")
+    s += link("M605 632 C605 680 810 680 850 680", 615, 655, "No")
+    s += box(850, 654, "Keys - Pattern 1", "Standard vault + paired-region copy", "k")
+    s += down(205, 580, 654)
+    s += box(50, 654, "Revisit the workload design", "No candidate meets these requirements", "w")
     return s
 
 
 def page5():
     inner = tree_svg()
-    svg_tree = (f'<svg viewBox="0 0 940 492" width="100%" role="img" aria-label="Decision tree. For secrets and certificates: if you need full read and write in the surviving region, use a Key Vault in each region; otherwise, if a pair exists in the same geography and is paired both ways, use a Key Vault in a paired region. For keys: if the key must stay in your own HSM outside Microsoft, use Managed HSM with EKM; otherwise, if you need read and write in a healthy region during failover, use Managed HSM with geo-replication, with an external HSM if you import the key; otherwise use a Premium vault per region with an external HSM if you import the key, or one Key Vault per region." '
+    svg_tree = (f'<svg viewBox="0 0 1220 730" width="100%" role="img" aria-label="Decision tree covering Secrets and certificates - Patterns 1-2 and Keys - Patterns 1-7. Check the consuming service, external key custody, shared replicated key requirements, independent regional key support, eligible pairing, BYOK, and HSM protection." '
                 f'font-family="{FONT}" style="display:block">{inner}</svg>')
     refs = [
         ("Reliability in Azure Key Vault", "https://learn.microsoft.com/azure/reliability/reliability-key-vault"),
         ("Azure Key Vault availability and redundancy", "https://learn.microsoft.com/azure/key-vault/general/disaster-recovery-guidance"),
         ("Azure paired regions", "https://learn.microsoft.com/azure/reliability/regions-paired"),
-        ("Regions that support availability zones", "https://learn.microsoft.com/azure/reliability/availability-zones-region-support"),
         ("Managed HSM multi-region replication", "https://learn.microsoft.com/azure/key-vault/managed-hsm/multi-region-replication"),
-        ("Managed HSM overview", "https://learn.microsoft.com/azure/key-vault/managed-hsm/overview"),
+        ("External key management", "https://learn.microsoft.com/azure/key-vault/managed-hsm/external-key-management-overview"),
         ("Supported HSMs for BYOK", "https://learn.microsoft.com/azure/key-vault/keys/hsm-protected-keys"),
-        ("Services that support customer-managed keys", "https://learn.microsoft.com/azure/security/fundamentals/encryption-models"),
+        ("Services that support customer-managed keys", "https://learn.microsoft.com/azure/security/fundamentals/encryption-customer-managed-keys-support"),
         ("How to choose the right key management solution", "https://learn.microsoft.com/azure/security/fundamentals/key-management-choose"),
         ("Key Vault and Managed HSM SLAs", "https://www.microsoft.com/licensing/docs/view/Service-Level-Agreements-SLA-for-Online-Services"),
     ]
     items = "".join(f'<li><a href="{u}">{t}</a></li>' for t, u in refs)
     body = (head("Service guides · Key Vault · Decision tree", "Which Key Vault pattern fits?",
-                 "Answer from the left. Each answer ends at one pattern from the previous pages. Validate current service behavior before you commit.")
-            + f'<div class="figure" id="figKVTree" style="margin-top:8px">{svg_tree}</div>'
+                 "Choose a candidate, not a universal support guarantee. Validate the scenario conditions on page 1 and the detailed online guidance.")
+            + f'<div class="figure" id="figKVTree" data-export-width="940" style="margin-top:8px">{svg_tree}</div>'
             + '<div class="eyebrow mt8" style="color:var(--s600)">Reference links · Microsoft Learn</div>'
-            + f'<ul style="list-style:none;columns:2;column-gap:30px;margin-top:4px;font-size:10.2px;line-height:1.55">{items}</ul>')
+            + f'<ul style="list-style:none;columns:3;column-gap:18px;margin-top:4px;font-size:9.6px;line-height:1.45">{items}</ul>')
     return page(body)
 
 
