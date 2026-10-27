@@ -457,7 +457,7 @@ def legend(y):
              ("train", "#8661C5", "Transit between neighborhoods", "Connectivity between regions"),
              ("lane", "#E0607E", "Express toll lanes", "ExpressRoute"),
              ("campus", "#243A57", "Office campus", "On-premises"),
-             ("hospital", "#D13438", "Police, fire, hospitals, utilities", "Shared services"),
+             ("hospital", "#D13438", "Police, fire, hospitals, utilities", "Platform services"),
              ("scales", "#5C2E91", "Laws, codes, zoning", "Governance and policy")]
     o = [f'<rect x="40" y="{y}" width="{W - 80}" height="92" rx="20" fill="#071A31" fill-opacity=".4" stroke="#FFFFFF" stroke-opacity=".18"/>']
     colw = (W - 120) / len(items)
@@ -608,10 +608,10 @@ def pdf_figure():
         '<h4>Laws <em>Governance and policy</em></h4>',
         row(_ic("scales"), "City hall", "Laws, codes, and zoning: <i>governance and policy</i>, set once for the whole city."),
         row(_swatch("limits"), "City limits", "Where the laws apply: every neighborhood, Lakeside included."),
-        '<h4>City services <em>Shared services</em></h4>',
+        '<h4>City services <em>Platform services</em></h4>',
         '<div class="sv">' + "".join(f'<div>{_ic(k)}{n}</div>' for k, n in services) + '</div>',
-        '<div class="svn">Together they are the platform&rsquo;s <i>shared services</i>. Downtown has every one. Riverside has a fire station and a clinic. '
-        'Hillcrest and Midtown use Downtown&rsquo;s. Lakeside needs none.</div>',
+        '<div class="svn">Platform Services span <i>Security, Identity, Management, and Networking</i>. Downtown offers the full set; '
+        'other neighborhoods keep only the capabilities they need locally.</div>',
     ])
     homes = [(1, LABELS[0], "Lakeside"), (2, LABELS[1], "Midtown"), (3, LABELS[2], "Hillcrest"), (4, LABELS[3], "Riverside")]
     who = ('<div class="who">'

@@ -64,6 +64,7 @@ module.exports = (pres, L) => {
   {
     const s = L.slide('x1');
     L.header(s, '', 'An operating model that keeps working as the environment changes', { tw: 8.2, lede: 'The architecture should not depend on the regions we pick today staying the right answer.', lx: 8.9, lw: 3.83 });
+    const platformServices = 'Security\nIdentity\nManagement\nNetworking';
     const y0 = 1.75;
     // left: a fixed regional pair
     L.box(s, 0.6, y0, 4.6, 4.35, { fill: C.wash, r: 0.14 });
@@ -73,9 +74,10 @@ module.exports = (pres, L) => {
       L.box(s, x, y0 + 0.55, 1.85, 1.8, { fill: 'FFFFFF', line: C.b300, dash: 'dash', r: 0.1 });
       L.icon(s, 'pin', x + 0.12, y0 + 0.65, 0.18, 'b');
       L.txt(s, n, x + 0.36, y0 + 0.62, 1.4, 0.24, { fontSize: 10.5, bold: true, color: C.b700 });
-      [['Workloads', C.t600, 'FFFFFF'], ['Shared services', C.b100, C.b800], ['Hub & connectivity', C.b600, 'FFFFFF']].forEach(([t, f, c], j) => {
-        L.box(s, x + 0.12, y0 + 0.95 + j * 0.43, 1.61, 0.36, { fill: f, r: 0.06 });
-        L.txt(s, t, x + 0.12, y0 + 0.95 + j * 0.43, 1.61, 0.36, { fontSize: 10, bold: true, color: c, align: 'center', valign: 'middle' });
+      [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']].forEach(([t, f, c], j) => {
+        const height = j ? 0.86 : 0.32;
+        L.box(s, x + 0.12, y0 + 0.95 + j * 0.4, 1.61, height, { fill: f, r: 0.06 });
+        L.txt(s, t, x + 0.12, y0 + 0.95 + j * 0.4, 1.61, height, { fontSize: 10, bold: true, color: c, align: 'center', valign: 'middle' });
       });
     });
     L.line(s, 2.72, y0 + 1.45, 3.08, y0 + 1.45, { color: C.faint, both: true, w: 1 });
@@ -94,9 +96,9 @@ module.exports = (pres, L) => {
     L.txt(s, 'An adaptable multi-region platform', 6.2, y0 + 0.14, 3.6, 0.3, { fontSize: 13, fontFace: F.semi, color: C.ink });
     L.txt(s, 'REGIONS AS QUALIFIED OPTIONS', 9.75, y0 + 0.18, 2.78, 0.25, { fontSize: 9, bold: true, color: C.b600, align: 'right', charSpacing: 1.5 });
     const regs = [
-      ['Region A', 1.95, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full platform', C.b600, 'FFFFFF']], 'Full-Platform region'],
-      ['Region B', 1.95, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full platform', C.b600, 'FFFFFF']], 'Full-Platform region'],
-      ['Region C', 1.55, [['Workloads', C.t600, 'FFFFFF'], ['Minimal platform', 'FFFFFF', C.b700, C.b300]], 'Minimal platform'],
+      ['Region A', 1.95, [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']], 'Full-Platform region'],
+      ['Region B', 1.95, [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']], 'Full-Platform region'],
+      ['Region C', 1.55, [['Workloads', C.t600, 'FFFFFF'], ['Selected local\nservices', 'FFFFFF', C.b700, C.b300]], 'Minimal platform'],
       ['Region D', 1.2, [['Spokes', C.t600, 'FFFFFF']], 'Remote platform', 'via hub'],
       ['Region E', 0.98, [['No platform', C.t100, C.t700]], 'No platform'],
       ['Region F', 0.8, [], 'Not enabled', 'Candidate'],
@@ -107,10 +109,13 @@ module.exports = (pres, L) => {
       L.box(s, x, y, rw, h, { fill: 'FFFFFF', line: i === 5 ? C.b500 : C.b300, dash: 'dash', r: 0.08 });
       L.icon(s, 'pin', x + 0.06, y + 0.08, 0.15, 'b');
       L.txt(s, n, x + 0.24, y + 0.05, 0.74, 0.22, { fontSize: 9.5, bold: true, color: C.b700, valign: 'middle' });
-      blocks.slice().reverse().forEach(([t, f, c, ln], j) => {
-        const by = base - 0.1 - (j + 1) * 0.38 + 0.06;
-        L.box(s, x + 0.03, by, rw - 0.06, 0.32, { fill: f, line: ln, r: 0.05 });
-        L.txt(s, t, x + 0.03, by, rw - 0.06, 0.32, { fontSize: 9.5, bold: true, color: c, align: 'center', valign: 'middle' });
+      let by = base - 0.1;
+      blocks.slice().reverse().forEach(([t, f, c, ln]) => {
+        const bh = t === platformServices ? 0.8 : t.length > 12 ? 0.46 : 0.32;
+        by -= bh;
+        L.box(s, x + 0.03, by, rw - 0.06, bh, { fill: f, line: ln, r: 0.05 });
+        L.txt(s, t, x + 0.03, by, rw - 0.06, bh, { fontSize: 9.5, bold: true, color: c, align: 'center', valign: 'middle' });
+        by -= 0.06;
       });
       if (extra) L.txt(s, extra, x, base - (blocks.length ? 0.1 + blocks.length * 0.38 + 0.26 : 0.46), rw, 0.22, { fontSize: 9.5, bold: true, color: C.b600, align: 'center', valign: 'middle' });
       L.txt(s, lab, x - 0.04, base + 0.07, rw + 0.08, 0.22, { fontSize: 10, color: C.muted, align: 'center' });
@@ -118,7 +123,7 @@ module.exports = (pres, L) => {
     L.box(s, 6.2, y0 + 3.45, 6.33, 0.7, { fill: C.s800, r: 0.08 });
     L.txt(s, 'One consistent, governed Azure landing-zone foundation', 6.4, y0 + 3.49, 6.0, 0.3, { fontSize: 12, fontFace: F.semi, color: 'FFFFFF', valign: 'middle' });
     L.txt(s, 'Identity · Connectivity · Security · Management · Application delivery', 6.4, y0 + 3.79, 6.0, 0.3, { fontSize: 10.5, color: 'C9D4E2', valign: 'middle' });
-    L.caption(s, 'Figure 1', 'From a fixed regional pair to governed regional options. The platform extends one governed foundation and gives each region only the capability its workloads require. Regional capability is a spectrum, not a copy.', 0.6, 6.3, 12.1);
+    L.caption(s, 'Figure 1', 'Platform Services span Security, Identity, Management, and Networking. The platform extends one governed foundation; each region provides only the local capabilities its workloads require.', 0.6, 6.3, 12.1);
     s.addNotes('Talk track — reframe the objective: "I think the opportunity is to evolve how we think about Landing Zones. Traditionally, we have tended to think about an Azure Landing Zone as something we establish in a particular region, with a fairly complete set of networking, security, management and shared services around it. That works well when the regions we want to use are relatively static. But the challenge we are trying to solve now is different. We want an operating model that can continue to work even as the external environment around us changes." Connect this need for flexibility to potential future regulatory and power constraints across European countries, while noting that Microsoft continues investing and growing capacity across Europe. For regulated customers, this begins the discussion on how to de-risk continued growth in an ever-changing, industry-wide dynamic.');
   }
 
@@ -214,7 +219,7 @@ module.exports = (pres, L) => {
     const P = [
       [C.t600, 'No private network path to a Full-Platform region, another region’s networks, or on-premises.', 'No hub or hybrid gateway. Approved local peering and Azure service endpoints only.'],
       [C.c600, 'Spokes connect privately to an existing Full-Platform region in another region.', 'Centralized services used; local services not required.'],
-      [C.b500, 'Selected local services and connectivity, based on workload requirements.', 'Local shared services with selective connectivity, without a Full platform.'],
+      [C.b500, 'Selected local services and connectivity, based on workload requirements.', 'Selected local platform services; other required capabilities consumed remotely or globally.'],
       [C.b700, 'Comprehensive local capabilities, with connectivity to spokes, on-premises, and other regions.', 'Full local capabilities when required by latency, traffic volume, compliance, or operations.'],
     ];
     P.forEach(([c, d, f], i) => {
@@ -237,26 +242,26 @@ module.exports = (pres, L) => {
         mini(1.1);
         spoke(ax + 0.25, ay + 0.34, 0.6, 0.48); spoke(ax + 0.25, ay + 0.91, 0.6, 0.48);
         L.box(s, ax + 1.45, ay, aw - 1.45, mh, { fill: C.b600, r: 0.1 });
-        L.txt(s, [{ text: 'Other region', options: { bold: true, fontSize: 11, breakLine: true } }, { text: 'Full-Platform region', options: { fontSize: 10.5, color: 'FFFFFF', breakLine: true } }, { text: 'Hybrid · egress · DNS', options: { fontSize: 10, color: 'DDEBF9' } }], ax + 1.48, ay + 0.08, aw - 1.5, 1.35, { color: 'FFFFFF', align: 'center', valign: 'middle' });
+        L.txt(s, [{ text: 'Full-Platform region', options: { bold: true, fontSize: 10.5, breakLine: true } }, { text: 'Security\nIdentity\nManagement\nNetworking\nOn-premises path', options: { fontSize: 10, color: 'DDEBF9' } }], ax + 1.48, ay + 0.08, aw - 1.5, 1.35, { color: 'FFFFFF', align: 'center', valign: 'middle' });
         L.line(s, ax + 1.12, ay + 0.78, ax + 1.43, ay + 0.78, { color: C.b600, both: true });
       }
       if (i === 2) {
         mini(2.0);
         L.box(s, ax + 0.08, ay + 0.28, 1.84, 0.55, { fill: 'FFFFFF', line: C.b500, lw: 1.5, r: 0.07 });
-        L.txt(s, [{ text: 'Shared services (selected)', options: { bold: true, breakLine: true } }, { text: 'DNS · Gateway · Monitor', options: { fontSize: 10 } }], ax + 0.08, ay + 0.28, 1.84, 0.55, { fontSize: 10.5, color: C.b700, align: 'center', valign: 'middle' });
+        L.txt(s, [{ text: 'Selected platform services', options: { bold: true, breakLine: true } }, { text: 'DNS · Gateway · Monitor', options: { fontSize: 10 } }], ax + 0.08, ay + 0.28, 1.84, 0.55, { fontSize: 10.5, color: C.b700, align: 'center', valign: 'middle' });
         spoke(ax + 0.2, ay + 0.98, 0.72, 0.46); spoke(ax + 1.08, ay + 0.98, 0.72, 0.46);
         L.line(s, ax + 2.0, ay + 0.47, ax + 2.1, ay + 0.47, { color: C.b500, dash: 'dash', arrow: false });
         L.oval(s, ax + 2.1, ay + 0.36, 0.34, { fill: C.b600 }); L.oval(s, ax + 2.21, ay + 0.47, 0.12, { fill: 'FFFFFF' });
-        L.txt(s, 'strategic\nhub', ax + 1.98, ay + 0.78, 0.62, 0.46, { fontSize: 10.5, color: C.s700, align: 'center' });
+        L.txt(s, 'Full-Platform\nregion', ax + 1.82, ay + 0.78, 0.78, 0.46, { fontSize: 10, color: C.s700, align: 'center' });
       }
       if (i === 3) {
         mini(aw);
         L.box(s, ax + 0.1, ay + 0.28, aw - 0.2, 0.58, { fill: C.b700, r: 0.08 });
-        L.txt(s, [{ text: 'Shared services (comprehensive)', options: { bold: true, color: 'FFFFFF', breakLine: true } }, { text: 'DNS · Gateway · Firewall · Monitor', options: { color: 'DDEBF9' } }], ax + 0.1, ay + 0.28, aw - 0.2, 0.58, { fontSize: 10, align: 'center', valign: 'middle' });
+        L.txt(s, [{ text: 'Local platform services', options: { bold: true, color: 'FFFFFF', breakLine: true } }, { text: 'Security · Identity\nManagement · Networking', options: { color: 'DDEBF9' } }], ax + 0.1, ay + 0.28, aw - 0.2, 0.58, { fontSize: 10, align: 'center', valign: 'middle' });
         spoke(ax + 0.35, ay + 0.98, 0.7, 0.46); spoke(ax + 1.45, ay + 0.98, 0.7, 0.46);
       }
     });
-    L.caption(s, 'Figure 4', 'The spectrum of Platform Services profiles. Moving right adds local capability and independence — and cost and operational scope. Services shown are examples; each hub includes only what its workloads require. Any profile can be the right long-term target.', 0.6, 6.4, 12.1);
+    L.caption(s, 'Figure 4', 'Platform Services span Security, Identity, Management, and Networking. Moving right adds local capability and independence — and cost and operational scope. Only required capabilities are deployed locally; any profile can be the right long-term target.', 0.6, 6.4, 12.1);
     s.addNotes('Talk track — this is the core architectural pivot: "Once we have that geographic foundation, we do not have to copy and paste the same full Landing Zone into every Azure region. We can maintain a small number of strategic Full-Platform regions with the full networking, security, management and shared-service footprint, while allowing applications to consume additional regions using lighter-weight patterns appropriate to the workload." Describe customers using two or three regions for full geographic Landing Zone hubs, then evaluating application requirements individually rather than automatically recreating the entire platform footprint everywhere.');
   }
 

@@ -85,7 +85,7 @@ module.exports = (pres, L) => {
     // six mappings
     L.txt(s, 'IN THE CITY', x, 1.62, 2.6, 0.2, { fontSize: 9.5, bold: true, color: C.muted, charSpacing: 1.5 });
     L.txt(s, 'IN AZURE', x + 2.85, 1.62, 2.4, 0.2, { fontSize: 9.5, bold: true, color: C.b600, charSpacing: 1.5 });
-    const map = [['Neighborhoods', 'Azure regions'], ['Transit between neighborhoods', 'Connectivity between regions'], ['Express toll lanes', 'ExpressRoute'], ['Office campus outside the city', 'On-premises'], ['Police, fire, hospitals, utilities', 'Shared services'], ['Laws, codes, zoning', 'Governance and policy']];
+    const map = [['Neighborhoods', 'Azure regions'], ['Transit between neighborhoods', 'Connectivity between regions'], ['Express toll lanes', 'ExpressRoute'], ['Office campus outside the city', 'On-premises'], ['Police, fire, hospitals, utilities', 'Platform services'], ['Laws, codes, zoning', 'Governance and policy']];
     map.forEach(([a, b], i) => {
       const y = 1.88 + i * 0.33;
       L.box(s, x, y, w, 0.008, { fill: C.soft, r: 0 });
@@ -116,7 +116,7 @@ module.exports = (pres, L) => {
     const P = [
       [C.t600, 'No private network path to a Full-Platform region, another region’s networks, or on-premises.', 'No hub or hybrid gateway. Approved local peering and Azure service endpoints only.'],
       [C.c600, 'Spokes connect privately to an existing Full-Platform region in another region.', 'Centralized services used; local services not required.'],
-      [C.b500, 'Selected local services and connectivity, based on workload requirements.', 'Local shared services with selective connectivity, without a Full platform.'],
+      [C.b500, 'Selected local services and connectivity, based on workload requirements.', 'Selected local platform services; other required capabilities consumed remotely or globally.'],
       [C.b700, 'Comprehensive local capabilities, with connectivity to spokes, on-premises, and other regions as needed.', 'Full local capabilities, when required by latency, traffic volume, compliance, or operational needs.'],
     ];
     const lab = (t, x, y, w, o = {}) => L.txt(s, t, x, y, w, o.h || 0.2, Object.assign({ fontSize: 9, bold: true, color: C.b700 }, o));
@@ -143,30 +143,30 @@ module.exports = (pres, L) => {
         lab('New Region', ax, ay + 0.05, 1.0, { align: 'center' });
         spoke(ax + 0.2, ay + 0.35, 0.6, 0.38); spoke(ax + 0.2, ay + 0.82, 0.6, 0.38);
         L.box(s, ax + 1.25, ay, aw - 1.25, ah, { fill: C.b600, r: 0.1 });
-        L.txt(s, [{ text: 'Other region', options: { bold: true, fontSize: 10, breakLine: true } }, { text: 'Full-Platform region', options: { color: C.b200, breakLine: true } }, { text: 'Hybrid · inspection · egress · routing · DNS', options: { color: C.b100 } }], ax + 1.3, ay + 0.04, aw - 1.35, ah - 0.08, { fontSize: 9, color: 'FFFFFF', align: 'center', valign: 'middle' });
+        L.txt(s, [{ text: 'Full-Platform region', options: { bold: true, fontSize: 10, breakLine: true } }, { text: 'Security\nIdentity\nManagement\nNetworking\nOn-premises path', options: { color: C.b100 } }], ax + 1.3, ay + 0.04, aw - 1.35, ah - 0.08, { fontSize: 9, color: 'FFFFFF', align: 'center', valign: 'middle' });
         L.line(s, ax + 1.03, ay + 0.65, ax + 1.22, ay + 0.65, { color: C.b600, both: true });
       }
       if (i === 2) {
         L.box(s, ax, ay, 1.85, ah, { fill: 'F7FBFE', line: C.b300, dash: 'dash', r: 0.1 });
         lab('New Region', ax + 0.1, ay + 0.04, 1.4);
         L.box(s, ax + 0.1, ay + 0.26, 1.65, 0.5, { fill: 'FFFFFF', line: C.b500, lw: 1.5, r: 0.07 });
-        L.txt(s, [{ text: 'Shared services', options: { bold: true, breakLine: true } }, { text: 'DNS · Gateway · Monitor' }], ax + 0.1, ay + 0.26, 1.65, 0.5, { fontSize: 9, color: C.b700, align: 'center', valign: 'middle' });
+        L.txt(s, [{ text: 'Selected platform services', options: { bold: true, breakLine: true } }, { text: 'DNS · Gateway · Monitor' }], ax + 0.1, ay + 0.26, 1.65, 0.5, { fontSize: 9, color: C.b700, align: 'center', valign: 'middle' });
         spoke(ax + 0.15, ay + 0.86, 0.7, 0.34); spoke(ax + 1.0, ay + 0.86, 0.7, 0.34);
         L.line(s, ax + 1.75, ay + 0.5, ax + 2.0, ay + 0.5, { color: C.b500, dash: 'dash', arrow: false });
         L.oval(s, ax + 2.0, ay + 0.33, 0.34, { fill: C.b600 }); L.oval(s, ax + 2.11, ay + 0.44, 0.12, { fill: 'FFFFFF' });
-        lab('strategic\nhub', ax + 1.92, ay + 0.74, 0.5, { h: 0.4, color: C.muted, align: 'center', bold: false });
+        lab('Full-Platform\nregion', ax + 1.75, ay + 0.74, 0.75, { h: 0.4, color: C.muted, align: 'center', bold: false });
       }
       if (i === 3) {
         L.box(s, ax, ay, aw, ah, { fill: 'F7FBFE', line: C.b300, dash: 'dash', r: 0.1 });
         lab('New Region', ax + 0.1, ay + 0.04, 1.4);
         L.box(s, ax + 0.1, ay + 0.26, aw - 0.2, 0.58, { fill: C.b700, r: 0.08 });
-        L.txt(s, [{ text: 'Shared services', options: { bold: true, color: 'FFFFFF', breakLine: true } }, { text: 'DNS · Gateway · Firewall · Monitor', options: { color: C.b100 } }], ax + 0.15, ay + 0.26, aw - 0.3, 0.58, { fontSize: 9, align: 'center', valign: 'middle' });
+        L.txt(s, [{ text: 'Local platform services', options: { bold: true, color: 'FFFFFF', breakLine: true } }, { text: 'Security · Identity\nManagement · Networking', options: { color: C.b100 } }], ax + 0.15, ay + 0.26, aw - 0.3, 0.58, { fontSize: 9, align: 'center', valign: 'middle' });
         spoke(ax + 0.3, ay + 0.92, 0.7, 0.3); spoke(ax + 1.5, ay + 0.92, 0.7, 0.3);
       }
       L.box(s, x, y + h - 1.0, w, 1.0, { fill: C.wash, r: 0.12 }); L.box(s, x, y + h - 1.0, w, 0.3, { fill: C.wash, r: 0 });
       L.txt(s, f, x + 0.2, y + h - 0.97, w - 0.4, 0.94, { fontSize: 11, fontFace: F.semi, color: C.ink, valign: 'middle' });
     });
-    L.caption(s, 'Figure', 'Moving right adds local capability, independence, cost, and operational scope. Services shown are examples. Profiles are not maturity stages.', 0.6, 6.5, 12.1);
+    L.caption(s, 'Figure', 'Platform Services span Security, Identity, Management, and Networking. Moving right adds local capability, independence, cost, and operational scope. Profiles are not maturity stages.', 0.6, 6.5, 12.1);
     s.addNotes('Enabling another region does not require changing or duplicating the full platform footprint of an existing Full-Platform region. An organization can maintain a small number of strategic Full-Platform regions, which provide resilient hybrid connectivity and common enterprise services to other regions; other regions use a more efficient profile and consume capabilities from those hubs when workload requirements permit. The four profiles form a spectrum from No platform to Full platform. They are not maturity stages. A profile can remain the right target for a region as long as it satisfies workload and platform requirements. Profiles describe platform capabilities, not workload designs.');
   }
 

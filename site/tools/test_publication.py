@@ -2,6 +2,7 @@
 import importlib.util
 import json
 from pathlib import Path
+import re
 import subprocess
 import sys
 import unittest
@@ -15,6 +16,28 @@ spec.loader.exec_module(build)
 
 
 class PublicationTests(unittest.TestCase):
+    def test_regional_footprint_figures_show_platform_service_categories(self):
+        categories = ["Security", "Identity", "Management", "Networking"]
+        for name in ("pages/03-intro.html", "exec/pages/03-reframe.html"):
+            source = (ROOT / "whitepaper" / name).read_text(encoding="utf-8")
+            groups = re.findall(r'<div class="blk platform-services"[^>]*>(.*?)</div>', source)
+            self.assertEqual(len(groups), 4, name)
+            for group in groups:
+                self.assertEqual(re.findall(r"<span>([^<]+)</span>", group), categories, name)
+            self.assertNotIn(">Shared<", source)
+            self.assertNotIn(">Shared services<", source)
+            self.assertIn("Selected local<br>platform services", source)
+
+    def test_profile_spectrum_figures_show_all_four_platform_service_categories(self):
+        categories = ["Security", "Identity", "Management", "Networking"]
+        for name in ("pages/08-profiles.html", "exec/pages/06-footprint.html"):
+            source = (ROOT / "whitepaper" / name).read_text(encoding="utf-8")
+            full = source.split("<!-- 4 -->", 1)[1]
+            for category in categories:
+                self.assertRegex(full, rf"<text\b[^>]*>{category}</text>", name)
+            self.assertIn("Selected platform services", source)
+            self.assertNotIn("Shared services", source)
+
     def test_toc_orders_every_page_once(self):
         pages = build.publication_pages()
         self.assertEqual(len(pages), len(set(pages)))

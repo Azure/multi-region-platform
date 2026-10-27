@@ -452,7 +452,7 @@
 <text x="946.0" y="1178" font-family="Pub Sans, Segoe UI, Open Sans, sans-serif" font-size="12.6" fill="#9FE6F7">→ On-premises</text>
 <circle cx="1200.0" cy="1164.0" r="18.5" fill="#FFFFFF" fill-opacity=".9"/><circle cx="1200.0" cy="1164.0" r="16.0" fill="#D13438"/><g transform="translate(1190.0,1154.0) scale(0.833)"><path d="M9.5 4h5v5.5H20v5h-5.5V20h-5v-5.5H4v-5h5.5z" fill="#fff"/></g>
 <text x="1226.0" y="1159" font-family="Pub Sans, Segoe UI, Open Sans, sans-serif" font-size="12.6" font-weight="600" fill="#FFFFFF">Police, fire, hospitals, utilities</text>
-<text x="1226.0" y="1178" font-family="Pub Sans, Segoe UI, Open Sans, sans-serif" font-size="12.6" fill="#9FE6F7">→ Shared services</text>
+<text x="1226.0" y="1178" font-family="Pub Sans, Segoe UI, Open Sans, sans-serif" font-size="12.6" fill="#9FE6F7">→ Platform services</text>
 <circle cx="1480.0" cy="1164.0" r="18.5" fill="#FFFFFF" fill-opacity=".9"/><circle cx="1480.0" cy="1164.0" r="16.0" fill="#5C2E91"/><g transform="translate(1470.0,1154.0) scale(0.833)"><g fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M7 20h10M5 7h14"/><path d="M5 7 2.5 13h5zM19 7l-2.5 6h5z" fill="#fff" fill-opacity=".9"/></g></g>
 <text x="1506.0" y="1159" font-family="Pub Sans, Segoe UI, Open Sans, sans-serif" font-size="12.6" font-weight="600" fill="#FFFFFF">Laws, codes, zoning</text>
 <text x="1506.0" y="1178" font-family="Pub Sans, Segoe UI, Open Sans, sans-serif" font-size="12.6" fill="#9FE6F7">→ Governance and policy</text>

@@ -283,6 +283,7 @@
 .wpf .blk { border-radius: 5px; font-size: 9px; font-weight: 650; text-align: center; padding: 5px 2px; line-height: 1.2; }
 .wpf .blk.hub { background: var(--b600); color: #fff; }
 .wpf .blk.ss { background: var(--b100); color: var(--b800); }
+.wpf .f1 .platform-services { display: grid; gap: 2px; background: var(--b600); color: #fff; }
 .wpf .blk.wl { background: var(--t600); color: #fff; }
 .wpf .blk.wl2 { background: var(--t100); color: var(--t700); }
 .wpf .rg.cand { border-color: var(--b500); background: rgba(255,255,255,.55); justify-content: center; align-items: center; }

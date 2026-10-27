@@ -78,6 +78,7 @@ module.exports = (pres, L) => {
   {
     const s = L.slide('overview');
     L.header(s, '', 'Extend Azure landing zones for adaptable regional placement', { tw: 8, lede: 'The same operating model applies across the estate, while each region is qualified against the workloads it may need to support.', lx: 8.9, lw: 3.83 });
+    const platformServices = 'Security\nIdentity\nManagement\nNetworking';
     // left panel: fixed pair
     L.box(s, 0.6, 1.85, 4.3, 4.45, { fill: C.wash, r: 0.14 });
     L.txt(s, 'A fixed regional pair', 0.85, 2.0, 2.6, 0.32, { fontSize: 14, fontFace: F.semi, color: C.ink, valign: 'middle' });
@@ -86,9 +87,10 @@ module.exports = (pres, L) => {
       L.box(s, x, 2.45, 1.8, 1.85, { fill: 'FFFFFF', line: C.b300, dash: 'dash', r: 0.1 });
       L.icon(s, 'pin', x + 0.12, 2.55, 0.2, 'b');
       L.txt(s, n, x + 0.38, 2.52, 1.4, 0.26, { fontSize: 10.5, bold: true, color: C.b700, valign: 'middle' });
-      [['Workloads', C.t600, 'FFFFFF'], ['Shared services', C.b100, C.b800], ['Hub & connectivity', C.b600, 'FFFFFF']].forEach(([t, f, c], j) => {
-        L.box(s, x + 0.12, 2.95 + j * 0.45, 1.56, 0.37, { fill: f, r: 0.06 });
-        L.txt(s, t, x + 0.12, 2.95 + j * 0.45, 1.56, 0.37, { fontSize: 10, bold: true, color: c, align: 'center', valign: 'middle' });
+      [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']].forEach(([t, f, c], j) => {
+        const height = j ? 0.86 : 0.32;
+        L.box(s, x + 0.12, 2.95 + j * 0.4, 1.56, height, { fill: f, r: 0.06 });
+        L.txt(s, t, x + 0.12, 2.95 + j * 0.4, 1.56, height, { fontSize: 10, bold: true, color: c, align: 'center', valign: 'middle' });
       });
     });
     L.line(s, 2.67, 3.6, 2.83, 3.6, { color: C.faint, both: true, w: 1 });
@@ -105,9 +107,9 @@ module.exports = (pres, L) => {
     L.txt(s, 'An adaptable multi-region platform', 6.0, 2.0, 4, 0.32, { fontSize: 14, fontFace: F.semi, color: C.ink, valign: 'middle' });
     L.txt(s, 'REGIONS AS QUALIFIED OPTIONS', 9.6, 2.04, 2.95, 0.25, { fontSize: 10, bold: true, color: C.b600, align: 'right', charSpacing: 1 });
     const regs = [
-      ['Region A', 2.0, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full platform', C.b600, 'FFFFFF']], 'Full-Platform region'],
-      ['Region B', 2.0, [['Workloads', C.t600, 'FFFFFF'], ['Shared', C.b100, C.b800], ['Full platform', C.b600, 'FFFFFF']], 'Full-Platform region'],
-      ['Region C', 1.55, [['Workloads', C.t600, 'FFFFFF'], ['Minimal platform', 'FFFFFF', C.b700, C.b300]], 'Minimal platform'],
+      ['Region A', 2.0, [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']], 'Full-Platform region'],
+      ['Region B', 2.0, [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']], 'Full-Platform region'],
+      ['Region C', 1.55, [['Workloads', C.t600, 'FFFFFF'], ['Selected local\nservices', 'FFFFFF', C.b700, C.b300]], 'Minimal platform'],
       ['Region D', 1.2, [['Spokes', C.t600, 'FFFFFF']], 'Remote platform', 'via Remote platform'],
       ['Region E', 1.0, [['No platform', C.t100, C.t700]], 'No platform'],
       ['Region F', 0.75, [], 'Not enabled', 'Candidate'],
@@ -120,7 +122,7 @@ module.exports = (pres, L) => {
       L.txt(s, n, x + 0.26, y + 0.05, 0.8, 0.22, { fontSize: 10, bold: true, color: C.b700, valign: 'middle' });
       let by = base - 0.1;
       blocks.slice().reverse().forEach(([t, f, c, ln]) => {
-        const bh = t.length > 12 && t !== 'Minimal platform' ? 0.46 : 0.3;
+        const bh = t === platformServices ? 0.8 : t.length > 12 ? 0.46 : 0.3;
         by -= bh;
         L.box(s, x + 0.07, by, rw - 0.14, bh, { fill: f, line: ln, r: 0.05 });
         L.txt(s, t, x + 0.07, by, rw - 0.14, bh, { fontSize: 9.5, bold: true, color: c, align: 'center', valign: 'middle' });
@@ -132,7 +134,7 @@ module.exports = (pres, L) => {
     L.box(s, 5.92, 5.5, 6.72, 0.66, { fill: C.s800, r: 0.08 });
     L.txt(s, 'One consistent, governed Azure landing-zone foundation', 6.12, 5.53, 6.4, 0.3, { fontSize: 12.5, fontFace: F.semi, color: 'FFFFFF', valign: 'middle' });
     L.txt(s, 'Identity · Connectivity · Security · Management · Application delivery', 6.12, 5.83, 6.4, 0.25, { fontSize: 10.5, color: 'C9D4E2', valign: 'middle' });
-    L.caption(s, 'Figure', 'Regional capability is a spectrum, not a copy: the platform extends one governed foundation and gives each region only what its workloads require.', 0.6, 6.42, 12.1);
+    L.caption(s, 'Figure', 'Platform Services span Security, Identity, Management, and Networking. Regional capability is a spectrum: each region provides only the local capabilities its workloads require.', 0.6, 6.42, 12.1);
     s.addNotes('Azure landing zones provide a governed foundation for identity, connectivity, security, management, and application delivery. Many organizations establish it around a fixed primary and disaster-recovery region, reflecting datacenter and colocation design. That works while demand and placement requirements remain predictable, but becomes less adaptable as business expansion, data boundaries, service and AI availability, latency requirements, and other regional conditions evolve. An adaptable multi-region platform extends Azure landing zones without creating separate governance structures or identical infrastructure in every region. The same operating model applies across the estate, while each region is qualified against the workloads it may need to support. Because platform teams cannot predict every future workload, the guidance uses three planning constructs.');
   }
 

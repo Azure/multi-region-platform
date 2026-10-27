@@ -13,9 +13,9 @@ The four profiles form a spectrum: from No platform, with no dependency on anoth
 
 Profiles describe platform capabilities, not workload designs; [Workload Landing Zone archetypes](./application-landing-zone-archetypes.md) describe what applications need.
 
-:::image type="content" source="./media/connectivity-profile-spectrum.png" alt-text="Spectrum of Platform Services profiles from no dedicated regional platform resources to the full required local platform service set. No platform has no dedicated regional platform resources; Remote platform consumes platform services from other more strategic regions through private connectivity; Minimal platform provides selected platform services locally; Full platform provides the full required local platform service set." lightbox="./media/connectivity-profile-spectrum.png":::
+:::image type="content" source="./media/connectivity-profile-spectrum.png" alt-text="Spectrum of Platform Services profiles from no dedicated regional platform resources to the full required local platform service set. No platform has no dedicated regional platform resources; Remote platform consumes platform services from other more strategic regions through private connectivity; Minimal platform provides selected platform services locally; Full platform provides the full required local platform service set. The Full platform and remote region show the Security, Identity, Management, and Networking categories." lightbox="./media/connectivity-profile-spectrum.png":::
 
-*The spectrum of Platform Services profiles. Moving right adds local capability and independence, and also cost and operational scope. Services shown are examples; each hub includes only what its workloads require.*
+*The spectrum of Platform Services profiles. Moving right adds local capability and independence, and also cost and operational scope. Platform Services span Security, Identity, Management, and Networking. Only required capabilities are deployed locally; any profile can be the right long-term target.*
 
 ## No platform
 

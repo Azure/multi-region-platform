@@ -63,7 +63,7 @@
           <rect x="120" y="4" width="82" height="118" rx="10" fill="#0F6CBD"/>
           <text x="161" y="19" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">Other region</text>
           <text x="161" y="29" text-anchor="middle" font-size="8" fill="#fff">Full-Platform region</text>
-          <g font-size="9.2" fill="#fff" text-anchor="middle"><text x="161" y="46">Hybrid connectivity</text><text x="161" y="58">Inspection · egress</text><text x="161" y="70">Routing · DNS</text><text x="161" y="82">Identity</text><text x="161" y="94">Monitoring</text><text x="161" y="106">Shared services</text></g>
+          <g font-size="9.2" fill="#fff" text-anchor="middle"><text x="161" y="46">Security</text><text x="161" y="61">Identity</text><text x="161" y="76">Management</text><text x="161" y="91">Networking</text><text x="161" y="108" font-size="8">On-premises path</text></g>
           <path d="M98 63h20" stroke="#0F6CBD" stroke-width="1.6"/><path d="M102 59l-4 4 4 4M114 59l4 4-4 4" fill="none" stroke="#0F6CBD" stroke-width="1.5"/>
         </svg></div>
         <div class="pf">Centralized services used; local services not required.</div>
@@ -76,7 +76,7 @@
           <rect x="4" y="4" width="150" height="118" rx="10" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"/>
           <use href="#i-pin" x="11" y="10" width="12" height="12" color="#0F6CBD"/><text x="26" y="20" font-size="8.6" font-weight="700" fill="#0F548C">New Region</text>
           <rect x="14" y="26" width="130" height="52" rx="7" fill="#fff" stroke="#2B88D8" stroke-width="1.4"/>
-          <text x="79" y="36" text-anchor="middle" font-size="8" font-weight="700" fill="#0F548C">Shared services (selected)</text>
+          <text x="79" y="36" text-anchor="middle" font-size="8" font-weight="700" fill="#0F548C">Selected platform services</text>
           <g font-size="9.2" fill="#243447" text-anchor="middle">
             <circle cx="36" cy="48" r="7" fill="#0F6CBD"/><text aria-hidden="true" x="36" y="50.4" font-size="4.8" font-weight="700" fill="#fff">DNS</text><text x="36" y="64">DNS</text><text x="36" y="73.5">(Private)</text>
             <use href="#i-lock" x="72" y="40" width="14" height="14" color="#0F6CBD"/><text x="79" y="64">VNet</text><text x="79" y="73.5">Gateway</text>
@@ -89,7 +89,7 @@
           <circle cx="182" cy="52" r="15" fill="#0F6CBD"/><circle cx="182" cy="52" r="5" fill="#fff"/>
           <text x="182" y="80" text-anchor="middle" font-size="7" fill="#5B6778">Full-Platform</text><text x="182" y="90" text-anchor="middle" font-size="8" fill="#5B6778">region</text>
         </svg></div>
-        <div class="pf">Local shared services with selective connectivity, without a {{PROFILE_4}}.</div>
+        <div class="pf">Selected local platform services; other required capabilities consumed remotely or globally.</div>
       </div>
       <!-- 4 -->
       <div class="pc">
@@ -99,12 +99,12 @@
           <rect x="4" y="4" width="198" height="118" rx="10" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"/>
           <use href="#i-pin" x="11" y="10" width="12" height="12" color="#0F6CBD"/><text x="26" y="20" font-size="8.6" font-weight="700" fill="#0F548C">New Region</text>
           <rect x="14" y="26" width="178" height="56" rx="8" fill="#0F548C"/>
-          <text x="103" y="36" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">Shared services (comprehensive)</text>
+          <text x="103" y="36" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">Local platform services</text>
           <g font-size="9.2" fill="#fff" text-anchor="middle">
-            <circle cx="36" cy="49" r="7" fill="#fff"/><text aria-hidden="true" x="36" y="51.4" font-size="4.8" font-weight="700" fill="#0F548C">DNS</text><text x="36" y="67">DNS</text><text x="36" y="76.5">(Private)</text>
-            <use href="#i-lock" x="75" y="41" width="14" height="14" color="#fff"/><text x="82" y="67">VNet</text><text x="82" y="76.5">Gateway</text>
-            <use href="#i-shield" x="117" y="41" width="14" height="14" color="#fff"/><text x="124" y="67">Azure</text><text x="124" y="76.5">Firewall</text>
-            <use href="#i-monitor" x="159" y="41" width="14" height="14" color="#fff"/><text x="166" y="67">Azure</text><text x="166" y="76.5">Monitor</text>
+            <use href="#i-shield" x="24" y="42" width="12" height="12" color="#fff"/><text x="40" y="51" text-anchor="start">Security</text>
+            <use href="#i-id" x="113" y="42" width="12" height="12" color="#fff"/><text x="129" y="51" text-anchor="start">Identity</text>
+            <use href="#i-gear" x="24" y="63" width="12" height="12" color="#fff"/><text x="40" y="72" text-anchor="start">Management</text>
+            <use href="#i-network" x="113" y="63" width="12" height="12" color="#fff"/><text x="129" y="72" text-anchor="start">Networking</text>
           </g>
           <path d="M60 82v6M146 82v6" stroke="#2B88D8" stroke-width="1.2"/>
           <rect x="34" y="88" width="52" height="30" rx="6" fill="#EDF8F6" stroke="#7CC9C3"/><rect x="52" y="95" width="16" height="16" rx="3.5" fill="#04807A"/>
@@ -113,7 +113,7 @@
         <div class="pf">Full local capabilities, when required by latency, traffic volume, compliance, or operational needs.</div>
       </div>
     </div>
-    <div class="figcap"><span class="fn">Figure 14</span><span class="ft"><b>The spectrum of Platform Services profiles.</b> Moving right adds local capability and independence — and cost and operational scope. Services shown are examples; each hub includes only what its workloads require. Any profile can be the right long-term target.</span></div>
+    <div class="figcap"><span class="fn">Figure 14</span><span class="ft"><b>The spectrum of Platform Services profiles.</b> Moving right adds local capability and independence — and cost and operational scope. Platform Services span Security, Identity, Management, and Networking. Only required capabilities are deployed locally; any profile can be the right long-term target.</span></div>
   </div>
 </div>
 </section>

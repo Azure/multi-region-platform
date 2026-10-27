@@ -13,6 +13,7 @@
   .blk { border-radius: 5px; font-size: 9px; font-weight: 650; text-align: center; padding: 5px 2px; line-height: 1.2; }
   .blk.hub { background: var(--b600); color: #fff; }
   .blk.ss { background: var(--b100); color: var(--b800); }
+  .f1 .platform-services { display: grid; gap: 2px; background: var(--b600); color: #fff; }
   .blk.wl { background: var(--t600); color: #fff; }
   .blk.wl2 { background: var(--t100); color: var(--t700); }
   .rg.cand { border-color: var(--b500); background: rgba(255,255,255,.55); justify-content: center; align-items: center; }
@@ -44,9 +45,9 @@
         <div class="ph"><b>A fixed regional pair</b><span class="cap">Traditional model</span></div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px;height:124px;position:relative">
           <div class="rg node" id="f1a"><div class="rl"><svg><use href="#i-pin"/></svg>Primary region</div>
-            <div class="blk wl">Workloads</div><div class="blk ss">Shared services</div><div class="blk hub">Hub &amp; connectivity</div></div>
+            <div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div>
           <div class="rg node" id="f1b"><div class="rl"><svg><use href="#i-pin"/></svg>DR region</div>
-            <div class="blk wl">Workloads</div><div class="blk ss">Shared services</div><div class="blk hub">Hub &amp; connectivity</div></div>
+            <div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div>
           <div style="position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);font-size: 9px;font-weight:700;color:var(--muted);background:var(--wash);padding:2px 0;z-index:3;writing-mode:vertical-rl;letter-spacing:.08em">MIRRORED</div>
         </div>
         <div class="cap mt12" style="color:var(--w600)">Evolving regional conditions</div>
@@ -67,9 +68,9 @@
       <div class="panel pr">
         <div class="ph"><b>An adaptable multi-region platform</b><span class="cap" style="color:var(--b600)">Regions as qualified options</span></div>
         <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;height:172px;align-items:end">
-          <div><div class="rg" style="height:150px"><div class="rl"><svg><use href="#i-pin"/></svg>Region A</div><div class="blk wl">Workloads</div><div class="blk ss">Shared</div><div class="blk hub">{{PROFILE_4}}</div></div></div>
-          <div><div class="rg" style="height:150px"><div class="rl"><svg><use href="#i-pin"/></svg>Region B</div><div class="blk wl">Workloads</div><div class="blk ss">Shared</div><div class="blk hub">{{PROFILE_4}}</div></div></div>
-          <div><div class="rg" style="height:118px"><div class="rl"><svg><use href="#i-pin"/></svg>Region C</div><div class="blk wl">Workloads</div><div class="blk ss" style="background:#fff;border:1px solid var(--b300)">{{PROFILE_3}}</div></div></div>
+          <div><div class="rg" style="height:150px"><div class="rl"><svg><use href="#i-pin"/></svg>Region A</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
+          <div><div class="rg" style="height:150px"><div class="rl"><svg><use href="#i-pin"/></svg>Region B</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
+          <div><div class="rg" style="height:118px"><div class="rl"><svg><use href="#i-pin"/></svg>Region C</div><div class="blk wl">Workloads</div><div class="blk ss" style="background:#fff;border:1px solid var(--b300)">Selected local<br>platform services</div></div></div>
           <div><div class="rg" style="height:92px"><div class="rl"><svg><use href="#i-pin"/></svg>Region D</div><div class="blk wl">Spokes</div><div class="blk" style="font-size: 9px;color:var(--b700);padding:2px">↔ {{PROFILE_2}}</div></div></div>
           <div><div class="rg" style="height:70px"><div class="rl"><svg><use href="#i-pin"/></svg>Region E</div><div class="blk wl2">{{PROFILE_1}}</div></div></div>
           <div><div class="rg cand" style="height:56px"><div class="rl" style="color:var(--b600)"><svg><use href="#i-pin"/></svg>Region F</div><span style="font-size: 9px;font-weight:650;color:var(--b600);margin-top:10px">Candidate</span></div></div>
@@ -83,7 +84,7 @@
         </div>
       </div>
     </div>
-    <div class="figcap"><span class="fn">Figure 1</span><span class="ft"><b>From a fixed regional pair to governed regional options.</b> Instead of mirroring a complete footprint in each new region, the platform extends one governed foundation and gives each region only the capability its workloads require. Regional capability is a spectrum, not a copy.</span></div>
+    <div class="figcap"><span class="fn">Figure 1</span><span class="ft"><b>From a fixed regional pair to governed regional options.</b> Instead of mirroring a complete footprint in each new region, extend one governed foundation. Platform Services span Security, Identity, Management, and Networking; each region provides only the local capabilities its workloads require.</span></div>
   </div>
 </div>
 </section>
