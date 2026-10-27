@@ -26,6 +26,15 @@ Check three design constraints:
 
 The [Key Vault reliability guide](https://learn.microsoft.com/azure/reliability/reliability-key-vault) lists exclusions, including Brazil South, Brazil Southeast, West US 3, and nonpaired regions. Microsoft-managed failover is best effort, not a customer-triggered recovery mechanism or a guaranteed application recovery time. Once initiated, public endpoint convergence is designed to take a few minutes; private endpoints can require up to an additional 20 minutes. Do not treat those routing timings as the total outage duration.
 
+### Failover guidance
+
+- **Microsoft-managed recovery:** Keep using the same vault URI; Microsoft reroutes requests after failover. You cannot trigger this failover. Initiation can take hours or longer, independently of other services. Asynchronous replication means recent changes can be lost.
+- **Read-only does not mean cryptography stops:** After failover, supported actions include listing and getting keys, secrets, and certificates; encrypt, decrypt, wrap, unwrap, sign, verify; and backup. Creating, updating, renewing, rotating, or deleting objects is unavailable. Access policies, firewall settings, and vault properties cannot be changed.
+- **Application readiness:** Use SDK retries with exponential backoff and respect DNS TTL. Validate private connectivity from the recovery region; Private Link reconnection can add 20 minutes after failover. Monitor Service Health and Resource Health.
+- **Customer-controlled recovery:** Pre-provision independent regional vaults, identities, permissions, networking, and required object versions. Your application selects the healthy vault; a second vault alone does not provide fallback. Test recovery and return to the primary before production. Key Vault backups are point-in-time and restore only within the same subscription and Azure geography.
+
+These are Standard/Premium vault behaviors. Replicated Managed HSM serves both regions; external keys have no geo-replicated failover target. See the [official failover guidance](https://learn.microsoft.com/azure/reliability/reliability-key-vault#resilience-to-region-wide-failures) and the [key patterns](#keys).
+
 ## Choose the product
 
 Key Vault is multi-tenant; Managed HSM is single-tenant. Keep the product choice separate from the regional deployment choice.
@@ -202,7 +211,7 @@ Your application decides whether each region uses an independent key or a common
 
 GRS copies are replicas of one storage account, not independently configured accounts. Both depend on that account's CMK. Independent regional vaults do not let you assign a different key store to each GRS replica. Consider a replicated key store and test key access during account failover. See [Storage CMKs](https://learn.microsoft.com/azure/storage/common/customer-managed-keys-overview).
 
-### Storage object replication
+### Azure Storage Blob Object Replication {#storage-object-replication}
 
 **Patterns you can use:**
 
@@ -245,7 +254,7 @@ Pre-create a compatible target-region Disk Encryption Set and authorize it to ac
 
 Distinguish read replicas, geo-redundant backups, and geo-restore. Their key, region, and identity requirements are not interchangeable. Provision recovery-region keys and identities as required; verify each product separately. See [PostgreSQL encryption](https://learn.microsoft.com/azure/postgresql/security/security-data-encryption) and [MySQL encryption](https://learn.microsoft.com/azure/mysql/security/security-customer-managed-key).
 
-### Database geo-replication
+### Azure SQL Database, Azure SQL Managed Instance and Azure Cosmos DB geo-replication {#database-geo-replication}
 
 **Patterns to consider, subject to the database service's requirements:**
 
@@ -256,7 +265,7 @@ Distinguish read replicas, geo-redundant backups, and geo-restore. Their key, re
 
 SQL Database and SQL Managed Instance need the required TDE protector keys available to their replicas. Documented SQL designs can use regional copies of key material; rotation must preserve access to every required version. Cosmos DB uses an account-level CMK dependency and has its own networking and key-store requirements. Do not assume SQL's key-copy design applies to Cosmos DB. Replicated Managed HSM is a candidate where supported; compare its cost with the accepted risk of Microsoft-managed vault recovery, not an arbitrary number-of-keys threshold. See [SQL customer-managed TDE](https://learn.microsoft.com/azure/azure-sql/database/transparent-data-encryption-byok-overview) and [Cosmos DB CMKs](https://learn.microsoft.com/azure/cosmos-db/how-to-setup-customer-managed-keys).
 
-### Database geo-restore
+### Azure SQL Database, Azure SQL Managed Instance and Azure Cosmos DB geo-restore {#database-geo-restore}
 
 **Conditional patterns:**
 

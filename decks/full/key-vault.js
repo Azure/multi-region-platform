@@ -28,6 +28,7 @@ module.exports = (pres, L) => {
     L.txt(s, 'Once initiated, endpoint convergence takes minutes; Private Link can add 20 minutes. Read-only afterward. These are not total recovery times.', 0.6, 6.05, 12.13, 0.3, { fontSize: 11, color: C.ink });
     L.txt(s, 'Check 3+0 (no pair), asymmetric 3+1, and cross-geography 3+1. Some pairs and all nonpaired regions lack this failover model.', 0.6, 6.3, 12.13, 0.4, { fontSize: 11, color: C.muted });
     s.addNotes('Microsoft-managed failover is best effort. Initiation can take hours or longer after the outage; endpoint convergence is not the application RTO. Key Vault can be a runtime dependency even when data is recoverable. Constraints: no pair, asymmetric pairing, and cross-geography pairing. Exclusions include Brazil South, Brazil Southeast, West US 3, and nonpaired regions. https://learn.microsoft.com/azure/reliability/reliability-key-vault . ' + reference);
+    s.addNotes(article.split('### Failover guidance\n')[1].split('\n## Choose the product')[0] + '\n' + reference + '#failover-guidance');
   }
 
   const groups = [
@@ -127,7 +128,7 @@ module.exports = (pres, L) => {
     const [title, ...lines] = section.split('\n');
     const body = lines.join('\n').trim();
     const summary = body.split('\n\n').filter(block => block.startsWith('**') || block.startsWith('- ')).join('\n\n');
-    return { title, body, summary };
+    return { title: title.replace(/ \{#[^}]+\}$/, ''), body, summary };
   });
   const linkedText = text => {
     const runs = [];
@@ -150,8 +151,9 @@ module.exports = (pres, L) => {
     scenarios.slice(offset, offset + 3).forEach(({ title, summary }, i) => {
       const x = 0.6 + i * 4.11;
       L.box(s, x, 1.5, 3.91, 5.2, { fill: C.wash });
-      L.txt(s, title, x + 0.16, 1.67, 3.59, 0.55, { fontSize: 14, bold: true, color: C.ink });
-      L.txt(s, linkedText(summary), x + 0.16, 2.3, 3.59, 4.2, { fontSize: 11, color: C.text, paraSpaceAfter: 6 });
+      const longTitle = title.length > 60;
+      L.txt(s, title, x + 0.16, 1.67, 3.59, longTitle ? 0.95 : 0.55, { fontSize: 14, bold: true, color: C.ink });
+      L.txt(s, linkedText(summary), x + 0.16, longTitle ? 2.7 : 2.3, 3.59, longTitle ? 3.8 : 4.2, { fontSize: 11, color: C.text, paraSpaceAfter: 6 });
     });
     L.txt(s, 'Select a linked pattern name for deployment details. Conditional options require feature-specific validation; full caveats are in the guide and notes.', 0.6, 6.85, 12.13, 0.2, { fontSize: 10.5, color: C.muted });
     s.addNotes(scenarios.slice(offset, offset + 3).map(({ title, body }) => title + '\n' + body).join('\n\n').replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1 ($2)') + '\n' + reference);

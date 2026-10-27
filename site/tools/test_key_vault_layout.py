@@ -97,10 +97,22 @@ class KeyVaultLayoutTests(unittest.TestCase):
                   '<figure class="fig" data-fig="key-vault-keys-managed-hsm-ekm">Diagram</figure>')
         self.assertIn('class="kv-pattern"', site_build.key_vault_pattern_layout(source))
 
+    def test_failover_guidance_is_explicit(self):
+        _, body = site_build.read_front_matter(ROOT / "content" / "key-vault-across-regions.md")
+        guidance = body.split("### Failover guidance", 1)[1].split("## Choose the product", 1)[0]
+        for condition in ("same vault URI", "cannot trigger", "hours or longer",
+                          "recent changes can be lost", "sign, verify", "firewall settings",
+                          "exponential backoff", "20 minutes", "return to the primary",
+                          "same subscription and Azure geography"):
+            with self.subTest(condition=condition):
+                self.assertIn(condition, guidance)
+        self.assertIn("#failover-guidance", keyvault.page2())
+
     def test_scenario_sections_preserve_removed_matrix_conditions(self):
         _, body = site_build.read_front_matter(ROOT / "content" / "key-vault-across-regions.md")
         scenarios = body.split("## Common key-management scenarios", 1)[1].split("## Decision tree", 1)[0]
-        sections = dict(re.findall(r"### ([^\n]+)\n(.*?)(?=\n### |\Z)", scenarios, re.S))
+        sections = {re.sub(r" \{#[^}]+\}$", "", title): text
+                    for title, text in re.findall(r"### ([^\n]+)\n(.*?)(?=\n### |\Z)", scenarios, re.S)}
         conditions = {
             "Application-level encryption": (
                 "software-protected", "HSM-protected", "independent regional keys",
@@ -108,7 +120,7 @@ class KeyVaultLayoutTests(unittest.TestCase):
             "Azure Storage GRS": (
                 "Microsoft-managed vault recovery", "shared key", "proxy availability",
                 "no external-key geo-replication", "different key store to each GRS replica"),
-            "Storage object replication": (
+            "Azure Storage Blob Object Replication": (
                 "independent keys", "import and authorize", "each account's CMK integration",
                 "proxy and external HSM", "separate accounts"),
             "VM disk encryption": (
@@ -120,11 +132,11 @@ class KeyVaultLayoutTests(unittest.TestCase):
             "PostgreSQL and MySQL Flexible Server": (
                 "product and recovery feature", "key and identity", "validate key import",
                 "Managed HSM support", "recovery feature separately", "geo-redundant backups"),
-            "Database geo-replication": (
+            "Azure SQL Database, Azure SQL Managed Instance and Azure Cosmos DB geo-replication": (
                 "shared-key dependencies", "Microsoft-managed recovery risk",
                 "key-copy and rotation design", "imported-key lifecycle",
                 "no geo-replicated failover target", "Cosmos DB"),
-            "Database geo-restore": (
+            "Azure SQL Database, Azure SQL Managed Instance and Azure Cosmos DB geo-restore": (
                 "original keys", "newly generated regional keys cannot replace",
                 "historical key availability", "external-key backup/restore is not supported",
                 "authorize the restored service"),

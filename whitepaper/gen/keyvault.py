@@ -268,12 +268,12 @@ def scenario_summary():
     rows = [
         ("Application encryption", "Match application operations; preserve identifiers and versions."),
         ("Storage GRS", "One account/key dependency. Independent vaults do not assign separate keys to GRS replicas."),
-        ("Storage object replication", "Separate accounts can use independent keys and vaults."),
+        ("Azure Storage Blob Object Replication", "Separate accounts can use independent keys and vaults."),
         ("VM disk encryption", "Regional Disk Encryption Sets; distinguish guest encryption and Secure Key Release."),
         ("Azure Site Recovery", "Pre-create target-region Disk Encryption Set and vault access. Do not infer HSM support."),
         ("PostgreSQL / MySQL Flexible", "Replica, geo-backup, and geo-restore have different key, region, and identity rules."),
-        ("Database geo-replication", "SQL permits documented regional key copies; Cosmos DB has account-level CMK requirements."),
-        ("Database geo-restore", "Retain historical keys; validate target region, identities, and backup requirements."),
+        ("Azure SQL Database, Azure SQL Managed Instance and Azure Cosmos DB geo-replication", "SQL permits documented regional key copies; Cosmos DB has account-level CMK requirements."),
+        ("Azure SQL Database, Azure SQL Managed Instance and Azure Cosmos DB geo-restore", "Retain historical keys; validate target region, identities, and backup requirements."),
         ("Purview Information Protection", "Identify tenant-key BYOK versus Customer Key. Preserve keys for old content."),
     ]
     anchors = ["application-level-encryption", "azure-storage-grs", "storage-object-replication",
@@ -301,7 +301,7 @@ def page2():
         ("lm", "Watch for", "Check eligible same-geography pairing and exclusions. Microsoft can delay failover for hours or longer."),
     ], "figKVS2", "S2")
     guide = ('<div class="row mt12" style="gap:20px;align-items:stretch"><div class="note" style="flex:1;padding:10px 14px"><h4>Design guidance</h4>'
-             '<p class="small" style="color:var(--ink);font-size:10.8px">Treat each region as a deployment stamp. Roll secrets out one region at a time; a bad change must not reach every vault at once. Optional app-level fallback needs private connectivity, managed identities, and version selection. Never store secret values in the IaC repository.</p></div>'
+             '<p class="small" style="color:var(--ink);font-size:10.8px">Treat each region as a deployment stamp. Roll changes out sequentially. Never store secret values in IaC. Microsoft-managed failover keeps the vault URI; retry failed requests. Read-only permits supported cryptography and backup, not writes or policy changes. App-level fallback needs ready identities, connectivity, and versions. <a href="https://azure.github.io/multi-region-platform/key-vault-across-regions.html#failover-guidance">Failover and return-to-primary checklist</a>.</p></div>'
              '<div style="flex:.8;background:var(--s800);border-radius:12px;padding:10px 16px;color:#fff;display:flex;flex-direction:column;justify-content:center"><p style="font-size:11.4px;line-height:1.4;color:#fff">Managed HSM and EKM do not hold secrets or certificates. Use Standard or Premium for both.</p></div></div>')
     body = (head("Service guides · Key Vault · Secrets and certificates", "Secrets and certificates: two patterns",
                  "Secrets and certificates can be loaded into any vault by a pipeline. That makes a vault in each region practical.")
