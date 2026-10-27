@@ -231,8 +231,6 @@ def key_vault_pattern_layout(h):
         table = re.sub(r"<tr>\s*<td>(.*?)</td>", r'<tr><th scope="row">\1</th>', table, flags=re.S)
         wide = "keys-pattern-7" in table
         label = "Key pattern comparison" if wide else "Key Vault comparison"
-        if "Application-level encryption" in table:
-            label = "Common key-management scenarios"
         cls = "kv-table kv-wide" if wide else "kv-table"
         return (f'<div class="table-wrap {cls}" tabindex="0" role="region" aria-label="{label}">'
                 f'<table>{table}</table></div>')

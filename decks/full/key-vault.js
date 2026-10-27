@@ -123,21 +123,38 @@ module.exports = (pres, L) => {
     }
   });
   const scenarioSection = article.split('## Common key-management scenarios\n')[1].split('\n## Decision tree')[0];
-  const matrix = scenarioSection.split('\n').filter(line => line.startsWith('|'));
-  const plain = text => text.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/<br>/g, '\n').trim();
-  const headers = matrix[0].split('|').slice(1, -1).map(plain);
-  const matrixRows = matrix.slice(2).map(line => line.split('|').slice(1, -1).map(plain));
-  for (let offset = 0; offset < matrixRows.length; offset += 3) {
+  const scenarios = scenarioSection.split('\n### ').slice(1).map(section => {
+    const [title, ...lines] = section.split('\n');
+    const body = lines.join('\n').trim();
+    const summary = body.split('\n\n').filter(block => block.startsWith('**') || block.startsWith('- ')).join('\n\n');
+    return { title, body, summary };
+  });
+  const linkedText = text => {
+    const runs = [];
+    for (const line of text.split('\n').filter(line => line.trim())) {
+      const paragraph = line.replace(/^- /, '').replace(/\*\*/g, '');
+      let start = 0;
+      for (const match of paragraph.matchAll(/\[([^\]]+)\]\(([^)]+)\)/g)) {
+        if (match.index > start) runs.push({ text: paragraph.slice(start, match.index) });
+        runs.push({ text: match[1], options: { color: C.b600, hyperlink: { url: match[2].startsWith('#') ? reference + match[2] : match[2] } } });
+        start = match.index + match[0].length;
+      }
+      if (start < paragraph.length) runs.push({ text: paragraph.slice(start) });
+      runs[runs.length - 1].options = { ...runs[runs.length - 1].options, breakLine: true };
+    }
+    return runs;
+  };
+  for (let offset = 0; offset < scenarios.length; offset += 3) {
     const s = L.slide('services');
     L.header(s, '', `Common key-management scenarios (${offset / 3 + 1} of 3)`, { eyebrow: 'Service guides · Key Vault · Keys patterns', tw: 11.8 });
-    const rows = [headers, ...matrixRows.slice(offset, offset + 3)];
-    s.addTable(rows.map((row, i) => row.map(text => ({ text, options: i ? {} : { bold: true, fill: C.b50, color: C.ink } }))), {
-      x: 0.6, y: 1.5, w: 12.13, colW: [2.05, 1.44, 1.44, 1.44, 1.44, 1.44, 1.44, 1.44],
-      rowH: [0.75, 1.42, 1.42, 1.42], fontFace: F.body, fontSize: 10.5, color: C.text, margin: 0.08,
-      border: { type: 'solid', pt: 0.75, color: C.soft }, autoPage: false,
+    scenarios.slice(offset, offset + 3).forEach(({ title, summary }, i) => {
+      const x = 0.6 + i * 4.11;
+      L.box(s, x, 1.5, 3.91, 5.2, { fill: C.wash });
+      L.txt(s, title, x + 0.16, 1.67, 3.59, 0.55, { fontSize: 14, bold: true, color: C.ink });
+      L.txt(s, linkedText(summary), x + 0.16, 2.3, 3.59, 4.2, { fontSize: 11, color: C.text, paraSpaceAfter: 6 });
     });
-    L.txt(s, 'Conditional: validate the exact feature, topology, and key operations. See the guide and speaker notes for details and references.', 0.6, 6.85, 12.13, 0.2, { fontSize: 10.5, color: C.muted });
-    s.addNotes(scenarioSection.slice(scenarioSection.indexOf('### Application-level encryption')).replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1 ($2)') + '\n' + reference);
+    L.txt(s, 'Select a linked pattern name for deployment details. Conditional options require feature-specific validation; full caveats are in the guide and notes.', 0.6, 6.85, 12.13, 0.2, { fontSize: 10.5, color: C.muted });
+    s.addNotes(scenarios.slice(offset, offset + 3).map(({ title, body }) => title + '\n' + body).join('\n\n').replace(/\[([^\]]+)\]\(([^)]+)\)/g, '$1 ($2)') + '\n' + reference);
   }
   {
     const s = L.slide('services');

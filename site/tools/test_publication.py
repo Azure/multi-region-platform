@@ -75,19 +75,20 @@ class PublicationTests(unittest.TestCase):
         pages = [page for page in build.publication_pages() if Path(page).name.startswith("22a4-kv")]
         self.assertEqual(len(pages), 5)
         result = subprocess.run(["node", "-e", """
-            let slides = 0, images = 0, scenarioRows = 0;
+            let slides = 0, images = 0, linkedScenarios = 0;
             const L = {
               data: {siteUrl: 'https://example.invalid/'},
               slide() {
                 slides++;
                 return {
-                  addTable(rows) {
-                    if (rows[0][0].text === 'Scenario') scenarioRows += rows.length - 1;
-                  },
+                  addTable() {},
                   addNotes() {}
                 };
               },
-              header() {}, txt() {}, box() {},
+              header() {}, box() {},
+              txt(slide, text) {
+                if (Array.isArray(text) && text.some(run => run.options?.hyperlink?.url.includes('#keys-pattern-'))) linkedScenarios++;
+              },
               image(slide, file, box) {
                 const png = require('fs').readFileSync(file);
                 const ratio = png.readUInt32BE(16) / png.readUInt32BE(20);
@@ -96,9 +97,9 @@ class PublicationTests(unittest.TestCase):
               }
             };
             require('./decks/full/key-vault')({}, L);
-            console.log(JSON.stringify({slides, images, scenarioRows}));
+            console.log(JSON.stringify({slides, images, linkedScenarios}));
         """], cwd=ROOT, check=True, capture_output=True, text=True)
-        self.assertEqual(json.loads(result.stdout), {"slides": 9, "images": 10, "scenarioRows": 9})
+        self.assertEqual(json.loads(result.stdout), {"slides": 9, "images": 10, "linkedScenarios": 9})
 
     def test_decks_are_created_only_in_temp(self):
         for builder in ("build_full.js", "build_exec.js"):

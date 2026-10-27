@@ -65,19 +65,30 @@ class KeyVaultLayoutTests(unittest.TestCase):
         self.assertIn("Register key reference only", keyvault.d_k7())
         self.assertIn("No key material is imported or geo-replicated", keyvault.d_k7())
 
-    def test_scenario_matrix_has_named_pattern_columns_and_nine_rows(self):
+    def test_scenarios_use_linked_pattern_lists_instead_of_a_matrix(self):
         _, body = site_build.read_front_matter(ROOT / "content" / "key-vault-across-regions.md")
         store = []
         result = site_build.key_vault_pattern_layout(
             site_build.postprocess(site_build.expand_raw(site_build.render_md(body, store), store)))
         self.assertLess(result.index('id="paired-and-nonpaired-regions"'), result.index("<table>"))
         start = result.index('id="common-key-management-scenarios"')
-        table = result[start:].split("<table>", 1)[1].split("</table>", 1)[0]
-        self.assertEqual(table.count("<tr>"), 10)
-        self.assertEqual(len(re.findall(r">Pattern [1-7]</a>", table)), 7)
-        self.assertEqual(table.count('scope="col"'), 8)
-        self.assertEqual(table.count('scope="row"'), 9)
-        self.assertIn('tabindex="0" role="region" aria-label="Common key-management scenarios"', result)
+        scenarios = result[start:].split('<h2 id="decision-tree">')[0]
+        self.assertNotIn("<table>", scenarios)
+        sections = re.split(r"<h3\b", scenarios)[1:]
+        self.assertEqual(len(sections), 9)
+        for section in sections:
+            self.assertRegex(section, r'<a href="#keys-pattern-[1-7]">')
+            self.assertIn("<ul>", section)
+        grs = next(section for section in sections if section.startswith(' id="azure-storage-grs"'))
+        self.assertNotIn('href="#keys-pattern-3"', grs)
+        self.assertNotIn('href="#keys-pattern-4"', grs)
+        for target, label in re.findall(r'<a href="#(keys-pattern-[1-7])">([^<]+)</a>', scenarios):
+            title = re.search(rf'<h3 id="{target}">Pattern [1-7]: (.*?)<a class="anchor"', result).group(1)
+            self.assertEqual(label, title)
+        headers = re.findall(r"<thead>(.*?)</thead>", result, re.S)
+        self.assertTrue(all(not re.search(r">Pattern \d", header) for header in headers))
+        self.assertIn('>Standard vault with paired-region replication</a>', headers[2])
+        self.assertIn('>Key Vault in each region</a>', headers[1])
         self.assertNotRegex(re.sub(r"<[^>]+>", "", result), r"\b[KS][1-7]\b")
 
     def test_later_patterns_keep_side_by_side_layout(self):
@@ -85,6 +96,48 @@ class KeyVaultLayoutTests(unittest.TestCase):
                   '<ul><li>Key remains outside Azure</li></ul>'
                   '<figure class="fig" data-fig="key-vault-keys-managed-hsm-ekm">Diagram</figure>')
         self.assertIn('class="kv-pattern"', site_build.key_vault_pattern_layout(source))
+
+    def test_scenario_sections_preserve_removed_matrix_conditions(self):
+        _, body = site_build.read_front_matter(ROOT / "content" / "key-vault-across-regions.md")
+        scenarios = body.split("## Common key-management scenarios", 1)[1].split("## Decision tree", 1)[0]
+        sections = dict(re.findall(r"### ([^\n]+)\n(.*?)(?=\n### |\Z)", scenarios, re.S))
+        conditions = {
+            "Application-level encryption": (
+                "software-protected", "HSM-protected", "independent regional keys",
+                "imported keys", "supported external-key operations", "restricted operation set"),
+            "Azure Storage GRS": (
+                "Microsoft-managed vault recovery", "shared key", "proxy availability",
+                "no external-key geo-replication", "different key store to each GRS replica"),
+            "Storage object replication": (
+                "independent keys", "import and authorize", "each account's CMK integration",
+                "proxy and external HSM", "separate accounts"),
+            "VM disk encryption": (
+                "regional imports", "Disk Encryption Sets", "same-region requirements",
+                "imported key", "supported disk profiles", "does not support Secure Key Release"),
+            "Azure Site Recovery": (
+                "target-region", "imported key", "does not provision",
+                "Do not assume Managed HSM or EKM support", "cache storage account"),
+            "PostgreSQL and MySQL Flexible Server": (
+                "product and recovery feature", "key and identity", "validate key import",
+                "Managed HSM support", "recovery feature separately", "geo-redundant backups"),
+            "Database geo-replication": (
+                "shared-key dependencies", "Microsoft-managed recovery risk",
+                "key-copy and rotation design", "imported-key lifecycle",
+                "no geo-replicated failover target", "Cosmos DB"),
+            "Database geo-restore": (
+                "original keys", "newly generated regional keys cannot replace",
+                "historical key availability", "external-key backup/restore is not supported",
+                "authorize the restored service"),
+            "Purview Information Protection": (
+                "preserve keys for old content", "dedicated Premium vault",
+                "feature-specific confirmation", "external-key operations",
+                "not applicable", "Microsoft 365 Customer Key"),
+        }
+        self.assertEqual(set(sections), set(conditions))
+        for title, phrases in conditions.items():
+            for phrase in phrases:
+                with self.subTest(scenario=title, condition=phrase):
+                    self.assertIn(phrase, sections[title])
 
     def test_graphical_tree_covers_new_patterns_without_abbreviating_certificates(self):
         tree = keyvault.tree_svg()
@@ -108,7 +161,8 @@ class KeyVaultLayoutTests(unittest.TestCase):
         for fid in keyvault.FIGNAMES:
             self.assertEqual(combined.count(f'id="{fid}"'), 1)
         self.assertLess(pages[0].index("Paired regions"), pages[0].index('id="figKVTiers"'))
-        self.assertEqual(pages[0].count("<tr>"), 10)
+        self.assertNotIn("<table", pages[0])
+        self.assertEqual(len(re.findall(r'href="[^"]+#(?:application-level-encryption|azure-storage-grs|storage-object-replication|vm-disk-encryption|azure-site-recovery|postgresql-and-mysql-flexible-server|database-geo-replication|database-geo-restore|purview-information-protection)"', pages[0])), 9)
 
     def test_decision_tree_export_is_not_clipped_by_the_pdf_page(self):
         import json

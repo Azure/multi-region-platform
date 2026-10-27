@@ -208,9 +208,8 @@ STYLE = """<style>
   .kv-quad .kv-h b { font-size:12px; }
   .kv-quad .kv-r { grid-template-columns:52px 1fr; font-size:10.4px; padding:4px 0; }
   .kv-quad .fig { grid-column:2; grid-row:2 / 6; align-self:center; margin:0; }
-  .kv-scenarios { width:100%; border-collapse:collapse; font-size:9.6px; line-height:1.28; }
-  .kv-scenarios th, .kv-scenarios td { border:1px solid var(--line); padding:3px 6px; text-align:left; vertical-align:top; }
-  .kv-scenarios th { background:var(--b50); color:var(--ink); }
+  .kv-scenarios { display:grid; grid-template-columns:1fr 1fr; gap:5px 18px; font-size:10px; line-height:1.3; }
+  .kv-scenarios p { margin:0; padding-top:4px; border-top:1px solid var(--line); }
   .kv-lead { font-size: 12.4px; line-height: 1.45; color: var(--muted); }
   .kv-tag { display: inline-block; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: var(--b50); color: var(--b700); margin-left: 6px; vertical-align: middle; }
 </style>"""
@@ -267,21 +266,25 @@ def page1():
 
 def scenario_summary():
     rows = [
-        ("Application encryption", "1-6; 7 conditional", "Match application operations; preserve identifiers and versions."),
-        ("Storage GRS", "1, 2, 5, 6; 7 conditional", "One account/key dependency. Patterns 3-4 do not assign separate keys to GRS replicas."),
-        ("Storage object replication", "1-6; 7 conditional", "Separate accounts can use independent keys and vaults."),
-        ("VM disk encryption", "3, 4; others conditional", "Regional Disk Encryption Sets; distinguish guest encryption and Secure Key Release."),
-        ("Azure Site Recovery", "3 documented; 4 conditional", "Pre-create target-region Disk Encryption Set and vault access. Do not infer HSM support."),
-        ("PostgreSQL / MySQL Flexible", "Feature-specific", "Replica, geo-backup, and geo-restore have different key, region, and identity rules."),
-        ("Database geo-replication", "Service-specific", "SQL permits documented regional key copies; Cosmos DB has account-level CMK requirements."),
-        ("Database geo-restore", "Service-specific", "Retain historical keys; validate target region, identities, and backup requirements."),
-        ("Purview Information Protection", "Feature-specific; 4 for vault BYOK", "Identify tenant-key BYOK versus Customer Key. Preserve keys for old content."),
+        ("Application encryption", "Match application operations; preserve identifiers and versions."),
+        ("Storage GRS", "One account/key dependency. Independent vaults do not assign separate keys to GRS replicas."),
+        ("Storage object replication", "Separate accounts can use independent keys and vaults."),
+        ("VM disk encryption", "Regional Disk Encryption Sets; distinguish guest encryption and Secure Key Release."),
+        ("Azure Site Recovery", "Pre-create target-region Disk Encryption Set and vault access. Do not infer HSM support."),
+        ("PostgreSQL / MySQL Flexible", "Replica, geo-backup, and geo-restore have different key, region, and identity rules."),
+        ("Database geo-replication", "SQL permits documented regional key copies; Cosmos DB has account-level CMK requirements."),
+        ("Database geo-restore", "Retain historical keys; validate target region, identities, and backup requirements."),
+        ("Purview Information Protection", "Identify tenant-key BYOK versus Customer Key. Preserve keys for old content."),
     ]
-    cells = "".join(f"<tr><td>{s}</td><td>{p}</td><td>{c}</td></tr>" for s, p, c in rows)
-    return ('<div class="eyebrow mt12" style="color:var(--s600)">Common key-management scenarios · candidate Keys patterns, not universal support</div>'
-            '<table class="kv-scenarios" style="margin-top:5px"><thead><tr><th>Scenario</th><th>Patterns</th><th>Critical condition</th></tr></thead>'
-            f'<tbody>{cells}</tbody></table><p style="font-size:9.6px;color:var(--muted);margin-top:5px">'
-            'The <a href="https://azure.github.io/multi-region-platform/key-vault-across-regions.html#common-key-management-scenarios">online scenario matrix and detailed sections</a> compare all seven patterns with service-specific references. Conditional = validate the exact feature, topology, and key operations.</p>')
+    anchors = ["application-level-encryption", "azure-storage-grs", "storage-object-replication",
+               "vm-disk-encryption", "azure-site-recovery", "postgresql-and-mysql-flexible-server",
+               "database-geo-replication", "database-geo-restore", "purview-information-protection"]
+    cells = "".join(
+        f'<p><b><a href="https://azure.github.io/multi-region-platform/key-vault-across-regions.html#{anchor}">{s}</a></b><br>{c}</p>'
+        for (s, c), anchor in zip(rows, anchors))
+    return ('<div class="eyebrow mt12" style="color:var(--s600)">Common key-management scenarios</div>'
+            f'<div class="kv-scenarios" style="margin-top:5px">{cells}</div><p style="font-size:9.6px;color:var(--muted);margin-top:5px">'
+            'Select a scenario for applicable patterns, linked deployment diagrams, and service-specific conditions. Conditional options are not universal support guarantees.</p>')
 
 
 def page2():
