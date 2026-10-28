@@ -1,7 +1,7 @@
 ---
 title: Regional design overview
 description: Select the regional design for a qualified Azure region with three choices from short lists — the Platform Services profile, where each shared service is provided, and whether existing hybrid connectivity is reused — and record them so the region can be prepared.
-ms.date: 10/27/2026
+ms.date: 10/28/2026
 ms.topic: conceptual
 ---
 
@@ -41,12 +41,12 @@ The three choices sit on one path, from on-premises locations to the workloads i
 
 ## The regional design record
 
-Keep one record per region. Record the selected profile, the placement of each shared service (and which hub provides the remote ones), the hybrid connectivity decision, the owner, the date, and the triggers that would reopen the decision.
+Keep one record per region. Record the selected profile, the placement of each shared platform service (and which region provides the remote ones), the hybrid connectivity decision, the owner, the date, and the triggers that would reopen the decision.
 
 | Region | Platform Services profile | Shared services | Hybrid connectivity | Open conditions |
 |---|---|---|---|---|
 | Region C | Minimal platform | Local: selected capabilities. Remote from Region A: remaining shared services. | Reuse: existing foundation where required. | None |
-| Region D | Remote platform | Remote from a Full-Platform region. | Reuse: via the hub where required. | Latency test with representative traffic. |
+| Region D | Remote platform | Remote from a Full-Platform region. | Reuse: via the remote region where required. | Latency test with representative traffic. |
 | Region E | No platform | None required. | Not required. | None |
 
 *Illustrative example. Regions and choices are examples only.*
