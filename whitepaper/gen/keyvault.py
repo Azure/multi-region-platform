@@ -249,7 +249,7 @@ def page1():
                  "Data can be recoverable while the application cannot start without its keys, secrets, and certificates. Key Vault is multi-tenant; Managed HSM is single-tenant.")
             + '<div class="row mt12" style="gap:20px;align-items:stretch">'
               '<div class="note" style="flex:1;padding:9px 12px"><h4>Paired regions</h4><p style="font-size:10.8px;line-height:1.4">Eligible Standard/Premium vaults replicate asynchronously to a Microsoft-managed copy. Microsoft may take hours or longer to initiate failover; afterward access is read-only. Private Link reconnection can add 20 minutes.</p></div>'
-              '<div class="note" style="flex:1;padding:9px 12px"><h4>Microsoft-managed failover exclusions</h4><p style="font-size:10.8px;line-height:1.4"><em>Microsoft-managed failover is not supported for non-paired regions, regions with asymmetric pairing or paired regions across two different geographies.</em> Use independent vaults or supported Managed HSM replication. See <a href="https://learn.microsoft.com/azure/reliability/reliability-key-vault#microsoft-managed-failover-to-a-paired-region">failover eligibility</a> and <a href="https://learn.microsoft.com/azure/key-vault/general/overview-security-worlds">security worlds</a>.</p></div></div>'
+              '<div class="note" style="flex:1;padding:9px 12px"><h4>Microsoft-managed failover exclusions</h4><p style="font-size:10.8px;line-height:1.4"><em>Microsoft-managed failover is not supported for non-paired regions, regions with asymmetric pairing or paired regions across two different geographies.</em> Use independent vaults or supported Managed HSM replication. See <a href="https://learn.microsoft.com/azure/reliability/reliability-key-vault#microsoft-managed-failover-to-a-paired-region">failover eligibility</a>, <a href="https://learn.microsoft.com/azure/key-vault/general/overview-security-worlds">security worlds</a>, and <a href="https://learn.microsoft.com/azure/reliability/reliability-managed-hsm">Managed HSM reliability</a>.</p></div></div>'
             + grid
             + scenario_summary())
     return page(body)
@@ -265,7 +265,7 @@ def scenario_summary():
         ("PostgreSQL / MySQL Flexible", "Replica, geo-backup, and geo-restore have different key, region, and identity rules."),
         ("Azure SQL Database, Azure SQL Managed Instance and Azure Cosmos DB geo-replication", "SQL permits documented regional key copies; Cosmos DB has account-level CMK requirements."),
         ("Azure SQL Database, Azure SQL Managed Instance and Azure Cosmos DB geo-restore", "Retain historical keys; validate target region, identities, and backup requirements."),
-        ("Purview Information Protection", "Identify tenant-key BYOK versus Customer Key. Preserve keys for old content."),
+        ("Purview Information Protection", "Managed HSM geo-replication, with or without BYOK, is suitable. EKM remains feature-specific. Preserve keys for old content."),
     ]
     anchors = ["application-level-encryption", "azure-storage-grs", "storage-object-replication",
                "vm-disk-encryption", "azure-site-recovery", "postgresql-and-mysql-flexible-server",
@@ -427,23 +427,24 @@ def page5():
     svg_tree = (f'<svg viewBox="0 0 1220 730" width="100%" role="img" aria-label="Decision tree identifying patterns by name for secrets and certificates and keys. Check the consuming service, external key custody, shared replicated key requirements, independent regional key support, eligible pairing, and BYOK. Paired-region vault replication uses Standard for software protection or Premium for HSM protection." '
                 f'font-family="{FONT}" style="display:block">{inner}</svg>')
     refs = [
-        ("Microsoft-managed failover to a paired region", "https://learn.microsoft.com/azure/reliability/reliability-key-vault#microsoft-managed-failover-to-a-paired-region"),
-        ("Azure Key Vault security worlds", "https://learn.microsoft.com/azure/key-vault/general/overview-security-worlds"),
         ("Azure Key Vault availability and redundancy", "https://learn.microsoft.com/azure/key-vault/general/disaster-recovery-guidance"),
+        ("Azure Key Vault security worlds", "https://learn.microsoft.com/azure/key-vault/general/overview-security-worlds"),
         ("Azure paired regions", "https://learn.microsoft.com/azure/reliability/regions-paired"),
-        ("Managed HSM multi-region replication", "https://learn.microsoft.com/azure/key-vault/managed-hsm/multi-region-replication"),
         ("External key management", "https://learn.microsoft.com/azure/key-vault/managed-hsm/external-key-management-overview"),
-        ("Supported HSMs for BYOK", "https://learn.microsoft.com/azure/key-vault/keys/hsm-protected-keys"),
-        ("Services that support customer-managed keys", "https://learn.microsoft.com/azure/security/fundamentals/encryption-customer-managed-keys-support"),
         ("How to choose the right key management solution", "https://learn.microsoft.com/azure/security/fundamentals/key-management-choose"),
         ("Key Vault and Managed HSM SLAs", "https://www.microsoft.com/licensing/docs/view/Service-Level-Agreements-SLA-for-Online-Services"),
+        ("Managed HSM multi-region replication", "https://learn.microsoft.com/azure/key-vault/managed-hsm/multi-region-replication"),
+        ("Microsoft-managed failover to a paired region", "https://learn.microsoft.com/azure/reliability/reliability-key-vault#microsoft-managed-failover-to-a-paired-region"),
+        ("Reliability in Azure Key Vault Managed HSM", "https://learn.microsoft.com/azure/reliability/reliability-managed-hsm"),
+        ("Services that support customer-managed keys", "https://learn.microsoft.com/azure/security/fundamentals/encryption-customer-managed-keys-support"),
+        ("Supported HSMs for BYOK", "https://learn.microsoft.com/azure/key-vault/keys/hsm-protected-keys"),
     ]
     items = "".join(f'<li><a href="{u}">{t}</a></li>' for t, u in refs)
     body = (head("Service guides · Key Vault · Decision tree", "Which Key Vault pattern fits?",
                  "Choose a candidate, not a universal support guarantee. Validate the scenario conditions on page 1 and the detailed online guidance.")
             + f'<div class="figure" id="figKVTree" data-export-width="940" style="margin-top:8px">{svg_tree}</div>'
             + '<div class="eyebrow mt8" style="color:var(--s600)">Reference links · Microsoft Learn</div>'
-            + f'<ul style="list-style:none;columns:3;column-gap:18px;margin-top:4px;font-size:9.6px;line-height:1.45">{items}</ul>')
+            + f'<ul style="columns:3;column-gap:18px;margin-top:4px;padding-left:14px;font-size:9.6px;line-height:1.45">{items}</ul>')
     return page(body)
 
 

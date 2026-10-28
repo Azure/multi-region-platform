@@ -215,6 +215,12 @@ class KeyVaultLayoutTests(unittest.TestCase):
         purview = body.split("### Purview Information Protection", 1)[1].split("## Decision tree", 1)[0]
         self.assertIn("(#keys-pattern-1), using Premium", purview)
         self.assertIn("Standard software-protected keys require feature-specific confirmation", purview)
+        suitable, conditional = purview.split("**External key management requires feature-specific confirmation:**", 1)
+        for pattern in (4, 5):
+            self.assertIn(f"(#keys-pattern-{pattern})", suitable)
+            self.assertNotIn(f"(#keys-pattern-{pattern})", conditional)
+        self.assertIn("(#keys-pattern-6)", conditional)
+        self.assertNotIn("(#keys-pattern-6)", suitable)
         self.assertIn("Standard: software / Premium: HSM", keyvault.d_k1())
 
     def test_standalone_figures_have_matching_export_sizes(self):
