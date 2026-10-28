@@ -1,13 +1,28 @@
 ---
 title: Key Vault across regions
 description: Compare two secrets and certificates patterns and seven key patterns, with regional diagrams, service-specific recovery scenarios, and a decision tree.
-ms.date: 10/27/2026
+ms.date: 10/28/2026
 ms.topic: conceptual
 ---
 
 # Key Vault across regions
 
 Key Vault is often a runtime dependency: an application can need keys, secrets, and certificates just to start. Recovering data in another region is not enough if its key cannot be reached. Start with regional behavior, compare the products and patterns, then check the consuming service's requirements.
+
+**Secrets and certificates patterns**
+
+- [Pattern 1: Key Vault in each region](#secrets-certificates-pattern-1)
+- [Pattern 2: Key Vault in a paired region](#secrets-certificates-pattern-2)
+
+**Key patterns**
+
+- [Pattern 1: Standard vault with paired-region replication](#keys-pattern-1)
+- [Pattern 2: Premium vault with paired-region replication](#keys-pattern-2)
+- [Pattern 3: One Key Vault per region](#keys-pattern-3)
+- [Pattern 4: Premium vault per region with external HSM and BYOK](#keys-pattern-4)
+- [Pattern 5: Managed HSM with geo-replication](#keys-pattern-5)
+- [Pattern 6: Managed HSM geo-replication with external HSM and BYOK](#keys-pattern-6)
+- [Pattern 7: Managed HSM with external key management](#keys-pattern-7)
 
 > [!IMPORTANT]
 > A key store's replication capability does not establish support for every service's replication or restore operation. Validate key access, identities, networking, rotation, and recovery together.

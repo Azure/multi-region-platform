@@ -102,9 +102,24 @@
   <main id="main">
     <div class="crumbs">Multi-region platform <span>/</span> Service Guides for Multi Region</div>
     <h1 class="title">Key Vault across regions</h1>
-    <p class="meta">October 27, 2026 · 19 min read</p>
+    <p class="meta">October 28, 2026 · 20 min read</p>
     <article class="prose">
 <p>Key Vault is often a runtime dependency: an application can need keys, secrets, and certificates just to start. Recovering data in another region is not enough if its key cannot be reached. Start with regional behavior, compare the products and patterns, then check the consuming service's requirements.</p>
+<p><strong>Secrets and certificates patterns</strong></p>
+<ul>
+<li><a href="#secrets-certificates-pattern-1">Pattern 1: Key Vault in each region</a></li>
+<li><a href="#secrets-certificates-pattern-2">Pattern 2: Key Vault in a paired region</a></li>
+</ul>
+<p><strong>Key patterns</strong></p>
+<ul>
+<li><a href="#keys-pattern-1">Pattern 1: Standard vault with paired-region replication</a></li>
+<li><a href="#keys-pattern-2">Pattern 2: Premium vault with paired-region replication</a></li>
+<li><a href="#keys-pattern-3">Pattern 3: One Key Vault per region</a></li>
+<li><a href="#keys-pattern-4">Pattern 4: Premium vault per region with external HSM and BYOK</a></li>
+<li><a href="#keys-pattern-5">Pattern 5: Managed HSM with geo-replication</a></li>
+<li><a href="#keys-pattern-6">Pattern 6: Managed HSM geo-replication with external HSM and BYOK</a></li>
+<li><a href="#keys-pattern-7">Pattern 7: Managed HSM with external key management</a></li>
+</ul>
 <div class="alert important"><p class="alert-title"><svg viewBox="0 0 16 16"><path d="M8 1 15 14H1L8 1Zm-.9 4.6.2 4.4h1.4l.2-4.4Zm.9 5.5a.9.9 0 1 0 0 1.8.9.9 0 0 0 0-1.8Z"/></svg>Important</p><p>A key store's replication capability does not establish support for every service's replication or restore operation. Validate key access, identities, networking, rotation, and recovery together.</p></div>
 <h2 id="paired-and-nonpaired-regions">Paired and nonpaired regions<a class="anchor" href="#paired-and-nonpaired-regions" aria-label="Link to this section">#</a></h2>
 <p><strong>Paired regions.</strong> In eligible same-geography region pairs, Key Vault Standard and Premium replicate vault contents asynchronously to a Microsoft-managed secondary. That copy is part of the same vault, not a second vault you manage. Microsoft decides when to fail over; afterward, secrets, certificates, and keys are available read-only until normal operation returns.</p>
