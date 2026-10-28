@@ -322,7 +322,7 @@ def page3():
         ("bf", "Best for", "HSM protection; accepts Microsoft recovery timing."),
         ("lm", "Watch for", "Premium uses the same regional recovery model as Standard."),
     ], "figKVK2", "K2")
-    k3 = card("3", "One Key Vault per region", [
+    k3 = card("3", "Standard or Premium vault in each region", [
         ("cr", "Origin", "Generate a different key in each Standard or Premium vault."),
         ("ok", "Outage", "Full local read and write in the surviving region."),
         ("bf", "Best for", "Services allowing independent regional keys."),

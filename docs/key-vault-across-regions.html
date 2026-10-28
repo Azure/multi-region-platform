@@ -105,16 +105,16 @@
     <p class="meta">October 28, 2026 · 20 min read</p>
     <article class="prose">
 <p>Key Vault is often a runtime dependency: an application can need keys, secrets, and certificates just to start. Recovering data in another region is not enough if its key cannot be reached. Start with regional behavior, compare the products and patterns, then check the consuming service's requirements.</p>
-<p><strong>Secrets and certificates patterns</strong></p>
+<p><strong>Secrets and Certificates management patterns</strong></p>
 <ul>
 <li><a href="#secrets-certificates-pattern-1">Pattern 1: Key Vault in each region</a></li>
 <li><a href="#secrets-certificates-pattern-2">Pattern 2: Key Vault in a paired region</a></li>
 </ul>
-<p><strong>Key patterns</strong></p>
+<p><strong>Key management patterns</strong></p>
 <ul>
 <li><a href="#keys-pattern-1">Pattern 1: Standard vault with paired-region replication</a></li>
 <li><a href="#keys-pattern-2">Pattern 2: Premium vault with paired-region replication</a></li>
-<li><a href="#keys-pattern-3">Pattern 3: One Key Vault per region</a></li>
+<li><a href="#keys-pattern-3">Pattern 3: Standard or Premium vault in each region</a></li>
 <li><a href="#keys-pattern-4">Pattern 4: Premium vault per region with external HSM and BYOK</a></li>
 <li><a href="#keys-pattern-5">Pattern 5: Managed HSM with geo-replication</a></li>
 <li><a href="#keys-pattern-6">Pattern 6: Managed HSM geo-replication with external HSM and BYOK</a></li>
@@ -244,7 +244,7 @@
 <th scope="col">Compare</th>
 <th scope="col"><a href="#keys-pattern-1">Standard vault with paired-region replication</a></th>
 <th scope="col"><a href="#keys-pattern-2">Premium vault with paired-region replication</a></th>
-<th scope="col"><a href="#keys-pattern-3">One Key Vault per region</a></th>
+<th scope="col"><a href="#keys-pattern-3">Standard or Premium vault in each region</a></th>
 <th scope="col"><a href="#keys-pattern-4">Premium vault per region with external HSM and BYOK</a></th>
 <th scope="col"><a href="#keys-pattern-5">Managed HSM with geo-replication</a></th>
 <th scope="col"><a href="#keys-pattern-6">Managed HSM geo-replication with external HSM and BYOK</a></th>
@@ -306,7 +306,7 @@
 <li><strong>Best for / watch for:</strong> HSM protection without a customer-configured replicated Managed HSM. Premium does not improve the vault's regional recovery control compared with Standard.</li>
 </ul></div><figure class="fig live" data-fig="key-vault-keys-premium-paired-region" role="img" aria-label="A Premium vault generates an HSM-protected key in region A. Microsoft asynchronously replicates it to a paired-region copy of the same vault, which is read-only after failover."><div class="fig-tools"><button class="fig-zoom" type="button" aria-label="Expand figure" title="Expand"><svg viewBox="0 0 16 16"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><a class="fig-png" href="media/key-vault-keys-premium-paired-region.png" download title="Download image" aria-label="Download image"><svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></div><div class="fig-stage"><div class="fig-scale"><div class="wpf" data-w="380" data-h="273" style="width:380px"><div class="figure" role="img" aria-label="A Premium vault generates an HSM-protected key in region A. Microsoft asynchronously replicates it to a paired-region copy of the same vault, which is read-only after failover." data-export-width="380" style="width: 380px; max-width: none;"><div style="border:1px solid var(--line);border-radius:12px;padding:8px 10px 4px"><svg viewBox="0 0 360 260" width="100%" role="img" aria-label="Premium Key Vault generates a key in the primary region; Microsoft asynchronously replicates it to a paired-region copy of the same vault. Read-only after Microsoft-managed failover." font-family="Pub Sans, Segoe UI, sans-serif" style="display:block"><rect x="70" y="8" width="220" height="44" rx="22.0" fill="#243A57"></rect><text x="180.0" y="29.0" text-anchor="middle" font-size="9.4" font-weight="700" fill="#fff">Key Vault key generation</text><text x="180.0" y="40.0" text-anchor="middle" font-size="8.6" fill="#E8EDF3">Create the key in the primary vault</text><g><rect x="8" y="96" width="150" height="140" rx="12" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"></rect><use href="#i-pin" x="16" y="108" width="12" height="12" color="#0F6CBD"></use><text x="32" y="118" font-size="10" font-weight="700" fill="#0F548C">Region A</text><rect x="18" y="138" width="130" height="46" rx="9" fill="#fff" stroke="#0F6CBD" stroke-width="1.3"></rect><use href="#i-lock" x="24" y="150" width="22" height="22" color="#0F6CBD"></use><text x="52" y="157" font-size="10" font-weight="700" fill="#0B3A63">Key Vault</text><text x="52" y="171" font-size="9.2" font-weight="700" fill="#0B3A63">Premium (primary)</text><text x="83" y="200" text-anchor="middle" font-size="9" fill="#5B6778">key created here</text><rect x="13" y="212" width="140" height="18" rx="9" fill="#DFF1E6" stroke="#9AD3B0"></rect><text x="83.0" y="224.4" text-anchor="middle" font-size="9" font-weight="700" fill="#0B6B38">Read + write</text></g><g opacity=".85"><rect x="202" y="96" width="150" height="140" rx="12" fill="#F7FBFE" stroke="#8CC0EE" stroke-dasharray="4 3"></rect><use href="#i-pin" x="210" y="108" width="12" height="12" color="#0F6CBD"></use><text x="226" y="118" font-size="10" font-weight="700" fill="#0F548C">Paired region</text><rect x="212" y="138" width="130" height="46" rx="9" fill="#fff" stroke="#0F6CBD" stroke-width="1.3"></rect><use href="#i-lock" x="218" y="150" width="22" height="22" color="#0F6CBD"></use><text x="246" y="157" font-size="10" font-weight="700" fill="#0B3A63">Key Vault</text><text x="246" y="171" font-size="9.2" font-weight="700" fill="#0B3A63">(Microsoft copy)</text><text x="277" y="200" text-anchor="middle" font-size="9" fill="#5B6778">Premium vault copy</text><rect x="207" y="212" width="140" height="18" rx="9" fill="#FFF1CC" stroke="#E8C766"></rect><text x="277.0" y="224.4" text-anchor="middle" font-size="9" font-weight="700" fill="#8A5A00">Read-only on failover</text></g><path d="M110 52 C110 90 136 90 136 138" fill="none" stroke="#2B88D8" stroke-width="1.6"></path><path d="M131 132 L136 138 L141 132" fill="none" stroke="#2B88D8" stroke-width="1.6" stroke-linejoin="round"></path><path d="M148 154 C170 142 190 138 212 150" fill="none" stroke="#2B88D8" stroke-width="1.6" stroke-dasharray="4 3"></path><path d="M209 143 L212 150 L205 151" fill="none" stroke="#2B88D8" stroke-width="1.6" stroke-linejoin="round"></path><text x="180" y="253" text-anchor="middle" font-size="9" fill="#5B6778">Dashed: Microsoft-managed asynchronous replication</text></svg></div></div></div>
 </div></div><figcaption>Keys - Pattern 2: Premium vault with Microsoft-managed paired-region replication.</figcaption></figure></div>
-<div class="kv-pattern"><div class="kv-pattern-copy"><h3 id="keys-pattern-3">Pattern 3: One Key Vault per region<a class="anchor" href="#keys-pattern-3" aria-label="Link to this section">#</a></h3><ul>
+<div class="kv-pattern"><div class="kv-pattern-copy"><h3 id="keys-pattern-3">Pattern 3: Standard or Premium vault in each region<a class="anchor" href="#keys-pattern-3" aria-label="Link to this section">#</a></h3><ul>
 <li><strong>Deployment:</strong> One Standard or Premium vault per workload per region.</li>
 <li><strong>Key origin:</strong> Generate a separate key in each vault.</li>
 <li><strong>Distribution:</strong> No vault-to-vault replication; each service instance uses its configured regional key.</li>
@@ -353,7 +353,7 @@
 <p><strong>Patterns you can use:</strong></p>
 <ul>
 <li><a href="#keys-pattern-1">Standard vault with paired-region replication</a> for software-protected operations or <a href="#keys-pattern-2">Premium vault with paired-region replication</a> for HSM-protected operations: accept Microsoft-managed recovery timing.</li>
-<li><a href="#keys-pattern-3">One Key Vault per region</a> or <a href="#keys-pattern-4">Premium vault per region with external HSM and BYOK</a>: the application must handle independent regional keys or imports.</li>
+<li><a href="#keys-pattern-3">Standard or Premium vault in each region</a> or <a href="#keys-pattern-4">Premium vault per region with external HSM and BYOK</a>: the application must handle independent regional keys or imports.</li>
 <li><a href="#keys-pattern-5">Managed HSM with geo-replication</a> or <a href="#keys-pattern-6">Managed HSM geo-replication with external HSM and BYOK</a>: use supported Managed HSM operations, including imported keys for BYOK.</li>
 <li><strong>Conditional:</strong> <a href="#keys-pattern-7">Managed HSM with external key management</a>, only for supported external-key operations.</li>
 </ul>
@@ -369,7 +369,7 @@
 <h3 id="storage-object-replication">Azure Storage Blob Object Replication<a class="anchor" href="#storage-object-replication" aria-label="Link to this section">#</a></h3>
 <p><strong>Patterns you can use:</strong></p>
 <ul>
-<li><a href="#keys-pattern-3">One Key Vault per region</a> or <a href="#keys-pattern-4">Premium vault per region with external HSM and BYOK</a>: source and destination accounts can use independent keys; for BYOK, import and authorize keys for each account.</li>
+<li><a href="#keys-pattern-3">Standard or Premium vault in each region</a> or <a href="#keys-pattern-4">Premium vault per region with external HSM and BYOK</a>: source and destination accounts can use independent keys; for BYOK, import and authorize keys for each account.</li>
 <li><a href="#keys-pattern-1">Standard vault with paired-region replication</a> or <a href="#keys-pattern-2">Premium vault with paired-region replication</a>: configure each account's key access and accept Microsoft-managed recovery.</li>
 <li><a href="#keys-pattern-5">Managed HSM with geo-replication</a> or <a href="#keys-pattern-6">Managed HSM geo-replication with external HSM and BYOK</a>: configure each account's CMK integration.</li>
 <li><strong>Conditional:</strong> <a href="#keys-pattern-7">Managed HSM with external key management</a>, including recovery of the proxy and external HSM.</li>
@@ -378,7 +378,7 @@
 <h3 id="vm-disk-encryption">VM disk encryption<a class="anchor" href="#vm-disk-encryption" aria-label="Link to this section">#</a></h3>
 <p><strong>Patterns you can use:</strong></p>
 <ul>
-<li><a href="#keys-pattern-3">One Key Vault per region</a> or <a href="#keys-pattern-4">Premium vault per region with external HSM and BYOK</a>: configure regional Disk Encryption Sets and keys, including regional imports for BYOK.</li>
+<li><a href="#keys-pattern-3">Standard or Premium vault in each region</a> or <a href="#keys-pattern-4">Premium vault per region with external HSM and BYOK</a>: configure regional Disk Encryption Sets and keys, including regional imports for BYOK.</li>
 <li><strong>Conditional:</strong> <a href="#keys-pattern-1">Standard vault with paired-region replication</a>, <a href="#keys-pattern-2">Premium vault with paired-region replication</a>, <a href="#keys-pattern-5">Managed HSM with geo-replication</a>, or <a href="#keys-pattern-6">Managed HSM geo-replication with external HSM and BYOK</a>: satisfy the disk/key-store regional requirements, including imported key access for BYOK.</li>
 <li><strong>Conditional:</strong> <a href="#keys-pattern-7">Managed HSM with external key management</a>, only for supported disk profiles that do not require Secure Key Release.</li>
 </ul>
@@ -386,7 +386,7 @@
 <h3 id="azure-site-recovery">Azure Site Recovery<a class="anchor" href="#azure-site-recovery" aria-label="Link to this section">#</a></h3>
 <p><strong>Patterns you can use:</strong></p>
 <ul>
-<li><a href="#keys-pattern-3">One Key Vault per region</a>: the documented regional-vault approach, with target-region Disk Encryption Set access.</li>
+<li><a href="#keys-pattern-3">Standard or Premium vault in each region</a>: the documented regional-vault approach, with target-region Disk Encryption Set access.</li>
 <li><strong>Conditional:</strong> <a href="#keys-pattern-4">Premium vault per region with external HSM and BYOK</a>: validate the imported key and complete Site Recovery configuration.</li>
 </ul>
 <p>Paired-region vault replication alone does not provision target-region encryption dependencies. Do not assume Managed HSM or EKM support from general managed-disk support.</p>
@@ -395,7 +395,7 @@
 <p><strong>Conditional patterns:</strong></p>
 <ul>
 <li><a href="#keys-pattern-1">Standard vault with paired-region replication</a> or <a href="#keys-pattern-2">Premium vault with paired-region replication</a>: validate the product and recovery feature.</li>
-<li><a href="#keys-pattern-3">One Key Vault per region</a> or <a href="#keys-pattern-4">Premium vault per region with external HSM and BYOK</a>: meet regional key and identity requirements; for BYOK, validate key import for the recovery feature.</li>
+<li><a href="#keys-pattern-3">Standard or Premium vault in each region</a> or <a href="#keys-pattern-4">Premium vault per region with external HSM and BYOK</a>: meet regional key and identity requirements; for BYOK, validate key import for the recovery feature.</li>
 <li><a href="#keys-pattern-5">Managed HSM with geo-replication</a> or <a href="#keys-pattern-6">Managed HSM geo-replication with external HSM and BYOK</a>: confirm Managed HSM support and regional requirements for that feature, including BYOK import where used.</li>
 <li><a href="#keys-pattern-7">Managed HSM with external key management</a>: verify the service's external-key CMK integration and the recovery feature separately.</li>
 </ul>
@@ -405,7 +405,7 @@
 <ul>
 <li><a href="#keys-pattern-5">Managed HSM with geo-replication</a> or <a href="#keys-pattern-6">Managed HSM geo-replication with external HSM and BYOK</a>: candidates for supported shared-key dependencies; with BYOK, manage the imported-key lifecycle.</li>
 <li><a href="#keys-pattern-1">Standard vault with paired-region replication</a> or <a href="#keys-pattern-2">Premium vault with paired-region replication</a>: accept the Microsoft-managed recovery risk and preserve replica key access.</li>
-<li><a href="#keys-pattern-3">One Key Vault per region</a> or <a href="#keys-pattern-4">Premium vault per region with external HSM and BYOK</a>: only with a documented service-specific key-copy and rotation design, not as a general shared-key solution.</li>
+<li><a href="#keys-pattern-3">Standard or Premium vault in each region</a> or <a href="#keys-pattern-4">Premium vault per region with external HSM and BYOK</a>: only with a documented service-specific key-copy and rotation design, not as a general shared-key solution.</li>
 <li><a href="#keys-pattern-7">Managed HSM with external key management</a>: verify the exact integration; external keys have no geo-replicated failover target.</li>
 </ul>
 <p>SQL Database and SQL Managed Instance need the required TDE protector keys available to their replicas. Documented SQL designs can use regional copies of key material; rotation must preserve access to every required version. Cosmos DB uses an account-level CMK dependency and has its own networking and key-store requirements. Do not assume SQL's key-copy design applies to Cosmos DB. Replicated Managed HSM is a candidate where supported; compare its cost with the accepted risk of Microsoft-managed vault recovery, not an arbitrary number-of-keys threshold. See <a href="https://learn.microsoft.com/azure/azure-sql/database/transparent-data-encryption-byok-overview" target="_blank" rel="noopener">SQL customer-managed TDE</a> and <a href="https://learn.microsoft.com/azure/cosmos-db/how-to-setup-customer-managed-keys" target="_blank" rel="noopener">Cosmos DB CMKs</a>.</p>
@@ -413,7 +413,7 @@
 <p><strong>Conditional patterns:</strong></p>
 <ul>
 <li><a href="#keys-pattern-1">Standard vault with paired-region replication</a> or <a href="#keys-pattern-2">Premium vault with paired-region replication</a>: the restore target must retain access to the original keys.</li>
-<li><a href="#keys-pattern-3">One Key Vault per region</a> or <a href="#keys-pattern-4">Premium vault per region with external HSM and BYOK</a>: preserve the required key material and versions; newly generated regional keys cannot replace them.</li>
+<li><a href="#keys-pattern-3">Standard or Premium vault in each region</a> or <a href="#keys-pattern-4">Premium vault per region with external HSM and BYOK</a>: preserve the required key material and versions; newly generated regional keys cannot replace them.</li>
 <li><a href="#keys-pattern-5">Managed HSM with geo-replication</a> or <a href="#keys-pattern-6">Managed HSM geo-replication with external HSM and BYOK</a>: verify service restore support and historical key availability.</li>
 <li><a href="#keys-pattern-7">Managed HSM with external key management</a>: retain the original external key and reference; external-key backup/restore is not supported.</li>
 </ul>

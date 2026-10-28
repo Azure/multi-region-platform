@@ -230,8 +230,6 @@ no key creation or rotation until normal operation returns
 no managed hsm geo replication for external keys
 no paired region for example qatar central belgium central and spain central
 once initiated public endpoint convergence is designed to take a few minutes
-one key vault per region keys pattern 3
-one key vault per region or premium vault per region with external hsm and byok
 one managed hsm pool with a primary and one supported extended region
 one premium vault per workload per region
 one premium vault with an eligible microsoft managed paired region copy
@@ -289,6 +287,7 @@ rotation must preserve access to every required version
 same as pattern 3
 same regional resilience as standard
 satisfy the disk key store regional requirements including imported key access for byok
+secrets and certificates management patterns
 secrets and certificates uses patterns 1 2
 select a candidate pattern then validate the consuming service s replication restore and key lifecycle requirements
 select a pattern name to return to its deployment details and diagram
@@ -300,6 +299,8 @@ site recovery does not automatically apply encryption key changes to protected v
 source and destination accounts can use independent keys
 source and destination are separate accounts so their cmk configuration can be independent
 sql database and sql managed instance need the required tde protector keys available to their replicas
+standard or premium vault in each region keys pattern 3
+standard or premium vault in each region or premium vault per region with external hsm and byok
 standard supports software protected keys
 standard vault with microsoft managed paired region replication
 standard vault with paired region replication

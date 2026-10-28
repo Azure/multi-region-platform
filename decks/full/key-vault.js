@@ -68,7 +68,7 @@ module.exports = (pres, L) => {
       title: 'Keys: independent regional vaults',
       guidance: 'Standard supports software-key import. HSM-to-HSM BYOK transfer uses Premium or Managed HSM. Import does not establish service support.',
       patterns: [
-        ['3', 'One Key Vault per region', 'keys-vault-per-region',
+        ['3', 'Standard or Premium vault in each region', 'keys-vault-per-region',
           'Standard or Premium; one vault per workload per region, with different keys.',
           'Full read and write on each local vault.',
           'Services can use separate regional keys.',

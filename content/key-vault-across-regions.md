@@ -9,16 +9,16 @@ ms.topic: conceptual
 
 Key Vault is often a runtime dependency: an application can need keys, secrets, and certificates just to start. Recovering data in another region is not enough if its key cannot be reached. Start with regional behavior, compare the products and patterns, then check the consuming service's requirements.
 
-**Secrets and certificates patterns**
+**Secrets and Certificates management patterns**
 
 - [Pattern 1: Key Vault in each region](#secrets-certificates-pattern-1)
 - [Pattern 2: Key Vault in a paired region](#secrets-certificates-pattern-2)
 
-**Key patterns**
+**Key management patterns**
 
 - [Pattern 1: Standard vault with paired-region replication](#keys-pattern-1)
 - [Pattern 2: Premium vault with paired-region replication](#keys-pattern-2)
-- [Pattern 3: One Key Vault per region](#keys-pattern-3)
+- [Pattern 3: Standard or Premium vault in each region](#keys-pattern-3)
 - [Pattern 4: Premium vault per region with external HSM and BYOK](#keys-pattern-4)
 - [Pattern 5: Managed HSM with geo-replication](#keys-pattern-5)
 - [Pattern 6: Managed HSM geo-replication with external HSM and BYOK](#keys-pattern-6)
@@ -108,7 +108,7 @@ Customer-managed keys (CMKs) protect a service's data encryption keys; the data 
 
 The seven patterns below follow the updated guidance's numbering. Standard supports software-protected keys; the HSM-backed BYOK patterns use Premium or Managed HSM.
 
-| Compare | [Standard vault with paired-region replication](#keys-pattern-1) | [Premium vault with paired-region replication](#keys-pattern-2) | [One Key Vault per region](#keys-pattern-3) | [Premium vault per region with external HSM and BYOK](#keys-pattern-4) | [Managed HSM with geo-replication](#keys-pattern-5) | [Managed HSM geo-replication with external HSM and BYOK](#keys-pattern-6) | [Managed HSM with external key management](#keys-pattern-7) |
+| Compare | [Standard vault with paired-region replication](#keys-pattern-1) | [Premium vault with paired-region replication](#keys-pattern-2) | [Standard or Premium vault in each region](#keys-pattern-3) | [Premium vault per region with external HSM and BYOK](#keys-pattern-4) | [Managed HSM with geo-replication](#keys-pattern-5) | [Managed HSM geo-replication with external HSM and BYOK](#keys-pattern-6) | [Managed HSM with external key management](#keys-pattern-7) |
 |---|---|---|---|---|---|---|---|
 | Key origin | Primary vault | Primary vault | Each regional vault | Customer-owned external HSM | Primary Managed HSM | Customer-owned external HSM | Customer-owned external HSM |
 | Distribution | Microsoft replication | Microsoft replication | Independent keys | Import into each vault | Geo-replication | Import, then geo-replicate | Register external key reference |
@@ -139,7 +139,7 @@ The seven patterns below follow the updated guidance's numbering. Standard suppo
 
 *Keys - Pattern 2: Premium vault with Microsoft-managed paired-region replication.*
 
-### Pattern 3: One Key Vault per region {#keys-pattern-3}
+### Pattern 3: Standard or Premium vault in each region {#keys-pattern-3}
 
 - **Deployment:** One Standard or Premium vault per workload per region.
 - **Key origin:** Generate a separate key in each vault.
@@ -210,7 +210,7 @@ Each scenario lists candidate key patterns and the conditions for using them. Se
 **Patterns you can use:**
 
 - [Standard vault with paired-region replication](#keys-pattern-1) for software-protected operations or [Premium vault with paired-region replication](#keys-pattern-2) for HSM-protected operations: accept Microsoft-managed recovery timing.
-- [One Key Vault per region](#keys-pattern-3) or [Premium vault per region with external HSM and BYOK](#keys-pattern-4): the application must handle independent regional keys or imports.
+- [Standard or Premium vault in each region](#keys-pattern-3) or [Premium vault per region with external HSM and BYOK](#keys-pattern-4): the application must handle independent regional keys or imports.
 - [Managed HSM with geo-replication](#keys-pattern-5) or [Managed HSM geo-replication with external HSM and BYOK](#keys-pattern-6): use supported Managed HSM operations, including imported keys for BYOK.
 - **Conditional:** [Managed HSM with external key management](#keys-pattern-7), only for supported external-key operations.
 
@@ -230,7 +230,7 @@ GRS copies are replicas of one storage account, not independently configured acc
 
 **Patterns you can use:**
 
-- [One Key Vault per region](#keys-pattern-3) or [Premium vault per region with external HSM and BYOK](#keys-pattern-4): source and destination accounts can use independent keys; for BYOK, import and authorize keys for each account.
+- [Standard or Premium vault in each region](#keys-pattern-3) or [Premium vault per region with external HSM and BYOK](#keys-pattern-4): source and destination accounts can use independent keys; for BYOK, import and authorize keys for each account.
 - [Standard vault with paired-region replication](#keys-pattern-1) or [Premium vault with paired-region replication](#keys-pattern-2): configure each account's key access and accept Microsoft-managed recovery.
 - [Managed HSM with geo-replication](#keys-pattern-5) or [Managed HSM geo-replication with external HSM and BYOK](#keys-pattern-6): configure each account's CMK integration.
 - **Conditional:** [Managed HSM with external key management](#keys-pattern-7), including recovery of the proxy and external HSM.
@@ -241,7 +241,7 @@ Source and destination are separate accounts, so their CMK configuration can be 
 
 **Patterns you can use:**
 
-- [One Key Vault per region](#keys-pattern-3) or [Premium vault per region with external HSM and BYOK](#keys-pattern-4): configure regional Disk Encryption Sets and keys, including regional imports for BYOK.
+- [Standard or Premium vault in each region](#keys-pattern-3) or [Premium vault per region with external HSM and BYOK](#keys-pattern-4): configure regional Disk Encryption Sets and keys, including regional imports for BYOK.
 - **Conditional:** [Standard vault with paired-region replication](#keys-pattern-1), [Premium vault with paired-region replication](#keys-pattern-2), [Managed HSM with geo-replication](#keys-pattern-5), or [Managed HSM geo-replication with external HSM and BYOK](#keys-pattern-6): satisfy the disk/key-store regional requirements, including imported key access for BYOK.
 - **Conditional:** [Managed HSM with external key management](#keys-pattern-7), only for supported disk profiles that do not require Secure Key Release.
 
@@ -251,7 +251,7 @@ For managed-disk server-side encryption, configure regional Disk Encryption Sets
 
 **Patterns you can use:**
 
-- [One Key Vault per region](#keys-pattern-3): the documented regional-vault approach, with target-region Disk Encryption Set access.
+- [Standard or Premium vault in each region](#keys-pattern-3): the documented regional-vault approach, with target-region Disk Encryption Set access.
 - **Conditional:** [Premium vault per region with external HSM and BYOK](#keys-pattern-4): validate the imported key and complete Site Recovery configuration.
 
 Paired-region vault replication alone does not provision target-region encryption dependencies. Do not assume Managed HSM or EKM support from general managed-disk support.
@@ -263,7 +263,7 @@ Pre-create a compatible target-region Disk Encryption Set and authorize it to ac
 **Conditional patterns:**
 
 - [Standard vault with paired-region replication](#keys-pattern-1) or [Premium vault with paired-region replication](#keys-pattern-2): validate the product and recovery feature.
-- [One Key Vault per region](#keys-pattern-3) or [Premium vault per region with external HSM and BYOK](#keys-pattern-4): meet regional key and identity requirements; for BYOK, validate key import for the recovery feature.
+- [Standard or Premium vault in each region](#keys-pattern-3) or [Premium vault per region with external HSM and BYOK](#keys-pattern-4): meet regional key and identity requirements; for BYOK, validate key import for the recovery feature.
 - [Managed HSM with geo-replication](#keys-pattern-5) or [Managed HSM geo-replication with external HSM and BYOK](#keys-pattern-6): confirm Managed HSM support and regional requirements for that feature, including BYOK import where used.
 - [Managed HSM with external key management](#keys-pattern-7): verify the service's external-key CMK integration and the recovery feature separately.
 
@@ -275,7 +275,7 @@ Distinguish read replicas, geo-redundant backups, and geo-restore. Their key, re
 
 - [Managed HSM with geo-replication](#keys-pattern-5) or [Managed HSM geo-replication with external HSM and BYOK](#keys-pattern-6): candidates for supported shared-key dependencies; with BYOK, manage the imported-key lifecycle.
 - [Standard vault with paired-region replication](#keys-pattern-1) or [Premium vault with paired-region replication](#keys-pattern-2): accept the Microsoft-managed recovery risk and preserve replica key access.
-- [One Key Vault per region](#keys-pattern-3) or [Premium vault per region with external HSM and BYOK](#keys-pattern-4): only with a documented service-specific key-copy and rotation design, not as a general shared-key solution.
+- [Standard or Premium vault in each region](#keys-pattern-3) or [Premium vault per region with external HSM and BYOK](#keys-pattern-4): only with a documented service-specific key-copy and rotation design, not as a general shared-key solution.
 - [Managed HSM with external key management](#keys-pattern-7): verify the exact integration; external keys have no geo-replicated failover target.
 
 SQL Database and SQL Managed Instance need the required TDE protector keys available to their replicas. Documented SQL designs can use regional copies of key material; rotation must preserve access to every required version. Cosmos DB uses an account-level CMK dependency and has its own networking and key-store requirements. Do not assume SQL's key-copy design applies to Cosmos DB. Replicated Managed HSM is a candidate where supported; compare its cost with the accepted risk of Microsoft-managed vault recovery, not an arbitrary number-of-keys threshold. See [SQL customer-managed TDE](https://learn.microsoft.com/azure/azure-sql/database/transparent-data-encryption-byok-overview) and [Cosmos DB CMKs](https://learn.microsoft.com/azure/cosmos-db/how-to-setup-customer-managed-keys).
@@ -285,7 +285,7 @@ SQL Database and SQL Managed Instance need the required TDE protector keys avail
 **Conditional patterns:**
 
 - [Standard vault with paired-region replication](#keys-pattern-1) or [Premium vault with paired-region replication](#keys-pattern-2): the restore target must retain access to the original keys.
-- [One Key Vault per region](#keys-pattern-3) or [Premium vault per region with external HSM and BYOK](#keys-pattern-4): preserve the required key material and versions; newly generated regional keys cannot replace them.
+- [Standard or Premium vault in each region](#keys-pattern-3) or [Premium vault per region with external HSM and BYOK](#keys-pattern-4): preserve the required key material and versions; newly generated regional keys cannot replace them.
 - [Managed HSM with geo-replication](#keys-pattern-5) or [Managed HSM geo-replication with external HSM and BYOK](#keys-pattern-6): verify service restore support and historical key availability.
 - [Managed HSM with external key management](#keys-pattern-7): retain the original external key and reference; external-key backup/restore is not supported.
 
