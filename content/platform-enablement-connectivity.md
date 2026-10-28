@@ -1,7 +1,7 @@
 ---
 title: Place shared services
 description: Decide where each shared service is provided for a qualified Azure region — local, remote from another hub, or global — starting from a default for each Platform Services profile and changing it only when a workload requirement says so.
-ms.date: 10/27/2026
+ms.date: 10/28/2026
 ms.topic: conceptual
 ---
 
@@ -9,11 +9,11 @@ ms.topic: conceptual
 
 **Question:** Where is each shared service that the workloads depend on provided?
 
-Determine which shared services and operational capabilities must be provided in the region, consumed from another region, or remain centralized. Each service has one of three placements:
+Determine which shared platform services and operational capabilities must be provided in the region, consumed from another region, or remain centralized. Each service has one of three placements:
 
 - **Local:** deployed in the region.
-- **Remote:** consumed from a hub or a shared instance in another region. Record which one.
-- **Global:** not tied to a region. There is nothing to deploy.
+- **Remote:** consumed from shared instance in another region. Record which one.
+- **Global:** not tied to a region.
 
 ## Default placement by profile
 

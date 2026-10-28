@@ -1,7 +1,7 @@
 ---
 title: Select the Platform Services profile
 description: Select one of the four Platform Services profiles for a qualified Azure region, using the archetype-to-profile matrix, the selection principles, and the profile decision tree, and know when to reassess the selection.
-ms.date: 10/27/2026
+ms.date: 10/28/2026
 ms.topic: conceptual
 ---
 
@@ -45,10 +45,10 @@ The same tree as a table, from the smallest regional footprint to the largest:
 
 | Profile | Fits when the workloads expected in the region | What the region gets |
 |---|---|---|
-| [No platform](./disconnected-spokes.md) | Need no Full-Platform region, on-premises path, centralized inspection, or private network connectivity beyond approved same-region spokes and Azure service endpoints. | No hub and no gateway. Workload spokes use the estate's standard identity, policy, security, and deployment practices. |
-| [Remote platform](./remote-hub.md) | Need Full-Platform region capabilities or wider private network access, and can tolerate the latency, availability coupling, and dependency on connectivity to another region. | No local hub. Workload spokes consume an existing Full-Platform region. |
-| [Minimal platform](./minimal-regional-hub.md) | Need some capabilities locally, without a comprehensive local set. | A local hub with only the services that must be in the region. Everything else stays remote. |
-| [Full platform](./full-regional-hub.md) | Need a comprehensive local capability set, or independence from other hubs. | The complete local connectivity and shared services that the region's workloads require. |
+| [No platform](./disconnected-spokes.md) | Need no Full-Platform region, on-premises path, centralized inspection, or private network connectivity beyond approved same-region spokes and Azure service endpoints. | No network hub and no gateway, only platform services that are Global. Workload spokes use the estate's standard identity, policy, security, and deployment practices. |
+| [Remote platform](./remote-hub.md) | Need Full-Platform region capabilities or wider private network access, and can tolerate the latency, availability coupling, and dependency on connectivity to another region. | No local network hub. Workload spokes consume services from another existing Full-Platform region. |
+| [Minimal platform](./minimal-regional-hub.md) | Need some capabilities locally, without a comprehensive local set. | A local network hub and only other platform services that must be in the region. Everything else stays remote. |
+| [Full platform](./full-regional-hub.md) | Need a comprehensive local capability set of platform services, and independence from other regions. | The complete local connectivity and shared services that the region's workloads require. |
 
 Two of the four profiles need no local hub, and only the Full platform approaches the footprint of an existing Full-Platform region.
 
@@ -60,7 +60,7 @@ Check these points before you settle on a profile, and revisit the profile when 
 
 ### No platform
 
-**Key considerations:** Validate administration, identity, DNS, secrets, telemetry, data movement, software distribution, private endpoints, incident response, and support procedures. Where applications require east-west communication within the region, evaluate direct spoke-to-spoke connectivity without assuming that a local hub is required. Confirm that no hidden dependency requires connectivity to a Full-Platform region or on-premises environment.
+**Key considerations:** Validate administration, identity, DNS, secrets, telemetry, data movement, software distribution, private endpoints, incident response, and support procedures. Where applications require east-west communication within the region, evaluate direct spoke-to-spoke connectivity without assuming that a local network hub is required. Confirm that no hidden dependency requires connectivity to a Full-Platform region or on-premises environment.
 
 **Reassess when:** Workloads require a Full-Platform region, on-premises connectivity, centralized inspection, or private network paths beyond approved same-region spokes and Azure service endpoints.
 

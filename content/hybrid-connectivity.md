@@ -1,7 +1,7 @@
 ---
 title: Confirm hybrid connectivity
 description: Decide whether the ExpressRoute, VPN, or SD-WAN connectivity you already have is enough for a new Azure region, and what justifies a change. A new region doesn't by itself require another circuit.
-ms.date: 10/27/2026
+ms.date: 10/28/2026
 ms.topic: conceptual
 ---
 
@@ -22,8 +22,8 @@ The outcome is one of three:
 ## How a new region reuses what exists
 
 - **A gateway in another region can serve the new region.** Global virtual network peering supports gateway transit, so spokes in the new region can use the gateways of an existing Full-Platform region.
-- **An existing circuit can connect to a gateway in the new region.** An ExpressRoute circuit can connect virtual networks in the same geopolitical region, and across geopolitical regions with the premium add-on. A hub in the new region doesn't need a circuit of its own.
-- **Azure Virtual WAN extends in the same way.** A virtual network in the new region can connect to an existing virtual hub in another region, or a new virtual hub in the region can connect to the existing circuits.
+- **An existing circuit can connect to a gateway in the new region.** An ExpressRoute circuit can connect virtual networks in the same geopolitical region, and across geopolitical regions with the premium add-on. A network hub in the new region doesn't need a circuit of its own.
+- **Azure Virtual WAN extends in the same way.** A spoke virtual network in the new region can connect to an existing VWAN virtual hub in another region, or a new VWAN virtual hub in the region can connect to the existing ExpressRoute Circuits.
 
 ## When a change is justified
 

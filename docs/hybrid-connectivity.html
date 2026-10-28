@@ -102,7 +102,7 @@
   <main id="main">
     <div class="crumbs">Multi-region platform <span>/</span> 3. Select the regional design</div>
     <h1 class="title">Confirm hybrid connectivity</h1>
-    <p class="meta">October 27, 2026 · 3 min read</p>
+    <p class="meta">October 28, 2026 · 3 min read</p>
     <article class="prose">
 <div class="callout question"><span class="callout-k">Question</span><p>Does the operating geography have resilient hybrid connectivity to Azure that satisfies the identified workload requirements?</p></div>
 <p>Enabling an additional Azure region doesn't by itself require another ExpressRoute circuit. Evaluate the existing ExpressRoute, VPN, SD-WAN, or other hybrid connectivity against datacenter and user locations, latency, bandwidth, and routing requirements. Add circuits, peering locations, gateways, or more connectivity paths only where the existing foundation can't provide the required reachability, diversity, or resilience.</p>
@@ -132,8 +132,8 @@
 <h2 id="how-a-new-region-reuses-what-exists">How a new region reuses what exists<a class="anchor" href="#how-a-new-region-reuses-what-exists" aria-label="Link to this section">#</a></h2>
 <ul>
 <li><strong>A gateway in another region can serve the new region.</strong> Global virtual network peering supports gateway transit, so spokes in the new region can use the gateways of an existing Full-Platform region.</li>
-<li><strong>An existing circuit can connect to a gateway in the new region.</strong> An ExpressRoute circuit can connect virtual networks in the same geopolitical region, and across geopolitical regions with the premium add-on. A hub in the new region doesn't need a circuit of its own.</li>
-<li><strong>Azure Virtual WAN extends in the same way.</strong> A virtual network in the new region can connect to an existing virtual hub in another region, or a new virtual hub in the region can connect to the existing circuits.</li>
+<li><strong>An existing circuit can connect to a gateway in the new region.</strong> An ExpressRoute circuit can connect virtual networks in the same geopolitical region, and across geopolitical regions with the premium add-on. A network hub in the new region doesn't need a circuit of its own.</li>
+<li><strong>Azure Virtual WAN extends in the same way.</strong> A spoke virtual network in the new region can connect to an existing VWAN virtual hub in another region, or a new VWAN virtual hub in the region can connect to the existing ExpressRoute Circuits.</li>
 </ul>
 <h2 id="when-a-change-is-justified">When a change is justified<a class="anchor" href="#when-a-change-is-justified" aria-label="Link to this section">#</a></h2>
 <ul>

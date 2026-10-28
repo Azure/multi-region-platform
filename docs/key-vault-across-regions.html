@@ -124,12 +124,13 @@
 <h2 id="paired-and-nonpaired-regions">Paired and nonpaired regions<a class="anchor" href="#paired-and-nonpaired-regions" aria-label="Link to this section">#</a></h2>
 <p><strong>Paired regions.</strong> In eligible same-geography region pairs, Key Vault Standard and Premium replicate vault contents asynchronously to a Microsoft-managed secondary. That copy is part of the same vault, not a second vault you manage. Microsoft decides when to fail over; afterward, secrets, certificates, and keys are available read-only until normal operation returns.</p>
 <p><strong>Nonpaired regions.</strong> Do not assume a Microsoft-managed secondary exists. Use independent regional vaults when the consuming service supports them, or configure Managed HSM multi-region replication for keys. Managed HSM can extend to one supported additional region; it is not restricted to region pairs.</p>
-<p>Check three design constraints:</p>
-<ul>
-<li><strong>3+0:</strong> No paired region, for example Qatar Central, Belgium Central, and Spain Central.</li>
-<li><strong>3+1, asymmetric:</strong> A pairing relationship is not necessarily reciprocal. Check West US 3 and East US against the service's replication exclusions.</li>
-<li><strong>3+1, cross-geography:</strong> A pair can cross geography boundaries, for example Brazil South and South Central US. Pairing alone does not establish a data-residency boundary or Key Vault replication eligibility.</li>
-</ul>
+<p>When you plan a multi-region architecture on Azure, check how your target regions are paired. Pairing affects disaster recovery options, data replication and data residency.</p>
+<p><strong>1. Regions without a pair</strong></p>
+<p>Some newer regions don't have a paired region. Examples include Qatar Central, Belgium Central and Spain Central. These regions use availability zones for resiliency within the region. If you need cross-region recovery, you'll need to choose a secondary region yourself and configure replication for each service.</p>
+<p><strong>2. Pairings that only go one way</strong></p>
+<p>A pairing isn't always reciprocal. For example, West US 3 lists East US as its pair, but East US is paired with West US. Some services also don't replicate automatically from certain regions. Before you rely on built-in geo-replication, check each service's documentation for regional exceptions.</p>
+<p><strong>3. Pairs in different geographies</strong></p>
+<p>Some pairs cross geographic boundaries. For example, Brazil South is paired with South Central US. A regional pair doesn't on its own keep your data within a particular country or <a href="https://learn.microsoft.com/azure/reliability/regions-list?tabs=all" target="_blank" rel="noopener">geography</a>, and it doesn't guarantee that every service replicates to the paired region. Key Vault is one example. Check data residency and service-level replication separately against your compliance requirements.</p>
 <p>The <a href="https://learn.microsoft.com/azure/reliability/reliability-key-vault" target="_blank" rel="noopener">Key Vault reliability guide</a> lists exclusions, including Brazil South, Brazil Southeast, West US 3, and nonpaired regions. Microsoft-managed failover is best effort, not a customer-triggered recovery mechanism or a guaranteed application recovery time. Once initiated, public endpoint convergence is designed to take a few minutes; private endpoints can require up to an additional 20 minutes. Do not treat those routing timings as the total outage duration.</p>
 <h3 id="failover-guidance">Failover guidance<a class="anchor" href="#failover-guidance" aria-label="Link to this section">#</a></h3>
 <ul>
