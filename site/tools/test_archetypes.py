@@ -100,7 +100,7 @@ class ArchetypeTests(unittest.TestCase):
         self.assertIn("Where hub-free", first_cells[1])
         self.assertIn('class="mk none"', first_cells[2])
         self.assertIn('class="mk cond"', first_cells[3])
-        self.assertIn("without hub or on-premises dependencies", rows[3])
+        self.assertIn("without a network hub or on-premises dependencies", rows[3])
 
     def test_overview_picture_preserves_original_explanations(self):
         source = self.read("whitepaper/pages/09-archetypes.html")
@@ -118,7 +118,7 @@ class ArchetypeTests(unittest.TestCase):
              "Profile set by dependency latency, resiliency, regulation, operations",
              "Common in migrations and hybrid scenarios"],
             ["Classified at group level", "Aggregate requirements set the profile",
-             "Direct spoke-to-spoke or a regional hub for east-west traffic"],
+             "Direct spoke-to-spoke or a regional network hub for east-west traffic"],
         ])
         profiles = [
             [text(chip) for chip in re.findall(r"<span[^>]*>(.*?)</span>", group)]

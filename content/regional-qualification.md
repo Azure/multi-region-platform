@@ -1,7 +1,7 @@
 ---
 title: Regional qualification overview
 description: Use four checks and one decision tree to determine which Azure regions should be prepared to support workload requirements, classify each regional option as excluded, candidate, conditional, or qualified, and record it with evidence, owners, and revalidation triggers.
-ms.date: 10/27/2026
+ms.date: 10/28/2026
 ms.topic: conceptual
 ---
 

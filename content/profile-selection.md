@@ -24,14 +24,14 @@ Start with the matrix to see which Platform Services profiles each [archetype](.
 | Hybrid-Dependent Workloads | Not indicated | Typical | Typical | Typical |
 | Interdependent Workload Groups | Approved same-region connectivity | Where acceptable | When justified | When justified |
 
-No platform can still provide approved direct same-region spoke connectivity and private endpoints for Azure services. These paths must satisfy DNS, security, inspection, and operational requirements without a hub or hybrid gateway. A private endpoint alone does not require Remote platform, Minimal platform, or Full platform.
+No platform can still provide approved direct same-region spoke connectivity and private endpoints for Azure services. These paths must satisfy DNS, security, inspection, and operational requirements without a network hub or gateway for hybrid connectivity. A private endpoint alone does not require Remote platform, Minimal platform, or Full platform.
 
 ## Profile selection principles
 
 - Start with the **workload requirements and dependencies** identified during regional qualification, including portfolio-level dependencies. Use Workload Landing Zone archetypes to spot recurring needs, then validate the profile against the actual workloads.
 - Select the **most efficient profile** that satisfies those requirements, not the maximum possible one.
 - Keep capabilities remote when latency, dependency, data, security, resiliency, availability, and operational requirements permit. Add local capabilities only when a measurable requirement justifies the larger regional footprint; adoption growth alone doesn't.
-- Consider direct spoke-to-spoke connectivity where workloads have significant east-west traffic and a hub transit path is unnecessary. Add regional routing, inspection, or shared services when broader requirements justify them.
+- Consider direct spoke-to-spoke connectivity where workloads have significant east-west traffic and a network hub transit path is unnecessary. Add regional routing, inspection, or shared services when broader requirements justify them.
 
 ## Which Platform Services profile should this region provide?
 
@@ -50,7 +50,7 @@ The same tree as a table, from the smallest regional footprint to the largest:
 | [Minimal platform](./minimal-regional-hub.md) | Need some capabilities locally, without a comprehensive local set. | A local network hub and only other platform services that must be in the region. Everything else stays remote. |
 | [Full platform](./full-regional-hub.md) | Need a comprehensive local capability set of platform services, and independence from other regions. | The complete local connectivity and shared services that the region's workloads require. |
 
-Two of the four profiles need no local hub, and only the Full platform approaches the footprint of an existing Full-Platform region.
+Two of the four profiles need no local network hub, and only the Full platform approaches the footprint of an existing Full-Platform region.
 
 **Decision:** Select the most efficient Platform Services profile that satisfies the identified requirements and can evolve as regional adoption changes.
 

@@ -1,7 +1,7 @@
 ---
 title: Understand Workload Landing Zone archetypes
 description: Four archetypes that group recurring application connectivity and dependency requirements, so platform teams can plan regional capability before every workload is known.
-ms.date: 10/27/2026
+ms.date: 10/28/2026
 ms.topic: conceptual
 ---
 
@@ -42,7 +42,7 @@ These workloads can use the No regional platform profile when approved direct sa
 
 ## Hybrid-Dependent Workloads
 
-Workloads that need routed access to on-premises environments or the enterprise network, including shared services hosted in a hub. Common in migrations and hybrid scenarios. The boundary with Selectively Connected Workloads is named endpoints versus routed network access, not Azure versus on-premises.
+Workloads that need routed access to on-premises environments or the enterprise network, including shared platform services hosted or connected to a network hub. Common in migrations and hybrid scenarios. The boundary with Selectively Connected Workloads is named endpoints versus routed network access, not Azure versus on-premises.
 
 These workloads typically use **Remote platform, Minimal platform, or Full platform**, depending on dependency latency, resiliency, regulatory, operational, and shared-service requirements. The No regional platform profile does not fit a mandatory private dependency on on-premises services and/or shared platform services.
 
