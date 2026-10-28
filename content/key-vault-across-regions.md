@@ -32,7 +32,7 @@ Key Vault is often a runtime dependency: an application can need keys, secrets, 
 > [!IMPORTANT]
 > *Microsoft-managed failover is not supported for non-paired regions, regions with asymmetric pairing or paired regions across two different geographies.*
 >
-> See [Microsoft-managed failover to a paired region](https://learn.microsoft.com/azure/reliability/reliability-key-vault#microsoft-managed-failover-to-a-paired-region) for regional eligibility and [Azure Key Vault security worlds](https://learn.microsoft.com/azure/key-vault/general/overview-security-worlds) for HSM cryptographic boundaries and backup/restore geography requirements.
+> See [Microsoft-managed failover to a paired region](https://learn.microsoft.com/azure/reliability/reliability-key-vault#microsoft-managed-failover-to-a-paired-region) for Key Vault regional failover eligibility, [Reliability in Azure Key Vault Managed HSM](https://learn.microsoft.com/azure/reliability/reliability-managed-hsm) for Managed HSM regional resiliency and replication, and [Azure Key Vault security worlds](https://learn.microsoft.com/azure/key-vault/general/overview-security-worlds) for HSM cryptographic boundaries and backup/restore geography requirements.
 
 When you plan a multi-region architecture on Azure, check how your target regions are paired. Pairing affects disaster recovery options, data replication and data residency.
 
@@ -296,8 +296,10 @@ Identify whether the requirement concerns an Azure Rights Management tenant key,
 
 - [Standard or Premium vault with paired-region replication](#keys-pattern-1), using Premium: the documented HSM-backed vault option; preserve keys for old content. Standard software-protected keys require feature-specific confirmation.
 - [Premium vault per region with external HSM and BYOK](#keys-pattern-3): use its external-HSM import approach with a dedicated Premium vault. Do not treat Microsoft 365 as a regional deployment stamp.
+- [Managed HSM with geo-replication](#keys-pattern-4): a suitable solution for a shared, regionally replicated key store; configure key access and lifecycle for the specific Information Protection feature.
+- [Managed HSM geo-replication with external HSM and BYOK](#keys-pattern-5): a suitable solution when key material is created in an external HSM and imported into a replicated Managed HSM. Preserve keys for old content.
 
-**Other options require feature-specific confirmation:** [Managed HSM with geo-replication](#keys-pattern-4), [Managed HSM geo-replication with external HSM and BYOK](#keys-pattern-5), and [Managed HSM with external key management](#keys-pattern-6). Confirm the exact feature's key lifecycle, Managed HSM/BYOK configuration, or supported external-key operations, as applicable. An independent-vault workload stamp is not applicable to this tenant-level service.
+**External key management requires feature-specific confirmation:** [Managed HSM with external key management](#keys-pattern-6) keeps key material outside Microsoft infrastructure rather than importing it into Azure. Confirm the exact feature's integration, key lifecycle, and supported external-key operations. An independent-vault workload stamp is not applicable to this tenant-level service.
 
 ## Decision tree
 
@@ -309,15 +311,16 @@ Check the scenario conditions before following the chart. Results identify candi
 
 ## Reference links
 
-- [Microsoft-managed failover to a paired region](https://learn.microsoft.com/azure/reliability/reliability-key-vault#microsoft-managed-failover-to-a-paired-region)
 - [Azure Key Vault security worlds](https://learn.microsoft.com/azure/key-vault/general/overview-security-worlds)
-- [Key Vault availability and redundancy](https://learn.microsoft.com/azure/key-vault/general/disaster-recovery-guidance)
 - [Azure paired regions](https://learn.microsoft.com/azure/reliability/regions-paired)
-- [Managed HSM multi-region replication](https://learn.microsoft.com/azure/key-vault/managed-hsm/multi-region-replication)
 - [External key management](https://learn.microsoft.com/azure/key-vault/managed-hsm/external-key-management-overview)
-- [Services that support CMKs](https://learn.microsoft.com/azure/security/fundamentals/encryption-customer-managed-keys-support)
-- [Key-management product selection](https://learn.microsoft.com/azure/security/fundamentals/key-management-choose)
 - [HSM-protected key import](https://learn.microsoft.com/azure/key-vault/keys/hsm-protected-keys)
+- [Key Vault availability and redundancy](https://learn.microsoft.com/azure/key-vault/general/disaster-recovery-guidance)
+- [Key-management product selection](https://learn.microsoft.com/azure/security/fundamentals/key-management-choose)
+- [Managed HSM multi-region replication](https://learn.microsoft.com/azure/key-vault/managed-hsm/multi-region-replication)
+- [Microsoft-managed failover to a paired region](https://learn.microsoft.com/azure/reliability/reliability-key-vault#microsoft-managed-failover-to-a-paired-region)
+- [Reliability in Azure Key Vault Managed HSM](https://learn.microsoft.com/azure/reliability/reliability-managed-hsm)
+- [Services that support CMKs](https://learn.microsoft.com/azure/security/fundamentals/encryption-customer-managed-keys-support)
 
 ## Next step
 
