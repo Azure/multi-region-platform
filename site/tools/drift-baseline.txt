@@ -61,13 +61,14 @@ getting started walks through the first additional region in six steps
 multi region platform strategy
 # key-vault-across-regions
 a fresh key in a new vault is not a substitute
-a key store s replication capability does not establish support for every service s replication or restore operation
 a pairing isn t always reciprocal
+a region s designated pair might not point back to it
 a regional pair doesn t on its own keep your data within a particular country or geography and it doesn t guarantee that every service replicates to the paired region
 a requirement for physical key custody outside microsoft
 a second endpoint alone does not provide safe fallback
 a second vault alone does not provide fallback
-accept microsoft managed recovery timing
+a suitable solution for a shared regionally replicated key store
+a suitable solution when key material is created in an external hsm and imported into a replicated managed hsm
 accept the microsoft managed recovery risk and preserve replica key access
 access policies firewall settings and vault properties cannot be changed
 after failover supported actions include listing and getting keys secrets and certificates
@@ -80,27 +81,33 @@ an independent vault workload stamp is not applicable to this tenant level servi
 asynchronous replication means recent changes can be lost
 asynchronous replication shares key material roles and permissions between regions
 automatic zone redundancy where supported
+availability zones where supported provide resiliency within a region not across regions
 azure sql database azure sql managed instance and azure cosmos db geo replication database geo replication
 azure sql database azure sql managed instance and azure cosmos db geo restore database geo restore
-azure storage blob object replication storage object replication
-before you rely on built in geo replication check each service s documentation for regional exceptions
+azure storage geo redundant storage grs azure storage grs
+azure storage object replication for block blobs storage object replication
+before you rely on built in geo replication check each service s documentation for regional eligibility
 best for watch for
 both data copies depend on microsoft managed vault recovery
 both depend on that account s cmk
+both tiers share the same paired region recovery model
 bring your own key byok means importing externally generated key material
 byok import followed by managed hsm geo replication
 candidates for supported shared key dependencies
 changes replicate within six minutes
 check data residency and service level replication separately against your compliance requirements
 check the scenario conditions before following the chart
+choose software protected or hsm protected operations and accept microsoft managed recovery timing
+choose the tier for the required key protection and consuming service support
 compare its cost with the accepted risk of microsoft managed vault recovery not an arbitrary number of keys threshold
 compare the patterns then review their distribution diagrams
 conditional means that the exact feature topology and key operations must satisfy the linked service guidance
 configure each account s cmk integration
 configure each account s key access and accept microsoft managed recovery
+configure key access and lifecycle for the specific information protection feature
 configure regional disk encryption sets and keys including regional imports for byok
 confirm managed hsm support and regional requirements for that feature including byok import where used
-confirm the exact feature s key lifecycle managed hsm byok configuration or supported external key operations as applicable
+confirm the exact feature s integration key lifecycle and supported external key operations
 confirm the same geography pairing service exclusions and recovery path rather than assuming any pair qualifies
 consider a replicated key store and test key access during account failover
 consider microsoft managed keys unless customer control is required
@@ -116,6 +123,7 @@ do not assume arbitrary application signing or encryption works unchanged
 do not assume managed hsm or ekm support from general managed disk support
 do not assume sql s key copy design applies to cosmos db
 do not carry grs s shared account constraint into this topology
+do not infer microsoft managed key vault failover support from a one way pairing
 do not infer site recovery support from a general disk encryption capability
 do not store secret values in the iac repository
 do not treat microsoft 365 as a regional deployment stamp
@@ -130,8 +138,8 @@ ekm is designed for compatible cmk encryption at rest integrations and exposes a
 eligible pair and read only recovery
 encrypt decrypt wrap unwrap sign verify
 every external operation adds network round trips
-examples include qatar central belgium central and spain central
 external key backup restore is not supported
+external key management requires feature specific confirmation
 external key material imported into independent premium vaults
 external key origin requirements plus replicated managed hsm
 external key origin requirements with independent regional vaults
@@ -139,28 +147,24 @@ external keys have no geo replicated failover target
 externally held key material without geo replication
 for byok import and authorize keys for each account
 for byok validate key import for the recovery feature
-for example brazil south is paired with south central us
-for example west us 3 lists east us as its pair but east us is paired with west us
 for managed disk server side encryption configure regional disk encryption sets and key access
 for replicated managed hsm respect dns time to live ttl so clients can reach a healthy region
 for tenant key byok the documented premium vault approach imports an external hsm key into azure
 generate a separate key in each vault
-generate a software protected key in the primary vault
-generate an hsm protected key in the primary vault
 generate the key in managed hsm
+generate the key in the primary vault
 grs copies are replicas of one storage account not independently configured accounts
 healthy region read write
 here byok refers to the supported hsm to hsm transfer process not generic software key import
-hsm protection without a customer configured replicated managed hsm
 identify whether the requirement concerns an azure rights management tenant key microsoft 365 customer key or another protection feature
-if you need cross region recovery you ll need to choose a secondary region yourself and configure replication for each service
 import the key into the primary pool through byok then use managed hsm geo replication
 import then geo replicate
 imported key material now resides in azure hsms
+in a region without a pair choose a secondary region yourself and configure cross region recovery for each service
 in eligible same geography region pairs key vault standard and premium replicate vault contents asynchronously to a microsoft managed secondary
 include the source disks and cache storage account in the design
 independent regional vaults do not let you assign a different key store to each grs replica
-independent regional vaults populated by a pipeline
+independent standard or premium vaults populated by a pipeline
 independent vaults with different regional keys
 initiation can take hours or longer independently of other services
 it is not a blanket support guarantee
@@ -171,30 +175,26 @@ keep the product choice separate from the regional deployment choice
 keep using the same vault uri
 keep versions renewal access policies identities and private connectivity ready before an outage
 key vault backups are point in time and restore only within the same subscription and azure geography
-key vault in a paired region secrets certificates pattern 2
-key vault in each region secrets certificates pattern 1
 key vault is often a runtime dependency
 key vault is one example
-keys uses patterns 1 7
+keys uses patterns 1 6
 maintain access to the shared key
 managed disks and their key store must meet same region requirements
 managed hsm an ekm proxy and your external hsm
 managed hsm and ekm do not store secrets or certificates
 managed hsm can extend to one supported additional region
-managed hsm geo replication with external hsm and byok
-managed hsm geo replication with external hsm and byok keys pattern 6
+managed hsm geo replication with external hsm and byok keys pattern 5
 managed hsm key generation and multi region replication
 managed hsm with ekm
-managed hsm with external key management
 managed hsm with external key management including recovery of the proxy and external hsm
-managed hsm with external key management keys pattern 7
+managed hsm with external key management keeps key material outside microsoft infrastructure rather than importing it into azure
+managed hsm with external key management keys pattern 6
 managed hsm with external key management only for supported disk profiles that do not require secure key release
 managed hsm with external key management only for supported external key operations
-managed hsm with geo replication keys pattern 5
+managed hsm with geo replication keys pattern 4
 managed hsm with geo replication or managed hsm geo replication with external hsm and byok
 meet regional key and identity requirements
 microsoft asynchronously replicates its contents
-microsoft asynchronously replicates the same vault s contents
 microsoft decides when to fail over
 microsoft managed failover is best effort not a customer triggered recovery mechanism or a guaranteed application recovery time
 microsoft replicates the same vault s contents
@@ -208,37 +208,29 @@ no managed hsm geo replication for external keys
 once initiated public endpoint convergence is designed to take a few minutes
 one managed hsm pool with a primary and one supported extended region
 one premium vault per workload per region
-one premium vault with an eligible microsoft managed paired region copy
+one standard or premium vault in a region eligible for microsoft managed paired region replication
 one standard or premium vault per workload per region
-one standard vault with an eligible microsoft managed paired region copy
+one standard or premium vault per workload per region configured consistently through infrastructure as code iac
+one standard or premium vault with a microsoft managed paired region copy
+one standard or premium vault with an eligible microsoft managed paired region copy
 one supported extended region
-one vault in a region eligible for microsoft managed paired region replication
-one vault per workload per region
-one vault per workload per region configured consistently through infrastructure as code iac
-one vault with a microsoft managed paired region copy
 only with a documented service specific key copy and rotation design not as a general shared key solution
 optional application level fallback to another vault requires explicit identity networking and version selection design
-other options require feature specific confirmation
 paired region vault replication alone does not provision target region encryption dependencies
 pairing affects disaster recovery options data replication and data residency
-pairings that only go one way
+pairings that only go one way asymmetric pairing
 pairs in different geographies
-pattern 3 s service constraints still apply
-patterns to consider for tenant key byok
-patterns to consider subject to the database service s requirements
+pattern 2 s service constraints still apply
 patterns you can use
 pipeline populates each vault
 plan external dependency recovery with no external key geo replication
-plan the import lifecycle and the same asynchronous replication window as pattern 5
+plan the import lifecycle and the same asynchronous replication window as pattern 4
 postgresql and mysql flexible server
 pre create a compatible target region disk encryption set and authorize it to access its regional key vault
 pre provision independent regional vaults identities permissions networking and required object versions
-premium does not improve the vault s regional recovery control compared with standard
-premium vault per region with external hsm and byok
-premium vault per region with external hsm and byok keys pattern 4
-premium vault with microsoft managed paired region replication
-premium vault with paired region replication
-premium vault with paired region replication keys pattern 2
+premium does not improve regional recovery control compared with standard
+premium supports hsm protected keys
+premium vault per region with external hsm and byok keys pattern 3
 preserve keys that protect old content and test recovery before production
 preserve the key identifier and version needed to decrypt existing data
 preserve the required key material and versions
@@ -262,34 +254,34 @@ retain all historical keys required by the backup authorize the restored service
 retain the original external key and reference
 roll changes out sequentially not globally at once
 rotation must preserve access to every required version
-same as pattern 3
+same as pattern 2
 same regional resilience as standard
 satisfy the disk key store regional requirements including imported key access for byok
 secrets and certificates management patterns
+secrets and certificates pattern 1
+secrets and certificates pattern 2
 secrets and certificates uses patterns 1 2
 select a candidate pattern then validate the consuming service s replication restore and key lifecycle requirements
 select a pattern name to return to its deployment details and diagram
 service must allow separate vaults keys
-services that accept software protected keys and microsoft managed recovery timing
+services that accept microsoft managed recovery timing
 services that support independent regional keys
 short customer controlled recovery
 site recovery does not automatically apply encryption key changes to protected vms
-some newer regions don t have a paired region
 some pairs cross geographic boundaries
-some services also don t replicate automatically from certain regions
 source and destination accounts can use independent keys
 source and destination are separate accounts so their cmk configuration can be independent
 sql database and sql managed instance need the required tde protector keys available to their replicas
-standard or premium vault in each region keys pattern 3
+standard or premium vault in a paired region secrets certificates pattern 2
+standard or premium vault in each region keys pattern 2
 standard or premium vault in each region or premium vault per region with external hsm and byok
+standard or premium vault in each region secrets certificates pattern 1
+standard or premium vault with microsoft managed paired region replication
+standard or premium vault with paired region replication keys pattern 1
+standard or premium vault with paired region replication managed hsm with geo replication or managed hsm geo replication with external hsm and byok
+standard or premium vault with paired region replication using premium
+standard software protected keys require feature specific confirmation
 standard supports software protected keys
-standard vault with microsoft managed paired region replication
-standard vault with paired region replication
-standard vault with paired region replication for software protected operations or premium vault with paired region replication for hsm protected operations
-standard vault with paired region replication keys pattern 1
-standard vault with paired region replication managed hsm with geo replication managed hsm geo replication with external hsm and byok and managed hsm with external key management
-standard vault with paired region replication or premium vault with paired region replication
-standard vault with paired region replication premium vault with paired region replication managed hsm with geo replication or managed hsm geo replication with external hsm and byok
 start with regional behavior compare the products and patterns then check the consuming service s requirements
 supported services requiring a shared key store and a customer selected recovery region
 symmetric keys in preview
@@ -305,29 +297,25 @@ the healthy region continues serving reads and writes
 the healthy region continues serving reads and writes through the pool s endpoint
 the hsm backed byok patterns use premium or managed hsm
 the key encryption key never leaves it
-the key vault reliability guide lists exclusions including brazil south brazil southeast west us 3 and nonpaired regions
 the pipeline populates each regional vault
 the pipeline populates the primary vault
 the restore target must retain access to the original keys
-the same primary extended region pool as keys pattern 5
-the same read only recovery model as keys pattern 1
-the seven patterns below follow the updated guidance s numbering
+the same primary extended region pool as keys pattern 4
+the six patterns below separate regional deployment from key protection
 their key region and identity requirements are not interchangeable
 there is no geo replicated failover target
 there is no single cross geography rule that can safely represent every sql and cosmos db restore feature
 these are not interchangeable integrations
 these are standard premium vault behaviors
-these regions use availability zones for resiliency within the region
 this is different from guest based azure disk encryption and confidential vm key release
 this is not automatic vault to vault replication
 treat each independent region as a deployment stamp
 use independent regional vaults when the consuming service supports them or configure managed hsm multi region replication for keys
 use its external hsm import approach with a dedicated premium vault
-use key vault standard or premium
 use sdk retries with exponential backoff and respect dns ttl
+use standard for software protected keys or premium for hsm protected keys
 use supported managed hsm operations including imported keys for byok
 validate each account s identity key versions and recovery behavior
-validate key access identities networking rotation and recovery together
 validate private connectivity from the recovery region
 validate the imported key and complete site recovery configuration
 validate the product and recovery feature

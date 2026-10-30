@@ -21,12 +21,11 @@
  "fig18b": "qualification-versus-placement",
  "figKVS1": "key-vault-secrets-per-region",
  "figKVS2": "key-vault-secrets-paired-region",
- "figKVK1": "key-vault-keys-standard-paired-region",
- "figKVK2": "key-vault-keys-premium-paired-region",
- "figKVK3": "key-vault-keys-vault-per-region",
- "figKVK4": "key-vault-keys-byok-per-region",
- "figKVK5": "key-vault-keys-managed-hsm-geo",
+ "figKVK1": "key-vault-keys-paired-region",
+ "figKVK2": "key-vault-keys-vault-per-region",
+ "figKVK3": "key-vault-keys-byok-per-region",
+ "figKVK4": "key-vault-keys-managed-hsm-geo",
+ "figKVK5": "key-vault-keys-managed-hsm-geo-byok",
  "figKVTree": "key-vault-decision-tree",
- "figKVK6": "key-vault-keys-managed-hsm-geo-byok",
- "figKVK7": "key-vault-keys-managed-hsm-ekm"
+ "figKVK6": "key-vault-keys-managed-hsm-ekm"
 }

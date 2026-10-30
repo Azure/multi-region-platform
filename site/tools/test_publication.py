@@ -122,7 +122,7 @@ class PublicationTests(unittest.TestCase):
             require('./decks/full/key-vault')({}, L);
             console.log(JSON.stringify({slides, images, linkedScenarios}));
         """], cwd=ROOT, check=True, capture_output=True, text=True)
-        self.assertEqual(json.loads(result.stdout), {"slides": 9, "images": 10, "linkedScenarios": 9})
+        self.assertEqual(json.loads(result.stdout), {"slides": 9, "images": 9, "linkedScenarios": 9})
 
     def test_decks_are_created_only_in_temp(self):
         for builder in ("build_full.js", "build_exec.js"):

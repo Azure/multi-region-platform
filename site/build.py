@@ -229,7 +229,7 @@ def key_vault_pattern_layout(h):
         table = m.group(1)
         table = table.replace("<th>", '<th scope="col">')
         table = re.sub(r"<tr>\s*<td>(.*?)</td>", r'<tr><th scope="row">\1</th>', table, flags=re.S)
-        wide = "keys-pattern-7" in table
+        wide = "keys-pattern-6" in table
         label = "Key pattern comparison" if wide else "Key Vault comparison"
         cls = "kv-table kv-wide" if wide else "kv-table"
         return (f'<div class="table-wrap {cls}" tabindex="0" role="region" aria-label="{label}">'
