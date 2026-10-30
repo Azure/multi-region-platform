@@ -11,8 +11,8 @@ ARTICLE_PAGES = {
     "index": [],
     "framework-overview": ["03-*", "03b-*", "04-*", "05-*"],
     "platform-and-workload": ["06-*", "07-*", "07b-*"],
-    "connectivity-profiles": ["08-*", "08b-*", "08c-*"],
-    "application-landing-zone-archetypes": ["09-*", "09b-*", "09c-*"],
+    "platform-services-profiles": ["08-*", "08b-*", "08c-*"],
+    "workload-landing-zone-archetypes": ["09-*", "09b-*", "09c-*"],
     "regional-qualification": ["10-*", "10b-*", "10c-*"],
     "business-and-geography": ["11-*"],
     "data-and-compliance": [],
@@ -125,7 +125,7 @@ for key, values in (("ARCHETYPE", SUMMARY["archetypes"]), ("ARCHETYPE_LABEL", SU
     PLACEHOLDERS.update({f"{key}_{i}": value for i, value in enumerate(values, 1)})
 for i, order in enumerate(SUMMARY["archetypeProfileOrder"], 1):
     PLACEHOLDERS[f"ARCHETYPE_CHIPS_{i}"] = "".join(
-        f'<span class="chip {"teal" if j == 0 else "blue"}">{SUMMARY["profiles"][j]}</span>'
+        f'<span class="chip blue">{SUMMARY["profiles"][j]}</span>'
         for j in order
     )
 

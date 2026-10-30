@@ -81,8 +81,8 @@ review the diff of `drift-baseline.txt`, and commit it with the change. The base
 | `02b` summary (intro, assumptions, how it works), `03` intro figure | `index.md` |
 | `02b` approach at a glance, `03` intro prose, `03b` drivers, `04` constructs, `05` journey, `21` conclusion | `framework-overview.md` |
 | `06`-`07` platform vs. workload, `07b` city analogy | `platform-and-workload.md` |
-| `08`, `08b`, `08c` profiles | `connectivity-profiles.md`; profile considerations and reassessment in `profile-selection.md` |
-| `09` archetypes, `09b` matrix, `09c` terminology | `application-landing-zone-archetypes.md` |
+| `08`, `08b`, `08c` profiles | `platform-services-profiles.md`; profile considerations and reassessment in `profile-selection.md` |
+| `09` archetypes, `09b` matrix, `09c` terminology | `workload-landing-zone-archetypes.md` |
 | `10` four checks, `10b` outcome, `10c` qualification tree | `regional-qualification.md` |
 | `11` checks 1-2, `12`/`12b` check 3, `13`/`13b` check 4, `13c` planner | `business-and-geography.md`, `data-and-compliance.md`, `workload-requirements.md`, `regional-capability.md`; `guides/region-planner.md` for the tool |
 | `14` part 3 opener, `14b` requirements and design record | `platform-architecture.md` |
@@ -107,7 +107,7 @@ The home page is a short landing page; longer explanations live in `framework-ov
 
 Figure IDs and extraction names live in `site/tools/extract_figures.py` (`FIGS`) and `site/figures/manifest.json`.
 
-The Platform Services profile display names are **No platform**, **Remote platform**, **Minimal platform**, and **Full platform**. Keep the existing article filenames and URLs stable when changing these labels; update links to renamed section anchors.
+The Platform Services profile display names are **No platform**, **Remote platform**, **Minimal platform**, and **Full platform**. The concept articles use `platform-services-profiles.md` and `workload-landing-zone-archetypes.md`, with matching website HTML names. Keep article links, figure names in `whitepaper/figures.json`, tests, and the PDF article mapping aligned when renaming these files. All profile chips on the archetype cards use the same blue styling in the PDF, website, PNG, and PowerPoint editions; their color does not indicate preference or eligibility.
 
 Keep the full Key Vault guide to at most five rendered PDF pages: regional guidance before the product comparison, a condensed scenario summary linking to the online scenario sections, two secrets and certificates patterns, seven key patterns, and a graphical decision tree with references. The full deck may use additional slides to keep all nine pattern diagrams readable; put service-specific detail in speaker notes. Use "Pattern N" within a category and "Keys - Pattern N" or "Secrets and certificates - Pattern N" where ambiguity exists. After regeneration, check the actual PDF page count and source-page coverage.
 Use `data-export-width` on a figure to set its standalone export width independently of the PDF column width. The nine Key Vault pattern diagrams use 380 pixels so their web and PNG objects have consistent sizes; their PDF placement follows the available columns.

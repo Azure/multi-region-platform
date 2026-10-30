@@ -68,4 +68,4 @@ Reuse the existing Azure landing-zone operating model by default. Extend regiona
 ## Next step
 
 > [!div class="nextstepaction"]
-> [Common Platform Services profiles](./connectivity-profiles.md)
+> [Platform Services profiles](./platform-services-profiles.md)

@@ -217,7 +217,7 @@ module.exports = (pres, L) => {
     L.txt(s, 'NO DEPENDENCY ON A Full-Platform region', 0.6, 1.97, 5, 0.22, { fontSize: 9.5, bold: true, color: C.t600, charSpacing: 1.5 });
     L.txt(s, 'GREATER LOCAL CAPABILITY AND INDEPENDENCE', 7.2, 1.97, 5.53, 0.22, { fontSize: 9.5, bold: true, color: C.b700, charSpacing: 1.5, align: 'right' });
     const P = [
-      [C.t600, 'No private network path to a Full-Platform region, another region’s networks, or on-premises.', 'No hub or hybrid gateway. Approved local peering and Azure service endpoints only.'],
+      [C.t600, 'No shared platform services or private path to a more strategic region or on-premises required. Governance still applies.', 'No hub or hybrid gateway. Approved local peering and Azure service endpoints only.'],
       [C.c600, 'Spokes connect privately to an existing Full-Platform region in another region.', 'Centralized services used; local services not required.'],
       [C.b500, 'Selected local services and connectivity, based on workload requirements.', 'Selected local platform services; other required capabilities consumed remotely or globally.'],
       [C.b700, 'Comprehensive local capabilities, with connectivity to spokes, on-premises, and other regions.', 'Full local capabilities when required by latency, traffic volume, compliance, or operations.'],
@@ -228,7 +228,7 @@ module.exports = (pres, L) => {
       L.num(s, i + 1, x + 0.18, y + 0.18, 0.38, c, 'FFFFFF', 13);
       L.txt(s, PROF[i], x + 0.66, y + 0.12, w - 0.75, 0.5, { fontSize: 12.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
       L.txt(s, d, x + 0.18, y + 0.7, w - 0.36, 0.75, { fontSize: 12, color: C.muted });
-      const ax = x + 0.2, ay = y + 1.5, aw = w - 0.4, mh = 1.55;
+      const ax = x + 0.2, ay = y + 1.6, aw = w - 0.4, mh = 1.55;
       const mini = (w2, label) => { L.box(s, ax, ay, w2, mh, { fill: 'F7FBFE', line: C.b300, dash: 'dash', r: 0.1 }); L.txt(s, label || 'New Region', ax + 0.08, ay + 0.03, w2 - 0.16, 0.22, { fontSize: 10.5, bold: true, color: C.b700 }); };
       const spoke = (sx, sy, sw, sh) => { L.box(s, sx, sy, sw, sh, { fill: C.t50, line: C.t300, r: 0.07 }); L.box(s, sx + sw / 2 - 0.1, sy + sh / 2 - 0.1, 0.2, 0.2, { fill: C.t600, r: 0.04 }); };
       if (i === 0) {
@@ -252,7 +252,7 @@ module.exports = (pres, L) => {
         spoke(ax + 0.2, ay + 0.98, 0.72, 0.46); spoke(ax + 1.08, ay + 0.98, 0.72, 0.46);
         L.line(s, ax + 2.0, ay + 0.47, ax + 2.1, ay + 0.47, { color: C.b500, dash: 'dash', arrow: false });
         L.oval(s, ax + 2.1, ay + 0.36, 0.34, { fill: C.b600 }); L.oval(s, ax + 2.21, ay + 0.47, 0.12, { fill: 'FFFFFF' });
-        L.txt(s, 'Full-Platform\nregion', ax + 1.82, ay + 0.78, 0.78, 0.46, { fontSize: 10, color: C.s700, align: 'center' });
+        L.txt(s, 'Full-Platform region', ax + 1.4, ay + mh + 0.06, 1.1, 0.4, { fontSize: 10, color: C.s700, align: 'right' });
       }
       if (i === 3) {
         mini(aw);
@@ -328,7 +328,7 @@ module.exports = (pres, L) => {
       L.txt(s, p, x + 0.18, y + 2.1, w - 0.36, 0.8, { fontSize: 12, color: C.ink });
       L.box(s, x, y + 2.95, w, 0.95, { fill: C.wash, r: 0.12 }); L.box(s, x, y + 2.95, w, 0.3, { fill: C.wash, r: 0 });
       let cx = x + 0.15, cy = y + 3.02;
-      chips.forEach(ch => { const cw = chipW(ch, 10); if (cx + cw > x + w - 0.1) { cx = x + 0.15; cy += 0.3; } const dsh = ch.includes('justified'); L.chip(s, ch, cx, cy, { w: cw, fill: dsh ? 'FFFFFF' : ch === 'No platform' ? C.t100 : C.b100, color: ch === 'No platform' ? C.t700 : C.b700, line: dsh ? C.b500 : undefined, dash: dsh ? 'dash' : undefined, size: 10 }); cx += cw + 0.06; });
+      chips.forEach(ch => { const cw = chipW(ch, 10); if (cx + cw > x + w - 0.1) { cx = x + 0.15; cy += 0.3; } L.chip(s, ch, cx, cy, { w: cw, fill: C.b100, color: C.b700, size: 10 }); cx += cw + 0.06; });
     });
     L.txt(s, 'Each workload or group gets one archetype. Traffic between its regional instances does not change it.', 0.6, 5.66, 12.13, 0.25, { fontSize: 10, color: C.muted, valign: 'middle' });
     L.box(s, 0.6, 6.0, 4.1, 0.85, { fill: C.s800, r: 0.12 });

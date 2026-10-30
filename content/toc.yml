@@ -9,10 +9,10 @@ items:
   items:
   - name: Multi-region platform and workload
     href: platform-and-workload.md
-  - name: Common Platform Services profiles
-    href: connectivity-profiles.md
+  - name: Platform Services profiles
+    href: platform-services-profiles.md
   - name: Workload Landing Zone archetypes
-    href: application-landing-zone-archetypes.md
+    href: workload-landing-zone-archetypes.md
 - name: 2. Qualify regions
   items:
   - name: Overview

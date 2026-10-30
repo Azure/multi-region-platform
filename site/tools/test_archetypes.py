@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import re
 import subprocess
+import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -34,7 +35,7 @@ class ArchetypeTests(unittest.TestCase):
         self.assertEqual(summary["archetypes"], ARCHETYPES)
         self.assertEqual(summary["profiles"], PROFILES)
         self.assertEqual(summary["choices"][0]["options"], PROFILES)
-        article = self.read("content/application-landing-zone-archetypes.md")
+        article = self.read("content/workload-landing-zone-archetypes.md")
         self.assertEqual(re.findall(r"^## (.+)$", article, re.M)[:4], ARCHETYPES)
         self.assertIn("The four archetypes, grouped by the platform connectivity and dependency capabilities each requires.", article)
         self.assertIn("without private connectivity to a more strategic region or an on-premises environment", article)
@@ -52,7 +53,7 @@ class ArchetypeTests(unittest.TestCase):
         self.assertEqual(SUMMARY["archetypeProfileOrder"], orders)
 
     def test_management_groups_and_regional_traffic(self):
-        article = self.read("content/application-landing-zone-archetypes.md")
+        article = self.read("content/workload-landing-zone-archetypes.md")
         self.assertIn("Each workload or group gets exactly one archetype.", article)
         self.assertIn("without routed access to the enterprise network", article)
         self.assertIn("named endpoints versus routed network access, not Azure versus on-premises", article)
@@ -127,6 +128,39 @@ class ArchetypeTests(unittest.TestCase):
         self.assertEqual(profiles, [[PROFILES[j] for j in order] for order in SUMMARY["archetypeProfileOrder"]])
         self.assertIn("Grouped by the platform connectivity and dependency capabilities each requires.", source)
 
+    def test_pdf_and_website_profile_chips_use_one_color(self):
+        script = """
+import json
+import build
+print(json.dumps([value for key, value in build.PLACEHOLDERS.items()
+                  if key.startswith("ARCHETYPE_CHIPS_")]))
+"""
+        result = subprocess.run([sys.executable, "-c", script], cwd=ROOT / "whitepaper",
+                                check=True, capture_output=True, text=True, encoding="utf-8")
+        groups = json.loads(result.stdout)
+        self.assertEqual(len(groups), 4)
+        for group, order in zip(groups, SUMMARY["archetypeProfileOrder"]):
+            self.assertEqual(re.findall(r'class="([^"]+)"', group), ["chip blue"] * len(order))
+            self.assertEqual(re.findall(r">([^<]+)</span>", group), [PROFILES[j] for j in order])
+
+    def test_concept_articles_and_figures_use_canonical_names(self):
+        import yaml
+        toc = yaml.safe_load(self.read("content/toc.yml"))
+        concepts = toc["items"][2]["items"]
+        self.assertEqual([(item["name"], item["href"]) for item in concepts[1:]], [
+            ("Platform Services profiles", "platform-services-profiles.md"),
+            ("Workload Landing Zone archetypes", "workload-landing-zone-archetypes.md"),
+        ])
+        figures = json.loads(self.read("whitepaper/figures.json"))
+        self.assertEqual(figures["fig12"], "workload-landing-zone-archetypes")
+        self.assertEqual(figures["fig14"], "platform-services-profile-spectrum")
+        self.assertEqual(figures["figProfileTree"], "platform-services-profile-decision-tree")
+        for item in concepts[1:]:
+            article = self.read("content/" + item["href"])
+            self.assertIn("# " + item["name"] + "\n", article)
+            for image in re.findall(r'source="\./media/([^"]+)"', article):
+                self.assertTrue((ROOT / "content" / "media" / image).is_file(), image)
+
     def test_qualification_statuses_move_with_their_archetype_columns(self):
         source = self.read("whitepaper/pages/10b-outcome.html")
         table = re.search(r'<table class="pm">(.*?)</table>', source, re.S)[1]
@@ -184,16 +218,19 @@ for (const module of ['./decks/full/10-part1', './decks/exec/e']) {
       slides.push(s); return s; },
     header(s, kicker, title) { s.title = title; },
     txt(s, value) { if (typeof value === 'string') s.events.push(['text', value]); },
-    chip(s, value) { s.events.push(['chip', value]); }
+    chip(s, value, x, y, style) { s.events.push(['chip', value, style]); }
   }, {get(target, key) { return key in target ? target[key] : () => {}; }});
   require(module)({}, L);
   const slide = slides.find(s => typeof s.title === 'string' &&
     /^(Four )?Workload Landing Zone [Aa]rchetypes$/.test(s.title));
   if (!slide) throw Error('Missing archetype slide in ' + module);
   const cards = [];
-  for (const [kind, value] of slide.events) {
-    if (data.archetypes.includes(value)) cards.push({name:value, text:[], profiles:[]});
-    else if (cards.length) cards.at(-1)[kind === 'chip' ? 'profiles' : 'text'].push(value);
+  for (const [kind, value, style] of slide.events) {
+    if (data.archetypes.includes(value)) cards.push({name:value, text:[], profiles:[], chipStyles:[]});
+    else if (cards.length) {
+      cards.at(-1)[kind === 'chip' ? 'profiles' : 'text'].push(value);
+      if (kind === 'chip') cards.at(-1).chipStyles.push([style.fill, style.color]);
+    }
   }
   outputs.push(cards);
 }
@@ -206,6 +243,8 @@ console.log(JSON.stringify(outputs));
             self.assertEqual([c["name"] for c in cards], ARCHETYPES)
             self.assertEqual(cards[2]["profiles"], PROFILES[1:])
             self.assertIn("Self-contained", " ".join(cards[0]["text"]))
+            styles = [tuple(style) for card in cards for style in card["chipStyles"]]
+            self.assertEqual(len(set(styles)), 1, "All platform profiles must have identical chip colors")
         expected = [[PROFILES[j] for j in order] for order in SUMMARY["archetypeProfileOrder"]]
         self.assertEqual([c["profiles"] for c in full_cards], expected)
         self.assertIn("Profile set by latency, traffic, resiliency, security", " ".join(full_cards[1]["text"]))

@@ -114,7 +114,7 @@ module.exports = (pres, L) => {
     L.txt(s, 'NO DEPENDENCY ON A Full-Platform region', 0.6, 1.88, 5, 0.22, { fontSize: 9.5, bold: true, color: C.t600, charSpacing: 1.5 });
     L.txt(s, 'GREATER LOCAL CAPABILITY AND INDEPENDENCE', 7.2, 1.88, 5.53, 0.22, { fontSize: 9.5, bold: true, color: C.b700, charSpacing: 1.5, align: 'right' });
     const P = [
-      [C.t600, 'No private network path to a Full-Platform region, another region’s networks, or on-premises.', 'No hub or hybrid gateway. Approved local peering and Azure service endpoints only.'],
+      [C.t600, 'No shared platform services or private path to a more strategic region or on-premises required. Governance still applies.', 'No hub or hybrid gateway. Approved local peering and Azure service endpoints only.'],
       [C.c600, 'Spokes connect privately to an existing Full-Platform region in another region.', 'Centralized services used; local services not required.'],
       [C.b500, 'Selected local services and connectivity, based on workload requirements.', 'Selected local platform services; other required capabilities consumed remotely or globally.'],
       [C.b700, 'Comprehensive local capabilities, with connectivity to spokes, on-premises, and other regions as needed.', 'Full local capabilities, when required by latency, traffic volume, compliance, or operational needs.'],
@@ -166,7 +166,7 @@ module.exports = (pres, L) => {
       L.box(s, x, y + h - 1.0, w, 1.0, { fill: C.wash, r: 0.12 }); L.box(s, x, y + h - 1.0, w, 0.3, { fill: C.wash, r: 0 });
       L.txt(s, f, x + 0.2, y + h - 0.97, w - 0.4, 0.94, { fontSize: 11, fontFace: F.semi, color: C.ink, valign: 'middle' });
     });
-    L.caption(s, 'Figure', 'Platform Services span Security, Identity, Management, and Networking. Moving right adds local capability, independence, cost, and operational scope. Profiles are not maturity stages.', 0.6, 6.5, 12.1);
+    L.caption(s, 'Figure', 'Platform Services span Security, Identity, Management, and Networking. More local capability adds independence, cost, and operational scope; profiles are not maturity stages.', 0.6, 6.5, 12.1);
     s.addNotes('Enabling another region does not require changing or duplicating the full platform footprint of an existing Full-Platform region. An organization can maintain a small number of strategic Full-Platform regions, which provide resilient hybrid connectivity and common enterprise services to other regions; other regions use a more efficient profile and consume capabilities from those hubs when workload requirements permit. The four profiles form a spectrum from No platform to Full platform. They are not maturity stages. A profile can remain the right target for a region as long as it satisfies workload and platform requirements. Profiles describe platform capabilities, not workload designs.');
   }
 
@@ -175,7 +175,7 @@ module.exports = (pres, L) => {
     const s = L.slide('part1');
     L.header(s, 'Platform Services profiles', 'When each profile fits', { tw: 8 });
     const D = [
-      ['Workloads need no private network path to a Full-Platform region, another region’s networks, or on-premises. Approved same-region peering and Azure service endpoints can meet their requirements.', 'Workload resources plus the controls to deploy, secure, monitor, and operate them, using the estate’s standard identity, policy, security, and deployment practices.'],
+      ['Workloads need no shared platform services or private path to a more strategic region or on-premises. Approved same-region peering or Azure public/private endpoints meet requirements.', 'Workload resources and controls to deploy, secure, monitor, and operate them. Subscriptions remain governed by Management Groups, Policy, RBAC, and the estate’s standard identity and security practices.'],
       ['Workloads need private access to selected enterprise or on-premises services and can tolerate the latency, availability coupling, data-transfer implications, and dependency on another region.', 'Workload spokes and what must stay close. Gateways, firewalls, hybrid connectivity, routing, and selected shared services can remain in the Full-Platform region.'],
       ['Workloads need some local shared services, application-to-application connectivity, lower-latency paths, regional security controls, or more independence than Remote platform gives.', 'Only the connectivity and shared services that must operate locally. Hybrid connectivity, specialized networking, and central management can remain in a Full-Platform region.'],
       ['Requirements justify a comprehensive local capability set: local hybrid connectivity, substantial shared services, strict latency or data-boundary controls, or independence when another region or hub is unavailable.', 'The approved set of local connectivity, shared services, operational capabilities, and independent critical paths that the region’s workload portfolio requires.'],
@@ -196,7 +196,8 @@ module.exports = (pres, L) => {
       D.forEach((row, j) => L.txt(s, row[i], x0 + lw + j * cw + 0.12, y + 0.06, cw - 0.24, rh[i] - 0.1, { fontSize: 12, color: i === 0 ? C.ink : C.text, lineSpacingMultiple: 1.03 }));
       y += rh[i] + 0.12;
     });
-    s.addNotes('No platform can include self-contained cloud-native, AI, development, test, batch, HPC, VDI, or internet-facing workloads where the conditions are met. Remote platform: cross-region connectivity can be implemented through appropriate Azure networking capabilities based on the required topology and routing model, and public ingress can remain local through Azure Front Door or Application Gateway. A Minimal platform provides only the local capabilities its workloads need, such as east-west routing, DNS, monitoring, backup, security inspection, egress, private connectivity, selected identity or directory services, or on-premises connectivity. A Full platform uses the same operating model and control baselines as other Full-Platform regions but does not have to be an identical copy. Enabling another region does not by itself require another ExpressRoute circuit.');
+    L.txt(s, 'All profiles: reuse existing ExpressRoute circuits; validate reachability, SKU, bandwidth, and gateway needs.', 0.6, 6.55, 12.13, 0.3, { fontSize: 10.5, color: C.b700 });
+    s.addNotes('No platform can include self-contained cloud-native, AI, development, test, batch, HPC, VDI, or internet-facing workloads where the conditions are met. Subscriptions remain governed from a Management Group, Policy and RBAC standpoint. Remote platform: cross-region connectivity usually uses Global Virtual Network peering, Virtual WAN Virtual Network Connection, or Azure Virtual Network Manager, based on the required topology and routing model. Public ingress can remain local through Azure Front Door and/or Application Gateway. A Minimal platform provides only the local capabilities its workloads need, such as east-west routing, DNS, monitoring, backup, traffic inspection, egress, private connectivity, selected identity or directory services, or on-premises connectivity; other services can remain in a more strategic region. A Full platform uses the same operating model and control baselines as other Full-Platform regions but does not have to be an identical copy. None of the profiles, including Full platform, require new ExpressRoute circuits. If you do not have new on-premises datacenters near the new region, reuse existing circuits. You might still need to upgrade the circuit SKU or bandwidth and deploy a gateway in the new region. See Confirm hybrid connectivity for recommendations and considerations.');
   }
 
   // ───────────────────────── 6 · Archetypes  (PDF p16)
@@ -215,11 +216,11 @@ module.exports = (pres, L) => {
       L.num(s, i + 1, x + 0.2, y + 0.2, 0.4, C.t600, 'FFFFFF', 14);
       L.txt(s, t, x + 0.72, y + 0.12, w - 0.85, 0.62, { fontSize: 12.5, fontFace: F.semi, color: C.ink, valign: 'middle' });
       L.txt(s, d, x + 0.2, y + 0.92, w - 0.4, 1.3, { fontSize: 11.5, color: C.ink });
-      L.box(s, x + 0.2, y + 2.35, w - 0.4, 0.008, { fill: C.t300, r: 0 });
-      L.txt(s, 'TYPICAL Platform Services profiles', x + 0.2, y + 2.45, w - 0.3, 0.2, { fontSize: 9, bold: true, color: C.b600, charSpacing: 0.6 });
-      let cx = x + 0.2, cy = y + 2.74;
-      chips.forEach(c => { const cw = c.length * 0.07 + 0.3; if (cx + cw > x + w - 0.15) { cx = x + 0.2; cy += 0.32; } const dashed = c.includes('where justified'); L.chip(s, c, cx, cy, { w: cw, fill: dashed ? 'FFFFFF' : c === 'No platform' ? C.t100 : C.b100, color: c === 'No platform' ? C.t700 : C.b700, line: dashed ? C.b500 : undefined, dash: dashed ? 'dash' : undefined, size: 10.5 }); cx += cw + 0.06; });
-      L.txt(s, drv, x + 0.2, y + 3.5, w - 0.4, 1.05, { fontSize: 11, color: C.muted });
+      L.box(s, x + 0.2, y + 2.15, w - 0.4, 0.008, { fill: C.t300, r: 0 });
+      L.txt(s, 'TYPICAL Platform Services profiles', x + 0.2, y + 2.25, w - 0.3, 0.2, { fontSize: 9, bold: true, color: C.b600, charSpacing: 0.6 });
+      let cx = x + 0.2, cy = y + 2.54;
+      chips.forEach(c => { const cw = c.length * 0.07 + 0.3; if (cx + cw > x + w - 0.15) { cx = x + 0.2; cy += 0.32; } L.chip(s, c, cx, cy, { w: cw, fill: C.b100, color: C.b700, size: 10.5 }); cx += cw + 0.06; });
+      L.txt(s, drv, x + 0.2, cy + 0.47, w - 0.4, y + h - cy - 0.57, { fontSize: 11, color: C.muted });
     });
     L.caption(s, 'Figure', 'Each workload or group gets one archetype. Traffic between its regional instances does not change it.', 0.6, 6.4, 12.1);
     s.addNotes("Classify each workload on its own. When workloads have material east-west dependencies on each other, classify the group as an Interdependent Workload Group and combine its members' requirements. Each workload or group gets exactly one archetype. Traffic between instances of the same workload in different regions does not change its archetype. These archetypes describe what a workload depends on. They are separate from the Internal (Corp), Online, and Local management groups of an Azure landing zone, which set the policies a subscription inherits, and a workload has one of each.");

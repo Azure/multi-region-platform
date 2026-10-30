@@ -9,9 +9,9 @@ ms.topic: conceptual
 
 **Question:** What is the most efficient regional platform design that supports the identified requirements?
 
-Determine how workloads in the region will reach Full-Platform regions, shared platform services, application dependencies, other Azure regions, and hybrid environments. Those connectivity and dependency requirements determine which [Platform Services profile](./connectivity-profiles.md) fits: No platform, Remote platform, Minimal platform, or Full platform.
+Determine how workloads in the region will reach Full-Platform regions, shared platform services, application dependencies, other Azure regions, and hybrid environments. Those connectivity and dependency requirements determine which [Platform Services profile](./platform-services-profiles.md) fits: No platform, Remote platform, Minimal platform, or Full platform.
 
-Start with the matrix to see which Platform Services profiles each [archetype](./application-landing-zone-archetypes.md) typically uses. Then apply the selection principles and use the decision tree to pick the most efficient profile that meets the requirements.
+Start with the matrix to see which Platform Services profiles each [archetype](./workload-landing-zone-archetypes.md) typically uses. Then apply the selection principles and use the decision tree to pick the most efficient profile that meets the requirements.
 
 :::image type="content" source="./media/archetype-profile-matrix.png" alt-text="Matrix of the four archetypes against the four Platform Services profiles. Self-Contained Workloads often use No platform and other profiles where justified; Selectively Connected Workloads can use No platform where approved local peering or Azure service endpoints suffice, or Remote platform, Minimal platform, or Full platform; Hybrid-Dependent Workloads use Remote platform, Minimal platform, or Full platform; interdependent groups can use No platform for approved same-region connectivity, Remote platform where acceptable, and Minimal platform or Full platform when justified." lightbox="./media/archetype-profile-matrix.png":::
 
@@ -35,9 +35,9 @@ No platform can still provide approved direct same-region spoke connectivity and
 
 ## Which Platform Services profile should this region provide?
 
-Each question comes from the "fits when" criteria of the [Platform Services profiles](./connectivity-profiles.md). Stop at the first profile that satisfies the requirements identified in [check 3](./workload-requirements.md#platform-and-connectivity-requirements).
+Each question comes from the "fits when" criteria of the [Platform Services profiles](./platform-services-profiles.md). Stop at the first profile that satisfies the requirements identified in [check 3](./workload-requirements.md#platform-and-connectivity-requirements).
 
-:::image type="content" source="./media/connectivity-profile-decision-tree.png" alt-text="Decision tree with three questions. If approved same-region spoke connectivity and Azure service endpoints meet all requirements without hub or on-premises access, use No platform. If they can tolerate the latency and coupling of another region, use Remote platform. If requirements do not justify a comprehensive local capability set, use a Minimal platform; otherwise use a Full platform." lightbox="./media/connectivity-profile-decision-tree.png":::
+:::image type="content" source="./media/platform-services-profile-decision-tree.png" alt-text="Decision tree with three questions. If approved same-region spoke connectivity and Azure service endpoints meet all requirements without hub or on-premises access, use No platform. If they can tolerate the latency and coupling of another region, use Remote platform. If requirements do not justify a comprehensive local capability set, use a Minimal platform; otherwise use a Full platform." lightbox="./media/platform-services-profile-decision-tree.png":::
 
 *Platform Services profile selection tree. Questions escalate from dependency, to tolerance of remote consumption, to required independence. The outcome is a platform capability, not a workload design.*
 

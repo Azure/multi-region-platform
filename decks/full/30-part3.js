@@ -79,13 +79,13 @@ module.exports = (pres, L) => {
     // right: what to record
     L.box(s, 7.7, 1.6, 5.03, 2.0, { fill: C.b50, r: 0.12 });
     L.txt(s, 'What to record', 7.9, 1.72, 4.6, 0.32, { fontSize: 14, fontFace: F.semi, color: C.ink });
-    L.bullets(s, ['Selected Platform Services profile', 'Placement of each shared service, and which hub provides the remote ones', 'Hybrid connectivity decision', 'Owner and date', 'Triggers that would reopen the decision'], 7.9, 2.12, 4.65, 1.4, { gap: 3 });
+    L.bullets(s, ['Selected Platform Services profile', 'Placement of each shared platform service, and which region provides the remote ones', 'Hybrid connectivity decision', 'Owner and date', 'Triggers that would reopen the decision'], 7.9, 2.12, 4.65, 1.4, { gap: 3 });
     // example record
     L.txt(s, 'Example record', 0.6, 3.76, 4, 0.3, { fontSize: 14, fontFace: F.semi, color: C.ink, valign: 'middle' });
     const head = ['Region', 'Platform Services profile', 'Shared services', 'Hybrid connectivity', 'Open conditions'];
     const rows = [
       ['Region C', PROF[2], 'Local: selected capabilities. Remote from Region A: remaining shared services.', 'Reuse: existing foundation where required.', 'None'],
-      ['Region D', PROF[1], 'Remote from a Full-Platform region.', 'Reuse: via the hub where required.', 'Latency test with representative traffic.'],
+      ['Region D', PROF[1], 'Remote from a Full-Platform region.', 'Reuse: via the remote region where required.', 'Latency test with representative traffic.'],
       ['Region E', PROF[0], 'None required.', 'Not required.', 'None'],
     ];
     const hOpt = { bold: true, fontSize: 10, color: C.muted, fill: { color: C.wash }, charSpacing: 1, valign: 'middle' };
@@ -111,7 +111,7 @@ module.exports = (pres, L) => {
       ['Start with the workload requirements and dependencies', 'identified during qualification.'],
       ['Select the most efficient profile', 'that satisfies them, not the maximum possible one.'],
       ['Keep capabilities remote', 'when requirements permit. Adoption growth alone does not justify local ones.'],
-      ['Consider direct spoke-to-spoke connectivity', 'where east-west traffic is significant and a hub transit path is unnecessary.'],
+      ['Consider direct spoke-to-spoke connectivity', 'where east-west traffic is significant and a network hub transit path is unnecessary.'],
     ];
     const rowH = 0.92;
     P.forEach(([lead, rest], i) => {
@@ -151,7 +151,7 @@ module.exports = (pres, L) => {
     const Q = [
       'Do workloads need a Full-Platform region, on-premises access, centralized inspection, or private network paths beyond approved same-region spokes and Azure service endpoints?',
       'Can they tolerate the latency, availability coupling, data-transfer implications, and dependency on connectivity to another region?',
-      'Do requirements justify a comprehensive local capability set: local hybrid connectivity, substantial shared services, strict latency or data-boundary controls, or independence from other hubs?',
+      'Do requirements justify a comprehensive local capability set: local hybrid connectivity, substantial shared services, strict latency or data-boundary controls, or independence from other regions?',
     ];
     const R = [[0, 'No', C.faint, 'Confirm that no hidden dependency requires hub or on-premises connectivity.'], [1, 'Yes', C.b600, 'Measure with representative traffic; document behavior if the hub degrades.'], [2, 'No', C.faint, 'Only services that must be local; define clearly what stays remote.']];
     const qx = 0.6, qw = 6.3, qh = 0.78, rx = 7.85, rw = 4.88, y0 = 2.3, pitch = 1.08;

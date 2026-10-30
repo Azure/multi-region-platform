@@ -28,7 +28,7 @@
         <li>Start with the <strong>workload requirements and dependencies</strong> identified during regional qualification, including portfolio-level dependencies. Use Workload Landing Zone archetypes to spot recurring needs, then validate the profile against the actual workloads.</li>
         <li>Select the <strong>most efficient profile</strong> that satisfies those requirements, not the maximum possible one.</li>
         <li>Keep capabilities remote when latency, dependency, data, security, resiliency, availability, and operational requirements permit. Add local capabilities only when a measurable requirement justifies the larger regional footprint; adoption growth alone doesn’t.</li>
-        <li style="border-bottom:1px solid var(--line-soft)">Consider direct spoke-to-spoke connectivity where workloads have significant east-west traffic and a hub transit path is unnecessary. Add regional routing, inspection, or shared services when broader requirements justify them.</li>
+        <li style="border-bottom:1px solid var(--line-soft)">Consider direct spoke-to-spoke connectivity where workloads have significant east-west traffic and a network hub transit path is unnecessary. Add regional routing, inspection, or shared services when broader requirements justify them.</li>
       </ol>
     </div>
 
@@ -59,7 +59,7 @@
         <li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/design-area/network-topology-and-connectivity">Network topology and connectivity</a></li>
         <li><a href="https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/define-an-azure-network-topology">Define an Azure network topology</a></li>
       </ul>
-      <p class="small mt8">{{PROFILE_1}} can still provide approved direct same-region spoke connectivity and private endpoints for Azure services. These paths must satisfy DNS, security, inspection, and operational requirements without a hub or hybrid gateway. A private endpoint alone does not require {{PROFILE_2}}, {{PROFILE_3}}, or {{PROFILE_4}}.</p>
+      <p class="small mt8">{{PROFILE_1}} can still provide approved direct same-region spoke connectivity and private endpoints for Azure services. These paths must satisfy DNS, security, inspection, and operational requirements without a network hub or gateway for hybrid connectivity. A private endpoint alone does not require {{PROFILE_2}}, {{PROFILE_3}}, or {{PROFILE_4}}.</p>
     </div>
   </div>
 </div>

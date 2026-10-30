@@ -1,34 +1,6 @@
-# application-landing-zone-archetypes
-a connected profile may still be selected where platform requirements such as private management security data access or centralized services justify connectivity
-architecture or design pattern
-because this is a group level archetype its combined dependencies may require capabilities beyond those needed by any individual workload
-classify at group level and combine the members requirements
-direct connectivity may suit a limited number of tightly coupled workloads while a minimal platform or full platform may be more appropriate where broader connectivity shared routing traffic inspection resiliency or operational requirements justify regional platform capabilities
-groups of workloads with material east west dependencies on each other such as shared data synchronous calls or private east west traffic
-otherwise use remote platform minimal platform or full platform depending on dependency latency traffic patterns resiliency security and operational requirements
-remote platform is an option when cross region latency traffic and availability coupling are acceptable
-select the profile from the group s aggregate connectivity shared service resiliency scale and operational requirements
-the archetype to profile matrix shows the typical options for each archetype
-the four archetypes grouped by the platform connectivity and dependency capabilities each requires
-the no regional platform profile does not fit a mandatory private dependency on on premises services and or shared platform services
-the no regional platform profile is an option only when approved same region spoke to spoke connectivity and azure service endpoints satisfy the group s aggregate requirements without private connectivity to a more strategic region or an on premises environment
-these workloads can often use no platform
-these workloads can use the no regional platform profile when approved direct same region spoke connectivity or azure service endpoints meet their dependency and control requirements without connectivity to a more strategic region with platform services and or connectivity to an on premises environment
-these workloads typically use remote platform minimal platform or full platform depending on dependency latency resiliency regulatory operational and shared service requirements
-understand workload landing zone archetypes
-use archetypes during regional qualification to anticipate the capabilities a candidate region may need to support
-use minimal platform or full platform when local capabilities are justified
-where future workload requirements aren t yet defined they give you planning guardrails without constraining later placement which happens once the workload s current requirements regional capabilities and platform readiness are known
-where significant east west traffic exists within a region evaluate whether direct spoke to spoke connectivity or a local virtual network hub or virtual wan hub provides a more appropriate path than routing traffic through the virtual network hub or virtual wan hub in another region
-workload landing zone archetypes group recurring workload connectivity and dependency requirements
-workload landing zone archetypes in this guidance describe what a workload requires from the platform which is a different concept
 # business-and-geography
 regions that don t pass this check don t need deeper assessment
 regions that pass continue to data and compliance which can exclude a region outright
-# connectivity-profiles
-depending on workload requirements these capabilities can include east west routing dns monitoring backup security inspection egress private connectivity selected identity or directory services on premises connectivity or other services that must remain close to the workloads
-moving right adds local capability and independence and also cost and operational scope
-understand common platform services profiles
 # customer-scenarios
 candidate until dependencies are known
 check 3 identifies applications and components that must move together
@@ -90,8 +62,8 @@ multi region platform strategy
 # key-vault-across-regions
 a fresh key in a new vault is not a substitute
 a key store s replication capability does not establish support for every service s replication or restore operation
-a pair can cross geography boundaries for example brazil south and south central us
-a pairing relationship is not necessarily reciprocal
+a pairing isn t always reciprocal
+a regional pair doesn t on its own keep your data within a particular country or geography and it doesn t guarantee that every service replicates to the paired region
 a requirement for physical key custody outside microsoft
 a second endpoint alone does not provide safe fallback
 a second vault alone does not provide fallback
@@ -111,6 +83,7 @@ automatic zone redundancy where supported
 azure sql database azure sql managed instance and azure cosmos db geo replication database geo replication
 azure sql database azure sql managed instance and azure cosmos db geo restore database geo restore
 azure storage blob object replication storage object replication
+before you rely on built in geo replication check each service s documentation for regional exceptions
 best for watch for
 both data copies depend on microsoft managed vault recovery
 both depend on that account s cmk
@@ -118,9 +91,8 @@ bring your own key byok means importing externally generated key material
 byok import followed by managed hsm geo replication
 candidates for supported shared key dependencies
 changes replicate within six minutes
+check data residency and service level replication separately against your compliance requirements
 check the scenario conditions before following the chart
-check three design constraints
-check west us 3 and east us against the service s replication exclusions
 compare its cost with the accepted risk of microsoft managed vault recovery not an arbitrary number of keys threshold
 compare the patterns then review their distribution diagrams
 conditional means that the exact feature topology and key operations must satisfy the linked service guidance
@@ -158,6 +130,7 @@ ekm is designed for compatible cmk encryption at rest integrations and exposes a
 eligible pair and read only recovery
 encrypt decrypt wrap unwrap sign verify
 every external operation adds network round trips
+examples include qatar central belgium central and spain central
 external key backup restore is not supported
 external key material imported into independent premium vaults
 external key origin requirements plus replicated managed hsm
@@ -166,6 +139,8 @@ external keys have no geo replicated failover target
 externally held key material without geo replication
 for byok import and authorize keys for each account
 for byok validate key import for the recovery feature
+for example brazil south is paired with south central us
+for example west us 3 lists east us as its pair but east us is paired with west us
 for managed disk server side encryption configure regional disk encryption sets and key access
 for replicated managed hsm respect dns time to live ttl so clients can reach a healthy region
 for tenant key byok the documented premium vault approach imports an external hsm key into azure
@@ -178,6 +153,7 @@ healthy region read write
 here byok refers to the supported hsm to hsm transfer process not generic software key import
 hsm protection without a customer configured replicated managed hsm
 identify whether the requirement concerns an azure rights management tenant key microsoft 365 customer key or another protection feature
+if you need cross region recovery you ll need to choose a secondary region yourself and configure replication for each service
 import the key into the primary pool through byok then use managed hsm geo replication
 import then geo replicate
 imported key material now resides in azure hsms
@@ -198,6 +174,7 @@ key vault backups are point in time and restore only within the same subscriptio
 key vault in a paired region secrets certificates pattern 2
 key vault in each region secrets certificates pattern 1
 key vault is often a runtime dependency
+key vault is one example
 keys uses patterns 1 7
 maintain access to the shared key
 managed disks and their key store must meet same region requirements
@@ -228,7 +205,6 @@ no end to end microsoft sla covers the external components
 no end to end sla for external keys
 no key creation or rotation until normal operation returns
 no managed hsm geo replication for external keys
-no paired region for example qatar central belgium central and spain central
 once initiated public endpoint convergence is designed to take a few minutes
 one managed hsm pool with a primary and one supported extended region
 one premium vault per workload per region
@@ -244,7 +220,9 @@ only with a documented service specific key copy and rotation design not as a ge
 optional application level fallback to another vault requires explicit identity networking and version selection design
 other options require feature specific confirmation
 paired region vault replication alone does not provision target region encryption dependencies
-pairing alone does not establish a data residency boundary or key vault replication eligibility
+pairing affects disaster recovery options data replication and data residency
+pairings that only go one way
+pairs in different geographies
 pattern 3 s service constraints still apply
 patterns to consider for tenant key byok
 patterns to consider subject to the database service s requirements
@@ -296,6 +274,9 @@ services that accept software protected keys and microsoft managed recovery timi
 services that support independent regional keys
 short customer controlled recovery
 site recovery does not automatically apply encryption key changes to protected vms
+some newer regions don t have a paired region
+some pairs cross geographic boundaries
+some services also don t replicate automatically from certain regions
 source and destination accounts can use independent keys
 source and destination are separate accounts so their cmk configuration can be independent
 sql database and sql managed instance need the required tde protector keys available to their replicas
@@ -336,6 +317,7 @@ there is no geo replicated failover target
 there is no single cross geography rule that can safely represent every sql and cosmos db restore feature
 these are not interchangeable integrations
 these are standard premium vault behaviors
+these regions use availability zones for resiliency within the region
 this is different from guest based azure disk encryption and confidential vm key release
 this is not automatic vault to vault replication
 treat each independent region as a deployment stamp
@@ -355,6 +337,7 @@ verify service restore support and historical key availability
 verify storage cmk integration and proxy availability
 verify the exact integration
 verify the service s external key cmk integration and the recovery feature separately
+when you plan a multi region architecture on azure check how your target regions are paired
 with byok manage the imported key lifecycle
 with external key management ekm managed hsm authenticates and authorizes requests but the key encryption key stays in your external hsm
 workloads that accept microsoft managed recovery
@@ -393,30 +376,32 @@ private dns across regions routing and inspection paths and hybrid connectivity 
 quota and specific capacity common blocker
 region settings in policy common blocker
 where logs and telemetry live common blocker
+# platform-services-profiles
+moving right adds local capability and independence and also cost and operational scope
 # prepare-region
 no platform remote platform minimal platform and full platform
 region c s minimal platform reaches on premises by reusing an existing expressroute circuit
 region d s does not
 what must be true before workloads arrive
 # profile-selection
-a local hub with only the services that must be in the region
+a local network hub and only other platform services that must be in the region
 check these points before you settle on a profile and revisit the profile when its reassessment trigger applies
 considerations and reassessment by profile
 each question comes from the fits when criteria of the platform services profiles
 everything else stays remote
 fits when the workloads expected in the region
-need a comprehensive local capability set or independence from other hubs
+need a comprehensive local capability set of platform services and independence from other regions
 need full platform region capabilities or wider private network access and can tolerate the latency availability coupling and dependency on connectivity to another region
 need no full platform region on premises path centralized inspection or private network connectivity beyond approved same region spokes and azure service endpoints
 need some capabilities locally without a comprehensive local set
-no hub and no gateway
+no network hub and no gateway only platform services that are global
 start with the matrix to see which platform services profiles each archetype typically uses
 the complete local connectivity and shared services that the region s workloads require
 the same tree as a table from the smallest regional footprint to the largest
 then apply the selection principles and use the decision tree to pick the most efficient profile that meets the requirements
 what the region gets
 which platform services profile should this region provide
-workload spokes consume an existing full platform region
+workload spokes consume services from another existing full platform region
 workload spokes use the estate s standard identity policy security and deployment practices
 # regional-capability
 assess required quota based on expected workload scale and identify any quota increases that may be required
@@ -460,6 +445,29 @@ use a supported region of choice replication pattern such as object replication 
 # workload-design
 service guides for multi region overview
 the articles in this section cover the dependencies that most often decide whether a regional combination works as built
+# workload-landing-zone-archetypes
+a connected profile may still be selected where platform requirements such as private management security data access or centralized services justify connectivity
+architecture or design pattern
+because this is a group level archetype its combined dependencies may require capabilities beyond those needed by any individual workload
+classify at group level and combine the members requirements
+direct connectivity may suit a limited number of tightly coupled workloads while a minimal platform or full platform may be more appropriate where broader connectivity shared routing traffic inspection resiliency or operational requirements justify regional platform capabilities
+groups of workloads with material east west dependencies on each other such as shared data synchronous calls or private east west traffic
+otherwise use remote platform minimal platform or full platform depending on dependency latency traffic patterns resiliency security and operational requirements
+remote platform is an option when cross region latency traffic and availability coupling are acceptable
+select the profile from the group s aggregate connectivity shared service resiliency scale and operational requirements
+the archetype to profile matrix shows the typical options for each archetype
+the four archetypes grouped by the platform connectivity and dependency capabilities each requires
+the no regional platform profile does not fit a mandatory private dependency on on premises services and or shared platform services
+the no regional platform profile is an option only when approved same region spoke to spoke connectivity and azure service endpoints satisfy the group s aggregate requirements without private connectivity to a more strategic region or an on premises environment
+these workloads can often use no platform
+these workloads can use the no regional platform profile when approved direct same region spoke connectivity or azure service endpoints meet their dependency and control requirements without connectivity to a more strategic region with platform services and or connectivity to an on premises environment
+these workloads typically use remote platform minimal platform or full platform depending on dependency latency resiliency regulatory operational and shared service requirements
+use archetypes during regional qualification to anticipate the capabilities a candidate region may need to support
+use minimal platform or full platform when local capabilities are justified
+where future workload requirements aren t yet defined they give you planning guardrails without constraining later placement which happens once the workload s current requirements regional capabilities and platform readiness are known
+where significant east west traffic exists within a region evaluate whether direct spoke to spoke connectivity or a local virtual network hub or virtual wan hub provides a more appropriate path than routing traffic through the virtual network hub or virtual wan hub in another region
+workload landing zone archetypes group recurring workload connectivity and dependency requirements
+workload landing zone archetypes in this guidance describe what a workload requires from the platform which is a different concept
 # workload-placement
 define whether the region will support the workload as its primary location recovery location or as part of a multi region active deployment
 document the selected region workload landing zone archetype platform services profile placement and resiliency outcomes assumptions constraints owners and revalidation triggers
