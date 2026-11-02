@@ -104,11 +104,6 @@
   "h": 273,
   "source": "figKVS1"
  },
- "key-vault-secrets-paired-region": {
-  "w": 380,
-  "h": 273,
-  "source": "figKVS2"
- },
  "key-vault-keys-paired-region": {
   "w": 380,
   "h": 273,
@@ -143,5 +138,10 @@
   "w": 380,
   "h": 273,
   "source": "figKVK6"
+ },
+ "key-vault-secrets-paired-region": {
+  "w": 380,
+  "h": 273,
+  "source": "figKVS2"
  }
 }

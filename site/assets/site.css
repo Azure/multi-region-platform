@@ -185,6 +185,9 @@ h2:hover .anchor, h3:hover .anchor { opacity: 1; }
 .prose .kv-wide th:first-child { background: var(--bg-soft); z-index: 2; }
 .prose .kv-wide th:last-child, .prose .kv-wide td:last-child { border-right: 0; }
 .prose .kv-table tbody th { font-size: 14.5px; letter-spacing: 0; text-transform: none; font-weight: 600; background: var(--bg); vertical-align: top; }
+.prose .kv-illustrated table { table-layout: fixed; min-width: 1000px; }
+.prose .kv-illustrated th:last-child, .prose .kv-illustrated td:last-child { width: 44%; }
+.kv-illustrated .fig { margin: 0; }
 .prose tbody tr:hover td { background: var(--bg-soft); }
 
 blockquote.pull { margin: 28px 0; padding: 22px 28px; border-radius: 12px; background: linear-gradient(120deg, #0B3A63, #0F6CBD 70%, #0A8BB0); color: #fff; }
