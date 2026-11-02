@@ -109,7 +109,7 @@ Figure IDs and extraction names live in `site/tools/extract_figures.py` (`FIGS`)
 
 The Platform Services profile display names are **No platform**, **Remote platform**, **Minimal platform**, and **Full platform**. The concept articles use `platform-services-profiles.md` and `workload-landing-zone-archetypes.md`, with matching website HTML names. Keep article links, figure names in `whitepaper/figures.json`, tests, and the PDF article mapping aligned when renaming these files. All profile chips on the archetype cards use the same blue styling in the PDF, website, PNG, and PowerPoint editions; their color does not indicate preference or eligibility.
 
-Keep the full Key Vault guide to at most five rendered PDF pages: regional guidance before the product comparison, a condensed scenario summary linking to the online scenario sections, two secrets and certificates patterns, six key patterns, and a graphical decision tree with references. Standard and Premium share one paired-region key pattern; distinguish their key protection and service-specific requirements within that pattern. The full deck may use additional slides to keep all eight pattern diagrams readable; put service-specific detail in speaker notes. Use "Pattern N" within a category and "Keys - Pattern N" or "Secrets and certificates - Pattern N" where ambiguity exists. After regeneration, check the actual PDF page count and source-page coverage.
+Keep the full Key Vault guide to at most five rendered PDF pages: regional guidance before the product comparison, a condensed scenario summary linking to the online scenario sections, one secrets and certificates pattern, six key patterns, and a graphical decision tree with references. Standard and Premium share one paired-region key pattern; distinguish their key protection and service-specific requirements within that pattern. The full deck may use additional slides to keep all seven pattern diagrams readable; put service-specific detail in speaker notes. Use "Pattern N" within a category and "Keys - Pattern N" or "Secrets and certificates - Pattern N" where ambiguity exists. After regeneration, check the actual PDF page count and source-page coverage.
 Use `data-export-width` on a figure to set its standalone export width independently of the PDF column width. The eight Key Vault pattern diagrams use 380 pixels so their web and PNG objects have consistent sizes; their PDF placement follows the available columns.
 Use descriptive, linked pattern names in comparison-table headers, not numbered shorthand. Keep applicable patterns and their service conditions directly under each scenario, with links back to the pattern details; do not reintroduce a scenario-by-pattern matrix.
 
@@ -121,9 +121,9 @@ The website generator (`site/build.py`) renders these Learn constructs:
 
 | Syntax | Website rendering |
 |---|---|
-| `:::image type="content" source="./media/x.png" alt-text="...":::` followed by an italic paragraph | Live scalable figure with caption, zoom, and PNG download; PNG fallback if no extracted figure exists |
+| `:::image type="content" source="./media/x.png" alt-text="...":::` followed by an italic paragraph | Live scalable figure with caption, zoom, and PNG download; PNG fallback if no extracted figure exists. The image directive also works inside Markdown table cells, without a separate caption paragraph. |
 | `:::row:::` / `:::column:::` | Card grid |
-| `> [!NOTE]`, `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]` | Alert boxes |
+| `> [!NOTE]`, `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]` | Alert boxes; append a plain-text title, e.g. `> [!NOTE] EXAMPLE SCENARIOS`, to override the default label |
 | `> [!div class="nextstepaction"]` | Next-step button |
 | `**Question:**`, `**Decision:**`, `**Takeaway:**` | Styled callouts |
 | `**Fits when:**`, `**Regional footprint:**`, `**Key considerations:**`, `**Reassess when:**` | Profile attribute rows |
