@@ -99,18 +99,28 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual(len(pages), 5)
         result = subprocess.run(["node", "-e", """
             let slides = 0, images = 0, linkedScenarios = 0;
+            let sharedPatternCards = 0;
+            let dualPatternCards = 0, asrPatternCards = 0;
+            const notes = [];
             const L = {
               data: {siteUrl: 'https://example.invalid/'},
               slide() {
                 slides++;
                 return {
                   addTable() {},
-                  addNotes() {}
+                  addNotes(text) { notes.push(text); }
                 };
               },
               header() {}, box() {},
               txt(slide, text) {
                 if (Array.isArray(text) && text.some(run => run.options?.hyperlink?.url.includes('#keys-pattern-'))) linkedScenarios++;
+                if (Array.isArray(text)) {
+                  if ([1, 4, 5].every(pattern => text.some(run => run.options?.hyperlink?.url.endsWith('#keys-pattern-' + pattern)))) sharedPatternCards++;
+                  if ([2, 3].every(pattern => text.some(run => run.options?.hyperlink?.url.endsWith('#keys-pattern-' + pattern)))) {
+                    dualPatternCards++;
+                    if (!text.some(run => [4, 5].some(pattern => run.options?.hyperlink?.url.endsWith('#keys-pattern-' + pattern)))) asrPatternCards++;
+                  }
+                }
               },
               image(slide, file, box) {
                 const png = require('fs').readFileSync(file);
@@ -120,6 +130,10 @@ class PublicationTests(unittest.TestCase):
               }
             };
             require('./decks/full/key-vault')({}, L);
+            if (sharedPatternCards !== 5) throw Error('Single KEK cards must inherit all three shared patterns');
+            if (dualPatternCards !== 4 || asrPatternCards !== 1) throw Error('Dual KEK cards must preserve scenario-specific pattern choices');
+            if (!notes.some(text => text.includes('Purview Information Protection') && text.includes('Non-exportable keys') && text.includes('Default to Microsoft-managed keys'))) throw Error('Missing Purview guidance in notes');
+            if (notes.some(text => text.includes('**Service-specific requirements:**'))) throw Error('Removed service-specific requirements remain in notes');
             console.log(JSON.stringify({slides, images, linkedScenarios}));
         """], cwd=ROOT, check=True, capture_output=True, text=True)
         self.assertEqual(json.loads(result.stdout), {"slides": 9, "images": 9, "linkedScenarios": 9})

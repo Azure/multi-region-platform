@@ -114,6 +114,10 @@ def render_md(text, store):
         store.append(h)
         return f"\n\nRAWBLOCK{len(store) - 1}END\n\n"
 
+    def table_image(match):
+        attrs = dict(re.findall(r'([\w-]+)="([^"]*)"', match.group(1)))
+        return keep(figure_html(attrs.get("source", ""), attrs.get("alt-text", ""), "")).strip()
+
     # website-only blocks: keep the content, drop the markers (site/tools/export_caf.py removes the whole block)
     text = re.sub(r"^[ \t]*<!--\s*site-only:(start|end)\s*-->[ \t]*\n?", "", text, flags=re.M)
     lines = text.split("\n")
@@ -133,6 +137,10 @@ def render_md(text, store):
                 cap = inline_md(lines[j].strip()[1:-1], store)
                 i = j
             out.append(keep(figure_html(attrs.get("source", ""), attrs.get("alt-text", ""), cap)))
+            i += 1
+            continue
+        if s.startswith("|") and ":::image " in s:
+            out.append(re.sub(r":::image\s+(.*?):::", table_image, ln))
             i += 1
             continue
         # :::row::: ... :::row-end:::
@@ -162,8 +170,9 @@ def render_md(text, store):
             mn = re.match(r'\[!div class="nextstepaction"\]', first)
             if ma:
                 kind = ma.group(1).lower()
+                title = first[ma.end():].strip() or kind.capitalize()
                 inner = render_md("\n".join(block[1:]), store)
-                out.append(keep(f'<div class="alert {kind}"><p class="alert-title"><svg viewBox="0 0 16 16">{ALERT_ICONS[kind]}</svg>{kind.capitalize()}</p>{inner}</div>'))
+                out.append(keep(f'<div class="alert {kind}"><p class="alert-title"><svg viewBox="0 0 16 16">{ALERT_ICONS[kind]}</svg>{html.escape(title)}</p>{inner}</div>'))
             elif mn:
                 rest = " ".join(b.strip() for b in block[1:])
                 ml = re.match(r"\[(.+?)\]\((.+?)\)", rest)
@@ -232,6 +241,8 @@ def key_vault_pattern_layout(h):
         wide = "keys-pattern-6" in table
         label = "Key pattern comparison" if wide else "Key Vault comparison"
         cls = "kv-table kv-wide" if wide else "kv-table"
+        if "<figure" in table:
+            cls += " kv-illustrated"
         return (f'<div class="table-wrap {cls}" tabindex="0" role="region" aria-label="{label}">'
                 f'<table>{table}</table></div>')
     return re.sub(r'<div class="table-wrap"><table>(.*?)</table></div>', scroll_table, h, flags=re.S)
