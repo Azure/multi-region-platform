@@ -63,7 +63,7 @@
 
   // ── step 3
   const PROFILES = [
-    { id: 'No platform', name: 'No regional platform', href: 'disconnected-spokes.html', gets: 'No hub and no gateway. Workload spokes use the estate’s standard identity, policy, security, and deployment practices.',
+    { id: 'Governance-Only', name: 'Governance-Only', href: 'disconnected-spokes.html', gets: 'No hub and no gateway. Workload spokes use the estate’s standard identity, policy, security, and deployment practices.',
       reassess: 'Workloads require a Full-Platform region, on-premises connectivity, centralized inspection, or private network paths beyond approved same-region spokes and Azure service endpoints.' },
     { id: 'Remote platform', name: 'Remote regional platform', href: 'remote-hub-connected.html', gets: 'No local hub. Workload spokes consume an existing Full-Platform region.',
       reassess: 'Cross-region traffic, latency, east-west communication, dependency criticality, regulatory requirements, scale, or availability coupling justify deploying selected connectivity or shared-service capabilities locally.' },
@@ -112,7 +112,7 @@
   }
 
   const HYBRID_DECISIONS = [
-    { id: 'Not required', text: 'The region uses No platform, or its workloads need no private path to on-premises locations.', icon: 'close' },
+    { id: 'Not required', text: 'The region uses Governance-Only, or its workloads need no private path to on-premises locations.', icon: 'close' },
     { id: 'Reuse', text: 'The existing circuits, gateways, and peering locations meet what the workloads in the new region need.', icon: 'reset' },
     { id: 'Change', text: 'A requirement can’t be met by the existing foundation. Record the requirement and the change it justifies.', icon: 'edit' },
   ];
@@ -128,7 +128,7 @@
     return [];
   }
   function eastWestOptions(profile) {
-    if (profile === 'No platform') return ['Not required', direct];
+    if (profile === 'Governance-Only') return ['Not required', direct];
     if (profile === 'Remote platform') return ['Through the Full-Platform region', direct, 'Not required'];
     if (profile === 'Minimal platform') return ['Through the local hub (firewall or network virtual appliance)', direct, 'Through the Full-Platform region', 'Not required'];
     if (profile === 'Full platform') return ['Through the local hub (firewall or network virtual appliance)', direct, 'Not required'];

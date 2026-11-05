@@ -1,7 +1,7 @@
 ---
 title: Regional design overview
 description: Select the regional design for a qualified Azure region with three choices from short lists — the Platform Services profile, where each shared service is provided, and whether existing hybrid connectivity is reused — and record them so the region can be prepared.
-ms.date: 10/28/2026
+ms.date: 11/05/2026
 ms.topic: conceptual
 ---
 
@@ -13,7 +13,7 @@ Each choice follows from the workloads you expect in the region, not from the fo
 
 | Choice | You select | Page |
 |---|---|---|
-| 1. Platform Services profile | One of four: No platform, Remote platform, Minimal platform, or Full platform. | [Select the Platform Services profile](./profile-selection.md) |
+| 1. Platform Services profile | One of four: Governance-Only, Remote platform, Minimal platform, or Full platform. | [Select the Platform Services profile](./profile-selection.md) |
 | 2. Shared-service placement | For each shared service the workloads depend on: local, remote, or global. | [Place shared services](./platform-enablement-connectivity.md) |
 | 3. Hybrid connectivity | Reuse the existing foundation, change it, or confirm that none is required. | [Confirm hybrid connectivity](./hybrid-connectivity.md) |
 
@@ -47,7 +47,7 @@ Keep one record per region. Record the selected profile, the placement of each s
 |---|---|---|---|---|
 | Region C | Minimal platform | Local: selected capabilities. Remote from Region A: remaining shared services. | Reuse: existing foundation where required. | None |
 | Region D | Remote platform | Remote from a Full-Platform region. | Reuse: via the remote region where required. | Latency test with representative traffic. |
-| Region E | No platform | None required. | Not required. | None |
+| Region E | Governance-Only | None required. | Not required. | None |
 
 *Illustrative example. Regions and choices are examples only.*
 

@@ -514,7 +514,7 @@ def build(web=False, pdf=False):
          ("Riverside", "Minimal platform · fire station, clinic", 790, 330, p(6.6, 1.2, .9)),
          ("Hillcrest", "Remote platform · services by transit", 930, 470, p(10.9, 1.4, .6)),
          ("Midtown", "Remote platform · services by transit", 430, 900, p(5.4, 8.1, .3)),
-         ("Lakeside", "No platform · off-grid, no city roads", 150, 800, p(.4, 8.9, .3)),
+         ("Lakeside", "Governance-Only · off-grid, no city roads", 150, 800, p(.4, 8.9, .3)),
          ("New plot", "Candidate · zoned, not yet built", 968, 905, p(11.6, 7.4, .05))]
     k = 1.0
     if pdf:   # the label names what the place stands for; the legend beside the picture explains the icons
@@ -525,7 +525,7 @@ def build(web=False, pdf=False):
              ("Riverside", "Minimal platform", 842, 340, p(6.6, 1.2, .9)),
              ("Hillcrest", "Remote platform", 960, 470, p(10.9, 1.4, .6)),
              ("Midtown", "Remote platform", 400, 970, p(5.4, 8.1, .3)),
-             ("Lakeside", "No platform", 128, 880, p(.4, 8.9, .3)),
+             ("Lakeside", "Governance-Only", 128, 880, p(.4, 8.9, .3)),
              ("New plot", "Candidate region", 968, 960, p(11.6, 7.4, .05))]
     for t, sub, cx, ty, (ax, ay) in L:
         ly = ty + 40 * k if ay > ty + 40 * k else ty

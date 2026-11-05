@@ -1,7 +1,7 @@
 ---
 title: Multi-region customer scenarios
 description: Four illustrative scenarios that follow the multi-region framework from a business or technical driver to a governed regional and workload decision.
-ms.date: 10/27/2026
+ms.date: 11/05/2026
 ms.topic: conceptual
 ---
 
@@ -12,7 +12,7 @@ These examples show how the framework moves from a business or technical driver 
 | Scenario | Driver | Archetype | Platform Services profile | Outcome |
 |---|---|---|---|---|
 | [Regulated bank adopts a new in-country region](#regulated-bank-adopts-a-new-in-country-region) | Data residency and regulation | [Hybrid-Dependent Workloads](./workload-landing-zone-archetypes.md#hybrid-dependent-workloads) | [Minimal platform](./platform-services-profiles.md#minimal-platform) | Qualified for defined requirements; selective relocation. |
-| [AI team requires a specific model or GPU SKU](#ai-team-requires-a-specific-model-or-gpu-sku) | Service, AI model, SKU, and quota availability | [Self-Contained Workloads](./workload-landing-zone-archetypes.md#self-contained-workloads) or [Selectively Connected Workloads](./workload-landing-zone-archetypes.md#selectively-connected-workloads) | [No platform](./platform-services-profiles.md#no-platform) | Qualified for the AI workload; net-new deployment. |
+| [AI team requires a specific model or GPU SKU](#ai-team-requires-a-specific-model-or-gpu-sku) | Service, AI model, SKU, and quota availability | [Self-Contained Workloads](./workload-landing-zone-archetypes.md#self-contained-workloads) or [Selectively Connected Workloads](./workload-landing-zone-archetypes.md#selectively-connected-workloads) | [Governance-Only](./platform-services-profiles.md#governance-only) | Qualified for the AI workload; net-new deployment. |
 | [Acquisition brings an estate in another geography](#acquisition-brings-an-estate-in-another-geography) | Business growth | [Interdependent Workload Groups](./workload-landing-zone-archetypes.md#interdependent-workload-groups) | [Remote platform](./platform-services-profiles.md#remote-platform) or [Minimal platform](./platform-services-profiles.md#minimal-platform) | Candidate until dependencies are known; workloads stay in place at first. |
 | [Datacenter exit accelerates migration](#datacenter-exit-accelerates-migration) | Datacenter and connectivity event | [Hybrid-Dependent Workloads](./workload-landing-zone-archetypes.md#hybrid-dependent-workloads) | No new profile; the existing Full-Platform region is reused | Workloads land in the existing qualified region. |
 
@@ -41,7 +41,7 @@ A product team requires an AI model, GPU SKU, or related Azure service that is u
 | Deciding checks | [Check 1](./business-and-geography.md) confirms the business requirement. [Check 2](./data-and-compliance.md) validates data and compliance constraints. [Check 4](./regional-capability.md) validates current model, service, SKU, zone, regional access, and quota support. |
 | Qualification | The region can be qualified for the defined AI workload requirements. It remains conditional for requirements that depend on private connectivity until that design is known and validated. |
 | Workload Landing Zone archetype | **Self-Contained Workloads** where the workload is self-contained; **Selectively Connected Workloads** where named private endpoints or APIs are required. |
-| Platform Services profile | **No platform** where the workload is self-contained; a connected profile only where actual dependencies justify it. |
+| Platform Services profile | **Governance-Only** where the workload is self-contained; a connected profile only where actual dependencies justify it. |
 | Placement | Net-new deployment. Revalidate current model, SKU, service, regional access, and quota support at decision time. |
 
 **Takeaway:** Qualify against the requirements that exist today; do not introduce enterprise connectivity or regional platform capabilities before a workload requirement justifies them.

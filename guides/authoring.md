@@ -38,7 +38,7 @@ The full PDF's reading order comes from `content/toc.yml` through `ARTICLE_PAGES
 
 Keep archetype lists, cards, matrix rows and columns, planner choices, and numbered city examples in this order: **Self-Contained Workloads**, **Selectively Connected Workloads**, **Hybrid-Dependent Workloads**, **Interdependent Workload Groups**. This is increasing platform connectivity and dependency complexity, not application sophistication or maturity. When reordering a qualification matrix, move the evidence/status cells with their archetype, not just the headings.
 
-Profile applicability is many-to-many. No platform is often suitable for isolated applications and is conditional for connected applications and portfolios: approved same-region spoke connectivity or Azure service endpoints must meet all requirements without Full-Platform region or on-premises dependencies. hybrid-dependent workloads require Remote platform, Minimal platform, or Full platform. Keep these qualifications in cards, matrices, slide notes, and the profile-selection questions. Run `python -m unittest discover -s site/tools -p test_archetypes.py` after changing these surfaces.
+Profile applicability is many-to-many. Typical card profiles are Governance-Only or Remote platform for Self-Contained Workloads, Remote platform or Minimal platform for Selectively Connected Workloads, and Minimal platform or Full platform for Hybrid-Dependent Workloads and Interdependent Workload Groups. The matrix retains conditional alternatives: Governance-Only requires approved same-region connectivity without Full-Platform region or on-premises dependencies, and Remote platform requires acceptable cross-region dependencies. Keep these qualifications in cards, matrices, slide notes, and the profile-selection questions. Run `python -m unittest discover -s site/tools -p test_archetypes.py` after changing these surfaces.
 
 The Markdown stays the source for prose. The titles in `shared/summary.json` (each scenario `title`, misconception `claim`, getting-started `title`, part and check `name`) must still appear in the matching article; `drift.py summary` checks that and the service-guides name against `content/toc.yml`. `tokens` is the reference for the color tokens in `whitepaper/styles.css` and `decks/lib.js`.
 
@@ -90,7 +90,7 @@ review the diff of `drift-baseline.txt`, and commit it with the change. The base
 | `16` shared-service placement | `platform-enablement-connectivity.md` |
 | `16b` hybrid connectivity | `hybrid-connectivity.md` |
 | `17` part 4 opener, `17a` order of work and readiness | `prepare-region.md` |
-| `17b` No platform | `disconnected-spokes.md` |
+| `17b` Governance-Only | `disconnected-spokes.md` |
 | `17c`-`17d` Remote platform | `remote-hub-connected.md` (`17d` includes an extra connection figure) |
 | `17e`-`17f` Minimal platform | `minimal-regional-hub.md` |
 | `17g`-`17h` Full platform | `full-regional-hub.md` (`17h` includes hub design options) |
@@ -107,7 +107,7 @@ The home page is a short landing page; longer explanations live in `framework-ov
 
 Figure IDs and extraction names live in `site/tools/extract_figures.py` (`FIGS`) and `site/figures/manifest.json`.
 
-The Platform Services profile display names are **No platform**, **Remote platform**, **Minimal platform**, and **Full platform**. The concept articles use `platform-services-profiles.md` and `workload-landing-zone-archetypes.md`, with matching website HTML names. Keep article links, figure names in `whitepaper/figures.json`, tests, and the PDF article mapping aligned when renaming these files. All profile chips on the archetype cards use the same blue styling in the PDF, website, PNG, and PowerPoint editions; their color does not indicate preference or eligibility.
+The Platform Services profile display names are **Governance-Only**, **Remote platform**, **Minimal platform**, and **Full platform**. The concept articles use `platform-services-profiles.md` and `workload-landing-zone-archetypes.md`, with matching website HTML names. Keep article links, figure names in `whitepaper/figures.json`, tests, and the PDF article mapping aligned when renaming these files. All profile chips on the archetype cards use the same blue styling in the PDF, website, PNG, and PowerPoint editions; their color does not indicate preference or eligibility.
 
 Keep the full Key Vault guide to at most five rendered PDF pages: regional guidance before the product comparison, a condensed scenario summary linking to the online scenario sections, two secrets and certificates patterns, six key patterns, and a graphical decision tree with references. Standard and Premium share one paired-region key pattern; distinguish their key protection and service-specific requirements within that pattern. The full deck may use additional slides to keep all eight pattern diagrams readable; put service-specific detail in speaker notes. Use "Pattern N" within a category and "Keys - Pattern N" or "Secrets and certificates - Pattern N" where ambiguity exists. After regeneration, check the actual PDF page count and source-page coverage.
 Use `data-export-width` on a figure to set its standalone export width independently of the PDF column width. The eight Key Vault pattern diagrams use 380 pixels so their web and PNG objects have consistent sizes; their PDF placement follows the available columns.

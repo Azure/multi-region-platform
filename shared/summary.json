@@ -102,12 +102,12 @@
    "n": 1,
    "name": "Platform Services profile",
    "options": [
-    "No platform",
+    "Governance-Only",
     "Remote platform",
     "Minimal platform",
     "Full platform"
    ],
-   "select": "One of four: No platform, Remote platform, Minimal platform, or Full platform.",
+   "select": "One of four: Governance-Only, Remote platform, Minimal platform, or Full platform.",
    "article": "profile-selection"
   },
   {
@@ -134,7 +134,7 @@
   }
  ],
  "profiles": [
-  "No platform",
+  "Governance-Only",
   "Remote platform",
   "Minimal platform",
   "Full platform"
@@ -345,7 +345,7 @@
     },
     {
      "label": "Platform Services profile",
-     "text": "No platform where the workload is self-contained; a connected profile only where actual dependencies justify it.",
+     "text": "Governance-Only where the workload is self-contained; a connected profile only where actual dependencies justify it.",
      "tone": "b"
     },
     {
@@ -362,7 +362,7 @@
      "Check 1 business need; Check 2 data constraints; Check 4 model, SKU, zone, access, quota.",
      "Qualified for the AI requirements; conditional where private connectivity is not yet designed.",
      "Self-Contained Workloads; Selectively connected where named private dependencies exist.",
-     "No platform; connected only where dependencies justify it.",
+     "Governance-Only; connected only where dependencies justify it.",
      "Net-new; revalidate model, SKU, access, quota at decision time."
     ],
     "takeaway": "Do not introduce enterprise connectivity or regional platform capabilities before a workload requirement justifies them."
@@ -528,7 +528,7 @@
   },
   {
    "title": "Prepare the region",
-   "text": "Build what the record says, through the automation you already run. Read only the page for the profile you selected: No platform, Remote platform, Minimal platform, or Full platform. Use the platform readiness checklist to confirm the region is ready before the first workload arrives.",
+   "text": "Build what the record says, through the automation you already run. Read only the page for the profile you selected: Governance-Only, Remote platform, Minimal platform, or Full platform. Use the platform readiness checklist to confirm the region is ready before the first workload arrives.",
    "short": "Build what the record says through the automation you already run. Confirm with the platform readiness checklist."
   },
   {
@@ -587,9 +587,9 @@
   "Interdependent groups"
  ],
  "archetypeProfileOrder": [
-  [0, 1, 2, 3],
-  [1, 2, 3, 0],
-  [1, 2, 3],
-  [0, 1, 2, 3]
+  [0, 1],
+  [1, 2],
+  [2, 3],
+  [2, 3]
  ]
 }

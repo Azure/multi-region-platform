@@ -100,7 +100,7 @@ module.exports = (pres, L) => {
       ['Region B', 1.95, [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']], 'Full-Platform region'],
       ['Region C', 1.55, [['Workloads', C.t600, 'FFFFFF'], ['Selected local\nservices', 'FFFFFF', C.b700, C.b300]], 'Minimal platform'],
       ['Region D', 1.2, [['Spokes', C.t600, 'FFFFFF']], 'Remote platform', 'via hub'],
-      ['Region E', 0.98, [['No platform', C.t100, C.t700]], 'No platform'],
+      ['Region E', 0.98, [['Governance-Only', C.t100, C.t700]], 'Governance-Only'],
       ['Region F', 0.8, [], 'Not enabled', 'Candidate'],
     ];
     const base = y0 + 3.0, rw = 1.04, gap = 0.04;
@@ -283,7 +283,7 @@ module.exports = (pres, L) => {
       if (sub) L.txt(s, sub, x + 0.1, ty + 0.24, w - 0.16, o.subH || 0.24, { fontSize: 12, color: o.sc || C.muted, valign: 'top' });
     };
     const top = 1.9, pitch = 0.75, bh = 0.72;
-    const R = [['Region C', 'Minimal platform', 'Own on-premises path; rest from A'], ['Region D', 'Minimal platform', 'No on-premises path; rest from A'], ['Region E', 'Remote platform', 'Services from Region A'], ['Region F', 'Remote platform', 'Services from Region B'], ['Region G', 'No platform', 'No private path to hubs'], ['Region H', 'Candidate — not yet enabled', '']];
+    const R = [['Region C', 'Minimal platform', 'Own on-premises path; rest from A'], ['Region D', 'Minimal platform', 'No on-premises path; rest from A'], ['Region E', 'Remote platform', 'Services from Region A'], ['Region F', 'Remote platform', 'Services from Region B'], ['Region G', 'Governance-Only', 'No private path to hubs'], ['Region H', 'Candidate — not yet enabled', '']];
     R.forEach(([l, t, sub], i) => reg(rx, top + i * pitch, rw, bh, l, t, sub, i === 4 ? { line: C.t300, lc: C.t700, ic: 't' } : i === 5 ? { line: C.b500, tc: C.b700 } : {}));
     const ay = 2.4, by = 4.15, hh = 1.15;
     reg(X, 3.25, 1.7, 1.15, '', 'On-premises', 'datacenters and user locations', { fill: C.s800, line: null, tc: 'FFFFFF', sc: 'C9D4E2', subH: 0.5 });
@@ -304,7 +304,7 @@ module.exports = (pres, L) => {
     L.icon(s, 'shield', X + 0.15, 5.98, 0.26, 's');
     L.txt(s, [{ text: 'Every profile shares one governed foundation: ', options: { bold: true } }, { text: 'governance, security, compliance, automation, and operations' }], X + 0.55, 5.8, 6.6, 0.62, { fontSize: 12, color: C.ink, valign: 'middle' });
     L.caption(s, 'Figure 6', 'An illustrative estate. Names and placements are examples only.', 0.6, 6.58, 12.13);
-    s.addNotes('Talk track: this is important economically as well as architecturally, because customers raise concerns that establishing a complete footprint in every additional region becomes expensive and difficult to sustain. The estate shows two Full-Platform regions with full footprints; other regions use Minimal platform profiles, Remote platform, or No platform, and a candidate region stays an option until needed.');
+    s.addNotes('Talk track: this is important economically as well as architecturally, because customers raise concerns that establishing a complete footprint in every additional region becomes expensive and difficult to sustain. The estate shows two Full-Platform regions with full footprints; other regions use Minimal platform profiles, Remote platform, or Governance-Only, and a candidate region stays an option until needed.');
   }
 
   // ───────────────────────── 8 · 05 Workload Landing Zone archetypes (brief page 8)
@@ -312,10 +312,10 @@ module.exports = (pres, L) => {
     const s = L.slide('x5');
     L.header(s, '', 'Four Workload Landing Zone archetypes', { ec: C.t600, tw: 8, lede: [{ text: 'Archetypes describe ' }, { text: 'what applications require', options: { bold: true, color: C.ink } }, { text: '; Platform Services profiles describe what the platform provides. The mapping is not one-to-one.' }], lx: 8.9, lw: 3.83 });
     const A = [
-      [C.t600, D.archetypes[0], "Self-contained workloads with no persistent private dependency outside the workload.", "Use No platform where services and capacity fit; add hub capabilities only when justified.", D.archetypeProfileOrder[0].map(j => D.profiles[j])],
-      [C.t700, D.archetypes[1], "Workloads that reach selected services through private endpoints or specific private APIs, without routed access to the enterprise network.", "No platform only for approved local peering or Azure service endpoints; otherwise select hub capabilities.", D.archetypeProfileOrder[1].map(j => D.profiles[j])],
-      [C.b700, D.archetypes[2], "Workloads that need routed access to on-premises environments or the enterprise network, including shared services hosted in a hub.", "Consume a Full-Platform region remotely or provide the required local capabilities. No platform has no hybrid path.", D.archetypeProfileOrder[2].map(j => D.profiles[j])],
-      [C.v600, D.archetypes[3], "Groups of workloads with material east-west dependencies: shared data, synchronous calls, or private east-west traffic. Combine members' requirements.", "Classified at group level. No platform only for approved same-region connectivity without hub or on-premises dependencies.", D.archetypeProfileOrder[3].map(j => D.profiles[j])]
+      [C.t600, D.archetypes[0], "Self-contained workloads with no persistent private dependency outside the workload.", "Use Governance-Only where services and capacity fit; add hub capabilities only when justified.", D.archetypeProfileOrder[0].map(j => D.profiles[j])],
+      [C.t700, D.archetypes[1], "Workloads that reach selected services through private endpoints or specific private APIs, without routed access to the enterprise network.", "Governance-Only only for approved local peering or Azure service endpoints; otherwise select hub capabilities.", D.archetypeProfileOrder[1].map(j => D.profiles[j])],
+      [C.b700, D.archetypes[2], "Workloads that need routed access to on-premises environments or the enterprise network, including shared services hosted in a hub.", "Consume a Full-Platform region remotely or provide the required local capabilities. Governance-Only has no hybrid path.", D.archetypeProfileOrder[2].map(j => D.profiles[j])],
+      [C.v600, D.archetypes[3], "Groups of workloads with material east-west dependencies: shared data, synchronous calls, or private east-west traffic. Combine members' requirements.", "Classified at group level. Governance-Only only for approved same-region connectivity without hub or on-premises dependencies.", D.archetypeProfileOrder[3].map(j => D.profiles[j])]
     ];
     A.forEach(([c, t, d, p, chips], i) => {
       const x = 0.6 + i * 3.067, y = 1.7, w = 2.93, h = 3.9;
@@ -335,7 +335,7 @@ module.exports = (pres, L) => {
     L.txt(s, [{ text: 'Region-agnostic does not mean ', options: { color: 'FFFFFF' } }, { text: 'region-random.', options: { color: '50E6FF' } }], 0.8, 6.0, 3.8, 0.85, { fontSize: 17, fontFace: F.semi, valign: 'middle' });
     L.box(s, 4.8, 6.0, 7.93, 0.85, { fill: C.b50, r: 0.12 });
     L.txt(s, [{ text: 'Governance moves up a level. ', options: { bold: true, color: C.b700 } }, { text: 'Define a governed operating model and a small number of approved archetypes; each application selects the most efficient pattern that satisfies its connectivity, resiliency, data, security, and service requirements.' }], 5.0, 6.0, 7.55, 0.85, { fontSize: 12, color: C.ink, valign: 'middle' });
-    s.addNotes('Present the archetypes in increasing platform connectivity and dependency complexity, not as maturity stages or a measure of application sophistication. Archetype 1: Self-Contained Workloads often use No platform; other profiles require a platform justification. Archetype 2: Selectively Connected Workloads can use No platform only when approved same-region peering or Azure service endpoints meet their requirements without a Full-Platform region or on-premises path; otherwise choose Remote platform, Minimal platform, or Full platform. Archetype 3: Hybrid-Dependent Workloads need persistent private enterprise or on-premises connectivity through Remote platform, Minimal platform, or Full platform, not No platform. Archetype 4: Interdependent Workload Groups select from aggregate requirements: No platform only for approved same-region connectivity, Remote platform when latency and availability coupling are acceptable, and Minimal platform or Full platform when local capabilities are justified. The mapping is many-to-many. Region-agnostic does not mean region-random; governance remains consistent.');
+    s.addNotes('Present the archetypes in increasing platform connectivity and dependency complexity, not as maturity stages or a measure of application sophistication. Archetype 1: Self-Contained Workloads often use Governance-Only; other profiles require a platform justification. Archetype 2: Selectively Connected Workloads can use Governance-Only only when approved same-region peering or Azure service endpoints meet their requirements without a Full-Platform region or on-premises path; otherwise choose Remote platform, Minimal platform, or Full platform. Archetype 3: Hybrid-Dependent Workloads need persistent private enterprise or on-premises connectivity through Remote platform, Minimal platform, or Full platform, not Governance-Only. Archetype 4: Interdependent Workload Groups select from aggregate requirements: Governance-Only only for approved same-region connectivity, Remote platform when latency and availability coupling are acceptable, and Minimal platform or Full platform when local capabilities are justified. The mapping is many-to-many. Region-agnostic does not mean region-random; governance remains consistent.');
   }
 
   // ───────────────────────── 9 · An everyday analogy: the city (brief page 9)
@@ -348,7 +348,7 @@ module.exports = (pres, L) => {
     const rx = 7.35, rw = 5.38;
     cap(s, 'In the city', rx, 1.8, { w: 1.8, color: C.b600 });
     cap(s, 'In Azure', rx + 2.8, 1.8, { w: 2.4, color: C.b600 });
-    const M = [['Neighborhoods', 'Azure regions'], ['Transit', 'Connectivity between regions'], ['Express toll lanes', 'ExpressRoute'], ['Office campus', 'On-premises'], ['Downtown', 'Full platform'], ['Riverside', 'Minimal platform'], ['Hillcrest and Midtown', 'Remote platform'], ['Lakeside', 'No platform'], ['New plot', 'Candidate region']];
+    const M = [['Neighborhoods', 'Azure regions'], ['Transit', 'Connectivity between regions'], ['Express toll lanes', 'ExpressRoute'], ['Office campus', 'On-premises'], ['Downtown', 'Full platform'], ['Riverside', 'Minimal platform'], ['Hillcrest and Midtown', 'Remote platform'], ['Lakeside', 'Governance-Only'], ['New plot', 'Candidate region']];
     M.forEach(([a, b], i) => {
       const y = 2.08 + i * 0.48;
       L.box(s, rx, y - 0.03, rw, 0.008, { fill: C.soft, r: 0 });

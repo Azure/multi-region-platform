@@ -39,7 +39,7 @@ items:
   items:
   - name: Overview
     href: prepare-region.md
-  - name: No platform
+  - name: Governance-Only
     href: disconnected-spokes.md
   - name: Remote platform
     href: remote-hub.md

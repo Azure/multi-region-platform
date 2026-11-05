@@ -150,6 +150,59 @@ def check_generic_skus(page):
     }""")
 
 
+def check_repeated_services(page):
+    seed(page, 0)
+    add = page.get_by_role("combobox", name="Add a service", exact=True)
+    expected = []
+    for service, products in [
+        ("Virtual Machines", ["Virtual Machines", "Virtual Machines"]),
+        ("Azure SQL Managed Instance", ["Azure SQL Managed Instance", "SQL Managed Instance enabled by Azure Arc"]),
+    ]:
+        for i, product in enumerate(products):
+            add.fill(service)
+            page.get_by_role("option", name=service, exact=True).click()
+            row = page.locator(".pl-services-scroll tbody tr").last
+            row.get_by_role("button", name=f"Narrow {service} to a product and SKU", exact=True).click()
+            row.get_by_role("combobox", name=f"Product of {service}", exact=True).fill(product)
+            page.get_by_role("option", name=product, exact=True).click()
+            sku = ""
+            if service == "Virtual Machines":
+                row.get_by_role("combobox", name=f"SKU of {service}", exact=True).click()
+                choice = page.locator('#pl-pop [role="option"]').nth(i)
+                sku = choice.inner_text()
+                choice.click()
+            expected.append([service, product, sku])
+    assert page.evaluate("""() => MRP.core.S.services.map(s => [s.service,s.product,s.sku])""") == expected
+    ids = page.evaluate("MRP.core.S.services.map(s => s.id)")
+    assert len(set(ids)) == 4
+    # Reload uses the same normalization as opening a JSON plan.
+    page.reload()
+    page.wait_for_selector('#planner[data-ready="1"]')
+    assert page.evaluate("""() => MRP.core.S.services.map(s => [s.service,s.product,s.sku])""") == expected
+    assert page.evaluate("MRP.core.S.services.map(s => s.id)") == ids
+    exported = page.evaluate("""() =>
+      MRP.workbook().sheets.find(s => s.name === 'Services').rows
+        .filter(r => r[0] && r[0].s === 'int').map(r => r.slice(1,4).map(c => c.v))
+    """)
+    assert exported == expected
+    # Editing and removing one entry must not touch the other entry for that service.
+    row = page.locator(".pl-services-scroll tbody tr").first
+    row.get_by_role("button", name="Clear SKU of Virtual Machines", exact=True).click()
+    assert page.evaluate("MRP.core.S.services[1].sku") == expected[1][2]
+    row.get_by_role("button", name="Remove Virtual Machines", exact=True).click()
+    assert page.evaluate("MRP.core.S.services.map(s => s.id)") == ids[1:]
+    page.locator("#tab-pricing").click()
+    assert page.evaluate("MRP.core.priceRows().map(s => s.id)") == ids[1:]
+    page.locator("#tab-services").click()
+    seed(page, 0, catalog=False)
+    for _ in range(2):
+        add.fill("Custom service")
+        add.press("Enter")
+    page.reload()
+    page.wait_for_selector('#planner[data-ready="1"]')
+    assert page.evaluate("MRP.core.S.services.map(s => s.service)") == ["Custom service", "Custom service"]
+
+
 def main():
     server = http.server.ThreadingHTTPServer(("127.0.0.1", 0),
         functools.partial(QuietHandler, directory=str(ROOT / "docs")))
@@ -166,6 +219,7 @@ def main():
             page.wait_for_function("MRP.core.D.hasAvailability")
             check_catalog_selections(page)
             check_generic_skus(page)
+            check_repeated_services(page)
             add = page.get_by_role("combobox", name="Add a service", exact=True)
 
             seed(page, 20)
@@ -228,7 +282,7 @@ def main():
             assert page.locator(".pl-services-scroll tbody th").last.inner_text() == "Custom service"
             assert not errors, errors
             browser.close()
-        print("Services: CSV selectors, mapped pricing, AZ details, 100-service limit, scrolling, persistence, export and print passed.")
+        print("Services: repeated services, independent products/SKUs, CSV selectors, mapped pricing, AZ details, 100-service limit, scrolling, persistence, export and print passed.")
     finally:
         server.shutdown()
         server.server_close()

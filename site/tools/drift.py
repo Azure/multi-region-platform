@@ -39,6 +39,7 @@ HUB_TERMS = [
     r"(?<!geographic )\bhub regions?\b", r"\b(?:limited|complete) (?:regional )?hubs?\b", r"\bexisting hubs?\b",
     r"\bthe remote hub\b", r"\bminimally viable regional hub\b"]
 RETIRED = [re.escape(t) for t in [
+    "No platform", "No-Platform",
     "Multi-region workload design", "Scenario R1", "Scenario R2", "Scenario R3",
     "Select the supporting Platform Services profile", "resiliency role separately",
     "Qualification and Enablement Framework", "Regional Qualification Framework", "five dimensions", "Dimension 5",

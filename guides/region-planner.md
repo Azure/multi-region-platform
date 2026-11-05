@@ -27,7 +27,7 @@ Planner actions, Essentials, and step tabs remain available throughout.
 After building, run `python site\tools\test_planner_layout.py` for full-width, navigation, and responsive
 layout regressions across all tabs in light and dark themes.
 
-The Services tab supports up to 100 services in one table. It shows 10 service rows at a time; scroll within the table to reach the rest, with column headers kept visible. Saved plans, Excel exports, and printing include the full list.
+The Services tab supports up to 100 service entries in one table. Add the same service as many times as needed within that limit, with an independent Product, SKU, and spend share for each entry. It shows 10 service rows at a time; scroll within the table to reach the rest, with column headers kept visible. Saved plans, Excel exports, and printing retain every entry, including repeated services.
 
 Services, Products, and SKUs come from the manually imported availability CSV. Separate Product and SKU selectors narrow the selection; leaving either unselected checks whether any matching entry is available. Regional cells show small AZ counts only where the CSV supplies them. Release Status is not imported. Pricing inherits those services through the maintained service-name mapping, but continues to use its separate Retail Prices API snapshot and service-level comparisons. See [Azure data collection](azure-data.md) for monthly CSV imports and the monthly pricing refresh Action.
 
@@ -112,7 +112,7 @@ per diagram and does not model every planner capability or product choice. Mixed
 paths, incomplete hybrid definitions and other limitations are called out in the panel. Firewall and DNS
 symbols illustrate the capability, not a confirmed product selection. Current-region services are only
 inferred where a new region requires them; the planner does not inventory all existing services.
-Both tools use **No platform**, **Remote platform**, **Minimal platform**, and **Full platform**. Full-Platform regions provide
+Both tools use **Governance-Only**, **Remote platform**, **Minimal platform**, and **Full platform**. Full-Platform regions provide
 hybrid connectivity and shared services from other regions; Azure geography names remain reference-data labels,
 not Platform Services profiles. Saved plans using the previous profile names are converted when opened, including
 regional connection choices that previously referred to the remote hub.

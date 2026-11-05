@@ -1,7 +1,7 @@
 ---
 title: Confirm hybrid connectivity
 description: Decide whether the ExpressRoute, VPN, or SD-WAN connectivity you already have is enough for a new Azure region, and what justifies a change. A new region doesn't by itself require another circuit.
-ms.date: 10/28/2026
+ms.date: 11/05/2026
 ms.topic: conceptual
 ---
 
@@ -15,7 +15,7 @@ The outcome is one of three:
 
 | Outcome | When |
 |---|---|
-| **Not required** | The region uses No platform, or its workloads need no private path to on-premises locations. |
+| **Not required** | The region uses Governance-Only, or its workloads need no private path to on-premises locations. |
 | **Reuse** | The existing circuits, gateways, and peering locations meet the reachability, latency, bandwidth, routing, and resilience that the workloads in the new region need. |
 | **Change** | A requirement can't be met by the existing foundation: diversity, failure-domain isolation, latency, bandwidth, routing, or resiliency. Record the requirement and the change it justifies. |
 

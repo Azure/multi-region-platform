@@ -56,7 +56,7 @@ def main():
             inherited = frame.evaluate("spec")
             assert frame.evaluate("Object.fromEntries(Object.entries(RULES.patterns).map(([id,p]) => [id,p.label]))") == {
                 "full-hub": "Full platform", "minimal-hub": "Minimal platform",
-                "remote-hub": "Remote platform", "disconnected": "No platform",
+                "remote-hub": "Remote platform", "disconnected": "Governance-Only",
             }
             assert "Minimal platform" in explorer.locator("#diagram").text_content()
             assert "New region - Minimal platform" in explorer.locator("#plannerDefinitions").text_content()
@@ -254,7 +254,7 @@ def main():
 
             inherited_page.evaluate("""() => {
               const C = MRP.core, d = C.design(C.reg('swedencentral'));
-              d.profile='No platform'; MRP.kit.hooks.commit();
+              d.profile='Governance-Only'; MRP.kit.hooks.commit();
             }""")
             assert inherited_frame.evaluate("spec.regions[1].pattern") == "disconnected"
             assert inherited_frame.evaluate("spec.hybrid_connections.length") == 0

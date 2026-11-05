@@ -1,7 +1,7 @@
 ---
 title: Workload Landing Zone archetypes
 description: Four archetypes that group recurring application connectivity and dependency requirements, so platform teams can plan regional capability before every workload is known.
-ms.date: 10/30/2026
+ms.date: 11/05/2026
 ms.topic: conceptual
 ---
 
@@ -32,19 +32,19 @@ Use archetypes during regional qualification to anticipate the capabilities a ca
 
 Workloads with no persistent private dependency outside the workload. These can include cloud-native or AI applications.
 
-These workloads can often use **No platform**. A connected profile may still be selected where platform requirements such as private management, security, data access, or centralized services justify connectivity.
+These workloads typically use **Governance-Only or Remote platform**. Minimal platform or Full platform may still be selected where private management, security, data access, or centralized services justify local capabilities.
 
 ## Selectively Connected Workloads
 
 Workloads that reach selected services through private endpoints or specific private APIs, without routed access to the enterprise network. Common for data, analytics, and AI platforms.
 
-These workloads can use the No regional platform profile when approved direct same-region spoke connectivity or Azure service endpoints meet their dependency and control requirements without connectivity to a more strategic region with Platform Services and/or connectivity to an on-premises environment. Otherwise, use **Remote platform, Minimal platform, or Full platform**, depending on dependency latency, traffic patterns, resiliency, security, and operational requirements.
+These workloads typically use **Remote platform or Minimal platform**, depending on dependency latency, traffic patterns, resiliency, security, and operational requirements. Governance-Only is an option when approved direct same-region spoke connectivity or Azure service endpoints meet their dependency and control requirements without connectivity to a more strategic region with Platform Services and/or connectivity to an on-premises environment. Full platform is an option when a comprehensive local capability set is justified.
 
 ## Hybrid-Dependent Workloads
 
 Workloads that need routed access to on-premises environments or the enterprise network, including shared platform services hosted or connected to a network hub. Common in migrations and hybrid scenarios. The boundary with Selectively Connected Workloads is named endpoints versus routed network access, not Azure versus on-premises.
 
-These workloads typically use **Remote platform, Minimal platform, or Full platform**, depending on dependency latency, resiliency, regulatory, operational, and shared-service requirements. The No regional platform profile does not fit a mandatory private dependency on on-premises services and/or shared platform services.
+These workloads typically use **Minimal platform or Full platform**, depending on dependency latency, resiliency, regulatory, operational, and shared-service requirements. Remote platform is an option where those requirements permit consuming capabilities from another region. The Governance-Only profile does not fit a mandatory private dependency on on-premises services and/or shared platform services.
 
 ## Interdependent Workload Groups
 
@@ -52,7 +52,7 @@ Groups of workloads with material east-west dependencies on each other, such as 
 
 Where significant east-west traffic exists within a region, evaluate whether direct spoke-to-spoke connectivity or a local virtual network hub or Virtual WAN hub provides a more appropriate path than routing traffic through the virtual network hub or Virtual WAN hub in another region. Direct connectivity may suit a limited number of tightly coupled workloads, while a **Minimal platform or Full platform** may be more appropriate where broader connectivity, shared routing, traffic inspection, resiliency, or operational requirements justify regional platform capabilities.
 
-The No regional platform profile is an option only when approved same-region spoke-to-spoke connectivity and Azure service endpoints satisfy the group's aggregate requirements without private connectivity to a more strategic region or an on-premises environment. **Remote platform** is an option when cross-region latency, traffic, and availability coupling are acceptable; use **Minimal platform or Full platform** when local capabilities are justified.
+These groups typically use **Minimal platform or Full platform**. The Governance-Only profile is an option only when approved same-region spoke-to-spoke connectivity and Azure service endpoints satisfy the group's aggregate requirements without private connectivity to a more strategic region or an on-premises environment. **Remote platform** is an option when cross-region latency, traffic, and availability coupling are acceptable.
 
 Because this is a **group-level archetype**, its combined dependencies may require capabilities beyond those needed by any individual workload. Select the profile from the group's aggregate connectivity, shared-service, resiliency, scale, and operational requirements.
 

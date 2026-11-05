@@ -231,12 +231,11 @@
   }
   function vServices() {
     const S = C.S, cs = C.cols(), full = S.services.length >= MAX_SERVICES;
-    const used = () => new Set(S.services.map(s => s.service));
     const add = K.combo('svc', { mode: 'add', ph: 'Add a service', label: 'Add a service', disabled: full,
       items: () => (D.hasAvailability ? D.services.map(s => ({ value: s.name, label: s.name, group: s.family || 'Other' })).sort((a, b) => a.group.localeCompare(b.group) || a.label.localeCompare(b.label))
-        : STARTER_SERVICES.map(n => ({ value: n, label: n }))).filter(x => !used().has(x.value)),
+        : STARTER_SERVICES.map(n => ({ value: n, label: n }))),
       onPick: it => { if (S.services.length < MAX_SERVICES) S.services.push({ id: C.uid('v'), service: it.value, product: '', sku: '', weight: '' }); },
-      onFree: D.hasAvailability ? null : (t => { if (S.services.length < MAX_SERVICES && !used().has(t)) S.services.push({ id: C.uid('v'), service: t, product: '', sku: '', weight: '' }); }) });
+      onFree: D.hasAvailability ? null : (t => { if (S.services.length < MAX_SERVICES) S.services.push({ id: C.uid('v'), service: t, product: '', sku: '', weight: '' }); }) });
     const rows = S.services.map((s, i) => `<tr><td class="pl-idx">${i + 1}</td><th scope="row" class="pl-sn">${esc(s.service)}${selectionWarning(s)}</th><td class="pl-pr">${productCell(s)}</td><td class="pl-pr pl-sku">${skuCell(s)}</td>` +
       cs.map(x => { const st = C.availability(s, x.id); return `<td class="${x.current ? 'is-cur ' : ''}av-${st}">${avCell(s, x.id, st)}</td>`; }).join('') + `<td class="pl-x">${K.iconBtn('rm-svc', s.id, 'close', 'Remove ' + s.service)}</td></tr>`).join('');
     const table = S.services.length ? K.scroll(`<table class="pl-dl pl-mx"><thead><tr><th scope="col" class="pl-idx">#</th><th scope="col">Service</th><th scope="col">Product</th><th scope="col">SKU</th>` +
@@ -244,7 +243,7 @@
       : K.empty('list', 'No services listed yet. Add the services the workloads expect to use.');
     const date = D.availabilityMeta && K.fmtDate(D.availabilityMeta.generated);
     const note = K.mb('info', 'The lists of available services, products, SKUs, models, and features need fuller validation directly in your own tenants and subscriptions. Work with your Microsoft account team or Microsoft Support to confirm them with confidence. Use <a href="https://azure.microsoft.com/explore/global-infrastructure/products-by-region/table" target="_blank" rel="noopener">Products available by region</a> as an additional reference.');
-    return K.head('Services', 'The services the workloads expect to use, and where each one is available.') + foldNote() + note +
+    return K.head('Services', 'The services the workloads expect to use, and where each one is available. Add the same service again to compare different products or SKUs.') + foldNote() + note +
       (!D.hasAvailability ? K.mb('warning', esc(D.asFile ? AS_FILE : D.availabilityError || 'No service availability catalog is published. Import the availability CSV first.')) : '') +
       `<div class="pl-bar">${add}${S.services.length ? '' : K.btn({ act: 'add-starter', label: 'Add common platform services', kind: 'secondary' })}<span class="pl-count">${S.services.length} of ${MAX_SERVICES}</span>${full ? '<span class="pl-cap">Remove one to add another.</span>' : ''}</div>` +
       svcTiles() + (cs.length ? '' : '<p class="pl-muted">Add regions in Scope to see a column for each one.</p>') + table +

@@ -48,9 +48,18 @@ class ArchetypeTests(unittest.TestCase):
         orders = []
         for row in rows:
             cells = [cell.strip() for cell in row[1:]]
-            eligible = [i for i, value in enumerate(cells) if value != "Not indicated"]
-            orders.append(sorted(eligible, key=lambda i: cells[i] not in ("Often", "Typical")))
+            orders.append([i for i, value in enumerate(cells) if value == "Typical"])
         self.assertEqual(SUMMARY["archetypeProfileOrder"], orders)
+
+    def test_shared_service_placement_table_excludes_workload_key_vaults(self):
+        article = self.read("content/platform-enablement-connectivity.md")
+        rows = [line for line in article.splitlines() if line.startswith("|")]
+        self.assertIn("Backup vaults", " ".join(rows))
+        self.assertNotIn("Key Vault", " ".join(rows))
+        source = self.read("whitepaper/pages/16-shared-services.html")
+        table = re.search(r'<table class="zdp mt4">(.*?)</table>', source, re.S)[1]
+        self.assertIn("Backup vaults", table)
+        self.assertNotIn("Key Vault", table)
 
     def test_management_groups_and_regional_traffic(self):
         article = self.read("content/workload-landing-zone-archetypes.md")
@@ -96,12 +105,17 @@ class ArchetypeTests(unittest.TestCase):
         rows = re.findall(r"<tbody>(.*?)</tbody>", matrix, re.S)[0]
         rows = re.findall(r"<tr\b.*?</tr>", rows, re.S)
         first_cells = [re.search(r"<td\b[^>]*>(.*?)</td>", row, re.S)[1] for row in rows]
-        self.assertIn("Often", first_cells[0])
+        self.assertIn("Typical", first_cells[0])
         self.assertIn('class="mk cond"', first_cells[1])
         self.assertIn("Where hub-free", first_cells[1])
         self.assertIn('class="mk none"', first_cells[2])
         self.assertIn('class="mk cond"', first_cells[3])
         self.assertIn("without a network hub or on-premises dependencies", rows[3])
+        typical = []
+        for row in rows:
+            cells = re.findall(r'<td\b[^>]*>(.*?)</td>', row, re.S)[:4]
+            typical.append([i for i, cell in enumerate(cells) if 'class="mk full"' in cell])
+        self.assertEqual(typical, SUMMARY["archetypeProfileOrder"])
 
     def test_overview_picture_preserves_original_explanations(self):
         source = self.read("whitepaper/pages/09-archetypes.html")
@@ -110,7 +124,7 @@ class ArchetypeTests(unittest.TestCase):
             for group in re.findall(r"<ul>(.*?)</ul>", source)
         ]
         self.assertEqual(bullets, [
-            ["No persistent private dependencies", "Can often use No platform",
+            ["No persistent private dependencies", "Can often use Governance-Only",
              "Flexible placement across regions"],
             ["Private access to selected dependencies",
              "Profile set by latency, traffic, resiliency, security",
@@ -241,7 +255,7 @@ console.log(JSON.stringify(outputs));
         full_cards, exec_cards = json.loads(result.stdout)
         for cards in (full_cards, exec_cards):
             self.assertEqual([c["name"] for c in cards], ARCHETYPES)
-            self.assertEqual(cards[2]["profiles"], PROFILES[1:])
+            self.assertEqual(cards[2]["profiles"], PROFILES[2:])
             self.assertIn("Self-contained", " ".join(cards[0]["text"]))
             styles = [tuple(style) for card in cards for style in card["chipStyles"]]
             self.assertEqual(len(set(styles)), 1, "All platform profiles must have identical chip colors")
@@ -251,8 +265,8 @@ console.log(JSON.stringify(outputs));
         self.assertIn("Common in migrations and hybrid scenarios", " ".join(full_cards[2]["text"]))
         self.assertIn("Direct spoke-to-spoke or a regional hub", " ".join(full_cards[3]["text"]))
         self.assertEqual([c["profiles"] for c in exec_cards], expected)
-        self.assertIn("No platform only", " ".join(exec_cards[1]["text"]))
-        self.assertIn("No platform", " ".join(exec_cards[2]["text"]))
+        self.assertIn("Governance-Only only", " ".join(exec_cards[1]["text"]))
+        self.assertIn("Governance-Only", " ".join(exec_cards[2]["text"]))
         self.assertIn("approved same-region", " ".join(exec_cards[3]["text"]))
 
 

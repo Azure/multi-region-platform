@@ -8,7 +8,7 @@
   function workbookSpec() {
     const C = M.core, S = C.S, picked = C.selected(), notes = [];
     const patterns = { 'Full platform': 'full-hub', 'Minimal platform': 'minimal-hub',
-      'Remote platform': 'remote-hub', 'No platform': 'disconnected' };
+      'Remote platform': 'remote-hub', 'Governance-Only': 'disconnected' };
     const topology = S.estate.topology || picked.map(r => C.effective(r).topology).find(Boolean);
     const result = { format: 1, title: S.meta.name || 'Regional networking design',
       defaults: { topology: topology === 'Azure Virtual WAN' ? 'vwan' : 'hub-spoke',

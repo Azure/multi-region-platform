@@ -98,7 +98,7 @@
   const NEW = '<rect class="dg-region" x="124" y="8" width="108" height="94" rx="10"/>';
   const SPOKES = (x, ys) => ys.map(y => spoke(x, y)).join('');
   const PROFILE = {
-    'No platform': svg(240, 112, GEO(true) + NEW + [[158, 36], [198, 36], [158, 74], [198, 74]].map(p => spoke(...p)).join(''), 'No platform: workload spokes in the region, with no link to a hub or to on-premises'),
+    'Governance-Only': svg(240, 112, GEO(true) + NEW + [[158, 36], [198, 36], [158, 74], [198, 74]].map(p => spoke(...p)).join(''), 'Governance-Only: workload spokes in the region, with no link to a hub or to on-premises'),
     'Remote platform': svg(240, 112, GEO(false) + NEW + SPOKES(212, [28, 55, 82]) + ln('M184 28V82M184 28H206M184 55H206M184 82H206') + ln('M184 55H89'), 'Remote platform: spokes in the region link across to the Full-Platform region in another region, which links to on-premises'),
     'Minimal platform': svg(240, 112, GEO(false) + NEW + SPOKES(212, [28, 55, 82]) + ln('M160 55H188M188 28V82M188 28H206M188 55H206M188 82H206') + ln('M140 55H89') + hex(150, 55, 11, 'dg-hub dg-open'), 'Minimal platform: a small hub in the region with spokes on it, linked to the Full-Platform region, which links to on-premises'),
     'Full platform': svg(240, 112, GEO(false) + NEW + SPOKES(212, [28, 55, 82]) + ln('M165 55H188M188 28V82M188 28H206M188 55H206M188 82H206') + ln('M139 55H89', 'dg-peer') + ln('M17 71V107H152V68') + hex(152, 55, 13, 'dg-hub dg-solid'), 'Full platform: a full hub in the region with spokes on it, its own link to on-premises, and a peer link to the other hub'),

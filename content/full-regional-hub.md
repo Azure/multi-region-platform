@@ -1,7 +1,7 @@
 ---
 title: "Prepare a region: Full platform"
 description: What to deploy to prepare a new Azure region with a Full platform — a full local hub that can keep operating when other hubs are unavailable — with the order of work, hub design options, recommendations, and links to the Azure landing zone guidance.
-ms.date: 10/27/2026
+ms.date: 11/05/2026
 ms.topic: conceptual
 ---
 
@@ -10,7 +10,7 @@ The region gets a full local hub: connectivity, inspection, DNS, identity, and t
 
 ## What you deploy
 
-Start with what every profile needs: the region in policy, address space, landing-zone provisioning, monitoring, backup, and keys. See [No platform](./disconnected-spokes.md#what-you-deploy). Then build the hub in this order.
+Start with what every profile needs: the region in policy, address space, landing-zone provisioning, monitoring, backup, and keys. See [Governance-Only](./disconnected-spokes.md#what-you-deploy). Then build the hub in this order.
 
 | Step | Hub-and-spoke virtual networks | Azure Virtual WAN |
 |---|---|---|

@@ -3,7 +3,7 @@ const { C, F } = require('../lib');
 // Part 3 · Select the regional design: three choices from short lists, written into one design record.
 module.exports = (pres, L) => {
   const [CH1, CH2, CH3] = L.data.choices;
-  const PROF = L.data.profiles;   // No platform, Remote platform, Minimal platform, Full platform
+  const PROF = L.data.profiles;   // Governance-Only, Remote platform, Minimal platform, Full platform
 
   // The question each choice answers: blue line under the title.
   const question = (s, text, w = 10.6) => L.txt(s, text, 0.6, 1.17, w, 0.5, { fontSize: 14, color: C.b700 });
@@ -223,7 +223,6 @@ module.exports = (pres, L) => {
       ['Directory services', [NR, 'remote', 'either', 'local']],
       ['Log workspace', ['logs']],
       ['Backup vaults', ['local']],
-      ['Key Vault', ['local']],
     ];
     const NAME = { local: 'Local', remote: 'Remote', either: 'Local or remote', global: 'Global' };
     const ry0 = ty + 0.8, rp = 0.35;
@@ -250,13 +249,12 @@ module.exports = (pres, L) => {
     L.txt(s, 'SET BY THE SERVICE, NOT BY THE PROFILE', sx, 2.45, sw, 0.3, { fontSize: 9.5, bold: true, color: C.b700, charSpacing: 1.5 });
     leadBullets(s, [
       ['Backup vaults are local.', 'Azure Backup works within a region.'],
-      ['Key Vault is local.', 'Give each workload a vault in its own region.'],
       ['Private DNS zones are global.', 'Create them once; link networks to them.'],
       ['Start with one log workspace.', 'Add a regional one only for data residency or high transfer charges.'],
       ['Policy and access control are not tied to a region.', ''],
     ], sx, 2.85, sw, 2.5, { gap: 4 });
     L.decision(s, 'Define the most efficient platform capability set, where each capability will be provided, who will operate it, and what requirements would trigger future expansion.', sx, 5.3, sw, 1.55, 'b');
-    s.addNotes('Each shared service has one of three placements: local, remote, or global. The table is a starting point for each profile; change a cell when a workload requirement calls for it and record the reason. For a Minimal platform, each row is a separate choice. Some placements are set by the service, not the profile: backup vaults and Key Vault are local in every profile, private DNS zones are global, and a single log workspace is the place to start. The one policy change for a new region is to allow it in any assignment that restricts locations. Also consider operational support, platform resiliency, ownership, and cost, and enable only the regional capabilities that expected workloads need.');
+    s.addNotes('Each shared service has one of three placements: local, remote, or global. The table is a starting point for each profile; change a cell when a workload requirement calls for it and record the reason. For a Minimal platform, each row is a separate choice. Some placements are set by the service, not the profile: backup vaults are local in every profile, private DNS zones are global, and a single log workspace is the place to start. The one policy change for a new region is to allow it in any assignment that restricts locations. Also consider operational support, platform resiliency, ownership, and cost, and enable only the regional capabilities that expected workloads need.');
   }
 
   // ───────────────────────── Choice 3: confirm hybrid connectivity
@@ -266,7 +264,7 @@ module.exports = (pres, L) => {
     question(s, 'Does the operating geography have resilient hybrid connectivity to Azure that satisfies the identified workload requirements?', 12.13);
     L.txt(s, 'Enabling an additional Azure region doesn’t by itself require another ExpressRoute circuit.', 0.6, 1.72, 12.13, 0.32, { fontSize: 15, fontFace: F.semi, color: C.ink });
     const O = [
-      ['Not required', 'x', 'FFFFFF', C.line, C.s600, 'The region uses No platform, or its workloads need no private path to on-premises locations.'],
+      ['Not required', 'x', 'FFFFFF', C.line, C.s600, 'The region uses Governance-Only, or its workloads need no private path to on-premises locations.'],
       ['Reuse', 'loop', C.b50, C.b200, C.b600, 'Existing circuits, gateways, and peering locations meet the reachability, latency, bandwidth, routing, and resilience the new region’s workloads need.'],
       ['Change', 'route', C.w50, C.w100, C.w600, 'The existing foundation can’t meet a requirement: diversity, failure-domain isolation, latency, bandwidth, routing, or resiliency. Record the requirement and the change it justifies.'],
     ];

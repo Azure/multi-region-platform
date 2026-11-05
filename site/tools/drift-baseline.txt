@@ -37,7 +37,7 @@ how the first two checks filter the portfolio
 the first two checks act as filters
 the first two checks filter the portfolio before deeper technical assessment
 # disconnected-spokes
-a spoke in the no platform profile can t use a dns resolver in a hub
+a spoke in the governance only profile can t use a dns resolver in a hub
 # framework-overview
 because platform teams cannot predict every future workload this guidance uses three planning constructs
 extend azure landing zones for adaptable regional placement
@@ -338,7 +338,7 @@ your application decides whether each region uses an independent key or a common
 your application selects the healthy vault
 # minimal-regional-hub
 the hub uses the minimal platform profile as long as the region still depends on a full platform region for something
-the same as for no platform with spokes that connect to the local hub
+the same as for governance only with spokes that connect to the local hub
 the same choices apply as for a full hub on a smaller scale
 # misconceptions
 common multi region misconceptions
@@ -357,7 +357,7 @@ where each shared service is provided with a default for each profile
 some placements are set by the service not by the profile
 # platform-readiness
 confirm the others as the capability set is put in place
-everything else on this page applies to every profile including no platform
+everything else on this page applies to every profile including governance only
 ip address planning common blocker
 items marked as common blockers should be planned early while the region is still being qualified
 private dns across regions routing and inspection paths and hybrid connectivity apply only to connected profiles
@@ -367,7 +367,7 @@ where logs and telemetry live common blocker
 # platform-services-profiles
 moving right adds local capability and independence and also cost and operational scope
 # prepare-region
-no platform remote platform minimal platform and full platform
+governance only remote platform minimal platform and full platform
 region c s minimal platform reaches on premises by reusing an existing expressroute circuit
 region d s does not
 what must be true before workloads arrive
@@ -434,24 +434,26 @@ use a supported region of choice replication pattern such as object replication 
 service guides for multi region overview
 the articles in this section cover the dependencies that most often decide whether a regional combination works as built
 # workload-landing-zone-archetypes
-a connected profile may still be selected where platform requirements such as private management security data access or centralized services justify connectivity
 architecture or design pattern
 because this is a group level archetype its combined dependencies may require capabilities beyond those needed by any individual workload
 classify at group level and combine the members requirements
 direct connectivity may suit a limited number of tightly coupled workloads while a minimal platform or full platform may be more appropriate where broader connectivity shared routing traffic inspection resiliency or operational requirements justify regional platform capabilities
+full platform is an option when a comprehensive local capability set is justified
+governance only is an option when approved direct same region spoke connectivity or azure service endpoints meet their dependency and control requirements without connectivity to a more strategic region with platform services and or connectivity to an on premises environment
 groups of workloads with material east west dependencies on each other such as shared data synchronous calls or private east west traffic
-otherwise use remote platform minimal platform or full platform depending on dependency latency traffic patterns resiliency security and operational requirements
+minimal platform or full platform may still be selected where private management security data access or centralized services justify local capabilities
 remote platform is an option when cross region latency traffic and availability coupling are acceptable
+remote platform is an option where those requirements permit consuming capabilities from another region
 select the profile from the group s aggregate connectivity shared service resiliency scale and operational requirements
 the archetype to profile matrix shows the typical options for each archetype
 the four archetypes grouped by the platform connectivity and dependency capabilities each requires
-the no regional platform profile does not fit a mandatory private dependency on on premises services and or shared platform services
-the no regional platform profile is an option only when approved same region spoke to spoke connectivity and azure service endpoints satisfy the group s aggregate requirements without private connectivity to a more strategic region or an on premises environment
-these workloads can often use no platform
-these workloads can use the no regional platform profile when approved direct same region spoke connectivity or azure service endpoints meet their dependency and control requirements without connectivity to a more strategic region with platform services and or connectivity to an on premises environment
-these workloads typically use remote platform minimal platform or full platform depending on dependency latency resiliency regulatory operational and shared service requirements
+the governance only profile does not fit a mandatory private dependency on on premises services and or shared platform services
+the governance only profile is an option only when approved same region spoke to spoke connectivity and azure service endpoints satisfy the group s aggregate requirements without private connectivity to a more strategic region or an on premises environment
+these groups typically use minimal platform or full platform
+these workloads typically use governance only or remote platform
+these workloads typically use minimal platform or full platform depending on dependency latency resiliency regulatory operational and shared service requirements
+these workloads typically use remote platform or minimal platform depending on dependency latency traffic patterns resiliency security and operational requirements
 use archetypes during regional qualification to anticipate the capabilities a candidate region may need to support
-use minimal platform or full platform when local capabilities are justified
 where future workload requirements aren t yet defined they give you planning guardrails without constraining later placement which happens once the workload s current requirements regional capabilities and platform readiness are known
 where significant east west traffic exists within a region evaluate whether direct spoke to spoke connectivity or a local virtual network hub or virtual wan hub provides a more appropriate path than routing traffic through the virtual network hub or virtual wan hub in another region
 workload landing zone archetypes group recurring workload connectivity and dependency requirements

@@ -22,7 +22,7 @@ the keyboard and the files. Everything here describes this version; there is no 
 
 ## The spec (format 1)
 
-Profile display names are **No platform**, **Remote platform**, **Minimal platform**, and **Full platform**.
+Profile display names are **Governance-Only**, **Remote platform**, **Minimal platform**, and **Full platform**.
 For compatibility with saved designs, their JSON `pattern` values remain `disconnected`, `remote-hub`,
 `minimal-hub`, and `full-hub`, respectively. The `remote_hub` field identifies the supplying Full-Platform region.
 Azure `geography` and `area` values remain the region catalog's geographic groupings.

@@ -13,7 +13,7 @@ global.localStorage = {setItem() {}};
 for (const file of ['planner-data.js', 'planner-icons.js', 'planner-core.js'])
   vm.runInThisContext(fs.readFileSync('site/assets/' + file, 'utf8'), {filename: file});
 const M = window.MRP, C = M.core;
-const names = ['No platform', 'Remote platform', 'Minimal platform', 'Full platform'];
+const names = ['Governance-Only', 'Remote platform', 'Minimal platform', 'Full platform'];
 const legacy = ['Disconnected Spokes', 'Remote Hub Connected', 'Minimal Regional Hub', 'Full Regional Hub'];
 const previous = ['No Hub', 'Remote Hub', 'Minimal Hub', 'Full Hub'];
 """
@@ -29,7 +29,7 @@ class PlannerProfileTests(unittest.TestCase):
         self.run_js("""
 assert.deepEqual(M.PROFILES.map(p => p.id), names);
 assert.deepEqual(M.PROFILES.map(p => p.name),
-  ['No regional platform', 'Remote regional platform', 'Minimal regional platform', 'Full regional platform']);
+  ['Governance-Only', 'Remote regional platform', 'Minimal regional platform', 'Full regional platform']);
 assert.deepEqual([
   C.suggestProfile({q1:'No'}),
   C.suggestProfile({q1:'Yes', q2:'Yes'}),
@@ -37,8 +37,8 @@ assert.deepEqual([
   C.suggestProfile({q1:'Yes', q2:'No', q3:'Yes'})
 ], names);
 for (const name of names) assert.ok(M.diagram.profile(name).includes(name), name);
-assert.deepEqual(M.linkOptions('No platform', 'Azure Virtual WAN'), []);
-assert.equal(M.hybridPathOptions('No platform', 'Azure Virtual WAN', '').length, 0);
+assert.deepEqual(M.linkOptions('Governance-Only', 'Azure Virtual WAN'), []);
+assert.equal(M.hybridPathOptions('Governance-Only', 'Azure Virtual WAN', '').length, 0);
 assert.ok(M.linkOptions('Remote platform', 'Hub-and-spoke virtual networks')
   .every(option => option.includes('the Full-Platform region')));
 assert.ok(M.eastWestOptions('Remote platform').includes('Through the Full-Platform region'));
@@ -50,7 +50,7 @@ for (const version of [1, 2, 3]) {
   [...legacy.map((name, index) => [name, index]),
    ...previous.map((name, index) => [name, index]),
    ...names.map((name, index) => [name, index]),
-   ['Selective Hub', 2]].forEach(([old, index]) => {
+   ['Selective Hub', 2], ['No platform', 0], ['No-Platform', 0]].forEach(([old, index]) => {
     const input = JSON.parse(JSON.stringify(M.EXAMPLE));
     input.v = version;
     Object.assign(input.regions[0].design, {

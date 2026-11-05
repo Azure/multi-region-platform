@@ -1,7 +1,7 @@
 ---
 title: Platform Services profiles
-description: Learn the four Platform Services profiles — No platform, Remote platform, Minimal platform, and Full platform — before you qualify a region.
-ms.date: 10/30/2026
+description: Learn the four Platform Services profiles — Governance-Only, Remote platform, Minimal platform, and Full platform — before you qualify a region.
+ms.date: 11/05/2026
 ms.topic: conceptual
 ---
 
@@ -9,15 +9,15 @@ ms.topic: conceptual
 
 Enabling an additional Azure region does not require changing or duplicating the full platform footprint of an existing full-service region. An organization can maintain a small number of strategic regions providing a more complete set of Platform Services, using the Full regional platform profile, that provide resilient hybrid connectivity and common enterprise services. Other regions can use more efficient profiles, such as Remote platform or Minimal platform, and consume capabilities from other more strategic regions when workload requirements permit.
 
-These common four profiles form a spectrum: from No platform, with no dependency on another region’s hub and other platform services (although still governed from a Management Group, Policy and RBAC standpoint), through Remote platform and Minimal platform, to Full platform, with greater local capability and independence. They aren’t maturity stages. A profile can remain the right target for a region as long as it continues to satisfy workload and platform requirements.
+These common four profiles form a spectrum: from Governance-Only, with no dependency on another region’s hub and other platform services (although still governed from a Management Group, Policy and RBAC standpoint), through Remote platform and Minimal platform, to Full platform, with greater local capability and independence. They aren’t maturity stages. A profile can remain the right target for a region as long as it continues to satisfy workload and platform requirements.
 
 Profiles describe platform services and capabilities that can be offered, not workload designs; [Workload Landing Zone archetypes](./workload-landing-zone-archetypes.md) describe what workloads need from the Platform.
 
-:::image type="content" source="./media/platform-services-profile-spectrum.png" alt-text="Spectrum of Platform Services profiles from no dedicated regional platform resources to the full required local platform service set. No platform has no dedicated regional platform resources; Remote platform consumes platform services from other more strategic regions through private connectivity; Minimal platform provides selected platform services locally; Full platform provides the full required local platform service set. The Full platform and remote region show the Security, Identity, Management, and Networking categories." lightbox="./media/platform-services-profile-spectrum.png":::
+:::image type="content" source="./media/platform-services-profile-spectrum.png" alt-text="Spectrum of Platform Services profiles from no dedicated regional platform resources to the full required local platform service set. Governance-Only has no dedicated regional platform resources; Remote platform consumes platform services from other more strategic regions through private connectivity; Minimal platform provides selected platform services locally; Full platform provides the full required local platform service set. The Full platform and remote region show the Security, Identity, Management, and Networking categories." lightbox="./media/platform-services-profile-spectrum.png":::
 
 *The spectrum of Platform Services profiles. Moving right adds local capability and independence, and also cost and operational scope. Platform Services span Security, Identity, Management, and Networking. Only required capabilities are deployed locally; any profile can be the right long-term target.*
 
-## No platform
+## Governance-Only
 
 Workload spokes in the new region do not require platform shared services, can operate without a private network path to a more strategic region, and/or to an on-premises environment. They could still use direct connectivity to other spokes where required and approved private or public connectivity to Azure platform services. The Subscriptions in this new region are still governed from a Management Group, Policy and RBAC standpoint.
 

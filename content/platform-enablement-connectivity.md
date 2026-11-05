@@ -1,7 +1,7 @@
 ---
 title: Place shared services
 description: Decide where each shared service is provided for a qualified Azure region — local, remote from another hub, or global — starting from a default for each Platform Services profile and changing it only when a workload requirement says so.
-ms.date: 10/28/2026
+ms.date: 11/05/2026
 ms.topic: conceptual
 ---
 
@@ -19,7 +19,7 @@ Determine which shared platform services and operational capabilities must be pr
 
 The table gives a starting point for each profile. The defaults aren't rules: change a cell when a workload requirement calls for it, and record the reason. For a Minimal platform, each row is a separate choice.
 
-| Shared service | No platform | Remote platform | Minimal platform | Full platform |
+| Shared service | Governance-Only | Remote platform | Minimal platform | Full platform |
 |---|---|---|---|---|
 | Management groups, access control, policy | Global | Global | Global | Global |
 | Private DNS zones | Global | Global | Global | Global |
@@ -29,12 +29,10 @@ The table gives a starting point for each profile. The defaults aren't rules: ch
 | Directory services (domain controllers) | Not required | Remote | Local or remote | Local |
 | Log workspace | Remote, or local for data residency | Remote, or local for data residency | Remote, or local for data residency | Remote, or local for data residency |
 | Backup vaults | Local | Local | Local | Local |
-| Key Vault | Local | Local | Local | Local |
 
 Some placements are set by the service, not by the profile:
 
 - **Backup vaults are local in every profile.** Azure Backup works within a region, so you need a vault in each region that holds protected resources.
-- **Key Vault is local in every profile.** Give each workload a vault in the region it runs in. See [Secrets and certificates](./key-vault-across-regions.md#secrets-and-certificates); [design keys separately](./key-vault-across-regions.md#keys).
 - **Private DNS zones are global.** Create them once, in the connectivity subscription, and link virtual networks to them.
 - **Start with a single log workspace.** Add a workspace in the region only when data must stay in that geography, or when the charges for sending data to another region are significant.
 - **Policy, access control, and management groups aren't tied to a region.** The one change is to allow the new region in any policy assignment that restricts locations.

@@ -89,7 +89,7 @@
         more += K.row('Requirement that justifies the change', k('hybridReason'), id => K.sel(k('hybridReason'), d.hybridReason, O.hybridReason, { id, label: 'Requirement that justifies the change' }));
         more += K.row('Change', k('hybridChange'), id => K.inp(k('hybridChange'), d.hybridChange, { id, ph: 'For example, a second circuit at another peering location', label: 'Change' }));
       }
-      secHy = K.section('Hybrid connectivity', `${dec}${none ? '<p class="pl-hint">The No platform profile has no private path to on-premises locations.</p>' : ''}${more ? `<div class="pl-subform">${more}</div>` : ''}`, { id: 'pl-d-hybrid', link: ['hybrid-connectivity.html', 'Guidance'] });
+      secHy = K.section('Hybrid connectivity', `${dec}${none ? '<p class="pl-hint">The Governance-Only profile has no private path to on-premises locations.</p>' : ''}${more ? `<div class="pl-subform">${more}</div>` : ''}`, { id: 'pl-d-hybrid', link: ['hybrid-connectivity.html', 'Guidance'] });
     }
 
     const secRec = K.section('Record',

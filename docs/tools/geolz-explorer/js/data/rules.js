@@ -134,7 +134,7 @@ window.RULES = /* rules.js: pattern rules as data. Everything below this line is
       "refs": ["aac-hub-spoke", "aac-spoke-to-spoke"]
     },
     "disconnected": {
-      "label": "No platform", "hub": "none", "dashed": true, "spokeExtras": ["own_zones"],
+      "label": "Governance-Only", "hub": "none", "dashed": true, "spokeExtras": ["own_zones"],
       "color": "#7A7774", "tint": "#F3F2F1", "dark": { "color": "#A19F9D", "tint": "#2A2928" },
       "description": "No hub, no gateway, no peering: the region's spoke holds whatever services its workload needs.",
       "fields": [], "links": [],
@@ -202,9 +202,9 @@ window.RULES = /* rules.js: pattern rules as data. Everything below this line is
     { "id": "minimal-needs-link", "when": "pattern == 'minimal-hub' && uses_remote == 'yes' && remote_hub_pattern in ['full-hub','minimal-hub']", "require": "linked_to_remote_hub == 'yes'", "severity": "error",
       "message": "{name} takes capabilities from {remote_hub} but has no region link to it: add a link under Region links.", "ref": "aac-hub-spoke" },
     { "id": "disconnected-no-remote", "when": "pattern == 'disconnected'", "require": "remote_hub == 'none'", "severity": "error",
-      "message": "{name} uses the No platform profile and cannot use a Full-Platform region.", "ref": "learn-private-link" },
+      "message": "{name} uses the Governance-Only profile and cannot use a Full-Platform region.", "ref": "learn-private-link" },
     { "id": "disconnected-no-links", "when": "pattern == 'disconnected'", "require": "has_links == 'no'", "severity": "error",
-      "message": "{name} uses the No platform profile and can't take part in region links.", "ref": "learn-private-link" },
+      "message": "{name} uses the Governance-Only profile and can't take part in region links.", "ref": "learn-private-link" },
     { "id": "unknown-region", "when": "known_region == 'no'", "require": "known_region == 'yes'", "severity": "warning",
       "message": "{name} ({id}) is not in the Azure region list (catalog.js); pick a region from the list.", "ref": "learn-regions-list" },
     { "id": "override-ignored", "when": "ignored_overrides != 'none'", "require": "ignored_overrides == 'none'", "severity": "warning",
@@ -244,7 +244,7 @@ window.RULES = /* rules.js: pattern rules as data. Everything below this line is
       "no-hub": { "steps": [], "matrix": "No route",
         "note": "No route: {src} or {dst} has no hub to transit.", "ref": "aac-spoke-to-spoke" },
       "disconnected": { "steps": [], "matrix": "No route by design",
-        "note": "No route by design: a No platform region has no peering. Share services through Private Link instead.", "ref": "learn-private-link" }
+        "note": "No route by design: a Governance-Only region has no peering. Share services through Private Link instead.", "ref": "learn-private-link" }
     },
     "talking_points": [
       { "key": true, "text": "With VNet peering, the multi-hub design sends hub-link traffic through both firewalls: hub A only knows its directly peered VNets, so a UDR on its firewall subnet sends region B's prefixes to the firewall in hub B.", "ref": "learn-fw-multi-hub" },

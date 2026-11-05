@@ -1,7 +1,7 @@
 ---
 title: Framework overview
 description: The drivers, principles, planning constructs, and adoption journey behind an adaptable multi-region Azure platform that extends the Azure landing zones you already run.
-ms.date: 10/27/2026
+ms.date: 11/05/2026
 ms.topic: conceptual
 ---
 
@@ -49,7 +49,7 @@ Three principles apply in every region. Three planning constructs put them into 
 
 Because platform teams cannot predict every future workload, this guidance uses three planning constructs.
 
-- **[Platform Services profiles](./platform-services-profiles.md)** describe what the platform provides in a region: No platform, Remote platform, Minimal platform, or Full platform. They are not maturity stages; the most efficient profile can remain the target as long as it continues to satisfy requirements.
+- **[Platform Services profiles](./platform-services-profiles.md)** describe what the platform provides in a region: Governance-Only, Remote platform, Minimal platform, or Full platform. They are not maturity stages; the most efficient profile can remain the target as long as it continues to satisfy requirements.
 - **[Workload Landing Zone archetypes](./workload-landing-zone-archetypes.md)** group recurring dependency and connectivity characteristics so platform teams can plan before every workload is known. The four archetypes are Self-Contained Workloads, Selectively Connected Workloads, Hybrid-Dependent Workloads, and Interdependent Workload Groups.
 - **[Regional qualification](./regional-qualification.md)** provides a repeatable way to assess candidate regions. Four checks lead to an excluded, candidate, conditional, or qualified regional option, backed by current evidence, known constraints, ownership, and review triggers.
 

@@ -2,7 +2,7 @@
 
 A small, offline, single-page tool for exploring how traffic flows through a multi-region Azure landing zone.
 Each region picks one of four connectivity patterns: **Full platform**, **Minimal platform**, **Remote platform** or
-**No platform**. The explorer draws the estate and walks through the ingress, egress, DNS, east-west and
+**Governance-Only**. The explorer draws the estate and walks through the ingress, egress, DNS, east-west and
 on-premises paths of each region, with checks, talking points and Microsoft Learn sources.
 
 Full-Platform regions provide hybrid connectivity and shared services to other regions. The **Remote platform**
@@ -35,7 +35,7 @@ The four connectivity patterns:
 | **Full platform** | Its own hub with every shared service (firewall, DNS, hybrid gateways, ingress, Bastion, private access). |
 | **Minimal platform** | Its own small hub. Each capability is *Local*, *From <remote hub>* or *Not needed*. |
 | **Remote platform** | No hub: the spokes peer to another region's hub. |
-| **No platform** | An isolated region: no hub, no links; anything it needs sits in its own spoke. |
+| **Governance-Only** | An isolated region: no hub, no links; anything it needs sits in its own spoke. |
 
 A Minimal platform's line reads, for example, *Local: firewall · From West Europe: DNS, Bastion · Not needed:
 on-premises*; a path for a capability that is not needed says so (*No on-premises connectivity — not needed for

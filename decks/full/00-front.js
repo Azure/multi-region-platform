@@ -138,7 +138,7 @@ module.exports = (pres, L) => {
     const s = L.slide('summary');
     L.header(s, 'Continued', 'Choose efficient connectivity, keep readiness and placement separate, keep one operating model', { tw: 11, ts: 24 });
     const cards = [
-      ['hub', C.v600, C.wash, 'Choose the most efficient regional connectivity', 'Profiles range from **No platform** through **Remote platform** and **Minimal platform** to a **Full platform**. They are not maturity stages. Select the **most efficient profile** for current requirements, and add local capabilities only when a measurable need justifies them.'],
+      ['hub', C.v600, C.wash, 'Choose the most efficient regional connectivity', 'Profiles range from **Governance-Only** through **Remote platform** and **Minimal platform** to a **Full platform**. They are not maturity stages. Select the **most efficient profile** for current requirements, and add local capabilities only when a measurable need justifies them.'],
       ['route', C.t700, C.t50, 'Keep platform readiness and workload placement separate', 'Qualification determines whether a region can become a viable platform option. Placement happens later, when a specific workload and its current requirements are known. Placement, relocation, recovery, and multi-region operation remain **workload-specific decisions**.'],
       ['shield', C.s800, C.wash, 'Keep the operating model consistent while allowing regional adaptation', 'The operating model stays consistent across regions; implementation can vary where business, workload, or regulatory requirements call for it. **Region-agnostic does not mean region-random.** Choice operates within qualified options, documented constraints, and current evidence.'],
     ];

@@ -84,6 +84,35 @@ test('availability does not require a retail price snapshot', async () => {
   assert.equal(C.availability({ service: 'App Service' }, 'eastus'), 'yes');
 });
 
+test('repeated services retain independent selections, weights and row identities on reopening', async () => {
+  const C = await core(), state = C.blank();
+  state.current = [{ id: 'eastus' }];
+  state.baseline = 'eastus';
+  state.services = [
+    { id: 'basic', service: 'App Service', product: 'Web', sku: 'Basic', weight: 30 },
+    { id: 'premium', service: 'App Service', product: 'Web', sku: 'Premium', weight: 50 },
+    { id: 'other', service: 'App Service', product: 'Other', sku: '', weight: 20 },
+  ];
+  C.replace(state);
+  const saved = JSON.stringify(C.S);
+  C.replace(JSON.parse(saved));
+  assert.equal(C.S.services.length, 3);
+  assert.deepEqual(JSON.parse(JSON.stringify(C.S.services)).map(({ id, product, sku, weight }) =>
+    ({ id, product, sku, weight })), state.services.map(({ id, product, sku, weight }) =>
+    ({ id, product, sku, weight })));
+  assert.equal(C.availability(C.S.services[0], 'westus'), 'no');
+  assert.equal(C.availability(C.S.services[1], 'eastus'), 'yes');
+  await C.loadPricing('eastus');
+  assert.deepEqual(Array.from(C.priceRows(), row => row.id), ['basic', 'premium', 'other']);
+  assert.deepEqual(Array.from(C.priceRows(), row => row.weight), [30, 50, 20]);
+  const duplicateIds = C.normalize({ v: 3, services: [
+    ...state.services, { ...state.services[0] }, { service: 'App Service' },
+  ] });
+  assert.equal(duplicateIds.services.length, 5);
+  assert.equal(new Set(duplicateIds.services.map(row => row.id)).size, 5);
+  assert.equal(JSON.stringify(C.normalize(duplicateIds)), JSON.stringify(duplicateIds));
+});
+
 test('generic evidence is not selectable and cannot substitute a specific SKU', async () => {
   const C = await core();
   assert.deepEqual(Array.from(C.skuOptions({ service: 'App Service', product: 'Web' })), ['Basic', 'Premium']);

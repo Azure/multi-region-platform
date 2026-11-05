@@ -1,7 +1,7 @@
 ---
 title: Select the Platform Services profile
 description: Select one of the four Platform Services profiles for a qualified Azure region, using the archetype-to-profile matrix, the selection principles, and the profile decision tree, and know when to reassess the selection.
-ms.date: 10/28/2026
+ms.date: 11/05/2026
 ms.topic: conceptual
 ---
 
@@ -9,22 +9,22 @@ ms.topic: conceptual
 
 **Question:** What is the most efficient regional platform design that supports the identified requirements?
 
-Determine how workloads in the region will reach Full-Platform regions, shared platform services, application dependencies, other Azure regions, and hybrid environments. Those connectivity and dependency requirements determine which [Platform Services profile](./platform-services-profiles.md) fits: No platform, Remote platform, Minimal platform, or Full platform.
+Determine how workloads in the region will reach Full-Platform regions, shared platform services, application dependencies, other Azure regions, and hybrid environments. Those connectivity and dependency requirements determine which [Platform Services profile](./platform-services-profiles.md) fits: Governance-Only, Remote platform, Minimal platform, or Full platform.
 
 Start with the matrix to see which Platform Services profiles each [archetype](./workload-landing-zone-archetypes.md) typically uses. Then apply the selection principles and use the decision tree to pick the most efficient profile that meets the requirements.
 
-:::image type="content" source="./media/archetype-profile-matrix.png" alt-text="Matrix of the four archetypes against the four Platform Services profiles. Self-Contained Workloads often use No platform and other profiles where justified; Selectively Connected Workloads can use No platform where approved local peering or Azure service endpoints suffice, or Remote platform, Minimal platform, or Full platform; Hybrid-Dependent Workloads use Remote platform, Minimal platform, or Full platform; interdependent groups can use No platform for approved same-region connectivity, Remote platform where acceptable, and Minimal platform or Full platform when justified." lightbox="./media/archetype-profile-matrix.png":::
+:::image type="content" source="./media/archetype-profile-matrix.png" alt-text="Typical profiles: Self-Contained Workloads use Governance-Only or Remote platform; Selectively Connected Workloads use Remote platform or Minimal platform; Hybrid-Dependent Workloads and Interdependent Workload Groups use Minimal platform or Full platform. Other profiles are conditional where the stated requirements justify them." lightbox="./media/archetype-profile-matrix.png":::
 
 *Archetype-to-profile relationships are many-to-many. Each row is a set of options, not an assignment; the selected profile follows dependencies, latency, traffic, resiliency, and independence requirements.*
 
-| Archetype | No platform | Remote platform | Minimal platform | Full platform |
+| Archetype | Governance-Only | Remote platform | Minimal platform | Full platform |
 |---|---|---|---|---|
-| Self-Contained Workloads | Often | Where justified | Where justified | Where justified |
-| Selectively Connected Workloads | Where hub-free | Typical | Typical | Typical |
-| Hybrid-Dependent Workloads | Not indicated | Typical | Typical | Typical |
-| Interdependent Workload Groups | Approved same-region connectivity | Where acceptable | When justified | When justified |
+| Self-Contained Workloads | Typical | Typical | Where justified | Where justified |
+| Selectively Connected Workloads | Where hub-free | Typical | Typical | Where justified |
+| Hybrid-Dependent Workloads | Not indicated | Where justified | Typical | Typical |
+| Interdependent Workload Groups | Approved same-region connectivity | Where acceptable | Typical | Typical |
 
-No platform can still provide approved direct same-region spoke connectivity and private endpoints for Azure services. These paths must satisfy DNS, security, inspection, and operational requirements without a network hub or gateway for hybrid connectivity. A private endpoint alone does not require Remote platform, Minimal platform, or Full platform.
+Governance-Only can still provide approved direct same-region spoke connectivity and private endpoints for Azure services. These paths must satisfy DNS, security, inspection, and operational requirements without a network hub or gateway for hybrid connectivity. A private endpoint alone does not require Remote platform, Minimal platform, or Full platform.
 
 ## Profile selection principles
 
@@ -37,7 +37,7 @@ No platform can still provide approved direct same-region spoke connectivity and
 
 Each question comes from the "fits when" criteria of the [Platform Services profiles](./platform-services-profiles.md). Stop at the first profile that satisfies the requirements identified in [check 3](./workload-requirements.md#platform-and-connectivity-requirements).
 
-:::image type="content" source="./media/platform-services-profile-decision-tree.png" alt-text="Decision tree with three questions. If approved same-region spoke connectivity and Azure service endpoints meet all requirements without hub or on-premises access, use No platform. If they can tolerate the latency and coupling of another region, use Remote platform. If requirements do not justify a comprehensive local capability set, use a Minimal platform; otherwise use a Full platform." lightbox="./media/platform-services-profile-decision-tree.png":::
+:::image type="content" source="./media/platform-services-profile-decision-tree.png" alt-text="Decision tree with three questions. If approved same-region spoke connectivity and Azure service endpoints meet all requirements without hub or on-premises access, use Governance-Only. If they can tolerate the latency and coupling of another region, use Remote platform. If requirements do not justify a comprehensive local capability set, use a Minimal platform; otherwise use a Full platform." lightbox="./media/platform-services-profile-decision-tree.png":::
 
 *Platform Services profile selection tree. Questions escalate from dependency, to tolerance of remote consumption, to required independence. The outcome is a platform capability, not a workload design.*
 
@@ -45,7 +45,7 @@ The same tree as a table, from the smallest regional footprint to the largest:
 
 | Profile | Fits when the workloads expected in the region | What the region gets |
 |---|---|---|
-| [No platform](./disconnected-spokes.md) | Need no Full-Platform region, on-premises path, centralized inspection, or private network connectivity beyond approved same-region spokes and Azure service endpoints. | No network hub and no gateway, only platform services that are Global. Workload spokes use the estate's standard identity, policy, security, and deployment practices. |
+| [Governance-Only](./disconnected-spokes.md) | Need no Full-Platform region, on-premises path, centralized inspection, or private network connectivity beyond approved same-region spokes and Azure service endpoints. | No network hub and no gateway, only platform services that are Global. Workload spokes use the estate's standard identity, policy, security, and deployment practices. |
 | [Remote platform](./remote-hub.md) | Need Full-Platform region capabilities or wider private network access, and can tolerate the latency, availability coupling, and dependency on connectivity to another region. | No local network hub. Workload spokes consume services from another existing Full-Platform region. |
 | [Minimal platform](./minimal-regional-hub.md) | Need some capabilities locally, without a comprehensive local set. | A local network hub and only other platform services that must be in the region. Everything else stays remote. |
 | [Full platform](./full-regional-hub.md) | Need a comprehensive local capability set of platform services, and independence from other regions. | The complete local connectivity and shared services that the region's workloads require. |
@@ -58,7 +58,7 @@ Two of the four profiles need no local network hub, and only the Full platform a
 
 Check these points before you settle on a profile, and revisit the profile when its reassessment trigger applies. Profiles can move in both directions.
 
-### No platform
+### Governance-Only
 
 **Key considerations:** Validate administration, identity, DNS, secrets, telemetry, data movement, software distribution, private endpoints, incident response, and support procedures. Where applications require east-west communication within the region, evaluate direct spoke-to-spoke connectivity without assuming that a local network hub is required. Confirm that no hidden dependency requires connectivity to a Full-Platform region or on-premises environment.
 
@@ -86,7 +86,7 @@ Check these points before you settle on a profile, and revisit the profile when 
 
 Greater local capability and independence usually increase fixed platform cost and operational scope, but they can reduce cross-region dependencies, latency exposure, and availability coupling.
 
-:::image type="content" source="./media/profile-cost-tradeoff.png" alt-text="Chart plotting the four profiles on a rising curve: fixed platform cost and operational scope increase with local capability and independence, from No platform through Remote platform and Minimal platform to Full platform, while cross-region transfer and availability coupling decrease." lightbox="./media/profile-cost-tradeoff.png":::
+:::image type="content" source="./media/profile-cost-tradeoff.png" alt-text="Chart plotting the four profiles on a rising curve: fixed platform cost and operational scope increase with local capability and independence, from Governance-Only through Remote platform and Minimal platform to Full platform, while cross-region transfer and availability coupling decrease." lightbox="./media/profile-cost-tradeoff.png":::
 
 *A qualitative trade-off, not a price list.*
 

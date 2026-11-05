@@ -1,7 +1,7 @@
 ---
 title: Prepare the region overview
 description: Build what the regional design record says, through the landing-zone automation you already run. See what each Platform Services profile adds in a new Azure region, what is global and needs no action, and the order of work.
-ms.date: 10/27/2026
+ms.date: 11/05/2026
 ms.topic: conceptual
 ---
 
@@ -13,7 +13,7 @@ Preparing a region is a targeted change to the platform you already run, not a n
 
 | Profile | What you add in the region | What you reuse |
 |---|---|---|
-| [No platform](./disconnected-spokes.md) | The region in policy and in landing-zone provisioning. Workload spokes with their own internet ingress and egress. No hub, no gateway, no peering. | Governance, identity, policy, monitoring, and automation. |
+| [Governance-Only](./disconnected-spokes.md) | The region in policy and in landing-zone provisioning. Workload spokes with their own internet ingress and egress. No hub, no gateway, no peering. | Governance, identity, policy, monitoring, and automation. |
 | [Remote platform](./remote-hub.md) | The same, plus a cross-region connection from each spoke to an existing Full-Platform region, with routing and DNS settings. No hub. | An existing Full-Platform region: its gateways, firewall, DNS, and shared services. |
 | [Minimal platform](./minimal-regional-hub.md) | The same, plus a hub in the region with only the components you selected. | The Full-Platform region, for everything you didn't make local. |
 | [Full platform](./full-regional-hub.md) | The same, plus a full local hub. | The landing-zone foundation and, where they meet requirements, the existing ExpressRoute circuits. |
@@ -34,7 +34,7 @@ Most of the landing zone isn't tied to a region:
 The order is the same for every profile. The profile decides how much each item contains.
 
 1. **Allow the region in policy**, for the workload requirements it is qualified for.
-1. **Reserve address space** that doesn't overlap the rest of the estate, even for No platform.
+1. **Reserve address space** that doesn't overlap the rest of the estate, even for Governance-Only.
 1. **Build the network part** that the profile calls for: nothing, connections to an existing Full-Platform region, or a local hub.
 1. **Extend the shared services** that must be local, such as DNS forwarding or domain controllers.
 1. **Turn on landing-zone provisioning** for the region, so that workload teams receive spokes that match the profile.
@@ -45,7 +45,7 @@ The order is the same for every profile. The profile decides how much each item 
 
 Different profiles can coexist across the estate. A region's profile changes only when workload and platform requirements change, not because regions are expected to progress along a maturity path.
 
-:::image type="content" source="./media/profiles-coexisting-estate.png" alt-text="Illustrative estate: on-premises datacenters connect to two Full-Platform regions in regions A and B. Region C runs a Minimal platform that reuses an existing ExpressRoute circuit, region D runs a Minimal platform without an on-premises path, regions E and F use Remote platform, region G uses No platform, and region H is a candidate not yet enabled." lightbox="./media/profiles-coexisting-estate.png":::
+:::image type="content" source="./media/profiles-coexisting-estate.png" alt-text="Illustrative estate: on-premises datacenters connect to two Full-Platform regions in regions A and B. Region C runs a Minimal platform that reuses an existing ExpressRoute circuit, region D runs a Minimal platform without an on-premises path, regions E and F use Remote platform, region G uses Governance-Only, and region H is a candidate not yet enabled." lightbox="./media/profiles-coexisting-estate.png":::
 
 *An illustrative estate. Two Full-Platform regions provide resilient hybrid connectivity; other regions consume what they need. Region C's Minimal platform reaches on-premises by reusing an existing ExpressRoute circuit; region D's does not. Both are valid. Names and placements are examples only.*
 
@@ -55,7 +55,7 @@ A region is **ready for workloads** when the required capability set is in place
 
 ## In this section
 
-- [No platform](./disconnected-spokes.md), [Remote platform](./remote-hub.md), [Minimal platform](./minimal-regional-hub.md), and [Full platform](./full-regional-hub.md): what to deploy for each profile.
+- [Governance-Only](./disconnected-spokes.md), [Remote platform](./remote-hub.md), [Minimal platform](./minimal-regional-hub.md), and [Full platform](./full-regional-hub.md): what to deploy for each profile.
 - [Platform readiness checklist](./platform-readiness.md): what must be true before workloads arrive.
 
 ## Reference links
@@ -67,4 +67,4 @@ A region is **ready for workloads** when the required capability set is in place
 ## Next step
 
 > [!div class="nextstepaction"]
-> [No platform](./disconnected-spokes.md)
+> [Governance-Only](./disconnected-spokes.md)

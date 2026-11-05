@@ -61,12 +61,12 @@
  },
  "workload-landing-zone-archetypes": {
   "w": 940,
-  "h": 409,
+  "h": 386,
   "source": "fig12"
  },
  "archetype-profile-matrix": {
   "w": 940,
-  "h": 375,
+  "h": 361,
   "source": "fig13"
  },
  "platform-services-profile-spectrum": {

@@ -1,7 +1,7 @@
 ---
 title: "Prepare a region: Minimal platform"
 description: What to deploy to prepare a new Azure region with a Minimal platform — a hub that holds only the components its workloads need and takes the rest from a Full-Platform region — with optional components, example compositions, recommendations, and links to the Azure landing zone guidance.
-ms.date: 10/27/2026
+ms.date: 11/05/2026
 ms.topic: conceptual
 ---
 
@@ -41,7 +41,7 @@ These are examples, not designs to copy. Each follows from a workload reason.
 
 | Area | What to do | Guidance |
 |---|---|---|
-| Policy, address space, landing-zone provisioning, monitoring, backup, and keys | The same as for [No platform](./disconnected-spokes.md#what-you-deploy), with spokes that connect to the local hub. | [Landing zone regions](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone) |
+| Policy, address space, landing-zone provisioning, monitoring, backup, and keys | The same as for [Governance-Only](./disconnected-spokes.md#what-you-deploy), with spokes that connect to the local hub. | [Landing zone regions](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone) |
 | Hub (the base) | Create the hub virtual network or virtual hub, connect it to the Full-Platform region, connect the spokes, and configure routing. | [Traditional Azure networking topology](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/traditional-azure-networking-topology) or [Virtual WAN network topology](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/virtual-wan-network-topology) |
 | Optional components | Deploy the components that must be local, in the same order as for a [Full platform](./full-regional-hub.md#what-you-deploy): inspection, gateways, name resolution, then identity. | [Landing zone regions](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone) |
 

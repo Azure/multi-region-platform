@@ -1,11 +1,11 @@
 ---
-title: "Prepare a region: No platform"
-description: What to deploy to prepare a new Azure region for No platform — no hub or hybrid gateway, with approved local peering and Azure service endpoints — with recommendations, considerations, and links to the Azure landing zone guidance for each area.
-ms.date: 10/27/2026
+title: "Prepare a region: Governance-Only"
+description: What to deploy to prepare a new Azure region for Governance-Only — no hub or hybrid gateway, with approved local peering and Azure service endpoints — with recommendations, considerations, and links to the Azure landing zone guidance for each area.
+ms.date: 11/05/2026
 ms.topic: conceptual
 ---
 
-# No regional platform
+# Governance-Only
 Workload spokes run in the region with no private network path to a Full-Platform region, another region's networks, or an on-premises environment. There is no hub to build. Preparing the region means letting the landing zone you already run accept it.
 
 In the Azure landing zone architecture, these spokes are *online* landing zones: workloads that use direct internet connectivity, or that don't need a virtual network, and that don't connect to the corporate network through a hub.
@@ -34,7 +34,7 @@ In the Azure landing zone architecture, these spokes are *online* landing zones:
 
 - **Keep address space unique.** A spoke that isn't peered today can move to a connected profile later only if its address space doesn't overlap.
 - **Plan outbound access explicitly.** New virtual networks default to private subnets, without default outbound access. A NAT gateway is the recommended method for most workloads that don't need a firewall.
-- **Decide who owns private DNS zones.** A spoke in the No platform profile can't use a DNS resolver in a hub. Its virtual network needs its own links to the private DNS zones for the private endpoints it uses, whether those zones are the central ones or zones that the workload owns.
+- **Decide who owns private DNS zones.** A spoke in the Governance-Only profile can't use a DNS resolver in a hub. Its virtual network needs its own links to the private DNS zones for the private endpoints it uses, whether those zones are the central ones or zones that the workload owns.
 - **Plan operator access.** Without a hub there is no shared management path. Decide how operators reach workloads, for example with Azure Bastion in the spoke.
 - **Check identity.** Workloads authenticate with Microsoft Entra ID. A workload that needs domain controllers doesn't fit this profile.
 - **Connect spokes directly only where needed.** Where applications in the region need east-west communication, evaluate direct spoke-to-spoke connectivity without assuming that a local hub is required. Limit it to spokes of the same environment and workload.

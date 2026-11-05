@@ -1,7 +1,7 @@
 ---
 title: "Prepare a region: Remote platform"
 description: What to deploy to prepare a new Azure region for Remote platform — spokes that connect across regions to an existing Full-Platform region, with no hub in the region — with recommendations, considerations, and links to the Azure networking guidance.
-ms.date: 10/27/2026
+ms.date: 11/05/2026
 ms.topic: conceptual
 ---
 
@@ -12,7 +12,7 @@ Workload spokes in the region connect across regions to an existing Full-Platfor
 
 | Area | What to do | Guidance |
 |---|---|---|
-| Policy, address space, monitoring, backup, and keys | The same as for [No platform](./disconnected-spokes.md#what-you-deploy). Address space must not overlap the hub or the other spokes. | [Landing zone regions](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone) |
+| Policy, address space, monitoring, backup, and keys | The same as for [Governance-Only](./disconnected-spokes.md#what-you-deploy). Address space must not overlap the hub or the other spokes. | [Landing zone regions](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/considerations/regions#add-a-new-region-to-an-existing-landing-zone) |
 | Landing-zone provisioning | Offer the region in subscription vending, with a spoke virtual network that the platform team connects to the Full-Platform region. | [Subscription vending](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/landing-zone/design-area/subscription-vending) |
 | Connection to the hub | Connect each spoke to the Full-Platform region in the other region. See [Connect to the Full-Platform region](#connect-to-the-full-platform-region). | [Virtual network peering](https://learn.microsoft.com/azure/virtual-network/virtual-network-peering-overview) |
 | Routing and inspection | Apply the same route tables as for spokes in the hub's own region, so that traffic reaches the hub firewall. | [Traditional Azure networking topology](https://learn.microsoft.com/azure/cloud-adoption-framework/ready/azure-best-practices/traditional-azure-networking-topology) |

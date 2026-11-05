@@ -18,11 +18,13 @@
   // A workbook saved by version 1 keeps its answers where the question still exists. Manual availability, price and latency entries are dropped.
   const V1_CAPABILITY = { 'Met': 'Yes', 'Gap (mandatory)': 'No (mandatory gap)', 'Gap (accepted with a condition)': 'Gap accepted with a condition' };
   const LEGACY_PROFILES = {
-    'No Hub': 'No platform',
+    'No platform': 'Governance-Only',
+    'No-Platform': 'Governance-Only',
+    'No Hub': 'Governance-Only',
     'Remote Hub': 'Remote platform',
     'Minimal Hub': 'Minimal platform',
     'Full Hub': 'Full platform',
-    'Disconnected Spokes': 'No platform',
+    'Disconnected Spokes': 'Governance-Only',
     'Remote Hub Connected': 'Remote platform',
     'Minimal Regional Hub': 'Minimal platform',
     'Selective Hub': 'Minimal platform',
@@ -87,10 +89,15 @@
     s.notes = { ...(s.notes || {}) };
     s.sites = (Array.isArray(s.sites) ? s.sites : []).filter(x => x && (x.kind === 'city' || x.kind === 'peering')).map(x =>
       ({ id: x.id || uid('s'), kind: x.kind, city: x.kind === 'city' && x.city ? { ...x.city } : null, peering: x.peering || '', target: num(x.target) ?? '', edits: Object.fromEntries(Object.entries(x.edits || {}).filter(([, v]) => num(v) !== null).map(([k, v]) => [k, Number(v)])) }));
-    const seen = new Set();
-    s.services = (Array.isArray(s.services) ? s.services : []).filter(x => x && x.service && !seen.has(x.service) && seen.add(x.service))
-      .map(x => ({ id: x.id || uid('v'), service: x.service, product: x.product || '', sku: x.sku || '', weight: num(x.weight) ?? '',
-        source: x.source || (raw.v >= 3 ? 'availability' : 'retail') }));
+    const serviceIds = new Set();
+    s.services = (Array.isArray(s.services) ? s.services : []).filter(x => x && x.service)
+      .map(x => {
+        let id = x.id || uid('v');
+        while (serviceIds.has(id)) id = uid('v');
+        serviceIds.add(id);
+        return { id, service: x.service, product: x.product || '', sku: x.sku || '', weight: num(x.weight) ?? '',
+          source: x.source || (raw.v >= 3 ? 'availability' : 'retail') };
+      });
     migrateServices(s);
     if (!s.current.some(c => c.id === s.baseline)) s.baseline = s.current[0] ? s.current[0].id : '';
     fillDates(s);
@@ -501,7 +508,7 @@
     return r.design;
   }
   function suggestProfile(d) {
-    if (d.q1 === 'No') return 'No platform';
+    if (d.q1 === 'No') return 'Governance-Only';
     if (d.q1 !== 'Yes') return '';
     if (d.q2 === 'Yes') return 'Remote platform';
     if (d.q2 !== 'No') return '';
@@ -512,7 +519,7 @@
     const d = design(r), suggested = suggestProfile(d), profile = d.profile || suggested, pi = PROFILES.findIndex(p => p.id === profile);
     const hubs = hubRegions(r.id);
     const estateTopo = M.O.topology.includes(S.estate.topology) ? S.estate.topology : '';
-    const none = profile === 'No platform';
+    const none = profile === 'Governance-Only';
     const connections = Array.isArray(d.hubConnections) ? d.hubConnections.filter(id => hubs.includes(id))
       : [hubs.includes(d.hub) ? d.hub : hubs[0]].filter(Boolean);
     const hubConnections = none ? [] : [...new Set(connections)], defHub = hubConnections[0] || '';
@@ -538,7 +545,7 @@
     e.hints = [];
     if (profile === 'Remote platform' && hubLocal.length) e.hints.push('A hub service is placed locally. With a hub in the region, the profile is a Minimal platform.');
     if (profile === 'Full platform' && hubRemote.length) e.hints.push('A hub service is still remote. A region that depends on a Full-Platform region for something is a Minimal platform.');
-    if (none && e.ss.some(s => s.p === 'Remote' && s.id !== 'logs')) e.hints.push('The No platform profile has no private path to another region. Check the services placed as remote.');
+    if (none && e.ss.some(s => s.p === 'Remote' && s.id !== 'logs')) e.hints.push('The Governance-Only profile has no private path to another region. Check the services placed as remote.');
     if (profile === 'Minimal platform' && e.ss.filter(s => HUB_SERVICES.includes(s.id) && s.p).length === 4 && !hubLocal.length) e.hints.push('No hub service is local. Without a hub in the region, the profile is Remote platform.');
     if (e.hybrid === 'Not required' && gw && gw.p === 'Local') e.hints.push('A local gateway is planned, but hybrid connectivity is set to not required.');
     const missing = [];
