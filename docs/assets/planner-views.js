@@ -61,13 +61,19 @@
     const curList = S.current.length
       ? K.scroll(`<table class="pl-dl"><thead><tr><th scope="col">Region</th><th scope="col">Full-Platform region</th><th scope="col">Price baseline</th><th scope="col" aria-label="Remove"></th></tr></thead><tbody>${cur}</tbody></table>`, { label: 'Current regions' })
       : '<p class="pl-muted">No current regions yet.</p>';
-    return K.head('Scope', 'The platform you run today and the regions you are considering.') +
+    return K.head('Scope', 'Your current platform, on-premises locations, ExpressRoute peering locations, and the regions you are considering.') +
       K.section('Plan', K.row('Plan name', 'meta/name', id => K.inp('meta/name', S.meta.name, { id, ph: 'For example, Contoso Nordic expansion', label: 'Plan name' })) +
         K.row('Owner', 'meta/owner', id => K.inp('meta/owner', S.meta.owner, { id, ph: 'Team or person', label: 'Owner' })) +
         K.row('Assessment date', 'meta/date', id => K.inp('meta/date', S.meta.date, { id, type: 'date', label: 'Assessment date' }))) +
       K.section('Current platform', K.rowRaw('Hub topology', K.cards('estate/topology', S.estate.topology, topo, { label: 'Hub topology', cls: 'sm' }), '', true) +
         K.row('Connectivity managed with', 'estate/managed', id => K.sel('estate/managed', S.estate.managed, O.managed, { id, label: 'Connectivity managed with' })) +
         K.row('Hybrid connectivity', 'estate/hybrid', id => K.sel('estate/hybrid', S.estate.hybrid, O.estateHybrid, { id, label: 'Hybrid connectivity' }))) +
+      K.section('On-premises datacenters', scopeLocations('city'), {
+        desc: 'Optional. Add the cities where your datacenters are located, their peering paths, and round-trip latency targets. Existing city entries are retained.',
+      }) +
+      K.section('ExpressRoute peering locations', scopeLocations('peering'), {
+        desc: 'Add the peering locations to assess and their round-trip latency targets. Selecting a location does not confirm an existing circuit.',
+      }) +
       K.section('Current regions', `<div class="pl-add">${regionCombo('cur', 'Add a current region', id => {
         S.current.push({ id, hub: !S.current.length }); C.tidy(); C.loadPricing(S.baseline).then(ok => ok && K.hooks.render());
       })}</div>${curList}`, { desc: 'Regions you already run in. Mark Full-Platform regions built with the Full platform profile, providing hybrid connectivity and shared services to other regions.' }) +
@@ -127,11 +133,24 @@
         : K.sel(`reg/${r.id}/check/${row.id}`, v, row.opts, { tone: row.neutral ? '' : TONE[v], label });
       return `<td data-r="${esc(C.rname(r.id))}"${mAttr(r)}>${ctl}${row.ev ? evChip(row.ev, r) : ''}</td>`;
     };
+    const workloadCells = row => {
+      const w = C.S.workload[row.id], count = Object.keys(w.overrides).length;
+      const shared = K.sel(`workload/${row.id}`, w.value, row.opts, {
+        tone: row.neutral ? '' : TONE[w.value], label: `${row.id} ${row.label} Shared answer for all regions`,
+      });
+      const toggle = `<button type="button" class="pl-btn subtle sm" data-act="workload-regions" data-arg="${row.id}" aria-expanded="${w.expanded}" aria-controls="pl-workload-${row.id.replace('.', '-')}">${w.expanded ? 'Hide regional answers' : 'Customize by region'}</button>`;
+      const regions = w.expanded ? `<div class="pl-workload-regions" id="pl-workload-${row.id.replace('.', '-')}">${rs.map(r => {
+        const override = Object.hasOwn(w.overrides, r.id), label = `${row.id} ${row.label} ${C.rname(r.id)}`;
+        return `<label class="pl-workload-region"${mAttr(r)}><span class="pl-cap">${esc(C.rname(r.id))}</span>${K.sel(`workload/${row.id}/${r.id}`, override ? w.overrides[r.id] : '__shared__',
+          [['__shared__', `Use shared answer (${w.value || 'not answered'})`], ...row.opts], { label, empty: 'Not answered', tone: row.neutral || !override ? '' : TONE[w.overrides[r.id]] })}</label>`;
+      }).join('')}</div>` : '';
+      return `<td colspan="${rs.length}" class="pl-workload"><div class="pl-workload-shared">${shared}<span class="pl-cap">${count ? `Shared default; ${K.plural(count, 'regional override')}` : 'Applies to all regions'}</span>${toggle}</div>${regions}${row.id === '3.4' ? '<p class="pl-hint">Record the workload requirement here. Check 4 flags regions that cannot meet it.</p>' : ''}</td>`;
+    };
     const body = chs.map(ch => `<tbody class="pl-cg-b"><tr class="pl-band"><th scope="row" class="pl-cg-q"><div class="pl-band-q"><span class="pl-band-n">${ch.n}</span><span class="pl-band-t"><b>${esc(ch.title)}</b><span>${esc(ch.q)}</span><a class="pl-link" href="${ch.href}">Guidance${icon('arrowright')}</a></span></div></th>` +
       rs.map(r => { const st = C.checkState(ch, r), name = `Check ${ch.n} for ${C.rname(r.id)}: ${ROLL_TEXT[st]}`;
         return `<td class="pl-roll" data-r="${esc(C.rname(r.id))}"${mAttr(r)}><span ${nameTip(name)} aria-label="${esc(name)}" role="img">${status(ROLL_KIND[st])}</span></td>`; }).join('') + '</tr>' +
       ch.rows.map(row => `<tr><th scope="row" class="pl-cg-q"><div class="pl-qt"><span class="pl-id">${row.id}</span><span>${esc(row.label)}</span></div><div class="pl-note-cell" data-note-cell="${row.id}">${noteCell(row.id)}</div></th>` +
-        rs.map(r => cell(row, r)).join('') + '</tr>').join('') + '</tbody>').join('');
+        (ch.n === 3 ? workloadCells(row) : rs.map(r => cell(row, r)).join('')) + '</tr>').join('') + '</tbody>').join('');
     return mSwitch(rs, r => ROLL_KIND[C.checkState(chs[chs.length - 1], r)]) + `<div class="pl-cgw" id="pl-cgw" style="--n:${rs.length}"><table class="pl-cg">${thead}${body}</table></div>`;
   }
 
@@ -313,6 +332,46 @@
   const KIND = { capital: 'Capital', state: 'State capital', city: 'City' };
   const dot = src => `<span class="pl-src ${src === 'm' ? 'm' : 'e'}" role="img" aria-label="${src === 'm' ? 'Measured' : 'Estimated'}"></span>`;
 
+  function siteIdentity(s) {
+    const city = s.city, isCity = s.kind === 'city';
+    const sub = isCity ? [city && city.a && city.a !== city.n ? city.a : '', city ? city.c : '', city && KIND[city.k]].filter(Boolean).join(' · ') : 'Peering location';
+    return `<span class="pl-rn">${icon(isCity ? 'building' : 'peering', { cls: 'pl-rn-ic' })}<span><b>${esc(C.siteName(s))}</b><span class="pl-cap">${esc(sub)}</span></span></span>`;
+  }
+  function sitePeeringControl(s) {
+    if (!D.lat) return `<span class="pl-muted">${esc(s.peering || 'No peering data')}</span>`;
+    return K.combo('pl-' + s.id, { mode: 'value', clearable: true,
+      ph: C.sitePeering(s) ? `Nearest: ${C.sitePeering(s)} (estimated)` : 'Select a peering location',
+      label: 'Peering location for ' + C.siteName(s), display: () => s.peering,
+      items: () => C.peeringChoices(s.city).map(p => ({ value: p.name, label: p.name, sub: p.ms + ' ms (estimated)' })),
+      onPick: it => { s.peering = it.value; },
+      onClear: () => { s.peering = ''; K.hooks.commit(); } });
+  }
+  function scopeLocations(kind) {
+    const S = C.S, L = D.lat, isCity = kind === 'city', sites = S.sites.filter(s => s.kind === kind);
+    const usedCities = () => new Set(S.sites.filter(s => s.kind === 'city' && s.city).map(s => D.cities ? D.cities.key(s.city) : ''));
+    const usedPeering = () => new Set(S.sites.filter(s => s.kind === 'peering').map(s => s.peering));
+    const add = isCity ? K.combo('city', { mode: 'add',
+      ph: D.citiesState === 'loading' ? 'Loading cities' : 'Add a datacenter city', label: 'Add a datacenter city',
+      disabled: !!L && (D.citiesState === 'idle' || D.citiesState === 'loading'),
+      items: () => D.cities ? D.cities.cities.filter(c => !usedCities().has(D.cities.key(c))).map(c => ({ value: D.cities.key(c), label: c.n, sub: `${c.a || c.n}, ${c.c}`, group: c.c, tag: KIND[c.k] || '', city: c })) : [],
+      onPick: it => { S.sites.push({ id: C.uid('s'), kind: 'city', city: { ...it.city }, peering: '', target: '', edits: {} }); },
+      onFree: !L || D.citiesState === 'none' ? (t => { S.sites.push({ id: C.uid('s'), kind: 'city', city: { n: t, a: t, c: '', cc: '', k: 'city' }, peering: '', target: '', edits: {} }); }) : null,
+    }) : K.combo('peer', { mode: 'add', showAll: true, ph: 'Add a peering location', label: 'Add a peering location',
+      items: () => L ? L.peering.filter(p => !usedPeering().has(p.name)).map(p => ({ value: p.name, label: p.name, sub: [p.city, p.country].filter(Boolean).join(', ') })) : [],
+      onPick: it => { S.sites.push({ id: C.uid('s'), kind: 'peering', city: null, peering: it.value, target: '', edits: {} }); },
+      onFree: L ? null : (t => { if (!usedPeering().has(t)) S.sites.push({ id: C.uid('s'), kind: 'peering', city: null, peering: t, target: '', edits: {} }); }),
+    });
+    const warning = !L ? K.mb('warning', esc(D.asFile ? AS_FILE : 'Location reference data is unavailable. You can record names, but latency estimates may be unavailable.'))
+      : isCity && D.citiesState === 'none' ? K.mb('warning', 'The city catalog could not be loaded. You can record a location name, but automatic city-based latency estimates may be unavailable.') : '';
+    const rows = sites.map(s => `<tr><th scope="row">${siteIdentity(s)}</th>${isCity ? `<td class="pl-pl">${sitePeeringControl(s)}</td>` : ''}` +
+      `<td>${K.inp(`site/${s.id}/target`, s.target, { type: 'number', min: 0, label: 'Target in milliseconds for ' + C.siteName(s) })}</td>` +
+      `<td class="pl-x">${K.iconBtn('rm-site', s.id, 'close', 'Remove ' + C.siteName(s))}</td></tr>`).join('');
+    return warning + `<div class="pl-add">${add}</div>` + (sites.length
+      ? K.scroll(`<table class="pl-dl pl-sites"><thead><tr><th scope="col">${isCity ? 'Datacenter location' : 'Peering location'}</th>${isCity ? '<th scope="col">Peering path</th>' : ''}<th scope="col">Target (ms)</th><th scope="col" aria-label="Remove"></th></tr></thead><tbody>${rows}</tbody></table>`, { label: isCity ? 'On-premises datacenters' : 'ExpressRoute peering locations' })
+      : `<p class="pl-muted">${isCity ? 'No datacenters added. Leave this empty for a cloud-only plan.' : 'No peering locations added.'}</p>`) +
+      (isCity && sites.length ? '<p class="pl-hint">Without an explicit peering path, Latency estimates the route through the nearest peering location. This is not a confirmed connection.</p>' : '');
+  }
+
   function pathDiagram() {
     const node = (ic, label) => `<div class="pl-node"><span class="pl-node-ic">${icon(ic)}</span><span class="pl-node-l">${label}</span></div>`;
     // The numbers under a latency value read "first + second": the first leg is the provider network, the second the Microsoft backbone.
@@ -379,16 +438,10 @@
     M.latencyMap.patch(root);
   }
   function siteRow(s, cs) {
-    const city = s.city, name = C.siteName(s), isCity = s.kind === 'city';
-    const sub = isCity ? [city && city.a && city.a !== city.n ? city.a : '', city ? city.c : ''].filter(Boolean).join(', ') : 'Peering location';
-    let peer;
-    if (!isCity) peer = `<span class="pl-pl-v">${esc(s.peering)}</span>`;
-    else if (!D.lat) peer = `<span class="pl-muted">${K.EM}</span>`;
-    else peer = K.combo('pl-' + s.id, { mode: 'value', ph: 'Select a peering location', label: 'Peering location for ' + name, display: () => C.sitePeering(s),
-      items: () => C.peeringChoices(city).map(p => ({ value: p.name, label: p.name, sub: p.ms + ' ms' })), onPick: it => { s.peering = it.value; } });
-    return `<tr><th scope="row"><span class="pl-rn">${icon(isCity ? 'building' : 'peering', { cls: 'pl-rn-ic' })}<span><b>${esc(name)}</b><span class="pl-cap">${esc(sub)}${isCity && city && KIND[city.k] ? ` · ${KIND[city.k]}` : ''}</span></span></span></th>` +
-      `<td class="pl-pl">${peer}</td><td class="pl-tg">${K.inp(`site/${s.id}/target`, s.target, { type: 'number', min: 0, label: 'Target in milliseconds for ' + name })}</td>` +
-      cs.map(x => siteCell(s, x.id)).join('') + `<td class="pl-x">${K.iconBtn('rm-site', s.id, 'close', 'Remove ' + name)}</td></tr>`;
+    const peer = C.sitePeering(s);
+    return `<tr><th scope="row">${siteIdentity(s)}</th>` +
+      `<td class="pl-pl"><span class="pl-pl-v">${esc(peer || K.EM)}</span>${s.kind === 'city' && !s.peering && peer ? '<span class="pl-cap">Nearest (estimated)</span>' : ''}</td>` +
+      `<td class="pl-tg">${s.target === '' ? K.EM : esc(s.target)}</td>${cs.map(x => siteCell(s, x.id)).join('')}</tr>`;
   }
   function latTiles() {
     const S = C.S, rs = C.active();
@@ -403,24 +456,15 @@
     const S = C.S, cs = C.cols();
     if (!cs.length) return K.head('Latency', 'Round-trip latency from your locations and current regions to each region, in milliseconds.') + K.empty('clock', 'Add your current regions and the regions to qualify first.', 'scope');
     const L = D.lat;
-    const usedCities = () => new Set(S.sites.filter(s => s.kind === 'city' && s.city).map(s => D.cities ? D.cities.key(s.city) : ''));
-    const usedPeering = () => new Set(S.sites.filter(s => s.kind === 'peering').map(s => s.peering));
-    const addCity = K.combo('city', { mode: 'add', ph: !L ? 'Add a location' : D.citiesState === 'ready' ? 'Add a city' : D.citiesState === 'loading' ? 'Loading cities' : 'Add a city', label: 'Add a city',
-      items: () => D.cities ? D.cities.cities.filter(c => !usedCities().has(D.cities.key(c))).map(c => ({ value: D.cities.key(c), label: c.n, sub: `${c.a || c.n}, ${c.c}`, group: c.c, tag: KIND[c.k] || '', city: c })) : [],
-      onPick: it => { S.sites.push({ id: C.uid('s'), kind: 'city', city: { ...it.city }, peering: '', target: '', edits: {} }); },
-      onFree: L && D.citiesState === 'ready' ? null : (t => { S.sites.push({ id: C.uid('s'), kind: 'city', city: { n: t, a: t, c: '', cc: '', k: 'city' }, peering: '', target: '', edits: {} }); }) });
-    const addPeer = K.combo('peer', { mode: 'add', showAll: true, ph: 'Add a peering location', label: 'Add a peering location',
-      items: () => L ? L.peering.filter(p => !usedPeering().has(p.name)).map(p => ({ value: p.name, label: p.name, sub: [p.city, p.country].filter(Boolean).join(', ') })) : [],
-      onPick: it => { S.sites.push({ id: C.uid('s'), kind: 'peering', city: null, peering: it.value, target: '', edits: {} }); },
-      onFree: L ? null : (t => { if (!usedPeering().has(t)) S.sites.push({ id: C.uid('s'), kind: 'peering', city: null, peering: t, target: '', edits: {} }); }) });
     const table = S.sites.length ? K.scroll(`<table class="pl-dl pl-mx pl-lt"><thead><tr><th scope="col">Location</th><th scope="col">Peering location</th><th scope="col">Target (ms)</th>` +
-      cs.map(x => `<th scope="col" class="${x.current ? 'is-cur' : ''}">${esc(C.rname(x.id))}${x.current ? '<span class="pl-cap">Current region</span>' : ''}</th>`).join('') + `<th scope="col" aria-label="Remove"></th></tr></thead><tbody>${S.sites.map(s => siteRow(s, cs)).join('')}</tbody></table>`, { label: 'Latency from your locations' })
-      : '<p class="pl-muted">No locations yet. Add a city, or a peering location where your circuit lands.</p>';
+      cs.map(x => `<th scope="col" class="${x.current ? 'is-cur' : ''}">${esc(C.rname(x.id))}${x.current ? '<span class="pl-cap">Current region</span>' : ''}</th>`).join('') + `</tr></thead><tbody>${S.sites.map(s => siteRow(s, cs)).join('')}</tbody></table>`, { label: 'Latency from your locations' })
+      : '<p class="pl-muted">No locations yet. Add datacenters or ExpressRoute peering locations in Scope.</p>';
     return K.head('Latency', 'Round-trip latency from your locations and current regions to each region, in milliseconds.') + foldNote() +
+      `<div class="pl-bar">${K.btn({ act: 'tab', arg: 'scope', label: 'Edit locations in Scope', kind: 'subtle', icon: 'edit' })}</div>` +
       (L ? '' : K.mb('warning', esc(D.asFile ? AS_FILE : 'No latency data is published with this site. Run site/tools/refresh_latency.py to create it.'))) +
       K.section('How the path is built', pathDiagram()) +
       K.section('Between regions', vBetween()) +
-      K.section('From your locations', `${latTiles()}<div class="pl-bar">${addCity}${addPeer}</div>${table}` +
+      K.section('From your locations', `${latTiles()}${table}` +
         // The scale legend is drawn once on the tab: under the first table that has bars.
         (S.sites.length && !(S.current.length && C.active().length) ? latLegend() : '') +
         `<p class="pl-fn pl-legend"><span class="pl-lg">${dot('m')}Measured</span><span class="pl-lg">${dot('e')}Estimated</span><span class="pl-lg"><span class="pl-tag brand">Edited</span>A value you typed over the calculated one</span></p>` +

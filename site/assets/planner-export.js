@@ -22,7 +22,7 @@
     const frame = (width, extra = []) => [`A1:${col(width - 1)}1`, `A2:${col(width - 1)}2`, `A3:${col(width - 1)}3`, ...extra];
 
     // ── Scope
-    const scRows = [[c('Scope', 'title')], [c('Plan context, current platform, and the regions being assessed.', 'muted')], [c(snapshot, 'muted')], []];
+    const scRows = [[c('Scope', 'title')], [c('Plan context, current platform, on-premises and peering locations, and the regions being assessed.', 'muted')], [c(snapshot, 'muted')], []];
     const scMerges = frame(7);
     const scGroup = text => { scRows.push(pad([c(text, 'group')], 7, 'group')); scMerges.push(`A${scRows.length}:G${scRows.length}`); };
     const scField = (label, value) => scRows.push([c(label, 'label'), c(value, 'input')]);
@@ -35,6 +35,16 @@
     scField('Hub topology', S.estate.topology);
     scField('Connectivity managed with', S.estate.managed);
     scField('Hybrid connectivity', S.estate.hybrid);
+    ['city', 'peering'].forEach(kind => {
+      scRows.push([]);
+      scGroup(kind === 'city' ? 'On-premises datacenters' : 'ExpressRoute peering locations');
+      scRows.push([c('Location', 'head'), c('Peering path', 'head'), c('Target (ms)', 'head')]);
+      S.sites.filter(s => s.kind === kind).forEach(s => {
+        const peer = C.sitePeering(s);
+        scRows.push([c(C.siteName(s), 'input'), c(peer + (kind === 'city' && !s.peering && peer ? ' (nearest, estimated)' : ''), 'input'),
+          c(C.num(s.target) ?? '', 'input')]);
+      });
+    });
     scRows.push([]);
     scGroup('Current regions');
     scRows.push([c('Region', 'head'), c('Full-Platform region', 'head'), c('Price baseline', 'head')]);

@@ -92,7 +92,9 @@ def main():
             assert "99 ms*" in page.locator(".pl-map-value text").all_text_contents()
             page.get_by_role("button", name="Restore the calculated value for Frankfurt to West Europe", exact=True).click()
             assert "99 ms*" not in page.locator(".pl-map-value text").all_text_contents()
+            page.get_by_role("button", name="Edit locations in Scope", exact=True).click()
             page.get_by_role("button", name="Remove Dublin", exact=True).click()
+            page.get_by_role("tab", name="Latency", exact=False).click()
             assert page.locator(".pl-map-node").count() == 6
             assert page.locator(".pl-map-link").count() == 8
             scenario(page)

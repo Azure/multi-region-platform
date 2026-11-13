@@ -4,6 +4,22 @@ The [published planner](https://azure.github.io/multi-region-platform/region-pla
 
 The planner exports Excel and saves or opens JSON planning records. Visitor-entered planning data stays in the browser; it is not sent to a server. Azure reference data is loaded from published snapshots: see [Azure data collection](azure-data.md) for provenance and limitations.
 
+Check 3 uses one shared answer per workload question, marked **Applies to all regions**.
+Choose **Customize by region** to override individual regions; **Use shared answer** restores
+inheritance. Changing the shared answer updates only regions without an override, including newly
+added candidates. Hiding regional answers does not remove overrides. Existing plans retain different
+regional answers and show them automatically. JSON saves retain defaults and overrides; Excel exports
+contain each region's effective answers. Zone resiliency remains a workload requirement:
+check 4 flags a capability gap rather than weakening the requirement.
+
+Scope defines the footprint in this order: optional **On-premises datacenters**,
+**ExpressRoute peering locations**, **Current regions**, and **Regions to qualify**.
+Add or remove locations, choose datacenter peering paths, and set latency targets there.
+Existing saved city locations, targets, peering choices, and measured overrides are retained.
+A nearest peering path is labelled as an estimate, not a confirmed circuit.
+Latency displays comparisons, target breaches, evidence sources, and the map, with an
+**Edit locations in Scope** link. Measured-latency overrides and their reset controls remain in Latency.
+
 In Regional design, **Hub Connections** is a searchable multi-select: select or clear regions without
 closing the dropdown. Arrow keys move between options; Enter or Space toggles a selection, and Esc closes
 the list. Saved plans, review records, and Excel exports retain every selected region. Older plans

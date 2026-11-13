@@ -16,7 +16,7 @@ class QuietHandler(http.server.SimpleHTTPRequestHandler):
 
 
 def check_peering_locations(page):
-    page.get_by_role("tab", name="Latency", exact=False).click()
+    page.get_by_role("tab", name="Scope", exact=False).click()
     page.evaluate("MRP.core.S.sites=[]; MRP.kit.hooks.commit()")
     catalog = page.evaluate("MRP.core.D.lat.peering.map(p => p.name)")
     assert len(catalog) > 50

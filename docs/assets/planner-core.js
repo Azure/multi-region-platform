@@ -10,7 +10,7 @@
 
   // ───────────── state
   const blank = () => ({ v: VERSION, meta: { name: '', owner: '', date: today() }, estate: { topology: '', managed: '', hybrid: '' },
-    current: [], baseline: '', regions: [], notes: {}, sites: [], services: [], ui: { details: false, weighted: false, showOut: false } });
+    current: [], baseline: '', regions: [], workload: {}, notes: {}, sites: [], services: [], ui: { details: false, weighted: false, showOut: false } });
   const newRegion = id => ({ id, checks: {}, outcome: '', selected: false, conditions: '', owner: '', review: '', design: null });
   const newDesign = () => ({ q1: '', q2: '', q3: '', profile: '', hub: '', hubConnections: null, topology: '', managed: '', link: '', eastWest: '', ss: {}, custom: [],
     hybrid: '', hybridUse: '', hybridPath: '', hybridReason: '', hybridChange: '', owner: '', date: '', reassess: '' });
@@ -86,6 +86,16 @@
       }
       return o;
     });
+    s.workload = Object.fromEntries(CHECKS[2].rows.map(({ id }) => {
+      const saved = raw.workload && raw.workload[id];
+      const value = saved && typeof saved.value === 'string' ? saved.value : s.regions[0]?.checks[id] || '';
+      const overrides = saved ? Object.fromEntries(s.regions
+        .filter(r => typeof saved.overrides?.[r.id] === 'string')
+        .map(r => [r.id, saved.overrides[r.id]]))
+        : Object.fromEntries(s.regions.filter(r => (r.checks[id] || '') !== value).map(r => [r.id, r.checks[id] || '']));
+      return [id, { value, overrides, expanded: saved ? !!saved.expanded : Object.keys(overrides).length > 0 }];
+    }));
+    syncWorkload(s);
     s.notes = { ...(s.notes || {}) };
     s.sites = (Array.isArray(s.sites) ? s.sites : []).filter(x => x && (x.kind === 'city' || x.kind === 'peering')).map(x =>
       ({ id: x.id || uid('s'), kind: x.kind, city: x.kind === 'city' && x.city ? { ...x.city } : null, peering: x.peering || '', target: num(x.target) ?? '', edits: Object.fromEntries(Object.entries(x.edits || {}).filter(([, v]) => num(v) !== null).map(([k, v]) => [k, Number(v)])) }));
@@ -197,7 +207,7 @@
       return true;
     } catch (e) { return false; }
   }
-  // The city list is large, so it is requested when the Latency tab first needs it (or a saved city location needs its estimates).
+  // Load the city list for Scope's location entry, or when saved locations need its estimates.
   async function loadCities() {
     if (!D.lat || D.citiesState !== 'idle') return false;
     D.citiesState = 'loading';
@@ -255,8 +265,19 @@
   }
   const TONE_OF = v => M.TONE[v] || '';
 
+  // Keep effective regional answers in the existing record/export shape.
+  function syncWorkload(s) {
+    const ids = new Set(s.regions.map(r => r.id));
+    CHECKS[2].rows.forEach(({ id }) => {
+      const w = s.workload[id] ||= { value: '', overrides: {}, expanded: false };
+      Object.keys(w.overrides).forEach(rid => { if (!ids.has(rid)) delete w.overrides[rid]; });
+      s.regions.forEach(r => { r.checks[id] = Object.hasOwn(w.overrides, r.id) ? w.overrides[r.id] : w.value; });
+    });
+  }
+
   // Keep the state consistent after any change.
   function tidy() {
+    syncWorkload(S);
     if (!S.current.some(c => c.id === S.baseline)) S.baseline = S.current[0] ? S.current[0].id : '';
     S.regions.forEach(r => {
       if (r.selected && !selectable(r)) r.selected = false;
@@ -619,7 +640,7 @@
     const decided = live.filter(r => outcome(r) !== 'Candidate').length;
     const allDone = picked.length && picked.every(r => effective(r).complete);
     return {
-      scope: S.current.length && rs.length ? 'done' : S.current.length || rs.length || S.meta.name ? 'half' : 'none',
+      scope: S.current.length && rs.length ? 'done' : S.current.length || rs.length || S.sites.length || S.meta.name ? 'half' : 'none',
       checks: rs.length && rs.every(fitDone) ? 'done' : fitAny ? 'half' : 'none',
       services: named().length ? 'done' : 'none',
       pricing: S.baseline && named().length && D.hasCatalog ? 'done' : S.baseline || named().length ? 'half' : 'none',

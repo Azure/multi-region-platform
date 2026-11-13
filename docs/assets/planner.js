@@ -192,7 +192,12 @@
     else if (p[0] === 'hub') { const x = S.current.find(c => c.id === p[1]); if (x) x.hub = !!v; }
     else if (p[0] === 'ui') S.ui[p[1]] = !!v;
     else if (p[0] === 'note') S.notes[p[1]] = v;
-    else if (p[0] === 'reg') { const r = C.reg(p[1]); if (!r) return; if (p[2] === 'check') r.checks[p[3]] = v; else r[p[2]] = v; }
+    else if (p[0] === 'workload') {
+      const w = S.workload[p[1]];
+      if (!p[2]) w.value = v;
+      else if (v === '__shared__') delete w.overrides[p[2]];
+      else w.overrides[p[2]] = v;
+    } else if (p[0] === 'reg') { const r = C.reg(p[1]); if (!r) return; if (p[2] === 'check') r.checks[p[3]] = v; else r[p[2]] = v; }
     else if (p[0] === 'svc') { const s = S.services.find(x => x.id === p[1]); if (s) s[p[2]] = numeric(v); }
     else if (p[0] === 'site') {
       const s = S.sites.find(x => x.id === p[1]); if (!s) return;
@@ -210,7 +215,7 @@
   }
   function openTab(id) {
     ui.tab = id; history.replaceState(null, '', '#' + id);
-    if (id === 'latency') C.loadCities().then(ok => ok && ui.tab === 'latency' && lazyRender());
+    if (id === 'scope' && C.D.lat && C.D.citiesState === 'idle') C.loadCities().then(() => ui.tab === 'scope' && lazyRender());
     if (id === 'pricing') C.loadPricing(C.S.baseline).then(ok => ok && ui.tab === 'pricing' && lazyRender());
     // The strip sticks under the site header, so a new tab starts with its title just below the strip.
     const head = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--top-h'), 10) || 56;
@@ -229,6 +234,7 @@
       case 'msg-x': clearTimeout(msgTimer); msgEl.innerHTML = ''; return;
       case 'show-out': S.ui.showOut = !S.ui.showOut; break;
       case 'mregion': ui.mregion = arg; break;
+      case 'workload-regions': S.workload[arg].expanded = !S.workload[arg].expanded; break;
       case 'accept': { const [rid, id] = arg.split('|'), r = C.reg(rid), v = r && C.suggestAnswer(id, r); if (v && !r.checks[id]) r.checks[id] = v; break; }
       case 'accept-all': C.suggestions(C.active()).forEach(x => { x.r.checks[x.id] = x.v; }); break;
       case 'narrow': ui.narrow[arg] = true; render(); { const c = root.querySelector(`[data-cb="prod-${CSS.escape(arg)}"]`); if (c) c.focus(); } return;
@@ -336,8 +342,7 @@
   C.load(); C.tidy();
   C.loadData().then(async () => {
     await C.loadPricing(C.S.baseline);
-    if (C.D.lat && C.S.sites.some(s => s.kind === 'city')) await C.loadCities();
+    if (C.D.lat && (ui.tab === 'scope' || C.S.sites.some(s => s.kind === 'city'))) await C.loadCities();
     C.tidy(); render();
-    if (ui.tab === 'latency') C.loadCities().then(ok => ok && lazyRender());
   });
 })();
