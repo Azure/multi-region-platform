@@ -200,8 +200,11 @@ def scope_locations(page, base):
     page.evaluate("MRP.core.replace(MRP.core.blank()); MRP.kit.hooks.render()")
     page.wait_for_function("MRP.core.D.citiesState === 'ready'")
     headings = page.locator(".pl-sec h3").all_text_contents()
-    assert headings[-4:] == ["On-premises datacenters", "ExpressRoute peering locations",
-                            "Current regions", "Regions to qualify"]
+    assert headings[-5:] == ["On-premises datacenters", "ExpressRoute peering locations",
+                            "Current regions", "Current platform", "Regions to qualify"]
+    groups = page.evaluate("""() => MRP.workbook().sheets.find(s => s.name === 'Scope')
+      .rows.filter(r => r[0] && r[0].s === 'group').map(r => r[0].v)""")
+    assert groups == ["Plan details", *headings[-5:]]
     # Locations can be defined before Azure regions; cloud-only plans can omit them.
     city = page.get_by_role("combobox", name="Add a datacenter city", exact=True)
     city.fill("London")

@@ -23,7 +23,7 @@
   .tool main { padding: 12px 12px 20px; }
 }
 
-/* ───────── tokens. Controls and surfaces are neutral; color is for state and data. */
+/* ───────── tokens. Controls and surfaces are neutral; color is for state, structure, and data. */
 #planner {
   --pl-surface: var(--bg); --pl-subtle: var(--bg-soft); --pl-sunk: var(--bg-sunk);
   --pl-ink: var(--ink); --pl-text: var(--text); --pl-muted: var(--muted);
@@ -746,6 +746,26 @@ html.network-full, html.network-full body { overflow: hidden; }
 #planner .pl-sec-h { align-items: center; min-height: 40px; padding: 8px 12px; border-left: 3px solid var(--pl-acc); border-radius: 0 4px 4px 0; background: var(--pl-acc-t); }
 #planner .pl-sec-h .pl-link { color: var(--pl-acc); }
 #planner .pl-sec-d { margin-top: 8px; }
+
+@media screen {
+  #planner #pl-scope-plan { --pl-section-light: #485D78; --pl-section-dark: #B5C9E2; }
+  #planner #pl-scope-datacenters { --pl-section-light: #086C74; --pl-section-dark: #61D2C7; }
+  #planner #pl-scope-peering { --pl-section-light: #995711; --pl-section-dark: #F2BE69; }
+  #planner #pl-scope-current { --pl-section-light: #1C64B5; --pl-section-dark: #86BEF5; }
+  #planner #pl-scope-platform { --pl-section-light: #7041A6; --pl-section-dark: #C8AEF2; }
+  #planner #pl-scope-candidates { --pl-section-light: #256D47; --pl-section-dark: #8DD4A1; }
+  #planner [data-tab="scope"] .pl-sec {
+    --pl-acc: var(--pl-section-light); --pl-section-tint: 8%;
+    --pl-acc-t: color-mix(in srgb, var(--pl-acc) var(--pl-section-tint), var(--pl-surface));
+    --pl-acc-l: color-mix(in srgb, var(--pl-acc) 32%, var(--pl-surface));
+  }
+  :root[data-theme="dark"] #planner [data-tab="scope"] .pl-sec { --pl-acc: var(--pl-section-dark); --pl-section-tint: 18%; }
+  #planner [data-tab="scope"] .pl-sec-h { border: 1px solid var(--pl-acc-l); border-radius: 6px; }
+  #planner [data-tab="scope"] .pl-sec-h h3 { color: var(--pl-acc); }
+}
+@media screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) #planner [data-tab="scope"] .pl-sec { --pl-acc: var(--pl-section-dark); --pl-section-tint: 18%; }
+}
 
 #planner .pl-band th, #planner .pl-band td { background: var(--pl-acc-t); border-bottom-color: var(--pl-acc-l); }
 #planner .pl-cg .pl-band th.pl-cg-q { box-shadow: inset 3px 0 0 var(--pl-acc); }

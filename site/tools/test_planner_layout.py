@@ -11,6 +11,26 @@ ROOT = Path(__file__).resolve().parents[2]
 TABS = ("scope", "checks", "services", "latency", "pricing", "capability", "design", "review")
 
 
+def scope_colors(page):
+    return page.locator('[data-tab="scope"] .pl-sec-h').evaluate_all("""headers => {
+      const ctx = document.createElement('canvas').getContext('2d');
+      const rgb = color => {
+        ctx.fillStyle = color; ctx.fillRect(0, 0, 1, 1);
+        return [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3);
+      };
+      return headers.map(header => ({
+        foreground: rgb(getComputedStyle(header.querySelector('h3')).color),
+        background: rgb(getComputedStyle(header).backgroundColor),
+      }));
+    }""")
+
+
+def luminance(rgb):
+    channels = [v / 255 for v in rgb]
+    linear = [v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4 for v in channels]
+    return sum(v * weight for v, weight in zip(linear, (0.2126, 0.7152, 0.0722)))
+
+
 class QuietHandler(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *_):
         pass
@@ -33,6 +53,7 @@ def main():
               MRP.core.replace(JSON.parse(JSON.stringify(MRP.EXAMPLE)));
               MRP.kit.hooks.render();
             }""")
+            palettes = {}
             for theme in ("light", "dark"):
                 page.evaluate("theme => document.documentElement.dataset.theme = theme", theme)
                 for width in (375, 768, 1440, 1920):
@@ -44,6 +65,12 @@ def main():
                         else:
                             page.locator(f"#tab-{tab}").click()
                         assert page.locator("#pl-panel").get_attribute("data-tab") == tab
+                        if tab == "scope" and width == 375:
+                            palettes[theme] = colors = scope_colors(page)
+                            assert len(colors) == len({tuple(c["background"]) for c in colors}) == 6
+                            for color in colors:
+                                a, b = sorted([luminance(color["foreground"]), luminance(color["background"])])
+                                assert (b + 0.05) / (a + 0.05) >= 4.5, (theme, color)
                         assert not page.locator("#side-nav").is_visible(), (theme, width, tab)
                         dimensions = page.evaluate("""() => {
                           const box = document.querySelector('#planner').getBoundingClientRect();
@@ -67,6 +94,7 @@ def main():
                         assert menu.get_attribute("aria-expanded") == "false"
                         assert not page.locator("#side-nav").is_visible()
                         assert page.locator(".nav-backdrop").is_hidden()
+            assert all(light != dark for light, dark in zip(palettes["light"], palettes["dark"]))
             page.reload()
             page.wait_for_selector('#planner[data-ready="1"]')
             assert page.locator("#pl-panel").get_attribute("data-tab") == "review"
@@ -76,6 +104,12 @@ def main():
             assert not page.locator("#side-nav").is_visible()
             assert page.locator("#pl-panel").is_visible()
             page.emulate_media(media="screen")
+            page.locator("#tab-scope").click()
+            page.emulate_media(color_scheme="dark")
+            page.evaluate("document.documentElement.removeAttribute('data-theme')")
+            assert scope_colors(page) == palettes["dark"]
+            page.emulate_media(color_scheme="light")
+            assert scope_colors(page) == palettes["light"]
             page.goto(f"{base}/getting-started.html")
             assert page.locator("#side-nav").is_visible()
             assert page.locator(".nav-toggle").is_hidden()

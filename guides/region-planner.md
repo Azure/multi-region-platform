@@ -13,7 +13,9 @@ contain each region's effective answers. Zone resiliency remains a workload requ
 check 4 flags a capability gap rather than weakening the requirement.
 
 Scope defines the footprint in this order: optional **On-premises datacenters**,
-**ExpressRoute peering locations**, **Current regions**, and **Regions to qualify**.
+**ExpressRoute peering locations**, **Current regions**, **Current platform**, and **Regions to qualify**.
+Section headers use distinct slate, teal, amber, blue, violet, and green accents, with
+theme-specific light and dark palettes. Controls and status indicators keep their existing meanings.
 Add or remove locations, choose datacenter peering paths, and set latency targets there.
 Existing saved city locations, targets, peering choices, and measured overrides are retained.
 A nearest peering path is labelled as an estimate, not a confirmed circuit.

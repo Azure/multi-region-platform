@@ -30,11 +30,6 @@
     scField('Plan name', title);
     scField('Owner', S.meta.owner);
     scField('Assessment date', S.meta.date);
-    scRows.push([]);
-    scGroup('Current platform');
-    scField('Hub topology', S.estate.topology);
-    scField('Connectivity managed with', S.estate.managed);
-    scField('Hybrid connectivity', S.estate.hybrid);
     ['city', 'peering'].forEach(kind => {
       scRows.push([]);
       scGroup(kind === 'city' ? 'On-premises datacenters' : 'ExpressRoute peering locations');
@@ -51,6 +46,11 @@
     (S.current.length ? S.current : [{ id: null, hub: false }]).forEach(x =>
       scRows.push([c(x.id ? C.rname(x.id) : 'Add a current region', 'input'),
         c(x.hub ? 'Yes' : x.id ? 'No' : '', 'input'), c(x.id === S.baseline ? 'Yes' : x.id ? 'No' : '', 'input')]));
+    scRows.push([]);
+    scGroup('Current platform');
+    scField('Hub topology', S.estate.topology);
+    scField('Connectivity managed with', S.estate.managed);
+    scField('Hybrid connectivity', S.estate.hybrid);
     scRows.push([]);
     scGroup('Regions to qualify');
     scRows.push([c('Region', 'head'), c('Outcome', 'head'), c('Selected for design', 'head'), c('Platform Services profile', 'head'),

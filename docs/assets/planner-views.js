@@ -64,22 +64,24 @@
     return K.head('Scope', 'Your current platform, on-premises locations, ExpressRoute peering locations, and the regions you are considering.') +
       K.section('Plan', K.row('Plan name', 'meta/name', id => K.inp('meta/name', S.meta.name, { id, ph: 'For example, Contoso Nordic expansion', label: 'Plan name' })) +
         K.row('Owner', 'meta/owner', id => K.inp('meta/owner', S.meta.owner, { id, ph: 'Team or person', label: 'Owner' })) +
-        K.row('Assessment date', 'meta/date', id => K.inp('meta/date', S.meta.date, { id, type: 'date', label: 'Assessment date' }))) +
-      K.section('Current platform', K.rowRaw('Hub topology', K.cards('estate/topology', S.estate.topology, topo, { label: 'Hub topology', cls: 'sm' }), '', true) +
-        K.row('Connectivity managed with', 'estate/managed', id => K.sel('estate/managed', S.estate.managed, O.managed, { id, label: 'Connectivity managed with' })) +
-        K.row('Hybrid connectivity', 'estate/hybrid', id => K.sel('estate/hybrid', S.estate.hybrid, O.estateHybrid, { id, label: 'Hybrid connectivity' }))) +
+        K.row('Assessment date', 'meta/date', id => K.inp('meta/date', S.meta.date, { id, type: 'date', label: 'Assessment date' })), { id: 'pl-scope-plan' }) +
       K.section('On-premises datacenters', scopeLocations('city'), {
+        id: 'pl-scope-datacenters',
         desc: 'Optional. Add the cities where your datacenters are located, their peering paths, and round-trip latency targets. Existing city entries are retained.',
       }) +
       K.section('ExpressRoute peering locations', scopeLocations('peering'), {
+        id: 'pl-scope-peering',
         desc: 'Add the peering locations to assess and their round-trip latency targets. Selecting a location does not confirm an existing circuit.',
       }) +
       K.section('Current regions', `<div class="pl-add">${regionCombo('cur', 'Add a current region', id => {
         S.current.push({ id, hub: !S.current.length }); C.tidy(); C.loadPricing(S.baseline).then(ok => ok && K.hooks.render());
-      })}</div>${curList}`, { desc: 'Regions you already run in. Mark Full-Platform regions built with the Full platform profile, providing hybrid connectivity and shared services to other regions.' }) +
+      })}</div>${curList}`, { id: 'pl-scope-current', desc: 'Regions you already run in. Mark Full-Platform regions built with the Full platform profile, providing hybrid connectivity and shared services to other regions.' }) +
+      K.section('Current platform', K.rowRaw('Hub topology', K.cards('estate/topology', S.estate.topology, topo, { label: 'Hub topology', cls: 'sm' }), '', true) +
+        K.row('Connectivity managed with', 'estate/managed', id => K.sel('estate/managed', S.estate.managed, O.managed, { id, label: 'Connectivity managed with' })) +
+        K.row('Hybrid connectivity', 'estate/hybrid', id => K.sel('estate/hybrid', S.estate.hybrid, O.estateHybrid, { id, label: 'Hybrid connectivity' })), { id: 'pl-scope-platform' }) +
       K.section('Regions to qualify', `<div class="pl-add">${regionCombo('cand', 'Add a region to qualify', id => { S.regions.push(C.newRegion(id)); })}</div>` +
         (S.regions.length ? `<div class="pl-rcs">${S.regions.map(regionCard).join('')}</div>` : '<p class="pl-muted">No regions to qualify yet.</p>'),
-        { desc: 'Candidate regions. Three to five keep the comparison readable.' });
+        { id: 'pl-scope-candidates', desc: 'Candidate regions. Three to five keep the comparison readable.' });
   }
 
   // ───────────── Checks
