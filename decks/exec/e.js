@@ -66,7 +66,7 @@ module.exports = (pres, L) => {
     const s = L.slide('x1');
     L.header(s, '', 'An operating model that keeps working as the environment changes', { tw: 8.2, lede: 'The architecture should not depend on the regions we pick today staying the right answer.', lx: 8.9, lw: 3.83 });
     regionalComparison(s, L, ['Regulatory change', 'Power and energy supply', 'Service & AI availability', 'Business expansion']);
-    L.caption(s, 'Figure 1', 'One governed landing-zone foundation in both models; regional capability adapts to workload needs on the right.', 0.6, 6.72, 12.1);
+    L.caption(s, 'Figure 1', 'Consistent governance and operating practices; regional capabilities vary with workload and geographic requirements.', 0.6, 6.3, 12.1);
     s.addNotes('Talk track — reframe the objective: "I think the opportunity is to evolve how we think about Landing Zones. Traditionally, we have tended to think about an Azure Landing Zone as something we establish in a particular region, with a fairly complete set of networking, security, management and shared services around it. That works well when the regions we want to use are relatively static. But the challenge we are trying to solve now is different. We want an operating model that can continue to work even as the external environment around us changes." Connect this need for flexibility to potential future regulatory and power constraints across European countries, while noting that Microsoft continues investing and growing capacity across Europe. For regulated customers, this begins the discussion on how to de-risk continued growth in an ever-changing, industry-wide dynamic.');
   }
 

@@ -1,7 +1,7 @@
 <section class="page" data-section="Framework overview">
 <style>
-  .f1 { display: grid; grid-template-columns: 330px 70px 1fr; height: 414px; }
-  .f1 .panel { display: grid; grid-template-rows: 20px 170px 22px 68px 1fr; gap: 5px; border-radius: 12px; padding: 12px 16px; }
+  .f1 { display: grid; grid-template-columns: 330px 70px 1fr; height: 378px; }
+  .f1 .panel { display: grid; grid-template-rows: 20px 170px 22px 32px 1fr; gap: 5px; border-radius: 12px; padding: 12px 16px; }
   .f1 .pl { background: var(--wash); }
   .f1 .pr { background: linear-gradient(180deg, var(--b50), #F6FAFE); }
   .f1 .ph { display: flex; justify-content: space-between; align-items: baseline; }
@@ -25,9 +25,8 @@
   .blk.wl { background: var(--t600); color: #fff; }
   .blk.wl2 { background: var(--t100); color: var(--t700); }
   .rg.cand { border-color: var(--b500); background: rgba(255,255,255,.55); justify-content: center; align-items: center; }
-  .f1 .found { border-radius: 8px; background: var(--s800); color: #fff; padding: 8px 12px; }
-  .f1 .found .ft { font-size: 10.2px; font-weight: 650; line-height: 1.2; }
-  .f1 .found .fs { font-size: 9px; line-height: 1.25; color: #C9D4E2; margin-top: 3px; }
+  .f1 .found { display: flex; align-items: center; border-radius: 8px; background: var(--s800); color: #fff; padding: 8px 12px; }
+  .f1 .found .ft { font-size: 10.2px; font-weight: 650; line-height: 1.2; white-space: nowrap; }
   .f1 .conditions { display: grid; grid-template-rows: 13px 39px auto; gap: 5px; align-content: start; }
   .f1 .conditions .cap { color: var(--w600); }
   .f1 .conditions .small { font-size: 10px; line-height: 1.4; }
@@ -64,8 +63,7 @@
           <div class="rlabel">Full-Platform<br>region</div><div class="rlabel">Full-Platform<br>region</div>
         </div>
         <div class="found">
-          <div class="ft">One consistent, governed<br>Azure landing-zone foundation</div>
-          <div class="fs">Identity · Connectivity · Security<br>Management · Application delivery</div>
+          <div class="ft">Consistent governance and operating practices</div>
         </div>
         <div class="conditions">
           <div class="cap">Evolving regional conditions</div>
@@ -98,8 +96,7 @@
           <div class="rlabel">Full-Platform<br>region</div><div class="rlabel">Full-Platform<br>region</div><div class="rlabel">{{PROFILE_3}}</div><div class="rlabel">{{PROFILE_2}}</div><div class="rlabel">{{PROFILE_1}}</div><div class="rlabel">Not enabled</div>
         </div>
         <div class="found">
-          <div class="ft">One consistent, governed<br>Azure landing-zone foundation</div>
-          <div class="fs">Identity · Connectivity · Security<br>Management · Application delivery</div>
+          <div class="ft">Consistent governance and operating practices</div>
         </div>
         <div class="conditions">
           <div class="cap">Governed response to change</div>
@@ -111,7 +108,7 @@
         </div>
       </div>
     </div>
-    <div class="figcap"><span class="fn">Figure 1</span><span class="ft"><b>From a fixed regional pair to governed regional options.</b> Instead of mirroring a complete footprint in each new region, extend one governed foundation. Platform Services span Security, Identity, Management, and Networking; each region provides only the local capabilities its workloads require.</span></div>
+    <div class="figcap"><span class="fn">Figure 1</span><span class="ft"><b>From a fixed regional pair to governed regional options.</b> Instead of mirroring a complete footprint in each new region, retain consistent governance and operating practices. Platform Services span Security, Identity, Management, and Networking; each region provides only the local capabilities its workloads require.</span></div>
   </div>
 </div>
 </section>

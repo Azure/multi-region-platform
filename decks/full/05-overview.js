@@ -80,7 +80,7 @@ module.exports = (pres, L) => {
     const s = L.slide('overview');
     L.header(s, '', 'Extend Azure landing zones for adaptable regional placement', { tw: 8, lede: 'The same operating model applies across the estate, while each region is qualified against the workloads it may need to support.', lx: 8.9, lw: 3.83 });
     regionalComparison(s, L, ['Business expansion', 'Data boundaries', 'Service & AI availability', 'Latency requirements']);
-    L.caption(s, 'Figure', 'One governed landing-zone foundation in both models; regional capability adapts to workload needs on the right.', 0.6, 6.72, 12.1);
+    L.caption(s, 'Figure', 'Consistent governance and operating practices; regional capabilities vary with workload and geographic requirements.', 0.6, 6.3, 12.1);
     s.addNotes('Azure landing zones provide a governed foundation for identity, connectivity, security, management, and application delivery. Many organizations establish it around a fixed primary and disaster-recovery region, reflecting datacenter and colocation design. That works while demand and placement requirements remain predictable, but becomes less adaptable as business expansion, data boundaries, service and AI availability, latency requirements, and other regional conditions evolve. An adaptable multi-region platform extends Azure landing zones without creating separate governance structures or identical infrastructure in every region. The same operating model applies across the estate, while each region is qualified against the workloads it may need to support. Because platform teams cannot predict every future workload, the guidance uses three planning constructs.');
   }
 

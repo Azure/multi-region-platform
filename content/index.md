@@ -38,9 +38,9 @@ The framework has five parts. Each part answers one question.
 
 ## From a fixed pair to governed options
 
-:::image type="content" source="./media/fixed-pair-to-governed-options.png" alt-text="Side-by-side comparison with aligned regions and matching governed Azure landing-zone foundations. The fixed Region A (Primary) and Region B (DR) pair mirrors Security, Identity, Management, and Networking, but becomes less adaptable as regional conditions evolve. The adaptable platform spans Regions C through H, from Full-Platform regions to selected shared services, remote services, Governance-Only, and a candidate region. Its governed response is qualified regional options, selective platform services, workload-led placement, and continuous revalidation." lightbox="./media/fixed-pair-to-governed-options.png":::
+:::image type="content" source="./media/fixed-pair-to-governed-options.png" alt-text="Side-by-side comparison with aligned regions and matching bars labeled Consistent governance and operating practices. The fixed Region A (Primary) and Region B (DR) pair mirrors Security, Identity, Management, and Networking, but becomes less adaptable as regional conditions evolve. The adaptable platform spans Regions C through H, from Full-Platform regions to selected shared services, remote services, Governance-Only, and a candidate region. Its governed response is qualified regional options, selective platform services, workload-led placement, and continuous revalidation." lightbox="./media/fixed-pair-to-governed-options.png":::
 
-*From a fixed regional pair to governed regional options. Instead of mirroring a complete footprint in each new region, extend one governed foundation. Platform Services span Security, Identity, Management, and Networking; each region provides only the local capabilities its workloads require.*
+*From a fixed regional pair to governed regional options. Instead of mirroring a complete footprint in each new region, retain consistent governance and operating practices. Platform Services span Security, Identity, Management, and Networking; each region provides only the local capabilities its workloads require.*
 
 ## Related resources
 

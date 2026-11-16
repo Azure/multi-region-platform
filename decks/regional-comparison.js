@@ -9,24 +9,23 @@ module.exports = (s, L, drivers) => {
     { x: 5.75, w: 6.98, title: 'An adaptable multi-region platform', cap: 'REGIONS AS QUALIFIED OPTIONS', fill: C.b50 },
   ];
   panels.forEach((p, i) => {
-    L.box(s, p.x, 1.72, p.w, 4.92, { fill: p.fill, r: 0.14 });
+    L.box(s, p.x, 1.72, p.w, 4.5, { fill: p.fill, r: 0.14 });
     L.txt(s, p.title, p.x + 0.2, 1.85, i ? 3.6 : 2.2, 0.28, { fontSize: 13, fontFace: F.semi, color: C.ink, valign: 'middle' });
     const capWidth = i ? 2.78 : 1.65;
     L.txt(s, p.cap, p.x + p.w - capWidth - 0.2, 1.89, capWidth, 0.2, { fontSize: 9, bold: true, color: i ? C.b600 : C.faint, align: 'right', charSpacing: 1 });
-    L.box(s, p.x + 0.2, 4.64, p.w - 0.4, 0.74, { fill: C.s800, r: 0.08 });
-    L.txt(s, 'One consistent, governed\nAzure landing-zone foundation', p.x + 0.32, 4.7, p.w - 0.64, 0.32, { fontSize: 9.5, bold: true, color: 'FFFFFF' });
-    L.txt(s, 'Identity · Connectivity · Security\nManagement · Application delivery', p.x + 0.32, 5.02, p.w - 0.64, 0.3, { fontSize: 9, color: 'C9D4E2' });
-    L.txt(s, i ? 'GOVERNED RESPONSE TO CHANGE' : 'EVOLVING REGIONAL CONDITIONS', p.x + 0.2, 5.48, p.w - 0.4, 0.2, { fontSize: 9.5, bold: true, color: C.w600, charSpacing: 1 });
+    L.box(s, p.x + 0.2, 4.64, p.w - 0.4, 0.32, { fill: C.s800, r: 0.08 });
+    L.txt(s, 'Consistent governance and operating practices', p.x + 0.32, 4.64, p.w - 0.64, 0.32, { fontSize: 9.5, bold: true, color: 'FFFFFF', valign: 'middle' });
+    L.txt(s, i ? 'GOVERNED RESPONSE TO CHANGE' : 'EVOLVING REGIONAL CONDITIONS', p.x + 0.2, 5.06, p.w - 0.4, 0.2, { fontSize: 9.5, bold: true, color: C.w600, charSpacing: 1 });
     const chips = i ? ['Qualified regional options', 'Selective platform services', 'Workload-led placement', 'Continuous revalidation'] : drivers;
     const widths = chips.map(t => Math.min(t.length * 9.5 * 0.0078 + 0.28, (p.w - 0.48) / 2));
     const column = Math.max(widths[0], widths[2]) + 0.08;
     chips.forEach((text, j) => {
-      L.chip(s, text, p.x + 0.2 + (j % 2) * column, 5.7 + Math.floor(j / 2) * 0.28, { w: widths[j], h: 0.24, size: 9.5, fill: C.w100, color: C.w600 });
+      L.chip(s, text, p.x + 0.2 + (j % 2) * column, 5.28 + Math.floor(j / 2) * 0.28, { w: widths[j], h: 0.24, size: 9.5, fill: C.w100, color: C.w600 });
     });
     const note = i
       ? 'Qualify additional regions and adopt only the platform capabilities each workload needs, while keeping one governed operating model.'
       : 'Works while demand and placement remain predictable; becomes less adaptable as conditions evolve.';
-    L.txt(s, note, p.x + 0.2, 6.28, p.w - 0.4, 0.32, { fontSize: 9.5, color: C.muted });
+    L.txt(s, note, p.x + 0.2, 5.86, p.w - 0.4, 0.32, { fontSize: 9.5, color: C.muted });
   });
 
   const full = [['Workloads', C.t600, 'FFFFFF', 0.3], [platformServices, C.b600, 'FFFFFF', 1.2]];
