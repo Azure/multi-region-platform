@@ -1,6 +1,7 @@
 // Executive briefing deck: one slide per page of the executive brief (cover = page 1 … closing = page 14).
 // Type: body text 11–12 pt, labels 9 pt or more. Sections come from sections.js; pictures go through L.image / L.icon.
 const { C, F, IMG } = require('../lib');
+const regionalComparison = require('../regional-comparison');
 
 module.exports = (pres, L) => {
   const D = L.data;
@@ -64,66 +65,8 @@ module.exports = (pres, L) => {
   {
     const s = L.slide('x1');
     L.header(s, '', 'An operating model that keeps working as the environment changes', { tw: 8.2, lede: 'The architecture should not depend on the regions we pick today staying the right answer.', lx: 8.9, lw: 3.83 });
-    const platformServices = 'Security\nIdentity\nManagement\nNetworking';
-    const y0 = 1.75;
-    // left: a fixed regional pair
-    L.box(s, 0.6, y0, 4.6, 4.35, { fill: C.wash, r: 0.14 });
-    L.txt(s, 'A fixed regional pair', 0.85, y0 + 0.14, 2.4, 0.3, { fontSize: 13, fontFace: F.semi, color: C.ink });
-    L.txt(s, 'TRADITIONAL MODEL', 3.2, y0 + 0.18, 1.78, 0.25, { fontSize: 9, bold: true, color: C.faint, align: 'right', charSpacing: 1.5 });
-    [['Region A\n(Primary)', 0.85], ['Region B\n(DR)', 3.1]].forEach(([n, x]) => {
-      L.box(s, x, y0 + 0.55, 1.85, 2.15, { fill: 'FFFFFF', line: C.b300, dash: 'dash', r: 0.1 });
-      L.icon(s, 'pin', x + 0.12, y0 + 0.65, 0.18, 'b');
-      L.txt(s, n, x + 0.36, y0 + 0.6, 1.37, 0.34, { fontSize: 9.5, bold: true, color: C.b700 });
-      [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']].forEach(([t, f, c], j) => {
-        const height = j ? 1.2 : 0.32;
-        L.box(s, x + 0.12, y0 + 0.95 + j * 0.4, 1.61, height, { fill: f, r: 0.06 });
-        L.txt(s, t, x + 0.12, y0 + 0.95 + j * 0.4, 1.61, height, { fontSize: 10, bold: true, color: c, align: 'center', valign: 'middle' });
-      });
-    });
-    L.line(s, 2.72, y0 + 1.45, 3.08, y0 + 1.45, { color: C.faint, both: true, w: 1 });
-    L.txt(s, 'MIRRORED INFRASTRUCTURE', 0.85, y0 + 2.73, 3.9, 0.2, { fontSize: 9, bold: true, color: C.muted, align: 'center', charSpacing: 1 });
-    L.txt(s, 'EVOLVING REGIONAL CONDITIONS', 0.85, y0 + 3.05, 3.9, 0.22, { fontSize: 9.5, bold: true, color: C.w600, charSpacing: 2 });
-    let cx = 0.85;
-    ['Regulatory change', 'Power and energy supply'].forEach(t => { const w = chipW(t, 10.5); L.chip(s, t, cx, y0 + 3.32, { fill: C.w100, color: C.w600, size: 10.5, w }); cx += w + 0.08; });
-    cx = 0.85;
-    ['Service & AI availability', 'Business expansion'].forEach(t => { const w = chipW(t, 10.5); L.chip(s, t, cx, y0 + 3.65, { fill: C.w100, color: C.w600, size: 10.5, w }); cx += w + 0.08; });
-    L.txt(s, 'Works while demand and placement remain predictable; becomes less adaptable as conditions evolve.', 0.85, y0 + 3.97, 4.1, 0.34, { fontSize: 11, color: C.muted });
-    // arrow
-    L.line(s, 5.3, y0 + 1.7, 5.9, y0 + 1.7, { color: C.b600, w: 2 });
-    L.txt(s, 'Extend,\nnot\nreplicate', 5.2, y0 + 1.82, 0.8, 0.6, { fontSize: 10, bold: true, color: C.b700, align: 'center' });
-    // right: adaptable platform
-    L.box(s, 6.0, y0, 6.73, 4.35, { fill: C.b50, r: 0.14 });
-    L.txt(s, 'An adaptable multi-region platform', 6.2, y0 + 0.14, 3.6, 0.3, { fontSize: 13, fontFace: F.semi, color: C.ink });
-    L.txt(s, 'REGIONS AS QUALIFIED OPTIONS', 9.75, y0 + 0.18, 2.78, 0.25, { fontSize: 9, bold: true, color: C.b600, align: 'right', charSpacing: 1.5 });
-    const regs = [
-      ['Region C', 2.2, [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']], 'Full-Platform region'],
-      ['Region D', 2.2, [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']], 'Full-Platform region'],
-      ['Region E', 1.85, [['Workloads', C.t600, 'FFFFFF'], ['Selected\nLanding\nZones\nPlatform\nShared\nServices', 'FFFFFF', C.b700, C.b300]], 'Minimal platform'],
-      ['Region F', 1.2, [['Workloads', C.t600, 'FFFFFF']], 'Remote platform', 'via Remote platform'],
-      ['Region G', 0.98, [['Governance-Only', C.t100, C.t700]], 'Governance-Only'],
-      ['Region H', 0.8, [], 'Not enabled', 'Candidate'],
-    ];
-    const base = y0 + 3.0, rw = 1.04, gap = 0.04;
-    regs.forEach(([n, h, blocks, lab, extra], i) => {
-      const x = 6.2 + i * (rw + gap), y = base - h;
-      L.box(s, x, y, rw, h, { fill: 'FFFFFF', line: i === 5 ? C.b500 : C.b300, dash: 'dash', r: 0.08 });
-      L.icon(s, 'pin', x + 0.06, y + 0.08, 0.15, 'b');
-      L.txt(s, n, x + 0.24, y + 0.05, 0.74, 0.22, { fontSize: 9.5, bold: true, color: C.b700, valign: 'middle' });
-      let by = base - 0.1 - (extra && blocks.length ? 0.48 : 0);
-      blocks.slice().reverse().forEach(([t, f, c, ln]) => {
-        const bh = t === platformServices ? 1.2 : ln ? 0.95 : t.length > 12 ? 0.46 : 0.32;
-        by -= bh;
-        L.box(s, x + 0.03, by, rw - 0.06, bh, { fill: f, line: ln, r: 0.05 });
-        L.txt(s, t, x + 0.03, by, rw - 0.06, bh, { fontSize: 9.5, bold: true, color: c, align: 'center', valign: 'middle' });
-        by -= 0.06;
-      });
-      if (extra) L.txt(s, extra, x, base - (blocks.length ? 0.48 : 0.46), rw, blocks.length ? 0.36 : 0.22, { fontSize: 9.5, bold: true, color: C.b600, align: 'center', valign: 'middle' });
-      L.txt(s, lab, x - 0.04, base + 0.07, rw + 0.08, 0.22, { fontSize: 10, color: C.muted, align: 'center' });
-    });
-    L.box(s, 6.2, y0 + 3.45, 6.33, 0.7, { fill: C.s800, r: 0.08 });
-    L.txt(s, 'One consistent, governed Azure landing-zone foundation', 6.4, y0 + 3.49, 6.0, 0.3, { fontSize: 12, fontFace: F.semi, color: 'FFFFFF', valign: 'middle' });
-    L.txt(s, 'Identity · Connectivity · Security · Management · Application delivery', 6.4, y0 + 3.79, 6.0, 0.3, { fontSize: 10.5, color: 'C9D4E2', valign: 'middle' });
-    L.caption(s, 'Figure 1', 'Platform Services span Security, Identity, Management, and Networking. The platform extends one governed foundation; each region provides only the local capabilities its workloads require.', 0.6, 6.3, 12.1);
+    regionalComparison(s, L, ['Regulatory change', 'Power and energy supply', 'Service & AI availability', 'Business expansion']);
+    L.caption(s, 'Figure 1', 'One governed landing-zone foundation in both models; regional capability adapts to workload needs on the right.', 0.6, 6.72, 12.1);
     s.addNotes('Talk track — reframe the objective: "I think the opportunity is to evolve how we think about Landing Zones. Traditionally, we have tended to think about an Azure Landing Zone as something we establish in a particular region, with a fairly complete set of networking, security, management and shared services around it. That works well when the regions we want to use are relatively static. But the challenge we are trying to solve now is different. We want an operating model that can continue to work even as the external environment around us changes." Connect this need for flexibility to potential future regulatory and power constraints across European countries, while noting that Microsoft continues investing and growing capacity across Europe. For regulated customers, this begins the discussion on how to de-risk continued growth in an ever-changing, industry-wide dynamic.');
   }
 

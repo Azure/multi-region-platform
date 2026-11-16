@@ -38,6 +38,37 @@ class PublicationTests(unittest.TestCase):
             self.assertEqual(source.count('class="blk wl">Workloads</div>'), 6, name)
             self.assertNotIn(">Spokes<", source)
 
+    def test_regional_comparison_aligns_both_models(self):
+        result = subprocess.run(["node", "-e", """
+            const result = { boxes: [], texts: [], chips: [] };
+            const L = {
+                box(s, x, y, w, h, style) { result.boxes.push({ x, y, w, h, style }); },
+                txt(s, text, x, y, w, h) { result.texts.push({ text, x, y, w, h }); },
+                chip(s, text, x, y) { result.chips.push({ text, x, y }); },
+                icon() {}, line() {},
+            };
+            require('./decks/regional-comparison')({}, L,
+                ['Business expansion', 'Data boundaries', 'Service & AI availability', 'Latency requirements']);
+            console.log(JSON.stringify(result));
+        """], cwd=ROOT, check=True, capture_output=True, text=True)
+        drawing = json.loads(result.stdout)
+        foundations = [box for box in drawing["boxes"] if box["style"]["fill"] == "243A57"]
+        self.assertEqual(len(foundations), 2)
+        self.assertEqual(len({(box["y"], box["h"]) for box in foundations}), 1)
+        services = [text for text in drawing["texts"]
+                    if text["text"] == "Security\nIdentity\nManagement\nNetworking"]
+        self.assertEqual(len(services), 4)
+        self.assertEqual(len({(text["y"], text["h"]) for text in services}), 1)
+        workloads = [text for text in drawing["texts"] if text["text"] == "Workloads"]
+        self.assertEqual(len({(text["y"], text["h"]) for text in workloads[:4]}), 1)
+        headings = [text for text in drawing["texts"] if text["text"] in {
+            "EVOLVING REGIONAL CONDITIONS", "GOVERNED RESPONSE TO CHANGE",
+        }]
+        self.assertEqual(len(headings), 2)
+        self.assertEqual(headings[0]["y"], headings[1]["y"])
+        self.assertEqual([chip["y"] for chip in drawing["chips"][:4]],
+                         [chip["y"] for chip in drawing["chips"][4:]])
+
     def test_profile_spectrum_figures_show_all_four_platform_service_categories(self):
         categories = ["Security", "Identity", "Management", "Networking"]
         for name in ("pages/08-profiles.html", "exec/pages/06-footprint.html"):

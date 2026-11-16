@@ -1,7 +1,7 @@
 ---
 title: Multi-region platform strategy
 description: Extend Azure landing-zone principles so that additional Azure regions become qualified options that workloads can use selectively, without separate governance models or an identical platform footprint in every region.
-ms.date: 11/05/2026
+ms.date: 11/16/2026
 ms.topic: conceptual
 ---
 
@@ -38,7 +38,7 @@ The framework has five parts. Each part answers one question.
 
 ## From a fixed pair to governed options
 
-:::image type="content" source="./media/fixed-pair-to-governed-options.png" alt-text="Diagram comparing a fixed Region A (Primary) and Region B (DR) pair, where Security, Identity, Management, and Networking platform services are mirrored, with an adaptable platform in which Regions C through H sit on one governed landing-zone foundation: two Full-Platform regions showing all four categories, a Minimal platform with Selected Landing Zones Platform Shared Services, a Remote platform with Workloads, Governance-Only, and a candidate region." lightbox="./media/fixed-pair-to-governed-options.png":::
+:::image type="content" source="./media/fixed-pair-to-governed-options.png" alt-text="Side-by-side comparison with aligned regions and matching governed Azure landing-zone foundations. The fixed Region A (Primary) and Region B (DR) pair mirrors Security, Identity, Management, and Networking, but becomes less adaptable as regional conditions evolve. The adaptable platform spans Regions C through H, from Full-Platform regions to selected shared services, remote services, Governance-Only, and a candidate region. Its governed response is qualified regional options, selective platform services, workload-led placement, and continuous revalidation." lightbox="./media/fixed-pair-to-governed-options.png":::
 
 *From a fixed regional pair to governed regional options. Instead of mirroring a complete footprint in each new region, extend one governed foundation. Platform Services span Security, Identity, Management, and Networking; each region provides only the local capabilities its workloads require.*
 
