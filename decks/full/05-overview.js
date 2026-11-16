@@ -83,22 +83,22 @@ module.exports = (pres, L) => {
     L.box(s, 0.6, 1.85, 4.3, 4.45, { fill: C.wash, r: 0.14 });
     L.txt(s, 'A fixed regional pair', 0.85, 2.0, 2.6, 0.32, { fontSize: 14, fontFace: F.semi, color: C.ink, valign: 'middle' });
     L.txt(s, 'TRADITIONAL', 3.45, 2.04, 1.25, 0.25, { fontSize: 10, bold: true, color: C.faint, align: 'right', charSpacing: 2 });
-    [['Primary region', 0.85], ['DR region', 2.85]].forEach(([n, x]) => {
-      L.box(s, x, 2.45, 1.8, 1.85, { fill: 'FFFFFF', line: C.b300, dash: 'dash', r: 0.1 });
+    [['Region A -\nPrimary', 0.85], ['Region B -\nSecondary', 2.85]].forEach(([n, x]) => {
+      L.box(s, x, 2.45, 1.8, 2.22, { fill: 'FFFFFF', line: C.b300, dash: 'dash', r: 0.1 });
       L.icon(s, 'pin', x + 0.12, 2.55, 0.2, 'b');
-      L.txt(s, n, x + 0.38, 2.52, 1.4, 0.26, { fontSize: 10.5, bold: true, color: C.b700, valign: 'middle' });
+      L.txt(s, n, x + 0.38, 2.52, 1.3, 0.38, { fontSize: 9.5, bold: true, color: C.b700, valign: 'middle' });
       [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']].forEach(([t, f, c], j) => {
-        const height = j ? 0.86 : 0.32;
+        const height = j ? 1.2 : 0.32;
         L.box(s, x + 0.12, 2.95 + j * 0.4, 1.56, height, { fill: f, r: 0.06 });
         L.txt(s, t, x + 0.12, 2.95 + j * 0.4, 1.56, height, { fontSize: 10, bold: true, color: c, align: 'center', valign: 'middle' });
       });
     });
     L.line(s, 2.67, 3.6, 2.83, 3.6, { color: C.faint, both: true, w: 1 });
-    L.txt(s, 'Mirrored infrastructure', 0.85, 4.38, 3.8, 0.26, { fontSize: 11, color: C.muted, align: 'center', valign: 'middle' });
-    L.txt(s, 'EVOLVING REGIONAL CONDITIONS', 0.85, 4.75, 3.8, 0.24, { fontSize: 10, bold: true, color: C.w600, charSpacing: 2 });
-    let cx = 0.85; ['Business expansion', 'Data boundaries'].forEach(t => { const w = cw(t); L.chip(s, t, cx, 5.04, { fill: C.w100, color: C.w600, size: 10.5, w, h: 0.28 }); cx += w + 0.08; });
-    cx = 0.85; ['Service & AI availability', 'Latency'].forEach(t => { const w = cw(t); L.chip(s, t, cx, 5.38, { fill: C.w100, color: C.w600, size: 10.5, w, h: 0.28 }); cx += w + 0.08; });
-    L.txt(s, 'Works while demand is predictable; less adaptable as conditions evolve.', 0.85, 5.74, 3.85, 0.45, { fontSize: 11, color: C.muted });
+    L.txt(s, 'Mirrored infrastructure', 0.85, 4.7, 3.8, 0.26, { fontSize: 11, color: C.muted, align: 'center', valign: 'middle' });
+    L.txt(s, 'EVOLVING REGIONAL CONDITIONS', 0.85, 5.0, 3.8, 0.24, { fontSize: 10, bold: true, color: C.w600, charSpacing: 2 });
+    let cx = 0.85; ['Business expansion', 'Data boundaries'].forEach(t => { const w = cw(t); L.chip(s, t, cx, 5.28, { fill: C.w100, color: C.w600, size: 10.5, w, h: 0.28 }); cx += w + 0.08; });
+    cx = 0.85; ['Service & AI availability', 'Latency'].forEach(t => { const w = cw(t); L.chip(s, t, cx, 5.62, { fill: C.w100, color: C.w600, size: 10.5, w, h: 0.28 }); cx += w + 0.08; });
+    L.txt(s, 'Works while demand is predictable; less adaptable as conditions evolve.', 0.85, 5.93, 3.85, 0.36, { fontSize: 11, color: C.muted });
     // arrow
     L.line(s, 5.0, 3.85, 5.6, 3.85, { color: C.b600, w: 2 });
     L.txt(s, 'Extend,\nnot\nreplicate', 4.9, 3.95, 0.85, 0.7, { fontSize: 10.5, bold: true, color: C.b700, align: 'center' });
@@ -107,12 +107,12 @@ module.exports = (pres, L) => {
     L.txt(s, 'An adaptable multi-region platform', 6.0, 2.0, 4, 0.32, { fontSize: 14, fontFace: F.semi, color: C.ink, valign: 'middle' });
     L.txt(s, 'REGIONS AS QUALIFIED OPTIONS', 9.6, 2.04, 2.95, 0.25, { fontSize: 10, bold: true, color: C.b600, align: 'right', charSpacing: 1 });
     const regs = [
-      ['Region A', 2.0, [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']], 'Full-Platform region'],
-      ['Region B', 2.0, [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']], 'Full-Platform region'],
-      ['Region C', 1.55, [['Workloads', C.t600, 'FFFFFF'], ['Selected local\nservices', 'FFFFFF', C.b700, C.b300]], 'Minimal platform'],
-      ['Region D', 1.2, [['Spokes', C.t600, 'FFFFFF']], 'Remote platform', 'via Remote platform'],
-      ['Region E', 1.0, [['Governance-Only', C.t100, C.t700]], 'Governance-Only'],
-      ['Region F', 0.75, [], 'Not enabled', 'Candidate'],
+      ['Region C', 2.2, [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']], 'Full-Platform region'],
+      ['Region D', 2.2, [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']], 'Full-Platform region'],
+      ['Region E', 1.85, [['Workloads', C.t600, 'FFFFFF'], ['Selected\nLanding\nZones\nPlatform\nShared\nServices', 'FFFFFF', C.b700, C.b300]], 'Minimal platform'],
+      ['Region F', 1.2, [['Workloads', C.t600, 'FFFFFF']], 'Remote platform', 'via Remote platform'],
+      ['Region G', 1.0, [['Governance-Only', C.t100, C.t700]], 'Governance-Only'],
+      ['Region H', 0.75, [], 'Not enabled', 'Candidate'],
     ];
     const base = 5.12, rw = 1.07, gap = 0.06;
     regs.forEach(([n, h, blocks, lab, extra], i) => {
@@ -120,15 +120,15 @@ module.exports = (pres, L) => {
       L.box(s, x, y, rw, h, { fill: 'FFFFFF', line: i === 5 ? C.b500 : C.b300, dash: 'dash', r: 0.08 });
       L.icon(s, 'pin', x + 0.07, y + 0.08, 0.16, 'b');
       L.txt(s, n, x + 0.26, y + 0.05, 0.8, 0.22, { fontSize: 10, bold: true, color: C.b700, valign: 'middle' });
-      let by = base - 0.1;
+      let by = base - 0.1 - (extra && blocks.length ? 0.48 : 0);
       blocks.slice().reverse().forEach(([t, f, c, ln]) => {
-        const bh = t === platformServices ? 0.8 : t.length > 12 ? 0.46 : 0.3;
+        const bh = t === platformServices ? 1.2 : ln ? 0.95 : t.length > 12 ? 0.46 : 0.3;
         by -= bh;
         L.box(s, x + 0.07, by, rw - 0.14, bh, { fill: f, line: ln, r: 0.05 });
         L.txt(s, t, x + 0.07, by, rw - 0.14, bh, { fontSize: 9.5, bold: true, color: c, align: 'center', valign: 'middle' });
         by -= 0.06;
       });
-      if (extra) L.txt(s, extra, x, blocks.length ? by - 0.2 : base - 0.42, rw, 0.22, { fontSize: 9.5, bold: true, color: C.b600, align: 'center', valign: 'middle' });
+      if (extra) L.txt(s, extra, x, blocks.length ? base - 0.48 : base - 0.42, rw, blocks.length ? 0.36 : 0.22, { fontSize: 9.5, bold: true, color: C.b600, align: 'center', valign: 'middle' });
       L.txt(s, lab, x - 0.04, base + 0.07, rw + 0.08, 0.22, { fontSize: 10, color: C.muted, align: 'center', valign: 'middle' });
     });
     L.box(s, 5.92, 5.5, 6.72, 0.66, { fill: C.s800, r: 0.08 });

@@ -70,24 +70,24 @@ module.exports = (pres, L) => {
     L.box(s, 0.6, y0, 4.6, 4.35, { fill: C.wash, r: 0.14 });
     L.txt(s, 'A fixed regional pair', 0.85, y0 + 0.14, 2.4, 0.3, { fontSize: 13, fontFace: F.semi, color: C.ink });
     L.txt(s, 'TRADITIONAL MODEL', 3.2, y0 + 0.18, 1.78, 0.25, { fontSize: 9, bold: true, color: C.faint, align: 'right', charSpacing: 1.5 });
-    [['Primary region', 0.85], ['DR region', 3.1]].forEach(([n, x]) => {
-      L.box(s, x, y0 + 0.55, 1.85, 1.8, { fill: 'FFFFFF', line: C.b300, dash: 'dash', r: 0.1 });
+    [['Region A -\nPrimary', 0.85], ['Region B -\nSecondary', 3.1]].forEach(([n, x]) => {
+      L.box(s, x, y0 + 0.55, 1.85, 2.15, { fill: 'FFFFFF', line: C.b300, dash: 'dash', r: 0.1 });
       L.icon(s, 'pin', x + 0.12, y0 + 0.65, 0.18, 'b');
-      L.txt(s, n, x + 0.36, y0 + 0.62, 1.4, 0.24, { fontSize: 10.5, bold: true, color: C.b700 });
+      L.txt(s, n, x + 0.36, y0 + 0.6, 1.37, 0.34, { fontSize: 9.5, bold: true, color: C.b700 });
       [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']].forEach(([t, f, c], j) => {
-        const height = j ? 0.86 : 0.32;
+        const height = j ? 1.2 : 0.32;
         L.box(s, x + 0.12, y0 + 0.95 + j * 0.4, 1.61, height, { fill: f, r: 0.06 });
         L.txt(s, t, x + 0.12, y0 + 0.95 + j * 0.4, 1.61, height, { fontSize: 10, bold: true, color: c, align: 'center', valign: 'middle' });
       });
     });
     L.line(s, 2.72, y0 + 1.45, 3.08, y0 + 1.45, { color: C.faint, both: true, w: 1 });
-    L.txt(s, 'MIRRORED INFRASTRUCTURE', 0.85, y0 + 2.38, 3.9, 0.2, { fontSize: 9, bold: true, color: C.muted, align: 'center', charSpacing: 1 });
-    L.txt(s, 'EVOLVING REGIONAL CONDITIONS', 0.85, y0 + 2.7, 3.9, 0.22, { fontSize: 9.5, bold: true, color: C.w600, charSpacing: 2 });
+    L.txt(s, 'MIRRORED INFRASTRUCTURE', 0.85, y0 + 2.73, 3.9, 0.2, { fontSize: 9, bold: true, color: C.muted, align: 'center', charSpacing: 1 });
+    L.txt(s, 'EVOLVING REGIONAL CONDITIONS', 0.85, y0 + 3.05, 3.9, 0.22, { fontSize: 9.5, bold: true, color: C.w600, charSpacing: 2 });
     let cx = 0.85;
-    ['Regulatory change', 'Power and energy supply'].forEach(t => { const w = chipW(t, 10.5); L.chip(s, t, cx, y0 + 2.97, { fill: C.w100, color: C.w600, size: 10.5, w }); cx += w + 0.08; });
+    ['Regulatory change', 'Power and energy supply'].forEach(t => { const w = chipW(t, 10.5); L.chip(s, t, cx, y0 + 3.32, { fill: C.w100, color: C.w600, size: 10.5, w }); cx += w + 0.08; });
     cx = 0.85;
-    ['Service & AI availability', 'Business expansion'].forEach(t => { const w = chipW(t, 10.5); L.chip(s, t, cx, y0 + 3.3, { fill: C.w100, color: C.w600, size: 10.5, w }); cx += w + 0.08; });
-    L.txt(s, 'Works while demand and placement remain predictable; becomes less adaptable as conditions evolve.', 0.85, y0 + 3.62, 4.1, 0.6, { fontSize: 12, color: C.muted });
+    ['Service & AI availability', 'Business expansion'].forEach(t => { const w = chipW(t, 10.5); L.chip(s, t, cx, y0 + 3.65, { fill: C.w100, color: C.w600, size: 10.5, w }); cx += w + 0.08; });
+    L.txt(s, 'Works while demand and placement remain predictable; becomes less adaptable as conditions evolve.', 0.85, y0 + 3.97, 4.1, 0.34, { fontSize: 11, color: C.muted });
     // arrow
     L.line(s, 5.3, y0 + 1.7, 5.9, y0 + 1.7, { color: C.b600, w: 2 });
     L.txt(s, 'Extend,\nnot\nreplicate', 5.2, y0 + 1.82, 0.8, 0.6, { fontSize: 10, bold: true, color: C.b700, align: 'center' });
@@ -96,12 +96,12 @@ module.exports = (pres, L) => {
     L.txt(s, 'An adaptable multi-region platform', 6.2, y0 + 0.14, 3.6, 0.3, { fontSize: 13, fontFace: F.semi, color: C.ink });
     L.txt(s, 'REGIONS AS QUALIFIED OPTIONS', 9.75, y0 + 0.18, 2.78, 0.25, { fontSize: 9, bold: true, color: C.b600, align: 'right', charSpacing: 1.5 });
     const regs = [
-      ['Region A', 1.95, [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']], 'Full-Platform region'],
-      ['Region B', 1.95, [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']], 'Full-Platform region'],
-      ['Region C', 1.55, [['Workloads', C.t600, 'FFFFFF'], ['Selected local\nservices', 'FFFFFF', C.b700, C.b300]], 'Minimal platform'],
-      ['Region D', 1.2, [['Spokes', C.t600, 'FFFFFF']], 'Remote platform', 'via hub'],
-      ['Region E', 0.98, [['Governance-Only', C.t100, C.t700]], 'Governance-Only'],
-      ['Region F', 0.8, [], 'Not enabled', 'Candidate'],
+      ['Region C', 2.2, [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']], 'Full-Platform region'],
+      ['Region D', 2.2, [['Workloads', C.t600, 'FFFFFF'], [platformServices, C.b600, 'FFFFFF']], 'Full-Platform region'],
+      ['Region E', 1.85, [['Workloads', C.t600, 'FFFFFF'], ['Selected\nLanding\nZones\nPlatform\nShared\nServices', 'FFFFFF', C.b700, C.b300]], 'Minimal platform'],
+      ['Region F', 1.2, [['Workloads', C.t600, 'FFFFFF']], 'Remote platform', 'via Remote platform'],
+      ['Region G', 0.98, [['Governance-Only', C.t100, C.t700]], 'Governance-Only'],
+      ['Region H', 0.8, [], 'Not enabled', 'Candidate'],
     ];
     const base = y0 + 3.0, rw = 1.04, gap = 0.04;
     regs.forEach(([n, h, blocks, lab, extra], i) => {
@@ -109,15 +109,15 @@ module.exports = (pres, L) => {
       L.box(s, x, y, rw, h, { fill: 'FFFFFF', line: i === 5 ? C.b500 : C.b300, dash: 'dash', r: 0.08 });
       L.icon(s, 'pin', x + 0.06, y + 0.08, 0.15, 'b');
       L.txt(s, n, x + 0.24, y + 0.05, 0.74, 0.22, { fontSize: 9.5, bold: true, color: C.b700, valign: 'middle' });
-      let by = base - 0.1;
+      let by = base - 0.1 - (extra && blocks.length ? 0.48 : 0);
       blocks.slice().reverse().forEach(([t, f, c, ln]) => {
-        const bh = t === platformServices ? 0.8 : t.length > 12 ? 0.46 : 0.32;
+        const bh = t === platformServices ? 1.2 : ln ? 0.95 : t.length > 12 ? 0.46 : 0.32;
         by -= bh;
         L.box(s, x + 0.03, by, rw - 0.06, bh, { fill: f, line: ln, r: 0.05 });
         L.txt(s, t, x + 0.03, by, rw - 0.06, bh, { fontSize: 9.5, bold: true, color: c, align: 'center', valign: 'middle' });
         by -= 0.06;
       });
-      if (extra) L.txt(s, extra, x, base - (blocks.length ? 0.1 + blocks.length * 0.38 + 0.26 : 0.46), rw, 0.22, { fontSize: 9.5, bold: true, color: C.b600, align: 'center', valign: 'middle' });
+      if (extra) L.txt(s, extra, x, base - (blocks.length ? 0.48 : 0.46), rw, blocks.length ? 0.36 : 0.22, { fontSize: 9.5, bold: true, color: C.b600, align: 'center', valign: 'middle' });
       L.txt(s, lab, x - 0.04, base + 0.07, rw + 0.08, 0.22, { fontSize: 10, color: C.muted, align: 'center' });
     });
     L.box(s, 6.2, y0 + 3.45, 6.33, 0.7, { fill: C.s800, r: 0.08 });
@@ -141,7 +141,7 @@ module.exports = (pres, L) => {
       L.icon(s, ic, x, 2.55, 0.3, 'w');
       L.txt(s, t, x + 0.4, 2.3, 1.9, 0.8, { fontSize: 12, fontFace: F.semi, color: 'FFFFFF', valign: 'middle' });
     });
-    const R = [['Region A', 'Full-Platform region', 'Full networking, security, management, and shared services', 'hub'], ['Region B', 'Full-Platform region', 'Full networking, security, management, and shared services', 'hub'], ['Region C', 'Qualified', 'Minimal platform for a portfolio', 'q'], ['Region D', 'Qualified', 'Spokes connected to a Full-Platform region', 'q'], ['Region E', 'Qualified', 'Self-contained AI workloads', 'q'], ['Region F', 'Candidate', 'Assessed; not yet enabled', 'c']];
+    const R = [['Region A', 'Full-Platform region', 'Full networking, security, management, and shared services', 'hub'], ['Region B', 'Full-Platform region', 'Full networking, security, management, and shared services', 'hub'], ['Region C', 'Qualified', 'Minimal platform for a portfolio', 'q'], ['Region D', 'Qualified', 'Workloads connected to a Full-Platform region', 'q'], ['Region E', 'Qualified', 'Self-contained AI workloads', 'q'], ['Region F', 'Candidate', 'Assessed; not yet enabled', 'c']];
     R.forEach(([r, tag, d, k], i) => {
       const x = 0.85 + i * 1.955, y = 3.28, w = 1.83, h = 1.78;
       const hub = k === 'hub';
@@ -190,7 +190,7 @@ module.exports = (pres, L) => {
     // geography
     L.box(s, 7.6, top, 5.13, hh, { fill: C.b50, line: C.b300, dash: 'dash', r: 0.14 });
     L.txt(s, 'GEOGRAPHY · FOR EXAMPLE, EUROPE', 7.8, top + 0.1, 4.5, 0.22, { fontSize: 9.5, bold: true, color: C.b700, charSpacing: 2 });
-    const G = [['Region A', 'Full-Platform region · gateways', C.b600, 'FFFFFF', 'DDEBF9'], ['Region B', 'Full-Platform region · gateways', C.b700, 'FFFFFF', 'DDEBF9'], ['Region C', 'Minimal platform · reuses existing circuits', 'FFFFFF', C.b700, C.muted], ['Region D', 'Spokes reach on-premises via a hub', 'FFFFFF', C.b700, C.muted], ['Region E', 'Self-contained · no hybrid path', 'FFFFFF', C.t700, C.muted], ['Region F', 'Candidate · no new circuit assumed', C.b50, C.b700, C.muted]];
+    const G = [['Region A', 'Full-Platform region · gateways', C.b600, 'FFFFFF', 'DDEBF9'], ['Region B', 'Full-Platform region · gateways', C.b700, 'FFFFFF', 'DDEBF9'], ['Region C', 'Minimal platform · reuses existing circuits', 'FFFFFF', C.b700, C.muted], ['Region D', 'Workloads reach on-premises via a hub', 'FFFFFF', C.b700, C.muted], ['Region E', 'Self-contained · no hybrid path', 'FFFFFF', C.t700, C.muted], ['Region F', 'Candidate · no new circuit assumed', C.b50, C.b700, C.muted]];
     G.forEach(([r, d, f, c1, c2], i) => {
       const x = 7.8 + (i % 2) * 2.42, y = top + 0.45 + Math.floor(i / 2) * 0.9, w = 2.32, h = 0.82;
       L.box(s, x, y, w, h, { fill: f, line: f === 'FFFFFF' ? (i === 4 ? C.t300 : C.b300) : i === 5 ? C.b500 : undefined, dash: i === 5 ? 'dash' : 'solid', r: 0.1 });

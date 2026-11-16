@@ -1,6 +1,6 @@
 <section class="page" data-section="01 · Reframe the objective">
 <style>
-  .f1 { display: grid; grid-template-columns: 330px 70px 1fr; height: 296px; }
+  .f1 { display: grid; grid-template-columns: 330px 70px 1fr; height: 342px; }
   .f1 .panel { border-radius: 12px; padding: 14px 16px 14px; position: relative; }
   .f1 .pl { background: var(--wash); }
   .f1 .pr { background: linear-gradient(180deg, var(--b50), #F6FAFE); }
@@ -13,9 +13,8 @@
   .blk { border-radius: 5px; font-size: 9px; font-weight: 650; text-align: center; padding: 5px 2px; line-height: 1.2; }
   .blk.hub { background: var(--b600); color: #fff; }
   .blk.ss { background: var(--b100); color: var(--b800); }
-  .f1 .platform-services { display: grid; gap: 2px; background: var(--b600); color: #fff; }
+  .f1 .platform-services { display: grid; gap: 2px; min-height: 110px; align-content: center; background: var(--b600); color: #fff; }
   .f1 .pr .ss { min-height: 78px; }
-  .f1 .pr .platform-services { min-height: 100px; align-content: center; }
   .blk.wl { background: var(--t600); color: #fff; }
   .blk.wl2 { background: var(--t100); color: var(--t700); }
   .rg.cand { border-color: var(--b500); background: rgba(255,255,255,.55); justify-content: center; align-items: center; }
@@ -45,10 +44,10 @@
       <!-- left: fixed pair -->
       <div class="panel pl">
         <div class="ph"><b>A fixed regional pair</b><span class="cap">Traditional model</span></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px;height:124px;position:relative">
-          <div class="rg node" id="f1a"><div class="rl"><svg><use href="#i-pin"/></svg>Primary region</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:26px;height:170px;position:relative">
+          <div class="rg node" id="f1a"><div class="rl"><svg><use href="#i-pin"/></svg>Region A - Primary</div>
             <div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div>
-          <div class="rg node" id="f1b"><div class="rl"><svg><use href="#i-pin"/></svg>DR region</div>
+          <div class="rg node" id="f1b"><div class="rl"><svg><use href="#i-pin"/></svg>Region B - Secondary</div>
             <div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div>
           <div style="position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);font-size: 9px;font-weight:700;color:var(--muted);background:var(--wash);padding:2px 0;z-index:3;writing-mode:vertical-rl;letter-spacing:.08em">MIRRORED</div>
         </div>
@@ -69,13 +68,13 @@
       <!-- right: adaptable platform -->
       <div class="panel pr">
         <div class="ph"><b>An adaptable multi-region platform</b><span class="cap" style="color:var(--b600)">Regions as qualified options</span></div>
-        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;height:172px;align-items:end">
-          <div><div class="rg" style="height:170px"><div class="rl"><svg><use href="#i-pin"/></svg>Region A</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
-          <div><div class="rg" style="height:170px"><div class="rl"><svg><use href="#i-pin"/></svg>Region B</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
-          <div><div class="rg" style="height:140px"><div class="rl"><svg><use href="#i-pin"/></svg>Region C</div><div class="blk wl">Workloads</div><div class="blk ss" style="background:#fff;border:1px solid var(--b300)">Selected<br>Landing Zones<br>Platform<br>Shared Services</div></div></div>
-          <div><div class="rg" style="height:92px"><div class="rl"><svg><use href="#i-pin"/></svg>Region D</div><div class="blk wl">Spokes</div><div class="blk" style="font-size: 9px;color:var(--b700);padding:2px">↔ {{PROFILE_2}}</div></div></div>
-          <div><div class="rg" style="height:70px"><div class="rl"><svg><use href="#i-pin"/></svg>Region E</div><div class="blk wl2">{{PROFILE_1}}</div></div></div>
-          <div><div class="rg cand" style="height:56px"><div class="rl" style="color:var(--b600)"><svg><use href="#i-pin"/></svg>Region F</div><span style="font-size: 9px;font-weight:650;color:var(--b600);margin-top:10px">Candidate</span></div></div>
+        <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;height:218px;align-items:end">
+          <div><div class="rg" style="height:170px"><div class="rl"><svg><use href="#i-pin"/></svg>Region C</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
+          <div><div class="rg" style="height:170px"><div class="rl"><svg><use href="#i-pin"/></svg>Region D</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
+          <div><div class="rg" style="height:140px"><div class="rl"><svg><use href="#i-pin"/></svg>Region E</div><div class="blk wl">Workloads</div><div class="blk ss" style="background:#fff;border:1px solid var(--b300)">Selected<br>Landing Zones<br>Platform<br>Shared Services</div></div></div>
+          <div><div class="rg" style="height:92px"><div class="rl"><svg><use href="#i-pin"/></svg>Region F</div><div class="blk wl">Workloads</div><div class="blk" style="font-size: 9px;color:var(--b700);padding:2px">↔ {{PROFILE_2}}</div></div></div>
+          <div><div class="rg" style="height:70px"><div class="rl"><svg><use href="#i-pin"/></svg>Region G</div><div class="blk wl2">{{PROFILE_1}}</div></div></div>
+          <div><div class="rg cand" style="height:56px"><div class="rl" style="color:var(--b600)"><svg><use href="#i-pin"/></svg>Region H</div><span style="font-size: 9px;font-weight:650;color:var(--b600);margin-top:10px">Candidate</span></div></div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px">
           <div class="rlabel">Full-Platform region</div><div class="rlabel">Full-Platform region</div><div class="rlabel">{{PROFILE_3}}</div><div class="rlabel">{{PROFILE_2}}</div><div class="rlabel">{{PROFILE_1}}</div><div class="rlabel">Not enabled</div>

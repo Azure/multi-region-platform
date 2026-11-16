@@ -270,7 +270,7 @@
 .wpf .es2 .c h3 { font-size: 14px; margin-bottom: 6px; }
 .wpf .es2 .c p { font-size: 11.6px; line-height: 1.52; margin-bottom: 6px; }
 .wpf .es2 .c p:last-child { margin-bottom: 0; }
-.wpf .f1 { display: grid; grid-template-columns: 330px 70px 1fr; height: 296px; }
+.wpf .f1 { display: grid; grid-template-columns: 330px 70px 1fr; height: 342px; }
 .wpf .f1 .panel { border-radius: 12px; padding: 14px 16px 14px; position: relative; }
 .wpf .f1 .pl { background: var(--wash); }
 .wpf .f1 .pr { background: linear-gradient(180deg, var(--b50), #F6FAFE); }
@@ -283,9 +283,8 @@
 .wpf .blk { border-radius: 5px; font-size: 9px; font-weight: 650; text-align: center; padding: 5px 2px; line-height: 1.2; }
 .wpf .blk.hub { background: var(--b600); color: #fff; }
 .wpf .blk.ss { background: var(--b100); color: var(--b800); }
-.wpf .f1 .platform-services { display: grid; gap: 2px; background: var(--b600); color: #fff; }
+.wpf .f1 .platform-services { display: grid; gap: 2px; min-height: 110px; align-content: center; background: var(--b600); color: #fff; }
 .wpf .f1 .pr .ss { min-height: 78px; }
-.wpf .f1 .pr .platform-services { min-height: 100px; align-content: center; }
 .wpf .blk.wl { background: var(--t600); color: #fff; }
 .wpf .blk.wl2 { background: var(--t100); color: var(--t700); }
 .wpf .rg.cand { border-color: var(--b500); background: rgba(255,255,255,.55); justify-content: center; align-items: center; }

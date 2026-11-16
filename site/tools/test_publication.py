@@ -26,7 +26,14 @@ class PublicationTests(unittest.TestCase):
                 self.assertEqual(re.findall(r"<span>([^<]+)</span>", group), categories, name)
             self.assertNotIn(">Shared<", source)
             self.assertNotIn(">Shared services<", source)
-            self.assertIn("Selected local<br>platform services", source)
+            self.assertIn("Selected<br>Landing Zones<br>Platform<br>Shared Services", source)
+            labels = re.findall(r'<div class="rl"[^>]*><svg>.*?</svg>([^<]+)</div>', source)
+            self.assertEqual(labels, [
+                "Region A - Primary", "Region B - Secondary",
+                "Region C", "Region D", "Region E", "Region F", "Region G", "Region H",
+            ], name)
+            self.assertEqual(source.count('class="blk wl">Workloads</div>'), 6, name)
+            self.assertNotIn(">Spokes<", source)
 
     def test_profile_spectrum_figures_show_all_four_platform_service_categories(self):
         categories = ["Security", "Identity", "Management", "Networking"]
