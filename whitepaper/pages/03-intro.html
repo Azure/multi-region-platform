@@ -14,8 +14,8 @@
   .blk.hub { background: var(--b600); color: #fff; }
   .blk.ss { background: var(--b100); color: var(--b800); }
   .f1 .platform-services { display: grid; gap: 2px; background: var(--b600); color: #fff; }
-  .f1 .pr .platform-services, .f1 .pr .ss { min-height: 78px; }
-  .f1 .pr .platform-services { align-content: center; }
+  .f1 .pr .ss { min-height: 78px; }
+  .f1 .pr .platform-services { min-height: 100px; align-content: center; }
   .blk.wl { background: var(--t600); color: #fff; }
   .blk.wl2 { background: var(--t100); color: var(--t700); }
   .rg.cand { border-color: var(--b500); background: rgba(255,255,255,.55); justify-content: center; align-items: center; }
@@ -69,8 +69,8 @@
       <div class="panel pr">
         <div class="ph"><b>An adaptable multi-region platform</b><span class="cap" style="color:var(--b600)">Regions as qualified options</span></div>
         <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;height:172px;align-items:end">
-          <div><div class="rg" style="height:150px"><div class="rl"><svg><use href="#i-pin"/></svg>Region A</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
-          <div><div class="rg" style="height:150px"><div class="rl"><svg><use href="#i-pin"/></svg>Region B</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
+          <div><div class="rg" style="height:170px"><div class="rl"><svg><use href="#i-pin"/></svg>Region A</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
+          <div><div class="rg" style="height:170px"><div class="rl"><svg><use href="#i-pin"/></svg>Region B</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
           <div><div class="rg" style="height:140px"><div class="rl"><svg><use href="#i-pin"/></svg>Region C</div><div class="blk wl">Workloads</div><div class="blk ss" style="background:#fff;border:1px solid var(--b300)">Selected<br>Landing Zones<br>Platform<br>Shared Services</div></div></div>
           <div><div class="rg" style="height:92px"><div class="rl"><svg><use href="#i-pin"/></svg>Region D</div><div class="blk wl">Spokes</div><div class="blk" style="font-size: 9px;color:var(--b700);padding:2px">↔ {{PROFILE_2}}</div></div></div>
           <div><div class="rg" style="height:70px"><div class="rl"><svg><use href="#i-pin"/></svg>Region E</div><div class="blk wl2">{{PROFILE_1}}</div></div></div>

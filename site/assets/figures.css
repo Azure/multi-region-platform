@@ -284,8 +284,8 @@
 .wpf .blk.hub { background: var(--b600); color: #fff; }
 .wpf .blk.ss { background: var(--b100); color: var(--b800); }
 .wpf .f1 .platform-services { display: grid; gap: 2px; background: var(--b600); color: #fff; }
-.wpf .f1 .pr .platform-services, .wpf .f1 .pr .ss { min-height: 78px; }
-.wpf .f1 .pr .platform-services { align-content: center; }
+.wpf .f1 .pr .ss { min-height: 78px; }
+.wpf .f1 .pr .platform-services { min-height: 100px; align-content: center; }
 .wpf .blk.wl { background: var(--t600); color: #fff; }
 .wpf .blk.wl2 { background: var(--t100); color: var(--t700); }
 .wpf .rg.cand { border-color: var(--b500); background: rgba(255,255,255,.55); justify-content: center; align-items: center; }
