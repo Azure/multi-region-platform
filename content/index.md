@@ -38,7 +38,7 @@ The framework has five parts. Each part answers one question.
 
 ## From a fixed pair to governed options
 
-:::image type="content" source="./media/fixed-pair-to-governed-options.png" alt-text="Diagram comparing a fixed Region A - Primary and Region B - Secondary pair, where Security, Identity, Management, and Networking platform services are mirrored, with an adaptable platform in which Regions C through H sit on one governed landing-zone foundation: two Full-Platform regions showing all four categories, a Minimal platform with Selected Landing Zones Platform Shared Services, a Remote platform with Workloads, Governance-Only, and a candidate region." lightbox="./media/fixed-pair-to-governed-options.png":::
+:::image type="content" source="./media/fixed-pair-to-governed-options.png" alt-text="Diagram comparing a fixed Region A (Primary) and Region B (DR) pair, where Security, Identity, Management, and Networking platform services are mirrored, with an adaptable platform in which Regions C through H sit on one governed landing-zone foundation: two Full-Platform regions showing all four categories, a Minimal platform with Selected Landing Zones Platform Shared Services, a Remote platform with Workloads, Governance-Only, and a candidate region." lightbox="./media/fixed-pair-to-governed-options.png":::
 
 *From a fixed regional pair to governed regional options. Instead of mirroring a complete footprint in each new region, extend one governed foundation. Platform Services span Security, Identity, Management, and Networking; each region provides only the local capabilities its workloads require.*
 

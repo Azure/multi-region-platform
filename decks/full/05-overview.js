@@ -83,7 +83,7 @@ module.exports = (pres, L) => {
     L.box(s, 0.6, 1.85, 4.3, 4.45, { fill: C.wash, r: 0.14 });
     L.txt(s, 'A fixed regional pair', 0.85, 2.0, 2.6, 0.32, { fontSize: 14, fontFace: F.semi, color: C.ink, valign: 'middle' });
     L.txt(s, 'TRADITIONAL', 3.45, 2.04, 1.25, 0.25, { fontSize: 10, bold: true, color: C.faint, align: 'right', charSpacing: 2 });
-    [['Region A -\nPrimary', 0.85], ['Region B -\nSecondary', 2.85]].forEach(([n, x]) => {
+    [['Region A\n(Primary)', 0.85], ['Region B\n(DR)', 2.85]].forEach(([n, x]) => {
       L.box(s, x, 2.45, 1.8, 2.22, { fill: 'FFFFFF', line: C.b300, dash: 'dash', r: 0.1 });
       L.icon(s, 'pin', x + 0.12, 2.55, 0.2, 'b');
       L.txt(s, n, x + 0.38, 2.52, 1.3, 0.38, { fontSize: 9.5, bold: true, color: C.b700, valign: 'middle' });

@@ -70,7 +70,7 @@ module.exports = (pres, L) => {
     L.box(s, 0.6, y0, 4.6, 4.35, { fill: C.wash, r: 0.14 });
     L.txt(s, 'A fixed regional pair', 0.85, y0 + 0.14, 2.4, 0.3, { fontSize: 13, fontFace: F.semi, color: C.ink });
     L.txt(s, 'TRADITIONAL MODEL', 3.2, y0 + 0.18, 1.78, 0.25, { fontSize: 9, bold: true, color: C.faint, align: 'right', charSpacing: 1.5 });
-    [['Region A -\nPrimary', 0.85], ['Region B -\nSecondary', 3.1]].forEach(([n, x]) => {
+    [['Region A\n(Primary)', 0.85], ['Region B\n(DR)', 3.1]].forEach(([n, x]) => {
       L.box(s, x, y0 + 0.55, 1.85, 2.15, { fill: 'FFFFFF', line: C.b300, dash: 'dash', r: 0.1 });
       L.icon(s, 'pin', x + 0.12, y0 + 0.65, 0.18, 'b');
       L.txt(s, n, x + 0.36, y0 + 0.6, 1.37, 0.34, { fontSize: 9.5, bold: true, color: C.b700 });

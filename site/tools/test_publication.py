@@ -27,9 +27,12 @@ class PublicationTests(unittest.TestCase):
             self.assertNotIn(">Shared<", source)
             self.assertNotIn(">Shared services<", source)
             self.assertIn("Selected<br>Landing Zones<br>Platform<br>Shared Services", source)
-            labels = re.findall(r'<div class="rl"[^>]*><svg>.*?</svg>([^<]+)</div>', source)
+            labels = [
+                " ".join(re.sub(r"<[^>]+>", " ", label).split())
+                for label in re.findall(r'<div class="rl"[^>]*><svg>.*?</svg>(.*?)</div>', source)
+            ]
             self.assertEqual(labels, [
-                "Region A - Primary", "Region B - Secondary",
+                "Region A (Primary)", "Region B (DR)",
                 "Region C", "Region D", "Region E", "Region F", "Region G", "Region H",
             ], name)
             self.assertEqual(source.count('class="blk wl">Workloads</div>'), 6, name)

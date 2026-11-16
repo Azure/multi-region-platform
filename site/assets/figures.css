@@ -277,6 +277,7 @@
 .wpf .f1 .ph { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
 .wpf .f1 .ph .cap { color: var(--muted); }
 .wpf .f1 .ph b { font-size: 13px; color: var(--ink); font-weight: 650; }
+.wpf .f1 .pl .rl { align-items: flex-start; line-height: 1.15; }
 .wpf .rg { border: 1.2px dashed var(--b300); border-radius: 9px; padding: 22px 6px 6px; position: relative; background: #fff; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; }
 .wpf .rg .rl { position: absolute; top: 5px; left: 7px; right: 5px; display: flex; gap: 3px; align-items: center; font-size: 9px; font-weight: 700; color: var(--b700); letter-spacing: .02em; white-space: nowrap; }
 .wpf .rg .rl svg { width: 10px; height: 10px; color: var(--b600); flex: none; }
