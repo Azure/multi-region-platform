@@ -16,6 +16,64 @@ class QuietHandler(http.server.SimpleHTTPRequestHandler):
         pass
 
 
+def check_workloads_above_platform(frame):
+    geometry = frame.evaluate("""() => ({
+      bottom:layout.bottom,
+      regions:layout.regions.map(c => ({id:c.region.id,spokes:c.box,hub:c.hub,shared:c.sharedBox})),
+      nodes:Object.values(layout.nodes).filter(n => n.region),
+      routes:layout.peers.flatMap(p => {
+        const node = (id, spoke) => layout.nodes[id + (spoke ? '.spoke' : '.firewall')] || layout.nodes[id + '.hub_router'];
+        const a = node(p.from, p.kind !== 'hub'), b = node(p.to, p.kind === 'spoke-peering');
+        if (!a || !b) return [];
+        const pairs = [[a,b]];
+        if (a.spoke) pairs.push([layout.nodes[p.from + '.spoke2'], b]);
+        if (b.spoke) pairs.push([a,layout.nodes[p.to + '.spoke2']]);
+        return pairs.flatMap(([src,dst]) => [[src,dst],[dst,src]]).map(([src,dst]) =>
+          ({from:src.key,to:dst.key,points:crossRoute(src,dst).pts}));
+      }),
+      peers:layout.peers.map(p => p.pts), zones:layout.zoneLinks
+    })""")
+    for region in geometry["regions"]:
+        spokes, hub = region["spokes"], region["hub"]
+        assert spokes["y"] + spokes["h"] <= hub["y"], region
+        assert 0 < geometry["bottom"] - hub["y"] - hub["h"] <= 24, region
+        if region.get("shared"):
+            shared = region["shared"]
+            assert spokes["y"] + spokes["h"] <= shared["y"], region
+            assert shared["y"] + shared["h"] <= hub["y"], region
+        for node in (n for n in geometry["nodes"] if n["region"] == region["id"]):
+            assert any(box and box["x"] <= node["x"] and box["y"] <= node["y"] and
+                node["x"] + node["w"] <= box["x"] + box["w"] and
+                node["y"] + node["h"] <= box["y"] + box["h"]
+                for box in (spokes, hub, region.get("shared"))), node
+    # Backbone and global DNS drops must use gutters, not pass through the moved platform blocks.
+    for points in geometry["peers"] + geometry["zones"]:
+        for a, b in zip(points, points[1:]):
+            if a[0] != b[0]:
+                continue
+            for region in geometry["regions"]:
+                for box in (region["hub"], region.get("shared"), region["spokes"]):
+                    if not box:
+                        continue
+                    if box == region["spokes"]:
+                        assert not (box["x"] < a[0] < box["x"] + box["w"] and
+                            min(a[1], b[1]) < box["y"] and max(a[1], b[1]) > box["y"] + box["h"]), (region["id"], a, b)
+                        continue
+                    assert not (box["x"] < a[0] < box["x"] + box["w"] and
+                        max(min(a[1], b[1]), box["y"]) < min(max(a[1], b[1]), box["y"] + box["h"])), (region["id"], a, b, box)
+    for route in geometry["routes"]:
+        for a, b in zip(route["points"], route["points"][1:]):
+            assert all(isinstance(value, (int, float)) for value in a + b), route
+            for node in geometry["nodes"]:
+                if node["key"] in (route["from"], route["to"]):
+                    continue
+                vertical = (a[0] == b[0] and node["x"] < a[0] < node["x"] + node["w"] and
+                    max(min(a[1], b[1]), node["y"]) < min(max(a[1], b[1]), node["y"] + node["h"]))
+                horizontal = (a[1] == b[1] and node["y"] < a[1] < node["y"] + node["h"] and
+                    max(min(a[0], b[0]), node["x"]) < min(max(a[0], b[0]), node["x"] + node["w"]))
+                assert not (vertical or horizontal), (route, node)
+
+
 def check_current_profile_and_circuit_inheritance(browser, url):
     page = browser.new_page(viewport={"width": 1440, "height": 1100})
     page.goto(url)
@@ -43,6 +101,7 @@ def check_current_profile_and_circuit_inheritance(browser, url):
           MRP.core.S.estate.topology = topology;
           MRP.kit.hooks.commit();
         }""", topology)
+        check_workloads_above_platform(frame)
         for region in ("westeurope", "northeurope"):
             resolved = frame.evaluate("""id => {
               const region = regionById(spec, id);
@@ -62,8 +121,20 @@ def check_current_profile_and_circuit_inheritance(browser, url):
         onprem = frame.evaluate("spec.onprem")
         assert {"rotterdam", "cork"} <= {s["id"] for s in onprem}
         assert not any(s["name"] in ("Amsterdam", "Dublin2") for s in onprem), onprem
+        # Tool-only product additions change both hub height and Virtual WAN shared-VNet height.
+        frame.evaluate("""() => {
+          Object.assign(spec.regions[0], {ingress:'appgw-waf',bastion:'bastion',
+            private_user_access:'entra-private-access',firewall:'third-party-firewall',egress_nat:'nat-gateway'});
+          onSpecChange(true);
+        }""")
+        check_workloads_above_platform(frame)
         assert page.evaluate("MRP.network.preparePrint()")
         assert "Dublin2" in page.locator("#pl-network-print").text_content()
+        assert page.locator("#pl-network-print svg").evaluate("""svg => {
+          const end = r => +r.getAttribute('y') + +r.getAttribute('height');
+          return Math.max(...[...svg.querySelectorAll('.spokes')].map(end)) <
+            Math.min(...[...svg.querySelectorAll('.hubbox,.ph-box,.svcnet')].map(r => +r.getAttribute('y')));
+        }""")
     # Existing infrastructure must not depend on a new region consuming its services.
     page.evaluate("MRP.core.S.regions.forEach(r => r.selected=false); MRP.kit.hooks.commit()")
     assert frame.evaluate("spec.regions.map(r => r.id)") == ["westeurope", "northeurope"]
@@ -131,6 +202,7 @@ def main():
             page.wait_for_function("document.querySelector('#pl-network-notice').hidden")
             assert page.locator('#pl-network-toggle').get_attribute("aria-expanded") == "true"
             frame = page.locator("#pl-network iframe").element_handle().content_frame()
+            check_workloads_above_platform(frame)
             inherited = frame.evaluate("spec")
             assert frame.evaluate("Object.fromEntries(Object.entries(RULES.patterns).map(([id,p]) => [id,p.label]))") == {
                 "full-hub": "Full platform", "minimal-hub": "Minimal platform",
@@ -203,6 +275,7 @@ def main():
             assert presentation.locator("aside").is_hidden()
             assert not presentation.locator("#btnTheme").is_visible()
             assert presentation.evaluate("ui.type") == "egress"
+            check_workloads_above_platform(presentation)
             assert presentation.evaluate("session.timer") is None
             assert not frame.evaluate("document.body.classList.contains('present')")
             frame.evaluate("spec.title = 'Live presentation update'; onSpecChange(true)")
@@ -466,6 +539,7 @@ def check_remote_spoke_peerings(browser, url):
     assert path["matrix"] == "Direct peering (uninspected)"
     assert frame.evaluate("regionById(spec,'italynorth').remote_hub") == "westeurope"
     assert frame.locator('#diagram path.lnk[data-layer="peering"]').count() == 2
+    check_workloads_above_platform(frame)
     frame.locator('[data-act="undo"]').click()
     assert not spoke.is_checked()
     frame.locator('[data-act="redo"]').click()
@@ -490,6 +564,7 @@ def check_remote_spoke_peerings(browser, url):
     assert hub.is_disabled(), "A managed virtual hub cannot accept global VNet peering"
     assert frame.get_by_role("checkbox", name="Global VNet peering: Italy North spokes to West Europe hub", exact=True).is_disabled()
     assert spoke.is_checked()
+    check_workloads_above_platform(frame)
     frame.evaluate("setPath(spec,'regions.3.pattern','full-hub'); dropLinks(spec,spec.regions[3]); onSpecChange(true)")
     assert frame.evaluate("spec.region_links.filter(l => ['spoke-hub','spoke-peering'].includes(l.kind))") == []
     assert not errors, errors

@@ -1,12 +1,12 @@
 /* layout.js: diagram geometry, hybrid/circuit layout and route segment helpers. */
 /* ===== LAYOUT: bands (users & internet, global services, areas, Microsoft backbone, on-premises) around one column
-   per region: header strip, hub (or a compact "no hub" note),
-     spoke container with spokes on a common baseline. ===== */
+   per region: header strip, workload spokes on a common baseline,
+     shared services and a bottom-aligned hub (or a compact "no hub" note). ===== */
 // A column: frame L.col wide (COL, wider for 3+ gateway lines); hub and spoke container HUB_W wide, PAD in from the
 // left. Its left gutter, the right gutter (path lane, gateway lines 8 apart) and the gaps between columns (hub link
 // lanes) keep routes 8+ px from edges.
 const COL = 330, GAP = 28, M = 16, PAD = 20, HUB_W = 270, ROW = 40, ITEM = 36, SPOKE_H = 48, LANE = 20;
-const RTOP = 232, HUB_TOP = 288;
+const RTOP = 232, WORKLOAD_TOP = 288;
 // Bands and lanes above the regions: path lanes 22 px below the users and global nodes (room for an arrowhead), DNS
 // zone links in their own lane above the global path lane.
 const TOP_LANE = 106, GLOBAL_Y = 116, ZONE_LANE = 186, GLOBAL_LANE = 196, AREA_Y = 206;
@@ -51,35 +51,38 @@ function placeStack(L, region, groups, x, y, hub) {
   }
   return y;
 }
-function placeHub(L, col) {
-  const { region, x } = col, box = { x: x + PAD, y: HUB_TOP, w: HUB_W };
+function hubContent(region) {
+  if (patternOf(region).hub === 'none') return { h: regionById(spec, region.remote_hub) ? 46 : 30 };
+  const open = isVwan(spec) && !hubSecurity(spec, region), nva = open && vhubState(spec, region) === 'nva';
+  const notes = [...wrapText(capabilityLine(spec, region), 34), ...(!open ? [] : [nva ? 'Firewall NVA: shared services'
+    : 'No hub security · not inspected'])];
+  const groups = groupRoles(ownedRoles(spec, region).hub);
+  const rows = groups.reduce((count, [, roles]) => count + roles.length, 0);
+  return { notes, groups, h: Math.max(40, 30 + notes.length * 15 + groups.length * 15 + rows * ROW) };
+}
+function placeHub(L, col, content) {
+  const { region, x } = col, box = col.hub;
   addLabel(L, cut(region.name, 30), x + 12, RTOP + 20, 'rname');
   const geo = azureRegion(region);  // sub-label: geography (e.g. Germany) and pattern
   addLabel(L, (geo ? geo.geography + ' · ' : '') + patternOf(region).label, x + 12, RTOP + 37, 'plabel');
   if (patternOf(region).hub === 'none') {
     const remote = regionById(spec, region.remote_hub);
     addLabel(L, remote ? 'No local hub' : region.remote_hub ? 'No hub · Full-Platform region missing' : 'No hub · isolated',
-      box.x + 10, HUB_TOP + 19, 'ph');
-    if (remote) addLabel(L, `→ ${cut(remote.name, 24)} hub`, box.x + 10, HUB_TOP + 35, 'ph', { layer: 'remote' });
-    col.hub = { ...box, h: remote ? 46 : 30, none: true };
+      box.x + 10, box.y + 19, 'ph');
+    if (remote) addLabel(L, `→ ${cut(remote.name, 24)} hub`, box.x + 10, box.y + 35, 'ph', { layer: 'remote' });
+    col.hub.none = true;
     return;
   }
-  addLabel(L, topologyOf(spec).hub, box.x + 10, HUB_TOP + 18, 'title');
+  addLabel(L, topologyOf(spec).hub, box.x + 10, box.y + 18, 'title');
   if (isVwan(spec) && vwansOf(spec).length > 1) {  // several virtual WANs: which one this virtual hub is in
-    addLabel(L, 'vWAN ' + cut(vwanOf(spec, region).name, 16), box.x + HUB_W - 10, HUB_TOP + 18, 'plabel',
+    addLabel(L, 'vWAN ' + cut(vwanOf(spec, region).name, 16), box.x + HUB_W - 10, box.y + 18, 'plabel',
       { anchor: 'end' });
   }
-  const open = isVwan(spec) && !hubSecurity(spec, region);  // topology.js: a virtual hub without security says so
-  const nva = open && vhubState(spec, region) === 'nva';
-  const notes = [...wrapText(capabilityLine(spec, region), 34), ...(!open ? [] : [nva ? 'Firewall NVA: shared services'
-    : 'No hub security · not inspected'])];
-  notes.forEach((t, k) => addLabel(L, t, box.x + 10, HUB_TOP + 34 + k * 15, 'cap'));
-  const bottom = placeStack(L, region, groupRoles(ownedRoles(spec, region).hub), box.x + 10,
-    HUB_TOP + 28 + notes.length * 15, true);
-  col.hub = { ...box, h: Math.max(40, bottom - HUB_TOP + 2) };
+  content.notes.forEach((t, k) => addLabel(L, t, box.x + 10, box.y + 34 + k * 15, 'cap'));
+  placeStack(L, region, content.groups, box.x + 10, box.y + 28 + content.notes.length * 15, true);
 }
 const stripHeight = col => (col.strip.length ? 19 + col.strip.length * ROW : 0);
-// Virtual WAN: the region's shared services VNet, a spoke connected to the virtual hub, at the top of the spokes.
+// Virtual WAN: a separate shared services VNet above the hub, below the workload spokes.
 const sharedHeight = col => (col.shared.length ? 34 + groupRoles(col.shared).length * 15 + col.shared.length * ROW
   : 0);
 function placeShared(L, col, x, y) {
@@ -89,11 +92,10 @@ function placeShared(L, col, x, y) {
   return y + sharedHeight(col);
 }
 function placeSpokes(L, col, spokeY) {
-  const { region, x } = col, left = x + PAD, w = HUB_W, top = spokeY - 24 - stripHeight(col) - sharedHeight(col);
+  const { region, x } = col, left = x + PAD, w = HUB_W, top = WORKLOAD_TOP;
   col.box = { x: left, y: top, w, h: spokeY + SPOKE_H + 10 - top };
   addLabel(L, 'SPOKES', left + 10, top + 15, 'grp');
-  const y = col.shared.length ? placeShared(L, col, left + 6, top + 22) : top + 22;
-  placeStack(L, region, col.strip.length ? [['spoke', col.strip]] : [], left + 10, y, false);
+  placeStack(L, region, col.strip.length ? [['spoke', col.strip]] : [], left + 10, top + 22, false);
   for (const [key, dx] of [['spoke', 10], ['spoke2', w / 2 + 2]]) {  // 22 px from the left / right path lane
     L.nodes[`${region.id}.${key}`] = { x: left + dx, y: spokeY, w: w / 2 - 12, h: SPOKE_H, region: region.id,
       spoke: key, ...CATALOG.generic[key] };
@@ -117,29 +119,32 @@ function planLanes(L, lane0) {
     const p = col(c.from), q = col(c.to), swap = c.kind === 'hub' && p && q && p.x > q.x;
     if (p && q && p !== q) conns.push({ ...c, a: swap ? q : p, b: swap ? p : q });
   }
-  const spokeX = (c, key) => centre(L.nodes[`${c.region.id}.${key}`])[0];
   conns.forEach((c, k) => {
     const { a, b } = c, laneY = lane0 + k * LANE;
     if (isSpokeLink(c)) {
       const src = L.nodes[a.region.id + '.spoke'], dst = L.nodes[b.region.id + '.spoke'];
       const slot = conns.filter(o => o.b === b).indexOf(c);
-      const srcX = centre(src)[0], dstX = c.kind === 'spoke-hub' ? b.x - 18 - slot * 8 : centre(dst)[0];
+      const srcX = laneL(a), dstX = c.kind === 'spoke-hub' ? b.x - 18 - slot * 8 : laneL(b);
       const end = c.kind === 'spoke-hub' ? [[dstX, b.hub.y + 12], [b.hub.x, b.hub.y + 12]]
-        : [[dstX, dst.y + dst.h]];
+        : [[dstX, dst.y + dst.h + 10], [centre(dst)[0], dst.y + dst.h + 10], [centre(dst)[0], dst.y + dst.h]];
       const key = `${c.kind}:${a.region.id}:${b.region.id}`, text = connectionLabel(spec, c);
       L.peers.push({ key, text, from: a.region.id, to: b.region.id, kind: c.kind, laneY, srcX, dstX,
-        pts: [[srcX, src.y + src.h], [srcX, laneY], [dstX, laneY], ...end] });
+        pts: [[centre(src)[0], src.y + src.h], [centre(src)[0], src.y + src.h + 10],
+          [srcX, src.y + src.h + 10], [srcX, laneY], [dstX, laneY], ...end] });
       addLabel(L, text, L.left + 8, laneY - 5, 'lbl', { peer: key, layer: 'peering', sel: peerSel(c) });
       return;
     }
     const into = conns.filter(o => o.b === b), j = into.indexOf(c);  // attach slot on b's hub
     const out = conns.filter(o => o.a === a && o.kind === 'hub').indexOf(c);  // exit slot on a's hub
-    const srcX = c.kind === 'hub' ? a.x + L.col + 10 + out * 8 : spokeX(a, 'spoke');
+    const srcX = c.kind === 'hub' ? a.x + L.col + 10 + out * 8 : laneL(a);
     const dstX = b.x - 18 - j * 8;
     const own = L.nodes[a.region.id + '.firewall'], fw = own && own.hub ? own : L.nodes[a.region.id + '.hub_router'];
     // level with the hub firewall (or its port slots); a virtual hub without one: with its router
     const y0 = (fw ? centre(fw)[1] : a.hub.y + a.hub.h - 12) + out * 10, dstY = b.hub.y + 10 + j * 8;
-    const start = c.kind === 'hub' ? [[a.hub.x + a.hub.w, y0], [srcX, y0]] : [[srcX, a.box.y + a.box.h]];
+    const source = L.nodes[a.region.id + '.spoke'];
+    const start = c.kind === 'hub' ? [[a.hub.x + a.hub.w, y0], [srcX, y0]]
+      : [[centre(source)[0], source.y + source.h], [centre(source)[0], a.box.y + a.box.h],
+        [srcX, a.box.y + a.box.h]];
     const end = [[dstX, dstY], [b.hub.x, dstY]];
     const key = `${c.kind}:${a.region.id}:${b.region.id}`, text = connectionLabel(spec, c);
     L.peers.push({ key, text, from: a.region.id, to: b.region.id, kind: c.kind, laneY, srcX, dstX,
@@ -164,8 +169,10 @@ function placeGlobal(L) {
   // Virtual WAN: zones are linked to the shared services VNets (not to virtual hubs): no line, see the zones' sub-label
   L.zoneLinks = [[[up.x + up.w, centre(up)[1]], [z.x, centre(z)[1]]], ...L.regions
     .filter(c => !c.hub.none && !isVwan(spec) && (resolveRole(spec, c.region, 'dns') || {}).owner === c.region.id)
-    .map(c => [[zx, z.y + z.h], [zx, ZONE_LANE], [c.hub.x + c.hub.w - 24, ZONE_LANE],
-      [c.hub.x + c.hub.w - 24, c.hub.y]])];
+    .map(c => {
+      const x = c.x + c.w - 8, y = c.hub.y + 8;
+      return [[zx, z.y + z.h], [zx, ZONE_LANE], [x, ZONE_LANE], [x, y], [c.hub.x + c.hub.w, y]];
+    })];
   placeGlobalEntry(L);
 }
 // Global entry. Front Door and Traffic Manager are Azure global services: in the global services row, centred under
@@ -251,7 +258,10 @@ function placeAreas(L) {
 // the drop from a remote-hub region's peer workload to its lane (the east-west hairpin path).
 function verticalLines(L) {
   const drops = L.peers.filter(p => p.kind === 'remote').map(p => [L.nodes[p.from + '.spoke2'], p.laneY])
-    .map(([n, y]) => [[centre(n)[0], n.y + n.h], [centre(n)[0], y]]);
+    .map(([n, y]) => {
+      const x = laneR(L.regions.find(c => c.region.id === n.region)), exit = n.y + n.h + 10;
+      return [[centre(n)[0], n.y + n.h], [centre(n)[0], exit], [x, exit], [x, y]];
+    });
   const lines = [...L.peers.map(p => p.pts), ...L.wires.map(w => w.pts), ...L.zoneLinks, ...drops];
   return lines.flatMap(pts => pts.slice(1).map((q, i) => [pts[i], q])).filter(([p, q]) => p[0] === q[0])
     .map(([p, q]) => [p[0], Math.min(p[1], q[1]), Math.max(p[1], q[1])]);
@@ -321,12 +331,18 @@ function layoutDiagram() {
   L.width = Math.max(760, left + n * L.col + Math.max(0, n - 1) * gap + M, globalEntryWidth(L), hybridWidth());
   L.regions = order.map((region, i) => ({ region, x: left + i * (L.col + gap), w: L.col, shared: ownedRoles(spec,
     region).shared, strip: [...ownedRoles(spec, region).spoke, ...(patternOf(region).spokeExtras || [])] }));
-  L.regions.forEach(col => placeHub(L, col));
-  placeOriginTags(L);
-  const spokeY = Math.max(HUB_TOP + 100, ...L.regions.map(c => c.hub.y + c.hub.h + 44 + stripHeight(c) +
-    sharedHeight(c)));
+  const spokeY = WORKLOAD_TOP + 24 + Math.max(0, ...L.regions.map(stripHeight));
   L.regions.forEach(col => placeSpokes(L, col, spokeY));
-  L.bottom = spokeY + SPOKE_H + 22;
+  const contents = L.regions.map(col => hubContent(col.region));
+  const platformBottom = spokeY + SPOKE_H + 34 +
+    Math.max(0, ...L.regions.map((col, i) => sharedHeight(col) + contents[i].h));
+  L.regions.forEach((col, i) => {
+    col.hub = { x: col.x + PAD, y: platformBottom - contents[i].h, w: HUB_W, h: contents[i].h };
+    placeHub(L, col, contents[i]);
+    if (col.shared.length) placeShared(L, col, col.x + PAD + 6, col.hub.y - sharedHeight(col));
+  });
+  placeOriginTags(L);
+  L.bottom = platformBottom + 12;
   placeBands(L); placeAreas(L); clearLabels(L);
   for (const [key, n] of Object.entries(L.nodes)) n.key = key;  // routes look up wires by node key
   return L;
@@ -702,7 +718,8 @@ function topRoute(a, b) {
   return { pts: [[ax, a.y + a.h], [ax, lane], [x, lane], [x, y], [b.x, y]] };
 }
 // Between regions: along the connection's backbone lane (or a generic one). Hub nodes reach its gap lanes from the
-// side (centre slot; a gateway's upper slot, its line leaves from the centre); spokes from their bottom centre.
+// side (centre slot; a gateway's upper slot, its line leaves from the centre); spokes exit below their box
+// and use the column gutters to avoid the platform services below them.
 function crossRoute(a, b) {
   const lanes = layout.peers;
   const matches = (q, src = a, dst = b) => q.kind === 'spoke-peering' ? src.spoke && dst.spoke
@@ -713,7 +730,10 @@ function crossRoute(a, b) {
   const lane = p || { srcX: right ? ca.x + ca.w + 10 : laneIn(ca) - 8, dstX: right ? laneIn(cb) - 8 : cb.x + cb.w + 10,
     laneY: layout.bottom + 26 };
   const reach = (n, x) => {  // from node n across to the vertical lane at x (or from its bottom centre)
-    if (n.spoke && n === a) return [[centre(n)[0], n.y + n.h]];
+    if (n.spoke) {
+      const sx = n.spoke === 'spoke2' ? laneR(colOf(n.region)) : x, y = n.y + n.h + 10;
+      return [[centre(n)[0], n.y + n.h], [centre(n)[0], y], [sx, y]];
+    }
     if (!n.hub && !n.spoke) return [[n.x + n.w, centre(n)[1]], [laneR(colOf(n.region)), centre(n)[1]]];  // spoke-level
     const out = x > n.x + n.w, y = centre(n)[1] - (out && isGateway(n) ? ROUTE.slot : 0);
     return [[out ? n.x + n.w : n.x, y], [x, y]];

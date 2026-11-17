@@ -28,7 +28,7 @@ function labelSvg(l) {
   return `${bullet}${pill}<text class="${l.cls}" x="${l.x}" y="${l.y}"${anchor}${peer}>${esc(l.text)}</text>`;
 }
 // Region frame and header strip are tinted with the pattern colour (CSS variables from rules.js); in Virtual WAN the
-// shared services VNet is a dashed box at the top of the spokes.
+// shared services VNet is a separate dashed box below workloads and above the virtual hub.
 function regionSvg({ region, x, w, hub, box, sharedBox: sb }) {
   const id = patternId(region), top = RTOP, h = layout.bottom - RTOP, sel = selAttr('region:' + region.id);
   const dashed = RULES.patterns[id].dashed ? ' dashed' : '';
@@ -40,8 +40,15 @@ function regionSvg({ region, x, w, hub, box, sharedBox: sb }) {
     rx="5"/>
     <rect class="spokes" x="${box.x}" y="${box.y}" width="${box.w}" height="${box.h}" rx="5"/>` + (!sb ? ''
     : `<rect class="svcnet" x="${sb.x}" y="${sb.y}" width="${sb.w}" height="${sb.h}" rx="4"/>`);
-  return hub.none ? s : s + ['spoke', 'spoke2'].map(key => centre(layout.nodes[`${region.id}.${key}`])[0])
-    .map(sx => `<path class="lnk" d="M${sx} ${hub.y + hub.h}V${box.y}"/>`).join('');
+  if (hub.none) return s;
+  s += ['spoke', 'spoke2'].map(key => {
+    const sx = centre(layout.nodes[`${region.id}.${key}`])[0];
+    if (!sb) return `<path class="lnk" d="M${sx} ${box.y + box.h}V${hub.y}"/>`;
+    const left = key === 'spoke', lane = left ? x + 8 : x + PAD + HUB_W + 12;
+    return `<path class="lnk" d="${roundPath([[sx, box.y + box.h], [lane, box.y + box.h],
+      [lane, hub.y + 8], [left ? hub.x : hub.x + hub.w, hub.y + 8]])}"/>`;
+  }).join('');
+  return s + (sb ? `<path class="lnk" d="M${centre(sb)[0]} ${sb.y + sb.h}V${hub.y}"/>` : '');
 }
 // Static links. Backbone lanes carry their connection key (data-peer): hub links are thin and unlabelled;
 // remote-hub peerings and lane labels appear only when the selected path uses them (drawPath). Then DNS zone links

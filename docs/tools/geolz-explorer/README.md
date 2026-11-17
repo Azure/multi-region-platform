@@ -17,7 +17,9 @@ Version 1.0 (October 2026), the first stable version. Created by Ramona Lefter, 
 ## What it is
 
 - **A diagram of the whole estate:** regions grouped by area, their hubs (or virtual hubs) and spokes, hub
-  links, the ExpressRoute peering locations, connectivity providers and on-premises sites.
+  links, the ExpressRoute peering locations, connectivity providers and on-premises sites. Workload spokes
+  sit at the top of each region, with platform shared services below and hubs aligned at the bottom.
+  Virtual WAN shared services VNets sit between workloads and virtual hubs.
 - **Paths you can step through:** pick a region and a path (Ingress, Egress, DNS, East-west, On-prem); the
   diagram highlights each hop and the side panel explains it, with a *source* link per statement.
 - **Checks:** design mistakes (a hub that depends on a single standard circuit, a remote hub that can't serve,

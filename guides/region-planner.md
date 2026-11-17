@@ -139,6 +139,10 @@ inline at the bottom of the page. Use its **Editor** to build or change hub-spok
 shared services, regional links, and hybrid connectivity. You can hide and reopen the tool or switch planner
 tabs without losing the loaded design.
 
+Regional diagrams place workload spokes at the top and platform shared services at the bottom,
+with hubs aligned along the lower edge. Virtual WAN shared services VNets sit below workloads,
+above their virtual hubs.
+
 The tool uses the same full-width layout and collapsed website navigation as the rest of the planner.
 Hiding it or leaving Regional design keeps that planner layout.
 **Editor** and **Details** show one side panel at a time; on narrower screens they overlay the canvas instead
