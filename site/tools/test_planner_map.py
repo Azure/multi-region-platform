@@ -22,7 +22,7 @@ def scenario(page):
       s.regions = ['swedencentral','denmarkeast','italynorth'].map(C.newRegion);
       s.sites = ['Frankfurt','Dublin'].map((peering,i) =>
         ({id:'peer'+i, kind:'peering',peering,city:null,target:'',edits:{}}));
-      C.replace(s); MRP.ui.tab = 'latency'; MRP.kit.hooks.render();
+      C.replace(s); MRP.ui.tab = 'capability'; MRP.ui.capability = 'latency'; MRP.kit.hooks.render();
     }""")
     page.wait_for_selector(".pl-map-land")
 
@@ -94,7 +94,8 @@ def main():
             assert "99 ms*" not in page.locator(".pl-map-value text").all_text_contents()
             page.get_by_role("button", name="Edit locations in Scope", exact=True).click()
             page.get_by_role("button", name="Remove Dublin", exact=True).click()
-            page.get_by_role("tab", name="Latency", exact=False).click()
+            page.locator("#tab-capability").click()
+            page.locator('[data-act="evidence"][data-arg="latency"]').click()
             assert page.locator(".pl-map-node").count() == 6
             assert page.locator(".pl-map-link").count() == 8
             scenario(page)

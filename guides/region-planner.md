@@ -5,22 +5,41 @@ The [published planner](https://azure.github.io/multi-region-platform/region-pla
 The planner exports Excel and saves or opens JSON planning records. Visitor-entered planning data stays in the browser; it is not sent to a server. Azure reference data is loaded from published snapshots: see [Azure data collection](azure-data.md) for provenance and limitations.
 
 Check 3 uses one shared answer per workload question, marked **Applies to all regions**.
-Choose **Customize by region** to override individual regions; **Use shared answer** restores
+Choose **Edit overrides** to override individual regions; **Use shared answer** restores
 inheritance. Changing the shared answer updates only regions without an override, including newly
 added candidates. Hiding regional answers does not remove overrides. Existing plans retain different
 regional answers and show them automatically. JSON saves retain defaults and overrides; Excel exports
 contain each region's effective answers. Zone resiliency remains a workload requirement:
 check 4 flags a capability gap rather than weakening the requirement.
 
-Scope defines the footprint in this order: optional **On-premises datacenters**,
-**ExpressRoute peering locations**, **Current regions**, **Current platform**, and **Regions to qualify**.
-Section headers use distinct slate, teal, amber, blue, violet, and green accents, with
-theme-specific light and dark palettes. Controls and status indicators keep their existing meanings.
+The six tabs are **Scope**, **Checks 1 to 3**, **Check 4**, **Outcome**, **Regional design**, and
+**Review + export**. Check 4 has three substeps: **Latency**, **Pricing**, then **Check 4 questions**.
+Evidence-based suggestions have dashed outlines and remain unrecorded until accepted.
+Outcome has one row per region and only four classifications: **Excluded**, **Candidate**,
+**Conditional**, and **Qualified**. Regions with no business need are Excluded; older saved
+classifications for that case migrate automatically. Subsequent checks show **Not needed**
+without erasing previously recorded answers. Only Qualified and Conditional regions can be selected
+for regional design; all regions remain in JSON, text, Excel, and the review record.
+
+Scope starts with **Plan**, followed by optional **On-premises datacenters** and
+**ExpressRoute peering locations** side by side, then **Current platform** and **Regions to qualify**.
+Neutral cards use color for status and selections rather than decorative section bands.
+Each current region records one of the four Platform Services profiles. Older Full-Platform flags
+migrate to Full platform; an unmarked legacy region's profile remains unspecified.
 Add or remove locations, choose datacenter peering paths, and set latency targets there.
 Existing saved city locations, targets, peering choices, and measured overrides are retained.
 A nearest peering path is labelled as an estimate, not a confirmed circuit.
-Latency displays comparisons, target breaches, evidence sources, and the map, with an
+**Primary ExpressRoute circuit** explicitly selects one of the peering locations added in Scope,
+or **None**. Adding a latency-test location alone does not assert circuit ownership.
+The selected circuit is the default for regional reuse decisions, unless an existing connectivity
+description is recorded explicitly.
+
+Latency displays comparisons, target markers, breaches, evidence sources, and the map, with an
 **Edit locations in Scope** link. Measured-latency overrides and their reset controls remain in Latency.
+Its bars and legend use equal-width steps at 0, 30, 60, 120, 200, and 250 ms, interpolating
+within each interval and filling at 250 ms. Location comparisons precede region-to-region comparisons.
+Pricing keeps the baseline selector and spend-weight toggle next to its summaries; enabling weighting
+reveals a spend-share input for each service. Diverging bars share a zero-centered scale.
 
 In Regional design, **Hub Connections** is a searchable multi-select: select or clear regions without
 closing the dropdown. Arrow keys move between options; Enter or Space toggles a selection, and Esc closes
@@ -32,7 +51,7 @@ Saved plans using earlier names for Minimal platform migrate automatically witho
 service placements, or hub selections. The advanced networking tool keeps its stable `minimal-hub` pattern ID.
 
 **Existing connectivity** suggests only locations in the Azure ExpressRoute peering-location snapshot,
-independently of the Latency tab. Customer cities and their estimated routes do not establish existing
+independently of the latency-test locations. Customer cities and their estimated routes do not establish existing
 circuits. Suggestions identify valid peering locations, not circuits the customer owns. You can still
 type a circuit description or other existing connectivity, such as a VPN. If the catalog is unavailable,
 the field explains why no locations are suggested.
@@ -45,7 +64,16 @@ Planner actions, Essentials, and step tabs remain available throughout.
 After building, run `python site\tools\test_planner_layout.py` for full-width, navigation, and responsive
 layout regressions across all tabs in light and dark themes.
 
-The Services tab supports up to 100 service entries in one table. Add the same service as many times as needed within that limit, with an independent Product, SKU, and spend share for each entry. It shows 10 service rows at a time; scroll within the table to reach the rest, with column headers kept visible. Saved plans, Excel exports, and printing retain every entry, including repeated services.
+Question **3.5** embeds up to 100 service entries in Check 3. Add the same service as many times as needed within that limit, with an independent Product, SKU, and spend share for each entry. Always-visible **Any product** and **Any SKU** selectors narrow the comparison; select a product before a specific SKU. It shows 10 service rows at a time; scroll within the table to reach the rest, with column headers kept visible. Saved plans, Excel exports, and printing retain every entry, including repeated services.
+
+Check 3 uses the guidance's four workload archetypes and shows their typical profile fits.
+Saved archetype names migrate without losing regional overrides. In Regional design, the actual
+connectivity requirements determine the suggested profile; a typical archetype fit is not automatic
+qualification. Shared-service defaults and explicit choices are always editable in one table,
+tagged **Profile default** or **Decided here**. Review triggers are a date and a list of changes
+to requirements, constraints, or platform capabilities; previous custom reassessment text remains
+editable as an additional trigger. Review records include the outcome date, archetype, profile,
+connectivity, service placement, documented constraints, ownership, and review triggers.
 
 Services, Products, and SKUs come from the manually imported availability CSV. Separate Product and SKU selectors narrow the selection; leaving either unselected checks whether any matching entry is available. Regional cells show small AZ counts only where the CSV supplies them. Release Status is not imported. Pricing inherits those services through the maintained service-name mapping, but continues to use its separate Retail Prices API snapshot and service-level comparisons. See [Azure data collection](azure-data.md) for monthly CSV imports and the monthly pricing refresh Action.
 
@@ -76,7 +104,7 @@ When checks, profiles, or default placements change in the articles, mirror the 
 
 ## Planner geography view
 
-The Latency tab ends with a geographic view derived from Scope's current/candidate regions, selected peering locations and customer cities, and the same published, estimated, or edited latency values as the tables. It adds no duplicate tables. Blue current-region, green candidate, and orange peering labels follow the planner's light/dark styling.
+The Latency substep in Check 4 ends with a geographic view derived from Scope's current/candidate regions, selected peering locations and customer cities, and the same published, estimated, or edited latency values as the tables. It adds no duplicate tables. Blue current-region, green candidate, and orange peering labels follow the planner's light/dark styling.
 
 **Add a peering location** lists every location in the published peering snapshot in a scrollable dropdown,
 without a 50-result cutoff. Search remains available; locations already added are omitted to prevent duplicates.

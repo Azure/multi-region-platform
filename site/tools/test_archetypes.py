@@ -197,7 +197,9 @@ for (const file of ['planner-data.js', 'planner-core.js'])
   vm.runInThisContext(fs.readFileSync('site/assets/' + file, 'utf8'));
 const M = window.MRP;
 const options = M.CHECKS[2].rows.find(r => r.id === '3.2').opts;
-const saved = options.slice(0, 4).map(value => M.core.normalize({
+const legacy = ['Isolated Cloud-Native or AI Applications', 'Connected Cloud-Native or AI Applications',
+  'Hybrid-Connected Applications', 'Interconnected Application Portfolios'];
+const saved = legacy.map(value => M.core.normalize({
   v: 3, regions: [{id:'westeurope', checks: {'3.2':value}}]
 }).regions[0].checks['3.2']);
 console.log(JSON.stringify({options, saved, question: M.PROFILE_QUESTIONS[0].label}));
@@ -205,10 +207,10 @@ console.log(JSON.stringify({options, saved, question: M.PROFILE_QUESTIONS[0].lab
         result = subprocess.run(["node", "-e", script], cwd=ROOT,
                                 check=True, capture_output=True, text=True, encoding="utf-8")
         data = json.loads(result.stdout)
-        legacy = ["Isolated Cloud-Native or AI Applications", "Connected Cloud-Native or AI Applications",
-                  "Hybrid-Connected Applications", "Interconnected Application Portfolios"]
-        self.assertEqual(data["options"], legacy + ["Several (see note)"])
-        self.assertEqual(data["saved"], legacy)
+        canonical = ["Self-Contained Workloads", "Selectively Connected Workloads",
+                     "Hybrid-Dependent Workloads", "Interdependent Workload Groups"]
+        self.assertEqual(data["options"], canonical)
+        self.assertEqual(data["saved"], canonical)
         self.assertIn("beyond approved same-region spokes and Azure service endpoints", data["question"])
 
     def test_executive_city_explains_the_numbered_archetypes(self):

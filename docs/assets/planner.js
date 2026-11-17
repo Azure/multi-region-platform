@@ -8,16 +8,27 @@
   const root = document.getElementById('planner');
   if (!root) return;
   const M = window.MRP, C = M.core, K = M.kit, { icon, status } = M, { esc } = K, ui = M.ui, T = M.viewTools;
-  // Checks 1 to 3 need no Azure data and come first; the evidence tabs then feed check 4 and the outcome.
   const TABS = [
-    { id: 'scope', label: 'Scope', step: 1 }, { id: 'checks', label: 'Checks 1 to 3', step: 1 }, { id: 'services', label: 'Services', step: 1 },
-    { id: 'latency', label: 'Latency', step: 1 }, { id: 'pricing', label: 'Pricing', step: 1 }, { id: 'capability', label: 'Check 4 and outcome', step: 1 },
+    { id: 'scope', label: 'Scope', step: 1 }, { id: 'checks', label: 'Checks 1 to 3', step: 1 },
+    { id: 'capability', label: 'Check 4', step: 1 }, { id: 'outcome', label: 'Outcome', step: 1 },
     { id: 'design', label: 'Regional design', step: 2 }, { id: 'review', label: 'Review + export', step: 2 },
   ];   // the order of this list is the order of the tab strip, of the phone step menu, of Previous and Next, and of the arrow keys
-  const STEPS = { 1: 'Qualify regions', 2: 'Select the regional design' };
-  const OLD_HASH = { record: 'review', outcome: 'capability' };
-  const tabFromHash = () => { const h = location.hash.slice(1), id = OLD_HASH[h] || h; return TABS.some(t => t.id === id) ? id : ''; };
-  ui.tab = tabFromHash() || 'scope';
+  const STEPS = { 1: 'Qualify regions', 2: 'Select regional design' };
+  function route(id, evidence) {
+    if (id === 'record') return { tab: 'review' };
+    if (id === 'services') return { tab: 'checks', anchor: 'pl-q-services' };
+    if (id === 'latency' || id === 'pricing') return { tab: 'capability', evidence: id };
+    if (id.startsWith('check4-')) {
+      const step = id.slice(7);
+      return { tab: 'capability', evidence: ['latency', 'pricing', 'questions'].includes(step) ? step : 'latency' };
+    }
+    if (id === 'capability' || id === 'check4') return { tab: 'capability', evidence: evidence || (id === 'capability' ? 'questions' : 'latency') };
+    return { tab: TABS.some(t => t.id === id) ? id : 'scope' };
+  }
+  const initial = route(location.hash.slice(1));
+  ui.tab = initial.tab;
+  if (initial.evidence) ui.capability = initial.evidence;
+  ui.anchor = initial.anchor || '';
   const GLYPH = { done: ['success', 'complete'], half: ['half', 'in progress'], none: ['none', 'not started'], lock: ['lock', 'needs a selected region'] };
 
   // ───────────── skeleton
@@ -42,7 +53,8 @@
     const v = x => x || K.EM;
     const kv = (a, b) => `<div class="pl-kv-r"><dt>${a}</dt><dd>${b}</dd></div>`;
     // One line while folded: what the workbook is about, where it stands, and how fresh the Azure data is.
-    const cur = S.current.map(c => `${esc(C.rname(c.id))}${c.hub ? ' <span class="pl-tag">Hub</span>' : ''}`).join(', ');
+    const cur = S.current.map(c => `${esc(C.rname(c.id))} ${c.profile ? K.profileBadge(c.profile) : '<span class="pl-tag">Profile not recorded</span>'}`).join(', ');
+    const candidates = S.regions.map(r => `<span class="pl-summary-region">${esc(C.rname(r.id))} ${K.badge(M.OUTCOME_ICON[C.outcome(r)], C.outcome(r))}</span>`).join('');
     const data = [D.hasAvailability && ['services', D.availabilityMeta.generated], D.hasCatalog && ['prices', D.meta.generated], D.lat && ['latency', D.lat.generated]].filter(Boolean);
     const sum = [
       S.meta.name ? `<span class="pl-sum-i pl-sum-name">${esc(S.meta.name)}</span>` : '',
@@ -54,11 +66,11 @@
     const prices = D.hasCatalog ? `${D.meta.partial ? 'Partial test snapshot' : 'Snapshot'} of ${esc(K.fmtDate(D.meta.generated))}` : D.asFile ? 'Not loaded' : 'Not published';
     const availability = D.hasAvailability ? `Imported ${esc(K.fmtDate(D.availabilityMeta.generated))}` : 'Not loaded';
     const lat = D.lat ? `Dataset of ${esc(D.lat.dataset || K.fmtDate(D.lat.generated))}` : D.asFile ? 'Not loaded' : 'Not published';
-    const names = S.current.map(c => `${esc(C.rname(c.id))}${c.id === S.baseline && S.current.length > 1 ? ' <span class="pl-tag">Price baseline</span>' : ''}${c.hub ? ' <span class="pl-tag">Hub</span>' : ''}`);
+    const names = S.current.map(c => `${esc(C.rname(c.id))} ${c.profile ? K.profileBadge(c.profile) : '<span class="pl-tag">Profile not recorded</span>'}${c.id === S.baseline && S.current.length > 1 ? ' <span class="pl-tag">Price baseline</span>' : ''}`);
     return `<div class="pl-ess-h"><button type="button" class="pl-ess-t" data-act="essentials" aria-expanded="${open}" aria-controls="pl-ess-b">${icon(open ? 'down' : 'right')}<span>Essentials</span></button>` +
       `${open ? '' : `<p class="pl-sum">${sum}</p>`}</div>` +
       `<div class="pl-ess-b" id="pl-ess-b"${open ? '' : ' hidden'}><dl>${kv('Plan', esc(v(S.meta.name)))}${kv('Owner', esc(v(S.meta.owner)))}${kv('Assessment date', esc(v(S.meta.date)))}</dl>` +
-      `<dl>${kv('Current regions', names.length ? names.join(', ') : K.EM)}${kv('Regions to qualify', S.regions.length ? `${S.regions.length}${breakdown ? `<span class="pl-brk">${breakdown}</span>` : ''}` : K.EM)}` +
+      `<dl>${kv('Current regions', names.length ? names.join(', ') : K.EM)}${kv('Regions to qualify', candidates || K.EM)}${kv('Primary ExpressRoute circuit', esc(S.estate.circuit || 'None'))}` +
       `${kv('Selected for regional design', picked.length ? esc(picked.map(r => C.rname(r.id)).join(', ')) : 'None yet')}${kv('Azure data', `<span class="pl-blk">Services: ${availability}</span><span class="pl-blk">Prices: ${prices}</span><span class="pl-blk">Latency: ${lat}</span>`)}</dl></div>`;
   }
   function vTabs() {
@@ -76,13 +88,19 @@
       `<select id="pl-stepsel" aria-label="Step ${i + 1} of ${TABS.length}: ${esc(TABS[i].label)}. Choose a step">${opts}</select></div><div class="pl-stepbar" aria-hidden="true">${bar}</div>`;
   }
   function vFoot() {
-    const i = TABS.findIndex(t => t.id === ui.tab), prev = TABS[i - 1], next = TABS[i + 1], n = C.selected().length, prog = C.progress();
+    const i = TABS.findIndex(t => t.id === ui.tab), n = C.selected().length, prog = C.progress();
+    let prev = ui.tab === 'outcome' ? { id: 'check4-questions', label: 'Check 4 questions' } : TABS[i - 1], next = TABS[i + 1];
+    if (ui.tab === 'capability') {
+      if (ui.capability === 'latency') next = { id: 'check4-pricing', label: 'Pricing' };
+      if (ui.capability === 'pricing') { prev = { id: 'check4-latency', label: 'Latency' }; next = { id: 'check4-questions', label: 'Check 4 questions' }; }
+      if (ui.capability === 'questions') prev = { id: 'check4-pricing', label: 'Pricing' };
+    }
     const locked = next && prog[next.id] === 'lock';
     // A step that needs a selected region is never one click away while nothing is selected: the button says why instead.
     const nextBtn = !next ? K.btn({ act: 'export', label: 'Export to Excel', icon: 'export', kind: 'primary' })
       : locked ? K.btn({ label: 'Next: ' + next.label, kind: 'primary', disabled: true, cls: 'pl-next' })
       : K.btn({ act: 'tab', arg: next.id, label: 'Next: ' + next.label, kind: 'primary', cls: 'pl-next' });
-    const say = locked ? `Select a Qualified or Conditional region to continue.${ui.tab === 'capability' ? '' : ` <button type="button" class="pl-linkbtn" data-act="tab" data-arg="capability">Go to the outcome</button>`}`
+    const say = locked ? `Select a Qualified or Conditional region to continue.${ui.tab === 'outcome' ? '' : ` <button type="button" class="pl-linkbtn" data-act="tab" data-arg="outcome">Go to the outcome</button>`}`
       : n ? `${K.plural(n, 'region')} selected for regional design` : 'No region selected for regional design yet';
     return `<div class="pl-foot-in${locked ? ' is-lock' : ''}"><div class="pl-foot-l">${prev ? K.btn({ act: 'tab', arg: prev.id, label: 'Previous', icon: 'arrowleft', cls: 'pl-prev', aria: 'Previous: ' + prev.label }) : ''}${nextBtn}</div>` +
       `<p class="pl-foot-r" role="status">${say}</p></div>`;
@@ -113,7 +131,7 @@
     if (!same) revealTab();
     root.style.setProperty('--pl-tabs-h', tabsEl.offsetHeight + 'px');
     panel.innerHTML = M.views[ui.tab](); panel.dataset.tab = ui.tab;
-    panel.dataset.step = String(TABS.find(t => t.id === ui.tab).step);   // the step group's hue, see "accents" in planner.css
+    panel.dataset.step = String(TABS.find(t => t.id === ui.tab).step);
     panel.setAttribute('aria-labelledby', 'tab-' + ui.tab);
     fitGrid();
     if (same) panel.querySelectorAll('.pl-scroll').forEach((x, i) => { if (scrolls[i]) { x.scrollLeft = scrolls[i].left; x.scrollTop = scrolls[i].top; } });
@@ -122,7 +140,8 @@
       if (t) { K.setQuiet(true); t.focus({ preventScroll: true }); K.setQuiet(false); if (caret && textual(t)) { try { t.setSelectionRange(caret[0], caret[1]); } catch (e) { /* not a text field */ } } }
     }
     root.dataset.ready = '1';
-    if (ui.tab === 'latency' || (ui.tab === 'design' && ui.desMap)) M.latencyMap.mount();
+    if ((ui.tab === 'capability' && ui.capability === 'latency') || (ui.tab === 'design' && ui.desMap)) M.latencyMap.mount();
+    if (ui.anchor) { const target = document.getElementById(ui.anchor); if (target) target.scrollIntoView({ block: 'start' }); ui.anchor = ''; }
     M.network.mount(el('pl-network'));
   }
   // On narrow screens the tab strip scrolls; keep the selected tab in view.
@@ -132,14 +151,18 @@
   }
   function patch() {
     put(ess, vEssentials()); put(tabsEl, vTabs()); put(foot, vFoot());
-    if (ui.tab === 'pricing') T.patchPricing(panel);
-    if (ui.tab === 'latency') T.patchLatency(panel);
+    if (ui.tab === 'capability' && ui.capability === 'pricing') T.patchPricing(panel);
+    if (ui.tab === 'capability' && ui.capability === 'latency') T.patchLatency(panel);
     M.network.syncWorkbook();
   }
   // The checks grid sticks its header to the page when it fits, and scrolls inside its own frame when it doesn't.
   function fitGrid() {
-    const w = document.getElementById('pl-cgw');
-    if (w) w.classList.toggle('fit', panel.clientWidth - 64 >= (window.matchMedia('(max-width: 960px)').matches ? 260 : 320) + (parseInt(w.style.getPropertyValue('--n'), 10) || 1) * 190);
+    panel.querySelectorAll('.pl-cgw').forEach(w => {
+      const table = w.querySelector('table'), style = getComputedStyle(w);
+      const available = w.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
+      const q = parseInt(getComputedStyle(table).getPropertyValue('--q'), 10) || 320;
+      w.classList.toggle('fit', available >= q + Number(w.style.getPropertyValue('--n')) * parseInt(w.style.getPropertyValue('--cw'), 10));
+    });
     const services = panel.querySelector('.pl-services-scroll');
     if (services) {
       const table = services.querySelector('table'), rows = [...table.tBodies[0].rows].slice(0, 10);
@@ -189,7 +212,7 @@
     if (p[0] === 'meta') S.meta[p[1]] = v;
     else if (p[0] === 'estate') S.estate[p[1]] = v;
     else if (p[0] === 'baseline') { S.baseline = v; C.loadPricing(v).then(ok => ok && lazyRender()); }
-    else if (p[0] === 'hub') { const x = S.current.find(c => c.id === p[1]); if (x) x.hub = !!v; }
+    else if (p[0] === 'current') { const x = S.current.find(c => c.id === p[1]); if (x) { x.profile = v; x.hub = v === 'Full platform'; } }
     else if (p[0] === 'ui') S.ui[p[1]] = !!v;
     else if (p[0] === 'note') S.notes[p[1]] = v;
     else if (p[0] === 'workload') {
@@ -197,7 +220,7 @@
       if (!p[2]) w.value = v;
       else if (v === '__shared__') delete w.overrides[p[2]];
       else w.overrides[p[2]] = v;
-    } else if (p[0] === 'reg') { const r = C.reg(p[1]); if (!r) return; if (p[2] === 'check') r.checks[p[3]] = v; else r[p[2]] = v; }
+    } else if (p[0] === 'reg') { const r = C.reg(p[1]); if (!r) return; if (p[2] === 'check') r.checks[p[3]] = v; else r[p[2]] = p[2] === 'selected' ? !!v : v; }
     else if (p[0] === 'svc') { const s = S.services.find(x => x.id === p[1]); if (s) s[p[2]] = numeric(v); }
     else if (p[0] === 'site') {
       const s = S.sites.find(x => x.id === p[1]); if (!s) return;
@@ -209,14 +232,20 @@
         const x = d.ss[p[3]] = d.ss[p[3]] || {};
         if (p[4] === 'p') { const sh = C.effective(r).ss.find(s => s.id === p[3]); if (sh && v === sh.def) delete x.p; else x.p = v; }
         else x[p[4]] = v;
+      } else if (p[2] === 'trigger') {
+        d.reviewTriggers = v ? [...new Set([...d.reviewTriggers, p[3]])] : d.reviewTriggers.filter(t => t !== p[3]);
       } else if (p[2] === 'custom') { const x = d.custom.find(c => c.id === p[3]); if (x) x[p[4]] = v; }
       else { d[p[2]] = v; if (p[2] === 'q1' && v !== 'Yes') d.q2 = d.q3 = ''; if (p[2] === 'q2' && v !== 'No') d.q3 = ''; }
     }
   }
   function openTab(id) {
-    ui.tab = id; history.replaceState(null, '', '#' + id);
-    if (id === 'scope' && C.D.lat && C.D.citiesState === 'idle') C.loadCities().then(() => ui.tab === 'scope' && lazyRender());
-    if (id === 'pricing') C.loadPricing(C.S.baseline).then(ok => ok && ui.tab === 'pricing' && lazyRender());
+    const next = route(id, id === 'capability' ? ui.capability : '');
+    ui.tab = next.tab; ui.anchor = next.anchor || '';
+    if (next.evidence) ui.capability = next.evidence;
+    const hash = ui.tab === 'capability' ? 'check4-' + ui.capability : next.anchor ? 'services' : ui.tab;
+    history.replaceState(null, '', '#' + hash);
+    if (ui.tab === 'scope' && C.D.lat && C.D.citiesState === 'idle') C.loadCities().then(() => ui.tab === 'scope' && lazyRender());
+    if (ui.tab === 'capability' && ui.capability === 'pricing') C.loadPricing(C.S.baseline).then(ok => ok && ui.tab === 'capability' && ui.capability === 'pricing' && lazyRender());
     // The strip sticks under the site header, so a new tab starts with its title just below the strip.
     const head = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--top-h'), 10) || 56;
     const lim = head + tabsEl.offsetHeight, top = panel.getBoundingClientRect().top;
@@ -228,6 +257,7 @@
     const S = C.S;
     switch (name) {
       case 'tab': openTab(arg); break;
+      case 'evidence': openTab('check4-' + arg); break;
       case 'region': ui.region = arg; break;
       case 'goto-design': ui.region = arg; openTab('design'); break;
       case 'essentials': S.ui.details = !S.ui.details; break;
@@ -235,10 +265,9 @@
       case 'show-out': S.ui.showOut = !S.ui.showOut; break;
       case 'mregion': ui.mregion = arg; break;
       case 'workload-regions': S.workload[arg].expanded = !S.workload[arg].expanded; break;
+      case 'workload-overrides': { const expanded = !M.CHECKS[2].rows.some(row => S.workload[row.id].expanded); M.CHECKS[2].rows.forEach(row => { S.workload[row.id].expanded = expanded; }); break; }
       case 'accept': { const [rid, id] = arg.split('|'), r = C.reg(rid), v = r && C.suggestAnswer(id, r); if (v && !r.checks[id]) r.checks[id] = v; break; }
       case 'accept-all': C.suggestions(C.active()).forEach(x => { x.r.checks[x.id] = x.v; }); break;
-      case 'narrow': ui.narrow[arg] = true; render(); { const c = root.querySelector(`[data-cb="prod-${CSS.escape(arg)}"]`); if (c) c.focus(); } return;
-      case 'ss-all': ui.ssAll = !ui.ssAll; render(); return;
       case 'des-map': ui.desMap = !ui.desMap; render(); return;
       case 'jump': { const t = document.getElementById(arg); if (t) { t.scrollIntoView({ block: 'start' }); const f = t.querySelector('h3, h2'); if (f) { f.tabIndex = -1; f.focus({ preventScroll: true }); } } return; }
       case 'rm-current': S.current = S.current.filter(x => x.id !== arg); break;
@@ -335,7 +364,12 @@
     }
   });
   K.bindPop(root); K.bindTips(root);
-  window.addEventListener('hashchange', () => { const id = tabFromHash(); if (id && id !== ui.tab) { openTab(id); render(); } });
+  window.addEventListener('hashchange', () => {
+    const id = location.hash.slice(1), next = route(id);
+    if (next.tab !== ui.tab || (next.evidence && next.evidence !== ui.capability) || next.anchor) {
+      openTab(next.evidence ? 'check4-' + next.evidence : id); render();
+    }
+  });
   window.addEventListener('beforeprint', () => { K.closePop(); K.hideTip(); M.network.preparePrint(); });
 
   // ───────────── start

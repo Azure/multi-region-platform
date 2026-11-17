@@ -8,7 +8,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[2]
-TABS = ("scope", "checks", "services", "latency", "pricing", "capability", "design", "review")
+TABS = ("scope", "checks", "check4-latency", "check4-pricing", "check4-questions", "outcome", "design", "review")
 
 
 def scope_colors(page):
@@ -20,7 +20,7 @@ def scope_colors(page):
       };
       return headers.map(header => ({
         foreground: rgb(getComputedStyle(header.querySelector('h3')).color),
-        background: rgb(getComputedStyle(header).backgroundColor),
+        background: rgb(getComputedStyle(header.closest('.pl-sec')).backgroundColor),
       }));
     }""")
 
@@ -59,15 +59,20 @@ def main():
                 for width in (375, 768, 1440, 1920):
                     page.set_viewport_size({"width": width, "height": 1100})
                     for tab in TABS:
+                        main_tab = "capability" if tab.startswith("check4-") else tab
                         # Phones choose the step from one menu; wider screens use the tab strip.
                         if width <= 720:
-                            page.locator("#pl-stepsel").select_option(tab)
+                            page.locator("#pl-stepsel").select_option(main_tab)
                         else:
-                            page.locator(f"#tab-{tab}").click()
-                        assert page.locator("#pl-panel").get_attribute("data-tab") == tab
+                            page.locator(f"#tab-{main_tab}").click()
+                        if tab.startswith("check4-"):
+                            page.locator(f'[data-act="evidence"][data-arg="{tab[7:]}"]').click()
+                        assert page.locator("#pl-panel").get_attribute("data-tab") == main_tab
                         if tab == "scope" and width == 375:
                             palettes[theme] = colors = scope_colors(page)
-                            assert len(colors) == len({tuple(c["background"]) for c in colors}) == 6
+                            assert len(colors) == 5
+                            assert len({tuple(c["background"]) for c in colors}) == 1
+                            assert len({tuple(c["foreground"]) for c in colors}) == 1
                             for color in colors:
                                 a, b = sorted([luminance(color["foreground"]), luminance(color["background"])])
                                 assert (b + 0.05) / (a + 0.05) >= 4.5, (theme, color)

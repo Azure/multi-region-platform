@@ -3,14 +3,22 @@
 (function (global) {
   'use strict';
 
+  const ARCHETYPES = [
+    { id: 'Self-Contained Workloads', text: 'No persistent private dependency outside the workload.', profiles: ['Governance-Only', 'Remote platform'] },
+    { id: 'Selectively Connected Workloads', text: 'Private endpoints or specific private APIs, without routed access.', profiles: ['Remote platform', 'Minimal platform'] },
+    { id: 'Hybrid-Dependent Workloads', text: 'Routed access to on-premises or the enterprise network.', profiles: ['Minimal platform', 'Full platform'] },
+    { id: 'Interdependent Workload Groups', text: 'Material east-west dependencies between workloads.', profiles: ['Minimal platform', 'Full platform'] },
+  ];
+  const PROFILE_COLORS = { 'Governance-Only': '#0B7A75', 'Remote platform': '#0F6CBD', 'Minimal platform': '#0E4F8F', 'Full platform': '#1B2F4E' };
+  const REVIEW_TRIGGERS = ['New requirements', 'New constraints', 'Platform gaps'];
   const O = {
     reason: ['Markets and users', 'Datacenter and partner locations', 'Planned launches or migrations', 'Anticipated growth and proximity', 'Geographic concentration risk', 'Other'],
     yesNo: ['Yes', 'No', 'To confirm'],
     comply: ['Yes', 'No (mandatory gap)', 'To validate', 'Not applicable'],
     known: ['Known', 'Partly known (guardrails set)', 'Not known'],
-    archetype: ['Isolated Cloud-Native or AI Applications', 'Connected Cloud-Native or AI Applications', 'Hybrid-Connected Applications', 'Interconnected Application Portfolios', 'Several (see note)'],
+    archetype: ARCHETYPES.map(a => a.id),
     capability: ['Yes', 'No (mandatory gap)', 'Gap accepted with a condition', 'To validate', 'Not applicable'],
-    outcome: ['Excluded', 'Candidate', 'Conditional', 'Qualified', 'No deeper assessment'],
+    outcome: ['Excluded', 'Candidate', 'Conditional', 'Qualified'],
     topology: ['Hub-and-spoke virtual networks', 'Azure Virtual WAN'],
     estateTopology: ['Hub-and-spoke virtual networks', 'Azure Virtual WAN', 'Both', 'No hub yet'],
     managed: ['Azure Virtual Network Manager', 'Infrastructure as code (peerings or hub connections)', 'Manual configuration'],
@@ -27,7 +35,7 @@
     'No': 'bad', 'No (mandatory gap)': 'bad',
   };
   // Outcome to status icon kind.
-  const OUTCOME_ICON = { 'Qualified': 'success', 'Conditional': 'warning', 'Candidate': 'info', 'Excluded': 'error', 'No deeper assessment': 'neutral' };
+  const OUTCOME_ICON = { 'Qualified': 'success', 'Conditional': 'warning', 'Candidate': 'candidate', 'Excluded': 'error' };
 
   // ── step 2: the four checks. `neutral` rows record a requirement, not a pass or fail. `ev` names the evidence shown under the answer.
   const CHECKS = [
@@ -56,7 +64,7 @@
         { id: '4.4', label: 'Does latency to datacenters and users meet the targets?', opts: O.capability, ev: 'latency' },
         { id: '4.5', label: 'Is the price difference from the current region acceptable?', opts: O.capability, ev: 'pricing' },
         { id: '4.6', label: 'Can the subscriptions and offer types deploy here, with regional access approved?', opts: O.capability, ev: 'access' },
-        { id: '4.7', label: 'Is quota available or requested for the expected scale?', opts: O.capability },
+        { id: '4.7', label: 'Is quota available or requested for the expected scale?', opts: O.capability, ev: 'quota' },
       ] },
   ];
   const CAPABILITY_IDS = CHECKS[3].rows.map(r => r.id);
@@ -65,7 +73,7 @@
   const PROFILES = [
     { id: 'Governance-Only', name: 'Governance-Only', href: 'disconnected-spokes.html', gets: 'No hub and no gateway. Workload spokes use the estate’s standard identity, policy, security, and deployment practices.',
       reassess: 'Workloads require a Full-Platform region, on-premises connectivity, centralized inspection, or private network paths beyond approved same-region spokes and Azure service endpoints.' },
-    { id: 'Remote platform', name: 'Remote regional platform', href: 'remote-hub-connected.html', gets: 'No local hub. Workload spokes consume an existing Full-Platform region.',
+    { id: 'Remote platform', name: 'Remote regional platform', href: 'remote-hub.html', gets: 'No local hub. Workload spokes consume an existing Full-Platform region.',
       reassess: 'Cross-region traffic, latency, east-west communication, dependency criticality, regulatory requirements, scale, or availability coupling justify deploying selected connectivity or shared-service capabilities locally.' },
     { id: 'Minimal platform', name: 'Minimal regional platform', href: 'minimal-regional-hub.html', gets: 'A local hub with only the services that must be in the region. Everything else stays remote.',
       reassess: 'Workload growth introduces additional local connectivity or shared-service requirements, multiple interconnected application portfolios require broader regional capabilities, stricter independence requirements emerge, or significant hybrid connectivity is required locally.' },
@@ -140,17 +148,23 @@
 
   // An illustrative, filled-in workbook. Every value is an example.
   const EXAMPLE = {
-    v: 3, meta: { name: 'Example: Nordic expansion', owner: 'Platform team', date: '' },
-    estate: { topology: 'Hub-and-spoke virtual networks', managed: 'Azure Virtual Network Manager', hybrid: 'ExpressRoute' },
-    current: [{ id: 'westeurope', hub: true }], baseline: 'westeurope',
+    v: 4, meta: { name: 'Example: Nordic expansion', owner: 'Platform team', date: '' },
+    estate: { topology: 'Hub-and-spoke virtual networks', managed: 'Azure Virtual Network Manager', hybrid: 'ExpressRoute', circuit: 'Frankfurt' },
+    current: [{ id: 'westeurope', profile: 'Full platform', hub: true }], baseline: 'westeurope',
+    workload: {
+      '3.1': { value: 'Known', expanded: false, overrides: { polandcentral: 'Partly known (guardrails set)' } },
+      '3.2': { value: 'Hybrid-Dependent Workloads', expanded: false, overrides: { polandcentral: 'Selectively Connected Workloads' } },
+      '3.3': { value: 'Yes', expanded: false, overrides: {} },
+      '3.4': { value: 'Yes', expanded: false, overrides: {} },
+    },
     regions: [
-      { id: 'swedencentral', checks: { '1.1': 'Yes', '1.2': 'Markets and users', '2.1': 'Yes', '2.2': 'Yes', '3.1': 'Known', '3.2': 'Hybrid-Connected Applications', '3.3': 'Yes', '3.4': 'Yes', '4.1': 'Yes', '4.2': 'Yes', '4.3': 'Yes', '4.4': 'Yes', '4.5': 'Yes', '4.6': 'Yes', '4.7': 'Yes' },
+      { id: 'swedencentral', checks: { '1.1': 'Yes', '1.2': 'Markets and users', '2.1': 'Yes', '2.2': 'Yes', '3.1': 'Known', '3.2': 'Hybrid-Dependent Workloads', '3.3': 'Yes', '3.4': 'Yes', '4.1': 'Yes', '4.2': 'Yes', '4.3': 'Yes', '4.4': 'Yes', '4.5': 'Yes', '4.6': 'Yes', '4.7': 'Yes' },
         outcome: '', selected: true, conditions: '', owner: 'Platform team', review: '',
         design: { q1: 'Yes', q2: 'No', q3: 'No', profile: 'Minimal platform', hub: 'westeurope', topology: 'Hub-and-spoke virtual networks', managed: 'Azure Virtual Network Manager',
           link: 'Azure Virtual Network Manager connectivity configuration between the hubs', eastWest: 'Through the local hub (firewall or network virtual appliance)',
           ss: { dnsres: { p: 'Local' }, inspect: { p: 'Local' }, gateway: { p: 'Local' }, directory: { p: 'Remote', from: 'westeurope' } }, custom: [],
           hybrid: 'Reuse', hybridUse: 'ExpressRoute circuit in Frankfurt', hybridPath: 'New gateway in this region, connected to the existing circuit', owner: 'Network team' } },
-      { id: 'polandcentral', checks: { '1.1': 'Yes', '1.2': 'Markets and users', '2.1': 'Yes', '2.2': 'To validate', '3.1': 'Partly known (guardrails set)', '3.2': 'Connected Cloud-Native or AI Applications', '3.3': 'Yes', '3.4': 'Yes' },
+      { id: 'polandcentral', checks: { '1.1': 'Yes', '1.2': 'Markets and users', '2.1': 'Yes', '2.2': 'To validate', '3.1': 'Partly known (guardrails set)', '3.2': 'Selectively Connected Workloads', '3.3': 'Yes', '3.4': 'Yes' },
         outcome: '', selected: false, conditions: 'Compliance review of the regulatory requirements is still open.', owner: 'Compliance', review: '' },
       { id: 'switzerlandnorth', checks: { '1.1': 'No', '1.2': 'Datacenter and partner locations' }, outcome: '', selected: false, conditions: '', owner: '', review: '' },
     ],
@@ -164,5 +178,5 @@
     ui: { essentials: true, weighted: false },
   };
 
-  global.MRP = Object.assign(global.MRP || {}, { O, TONE, OUTCOME_ICON, CHECKS, CAPABILITY_IDS, PROFILES, PROFILE_QUESTIONS, SHARED, HUB_SERVICES, HYBRID_PATHS, HYBRID_DECISIONS, hybridPathOptions, linkOptions, eastWestOptions, STARTER_SERVICES, EXAMPLE });
+  global.MRP = Object.assign(global.MRP || {}, { O, ARCHETYPES, PROFILE_COLORS, REVIEW_TRIGGERS, TONE, OUTCOME_ICON, CHECKS, CAPABILITY_IDS, PROFILES, PROFILE_QUESTIONS, SHARED, HUB_SERVICES, HYBRID_PATHS, HYBRID_DECISIONS, hybridPathOptions, linkOptions, eastWestOptions, STARTER_SERVICES, EXAMPLE });
 })(window);

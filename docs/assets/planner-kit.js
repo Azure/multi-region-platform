@@ -16,7 +16,7 @@
   let quiet = false;                    // true while the page puts focus back after a render, so the popup doesn't open by itself
   const setQuiet = v => { quiet = v; };
   // View state that isn't part of the saved workbook.
-  const ui = { tab: 'scope', region: '', noteEdit: '', mregion: '', narrow: {}, ssAll: false, desMap: false };   // view state that isn't saved
+  const ui = { tab: 'scope', capability: 'latency', region: '', noteEdit: '', mregion: '', desMap: false };   // view state that isn't saved
 
   // ───────────── buttons
   function btn(o) {
@@ -62,7 +62,7 @@
     const anyOn = items.some(x => x[0] === value);
     return `<div class="pl-seg${o.cls ? ' ' + o.cls : ''}" role="radiogroup" aria-label="${esc(o.label || '')}">` + items.map((x, i) => {
       const on = x[0] === value, tab = on || (!anyOn && i === 0);
-      return `<button type="button" class="pl-seg-b${on ? ' on' : ''}" role="radio" aria-checked="${on}" tabindex="${tab && !o.disabled ? 0 : -1}" data-k="${esc(k)}" data-v="${esc(x[0])}"${o.disabled ? ' disabled' : ''}>${esc(x[1])}</button>`;
+      return `<button type="button" class="pl-seg-b${on ? ' on' : ''}${!value && o.suggested === x[0] ? ' suggested' : ''}" role="radio" aria-checked="${on}" tabindex="${tab && !o.disabled ? 0 : -1}" data-k="${esc(k)}" data-v="${esc(x[0])}"${o.disabled ? ' disabled' : ''}>${esc(x[1])}</button>`;
     }).join('') + '</div>';
   }
   // Choice cards: a radio group where each choice has a picture, a title, and text.
@@ -70,16 +70,17 @@
     const anyOn = items.some(x => x.id === value);
     return `<div class="pl-cards${o.cls ? ' ' + o.cls : ''}" role="radiogroup" aria-label="${esc(o.label || '')}">` + items.map((x, i) => {
       const on = x.id === value, tab = on || (!anyOn && i === 0), dis = x.disabled || o.disabled;
-      return `<button type="button" class="pl-choice${on ? ' on' : ''}" role="radio" aria-checked="${on}" tabindex="${tab && !dis ? 0 : -1}" data-k="${esc(k)}" data-v="${esc(x.id)}"${dis ? ' disabled' : ''}>` +
+      return `<button type="button" class="pl-choice${on ? ' on' : ''}" role="radio" aria-checked="${on}" tabindex="${tab && !dis ? 0 : -1}" data-k="${esc(k)}" data-v="${esc(x.id)}"${x.color ? ` style="--pl-profile:${esc(x.color)}"` : ''}${dis ? ' disabled' : ''}>` +
         `${x.art ? `<span class="pl-choice-art">${x.art}</span>` : ''}<span class="pl-choice-t">${x.tag ? `<span class="pl-tag brand">${esc(x.tag)}</span>` : ''}${esc(x.title || x.id)}</span>${x.text ? `<span class="pl-choice-x">${esc(x.text)}</span>` : ''}` +
-        `<span class="pl-choice-mark">${on ? status('success') : ''}</span></button>`;
+        `${x.meta ? `<span class="pl-choice-meta">${x.meta}</span>` : ''}<span class="pl-choice-mark">${on ? status('success') : ''}</span></button>`;
     }).join('') + '</div>';
   }
-  const toggle = (k, on, label) => `<button type="button" class="pl-switch${on ? ' on' : ''}" role="switch" aria-checked="${on}" aria-label="${esc(label)}" data-k="${esc(k)}" data-v="${on ? '' : '1'}"><span class="pl-switch-knob"></span></button>`;
+  const toggle = (k, on, label, disabled = false) => `<button type="button" class="pl-switch${on ? ' on' : ''}" role="switch" aria-checked="${!!on}" aria-label="${esc(label)}" data-k="${esc(k)}" data-v="${on ? '' : '1'}"${disabled ? ' disabled' : ''}><span class="pl-switch-knob"></span></button>`;
 
   // ───────────── status pieces
   const badge = (kind, text, o = {}) => `<span class="pl-badge ${kind}${o.lg ? ' lg' : ''}">${status(kind)}<span>${esc(text)}</span></span>`;
   const tag = (text, kind) => `<span class="pl-tag${kind ? ' ' + kind : ''}">${esc(text)}</span>`;
+  const profileBadge = name => `<span class="pl-profile"><i style="background:${M.PROFILE_COLORS[name] || 'currentColor'}"></i>${esc(name)}</span>`;
   // kinds: info, warning, success, error. `html` is trusted markup (escape user text before passing it).
   function mb(kind, html, action, o = {}) {
     return `<div class="pl-mb ${kind}${o.cls ? ' ' + o.cls : ''}" role="${kind === 'error' ? 'alert' : 'status'}">${status(kind === 'error' ? 'error' : kind)}<div class="pl-mb-t">${html}</div>${action || ''}</div>`;
@@ -89,7 +90,7 @@
   }
   // A page title for a tab, then its sections.
   const head = (title, text) => `<header class="pl-head"><h2 class="pl-title">${esc(title)}</h2><p class="pl-sub">${esc(text)}</p></header>`;
-  const section = (title, body, o = {}) => `<section class="pl-sec"${o.id ? ` id="${o.id}"` : ''}><div class="pl-sec-h"><h3>${esc(title)}</h3>${o.link ? `<a class="pl-link" href="${o.link[0]}">${esc(o.link[1])}${icon('arrowright')}</a>` : ''}</div>${o.desc ? `<p class="pl-sec-d">${esc(o.desc)}</p>` : ''}${body}</section>`;
+  const section = (title, body, o = {}) => `<section class="pl-sec"${o.id ? ` id="${o.id}"` : ''}><div class="pl-sec-h"><h3>${o.number ? `<span class="pl-check-number">${o.number}</span>` : ''}${esc(title)}</h3>${o.link ? `<a class="pl-link" href="${o.link[0]}">${esc(o.link[1])}${icon('arrowright')}</a>` : ''}</div>${o.desc ? `<p class="pl-sec-d">${esc(o.desc)}</p>` : ''}${body}</section>`;
   const tip = text => `data-tip="${esc(text)}"`;
   const scroll = (html, o = {}) => `<div class="pl-scroll${o.cls ? ' ' + o.cls : ''}" tabindex="0" role="region" aria-label="${esc(o.label || 'Table')}">${html}</div>`;
 
@@ -251,6 +252,6 @@
   }
 
   M.ui = ui;
-  M.kit = { setQuiet, ui, esc, slug, fold, lower, fmtDate, plural, EM, hooks, btn, iconBtn, sel, inp, area, row, rowRaw, seg, cards, toggle, badge, tag, mb, empty, head, section, tip, scroll,
+  M.kit = { setQuiet, ui, esc, slug, fold, lower, fmtDate, plural, EM, hooks, btn, iconBtn, sel, inp, area, row, rowRaw, seg, cards, toggle, badge, tag, profileBadge, mb, empty, head, section, tip, scroll,
     combo, closePop, bindPop, comboClear, bindTips, hideTip, popOpen: () => !!pop };
 })(window);

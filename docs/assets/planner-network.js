@@ -25,8 +25,8 @@
       return region;
     };
     S.current.forEach(c => {
-      addRegion(c.id, c.hub ? 'full-hub' : 'disconnected');
-      result.workbook.records.push({ id: c.id, lines: ['Current region' + (c.hub ? ' - Full-Platform region' : ''),
+      addRegion(c.id, patterns[c.profile] || 'disconnected');
+      result.workbook.records.push({ id: c.id, lines: ['Current region' + (c.profile ? ' - ' + c.profile : ' - profile not recorded'),
         'Estate topology: ' + (S.estate.topology || 'Not decided'),
         'Managed with: ' + (S.estate.managed || 'Not decided'),
         'Hybrid connectivity: ' + (S.estate.hybrid || 'Not decided')] });
@@ -75,7 +75,7 @@
         'Hub Connections: ' + (C.list(e.hubConnections.map(C.rname)) || 'None'),
         'Regional link: ' + (e.link || 'None'),
         'East-west: ' + (e.eastWest || 'Not decided'),
-        'Hybrid: ' + (e.hybrid || 'Not decided') + (d.hybridUse ? ' - ' + d.hybridUse : ''),
+        'Hybrid: ' + (e.hybrid || 'Not decided') + (e.hybridUse ? ' - ' + e.hybridUse : ''),
         'Hybrid path: ' + (e.hybridPath || 'Not decided'),
         ...(d.hybridReason ? ['Hybrid reason: ' + d.hybridReason] : []),
         ...(d.hybridChange ? ['Hybrid change: ' + d.hybridChange] : []),
@@ -89,7 +89,7 @@
         notes.push(C.rname(r.id) + ': SD-WAN/NVA hybrid paths are recorded but not modelled by GeoLZ.');
         return;
       }
-      const type = /VPN/.test(e.hybridPath) ? 'vpn' : /ExpressRoute/i.test(d.hybridUse) ? 'expressroute' : '';
+      const type = /VPN/.test(e.hybridPath) ? 'vpn' : /ExpressRoute/i.test(e.hybridUse) ? 'expressroute' : '';
       if (!type || !e.hybridPath || !gateway || !['Local', 'Remote'].includes(gateway.p)) {
         notes.push(C.rname(r.id) + ': hybrid connection details are incomplete; no circuit or gateway is invented.');
         return;
@@ -99,9 +99,9 @@
         notes.push(C.rname(r.id) + ': the gateway provider has no recorded local hub; no attachment is assumed.');
         return;
       }
-      const location = type === 'expressroute' ? (d.hybridUse.match(/^ExpressRoute circuit in (.+)$/i) || [])[1] : '';
+      const location = type === 'expressroute' ? (e.hybridUse.match(/^ExpressRoute circuit in (.+)$/i) || [])[1] : '';
       if (type === 'expressroute' && !location) {
-        notes.push(C.rname(r.id) + ': specify the ExpressRoute peering location to draw "' + d.hybridUse + '".');
+        notes.push(C.rname(r.id) + ': specify the ExpressRoute peering location to draw "' + e.hybridUse + '".');
         return;
       }
       if (e.hybrid === 'Change') notes.push(C.rname(r.id) +
@@ -120,7 +120,7 @@
         let connection = result.hybrid_connections.find(c => c.id === id);
         if (!connection) {
           connection = { id, type, site: site.id,
-            name: type === 'vpn' ? 'Site-to-site VPN' : d.hybridUse, connects_to: [] };
+            name: type === 'vpn' ? 'Site-to-site VPN' : e.hybridUse, connects_to: [] };
           if (location) Object.assign(connection, { peering_location: location, connection: 'provider' });
           result.hybrid_connections.push(connection);
         }

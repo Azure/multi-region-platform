@@ -10,21 +10,27 @@
   function vDesign() {
     const picked = C.selected();
     const h = K.head('Regional design', 'Three choices for each selected region: Platform Services profile, shared services, and hybrid connectivity.');
-    if (!picked.length) return h + K.empty('lock', 'No region is selected yet.', 'capability', 'Go to the outcome');
+    if (!picked.length) return h + K.empty('lock', 'Select a Qualified or Conditional region in Outcome. Candidate and Excluded regions cannot have a regional design selected.', 'outcome', 'Go to Outcome');
     if (!picked.some(r => r.id === ui.region)) ui.region = picked[0].id;
     const r = C.reg(ui.region), d = C.design(r), e = C.effective(r), k = f => `des/${r.id}/${f}`, name = C.rname(r.id);
     const hubOpts = e.hubs.map(id => [id, C.rname(id)]);
-    const switcher = picked.length ? `<div class="pl-pills" role="group" aria-label="Selected regions">${picked.map(x => { const done = C.effective(x).complete;
-      return `<button type="button" class="pl-pill${x.id === r.id ? ' on' : ''}" data-act="region" data-arg="${esc(x.id)}" aria-pressed="${x.id === r.id}" aria-label="${esc(C.rname(x.id))}${done ? ', record complete' : ', record incomplete'}">${status(done ? 'success' : 'half')}<span>${esc(C.rname(x.id))}</span></button>`; }).join('')}</div>` : '';
+    const switcher = `<div class="pl-pills" role="group" aria-label="Regions in this plan">${C.S.regions.map(x => {
+      const selected = picked.includes(x), done = selected && C.effective(x).complete;
+      const reason = selected ? done ? 'Record complete' : 'Record incomplete'
+        : C.selectable(x) ? 'Not selected in Outcome' : `${C.outcome(x)}: requires Qualified or Conditional`;
+      return `<button type="button" class="pl-pill${x.id === r.id ? ' on' : ''}" data-act="region" data-arg="${esc(x.id)}" aria-pressed="${x.id === r.id}"${selected ? '' : ' disabled'}>${status(selected ? done ? 'success' : 'half' : 'lock')}<span>${esc(C.rname(x.id))}<small>${esc(reason)}</small></span></button>`;
+    }).join('')}</div>`;
     const state = e.complete ? K.mb('success', `The record for ${esc(name)} is complete.`) : K.mb('warning', `Still to decide: ${esc(C.list(e.missing))}.`);
 
     // choice 1
     const qs = PROFILE_QUESTIONS.map((q, i) => { const off = (i === 1 && d.q1 !== 'Yes') || (i === 2 && (d.q1 !== 'Yes' || d.q2 !== 'No'));
       return `<div class="pl-pq${off ? ' off' : ''}"><span class="pl-pq-n">${i + 1}</span><p>${esc(q.label)}</p>${K.seg(k(q.id), off ? '' : d[q.id], ['Yes', 'No'], { label: q.label, disabled: off })}</div>`; }).join('');
     const prof = PROFILES[e.pi];
-    const cards = K.cards(k('profile'), e.profile, PROFILES.map(p => ({ id: p.id, title: p.id, text: p.gets, art: M.diagram.profile(p.id), tag: e.suggested === p.id ? 'Suggested' : '' })), { label: 'Platform Services profile', cls: 'profiles' });
+    const cards = K.cards(k('profile'), e.profile, PROFILES.map(p => ({ id: p.id, title: p.id, text: p.gets, art: M.diagram.profile(p.id), color: M.PROFILE_COLORS[p.id], tag: e.suggested === p.id ? 'Suggested' : '' })), { label: 'Platform Services profile', cls: 'profiles' });
     const differs = e.suggested && e.profile && e.profile !== e.suggested ? `<p class="pl-hint">The answers point to ${esc(e.suggested)}.</p>` : '';
-    const secProfile = K.section('Platform Services profile', `<div class="pl-pqs">${qs}</div>${cards}${differs}${prof ? `<p class="pl-after"><a class="pl-link" href="${prof.href}">What to deploy for the ${esc(prof.name)} profile${icon('arrowright')}</a></p>` : ''}`,
+    const archetype = M.ARCHETYPES.find(a => a.id === r.checks['3.2']);
+    const fit = archetype ? `<div class="pl-fit"><b>${esc(archetype.id)}</b><span>Typical profiles</span>${archetype.profiles.map(K.profileBadge).join('')}<p class="pl-cap">The connectivity answers below determine the suggestion; confirm it against the actual workload dependencies.</p></div>` : '';
+    const secProfile = K.section('Platform Services profile', fit + `<div class="pl-pqs">${qs}</div>${cards}${differs}${prof ? `<p class="pl-after"><a class="pl-link" href="${prof.href}">What to deploy for the ${esc(prof.name)} profile${icon('arrowright')}</a></p>` : ''}`,
       { id: 'pl-d-profile', link: ['profile-selection.html', 'Guidance'] });
 
     // hub and regional connectivity
@@ -47,24 +53,19 @@
         K.row('Connection to the hubs', k('link'), id => K.sel(k('link'), e.link, e.linkOptions, { id, label: 'Connection to the hubs', empty: e.linkOptions.length ? 'Select' : 'Select the hub topology first' })) + traffic, { id: 'pl-d-hub' });
     }
 
-    // shared services: the ones the profile places by default fold into one line; the ones decided for this region are rows.
     let secSs = '';
     const fromProfile = e.ss.filter(x => x.isDefault && !x.custom), decided = e.ss.filter(x => !(x.isDefault && !x.custom));
     if (e.profile) {
       const ssRow = s => { const base = s.custom ? `custom/${s.id}` : `ss/${s.id}`, nm = s.name || 'new service';
-        const mark = !s.p ? K.tag('Choose', 'warn') : s.isDefault ? K.tag('Default') : s.def && s.p !== s.def ? K.tag('Profile: ' + s.def) : '';
+        const mark = !s.p ? K.tag('Choose', 'warn') : K.tag(s.isDefault ? 'Profile default' : 'Decided here', s.isDefault ? '' : 'brand');
         const extra = (s.p === 'Remote' ? (hubOpts.length ? K.sel(k(base + '/from'), s.from, hubOpts, { label: 'Provided from', cls: 'sm' }) : '<span class="pl-muted">Add current regions in Scope</span>') : '') +
-          (s.p && !s.isDefault ? K.inp(k(base + '/note'), s.note, { ph: 'Reason', label: 'Reason for the placement of ' + nm }) : '');
+          K.inp(k(base + '/note'), s.note, { ph: 'Reason (optional)', label: 'Reason for the placement of ' + nm });
         return `<div class="pl-ssr"><div class="pl-ss-n"><span class="pl-ss-ic">${icon(s.icon || 'cloud')}</span><span>${s.custom ? K.inp(k(base + '/name'), s.name, { ph: 'Service name', label: 'Service name' }) : `<b>${esc(s.name)}</b>${s.hint ? `<span class="pl-cap">${esc(s.hint)}</span>` : ''}`}</span></div>` +
           `<div class="pl-ss-p">${K.seg(k(base + '/p'), s.p, O.placement, { label: 'Placement of ' + nm })}${mark}</div><div class="pl-ss-x">${extra}</div>` +
           `<div class="pl-ss-r">${s.custom ? K.iconBtn('rm-custom', s.id, 'close', 'Remove ' + nm) : ''}</div></div>`; };
-      const showAll = ui.ssAll || !fromProfile.length;
-      const group = fromProfile.length ? `<div class="pl-ssg"><div class="pl-ssg-h"><b>Set by the ${esc(e.profile)} profile</b>${K.btn({ act: 'ss-all', label: ui.ssAll ? 'Fold' : 'Change any', kind: 'subtle', cls: 'sm', pressed: !!ui.ssAll })}</div>` +
-        (ui.ssAll ? '' : `<ul class="pl-chips">${fromProfile.map(x => `<li class="pl-chip">${esc(x.short || x.name)} <b>${esc(x.p === 'Remote' && x.from ? `Remote, ${C.rname(x.from)}` : x.p)}</b></li>`).join('')}</ul>`) + '</div>' : '';
-      const rows = (showAll ? e.ss : decided).map(ssRow).join('');
-      const reasons = decided.filter(x => x.p && x.note).length;
-      secSs = K.section('Shared services', (e.hints.length ? K.mb('warning', e.hints.map(x => `<span class="pl-blk">${esc(x)}</span>`).join('')) : '') + group +
-        (rows ? `${showAll ? '' : `<p class="pl-ssg-d"><b>Decided for this region</b><span>Reasons ${reasons} of ${decided.length}, optional</span></p>`}<div class="pl-ssl" role="group" aria-label="Shared services">${rows}</div>` : '') +
+      const rows = e.ss.map(ssRow).join('');
+      secSs = K.section('Shared services', (e.hints.length ? K.mb('warning', e.hints.map(x => `<span class="pl-blk">${esc(x)}</span>`).join('')) : '') +
+        `<div class="pl-ssl" role="group" aria-label="Shared services">${rows}</div>` +
         `<div class="pl-bar">${K.btn({ act: 'add-custom', label: 'Add a shared service', icon: 'add' })}${K.btn({ act: 'ss-reset', label: 'Reset to profile defaults', icon: 'reset', kind: 'subtle' })}</div>`,
         { id: 'pl-d-ss', desc: 'Local is deployed in the region, remote is consumed from another hub, and global isn’t tied to a region.', link: ['platform-enablement-connectivity.html', 'Guidance'] });
     }
@@ -80,7 +81,7 @@
           .sort((a, b) => a.name.localeCompare(b.name))
           .map(p => ({ value: `ExpressRoute circuit in ${p.name}`, label: `ExpressRoute circuit in ${p.name}`, sub: [p.city, p.country].filter(Boolean).join(', ') }));
         more += K.row('Existing connectivity', k('hybridUse'), id => K.combo('use-' + r.id, { mode: 'text', key: k('hybridUse'), inputId: id, describedBy: id + '-h', ph: 'For example, ExpressRoute circuit in Frankfurt', label: 'Existing connectivity',
-          value: () => d.hybridUse || '', items: () => circuits, onPick: it => { d.hybridUse = it.value; } }) +
+          value: () => e.hybridUse, items: () => circuits, onPick: it => { d.hybridUse = it.value; } }) +
           `<p class="pl-hint" id="${id}-h">${circuits.length ? 'Suggestions are Azure ExpressRoute peering locations, not confirmation of an existing circuit. Latency-test cities do not create circuits.' : 'The Azure peering-location catalog is unavailable; no ExpressRoute locations are suggested.'} You can also type your existing connectivity.</p>`);
         more += K.row('How the region reaches on-premises locations', k('hybridPath'), id => K.sel(k('hybridPath'), e.hybridPath, e.pathOptions, { id, label: 'How the region reaches on-premises locations', empty: e.pathOptions.length ? 'Select' : 'No path is offered' }),
           e.pathOptions.length ? '' : 'Place the gateway as Local or Remote in Shared services to see the paths.');
@@ -96,11 +97,14 @@
       K.row('Owner', k('owner'), id => K.inp(k('owner'), d.owner, { id, ph: 'Team or person', label: 'Owner' })) +
       K.row('Decision date', k('date'), id => K.inp(k('date'), e.date, { id, type: 'date', label: 'Decision date' })) +
       K.row('Open conditions', `reg/${r.id}/conditions`, id => K.area(`reg/${r.id}/conditions`, r.conditions, { id, ph: 'None', rows: 3, label: 'Open conditions' }), 'The region isn’t ready for workloads until they are resolved.') +
-      K.row('Reassess when', k('reassess'), id => K.area(k('reassess'), e.reassess, { id, rows: 6, label: 'Reassess when' })), { id: 'pl-d-record' });
+      K.row('Review date', `reg/${r.id}/review`, id => K.inp(`reg/${r.id}/review`, r.review, { id, type: 'date', label: 'Review date' })) +
+      K.rowRaw('Review triggers', `<div class="pl-triggers">${[...new Set([...M.REVIEW_TRIGGERS, ...d.reviewTriggers])].map(t =>
+        `<label><input type="checkbox" data-k="${esc(k('trigger/' + t))}"${d.reviewTriggers.includes(t) ? ' checked' : ''}>${esc(t)}</label>`).join('')}</div>`) +
+      K.row('Additional review trigger', k('reassess'), id => K.area(k('reassess'), d.reassess, { id, rows: 2, ph: 'Optional; previous reassessment notes are retained here', label: 'Additional review trigger' })), { id: 'pl-d-record' });
 
-    // The map is the one on the Latency tab, so here it waits behind a button.
+    // Reuse the Check 4 map without loading it until requested.
     const secMap = ui.desMap ? `<div id="pl-d-map" class="pl-d-map">${M.latencyMap.view()}<div class="pl-bar">${K.btn({ act: 'des-map', label: 'Hide the map', kind: 'subtle' })}</div></div>`
-      : `<div id="pl-d-map" class="pl-mapcard"><span class="pl-mapcard-ic">${icon('pin')}</span><div><b>Geographic view</b><p class="pl-cap">The Latency tab’s map of your regions and locations.</p></div>${K.btn({ act: 'des-map', label: 'Show the map' })}</div>`;
+      : `<div id="pl-d-map" class="pl-mapcard"><span class="pl-mapcard-ic">${icon('pin')}</span><div><b>Geographic view</b><p class="pl-cap">The Check 4 map of your regions and locations.</p></div>${K.btn({ act: 'des-map', label: 'Show the map' })}</div>`;
 
     // The outline: the parts of the record and their state, and the optional views.
     const hy = e.missing.filter(x => /hybrid|on-premises/.test(x)).length;
@@ -109,7 +113,7 @@
       e.profile ? ['pl-d-hub', 'Hub and regional connectivity', 'success', e.none ? 'No hub' : [e.topology, e.managed].filter(Boolean).join(' · ') || 'Hub in the region'] : null,
       e.profile ? ['pl-d-ss', 'Shared services', e.ss.some(x => !x.p) ? 'half' : 'success', `${fromProfile.length} from the profile · ${decided.length} decided here`] : null,
       e.profile ? ['pl-d-hybrid', 'Hybrid connectivity', !e.hybrid ? 'none' : hy ? 'half' : 'success', e.hybrid || 'Not decided yet'] : null,
-      ['pl-d-record', 'Owner, date, reassess when', 'success', [d.owner, e.date].filter(Boolean).join(' · ')],
+      ['pl-d-record', 'Ownership and review triggers', 'success', [d.owner || r.owner, e.date].filter(Boolean).join(' · ')],
     ].filter(Boolean);
     const olItem = ([id, t, st, sub]) => `<li><button type="button" class="pl-ol" data-act="jump" data-arg="${id}">${status(st)}<span><span class="pl-ol-t">${esc(t)}</span><span class="pl-ol-s">${esc(sub)}</span></span></button></li>`;
     const nav = `<nav class="pl-dz-nav" aria-label="Regional design outline"><p class="pl-ol-h">${picked.length > 1 ? 'Regions' : 'Region'}</p>${switcher}` +
@@ -120,11 +124,12 @@
 
   function vReview() {
     const S = C.S, picked = C.selected();
-    const h = K.head('Review + export', 'The regional design record of each selected region.');
-    if (!picked.length) return h + K.empty('lock', 'No region is selected yet.', 'capability', 'Go to the outcome');
+    const h = K.head('Review + export', 'Governed regional option records, as of the assessment date. Unselected and excluded regions remain in the record and export.');
+    if (!S.regions.length) return h + K.empty('list', 'Add the regions to qualify first.', 'scope', 'Go to Scope');
     const bad = picked.map(r => ({ r, e: C.effective(r) })).filter(x => !x.e.complete);
     const valid = bad.length ? K.mb('warning', `<b class="pl-blk">${K.plural(bad.length, 'record')} still to complete.</b><ul class="pl-miss">${bad.map(x => `<li><button type="button" class="pl-linkbtn" data-act="goto-design" data-arg="${esc(x.r.id)}">${esc(C.rname(x.r.id))}</button>: ${esc(C.list(x.e.missing))}</li>`).join('')}</ul>`)
-      : K.mb('success', 'All records are complete.');
+      : picked.length ? K.mb('success', 'All selected regional design records are complete.')
+      : K.mb('info', 'No region is selected for regional design. The qualification records below can still be saved, copied, printed, or exported.');
     const reportMeta = [
       S.meta.name && `<span><b>Plan</b>${esc(S.meta.name)}</span>`,
       S.meta.owner && `<span><b>Owner</b>${esc(S.meta.owner)}</span>`,
@@ -132,14 +137,15 @@
     ].filter(Boolean).join('');
     const blocks = picked.map(r => { const e = C.effective(r), p = PROFILES[e.pi];
       return `<section class="pl-rec"><div class="pl-rec-h"><h3>${esc(C.rname(r.id))}</h3>${outcomeBadge(C.outcome(r))}${K.badge(e.complete ? 'success' : 'warning', e.complete ? 'Record complete' : 'Record incomplete')}</div>` +
-        `<div class="pl-rec-b">${p ? `<div class="pl-rec-art">${M.diagram.profile(p.id)}</div>` : ''}<dl class="pl-kv">${C.record(r).slice(1).map(([a, b]) => `<div><dt>${esc(a)}</dt><dd>${esc(b)}</dd></div>`).join('')}</dl></div>` +
+        `<div class="pl-rec-b">${p ? `<div class="pl-rec-art" style="--pl-profile:${M.PROFILE_COLORS[p.id]}">${M.diagram.profile(p.id)}</div>` : ''}<dl class="pl-kv">${C.record(r).slice(1).map(([a, b]) => `<div><dt>${esc(a)}</dt><dd>${a === 'Review triggers' ? `<ul class="pl-review-triggers">${b.split('\n').filter(Boolean).map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : esc(b)}</dd></div>`).join('')}</dl></div>` +
         `${p ? `<p class="pl-after"><a class="pl-link" href="${p.href}">Prepare the region: ${esc(p.id)}${icon('arrowright')}</a></p>` : ''}</section>`; }).join('');
     const all = S.regions.map(r => { const sel = picked.includes(r), e = sel ? C.effective(r) : null;
-      return `<tr><th scope="row">${esc(C.rname(r.id))}</th><td>${outcomeBadge(C.outcome(r))}</td><td>${yesNo(sel, 'Yes', 'No')}</td><td>${e && e.profile ? esc(e.profile) : K.EM}</td></tr>`; }).join('');
+      return `<tr><th scope="row">${esc(C.rname(r.id))}</th><td>${outcomeBadge(C.outcome(r))}<span class="pl-cap">As of ${esc(S.meta.date)}</span></td><td>${esc(C.suggest(r).why)}</td><td>${yesNo(sel, 'Yes', 'No')}</td>` +
+        `<td>${esc(r.checks['3.2'] || 'Not recorded')}</td><td>${e && e.profile ? K.profileBadge(e.profile) : K.EM}</td><td>${esc(r.conditions || 'None')}</td><td>${esc((sel && C.design(r).owner) || r.owner || S.meta.owner || K.EM)}</td><td class="pl-review-date">${esc(r.review)}</td></tr>`; }).join('');
     return h + `<header class="pl-print-head"><p class="pl-print-kicker">Regional platform planning</p><h1>Multi-region planner report</h1>` +
-      `${reportMeta ? `<div class="pl-print-meta">${reportMeta}</div>` : ''}<p class="pl-print-count">${K.plural(picked.length, 'region')} included · ${bad.length ? `${bad.length} record${bad.length === 1 ? '' : 's'} incomplete` : 'All records complete'}</p></header>` +
+      `${reportMeta ? `<div class="pl-print-meta">${reportMeta}</div>` : ''}<p class="pl-print-count">${K.plural(S.regions.length, 'regional option')} included · ${picked.length} selected for design</p></header>` +
       valid + `<div class="pl-bar pl-noprint">${K.btn({ act: 'export', label: 'Export to Excel', icon: 'export' })}${K.btn({ act: 'copy', label: 'Copy as text', icon: 'copy' })}${K.btn({ act: 'print', label: 'Print', icon: 'print' })}</div>` +
-      blocks + K.section('All regions in this plan', K.scroll(`<table class="pl-dl"><thead><tr><th scope="col">Region</th><th scope="col">Outcome</th><th scope="col">Selected</th><th scope="col">Platform Services profile</th></tr></thead><tbody>${all}</tbody></table>`, { label: 'All regions' }));
+      blocks + K.section('All regions in this plan', K.scroll(`<table class="pl-dl"><thead><tr><th scope="col">Region</th><th scope="col">Outcome</th><th scope="col">Qualification evidence</th><th scope="col">Selected</th><th scope="col">Workload archetype</th><th scope="col">Platform Services profile</th><th scope="col">Documented constraints</th><th scope="col">Ownership</th><th scope="col">Review date</th></tr></thead><tbody>${all}</tbody></table>`, { label: 'All regions' }));
   }
 
   M.views.design = vDesign;

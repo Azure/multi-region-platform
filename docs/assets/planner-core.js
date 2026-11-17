@@ -3,17 +3,17 @@
   'use strict';
   const M = global.MRP, { CHECKS, CAPABILITY_IDS, PROFILES, SHARED, HUB_SERVICES, HYBRID_PATHS } = M;
   const KEY = 'mrp-planner', OLD_KEY = 'mrp-planner-v1';
-  const VERSION = 3;
+  const VERSION = 4;
   const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
   const uid = p => p + Math.random().toString(36).slice(2, 8);
   const num = v => v === '' || v === null || v === undefined || !isFinite(Number(v)) ? null : Number(v);
 
   // ───────────── state
-  const blank = () => ({ v: VERSION, meta: { name: '', owner: '', date: today() }, estate: { topology: '', managed: '', hybrid: '' },
+  const blank = () => ({ v: VERSION, meta: { name: '', owner: '', date: today() }, estate: { topology: '', managed: '', hybrid: '', circuit: '' },
     current: [], baseline: '', regions: [], workload: {}, notes: {}, sites: [], services: [], ui: { details: false, weighted: false, showOut: false } });
   const newRegion = id => ({ id, checks: {}, outcome: '', selected: false, conditions: '', owner: '', review: '', design: null });
   const newDesign = () => ({ q1: '', q2: '', q3: '', profile: '', hub: '', hubConnections: null, topology: '', managed: '', link: '', eastWest: '', ss: {}, custom: [],
-    hybrid: '', hybridUse: '', hybridPath: '', hybridReason: '', hybridChange: '', owner: '', date: '', reassess: '' });
+    hybrid: '', hybridUse: '', hybridPath: '', hybridReason: '', hybridChange: '', owner: '', date: '', reassess: '', reviewTriggers: [...M.REVIEW_TRIGGERS] });
 
   // A workbook saved by version 1 keeps its answers where the question still exists. Manual availability, price and latency entries are dropped.
   const V1_CAPABILITY = { 'Met': 'Yes', 'Gap (mandatory)': 'No (mandatory gap)', 'Gap (accepted with a condition)': 'Gap accepted with a condition' };
@@ -30,6 +30,18 @@
     'Selective Hub': 'Minimal platform',
     'Full Regional Hub': 'Full platform',
   };
+  const LEGACY_ARCHETYPES = {
+    'Isolated Cloud-Native or AI Applications': 'Self-Contained Workloads',
+    'Connected Cloud-Native or AI Applications': 'Selectively Connected Workloads',
+    'Hybrid-Connected Applications': 'Hybrid-Dependent Workloads',
+    'Interconnected Application Portfolios': 'Interdependent Workload Groups',
+  };
+  const archetypeName = value => LEGACY_ARCHETYPES[value] || value;
+  function currentRegion(c) {
+    const region = typeof c === 'string' ? { id: c } : c;
+    const profile = LEGACY_PROFILES[region.profile] || region.profile || (region.hub ? 'Full platform' : '');
+    return { ...region, profile, hub: profile === 'Full platform' };
+  }
   function fromV1(raw) {
     const o = { ...raw };
     o.regions = (Array.isArray(raw.regions) ? raw.regions : []).map(r => {
@@ -70,11 +82,14 @@
     s.meta = { ...blank().meta, ...(s.meta || {}) };
     s.estate = { ...blank().estate, ...(s.estate || {}) };
     s.ui = { ...blank().ui, ...(s.ui || {}) };
-    s.current = (Array.isArray(s.current) ? s.current : []).map(c => typeof c === 'string' ? { id: c, hub: false } : c).filter(c => c && c.id);
+    s.current = (Array.isArray(s.current) ? s.current : []).filter(c => c && (typeof c === 'string' || c.id)).map(currentRegion);
     s.regions = (Array.isArray(s.regions) ? s.regions : []).filter(r => r && r.id).map(r => {
       const o = { ...newRegion(r.id), ...r, checks: { ...(r.checks || {}) } };
+      if (o.checks['3.2']) o.checks['3.2'] = archetypeName(o.checks['3.2']);
+      if (o.outcome === 'No deeper assessment') o.outcome = 'Excluded';
       if (o.design) {
         o.design = { ...newDesign(), ...o.design, ss: { ...(o.design.ss || {}) }, custom: [...(o.design.custom || [])] };
+        o.design.reviewTriggers = Array.isArray(o.design.reviewTriggers) ? o.design.reviewTriggers.filter(t => typeof t === 'string') : [...M.REVIEW_TRIGGERS];
         if (Object.hasOwn(LEGACY_PROFILES, o.design.profile)) o.design.profile = LEGACY_PROFILES[o.design.profile];
         ['link', 'eastWest', 'hybridPath'].forEach(key => {
           if (typeof o.design[key] === 'string') o.design[key] = o.design[key]
@@ -88,10 +103,11 @@
     });
     s.workload = Object.fromEntries(CHECKS[2].rows.map(({ id }) => {
       const saved = raw.workload && raw.workload[id];
-      const value = saved && typeof saved.value === 'string' ? saved.value : s.regions[0]?.checks[id] || '';
+      const canonical = value => id === '3.2' ? archetypeName(value) : value;
+      const value = canonical(saved && typeof saved.value === 'string' ? saved.value : s.regions[0]?.checks[id] || '');
       const overrides = saved ? Object.fromEntries(s.regions
         .filter(r => typeof saved.overrides?.[r.id] === 'string')
-        .map(r => [r.id, saved.overrides[r.id]]))
+        .map(r => [r.id, canonical(saved.overrides[r.id])]))
         : Object.fromEntries(s.regions.filter(r => (r.checks[id] || '') !== value).map(r => [r.id, r.checks[id] || '']));
       return [id, { value, overrides, expanded: saved ? !!saved.expanded : Object.keys(overrides).length > 0 }];
     }));
@@ -230,7 +246,7 @@
   // ───────────── step 2: outcome
   function suggest(r) {
     const c = r.checks, cap = CAPABILITY_IDS;
-    if (c['1.1'] === 'No') return { o: 'No deeper assessment', why: 'Check 1: Azure presence in this region isn’t needed.' };
+    if (c['1.1'] === 'No') return { o: 'Excluded', why: 'Check 1: Azure presence in this region isn’t needed.' };
     if (c['2.1'] === 'No (mandatory gap)' || c['2.2'] === 'No (mandatory gap)') return { o: 'Excluded', why: 'Check 2: a mandatory data, compliance, or policy requirement can’t be met.' };
     if (cap.some(k => c[k] === 'No (mandatory gap)')) return { o: 'Excluded', why: 'Check 4: a mandatory capability gap.' };
     if (!c['1.1'] || c['1.1'] === 'To confirm') return { o: 'Candidate', why: 'Check 1: the need for Azure presence isn’t confirmed yet.' };
@@ -245,18 +261,24 @@
   const outcome = r => r.outcome || suggest(r).o;
   const selectable = r => ['Qualified', 'Conditional'].includes(outcome(r));
   const selected = () => S.regions.filter(r => r.selected && selectable(r));
-  // A region ruled out by checks 1 to 3 (or set by hand to Excluded or No deeper assessment) is folded in the evidence tabs and in check 4.
+  // Regions ruled out before check 4 are folded in the evidence, but retained in the record and export.
   // A region excluded for a check 4 gap stays visible, because the evidence is the reason.
   function ruledOut(r) {
     const o = outcome(r);
-    if (o !== 'Excluded' && o !== 'No deeper assessment') return false;
+    if (o !== 'Excluded') return false;
     return !!r.outcome || !/^Check 4/.test(suggest(r).why);
   }
   const active = () => S.ui.showOut ? S.regions : S.regions.filter(r => !ruledOut(r));
   const folded = () => S.ui.showOut ? [] : S.regions.filter(ruledOut);
 
   // The answer-by-answer state of one check in one region: success, warning, error, or none.
+  function checkSkipped(ch, r) {
+    return (ch.n > 1 && r.checks['1.1'] === 'No') ||
+      (ch.n > 2 && ['2.1', '2.2'].some(id => r.checks[id] === 'No (mandatory gap)')) ||
+      (ch.n === 4 && r.outcome === 'Excluded');
+  }
   function checkState(ch, r) {
+    if (checkSkipped(ch, r)) return 'skip';
     const vals = ch.rows.map(row => r.checks[row.id] || '');
     if (!vals.some(Boolean)) return 'none';
     if (ch.rows.some((row, i) => !row.neutral && TONE_OF(vals[i]) === 'bad')) return 'error';
@@ -277,6 +299,8 @@
 
   // Keep the state consistent after any change.
   function tidy() {
+    S.current = S.current.map(currentRegion);
+    if (S.estate.circuit && !S.sites.some(s => s.kind === 'peering' && s.peering === S.estate.circuit)) S.estate.circuit = '';
     syncWorkload(S);
     if (!S.current.some(c => c.id === S.baseline)) S.baseline = S.current[0] ? S.current[0].id : '';
     S.regions.forEach(r => {
@@ -369,11 +393,15 @@
   };
   const estimate = distance => Math.max(1, Math.round(D.lat.model.a + D.lat.model.b * distance));
 
-  // The scale every latency bar and the legend share. The color stops are in milliseconds (green up to 30, yellow at 60, red at 120,
-  // dark red from 200) and the length is the square root of the value, so a 10 ms European hop is still visible while a 250 ms route
-  // fits. Values past `max` fill the bar. The gradient in planner.css (.pl-hbar) uses the same square-root positions.
-  const latScale = { max: 250, marks: [0, 30, 60, 120, 200] };
-  const latPos = ms => Math.sqrt(Math.min(Math.max(ms, 0), latScale.max) / latScale.max);
+  // Equal-width intervals keep short hops visible and share the legend's exact breakpoints.
+  const latScale = { max: 250, marks: [0, 30, 60, 120, 200, 250] };
+  function latPos(ms) {
+    const value = Math.min(Math.max(ms, 0), latScale.max), marks = latScale.marks;
+    for (let i = 1; i < marks.length; i++) {
+      if (value <= marks[i]) return (i - 1 + (value - marks[i - 1]) / (marks[i] - marks[i - 1])) / (marks.length - 1);
+    }
+    return 1;
+  }
 
   const SRC_TEXT = {
     m: d => `Microsoft published median${d.lat && d.lat.dataset ? ', dataset of ' + d.lat.dataset : ''}`,
@@ -453,16 +481,18 @@
     const i = info(r.id);
     if (kind === 'services') {
       const a = availSummary(r.id);
-      if (!a.total) return { text: 'No services listed', tone: '', tab: 'services' };
-      if (a.none === a.total) return { text: `${a.total} services, no data`, tone: '', tab: 'services' };
-      return { text: `${a.ok} of ${a.total} services available`, tone: a.ok === a.total ? 'good' : 'warn', tab: 'services' };
+      if (!a.total) return { text: 'No services listed', tone: '', tab: 'services', label: 'Check 3' };
+      if (a.none === a.total) return { text: `${a.total} services, no data`, tone: '', tab: 'services', label: 'Check 3' };
+      return { text: `${a.ok} of ${a.total} services available`, tone: a.ok === a.total ? 'good' : 'warn', tab: 'services', label: 'Check 3' };
     }
     if (kind === 'zones') {
       const need = r.checks['3.4'];
       const z = i.zones === true ? 'Zones: yes' : i.zones === false ? 'Zones: no' : 'Zones: verify';
-      return { text: need === 'No' ? z + ' (not required)' : z, tone: i.zones === true ? 'good' : i.zones === false && need === 'Yes' ? 'bad' : i.zones === null || i.zones === undefined ? 'warn' : '' };
+      return { text: need === 'No' ? z + ' (not required)' : z, tone: i.zones === true ? 'good' : i.zones === false && need === 'Yes' ? 'bad' : i.zones === null || i.zones === undefined ? 'warn' : '',
+        href: 'regional-capability.html', label: 'Zone guidance' };
     }
-    if (kind === 'pair') return { text: !i.known ? 'Pairing: verify' : i.pair ? `Paired with ${rname(i.pair)}` : 'Nonpaired region', tone: !i.known ? 'warn' : '' };
+    if (kind === 'pair') return { text: (!i.known ? 'Pairing: verify' : i.pair ? `Paired with ${rname(i.pair)}` : 'Nonpaired region') + '; validate service behavior',
+      tone: !i.known ? 'warn' : '', href: 'regional-capability.html', label: 'Behavior guidance' };
     if (kind === 'latency') {
       const l = latencySummary(r.id);
       if (l.max === null) return { text: S.sites.length ? 'No latency values' : 'No locations added', tone: '', tab: 'latency' };
@@ -474,7 +504,10 @@
       if (!p.n || p.value === null) return { text: 'No price comparison', tone: '', tab: 'pricing' };
       return { text: `${fmtPct(p.value)} vs ${rname(S.baseline)}`, tone: '', tab: 'pricing' };
     }
-    if (kind === 'access') return i.access === 'restricted' ? { text: 'Access request needed', tone: 'warn' } : { text: '', tone: '' };
+    if (kind === 'access') return { text: i.access === 'restricted' ? 'Access request needed' : 'Validate subscription and offer access', tone: 'warn',
+      href: 'regional-capability.html#regional-access-and-quota', label: 'Access guidance' };
+    if (kind === 'quota') return { text: 'Validate quota in the target subscriptions', tone: 'warn',
+      href: 'regional-capability.html#regional-access-and-quota', label: 'Quota guidance' };
     return { text: '', tone: '' };
   }
 
@@ -556,6 +589,7 @@
       return { ...s, p, isDefault: !x.p && !!def, def, from: p === 'Remote' ? (hubs.includes(x.from) ? x.from : defHub) : '', note: x.note || '' };
     }).concat(d.custom.map(c => ({ id: c.id, name: c.name, short: c.name, icon: 'cloud', custom: true, p: c.p || '', def: '', isDefault: false, from: c.p === 'Remote' ? (hubs.includes(c.from) ? c.from : defHub) : '', note: c.note || '' })));
     e.hybrid = none ? 'Not required' : d.hybrid;
+    e.hybridUse = d.hybridUse || (S.estate.circuit ? `ExpressRoute circuit in ${S.estate.circuit}` : '');
     const gw = e.ss.find(s => s.id === 'gateway');
     e.pathOptions = none ? [] : M.hybridPathOptions(profile, e.topology, gw ? gw.p : '');
     e.hybridPath = e.pathOptions.includes(d.hybridPath) ? d.hybridPath : '';
@@ -594,14 +628,17 @@
     const provider = gateway && gateway.p === 'Remote' ? gateway.from : '';
     const hubNames = provider ? rname(provider) : list(e.hubConnections.map(rname));
     if (say && hubNames) say = say.replace('the Full-Platform region', hubNames).replace('another region', hubNames);
-    if (e.hybrid === 'Reuse') return `Reuse the existing ${d.hybridUse || 'connectivity'}${say ? ', ' + say : ''}`;
+    if (e.hybrid === 'Reuse') return `Reuse the existing ${e.hybridUse || 'connectivity'}${say ? ', ' + say : ''}`;
     return `Change: ${d.hybridChange || 'to be defined'}${d.hybridReason ? ` (${d.hybridReason.charAt(0).toLowerCase() + d.hybridReason.slice(1)})` : ''}${say ? ', ' + say : ''}`;
   }
   // The regional design record of a selected region, as label and text pairs.
+  const reviewTriggers = r => [r.review && 'Review date: ' + r.review, ...(r.design?.reviewTriggers || M.REVIEW_TRIGGERS), r.design?.reassess].filter(Boolean);
   function record(r) {
     const e = effective(r), d = design(r), out = [];
     const at = p => e.ss.filter(s => s.p === p && (s.short || s.name));
     out.push(['Selected region', `${rname(r.id)} (${outcome(r)} as of ${S.meta.date})`]);
+    out.push(['Outcome', `${outcome(r)} as of ${S.meta.date}; onboarding revalidation still required`]);
+    out.push(['Workload Landing Zone archetype', r.checks['3.2'] || 'Not recorded']);
     out.push(['Platform Services profile', e.profile || 'Not selected yet']);
     if (!e.none && e.profile) {
       out.push(['Hub implementation', [e.profile === 'Remote platform' ? 'No local hub' : e.topology === 'Azure Virtual WAN' ? 'Virtual hub in the region (Azure Virtual WAN)' : e.topology ? 'Hub virtual network in the region' : 'Hub in the region',
@@ -617,15 +654,21 @@
     if (at('Global').length) out.push(['Global services', list(at('Global').map(s => s.short))]);
     const unplaced = e.ss.filter(s => !s.p);
     if (e.profile && unplaced.length) out.push(['Still to place', list(unplaced.map(s => s.short || s.name || 'Unnamed service'))]);
-    out.push(['Open conditions', r.conditions || 'None']);
-    if (d.owner) out.push(['Owner', d.owner]);
+    out.push(['Documented constraints', r.conditions || 'None']);
+    out.push(['Ownership', d.owner || r.owner || S.meta.owner || 'Not recorded']);
     out.push(['Decision date', e.date]);
-    out.push(['Reassess when', e.reassess || '']);
+    out.push(['Review triggers', reviewTriggers(r).join('\n')]);
     return out;
   }
   function recordText() {
     const head = [S.meta.name || 'Multi-region planner', `Date: ${S.meta.date}` + (S.meta.owner ? ` · Owner: ${S.meta.owner}` : ''), ''];
-    const body = selected().map(r => record(r).filter(x => x[1]).map(([k, v]) => `${k}: ${v}`).join('\n'));
+    const picked = selected();
+    const body = S.regions.map(r => (picked.includes(r) ? record(r) : [
+      ['Region', rname(r.id)], ['Outcome', outcome(r)], ['Reason', suggest(r).why],
+      ['Workload Landing Zone archetype', r.checks['3.2'] || 'Not recorded'],
+      ['Documented constraints', r.conditions || 'None'], ['Ownership', r.owner || S.meta.owner],
+      ['Review triggers', reviewTriggers(r).join('\n')],
+    ]).filter(x => x[1]).map(([k, v]) => `${k}: ${v}`).join('\n'));
     return head.concat(body.join('\n\n')).join('\n');
   }
 
@@ -637,7 +680,7 @@
     const picked = selected(), rs = S.regions, live = rs.filter(r => !ruledOut(r));
     const fitAny = rs.some(r => FIT_IDS.some(id => r.checks[id]));
     const capAny = rs.some(r => CAPABILITY_IDS.some(id => r.checks[id]) || r.outcome);
-    const decided = live.filter(r => outcome(r) !== 'Candidate').length;
+    const decided = live.filter(r => CAPABILITY_IDS.every(id => r.checks[id])).length;
     const allDone = picked.length && picked.every(r => effective(r).complete);
     return {
       scope: S.current.length && rs.length ? 'done' : S.current.length || rs.length || S.sites.length || S.meta.name ? 'half' : 'none',
@@ -645,16 +688,17 @@
       services: named().length ? 'done' : 'none',
       pricing: S.baseline && named().length && D.hasCatalog ? 'done' : S.baseline || named().length ? 'half' : 'none',
       latency: S.sites.length ? 'done' : 'none',
-      capability: live.length && picked.length && decided === live.length ? 'done' : capAny || picked.length ? 'half' : 'none',
+      capability: live.length && decided === live.length ? 'done' : capAny ? 'half' : 'none',
+      outcome: rs.length && rs.every(r => r.checks['1.1'] || r.outcome) ? 'done' : fitAny || capAny ? 'half' : 'none',
       design: !picked.length ? 'lock' : allDone ? 'done' : 'half',
-      review: !picked.length ? 'lock' : allDone ? 'done' : 'half',
+      review: !rs.length ? 'none' : !picked.length || allDone ? 'done' : 'half',
       // the counts shown beside a tab that is in progress
       counts: { checks: [rs.filter(fitDone).length, rs.length, 'answered'], capability: [decided, live.length, 'decided'] },
     };
   }
 
   M.core = { get S() { return S; }, D, VERSION, load, save, replace, blank, normalize, tidy, newRegion, uid, today, loadData, loadPricing, loadCities, bit,
-    info, rname, reg, cols, suggest, outcome, selectable, selected, ruledOut, active, folded, fitDone, checkState, named, serviceSelection, skuOptions, availability, availabilityDetails, zoneText, availSummary, priceRows, priceDiff, priceSummary,
+    info, rname, reg, cols, suggest, outcome, selectable, selected, ruledOut, active, folded, fitDone, checkState, checkSkipped, named, serviceSelection, skuOptions, availability, availabilityDetails, zoneText, availSummary, priceRows, priceDiff, priceSummary,
     regionLatency, peeringLatency, cityLatency, peeringChoices, nearestPeering, sitePeering, siteName, siteLatency, latencySummary, srcText, km, estimate, latScale, latPos,
-    num, fmtPct, priceTone, evidence, latencyWorst, suggestAnswer, suggestions, hubRegions, design, suggestProfile, effective, hybridText, record, recordText, list, progress };
+    num, fmtPct, priceTone, evidence, latencyWorst, suggestAnswer, suggestions, hubRegions, design, suggestProfile, effective, hybridText, reviewTriggers, record, recordText, list, progress };
 })(window);

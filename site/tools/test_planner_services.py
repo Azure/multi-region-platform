@@ -23,7 +23,7 @@ def seed(page, count, catalog=True):
       s.services = C.D.services.slice(0, count).map((x, i) =>
         ({id:'v'+i, service:x.name, product:'', weight:''}));
       C.D.hasAvailability = catalog;
-      C.replace(s); MRP.ui.tab = 'services'; MRP.kit.hooks.render();
+      C.replace(s); MRP.ui.tab = 'checks'; MRP.kit.hooks.render();
     }""", {"count": count, "catalog": catalog})
     assert page.locator(".pl-services-scroll tbody tr").count() == count
 
@@ -47,12 +47,14 @@ def check_catalog_selections(page):
       s.current = [{id:'westeurope',hub:true}]; s.baseline = 'westeurope';
       s.regions = ['swedencentral'].map(C.newRegion);
       s.services = [{id:'vm',service:'Virtual Machines',product:'',sku:'',weight:''}];
-      C.replace(s); MRP.ui.tab = 'services'; MRP.kit.hooks.render();
+      C.replace(s); MRP.ui.tab = 'checks'; MRP.kit.hooks.render();
     }""")
-    # Narrowing is optional: an unnarrowed row shows a link that opens the product and SKU fields.
-    page.get_by_role("button", name="Narrow Virtual Machines to a product and SKU", exact=True).click()
+    # Optional product and SKU controls are always present in question 3.5.
     product = page.get_by_role("combobox", name="Product of Virtual Machines", exact=True)
     sku = page.get_by_role("combobox", name="SKU of Virtual Machines", exact=True)
+    assert product.get_attribute("placeholder") == "Any product"
+    assert sku.get_attribute("placeholder") == "Any SKU"
+    assert page.locator('[data-act="narrow"]').count() == 0
     assert sku.is_disabled()
     product.fill("Virtual Machines")
     page.get_by_role("option", name="Virtual Machines", exact=True).click()
@@ -88,12 +90,13 @@ def check_catalog_selections(page):
         {id:'free',service:'Azure Advisor',product:'',sku:'',weight:0});
       MRP.kit.hooks.commit();
     }""")
-    page.locator("#tab-pricing").click()
+    page.locator("#tab-capability").click()
+    page.locator('[data-act="evidence"][data-arg="pricing"]').click()
     page.wait_for_function("MRP.core.D.pricing.westeurope")
     assert page.locator(".pl-pt tbody th").filter(has_text="Azure App Service").count() == 1
     assert page.locator(".pl-pt tbody th").filter(has_text="No Retail meter (free service)").count() == 1
     assert page.evaluate("MRP.core.priceRows().find(s=>s.id==='app').retailService") == "Azure App Service"
-    page.locator("#tab-services").click()
+    page.locator("#tab-checks").click()
     zone_count = page.evaluate("""() => {
       const C = MRP.core;
       for (const service of C.D.services) for (const product of Object.values(service.products))
@@ -121,7 +124,7 @@ def check_generic_skus(page):
         page.evaluate("""({service,product}) => {
           const C=MRP.core,s=C.blank(); s.current=[{id:'australiacentral2'}];
           s.services=[{id:'generic-test',service,product,sku:'',weight:''}];
-          C.replace(s); MRP.ui.tab='services'; MRP.kit.hooks.render();
+          C.replace(s); MRP.ui.tab='checks'; MRP.kit.hooks.render();
         }""", {"service": service, "product": product})
         page.get_by_role("combobox", name="SKU of " + service, exact=True).click()
         assert page.locator('#pl-pop [role="option"]').all_inner_texts() == expected
@@ -162,7 +165,6 @@ def check_repeated_services(page):
             add.fill(service)
             page.get_by_role("option", name=service, exact=True).click()
             row = page.locator(".pl-services-scroll tbody tr").last
-            row.get_by_role("button", name=f"Narrow {service} to a product and SKU", exact=True).click()
             row.get_by_role("combobox", name=f"Product of {service}", exact=True).fill(product)
             page.get_by_role("option", name=product, exact=True).click()
             sku = ""
@@ -191,9 +193,10 @@ def check_repeated_services(page):
     assert page.evaluate("MRP.core.S.services[1].sku") == expected[1][2]
     row.get_by_role("button", name="Remove Virtual Machines", exact=True).click()
     assert page.evaluate("MRP.core.S.services.map(s => s.id)") == ids[1:]
-    page.locator("#tab-pricing").click()
+    page.locator("#tab-capability").click()
+    page.locator('[data-act="evidence"][data-arg="pricing"]').click()
     assert page.evaluate("MRP.core.priceRows().map(s => s.id)") == ids[1:]
-    page.locator("#tab-services").click()
+    page.locator("#tab-checks").click()
     seed(page, 0, catalog=False)
     for _ in range(2):
         add.fill("Custom service")

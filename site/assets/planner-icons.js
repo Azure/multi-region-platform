@@ -62,9 +62,10 @@
 
   // Status glyphs: a filled shape with a white (dark in the dark theme) mark. Color comes from the class.
   const S = {
-    success: '<circle class="bg" cx="8" cy="8" r="6.5"/><path class="g" d="M5.2 8.2l2 2 3.6-4.1"/>',
-    error: '<circle class="bg" cx="8" cy="8" r="6.5"/><path class="g" d="M5.7 5.7l4.6 4.6M10.3 5.7l-4.6 4.6"/>',
-    warning: '<path class="bg" d="M8 1.9l6.4 11.4a.5.5 0 0 1-.44.74H2.04a.5.5 0 0 1-.44-.74z"/><path class="g" d="M8 6.2v3.1M8 11.2v.01"/>',
+    success: '<circle class="outline" cx="8" cy="8" r="6.25"/><path class="outline" d="M5.2 8.2l2 2 3.6-4.1"/>',
+    error: '<circle class="outline" cx="8" cy="8" r="6.25"/><path class="outline" d="M5.7 5.7l4.6 4.6M10.3 5.7l-4.6 4.6"/>',
+    warning: '<path class="outline" d="M4.5 14V2M4.5 2h7l-2 3 2 3h-7"/>',
+    candidate: '<circle class="outline" cx="8" cy="8" r="6.25" stroke-dasharray="2.5 2"/><path class="outline" d="M8 4.5V8l2.5 1.5"/>',
     info: '<circle class="bg" cx="8" cy="8" r="6.5"/><path class="g" d="M8 7.3v3.4M8 5.2v.01"/>',
     neutral: '<circle class="ring" cx="8" cy="8" r="6.25"/><path class="ring" d="M5.5 8h5"/>',
     none: '<circle class="ring" cx="8" cy="8" r="6.25"/>',

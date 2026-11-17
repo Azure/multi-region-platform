@@ -3,7 +3,7 @@
 (function (global) {
   'use strict';
   const M = global.MRP, C = M.core, { O, TONE, CHECKS, PROFILES, PROFILE_QUESTIONS, SHARED, HYBRID_PATHS } = M;
-  const OUTCOME_TONE = { 'Qualified': 'good', 'Conditional': 'warn', 'Candidate': 'warn', 'Excluded': 'bad', 'No deeper assessment': 'bad' };
+  const OUTCOME_TONE = { 'Qualified': 'good', 'Conditional': 'warn', 'Candidate': 'warn', 'Excluded': 'bad' };
   const col = i => global.XlsxLite.colName(i);
   const tone = v => TONE[v] || OUTCOME_TONE[v] || 'cell';
   const c = (v, s) => ({ v: v === null || v === undefined ? '' : v, s: s || 'cell' });
@@ -42,15 +42,16 @@
     });
     scRows.push([]);
     scGroup('Current regions');
-    scRows.push([c('Region', 'head'), c('Full-Platform region', 'head'), c('Price baseline', 'head')]);
+    scRows.push([c('Region', 'head'), c('Platform Services profile', 'head'), c('Price baseline', 'head')]);
     (S.current.length ? S.current : [{ id: null, hub: false }]).forEach(x =>
       scRows.push([c(x.id ? C.rname(x.id) : 'Add a current region', 'input'),
-        c(x.hub ? 'Yes' : x.id ? 'No' : '', 'input'), c(x.id === S.baseline ? 'Yes' : x.id ? 'No' : '', 'input')]));
+        c(x.profile || '', 'input'), c(x.id === S.baseline ? 'Yes' : x.id ? 'No' : '', 'input')]));
     scRows.push([]);
     scGroup('Current platform');
     scField('Hub topology', S.estate.topology);
     scField('Connectivity managed with', S.estate.managed);
     scField('Hybrid connectivity', S.estate.hybrid);
+    scField('Primary ExpressRoute circuit', S.estate.circuit || 'None');
     scRows.push([]);
     scGroup('Regions to qualify');
     scRows.push([c('Region', 'head'), c('Outcome', 'head'), c('Selected for design', 'head'), c('Platform Services profile', 'head'),
@@ -64,17 +65,18 @@
     const scope = { name: 'Scope', tabColor: '0F6CBD', cols: [34, 28, 24, 30, 22, 16, 48], freeze: { x: 1, y: 3 }, rows: scRows, merges: scMerges };
 
     // ── Review
-    const oHead = ['Region', 'Outcome', 'Selected', 'Platform Services profile', 'Hub implementation', 'Regional connectivity', 'Hybrid connectivity', 'Local shared services', 'Remote shared services', 'Global services', 'Open conditions', 'Owner', 'Review date'];
+    const oHead = ['Region', 'Outcome', 'Selected', 'Platform Services profile', 'Hub implementation', 'Regional connectivity', 'Hybrid connectivity', 'Local shared services', 'Remote shared services', 'Global services', 'Documented constraints', 'Ownership', 'Review date', 'Workload archetype', 'Review triggers', 'Qualification evidence'];
     const oRows = [[c('Review + export', 'title')], [c(sub, 'muted')], [c(snapshot, 'muted')], [], oHead.map(h => c(h, 'head'))];
     S.regions.slice().sort((a, b) => (b.selected ? 1 : 0) - (a.selected ? 1 : 0)).forEach(r => {
       const out = C.outcome(r), sel = r.selected && C.selectable(r);
       const rec = sel ? Object.fromEntries(C.record(r).map(([k, v]) => [k.replace(/ \(from .*\)$/, ''), v])) : {};
       const remote = sel ? C.record(r).filter(([k]) => k.startsWith('Remote shared services')).map(([k, v]) => (k.match(/from (.*)\)$/) ? k.match(/from (.*)\)$/)[1] + ': ' : '') + v).join('\n') : '';
       oRows.push([c(C.rname(r.id), 'label'), c(out, 'input'), c(sel ? 'Yes' : 'No', 'input'), c(rec['Platform Services profile'], 'input'), c(rec['Hub implementation']), c(rec['Regional connectivity']),
-        c(rec['Hybrid connectivity']), c(rec['Local shared services']), c(remote), c(rec['Global services']), c(r.conditions, 'input'), c(sel ? C.design(r).owner || r.owner : r.owner, 'input'), c(r.review, 'input')]);
+        c(rec['Hybrid connectivity']), c(rec['Local shared services']), c(remote), c(rec['Global services']), c(r.conditions, 'input'), c((sel && C.design(r).owner) || r.owner || S.meta.owner, 'input'), c(r.review, 'input'),
+        c(r.checks['3.2'], 'input'), c(C.reviewTriggers(r).join('\n'), 'input'), c(C.suggest(r).why)]);
     });
     if (!S.regions.length) oRows.push(pad([c('Region 1', 'label')], oHead.length));
-    const outcome = { name: 'Review', tabColor: '12324A', cols: [24, 16, 16, 24, 34, 44, 44, 44, 38, 34, 40, 18, 13], freeze: { x: 1, y: 5 }, rows: oRows, merges: frame(oHead.length),
+    const outcome = { name: 'Review', tabColor: '12324A', cols: [24, 16, 16, 24, 34, 44, 44, 44, 38, 34, 40, 18, 13, 36, 46, 54], freeze: { x: 1, y: 5 }, rows: oRows, merges: frame(oHead.length),
       lists: [{ ref: `B6:B${oRows.length}`, items: O.outcome }, { ref: `C6:C${oRows.length}`, items: ['Yes', 'No'] }, { ref: `D6:D${oRows.length}`, items: PROFILES.map(p => p.id) }] };
 
     // ── Step 2: checks
@@ -183,7 +185,7 @@
       .forEach(name => dLine(name, x => place(x.e.ss.find(s => s.custom && s.name === name)), O.placement));
     group2('Choice 3 · Hybrid connectivity');
     dLine('Decision', x => x.e.hybrid, O.hybrid);
-    dLine('Existing connectivity used', x => x.e.hybrid === 'Not required' ? '' : x.d.hybridUse);
+    dLine('Existing connectivity used', x => x.e.hybrid === 'Not required' ? '' : x.e.hybridUse);
     dLine('How the region reaches on-premises locations', x => x.e.hybrid === 'Not required' ? '' : x.e.hybridPath, HYBRID_PATHS.map(p => p.id));
     dLine('Change', x => x.e.hybrid === 'Change' ? x.d.hybridChange : '');
     dLine('Requirement that justifies the change', x => x.e.hybrid === 'Change' ? x.d.hybridReason : '', O.hybridReason);
@@ -191,7 +193,8 @@
     dLine('Open conditions', x => x.r.conditions);
     dLine('Owner', x => x.d.owner);
     dLine('Decision date', x => x.e.date);
-    dLine('Reassess when', x => x.e.reassess);
+    dLine('Workload archetype', x => x.r.checks['3.2']);
+    dLine('Review triggers', x => C.reviewTriggers(x.r).join('\n'));
     dLine('Record complete', x => x.e.complete ? 'Yes' : 'No: ' + x.e.missing.join(', '), null, v => v === 'Yes' ? 'good' : 'warn');
     function group2(text) { dRows.push(pad([c(text, 'group')], dWidth, 'group')); if (dWidth > 1) dMerges.push(`A${dRows.length}:${dLast}${dRows.length}`); }
     const designSheet = { name: 'Regional design', tabColor: '8661C5', cols: [62, ...des.map(() => 46)], freeze: { x: 1, y: 4 }, rows: dRows, lists: dLists, merges: [...frame(dWidth), ...dMerges] };

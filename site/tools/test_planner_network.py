@@ -294,6 +294,22 @@ def main():
             assert next(r for r in multi["regions"] if r["id"] == "francecentral")["pattern"] == "full-hub"
             er = next(c for c in multi["hybrid_connections"] if c["type"] == "expressroute")
             assert set(er["connects_to"]) == {"francecentral", "northeurope"}
+            inherited_page.evaluate("""() => {
+              const C = MRP.core, input = JSON.parse(JSON.stringify(MRP.EXAMPLE));
+              input.current = [
+                {id:'westeurope',profile:'Full platform'},
+                {id:'northeurope',profile:'Minimal platform'},
+                {id:'francecentral',profile:'Remote platform'},
+                {id:'uksouth',profile:'Governance-Only'}
+              ];
+              input.regions[0].design.hybridUse = '';
+              C.replace(input); MRP.kit.hooks.commit();
+            }""")
+            profiles = inherited_frame.evaluate("Object.fromEntries(spec.regions.map(r => [r.id,r.pattern]))")
+            assert {key: profiles[key] for key in ["westeurope", "northeurope", "francecentral", "uksouth"]} == {
+                "westeurope": "full-hub", "northeurope": "minimal-hub",
+                "francecentral": "remote-hub", "uksouth": "disconnected"}
+            assert inherited_frame.evaluate("spec.hybrid_connections[0].peering_location") == "Frankfurt"
             inherited_page.evaluate("MRP.core.replace({v:2}); MRP.kit.hooks.render()")
             assert inherited_frame.evaluate("spec.regions.length") == 0
             assert inherited_frame.evaluate("spec.hybrid_connections.length") == 0

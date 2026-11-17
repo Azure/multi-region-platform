@@ -25,6 +25,101 @@ class PlannerProfileTests(unittest.TestCase):
                                 capture_output=True, text=True, encoding="utf-8")
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
+    def test_four_outcomes_and_skipped_checks_preserve_saved_evidence(self):
+        self.run_js("""
+assert.deepEqual(M.O.outcome, ['Excluded', 'Candidate', 'Conditional', 'Qualified']);
+const input = JSON.parse(JSON.stringify(M.EXAMPLE));
+const old = input.regions[2];
+old.outcome = 'No deeper assessment'; old.selected = true;
+old.checks['2.1'] = 'Yes'; old.conditions = 'Retain the business decision';
+const before = JSON.stringify(input);
+C.replace(input);
+const r = C.reg(old.id);
+assert.equal(JSON.stringify(input), before);
+assert.equal(C.outcome(r), 'Excluded');
+assert.equal(C.suggest(r).o, 'Excluded');
+assert.equal(r.selected, false);
+assert.equal(r.checks['2.1'], 'Yes');
+assert.equal(r.conditions, old.conditions);
+assert.equal(C.checkState(M.CHECKS[0], r), 'error');
+for (const check of M.CHECKS.slice(1)) assert.equal(C.checkState(check, r), 'skip');
+assert.deepEqual(C.normalize(C.S), C.S);
+""")
+
+    def test_archetype_defaults_and_explicit_overrides_migrate_together(self):
+        self.run_js("""
+const input = JSON.parse(JSON.stringify(M.EXAMPLE));
+input.workload = {'3.2': {
+  value:'Hybrid-Connected Applications', expanded:false,
+  overrides:{polandcentral:'Connected Cloud-Native or AI Applications', switzerlandnorth:''}
+}};
+const before = JSON.stringify(input);
+const s = C.normalize(input);
+assert.equal(JSON.stringify(input), before);
+assert.equal(s.workload['3.2'].value, 'Hybrid-Dependent Workloads');
+assert.equal(s.workload['3.2'].overrides.polandcentral, 'Selectively Connected Workloads');
+assert.equal(s.workload['3.2'].overrides.switzerlandnorth, '');
+assert.deepEqual(s.regions.map(r => r.checks['3.2']),
+  ['Hybrid-Dependent Workloads', 'Selectively Connected Workloads', '']);
+assert.deepEqual(C.normalize(s), s);
+""")
+
+    def test_current_profiles_and_explicit_circuit_are_independent_of_test_locations(self):
+        self.run_js("""
+const s = C.blank();
+s.current = [{id:'westeurope',hub:true}, {id:'northeurope',hub:false},
+  {id:'italynorth',profile:'Minimal Hub'}, {id:'francecentral',profile:'Remote platform'}];
+s.regions = [C.newRegion('swedencentral')];
+s.sites = [{id:'frankfurt',kind:'peering',peering:'Frankfurt',target:30,edits:{}}];
+C.replace(s);
+assert.deepEqual(C.S.current.map(c => c.profile), ['Full platform','','Minimal platform','Remote platform']);
+assert.deepEqual(C.S.current.map(c => c.hub), [true,false,false,false]);
+assert.equal(C.S.estate.circuit, '');
+const r = C.S.regions[0], d = C.design(r);
+Object.assign(d, {q1:'Yes',q2:'Yes',hybrid:'Reuse'});
+assert.equal(C.effective(r).hybridUse, '');
+C.S.estate.circuit = 'Frankfurt';
+assert.equal(C.effective(r).hybridUse, 'ExpressRoute circuit in Frankfurt');
+d.hybridUse = 'Existing VPN';
+assert.equal(C.effective(r).hybridUse, 'Existing VPN');
+C.S.sites = []; C.tidy();
+assert.equal(C.S.estate.circuit, '');
+assert.equal(d.hybridUse, 'Existing VPN');
+""")
+
+    def test_latency_breakpoints_have_equal_width_and_interpolate_between_steps(self):
+        self.run_js("""
+assert.deepEqual(C.latScale.marks, [0,30,60,120,200,250]);
+C.latScale.marks.forEach((value,i) => assert.equal(C.latPos(value), i/5));
+assert.equal(C.latPos(15), 0.1);
+assert.equal(C.latPos(45), 0.3);
+assert.equal(C.latPos(90), 0.5);
+assert.equal(C.latPos(160), 0.7);
+assert.equal(C.latPos(225), 0.9);
+assert.equal(C.latPos(-5), 0);
+assert.equal(C.latPos(300), 1);
+""")
+
+    def test_record_retains_unselected_regions_and_custom_review_triggers(self):
+        self.run_js("""
+C.replace(M.EXAMPLE);
+const r = C.S.regions[0], d = C.design(r);
+d.reassess = 'Revisit the second circuit at renewal';
+d.reviewTriggers = ['New requirements', 'Platform gaps'];
+assert.ok(C.reviewTriggers(r).includes(d.reassess));
+const text = C.recordText();
+for (const region of C.S.regions) assert.ok(text.includes(C.rname(region.id)));
+assert.ok(text.includes('Workload Landing Zone archetype: Hybrid-Dependent Workloads'));
+assert.ok(text.includes('Outcome: Qualified as of '));
+assert.ok(text.includes('Ownership: Platform team'));
+assert.ok(text.includes(d.reassess));
+assert.ok(!text.includes('No deeper assessment'));
+const saved = C.normalize(C.S);
+assert.deepEqual(saved.regions[0].design.reviewTriggers, d.reviewTriggers);
+assert.equal(saved.regions[0].design.reassess, d.reassess);
+assert.notEqual(saved.regions[0].design.reviewTriggers, d.reviewTriggers);
+""")
+
     def test_profile_choices_suggestions_and_diagrams_use_canonical_names(self):
         self.run_js("""
 assert.deepEqual(M.PROFILES.map(p => p.id), names);
