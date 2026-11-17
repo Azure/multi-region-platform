@@ -6,6 +6,8 @@ Contributions to the guidance, planning workbook, and build tooling are welcome.
 
 Use [GitHub issues](https://github.com/Azure/multi-region-platform/issues) for documentation corrections, non-security bugs, and feature suggestions. Discuss substantial changes before implementing them. Include the affected article or tool, current behavior, expected behavior, and reproducible steps where relevant. Do not include credentials, customer planning records, or other confidential information.
 
+Publish only public, approved content. Do not commit Microsoft confidential or internal-only material, personal data, Word or Excel documents, AI prompts, agent instructions, skills, or local Claude/Copilot configuration. Generated PowerPoint presentations and downloaded caches stay local. The maintained service-name mapping CSV in `docs/data/` is public application data, not an Excel workbook. Ignore rules do not protect already-tracked files or detect sensitive content; review the staged diff and document metadata before publishing.
+
 For security vulnerabilities, follow [SECURITY.md](SECURITY.md) rather than opening a public issue. Participation in this project is governed by the [Microsoft Open Source Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Submit a change

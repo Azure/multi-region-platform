@@ -35,11 +35,48 @@ yarn.lock
 !.env.example
 !.env.template
 
-# ─── Office documents: do not publish source documents ────────────────────────
-*.docx
-*.DOCX
-*.pptx
-*.PPTX
+# Office documents: generated presentations stay local; no Word or Excel files
+*.[dD][oO][cC]
+*.[dD][oO][cC][xXmM]
+*.[dD][oO][tT]
+*.[dD][oO][tT][xXmM]
+*.[xX][lL][sS]
+*.[xX][lL][sS][xXmMbB]
+*.[xX][lL][tT]
+*.[xX][lL][tT][xXmM]
+*.[xX][lL][aA]
+*.[xX][lL][aA][mM]
+*.[pP][pP][tT]
+*.[pP][pP][tT][xXmM]
+~$*
+
+# Local AI tooling, prompts, instructions, skills, and downloaded caches
+.cache/
+.impeccable/
+.claude*/
+.copilot*/
+.codex*/
+.cursor*/
+.gemini*/
+.agent/
+.agents/
+.aider*
+.mcp.json
+.cursorignore
+.cursorrules
+[aA][gG][eE][nN][tT][sS].md
+[cC][lL][aA][uU][dD][eE]*
+[cC][oO][pP][iI][lL][oO][tT].md
+[cC][oO][pP][iI][lL][oO][tT]-instructions.md
+[gG][eE][mM][iI][nN][iI].md
+*.[pP][rR][oO][mM][pP][tT].md
+*.[iI][nN][sS][tT][rR][uU][cC][tT][iI][oO][nN][sS].md
+[aA]gents/
+[sS]kill/
+[sS]kills/
+[pP]rompt/
+[pP]rompts/
+[iI]nstructions/
 
 # ─── TypeScript ─────────────────────────────────────────────────────────────────
 *.tsbuildinfo
@@ -78,6 +115,4 @@ whitepaper/assets/
 docs/raw-import.md
 _split_docs.py
 .instructions-live-site.md
-claude.md
-Claude*
 backup*
