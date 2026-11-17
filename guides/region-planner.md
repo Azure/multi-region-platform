@@ -180,7 +180,8 @@ per diagram and does not model every planner capability or product choice. Mixed
 paths, incomplete hybrid definitions and other limitations are called out in the panel. Firewall and DNS
 symbols illustrate the capability, not a confirmed product selection. Current-region services use
 profile defaults, not a verified inventory. Datacenter paths use saved or nearest estimated peering
-paths; a registered but unmatched circuit keeps its exact location and an explicitly unspecified site.
+paths, matched to a circuit by city: Amsterdam, Amsterdam2 and Amsterdam Metro are one city. A registered
+but unmatched circuit keeps its exact location and an explicitly unspecified site.
 Both tools use **Governance-Only**, **Remote platform**, **Minimal platform**, and **Full platform**. Full-Platform regions provide
 hybrid connectivity and shared services from other regions; Azure geography names remain reference-data labels,
 not Platform Services profiles. Saved plans using the previous profile names are converted when opened, including

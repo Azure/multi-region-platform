@@ -26,8 +26,11 @@
       result.regions.push(region);
       return region;
     };
+    // A peering location's city: "Amsterdam", "Amsterdam2" and "Amsterdam Metro" are all Amsterdam.
+    const peeringCity = location => String(location || '').replace(/ Metro$/, '').replace(/\d+$/, '').trim().toLowerCase();
     const addHybrid = (type, location, targets, name) => {
-      const matching = type === 'expressroute' ? sites.filter(s => C.sitePeering(s) === location) : sites;
+      const city = peeringCity(location);
+      const matching = type === 'expressroute' ? sites.filter(s => city && peeringCity(C.sitePeering(s)) === city) : sites;
       if (!matching.length) notes.push(name +
         ': no matching on-premises location is recorded; the connection uses an unspecified site.');
       const attachments = matching.length ? matching.map(s => ({ id: s.id, name: C.siteName(s) }))
@@ -154,7 +157,7 @@
     });
     notes.push('Firewall and DNS symbols represent the capability choices in the plan, not a confirmed product selection.');
     notes.push('Current-region firewall and DNS symbols follow the profile defaults; gateways follow each region\'s primary circuit. These are planning defaults, not an inventory of deployed products.');
-    notes.push('On-premises path matching uses saved or nearest estimated peering paths. Peering-location entries are not datacenters; unmatched connections are explicitly labelled as unspecified.');
+    notes.push('An on-premises datacenter attaches to an ExpressRoute circuit when its saved or nearest estimated peering path is in the circuit\'s city (Amsterdam, Amsterdam2 and Amsterdam Metro count as one). Peering-location entries are not datacenters; unmatched connections are explicitly labelled as unspecified.');
     return result;
   }
 
@@ -294,5 +297,5 @@
     }
   }
 
-  M.network = { mount, preparePrint, syncWorkbook };
+  M.network = { mount, preparePrint, syncWorkbook, workbookSpec };
 })(window);

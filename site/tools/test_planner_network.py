@@ -121,6 +121,11 @@ def check_current_profile_and_circuit_inheritance(browser, url):
         onprem = frame.evaluate("spec.onprem")
         assert {"rotterdam", "cork"} <= {s["id"] for s in onprem}
         assert not any(s["name"] in ("Amsterdam", "Dublin2") for s in onprem), onprem
+        # A datacenter attaches by its peering path's city: Cork (nearest: Dublin) reaches the Dublin2 circuit,
+        # Rotterdam (nearest: Amsterdam) the Amsterdam one, so no placeholder site is drawn.
+        assert all(c["site"] == "cork" for c in dublin), dublin
+        assert all(c["site"] == "rotterdam" for c in amsterdam), amsterdam
+        assert not any(s["name"] == "Site not specified" for s in onprem), onprem
         # Tool-only product additions change both hub height and Virtual WAN shared-VNet height.
         frame.evaluate("""() => {
           Object.assign(spec.regions[0], {ingress:'appgw-waf',bastion:'bastion',
