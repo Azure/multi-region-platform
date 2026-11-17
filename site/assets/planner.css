@@ -429,8 +429,7 @@
 #planner .pl-pr .pl-cb { min-width: 240px; max-width: 380px; }
 #planner .pl-pl .pl-cb { min-width: 168px; }
 #planner .pl-add { margin-bottom: 16px; }
-#planner .pl-sites { min-width: 520px; }
-#planner .pl-sites .pl-in[type="number"] { width: 80px; }
+#planner .pl-sites { min-width: 0; }
 #planner .pl-pop { position: fixed; z-index: 70; overflow-y: auto; padding: 4px; border: 1px solid var(--pl-line); border-radius: 4px; background: var(--pl-surface); box-shadow: var(--pl-pop); }
 #planner .pl-pop-g { padding: 8px 8px 2px; font-size: 12px; line-height: 16px; font-weight: 600; color: var(--pl-muted); }
 #planner .pl-pop-o { display: flex; align-items: center; gap: 8px; min-height: 32px; padding: 4px 8px; border-radius: 4px; color: var(--pl-ink); cursor: pointer; }
@@ -656,7 +655,6 @@
 #planner .pl-lc-st { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; line-height: 16px; color: var(--pl-text); white-space: nowrap; }
 #planner .pl-lc-ed { display: inline-flex; align-items: center; gap: 2px; margin-left: -4px; }
 #planner .pl-lt .pl-pl { min-width: 168px; }
-#planner .pl-lt tbody td.pl-tg { min-width: 0; width: 100px; }
 #planner .pl-pl-v { display: inline-block; padding: 6px 0; }
 #planner .pl-lt .pl-in[type="number"] { width: 80px; }
 #planner .pl-lt .pl-cb { max-width: 220px; }
@@ -761,9 +759,7 @@ html.network-full, html.network-full body { overflow: hidden; }
 #planner .pl-plan-fields .pl-ctl { max-width: none; }
 #planner .pl-scope-locations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 20px; }
 #planner .pl-scope-locations .pl-sec { margin-top: 0; }
-#planner .pl-scope-locations .pl-sites { min-width: 440px; }
-#planner .pl-circuit { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--pl-line); }
-#planner .pl-circuit h4 { display: flex; align-items: center; gap: 6px; }
+#planner #pl-scope-current .pl-dl { min-width: 720px; }
 #planner .pl-workload-question { padding: 16px 0; border-top: 1px solid var(--pl-line); }
 #planner .pl-workload-label { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
 #planner .pl-workload-shared { display: block; }

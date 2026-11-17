@@ -42,16 +42,15 @@
     });
     scRows.push([]);
     scGroup('Current regions');
-    scRows.push([c('Region', 'head'), c('Platform Services profile', 'head'), c('Price baseline', 'head')]);
+    scRows.push([c('Region', 'head'), c('Platform Services profile', 'head'), c('Primary ExpressRoute circuit', 'head'), c('Price baseline', 'head')]);
     (S.current.length ? S.current : [{ id: null, hub: false }]).forEach(x =>
       scRows.push([c(x.id ? C.rname(x.id) : 'Add a current region', 'input'),
-        c(x.profile || '', 'input'), c(x.id === S.baseline ? 'Yes' : x.id ? 'No' : '', 'input')]));
+        c(x.profile || '', 'input'), c(x.circuit || 'None', 'input'), c(x.id === S.baseline ? 'Yes' : x.id ? 'No' : '', 'input')]));
     scRows.push([]);
     scGroup('Current platform');
     scField('Hub topology', S.estate.topology);
     scField('Connectivity managed with', S.estate.managed);
     scField('Hybrid connectivity', S.estate.hybrid);
-    scField('Primary ExpressRoute circuit', S.estate.circuit || 'None');
     scRows.push([]);
     scGroup('Regions to qualify');
     scRows.push([c('Region', 'head'), c('Outcome', 'head'), c('Selected for design', 'head'), c('Platform Services profile', 'head'),

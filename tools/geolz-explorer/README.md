@@ -92,6 +92,17 @@ docs/         detailed guide
 6. **Layers** (**L**) hides background layers; **Present** (**F**) gives a full-screen view; **Theme** (**T**)
    cycles Auto → Light → Dark.
 
+In **Region links > Remote-region spoke peerings**, connect a Remote platform region's spokes to other
+regions' hub VNets or directly to their workload spokes. These explicit global VNet peerings keep the
+service-provider hub unchanged. Direct spoke peering bypasses hub firewalls; hub peering needs route tables
+and forwarded traffic through the target firewall, not implicit peering transit. Managed Virtual WAN hubs
+cannot be global VNet peering targets, but workload-spoke peerings remain available.
+
+When embedded in the multi-region planner, ExpressRoute locations come exclusively from Scope, including
+Metro offerings. New-circuit defaults, resiliency switches and presentation windows keep the same Scope
+restriction. Add a Standard or Metro location in Scope before selecting it here. The standalone explorer
+continues to offer its full peering-location catalog.
+
 ## Global entry and ownership boundaries
 
 The Estate tab can put one service in front of the internet ingress of chosen **origin** regions: **Azure Front
@@ -149,7 +160,7 @@ the app (side panel, *Not modelled in this explorer*).
   peering instead.
 - **Application Gateway in front of the firewall, and the private network connector's route through the firewall**:
   ingress is drawn direct to the spoke; talking points cover both designs.
-- **Direct peering between spokes** (in the same region or across regions): east-west traffic goes through the
+- **Direct peering between spokes** in the same region, or between two non-Remote platform regions: east-west traffic goes through the
   hubs. A talking point covers direct peering: it bypasses the hub firewalls.
 - **How a global entry service chooses between several active origins** (Front Door priority, latency and
   weight; Traffic Manager routing methods): origins are shown as active or backup.

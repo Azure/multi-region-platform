@@ -24,6 +24,7 @@ window.GeoLZPlanner = {
     $('btnWorkbook').hidden = !spec.workbook;
   },
   receiveWorkbook(next) {
+    plannerPeeringLocations = [...(next.workbook.peering_locations || [])];
     session.undo = null;
     edits.past = [];
     edits.future = [];
@@ -37,10 +38,11 @@ window.GeoLZPlanner = {
   },
   getPresentationState() {
     const { region, type, sub, dest, step, fail, globalFail } = ui;
-    return clone({ spec, ui: { region, type, sub, dest, step, fail, globalFail },
+    return clone({ spec, peeringLocations: plannerPeeringLocations, ui: { region, type, sub, dest, step, fail, globalFail },
       hiddenLayers: [...hiddenLayers], theme: document.documentElement.dataset.theme || 'auto' });
   },
   receivePresentation(state) {
+    plannerPeeringLocations = state.peeringLocations;
     loadSpec(state.spec);
     Object.assign(ui, state.ui);
     hiddenLayers = new Set(state.hiddenLayers);

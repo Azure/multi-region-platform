@@ -26,18 +26,24 @@ Scope starts with **Plan**, followed by optional **On-premises datacenters** and
 Neutral cards use color for status and selections rather than decorative section bands.
 Each current region records one of the four Platform Services profiles. Older Full-Platform flags
 migrate to Full platform; an unmarked legacy region's profile remains unspecified.
-Add or remove locations, choose datacenter peering paths, and set latency targets there.
-Existing saved city locations, targets, peering choices, and measured overrides are retained.
+Add or remove locations there. Scope lists location names without peering-path or latency-target controls.
+Existing saved city locations, targets, peering choices, and measured overrides are retained
+and continue to inform the Latency view; no replacement editing controls are introduced yet.
 A nearest peering path is labelled as an estimate, not a confirmed circuit.
-**Primary ExpressRoute circuit** explicitly selects one of the peering locations added in Scope,
+Each current region's **Primary ExpressRoute circuit** selects one of the peering locations added in Scope,
 or **None**. Adding a latency-test location alone does not assert circuit ownership.
-The selected circuit is the default for regional reuse decisions, unless an existing connectivity
-description is recorded explicitly.
+Each region can have a different primary circuit. The gateway provider's primary circuit (or the first
+connected current region's primary circuit for a local gateway) is the default for regional reuse decisions,
+unless another user-added peering location is selected explicitly. Older plan-wide primary circuit
+assignments migrate to the current regions without replacing explicit per-region choices.
 
 Latency displays comparisons, target markers, breaches, evidence sources, and the map, with an
 **Edit locations in Scope** link. Measured-latency overrides and their reset controls remain in Latency.
 Its bars and legend use equal-width steps at 0, 30, 60, 120, 200, and 250 ms, interpolating
 within each interval and filling at 250 ms. Location comparisons precede region-to-region comparisons.
+The location table shows only on-premises datacenters, with **On-Premises Locations** and
+**ExpressRoute Peering location** columns and no target column. Peering locations form part of
+each datacenter's path rather than separate rows; their saved entries remain available in Scope.
 Pricing keeps the baseline selector and spend-weight toggle next to its summaries; enabling weighting
 reveals a spend-share input for each service. Diverging bars share a zero-centered scale.
 
@@ -50,11 +56,11 @@ when no supplier is specified, the first selected hub is used.
 Saved plans using earlier names for Minimal platform migrate automatically without changing custom notes,
 service placements, or hub selections. The advanced networking tool keeps its stable `minimal-hub` pattern ID.
 
-**Existing connectivity** suggests only locations in the Azure ExpressRoute peering-location snapshot,
-independently of the latency-test locations. Customer cities and their estimated routes do not establish existing
-circuits. Suggestions identify valid peering locations, not circuits the customer owns. You can still
-type a circuit description or other existing connectivity, such as a VPN. If the catalog is unavailable,
-the field explains why no locations are suggested.
+**Existing connectivity** is a dropdown containing only ExpressRoute peering locations the user added
+in Scope. Customer cities and their peering paths do not supply circuit options, and the Azure catalog
+does not add options automatically. Removing a peering location clears its current-region circuit
+assignments. Previously saved connectivity outside the added locations remains in JSON with a warning
+and must be replaced or its peering location added before the design is complete.
 After building, run `python site\tools\test_planner_connectivity.py` for the hub multi-select,
 saved-plan compatibility, review/export, diagram inheritance, and peering-suggestion browser checks.
 
@@ -70,7 +76,9 @@ Check 3 uses the guidance's four workload archetypes and shows their typical pro
 Saved archetype names migrate without losing regional overrides. In Regional design, the actual
 connectivity requirements determine the suggested profile; a typical archetype fit is not automatic
 qualification. Shared-service defaults and explicit choices are always editable in one table,
-tagged **Profile default** or **Decided here**. Review triggers are a date and a list of changes
+tagged **Profile default** or **Decided here**. Management groups, access control, policy, and Key Vault
+are not regional shared-service placement choices; existing saved placements remain in JSON.
+Key Vault remains available as a workload service in Check 3.5. Review triggers are a date and a list of changes
 to requirements, constraints, or platform capabilities; previous custom reassessment text remains
 editable as an additional trigger. Review records include the outcome date, archetype, profile,
 connectivity, service placement, documented constraints, ownership, and review triggers.
@@ -147,8 +155,18 @@ browser blocks popups, allow them for this site and retry.
 
 The embedded explorer inherits current regions from Scope and the new regions selected for Regional design.
 It uses their effective profiles, hub connections, topology, regional links, shared-service placements and
-hybrid decisions. Named `ExpressRoute circuit in <peering location>` connections are attached to the
-appropriate local or remote gateways; matching Latency locations identify their on-premises sites.
+hybrid decisions. Every existing region receives its profile's local firewall and DNS defaults,
+independently of whether a new region consumes them. Each current region's primary ExpressRoute circuit
+is attached to its own local gateway; a circuit shared with a new region is represented once per
+on-premises site and peering location, with all attached regions retained.
+Named `ExpressRoute circuit in <peering location>` connections are attached to the
+appropriate local or remote gateways; matching on-premises datacenters identify their sites.
+Only datacenter entries become on-premises sites, never the peering-location entries themselves.
+Scope offers **Standard** and **Metro** peering locations. The advanced tool's peering-location
+selectors, new-circuit defaults and resiliency switches use only the locations added in Scope.
+Add the corresponding Standard or Metro entry in Scope before switching to that offering.
+Metro is preserved as a single circuit with two peering locations; its Scope map position is a
+city-level reference, not a facility-specific latency estimate.
 An unspecified site is explicitly labelled rather than inventing a datacenter. Site-to-site VPN choices
 are also mapped. Unselected qualification candidates are not imported.
 
@@ -156,15 +174,21 @@ The **Plan definitions** panel retains every shared service (including custom se
 placement, supplying region, management method, east-west choice and hybrid change. GeoLZ has one topology
 per diagram and does not model every planner capability or product choice. Mixed topologies, SD-WAN/NVA
 paths, incomplete hybrid definitions and other limitations are called out in the panel. Firewall and DNS
-symbols illustrate the capability, not a confirmed product selection. Current-region services are only
-inferred where a new region requires them; the planner does not inventory all existing services.
+symbols illustrate the capability, not a confirmed product selection. Current-region services use
+profile defaults, not a verified inventory. Datacenter paths use saved or nearest estimated peering
+paths; a registered but unmatched circuit keeps its exact location and an explicitly unspecified site.
 Both tools use **Governance-Only**, **Remote platform**, **Minimal platform**, and **Full platform**. Full-Platform regions provide
 hybrid connectivity and shared services from other regions; Azure geography names remain reference-data labels,
 not Platform Services profiles. Saved plans using the previous profile names are converted when opened, including
 regional connection choices that previously referred to the remote hub.
 
-Every selected hub connection is passed to the diagram. For Remote platform, GeoLZ models
-traffic through one Full-Platform region (the first selection); this limitation is called out in Plan definitions.
+Every selected hub connection is passed to the diagram. A Remote platform region keeps one service-provider
+hub (the first selection). In the advanced editor, **Region links > Remote-region spoke peerings** adds
+independent global VNet peerings from its spokes to other regions' **hub VNets** or **workload spokes**.
+Direct spoke peerings bypass hub firewalls. Hub peering requires route tables and forwarded traffic through
+the target hub firewall; it does not by itself provide transitive connectivity or gateway transit.
+A managed Virtual WAN hub cannot accept global VNet peering, so hub-VNet targets are disabled in that topology;
+explicit workload-spoke peerings remain available. These are tool-only refinements, not changes to the saved plan.
 
 Changes to networking definitions in the plan refresh the explorer, including its live presentation window.
 Tool-only refinements survive unrelated renders, hiding and reopening, but are replaced by a networking

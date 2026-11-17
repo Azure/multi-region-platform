@@ -337,7 +337,7 @@ Object.assign(window.RULES, /* rules.js: hybrid connectivity and global entry ru
     "A primary link chosen per site: Azure's routing decides it at each hub (ExpressRoute; in Virtual WAN the hub routing preference) and the other link is the backup.",
     "Traffic between virtual networks over ExpressRoute (the gateway setting Allow traffic from remote virtual networks): east-west traffic uses hub links.",
     "Application Gateway in front of the firewall, and the private network connector's route through the firewall: ingress is drawn direct to the spoke; talking points cover both designs.",
-    "Direct peering between spokes (in the same region or across regions): east-west traffic goes through the hubs; a talking point covers direct peering.",
+    "Direct peering between spokes in the same region, or between two non-Remote platform regions. Explicit cross-region global VNet peerings involving Remote platform spokes are modelled.",
     "How a global entry service chooses between several active origins (Front Door priority, latency and weight; Traffic Manager routing methods): origins are shown as active or backup.",
     "Azure Front Door Private Link to origins: not drawn.",
     "Front Door WAF policy, caching, rules engine, domains, certificates and session affinity."

@@ -66,7 +66,7 @@ function onEditorClick(e) {
 }
 
 /* ===== EVENTS: fields (data-path and friends) ===== */
-const FIELD_KEYS = ['path', 'rename', 'link', 'flag', 'list', 'resiliency', 'addconn', 'ic'];
+const FIELD_KEYS = ['path', 'rename', 'link', 'spokeLink', 'flag', 'list', 'resiliency', 'addconn', 'ic'];
 function onEditorChange(e) {
   const el = e.target;
   syncFolds();
@@ -89,6 +89,7 @@ function applyField(el) {
   afterEdit(spec, d.path);  // topology.js: the first virtual WAN
   if (d.rename) renameRegion(spec, +d.rename, el.value);
   if (d.link) setLink(spec, ...d.link.split('|'), el.checked);
+  if (d.spokeLink) setSpokeLink(spec, ...d.spokeLink.split('|'), el.checked);
   if (d.flag) setPath(spec, d.flag, el.checked);
   if (d.list) {
     const list = getPath(spec, d.list) || [];
@@ -106,7 +107,7 @@ function selOfNode(id, n) {
   if (!n.region) return null;  // users, internet, admins, global DNS services
   return n.spoke ? 'region:' + n.region : 'role:' + id;
 }
-const peerSel = p => ({ hub: 'link:', remote: 'remote:' }[p.kind] +
+const peerSel = p => isSpokeLink(p) ? 'spoke:' + p.from : ({ hub: 'link:', remote: 'remote:' }[p.kind] +
   (p.kind === 'remote' ? p.from : `${p.from}|${p.to}`));
 const parseSel = text => (([kind, ...rest]) => (rest.length ? { kind, key: rest.join(':') } : null))(
   String(text || '').split(':'));
@@ -134,6 +135,8 @@ const SELECT_KINDS = {
     title: k => 'On-premises site · ' + nameOfSite(k), body: sitePanel },
   link: { tab: 'links', fold: () => null, find: k => pairOf(k).every(id => regionById(spec, id)),
     title: k => `Hub link · ${pairOf(k).map(nameOf).join(' ↔ ')}`, body: linkPanel },
+  spoke: { tab: 'links', fold: () => null, find: k => regionById(spec, k)?.pattern === 'remote-hub',
+    title: k => 'Global VNet peering · ' + nameOf(k), body: k => spokePeeringFields(regionById(spec, k)) },
   remote: { tab: 'regions', fold: k => 'region:' + k, find: k => regionById(spec, k),
     title: k => `Remote-hub peering · ${nameOf(k)}`,
     body: k => remoteHubField(regionAt(k)[0], `regions.${regionAt(k)[1]}`) }
@@ -377,13 +380,13 @@ function onpremStep() {
   const site = `<label>Site name<input type="text" id="guideSite" data-draft="site" value="${esc(d.site)}"></label>
     <div class="row"><button data-act="wiz-add-site">+ Add site</button></div>`;
   if (!sites.length || !hubs.length) return list + site;
-  const locs = ER_LOCATIONS.geopolitical.map(g => `<optgroup label="${esc(g.name)}">` + opts(g.locations
+  const locs = peeringGroups().map(([name, locations]) => `<optgroup label="${esc(name)}">` + opts(locations
     .map(l => [l, l]), d.location) + '</optgroup>').join('');
   return list + site + draftSelect('guideConnSite', 'connSite', 'Connection from', opts(sites.map(s => [s.id, s.name]),
     d.connSite)) + draftSelect('guideConnType', 'type', 'Type', opts(Object.entries(CONNECTION_TYPES), d.type)) +
     draftSelect('guideConnHub', 'hub', 'To hub', opts(hubs.map(r => [r.id, r.name]), d.hub)) +
     (d.type === 'expressroute' ? draftSelect('guideLocation', 'location', 'Peering location', '<option value="">' +
-      'Suggested (Metro near the hub)</option>' + locs) : '') +
+      (plannerPeeringLocations === null ? 'Suggested (Metro near the hub)' : 'First available Scope location') + '</option>' + locs) : '') +
     '<div class="row"><button data-act="wiz-add-conn">+ Add connection</button></div>';
 }
 // A draft field changed: kept in the draft; a choice that changes the step's fields re-renders it.
@@ -471,6 +474,7 @@ function startAddConnection() {
   const d = startState.draft, site = startField('guideConnSite', 'connSite') || spec.onprem[0].id;
   const conn = addConnection(spec, startField('guideConnType', 'type') || 'expressroute', site,
     startField('guideConnHub', 'hub'));  // spec.js
+  if (!conn) return;
   const loc = conn.type === 'expressroute' && startField('guideLocation', 'location');
   if (loc) conn.peering_location = loc;
   Object.assign(d, { connSite: site });

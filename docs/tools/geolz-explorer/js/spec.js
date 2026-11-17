@@ -44,7 +44,7 @@ function validSpec(s) {
   }
   for (const obj of [s.defaults, ...s.regions]) dropBadValues(obj, obj === s.defaults ? 'defaults' : obj.name, notes);
   dropConnectionTypes(s, notes);
-  dropSpokePeerings(s, notes);
+  validateSpokePeerings(s, notes);
   if (s.defaults.topology !== 'vwan') [s.defaults, ...s.regions].forEach(o => dropUnknown(o, Object.keys(o).filter(k =>
     k !== 'hub_routing_preference'), o === s.defaults ? 'defaults' : `region ${o.name}`, notes));
   s.format = SPEC_FORMAT;
@@ -60,13 +60,12 @@ function validSpec(s) {
   }
   return Object.defineProperty(s, 'notes', { value: notes, configurable: true });
 }
-function dropSpokePeerings(s, notes) {
+function validateSpokePeerings(s, notes) {
   const regionName = id => ((s.regions || []).find(r => r.id === id) || {}).name || id;
-  for (const l of (s.region_links || []).filter(x => x.kind === 'spoke-peering')) {
-    notes.push(`Not recognised, ignored: spoke peering ${regionName(l.from)}–${regionName(l.to)} ` +
-      '(direct spoke peering: not modelled in this explorer).');
+  for (const l of (s.region_links || []).filter(isSpokeLink)) {
+    if (!linkUsable(s, l)) notes.push(`Inactive global VNet peering: ${regionName(l.from)}–${regionName(l.to)}. ` +
+      'It needs a Remote platform endpoint and a connected destination profile; hub targets must be hub VNets, not managed virtual hubs.');
   }
-  if (s.region_links) s.region_links = s.region_links.filter(x => x.kind !== 'spoke-peering');
 }
 function dropIngressChoices(obj, where, notes) {
   const fields = [
@@ -245,7 +244,7 @@ function dropConnections(spec, region) {
 function dropLinks(spec, region) {
   const kinds = patternOf(region).links || [], name = id => (regionById(spec, id) || { name: id }).name;
   const gone = (spec.region_links || []).filter(l => [l.from, l.to].includes(region.id) &&
-    !kinds.includes(l.kind || 'hub'));
+    (isSpokeLink(l) ? !linkUsable(spec, l) : !kinds.includes(l.kind || 'hub')));
   spec.region_links = (spec.region_links || []).filter(l => !gone.includes(l));
   return gone.map(l => 'region link to ' + name(l.from === region.id ? l.to : l.from));
 }
@@ -272,7 +271,11 @@ function dropSettings(spec, region) {
 // A circuit's resiliency (the editor's dropdown): the peering location switches to a matching one.
 function setCircuitResiliency(spec, i, resiliency) {
   const c = hybridConnections(spec)[i];
-  if (resiliencyOf(c) !== resiliency) c.peering_location = matchingLocation(c.peering_location, resiliency);
+  if (resiliencyOf(c) === resiliency) return;
+  const available = peeringGroups(resiliency).flatMap(([, locations]) => locations);
+  if (!available.length) return setStatus('Add a matching Standard or Metro peering location in Scope first.');
+  const match = matchingLocation(c.peering_location, resiliency);
+  c.peering_location = available.includes(match) ? match : available[0];
 }
 
 /* ===== REGION LINKS: the editor's "Connect all hubs" / "Disconnect all hubs" button ===== */
@@ -305,6 +308,11 @@ function toggleHubLinks(spec) {
 // circuit starts at a Metro peering location in that hub's geopolitical region (resilience default), or the first
 // location in the list. Returns the connection.
 function addConnection(spec, type, siteId, hubId) {
+  const available = peeringGroups().flatMap(([, locations]) => locations);
+  if (type === 'expressroute' && !available.length) {
+    setStatus('Add an ExpressRoute peering location in Scope first.');
+    return null;
+  }
   if (!(spec.onprem || []).length) spec.onprem = [{ id: 's' + Date.now().toString(36), name: 'New site' }];
   const hub = regionById(spec, hubId) || spec.regions.find(r => canHostGateway(spec, r));
   const conns = hybridConnections(spec);
@@ -314,7 +322,8 @@ function addConnection(spec, type, siteId, hubId) {
   const conn = { id, type, site: siteId || spec.onprem[0].id, connects_to: hub ? [hub.id] : [] };
   if (type === 'expressroute') {
     const geo = ER_LOCATIONS.geopolitical.find(g => hub && g.regions.includes(hub.id)) || ER_LOCATIONS.geopolitical[0];
-    const loc = geo.locations.find(l => / Metro$/.test(l)) || geo.locations[0];
+    const loc = geo.locations.find(l => / Metro$/.test(l) && available.includes(l)) ||
+      geo.locations.find(l => available.includes(l)) || available[0];
     Object.assign(conn, { name: `Circuit ${conns.filter(c => c.type === type).length + 1}`, peering_location: loc });
   }
   conns.push(conn);

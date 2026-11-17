@@ -1,14 +1,31 @@
 /* topology.js: hub-spoke and Virtual WAN topology, region links, hybrid attachments, east-west and ingress helpers. */
 const ER_LOCATIONS = window.ER_LOCATIONS || { geopolitical: [] };
+let plannerPeeringLocations = PLANNER_MODE ? [] : null;
 
 /* ===== REGION LINKS: explicit hub-to-hub links, implicit Virtual WAN links ===== */
 const sameLink = (l, a, b) => (l.from === a && l.to === b) || (l.from === b && l.to === a);
+const isSpokeLink = l => ['spoke-hub', 'spoke-peering'].includes(l.kind);
+function spokeLinks(spec) {
+  return (spec.region_links || []).filter(l => isSpokeLink(l) && linkUsable(spec, l));
+}
+function setSpokeLink(spec, from, to, kind, on) {
+  const links = spec.region_links = spec.region_links || [];
+  const index = links.findIndex(l => l.kind === kind && (kind === 'spoke-peering'
+    ? sameLink(l, from, to) : l.from === from && l.to === to));
+  if (on && index < 0 && linkUsable(spec, { from, to, kind })) links.push({ from, to, kind });
+  if (!on && index >= 0) links.splice(index, 1);
+}
 // Hub-to-hub links: they exist or not. Hub-spoke: the explicit entries (always inspected by both hub firewalls,
 // because peering is not transitive). Virtual WAN: every pair of hubs in the same Standard virtual WAN, implicitly
 // (topology.js); routing intent is topology-wide. A link with an end whose pattern can't take part (rules.js
 // patterns[x].links) is left out of paths and the diagram; Checks reports it (raw = true lists every entry).
 function linkUsable(spec, link) {
   const ends = [link.from, link.to].map(id => regionById(spec, id));
+  if (isSpokeLink(link)) {
+    if (link.from === link.to || !ends.every(Boolean)) return false;
+    return link.kind === 'spoke-hub' ? !isVwan(spec) && ends[0].pattern === 'remote-hub' && hasHub(ends[1])
+      : ends.every(r => r.pattern !== 'disconnected') && ends.some(r => r.pattern === 'remote-hub');
+  }
   const apart = isVwan(spec) && ends.every(Boolean) && vwanOf(spec, ends[0]) !== vwanOf(spec, ends[1]);
   return link.from !== link.to && !apart && ends.every(r => r && (patternOf(r).links || [])
     .includes(link.kind || 'hub'));
@@ -41,11 +58,13 @@ function setLink(spec, a, b, on) {
 function backboneConnections(spec) {
   const remote = spec.regions.filter(r => r.pattern === 'remote-hub' && hasHub(regionById(spec, r.remote_hub)));
   return [...remote.map(r => ({ kind: 'remote', from: r.id, to: r.remote_hub })),
+    ...spokeLinks(spec),
     ...regionLinks(spec).map(link => ({ kind: 'hub', from: link.from, to: link.to, link }))];
 }
 function connectionLabel(spec, c) {
   const a = regionById(spec, c.from), b = regionById(spec, c.to), topo = topologyOf(spec);
   if (c.kind === 'remote') return `${topo.connection || topo.cross} · ${a.name} → ${b.name} hub`;
+  if (isSpokeLink(c)) return `Global VNet peering · ${a.name} spokes ↔ ${b.name} ${c.kind === 'spoke-hub' ? 'hub' : 'spokes'}`;
   if (isVwan(spec)) return vwanLaneLabel(spec, a, b);  // topology.js
   return `${topo.cross} · ${a.name} ↔ ${b.name} · ${RULES.crossRegion.linkLabels['hub-spoke']}`;
 }
@@ -158,6 +177,12 @@ const resiliencyOf = c => (isMetro(c) ? 'metro' : 'standard');
 // The city of a peering location: "Amsterdam2" and "Amsterdam Metro" are both in Amsterdam.
 const cityOf = location => String(location || '').replace(/ Metro$/, '').replace(/\d+$/, '');
 const locationsFor = (geo, resiliency) => geo.locations.filter(l => isMetroLocation(l) === (resiliency === 'metro'));
+function peeringGroups(resiliency) {
+  if (plannerPeeringLocations !== null) return [['Scope', plannerPeeringLocations.filter(l =>
+    resiliency === undefined || isMetroLocation(l) === (resiliency === 'metro'))]];
+  return ER_LOCATIONS.geopolitical.map(g => [g.name,
+    resiliency === undefined ? g.locations : locationsFor(g, resiliency)]);
+}
 // The location to switch to when the resiliency changes: the same city's match, else the first match in its region.
 function matchingLocation(location, resiliency) {
   const geo = ER_LOCATIONS.geopolitical.find(g => g.locations.includes(location)) || ER_LOCATIONS.geopolitical[0];
@@ -397,6 +422,28 @@ function crossKey(spec, region, dest, hubs, link) {
 
 /* ===== THE PATH ===== */
 function crossRegionPath(spec, region, dest) {
+  const direct = spokeLinks(spec).find(l => l.kind === 'spoke-peering' && sameLink(l, region.id, dest.id));
+  if (direct) return {
+    type: 'east_west', dest: dest.id, key: 'spoke-peering',
+    steps: [resolveToken(spec, region, 'spoke'), { id: null, label: 'Global VNet peering' },
+      resolveToken(spec, dest, 'spoke')], missing: null, na: false,
+    matrix: 'Direct peering (uninspected)', ref: 'learn-vnet-peering',
+    note: 'Direct workload-to-workload global VNet peering bypasses the hub firewalls. Peering is not transitive; this does not add gateway transit or change the service-provider hub.'
+  };
+  const peeredHub = spokeLinks(spec).find(l => l.kind === 'spoke-hub' &&
+    ((l.from === region.id && l.to === dest.id) || (l.from === dest.id && l.to === region.id)));
+  if (peeredHub) {
+    const remote = regionById(spec, peeredHub.from), hub = regionById(spec, peeredHub.to);
+    const firewall = resolveRole(spec, hub, 'firewall');
+    const inspected = firewall && firewall.product !== 'none' && firewall.owner === hub.id;
+    const steps = inspected ? [resolveToken(spec, remote, 'spoke'),
+      { id: null, label: 'Global VNet peering' }, resolveToken(spec, hub, '{firewall}'),
+      resolveToken(spec, hub, 'spoke')] : [];
+    return { type: 'east_west', dest: dest.id, key: 'spoke-hub',
+      steps: region === remote ? steps : steps.reverse(), missing: inspected ? null : 'hub firewall',
+      na: !inspected, matrix: inspected ? 'Inspected via peered hub' : 'No route',
+      ref: 'learn-vnet-peering', note: 'The remote spokes peer directly with this hub VNet. Workload traffic requires spoke route tables and forwarded traffic through its firewall; peering alone is not transitive. The service-provider hub and gateway transit are unchanged.' };
+  }
   const srcHub = hubOf(spec, region), dstHub = hubOf(spec, dest);
   const link = srcHub && dstHub && srcHub !== dstHub && linkBetween(spec, srcHub.id, dstHub.id);
   const key = crossKey(spec, region, dest, [srcHub, dstHub], link);

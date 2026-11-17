@@ -101,8 +101,10 @@ def desktop(page, base):
     # Regional design: all placements remain editable, including defaults; the map waits behind a button.
     page.locator("#tab-design").click()
     assert page.locator(".pl-dz-nav .pl-ol").count() >= 5
-    assert page.locator(".pl-ssr").count() == 9
-    assert page.locator(".pl-ssr .pl-tag").filter(has_text="Profile default").count() == 5
+    assert page.locator(".pl-ssr").count() == 7
+    assert page.locator(".pl-ssr .pl-tag").filter(has_text="Profile default").count() == 3
+    assert page.get_by_role("radiogroup", name="Placement of Key Vault", exact=True).count() == 0
+    assert page.get_by_role("radiogroup", name="Placement of Management groups, access control, policy", exact=True).count() == 0
     assert page.locator(".pl-dz-nav .pl-pill:disabled").count() == 2
     assert "Candidate: requires Qualified or Conditional" in page.locator(".pl-dz-nav").inner_text()
     assert page.locator("#pl-latency-map").count() == 0
@@ -239,23 +241,28 @@ def scope_locations(page, base):
     page.get_by_role("listbox").get_by_role("option").filter(has_text="London").first.click()
     sid = page.evaluate("MRP.core.S.sites[0].id")
     assert page.evaluate("MRP.core.progress().scope") == "half"
-    assert page.get_by_role("combobox", name="Peering location for London", exact=True).input_value() == ""
-    page.get_by_role("spinbutton", name="Target in milliseconds for London", exact=True).fill("50")
-    path = page.get_by_role("combobox", name="Peering location for London", exact=True)
-    path.fill("Frankfurt")
-    page.get_by_role("listbox").get_by_role("option").filter(has_text="Frankfurt").first.click()
+    assert page.get_by_role("combobox", name="Peering location for London", exact=True).count() == 0
+    assert page.get_by_role("spinbutton", name="Target in milliseconds for London", exact=True).count() == 0
     peer = page.get_by_role("combobox", name="Add a peering location", exact=True)
     peer.fill("Dublin")
     page.get_by_role("listbox").get_by_text("Dublin", exact=True).click()
-    page.get_by_role("spinbutton", name="Target in milliseconds for Dublin", exact=True).fill("30")
-    assert page.evaluate("MRP.core.S.estate.circuit") == ""
-    page.get_by_role("radiogroup", name="Primary ExpressRoute circuit peering location").get_by_role("radio", name="Dublin", exact=True).click()
-    assert page.evaluate("MRP.core.S.estate.circuit") == "Dublin"
+    assert page.get_by_role("spinbutton", name="Target in milliseconds for Dublin", exact=True).count() == 0
+    assert page.locator(".pl-sites thead tr").evaluate_all("rows => rows.map(row => row.children.length)") == [2, 2]
+    assert page.locator(".pl-sites").get_by_role("columnheader", name="Peering path", exact=True).count() == 0
+    assert page.locator(".pl-sites").get_by_role("columnheader", name="Target (ms)", exact=True).count() == 0
+    # Saved paths and targets still survive and inform latency without Scope editing controls.
     page.evaluate("""() => {
       const C = MRP.core;
+      C.S.sites[0].peering = 'Frankfurt'; C.S.sites[0].target = 50;
+      C.S.sites[1].target = 30;
       C.S.current = [{id:'westeurope', hub:true}];
       C.S.regions = [C.newRegion('swedencentral')]; MRP.kit.hooks.commit();
     }""")
+    primary = page.get_by_role("combobox", name="Primary ExpressRoute circuit of West Europe", exact=True)
+    assert primary.locator("option").all_text_contents() == ["None", "Dublin"]
+    assert primary.input_value() == ""
+    primary.select_option("Dublin")
+    assert page.evaluate("MRP.core.S.current[0].circuit") == "Dublin"
     saved = page.evaluate("JSON.parse(JSON.stringify(MRP.core.S.sites))")
     profile = page.get_by_role("combobox", name="Platform Services profile of West Europe")
     assert profile.locator("option").all_text_contents()[1:] == ["Governance-Only", "Remote platform", "Minimal platform", "Full platform"]
@@ -264,17 +271,25 @@ def scope_locations(page, base):
     page.wait_for_selector('#planner[data-ready="1"]')
     assert page.evaluate("MRP.core.S.sites") == saved
     assert page.evaluate("MRP.core.S.current[0].profile") == "Minimal platform"
-    assert page.evaluate("MRP.core.S.estate.circuit") == "Dublin"
+    assert page.evaluate("MRP.core.S.current[0].circuit") == "Dublin"
     scope = page.evaluate("MRP.workbook().sheets.find(s => s.name === 'Scope').rows.map(r => r.map(c => c.v))")
     assert ["London", "Frankfurt", 50] in scope
     assert ["Dublin", "Dublin", 30] in scope
+    assert ["West Europe", "Minimal platform", "Dublin", "Yes"] in scope
     page.locator("#tab-capability").click()
     page.locator('[data-act="evidence"][data-arg="latency"]').click()
     assert page.get_by_role("combobox", name="Add a datacenter city", exact=True).count() == 0
     assert page.get_by_role("combobox", name="Add a peering location", exact=True).count() == 0
     assert page.locator('[data-act="rm-site"], [data-k$="/target"], [data-cb^="pl-"]').count() == 0
-    assert page.locator(".pl-lt tbody tr").count() == 2
-    assert page.locator(".pl-lat-target").count() == 4
+    table = page.locator(".pl-lt")
+    assert table.locator("tbody tr").count() == 1
+    assert table.get_by_role("rowheader").get_by_text("London", exact=True).count() == 1
+    assert table.get_by_role("columnheader").all_inner_texts() == [
+        "On-Premises Locations", "ExpressRoute Peering location",
+        "West Europe\nCurrent region", "Sweden Central"]
+    assert table.get_by_role("columnheader", name="Target (ms)", exact=True).count() == 0
+    assert table.locator(".pl-pl-v").inner_text() == "Frankfurt"
+    assert page.locator(".pl-lat-target").count() == 2
     assert page.locator(".pl-latlg-t").all_inner_texts() == ["0", "30", "60", "120", "200", "250+"]
     latency = page.get_by_role("spinbutton", name="Latency from London to West Europe in milliseconds", exact=True)
     for value, expected in [(30, 0.2), (60, 0.4), (120, 0.6), (200, 0.8), (250, 1.0)]:
@@ -285,8 +300,9 @@ def scope_locations(page, base):
     latency.fill("99")
     assert page.evaluate("MRP.core.S.sites[0].edits.westeurope") == 99
     page.get_by_role("button", name="Edit locations in Scope", exact=True).click()
-    assert page.get_by_role("spinbutton", name="Target in milliseconds for London", exact=True).input_value() == "50"
-    page.get_by_role("button", name="Clear Peering location for London", exact=True).click()
+    assert page.evaluate("MRP.core.S.sites[0].target") == 50
+    assert page.evaluate("MRP.core.S.sites[0].peering") == "Frankfurt"
+    page.evaluate("MRP.core.S.sites[0].peering=''; MRP.kit.hooks.commit()")
     assert page.evaluate("MRP.core.S.sites[0].peering") == ""
     page.locator("#tab-capability").click()
     page.locator('[data-act="evidence"][data-arg="latency"]').click()
@@ -296,9 +312,19 @@ def scope_locations(page, base):
     assert page.get_by_text("Nearest (estimated)", exact=True).count() == 1
     page.get_by_role("button", name="Edit locations in Scope", exact=True).click()
     page.get_by_role("button", name="Remove Dublin", exact=True).click()
-    assert page.evaluate("MRP.core.S.estate.circuit") == ""
+    assert page.evaluate("MRP.core.S.current[0].circuit") == ""
     assert page.evaluate("MRP.core.S.sites.map(s => s.id)") == [sid]
+    # Peering-only plans do not introduce standalone rows in the on-premises table.
+    page.get_by_role("combobox", name="Add a peering location", exact=True).fill("Dublin")
+    page.get_by_role("listbox").get_by_text("Dublin", exact=True).click()
     page.get_by_role("button", name="Remove London", exact=True).click()
+    page.locator("#tab-capability").click()
+    page.locator('[data-act="evidence"][data-arg="latency"]').click()
+    assert page.locator(".pl-lt").count() == 0
+    assert page.get_by_text("No on-premises locations yet. Add datacenters in Scope.", exact=True).is_visible()
+    assert page.evaluate("MRP.core.S.sites[0].peering") == "Dublin"
+    page.get_by_role("button", name="Edit locations in Scope", exact=True).click()
+    page.get_by_role("button", name="Remove Dublin", exact=True).click()
     assert page.evaluate("MRP.core.S.sites") == []
 
     # Missing catalogs explain the limitation without blocking manual footprint entry.
@@ -342,7 +368,7 @@ def review_exports(page, base):
         assert len(plan["regions"]) == 3
         assert plan["regions"][0]["design"]["reviewTriggers"] == ["New constraints"]
         assert plan["current"][0]["profile"] == "Full platform"
-        assert plan["estate"]["circuit"] == "Frankfurt"
+        assert plan["current"][0]["circuit"] == "Frankfurt"
         page.evaluate("MRP.core.replace(MRP.core.blank()); MRP.kit.hooks.render()")
         page.locator("#pl-file").set_input_files(saved)
         page.get_by_text("Opened region-plan.json.", exact=True).wait_for()

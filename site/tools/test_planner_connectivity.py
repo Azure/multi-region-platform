@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Browser regressions for multiple hub connections and authoritative peering suggestions."""
+"""Browser regressions for hub connections and user-added peering circuit choices."""
 import functools
 import http.server
 import threading
@@ -20,6 +20,7 @@ def check_peering_locations(page):
     page.evaluate("MRP.core.S.sites=[]; MRP.kit.hooks.commit()")
     catalog = page.evaluate("MRP.core.D.lat.peering.map(p => p.name)")
     assert len(catalog) > 50
+    assert "Amsterdam Metro" in catalog and "Dublin Metro" in catalog
     peer = page.get_by_role("combobox", name="Add a peering location", exact=True)
     options = page.get_by_role("listbox")
     peer.click()
@@ -129,40 +130,48 @@ def main():
 
             check_peering_locations(page)
 
-            # Latency cities (including arbitrary customer names) never supply circuit options.
+            # Only user-added peering locations supply existing connectivity choices.
             page.evaluate("""() => {
               MRP.core.S.sites = [
                 {id:'customer',kind:'city',city:{n:'Customer Chicago DC',lat:41.88,lon:-87.63},peering:'Chicago',edits:{}},
-                {id:'unknown',kind:'peering',peering:'Not an Azure peering location',edits:{}}
+                {id:'frankfurt',kind:'peering',peering:'Frankfurt',edits:{}},
+                {id:'dublin',kind:'peering',peering:'Dublin',edits:{}}
               ];
               MRP.kit.hooks.commit();
             }""")
             connectivity = page.get_by_role("combobox", name="Existing connectivity", exact=True)
-            connectivity.click()
-            assert options.get_attribute("aria-multiselectable") is None
-            connectivity.fill("Customer Chicago DC")
-            assert page.locator(".pl-pop-o").count() == 0
-            connectivity.fill("Not an Azure peering location")
-            assert page.locator(".pl-pop-o").count() == 0
-            # Chicago is itself a valid Azure metro; it appears only from the catalog.
-            connectivity.fill("Chicago")
-            assert options.get_by_role("option").filter(has=page.get_by_text("ExpressRoute circuit in Chicago", exact=True)).count() == 1
-            connectivity.fill("Frankfurt")
-            options.get_by_role("option").filter(has=page.get_by_text("ExpressRoute circuit in Frankfurt", exact=True)).click()
+            assert connectivity.locator("option").all_text_contents() == [
+                "Select a peering location", "ExpressRoute circuit in Frankfurt", "ExpressRoute circuit in Dublin"]
+            connectivity.select_option("ExpressRoute circuit in Frankfurt")
             assert connectivity.input_value() == "ExpressRoute circuit in Frankfurt"
-            page.evaluate("MRP.core.S.sites=[]; MRP.kit.hooks.commit()")
-            connectivity.click()
-            connectivity.fill("Frankfurt")
-            assert options.get_by_role("option").filter(has=page.get_by_text("ExpressRoute circuit in Frankfurt", exact=True)).count() == 1
-            page.keyboard.press("Escape")
-            connectivity.fill("Site-to-site VPN to customer datacenter")
-            connectivity.press("Tab")
-            assert page.evaluate("MRP.core.design(MRP.core.reg('swedencentral')).hybridUse") == "Site-to-site VPN to customer datacenter"
+            # Each current region assigns its primary circuit independently.
+            page.get_by_role("tab", name="Scope", exact=False).click()
+            west = page.get_by_role("combobox", name="Primary ExpressRoute circuit of West Europe", exact=True)
+            north = page.get_by_role("combobox", name="Primary ExpressRoute circuit of North Europe", exact=True)
+            assert west.locator("option").all_text_contents() == ["None", "Frankfurt", "Dublin"]
+            west.select_option("Frankfurt")
+            north.select_option("Dublin")
+            page.reload()
+            page.wait_for_selector('#planner[data-ready="1"]')
+            assert west.input_value() == "Frankfurt"
+            assert north.input_value() == "Dublin"
+            assert page.evaluate("MRP.core.S.current.map(c => c.profile)") == ["Full platform", "Full platform"]
+            scope = page.evaluate("MRP.workbook().sheets[0].rows.map(row => row.map(c => c.v))")
+            assert ["West Europe", "Full platform", "Frankfurt", "Yes"] in scope
+            assert ["North Europe", "Full platform", "Dublin", "No"] in scope
+            page.get_by_role("tab", name="Regional design", exact=False).click()
+            connectivity.select_option("ExpressRoute circuit in Dublin")
             page.evaluate("MRP.core.D.lat=null; MRP.kit.hooks.commit()")
-            assert page.get_by_text("The Azure peering-location catalog is unavailable", exact=False).is_visible()
-            connectivity.click()
-            assert options.is_hidden()
-            assert connectivity.input_value() == "Site-to-site VPN to customer datacenter"
+            assert connectivity.locator("option").count() == 3
+            assert connectivity.input_value() == "ExpressRoute circuit in Dublin"
+            page.evaluate("MRP.core.S.sites=[]; MRP.kit.hooks.commit()")
+            assert connectivity.is_disabled()
+            assert connectivity.locator("option").count() == 1
+            assert connectivity.input_value() == ""
+            assert page.evaluate("MRP.core.S.current.map(c => c.circuit)") == ["", ""]
+            assert page.evaluate("MRP.core.design(MRP.core.reg('swedencentral')).hybridUse") == "ExpressRoute circuit in Dublin"
+            assert page.get_by_text("Previously recorded connectivity:", exact=False).is_visible()
+            assert page.get_by_text("Add an ExpressRoute peering location in Scope first.", exact=True).is_visible()
 
             for theme in ("light", "dark"):
                 page.evaluate("theme => document.documentElement.dataset.theme=theme", theme)
@@ -179,7 +188,7 @@ def main():
     finally:
         server.shutdown()
         server.server_close()
-    print("Hub multi-select, persistence, legacy plans, review/export, diagram, full Latency peering list and Azure peering suggestions passed.")
+    print("Hub multi-select, persistence, legacy plans, review/export, diagram, full peering catalog, user-added connectivity and per-region circuits passed.")
 
 
 if __name__ == "__main__":

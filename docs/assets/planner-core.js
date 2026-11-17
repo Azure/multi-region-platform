@@ -3,13 +3,13 @@
   'use strict';
   const M = global.MRP, { CHECKS, CAPABILITY_IDS, PROFILES, SHARED, HUB_SERVICES, HYBRID_PATHS } = M;
   const KEY = 'mrp-planner', OLD_KEY = 'mrp-planner-v1';
-  const VERSION = 4;
+  const VERSION = 5;
   const today = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
   const uid = p => p + Math.random().toString(36).slice(2, 8);
   const num = v => v === '' || v === null || v === undefined || !isFinite(Number(v)) ? null : Number(v);
 
   // ───────────── state
-  const blank = () => ({ v: VERSION, meta: { name: '', owner: '', date: today() }, estate: { topology: '', managed: '', hybrid: '', circuit: '' },
+  const blank = () => ({ v: VERSION, meta: { name: '', owner: '', date: today() }, estate: { topology: '', managed: '', hybrid: '' },
     current: [], baseline: '', regions: [], workload: {}, notes: {}, sites: [], services: [], ui: { details: false, weighted: false, showOut: false } });
   const newRegion = id => ({ id, checks: {}, outcome: '', selected: false, conditions: '', owner: '', review: '', design: null });
   const newDesign = () => ({ q1: '', q2: '', q3: '', profile: '', hub: '', hubConnections: null, topology: '', managed: '', link: '', eastWest: '', ss: {}, custom: [],
@@ -37,10 +37,11 @@
     'Interconnected Application Portfolios': 'Interdependent Workload Groups',
   };
   const archetypeName = value => LEGACY_ARCHETYPES[value] || value;
-  function currentRegion(c) {
+  function currentRegion(c, legacyCircuit = '') {
     const region = typeof c === 'string' ? { id: c } : c;
     const profile = LEGACY_PROFILES[region.profile] || region.profile || (region.hub ? 'Full platform' : '');
-    return { ...region, profile, hub: profile === 'Full platform' };
+    const circuit = Object.hasOwn(region, 'circuit') ? region.circuit : legacyCircuit;
+    return { ...region, profile, hub: profile === 'Full platform', circuit: typeof circuit === 'string' ? circuit : '' };
   }
   function fromV1(raw) {
     const o = { ...raw };
@@ -82,7 +83,9 @@
     s.meta = { ...blank().meta, ...(s.meta || {}) };
     s.estate = { ...blank().estate, ...(s.estate || {}) };
     s.ui = { ...blank().ui, ...(s.ui || {}) };
-    s.current = (Array.isArray(s.current) ? s.current : []).filter(c => c && (typeof c === 'string' || c.id)).map(currentRegion);
+    s.current = (Array.isArray(s.current) ? s.current : []).filter(c => c && (typeof c === 'string' || c.id))
+      .map(c => currentRegion(c, s.estate.circuit));
+    delete s.estate.circuit;
     s.regions = (Array.isArray(s.regions) ? s.regions : []).filter(r => r && r.id).map(r => {
       const o = { ...newRegion(r.id), ...r, checks: { ...(r.checks || {}) } };
       if (o.checks['3.2']) o.checks['3.2'] = archetypeName(o.checks['3.2']);
@@ -219,6 +222,11 @@
     try {
       const j = await getJson('data/latency.json');
       if (!j || !j.generated || !Array.isArray(j.regions) || !Array.isArray(j.peering)) return false;
+      const metros = global.ER_LOCATIONS.geopolitical.flatMap(g => g.locations).filter(name => / Metro$/.test(name));
+      metros.filter(name => !j.peering.some(p => p.name === name)).forEach(name => {
+        const city = name.replace(/ Metro$/, ''), base = j.peering.find(p => p.name === city);
+        j.peering.push({ ...(base || { city }), name, metro: true });
+      });
       D.lat = { ...j, ridx: Object.fromEntries(j.regions.map((r, i) => [r, i])), pidx: Object.fromEntries(j.peering.map((p, i) => [p.name, i])) };
       return true;
     } catch (e) { return false; }
@@ -298,9 +306,13 @@
   }
 
   // Keep the state consistent after any change.
+  const circuitLocations = () => [...new Set(S.sites.filter(s => s.kind === 'peering' && s.peering).map(s => s.peering))];
   function tidy() {
-    S.current = S.current.map(currentRegion);
-    if (S.estate.circuit && !S.sites.some(s => s.kind === 'peering' && s.peering === S.estate.circuit)) S.estate.circuit = '';
+    const circuits = circuitLocations();
+    S.current = S.current.map(c => {
+      const region = currentRegion(c);
+      return { ...region, circuit: circuits.includes(region.circuit) ? region.circuit : '' };
+    });
     syncWorkload(S);
     if (!S.current.some(c => c.id === S.baseline)) S.baseline = S.current[0] ? S.current[0].id : '';
     S.regions.forEach(r => {
@@ -589,8 +601,10 @@
       return { ...s, p, isDefault: !x.p && !!def, def, from: p === 'Remote' ? (hubs.includes(x.from) ? x.from : defHub) : '', note: x.note || '' };
     }).concat(d.custom.map(c => ({ id: c.id, name: c.name, short: c.name, icon: 'cloud', custom: true, p: c.p || '', def: '', isDefault: false, from: c.p === 'Remote' ? (hubs.includes(c.from) ? c.from : defHub) : '', note: c.note || '' })));
     e.hybrid = none ? 'Not required' : d.hybrid;
-    e.hybridUse = d.hybridUse || (S.estate.circuit ? `ExpressRoute circuit in ${S.estate.circuit}` : '');
     const gw = e.ss.find(s => s.id === 'gateway');
+    const primary = S.current.find(c => c.id === (gw && gw.p === 'Remote' ? gw.from : defHub))?.circuit;
+    const connectivity = d.hybridUse || (primary ? `ExpressRoute circuit in ${primary}` : '');
+    e.hybridUse = circuitLocations().some(name => connectivity === `ExpressRoute circuit in ${name}`) ? connectivity : '';
     e.pathOptions = none ? [] : M.hybridPathOptions(profile, e.topology, gw ? gw.p : '');
     e.hybridPath = e.pathOptions.includes(d.hybridPath) ? d.hybridPath : '';
     e.reassess = d.reassess || (pi >= 0 ? PROFILES[pi].reassess : '');
@@ -609,6 +623,7 @@
     if (profile && unplaced) missing.push(`${unplaced} shared service${unplaced > 1 ? 's' : ''} to place`);
     if (profile && !e.hybrid) missing.push('hybrid connectivity');
     if (e.hybrid === 'Reuse' || e.hybrid === 'Change') {
+      if (!e.hybridUse) missing.push('existing connectivity from a peering location in Scope');
       if (e.pathOptions.length && !e.hybridPath) missing.push('how the region reaches on-premises locations');
       if (e.hybrid === 'Change' && !d.hybridChange) missing.push('the hybrid connectivity change');
     }
@@ -700,5 +715,5 @@
   M.core = { get S() { return S; }, D, VERSION, load, save, replace, blank, normalize, tidy, newRegion, uid, today, loadData, loadPricing, loadCities, bit,
     info, rname, reg, cols, suggest, outcome, selectable, selected, ruledOut, active, folded, fitDone, checkState, checkSkipped, named, serviceSelection, skuOptions, availability, availabilityDetails, zoneText, availSummary, priceRows, priceDiff, priceSummary,
     regionLatency, peeringLatency, cityLatency, peeringChoices, nearestPeering, sitePeering, siteName, siteLatency, latencySummary, srcText, km, estimate, latScale, latPos,
-    num, fmtPct, priceTone, evidence, latencyWorst, suggestAnswer, suggestions, hubRegions, design, suggestProfile, effective, hybridText, reviewTriggers, record, recordText, list, progress };
+    num, fmtPct, priceTone, evidence, latencyWorst, suggestAnswer, suggestions, circuitLocations, hubRegions, design, suggestProfile, effective, hybridText, reviewTriggers, record, recordText, list, progress };
 })(window);

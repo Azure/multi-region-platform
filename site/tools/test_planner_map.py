@@ -85,12 +85,18 @@ def main():
             page.get_by_role("button", name="Fit selections", exact=True).click()
             assert page.locator(".pl-map-node.current").first.inner_html() == before
 
-            entry = page.get_by_role("spinbutton", name="Latency from Frankfurt to West Europe in milliseconds", exact=True)
-            entry.fill("99")
+            # Saved peering overrides still affect the map, although peering-only table rows are no longer shown.
+            page.evaluate("""() => {
+              MRP.core.S.sites.find(s => s.peering==='Frankfurt').edits.westeurope=99;
+              MRP.kit.hooks.commit();
+            }""")
             assert any("Frankfurt → West Europe: 99 ms · Edited" in t
                 for t in page.locator(".pl-map-value title").all_text_contents())
             assert "99 ms*" in page.locator(".pl-map-value text").all_text_contents()
-            page.get_by_role("button", name="Restore the calculated value for Frankfurt to West Europe", exact=True).click()
+            page.evaluate("""() => {
+              delete MRP.core.S.sites.find(s => s.peering==='Frankfurt').edits.westeurope;
+              MRP.kit.hooks.commit();
+            }""")
             assert "99 ms*" not in page.locator(".pl-map-value text").all_text_contents()
             page.get_by_role("button", name="Edit locations in Scope", exact=True).click()
             page.get_by_role("button", name="Remove Dublin", exact=True).click()

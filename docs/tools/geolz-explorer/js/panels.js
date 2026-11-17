@@ -1,6 +1,7 @@
 /* panels.js: layers, header and legend, path navigation, side panels, checks, references and compare. */
 /* ===== LAYERS: ids, labels and the hidden set ===== */
 const LAYERS = [['hub', 'Hub links'], ['remote', 'Remote-hub peering'],
+  ['peering', 'Additional global VNet peerings'],
   ['hybrid', 'Hybrid connections (ExpressRoute / VPN, peering locations, providers)'],
   ['backup', 'Backup links (hidden with Hybrid connections too)'],
   ['dns', 'DNS (global services + zone links)'], ['users', 'Admins / Users band']];
@@ -69,6 +70,7 @@ function patternChip(id, p = RULES.patterns[id]) {
 const dashSwatch = t => `<svg class="sw" width="28" height="8" aria-hidden="true"><line x1="3" y1="4" x2="25" y2="4"
   stroke="${t.color}" stroke-width="3" stroke-linecap="round" stroke-dasharray="${t.dash}"/></svg>`;
 const LINE_STYLES = [['hl', 'Hub link', 'hub'], ['x', 'Remote-hub peering', 'remote'],
+  ['gp', 'Global VNet peering', 'peering'],
   ['er', 'ExpressRoute', 'hybrid'], ['pn', 'Provider network', 'hybrid'], ['vpn', 'VPN', 'hybrid'],
   ['ic', 'On-prem interconnect', 'hybrid'],
   ['vpn bk', 'Backup link', 'backup']];  // [class, text, layer]
@@ -90,6 +92,7 @@ function lineStyleUsed(cls, layer) {
   const links = backboneConnections(spec), conns = hybridConnections(spec);
   if (layer === 'hub') return links.some(l => l.kind === 'hub');
   if (layer === 'remote') return links.some(l => l.kind === 'remote');
+  if (layer === 'peering') return links.some(isSpokeLink);
   if (cls === 'er') return conns.some(c => c.type === 'expressroute');
   if (cls === 'pn') return conns.some(c => c.type === 'expressroute' && !isDirect(c));
   if (cls === 'vpn') return conns.some(c => c.type === 'vpn');

@@ -41,7 +41,7 @@ TOOLS = [{
                    "prices, and latency, select regions, and record the Platform Services profile, shared-service placement, and hybrid connectivity of each one. Exports to Excel.",
     "meta": "Interactive · Steps 2 and 3 · Exports to Excel",
     "css": ["assets/planner.css"],
-    "js": ["assets/xlsx-lite.js", "assets/planner-icons.js", "assets/planner-data.js", "assets/planner-core.js", "assets/planner-kit.js",
+    "js": ["tools/geolz-explorer/js/data/catalog.js", "assets/xlsx-lite.js", "assets/planner-icons.js", "assets/planner-data.js", "assets/planner-core.js", "assets/planner-kit.js",
            "assets/planner-map.js", "assets/planner-views.js", "assets/planner-design.js", "assets/planner-network.js", "assets/planner-export.js", "assets/planner.js"],
     "seed": "data/regions-seed.json",
     "search": "planner workbook tool checklist excel export questions decisions latency pricing price comparison service availability "

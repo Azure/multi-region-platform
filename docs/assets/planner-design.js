@@ -77,12 +77,12 @@
       const dec = K.cards(k('hybrid'), e.hybrid, HYBRID_DECISIONS.map(x => ({ id: x.id, title: x.id, text: x.text, disabled: none && x.id !== 'Not required' })), { label: 'Hybrid connectivity decision', cls: 'plain' });
       let more = '';
       if (e.hybrid === 'Reuse' || e.hybrid === 'Change') {
-        const circuits = [...new Map((C.D.lat ? C.D.lat.peering : []).map(p => [p.name, p])).values()]
-          .sort((a, b) => a.name.localeCompare(b.name))
-          .map(p => ({ value: `ExpressRoute circuit in ${p.name}`, label: `ExpressRoute circuit in ${p.name}`, sub: [p.city, p.country].filter(Boolean).join(', ') }));
-        more += K.row('Existing connectivity', k('hybridUse'), id => K.combo('use-' + r.id, { mode: 'text', key: k('hybridUse'), inputId: id, describedBy: id + '-h', ph: 'For example, ExpressRoute circuit in Frankfurt', label: 'Existing connectivity',
-          value: () => e.hybridUse, items: () => circuits, onPick: it => { d.hybridUse = it.value; } }) +
-          `<p class="pl-hint" id="${id}-h">${circuits.length ? 'Suggestions are Azure ExpressRoute peering locations, not confirmation of an existing circuit. Latency-test cities do not create circuits.' : 'The Azure peering-location catalog is unavailable; no ExpressRoute locations are suggested.'} You can also type your existing connectivity.</p>`);
+        const circuits = C.circuitLocations().map(name => `ExpressRoute circuit in ${name}`);
+        const previous = d.hybridUse && !circuits.includes(d.hybridUse)
+          ? K.mb('warning', `Previously recorded connectivity: ${esc(d.hybridUse)}. Add its peering location in Scope or select one of the locations already added.`) : '';
+        more += K.row('Existing connectivity', k('hybridUse'), id =>
+          K.sel(k('hybridUse'), e.hybridUse, circuits, { id, label: 'Existing connectivity', empty: 'Select a peering location', disabled: !circuits.length }) +
+          previous, circuits.length ? 'Only peering locations added in Scope are available.' : 'Add an ExpressRoute peering location in Scope first.');
         more += K.row('How the region reaches on-premises locations', k('hybridPath'), id => K.sel(k('hybridPath'), e.hybridPath, e.pathOptions, { id, label: 'How the region reaches on-premises locations', empty: e.pathOptions.length ? 'Select' : 'No path is offered' }),
           e.pathOptions.length ? '' : 'Place the gateway as Local or Remote in Shared services to see the paths.');
       }

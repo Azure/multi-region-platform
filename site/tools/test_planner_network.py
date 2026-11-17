@@ -16,6 +16,81 @@ class QuietHandler(http.server.SimpleHTTPRequestHandler):
         pass
 
 
+def check_current_profile_and_circuit_inheritance(browser, url):
+    page = browser.new_page(viewport={"width": 1440, "height": 1100})
+    page.goto(url)
+    page.wait_for_selector('#planner[data-ready="1"]')
+    page.evaluate("""() => {
+      const input = JSON.parse(JSON.stringify(MRP.EXAMPLE));
+      input.current = [
+        {id:'westeurope',profile:'Full platform',circuit:'Amsterdam'},
+        {id:'northeurope',profile:'Full platform',circuit:'Dublin2'}
+      ];
+      input.sites = [
+        {id:'rotterdam',kind:'city',city:{n:'Rotterdam',lat:51.92,lon:4.48},peering:'',edits:{}},
+        {id:'cork',kind:'city',city:{n:'Cork',lat:51.90,lon:-8.47},peering:'',edits:{}},
+        {id:'amsterdam',kind:'peering',peering:'Amsterdam',edits:{}},
+        {id:'dublin2',kind:'peering',peering:'Dublin2',edits:{}}
+      ];
+      input.regions[0].design.hybridUse = 'ExpressRoute circuit in Amsterdam';
+      MRP.core.replace(input); MRP.kit.hooks.render();
+    }""")
+    page.locator("#pl-network-toggle").click()
+    page.wait_for_function("document.querySelector('#pl-network-notice').hidden")
+    frame = page.locator("#pl-network iframe").element_handle().content_frame()
+    for topology in ("Hub-and-spoke virtual networks", "Azure Virtual WAN"):
+        page.evaluate("""topology => {
+          MRP.core.S.estate.topology = topology;
+          MRP.kit.hooks.commit();
+        }""", topology)
+        for region in ("westeurope", "northeurope"):
+            resolved = frame.evaluate("""id => {
+              const region = regionById(spec, id);
+              return Object.fromEntries(['firewall','dns','er_gateway'].map(role =>
+                [role, resolveRole(spec, region, role)]));
+            }""", region)
+            assert resolved["firewall"] == {"owner": region, "product": "azure-firewall"}, resolved
+            assert resolved["dns"] == {"owner": region, "product": "private-resolver"}, resolved
+            assert resolved["er_gateway"] == {"owner": region, "product": "expressroute"}, resolved
+        connections = frame.evaluate("spec.hybrid_connections")
+        amsterdam = [c for c in connections if c.get("peering_location") == "Amsterdam"]
+        dublin = [c for c in connections if c.get("peering_location") == "Dublin2"]
+        assert amsterdam and dublin, connections
+        assert all("northeurope" not in c["connects_to"] for c in amsterdam)
+        assert all(c["connects_to"] == ["northeurope"] for c in dublin)
+        assert frame.locator("#diagram").get_by_text("Dublin2", exact=True).count() == 1
+        onprem = frame.evaluate("spec.onprem")
+        assert {"rotterdam", "cork"} <= {s["id"] for s in onprem}
+        assert not any(s["name"] in ("Amsterdam", "Dublin2") for s in onprem), onprem
+        assert page.evaluate("MRP.network.preparePrint()")
+        assert "Dublin2" in page.locator("#pl-network-print").text_content()
+    # Existing infrastructure must not depend on a new region consuming its services.
+    page.evaluate("MRP.core.S.regions.forEach(r => r.selected=false); MRP.kit.hooks.commit()")
+    assert frame.evaluate("spec.regions.map(r => r.id)") == ["westeurope", "northeurope"]
+    assert {c["peering_location"] for c in frame.evaluate("spec.hybrid_connections")} == {"Amsterdam", "Dublin2"}
+    page.get_by_role("tab", name="Scope", exact=False).click()
+    primary = page.get_by_role("combobox", name="Primary ExpressRoute circuit of North Europe", exact=True)
+    primary.select_option("Amsterdam")
+    connections = frame.evaluate("spec.hybrid_connections")
+    assert {c["peering_location"] for c in connections} == {"Amsterdam"}
+    assert all(set(c["connects_to"]) == {"westeurope", "northeurope"} for c in connections)
+    primary.select_option("")
+    assert frame.evaluate("resolveRole(spec,regionById(spec,'northeurope'),'er_gateway')") is None
+    assert frame.evaluate("resolveRole(spec,regionById(spec,'northeurope'),'firewall').owner") == "northeurope"
+    page.evaluate("""() => {
+      const C = MRP.core, r = C.reg('swedencentral'), d = C.design(r);
+      C.S.current[0].circuit = 'Dublin2';
+      r.selected = true;
+      d.profile = 'Remote platform';
+      d.ss.gateway = {p:'Remote', from:'westeurope'};
+      d.hybridPath = MRP.HYBRID_PATHS[0].id;
+      C.S.sites.find(s => s.id === 'rotterdam').peering = 'Amsterdam';
+      MRP.kit.hooks.commit();
+    }""")
+    assert frame.evaluate("circuitsAt(spec,'westeurope')[0].peering_location") == "Dublin2"
+    page.close()
+
+
 def main():
     server = http.server.ThreadingHTTPServer(("127.0.0.1", 0),
         functools.partial(QuietHandler, directory=str(ROOT / "docs")))
@@ -24,6 +99,9 @@ def main():
     try:
         with sync_playwright() as playwright, tempfile.TemporaryDirectory() as artifacts:
             browser = playwright.chromium.launch()
+            check_remote_spoke_peerings(browser, url)
+            check_scope_peering_options(browser, url)
+            check_current_profile_and_circuit_inheritance(browser, url)
             page = browser.new_page(viewport={"width": 1440, "height": 1100})
             errors = []
             page.on("pageerror", lambda error: errors.append(str(error)))
@@ -68,7 +146,11 @@ def main():
             circuit = inherited["hybrid_connections"][0]
             assert circuit["peering_location"] == "Frankfurt"
             assert set(circuit["connects_to"]) == {"westeurope", "swedencentral"}
-            assert inherited["onprem"] == [{"id": "s3", "name": "Frankfurt"}]
+            assert inherited["onprem"] == [
+                {"id": "s1", "name": "Stockholm"},
+                {"id": "s2", "name": "Oslo"},
+                {"id": "circuit-Frankfurt", "name": "Site not specified"},
+            ]
             explorer.locator("#btnWorkbook").click()
             assert explorer.locator("#plannerDefinitions").is_visible()
             assert "Backup vaults: Local" in explorer.locator("#plannerDefinitions").text_content()
@@ -257,7 +339,7 @@ def main():
               d.profile='Governance-Only'; MRP.kit.hooks.commit();
             }""")
             assert inherited_frame.evaluate("spec.regions[1].pattern") == "disconnected"
-            assert inherited_frame.evaluate("spec.hybrid_connections.length") == 0
+            assert inherited_frame.evaluate("spec.hybrid_connections.map(c => c.connects_to)") == [["westeurope"]]
             inherited_page.evaluate("""() => {
               const C = MRP.core, d = C.design(C.reg('swedencentral'));
               d.profile='Full platform'; d.topology='Azure Virtual WAN';
@@ -267,7 +349,7 @@ def main():
             text = inherited_frame.locator("#plannerDefinitions").text_content()
             assert "mixed topologies are not modelled" in text
             assert "SD-WAN/NVA hybrid paths" in text
-            assert inherited_frame.evaluate("spec.hybrid_connections.length") == 0
+            assert inherited_frame.evaluate("spec.hybrid_connections.map(c => c.connects_to)") == [["westeurope"]]
             inherited_page.evaluate("""() => {
               const C = MRP.core, d = C.design(C.reg('swedencentral'));
               C.S.estate.topology='Azure Virtual WAN';
@@ -275,11 +357,12 @@ def main():
               d.hybridPath='Site-to-site VPN to a gateway in this region'; MRP.kit.hooks.commit();
             }""")
             assert inherited_frame.evaluate("spec.defaults.topology") == "vwan"
-            assert inherited_frame.evaluate("spec.hybrid_connections.every(c => c.type === 'vpn')") is True
-            assert inherited_frame.evaluate("spec.hybrid_connections.length") == 2
+            assert inherited_frame.evaluate(
+                "spec.hybrid_connections.filter(c => c.type === 'vpn').map(c => c.site)") == ["s1", "s2"]
+            assert inherited_frame.evaluate("spec.hybrid_connections.length") == 3
             inherited_page.evaluate("""() => {
               const C = MRP.core;
-              C.S.current.push({id:'northeurope',hub:true});
+              C.S.current.push({id:'northeurope',hub:true,circuit:'Frankfurt'});
               const r = C.newRegion('francecentral');
               r.outcome='Qualified'; r.selected=true; C.S.regions.push(r);
               const d = C.design(r); d.profile='Full platform'; d.topology='Azure Virtual WAN';
@@ -293,15 +376,17 @@ def main():
                 "westeurope", "northeurope", "swedencentral", "francecentral"}
             assert next(r for r in multi["regions"] if r["id"] == "francecentral")["pattern"] == "full-hub"
             er = next(c for c in multi["hybrid_connections"] if c["type"] == "expressroute")
-            assert set(er["connects_to"]) == {"francecentral", "northeurope"}
+            assert set(er["connects_to"]) == {"westeurope", "francecentral", "northeurope"}
             inherited_page.evaluate("""() => {
               const C = MRP.core, input = JSON.parse(JSON.stringify(MRP.EXAMPLE));
               input.current = [
-                {id:'westeurope',profile:'Full platform'},
-                {id:'northeurope',profile:'Minimal platform'},
+                {id:'westeurope',profile:'Full platform',circuit:'Frankfurt'},
+                {id:'northeurope',profile:'Minimal platform',circuit:'Dublin'},
                 {id:'francecentral',profile:'Remote platform'},
                 {id:'uksouth',profile:'Governance-Only'}
               ];
+              input.sites.push({id:'dublin',kind:'peering',peering:'Dublin',edits:{}});
+              input.regions[0].design.hubConnections = ['westeurope','northeurope'];
               input.regions[0].design.hybridUse = '';
               C.replace(input); MRP.kit.hooks.commit();
             }""")
@@ -309,7 +394,12 @@ def main():
             assert {key: profiles[key] for key in ["westeurope", "northeurope", "francecentral", "uksouth"]} == {
                 "westeurope": "full-hub", "northeurope": "minimal-hub",
                 "francecentral": "remote-hub", "uksouth": "disconnected"}
+            inherited_page.evaluate("""() => {
+              MRP.core.S.current.find(c => c.id === 'northeurope').profile = 'Full platform';
+              MRP.kit.hooks.commit();
+            }""")
             assert inherited_frame.evaluate("spec.hybrid_connections[0].peering_location") == "Frankfurt"
+            assert inherited_frame.evaluate("spec.hybrid_connections[0].connects_to.sort()") == ["swedencentral", "westeurope"]
             inherited_page.evaluate("MRP.core.replace({v:2}); MRP.kit.hooks.render()")
             assert inherited_frame.evaluate("spec.regions.length") == 0
             assert inherited_frame.evaluate("spec.hybrid_connections.length") == 0
@@ -335,6 +425,128 @@ def main():
         server.shutdown()
         server.server_close()
     print("Networking designer: navigation collapse, diagram width, exclusive side panels, host theme, live popup, blocked popup, state retention, full diagram print, responsive layout and failures passed.")
+
+
+def check_remote_spoke_peerings(browser, url):
+    page = browser.new_page(viewport={"width": 1440, "height": 1100})
+    errors = []
+    page.on("pageerror", lambda error: errors.append(str(error)))
+    page.goto(url)
+    page.wait_for_selector('#planner[data-ready="1"]')
+    page.evaluate("""() => {
+      const input = JSON.parse(JSON.stringify(MRP.EXAMPLE));
+      input.current.push({id:'northeurope',profile:'Full platform',circuit:'Frankfurt'});
+      const remote = JSON.parse(JSON.stringify(input.regions[0]));
+      remote.id = 'italynorth';
+      remote.design.profile = 'Remote platform';
+      remote.design.ss = Object.fromEntries(['inspect','dnsres','gateway'].map(id =>
+        [id,{p:'Remote',from:'westeurope'}]));
+      input.regions.push(remote);
+      const isolated = JSON.parse(JSON.stringify(remote));
+      isolated.id = 'uksouth'; isolated.design.profile = 'Governance-Only';
+      input.regions.push(isolated);
+      MRP.core.replace(input); MRP.kit.hooks.render();
+    }""")
+    page.locator("#pl-network-toggle").click()
+    page.wait_for_function("document.querySelector('#pl-network-notice').hidden")
+    frame = page.locator("#pl-network iframe").element_handle().content_frame()
+    frame.locator("#btnEditor").click()
+    frame.locator("#etab-links").click()
+    hub = frame.get_by_role("checkbox", name="Global VNet peering: Italy North spokes to North Europe hub", exact=True)
+    assert hub.count() == 1, "Remote spokes need an independent peering control for another region's hub"
+    assert frame.get_by_role("checkbox", name="Global VNet peering: Italy North spokes to UK South spokes", exact=True).is_disabled()
+    hub.check()
+    path = frame.evaluate("crossRegionPath(spec,regionById(spec,'italynorth'),regionById(spec,'northeurope'))")
+    assert not path["na"] and "northeurope.firewall" in [s["id"] for s in path["steps"]]
+    assert "westeurope.firewall" not in [s["id"] for s in path["steps"]]
+    spoke = frame.get_by_role("checkbox", name="Global VNet peering: Italy North spokes to Sweden Central spokes", exact=True)
+    spoke.check()
+    path = frame.evaluate("crossRegionPath(spec,regionById(spec,'italynorth'),regionById(spec,'swedencentral'))")
+    assert [s["id"] for s in path["steps"] if s["id"]] == ["italynorth.spoke", "swedencentral.spoke"]
+    assert path["matrix"] == "Direct peering (uninspected)"
+    assert frame.evaluate("regionById(spec,'italynorth').remote_hub") == "westeurope"
+    assert frame.locator('#diagram path.lnk[data-layer="peering"]').count() == 2
+    frame.locator('[data-act="undo"]').click()
+    assert not spoke.is_checked()
+    frame.locator('[data-act="redo"]').click()
+    assert spoke.is_checked()
+    frame.evaluate("loadSpec(JSON.parse(JSON.stringify(spec)))")
+    assert spoke.is_checked(), "Saving/reopening must retain explicit spoke peerings"
+    assert page.evaluate("MRP.network.preparePrint()")
+    assert page.locator('#pl-network-print path.lnk[data-layer="peering"]').count() == 2
+    parent_spokes = frame.get_by_role("checkbox", name="Global VNet peering: Italy North spokes to West Europe spokes", exact=True)
+    parent_spokes.check()
+    frame.evaluate("choose(spec.regions.findIndex(r=>r.id==='italynorth'),'east_west','westeurope')")
+    assert frame.locator('#diagram path.used[data-peer="spoke-peering:italynorth:westeurope"]').count() == 1
+    parent_spokes.uncheck()
+    frame.evaluate("""() => {
+      const i=spec.regions.findIndex(r=>r.id==='italynorth'), previous=spec.regions[i].remote_hub;
+      spec.regions[i].remote_hub='northeurope'; remoteHubChange(i,previous); onSpecChange(true);
+    }""")
+    assert frame.evaluate("backboneConnections(spec).filter(c=>c.from==='italynorth'&&c.to==='northeurope').length") == 1
+    frame.locator("#etab-estate").click()
+    frame.locator('select[data-path="defaults.topology"]').select_option("vwan")
+    frame.locator("#etab-links").click()
+    assert hub.is_disabled(), "A managed virtual hub cannot accept global VNet peering"
+    assert frame.get_by_role("checkbox", name="Global VNet peering: Italy North spokes to West Europe hub", exact=True).is_disabled()
+    assert spoke.is_checked()
+    frame.evaluate("setPath(spec,'regions.3.pattern','full-hub'); dropLinks(spec,spec.regions[3]); onSpecChange(true)")
+    assert frame.evaluate("spec.region_links.filter(l => ['spoke-hub','spoke-peering'].includes(l.kind))") == []
+    assert not errors, errors
+    page.close()
+
+
+def check_scope_peering_options(browser, url):
+    page = browser.new_page(viewport={"width": 1440, "height": 1100})
+    page.goto(url)
+    page.wait_for_selector('#planner[data-ready="1"]')
+    page.evaluate("""() => {
+      const input = JSON.parse(JSON.stringify(MRP.EXAMPLE));
+      input.current[0].circuit = 'Amsterdam Metro';
+      input.sites = input.sites.filter(s => s.kind === 'city').concat(
+        ['Amsterdam','Amsterdam Metro','Dublin2'].map(peering => ({id:peering,kind:'peering',peering,edits:{}})));
+      input.regions[0].design.hybridUse = 'ExpressRoute circuit in Amsterdam Metro';
+      MRP.core.replace(input); MRP.kit.hooks.render();
+    }""")
+    page.locator("#pl-network-toggle").click()
+    page.wait_for_function("document.querySelector('#pl-network-notice').hidden")
+    frame = page.locator("#pl-network iframe").element_handle().content_frame()
+    frame.evaluate("selectItem('conn:'+spec.hybrid_connections[0].id)")
+    selected = frame.locator("#selPanel")
+    location = selected.locator('select[data-path$=".peering_location"]')
+    resiliency = selected.locator("select[data-resiliency]")
+    locations = location.locator("option").all_text_contents()
+    assert locations == ["Amsterdam Metro"], locations
+    resiliency.select_option("standard")
+    assert location.locator("option").all_text_contents() == ["Amsterdam", "Dublin2"]
+    location.select_option("Dublin2")
+    resiliency.select_option("metro")
+    assert location.input_value() == "Amsterdam Metro"
+    assert frame.evaluate("spec.hybrid_connections.every(c => c.peering_location === 'Amsterdam Metro')")
+    with page.expect_popup() as popup:
+        frame.locator("#btnPresent").click()
+    presentation = popup.value
+    presentation.wait_for_selector("body.present")
+    assert presentation.evaluate("peeringGroups('metro').flatMap(([,locations])=>locations)") == ["Amsterdam Metro"]
+    presentation.close()
+    page.evaluate("""() => {
+      MRP.core.S.sites = MRP.core.S.sites.filter(s => s.kind === 'city' || s.peering === 'Amsterdam Metro');
+      MRP.kit.hooks.commit();
+    }""")
+    frame.evaluate("selectItem('conn:'+spec.hybrid_connections[0].id)")
+    assert resiliency.locator('option[value="standard"]').get_attribute("disabled") is not None
+    frame.locator("#etab-hybrid").click()
+    frame.locator("#selPanel [data-act='sel-clear']").click()
+    frame.locator("select[data-addconn]").first.select_option("new:expressroute")
+    assert location.input_value() == "Amsterdam Metro"
+    page.evaluate("MRP.core.S.sites=MRP.core.S.sites.filter(s => s.kind==='city'); MRP.kit.hooks.commit()")
+    assert frame.locator('select[data-addconn] option[value="new:expressroute"]').count() == 0
+    page.close()
+    standalone = browser.new_page()
+    standalone.goto(url.split("/region-planner.html")[0] + "/tools/geolz-explorer/index.html")
+    standalone.wait_for_selector("#diagram .region")
+    assert standalone.evaluate("peeringGroups().flatMap(([,locations])=>locations).length") > 50
+    standalone.close()
 
 
 if __name__ == "__main__":

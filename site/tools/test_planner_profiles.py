@@ -74,17 +74,66 @@ s.sites = [{id:'frankfurt',kind:'peering',peering:'Frankfurt',target:30,edits:{}
 C.replace(s);
 assert.deepEqual(C.S.current.map(c => c.profile), ['Full platform','','Minimal platform','Remote platform']);
 assert.deepEqual(C.S.current.map(c => c.hub), [true,false,false,false]);
-assert.equal(C.S.estate.circuit, '');
+assert.deepEqual(C.S.current.map(c => c.circuit), ['','','','']);
 const r = C.S.regions[0], d = C.design(r);
 Object.assign(d, {q1:'Yes',q2:'Yes',hybrid:'Reuse'});
 assert.equal(C.effective(r).hybridUse, '');
-C.S.estate.circuit = 'Frankfurt';
+C.S.current[0].circuit = 'Frankfurt';
 assert.equal(C.effective(r).hybridUse, 'ExpressRoute circuit in Frankfurt');
 d.hybridUse = 'Existing VPN';
-assert.equal(C.effective(r).hybridUse, 'Existing VPN');
+assert.equal(C.effective(r).hybridUse, '');
+assert.ok(C.effective(r).missing.includes('existing connectivity from a peering location in Scope'));
 C.S.sites = []; C.tidy();
-assert.equal(C.S.estate.circuit, '');
+assert.equal(C.S.current[0].circuit, '');
 assert.equal(d.hybridUse, 'Existing VPN');
+""")
+
+    def test_primary_circuits_migrate_and_follow_the_selected_gateway_provider(self):
+        self.run_js("""
+const input = JSON.parse(JSON.stringify(M.EXAMPLE));
+input.v = 4;
+input.estate.circuit = 'Frankfurt';
+input.current = [
+  {id:'westeurope',hub:true},
+  {id:'northeurope',hub:true,circuit:'Dublin'},
+  {id:'italynorth',profile:'Full platform',circuit:''}
+];
+input.sites.push({id:'dublin',kind:'peering',peering:'Dublin',edits:{}});
+const original = JSON.stringify(input);
+C.replace(input);
+assert.equal(JSON.stringify(input), original);
+assert.deepEqual(C.S.current.map(c => c.circuit), ['Frankfurt','Dublin','']);
+assert.ok(!Object.hasOwn(C.S.estate, 'circuit'));
+assert.deepEqual(C.normalize(C.S), C.S);
+assert.deepEqual(C.circuitLocations(), ['Frankfurt','Dublin']);
+const r = C.S.regions[0], d = C.design(r);
+Object.assign(d, {profile:'Remote platform',hybridUse:'',hub:'northeurope'});
+d.ss.gateway = {p:'Remote'};
+assert.equal(C.effective(r).hybridUse, 'ExpressRoute circuit in Dublin');
+d.ss.gateway.from = 'westeurope';
+assert.equal(C.effective(r).hybridUse, 'ExpressRoute circuit in Frankfurt');
+d.hybridUse = 'ExpressRoute circuit in Dublin';
+assert.equal(C.effective(r).hybridUse, d.hybridUse);
+C.S.sites = C.S.sites.filter(s => s.peering !== 'Dublin');
+C.tidy();
+assert.deepEqual(C.S.current.map(c => c.circuit), ['Frankfurt','','']);
+assert.equal(d.hybridUse, 'ExpressRoute circuit in Dublin');
+assert.equal(C.effective(r).hybridUse, '');
+""")
+
+    def test_removed_placement_services_are_not_in_records_but_saved_answers_remain(self):
+        self.run_js("""
+const input = JSON.parse(JSON.stringify(M.EXAMPLE));
+input.regions[0].design.ss.governance = {p:'Global',note:'Keep saved governance note'};
+input.regions[0].design.ss.keyvault = {p:'Local',note:'Keep saved vault note'};
+C.replace(input);
+const r = C.S.regions[0];
+assert.ok(!C.effective(r).ss.some(s => ['governance','keyvault'].includes(s.id)));
+assert.ok(!C.recordText().includes('Key Vault'));
+assert.ok(!C.recordText().includes('Management groups'));
+assert.deepEqual(r.design.ss.governance, input.regions[0].design.ss.governance);
+assert.deepEqual(r.design.ss.keyvault, input.regions[0].design.ss.keyvault);
+assert.ok(M.STARTER_SERVICES.includes('Key Vault'));
 """)
 
     def test_latency_breakpoints_have_equal_width_and_interpolate_between_steps(self):

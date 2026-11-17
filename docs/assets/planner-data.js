@@ -88,7 +88,6 @@
 
   // Shared services and their default placement per profile, in the order of PROFILES. '' means a choice for each region.
   const SHARED = [
-    { id: 'governance', icon: 'checklist', name: 'Management groups, access control, policy', short: 'Management groups, access control, and policy', d: ['Global', 'Global', 'Global', 'Global'] },
     { id: 'pdns', icon: 'dns', name: 'Private DNS zones', short: 'Private DNS zones', d: ['Global', 'Global', 'Global', 'Global'] },
     { id: 'dnsres', icon: 'dns', name: 'DNS resolution across premises (private resolver or forwarders)', short: 'DNS private resolver or forwarders', d: ['Not required', 'Remote', '', 'Local'] },
     { id: 'inspect', icon: 'firewall', name: 'Traffic inspection and internet egress (Azure Firewall or network virtual appliance)', short: 'Firewall for traffic inspection and internet egress', d: ['Not required', 'Remote', '', 'Local'] },
@@ -96,7 +95,6 @@
     { id: 'directory', icon: 'people', name: 'Directory services (domain controllers)', short: 'Domain controllers', d: ['Not required', 'Remote', '', 'Local'] },
     { id: 'logs', icon: 'logs', name: 'Log workspace', short: 'Log workspace', d: ['Remote', 'Remote', 'Remote', 'Remote'], hint: 'Local only for data residency or significant cross-region charges.' },
     { id: 'backup', icon: 'backup', name: 'Backup vaults', short: 'Backup vaults', d: ['Local', 'Local', 'Local', 'Local'], hint: 'Local in every profile: Azure Backup works within a region.' },
-    { id: 'keyvault', icon: 'key', name: 'Key Vault', short: 'Key Vault', d: ['Local', 'Local', 'Local', 'Local'], hint: 'Local in every profile: a vault for each workload in its region.' },
   ];
   const HUB_SERVICES = ['dnsres', 'inspect', 'gateway', 'directory'];   // the services that make a hub a hub
 
@@ -148,9 +146,9 @@
 
   // An illustrative, filled-in workbook. Every value is an example.
   const EXAMPLE = {
-    v: 4, meta: { name: 'Example: Nordic expansion', owner: 'Platform team', date: '' },
-    estate: { topology: 'Hub-and-spoke virtual networks', managed: 'Azure Virtual Network Manager', hybrid: 'ExpressRoute', circuit: 'Frankfurt' },
-    current: [{ id: 'westeurope', profile: 'Full platform', hub: true }], baseline: 'westeurope',
+    v: 5, meta: { name: 'Example: Nordic expansion', owner: 'Platform team', date: '' },
+    estate: { topology: 'Hub-and-spoke virtual networks', managed: 'Azure Virtual Network Manager', hybrid: 'ExpressRoute' },
+    current: [{ id: 'westeurope', profile: 'Full platform', hub: true, circuit: 'Frankfurt' }], baseline: 'westeurope',
     workload: {
       '3.1': { value: 'Known', expanded: false, overrides: { polandcentral: 'Partly known (guardrails set)' } },
       '3.2': { value: 'Hybrid-Dependent Workloads', expanded: false, overrides: { polandcentral: 'Selectively Connected Workloads' } },

@@ -47,8 +47,8 @@ function regionSvg({ region, x, w, hub, box, sharedBox: sb }) {
 // remote-hub peerings and lane labels appear only when the selected path uses them (drawPath). Then DNS zone links
 // and hybrid wires. The diagram has no hover tooltips: a click opens the details or the editor.
 function peerSvg(p) {  // connection kinds (hub, remote) are also the layer ids
-  const cls = { remote: 'lnk x', hub: 'lnk hl' }[p.kind], d = roundPath(p.pts);
-  const layer = layerAttr(p.kind);
+  const cls = isSpokeLink(p) ? 'lnk gp' : { remote: 'lnk x', hub: 'lnk hl' }[p.kind], d = roundPath(p.pts);
+  const layer = layerAttr(isSpokeLink(p) ? 'peering' : p.kind);
   return `<g${selAttr(peerSel(p))}><path class="hit"${layer} d="${d}"/>` +
     `<path class="${cls}" data-peer="${p.key}"${layer} d="${d}"/></g>`;
 }

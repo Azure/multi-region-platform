@@ -114,12 +114,24 @@ function addBand(L, text, y, h, layer) {
 function planLanes(L, lane0) {
   const col = id => L.regions.find(c => c.region.id === id), conns = [];
   for (const c of backboneConnections(spec)) {
-    const p = col(c.from), q = col(c.to), swap = c.kind !== 'remote' && p && q && p.x > q.x;
+    const p = col(c.from), q = col(c.to), swap = c.kind === 'hub' && p && q && p.x > q.x;
     if (p && q && p !== q) conns.push({ ...c, a: swap ? q : p, b: swap ? p : q });
   }
   const spokeX = (c, key) => centre(L.nodes[`${c.region.id}.${key}`])[0];
   conns.forEach((c, k) => {
     const { a, b } = c, laneY = lane0 + k * LANE;
+    if (isSpokeLink(c)) {
+      const src = L.nodes[a.region.id + '.spoke'], dst = L.nodes[b.region.id + '.spoke'];
+      const slot = conns.filter(o => o.b === b).indexOf(c);
+      const srcX = centre(src)[0], dstX = c.kind === 'spoke-hub' ? b.x - 18 - slot * 8 : centre(dst)[0];
+      const end = c.kind === 'spoke-hub' ? [[dstX, b.hub.y + 12], [b.hub.x, b.hub.y + 12]]
+        : [[dstX, dst.y + dst.h]];
+      const key = `${c.kind}:${a.region.id}:${b.region.id}`, text = connectionLabel(spec, c);
+      L.peers.push({ key, text, from: a.region.id, to: b.region.id, kind: c.kind, laneY, srcX, dstX,
+        pts: [[srcX, src.y + src.h], [srcX, laneY], [dstX, laneY], ...end] });
+      addLabel(L, text, L.left + 8, laneY - 5, 'lbl', { peer: key, layer: 'peering', sel: peerSel(c) });
+      return;
+    }
     const into = conns.filter(o => o.b === b), j = into.indexOf(c);  // attach slot on b's hub
     const out = conns.filter(o => o.a === a && o.kind === 'hub').indexOf(c);  // exit slot on a's hub
     const srcX = c.kind === 'hub' ? a.x + L.col + 10 + out * 8 : spokeX(a, 'spoke');
@@ -693,8 +705,10 @@ function topRoute(a, b) {
 // side (centre slot; a gateway's upper slot, its line leaves from the centre); spokes from their bottom centre.
 function crossRoute(a, b) {
   const lanes = layout.peers;
-  const p = lanes.find(q => q.from === a.region && q.to === b.region);
-  if (!p && lanes.some(q => q.from === b.region && q.to === a.region)) return flip(crossRoute(b, a));
+  const matches = (q, src = a, dst = b) => q.kind === 'spoke-peering' ? src.spoke && dst.spoke
+    : q.kind === 'spoke-hub' ? src.spoke && dst.hub : q.kind === 'remote' ? !(src.spoke && dst.spoke) : true;
+  const p = lanes.find(q => q.from === a.region && q.to === b.region && matches(q));
+  if (!p && lanes.some(q => q.from === b.region && q.to === a.region && matches(q, b, a))) return flip(crossRoute(b, a));
   const ca = colOf(a.region), cb = colOf(b.region), right = cb.x > ca.x;
   const lane = p || { srcX: right ? ca.x + ca.w + 10 : laneIn(ca) - 8, dstX: right ? laneIn(cb) - 8 : cb.x + cb.w + 10,
     laneY: layout.bottom + 26 };

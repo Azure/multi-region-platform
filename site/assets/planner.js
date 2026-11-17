@@ -66,11 +66,11 @@
     const prices = D.hasCatalog ? `${D.meta.partial ? 'Partial test snapshot' : 'Snapshot'} of ${esc(K.fmtDate(D.meta.generated))}` : D.asFile ? 'Not loaded' : 'Not published';
     const availability = D.hasAvailability ? `Imported ${esc(K.fmtDate(D.availabilityMeta.generated))}` : 'Not loaded';
     const lat = D.lat ? `Dataset of ${esc(D.lat.dataset || K.fmtDate(D.lat.generated))}` : D.asFile ? 'Not loaded' : 'Not published';
-    const names = S.current.map(c => `${esc(C.rname(c.id))} ${c.profile ? K.profileBadge(c.profile) : '<span class="pl-tag">Profile not recorded</span>'}${c.id === S.baseline && S.current.length > 1 ? ' <span class="pl-tag">Price baseline</span>' : ''}`);
+    const names = S.current.map(c => `${esc(C.rname(c.id))} ${c.profile ? K.profileBadge(c.profile) : '<span class="pl-tag">Profile not recorded</span>'}${c.id === S.baseline && S.current.length > 1 ? ' <span class="pl-tag">Price baseline</span>' : ''}<span class="pl-cap">Primary circuit: ${esc(c.circuit || 'None')}</span>`);
     return `<div class="pl-ess-h"><button type="button" class="pl-ess-t" data-act="essentials" aria-expanded="${open}" aria-controls="pl-ess-b">${icon(open ? 'down' : 'right')}<span>Essentials</span></button>` +
       `${open ? '' : `<p class="pl-sum">${sum}</p>`}</div>` +
       `<div class="pl-ess-b" id="pl-ess-b"${open ? '' : ' hidden'}><dl>${kv('Plan', esc(v(S.meta.name)))}${kv('Owner', esc(v(S.meta.owner)))}${kv('Assessment date', esc(v(S.meta.date)))}</dl>` +
-      `<dl>${kv('Current regions', names.length ? names.join(', ') : K.EM)}${kv('Regions to qualify', candidates || K.EM)}${kv('Primary ExpressRoute circuit', esc(S.estate.circuit || 'None'))}` +
+      `<dl>${kv('Current regions', names.length ? names.join(', ') : K.EM)}${kv('Regions to qualify', candidates || K.EM)}` +
       `${kv('Selected for regional design', picked.length ? esc(picked.map(r => C.rname(r.id)).join(', ')) : 'None yet')}${kv('Azure data', `<span class="pl-blk">Services: ${availability}</span><span class="pl-blk">Prices: ${prices}</span><span class="pl-blk">Latency: ${lat}</span>`)}</dl></div>`;
   }
   function vTabs() {
@@ -212,7 +212,10 @@
     if (p[0] === 'meta') S.meta[p[1]] = v;
     else if (p[0] === 'estate') S.estate[p[1]] = v;
     else if (p[0] === 'baseline') { S.baseline = v; C.loadPricing(v).then(ok => ok && lazyRender()); }
-    else if (p[0] === 'current') { const x = S.current.find(c => c.id === p[1]); if (x) { x.profile = v; x.hub = v === 'Full platform'; } }
+    else if (p[0] === 'current') {
+      const x = S.current.find(c => c.id === p[1]);
+      if (x) { x[p[2]] = v; if (p[2] === 'profile') x.hub = v === 'Full platform'; }
+    }
     else if (p[0] === 'ui') S.ui[p[1]] = !!v;
     else if (p[0] === 'note') S.notes[p[1]] = v;
     else if (p[0] === 'workload') {

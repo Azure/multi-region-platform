@@ -15,8 +15,10 @@
         firewall: 'none', dns: 'none', ingress: 'none', bastion: 'none', private_user_access: 'none',
         dns_model: 'centralized', routing_intent: false },
       regions: [], region_links: [], onprem: [], hybrid_connections: [],
-      workbook: { records: [], notes } };
+      workbook: { records: [], notes, peering_locations: C.circuitLocations() } };
     const roles = { inspect: ['firewall', 'azure-firewall'], dnsres: ['dns', 'private-resolver'] };
+    const sites = S.sites.filter(s => s.kind === 'city');
+    result.onprem = sites.map(s => ({ id: s.id, name: C.siteName(s) }));
     const addRegion = (id, pattern) => {
       const region = { id, name: C.rname(id), pattern, capabilities: {
         firewall: 'none', dns: 'none', hybrid: 'none', ingress: 'none', bastion: 'none',
@@ -24,12 +26,50 @@
       result.regions.push(region);
       return region;
     };
+    const addHybrid = (type, location, targets, name) => {
+      const matching = type === 'expressroute' ? sites.filter(s => C.sitePeering(s) === location) : sites;
+      if (!matching.length) notes.push(name +
+        ': no matching on-premises location is recorded; the connection uses an unspecified site.');
+      const attachments = matching.length ? matching.map(s => ({ id: s.id, name: C.siteName(s) }))
+        : [{ id: 'circuit-' + (location || targets[0]), name: 'Site not specified' }];
+      return attachments.map(site => {
+        if (!result.onprem.some(s => s.id === site.id)) result.onprem.push(site);
+        const id = site.id + '-' + type + '-' + (location || '');
+        let connection = result.hybrid_connections.find(c => c.id === id);
+        if (!connection) {
+          connection = { id, type, site: site.id, name, connects_to: [] };
+          if (location) Object.assign(connection, { peering_location: location, connection: 'provider' });
+          result.hybrid_connections.push(connection);
+        }
+        targets.forEach(target => {
+          if (!connection.connects_to.includes(target)) connection.connects_to.push(target);
+        });
+        return connection.id;
+      });
+    };
     S.current.forEach(c => {
-      addRegion(c.id, patterns[c.profile] || 'disconnected');
+      const region = addRegion(c.id, patterns[c.profile] || 'disconnected');
+      const pi = M.PROFILES.findIndex(p => p.id === c.profile);
+      M.SHARED.forEach(service => {
+        const role = roles[service.id];
+        if (role && service.d[pi] === 'Local') {
+          region.capabilities[role[0]] = 'local';
+          region[role[0]] = role[1];
+          if (result.defaults.topology === 'vwan' && role[0] === 'dns') region.capabilities.shared = 'local';
+        }
+      });
+      if (c.circuit) {
+        if (['full-hub', 'minimal-hub'].includes(region.pattern)) {
+          region.capabilities.hybrid = 'local';
+          region.er_preferred = addHybrid('expressroute', c.circuit, [c.id], `ExpressRoute circuit in ${c.circuit}`)[0];
+        } else notes.push(C.rname(c.id) +
+          ': a primary circuit is assigned, but the selected profile has no local hub to host its gateway.');
+      }
       result.workbook.records.push({ id: c.id, lines: ['Current region' + (c.profile ? ' - ' + c.profile : ' - profile not recorded'),
         'Estate topology: ' + (S.estate.topology || 'Not decided'),
         'Managed with: ' + (S.estate.managed || 'Not decided'),
-        'Hybrid connectivity: ' + (S.estate.hybrid || 'Not decided')] });
+        'Hybrid connectivity: ' + (S.estate.hybrid || 'Not decided'),
+        'Primary circuit: ' + (c.circuit || 'None')] });
     });
     const designs = picked.map(r => ({ r, d: C.design(r), e: C.effective(r) }));
     designs.forEach(({ r, e }) => {
@@ -106,33 +146,15 @@
       }
       if (e.hybrid === 'Change') notes.push(C.rname(r.id) +
         ': the stated hybrid change is retained in the record; additional circuits are not inferred from free text.');
-      const sites = type === 'expressroute'
-        ? S.sites.filter(s => C.sitePeering(s) === location) : S.sites.filter(s => s.kind === 'city');
-      if (!sites.length) notes.push(C.rname(r.id) +
-        ': no matching on-premises location is recorded; the connection uses an unspecified site.');
-      const attachments = sites.length ? sites : [{ id: 'circuit-' + (location || r.id),
-        name: 'Site not specified' }];
-      attachments.forEach(site => {
-        if (!result.onprem.some(s => s.id === site.id)) {
-          result.onprem.push({ id: site.id, name: site.name || C.siteName(site) });
-        }
-        const id = site.id + '-' + type + '-' + (location || '');
-        let connection = result.hybrid_connections.find(c => c.id === id);
-        if (!connection) {
-          connection = { id, type, site: site.id,
-            name: type === 'vpn' ? 'Site-to-site VPN' : e.hybridUse, connects_to: [] };
-          if (location) Object.assign(connection, { peering_location: location, connection: 'provider' });
-          result.hybrid_connections.push(connection);
-        }
-        if (!connection.connects_to.includes(target)) connection.connects_to.push(target);
-        // Reusing a circuit also requires the existing Full-Platform region's attachment.
-        if (e.hybrid === 'Reuse') e.hubConnections.forEach(id => {
-          if (S.current.some(c => c.id === id && c.hub) && !connection.connects_to.includes(id)) connection.connects_to.push(id);
-        });
+      const targets = [target];
+      if (e.hybrid === 'Reuse' && type === 'vpn') e.hubConnections.forEach(id => {
+        if (S.current.some(c => c.id === id && c.hub) && !targets.includes(id)) targets.push(id);
       });
+      addHybrid(type, location, targets, type === 'vpn' ? 'Site-to-site VPN' : e.hybridUse);
     });
     notes.push('Firewall and DNS symbols represent the capability choices in the plan, not a confirmed product selection.');
-    notes.push('Current-region services are shown only where required by a selected new region. No other existing services are assumed.');
+    notes.push('Current-region firewall and DNS symbols follow the profile defaults; gateways follow each region\'s primary circuit. These are planning defaults, not an inventory of deployed products.');
+    notes.push('On-premises path matching uses saved or nearest estimated peering paths. Peering-location entries are not datacenters; unmatched connections are explicitly labelled as unspecified.');
     return result;
   }
 

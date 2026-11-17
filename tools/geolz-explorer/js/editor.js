@@ -347,6 +347,12 @@ function patternChange(i, next) {
 // Full-Platform region stays cleared). Undo brings a removed link back.
 function remoteHubChange(i, previous) {
   const region = spec.regions[i], removed = unlinkRemoteHub(spec, region, previous);
+  const redundant = (spec.region_links || []).some(l => l.kind === 'spoke-hub' &&
+    l.from === region.id && l.to === region.remote_hub);
+  if (region.pattern === 'remote-hub' && redundant) {
+    setSpokeLink(spec, region.id, region.remote_hub, 'spoke-hub', false);
+    removed.push('additional peering to the new service-provider hub (already connected)');
+  }
   const added = linkRemoteHub(spec, region, false);
   const parts = [removed.length && `removed: ${removed.join(', ')}`, added.length && `added: ${added.join(', ')}`];
   if (removed.length || added.length) ui.status = { key: 'p:' + region.id, text: `${region.name} — ` +
@@ -381,7 +387,25 @@ function linksTab() {
   const off = vwan ? ' disabled title="Virtual WAN links the hubs of each Standard virtual WAN"' : '';
   const label = allHubsLinked(spec) ? 'Disconnect all hubs' : 'Connect all hubs';
   return `<h3>Hub links</h3><button data-act="connect-all"${off}>${label}</button>${editStatus('links')}` +
-    linkGrid(vwan);
+    linkGrid(vwan) + '<h3>Remote-region spoke peerings</h3>' +
+    '<div class="hint left">Additional global VNet peerings do not change the service-provider hub or enable gateway transit. Direct spoke peering bypasses hub firewalls; hub peering needs route tables and forwarded traffic.</div>' +
+    spec.regions.filter(r => r.pattern === 'remote-hub').map(spokePeeringFields).join('');
+}
+function spokePeeringFields(remote) {
+  const options = spec.regions.filter(r => r.id !== remote.id).flatMap(target =>
+    [...(hasHub(target) ? ['spoke-hub'] : []), 'spoke-peering'].map(kind => {
+      const hub = kind === 'spoke-hub', implicit = hub && target.id === remote.remote_hub && !isVwan(spec);
+      const checked = implicit || (spec.region_links || []).some(l => l.kind === kind &&
+        (hub ? l.from === remote.id && l.to === target.id : sameLink(l, remote.id, target.id)));
+      const name = `Global VNet peering: ${remote.name} spokes to ${target.name} ${hub ? 'hub' : 'spokes'}`;
+      const isolated = target.pattern === 'disconnected', off = isolated || hub && (implicit || isVwan(spec));
+      const hint = isolated ? ' (Governance-Only: isolated)' : implicit ? ' (service-provider hub)'
+        : hub && isVwan(spec) ? ' (managed virtual hub: VNet connection required)' : '';
+      return `<label><input type="checkbox" data-spoke-link="${remote.id}|${target.id}|${kind}"
+        aria-label="${esc(name)}"${checked ? ' checked' : ''}${off ? ' disabled' : ''}>${esc(target.name)}
+        ${hub ? 'hub VNet' : 'workload spokes'}${hint}</label>`;
+    }));
+  return `<fieldset><legend>${esc(remote.name)} spokes</legend><div class="checks">${options.join('')}</div></fieldset>`;
 }
 // Hub × hub grid: a tick box per pair in the upper triangle (rows: full names; columns: short names, full name as
 // tooltip). Scrolls sideways when wide; the first column stays put (styles.css).
@@ -470,7 +494,9 @@ function gridCell(site, hub) {
 function addSelect(site, hub, here) {
   const others = hybridConnections(spec).filter(c => c.site === site.id && !here.includes(c))
     .map(c => [`link:${c.id}`, `Connect ${connectionName(spec, c)} here`]);
-  const opts = [['', '+'], ...others, ['new:expressroute', 'New ExpressRoute circuit'], ['new:vpn', 'New VPN']];
+  const er = peeringGroups().some(([, locations]) => locations.length)
+    ? [['new:expressroute', 'New ExpressRoute circuit']] : [];
+  const opts = [['', '+'], ...others, ...er, ['new:vpn', 'New VPN']];
   return `<select class="add" data-addconn="${esc(site.id)}|${esc(hub.id)}" aria-label="Add a connection from
     ${esc(site.name)} to ${esc(hub.name)}">${opts.map(([v, l]) => `<option value="${esc(v)}">${esc(l)}`).join('')}
     </select>`;
@@ -541,7 +567,8 @@ function connectionFields(c, i) {
 }
 function circuitFields(c, i) {
   const p = `hybrid_connections.${i}`, shown = resiliencyOf(c);
-  const opts = Object.entries(RESILIENCY).map(([k, v]) => `<option value="${k}"${k === shown ? ' selected' : ''}>${v}`);
+  const opts = Object.entries(RESILIENCY).map(([k, v]) => `<option value="${k}"${k === shown ? ' selected' : ''}
+    ${peeringGroups(k).some(([, locations]) => locations.length) ? '' : 'disabled'}>${v}`);
   return textField('Circuit name', `${p}.name`, c.name || '') +
     `<label>Resiliency<select data-resiliency="${i}">${opts.join('')}</select></label>` + resiliencyCompare(c, shown) +
     locationField(p, c.peering_location, shown) + providerFields(c, p);
@@ -565,12 +592,13 @@ function resiliencyCompare(c, shown) {
 // Peering location dropdown grouped by geopolitical region (catalog.js), only the locations matching the
 // resiliency (Metro: names ending in " Metro"); an unknown or mismatched current name stays selected.
 function locationField(p, current = 'Unspecified', resiliency) {
-  const groups = ER_LOCATIONS.geopolitical.map(g => [g.name, locationsFor(g, resiliency)]).filter(([, l]) => l.length);
+  const groups = peeringGroups(resiliency).filter(([, l]) => l.length);
   const known = groups.some(([, list]) => list.includes(current));
   const html = groups.map(([name, list]) => `<optgroup label="${esc(name)}">` + list.map(l =>
     `<option value="${esc(l)}"${l === current ? ' selected' : ''}>${esc(l)}`).join('') + '</optgroup>');
-  const own = known ? '' : `<option value="${esc(current)}" selected>${esc(current)}`;
-  return `<label>Peering location<select data-path="${p}.peering_location">${own}${html.join('')}</select></label>`;
+  const own = known ? '' : `<option value="${esc(current)}" selected${plannerPeeringLocations !== null ? ' disabled' : ''}>${esc(current)}</option>`;
+  return `<label>Peering location<select data-path="${p}.peering_location">${own}${html.join('')}</select></label>` +
+    (plannerPeeringLocations !== null ? '<div class="hint">Only locations added in Scope are available. Add a Standard or Metro location there first.</div>' : '');
 }
 /* ===== ACTIONS ===== */
 const newSite = () => ({ id: 's' + Date.now().toString(36), name: 'New site' });
