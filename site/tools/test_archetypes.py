@@ -76,7 +76,7 @@ class ArchetypeTests(unittest.TestCase):
         self.assertIn("Record the management group each workload's subscriptions will sit under.", requirements)
         self.assertIn("SQL Server Always On on VMs", requirements)
         self.assertIn("Managed replication on the Microsoft backbone", requirements)
-        for path in ("whitepaper/exec/pages/08-archetypes.html", "word/brief.md", "decks/exec/e.js"):
+        for path in ("whitepaper/exec/pages/08-archetypes.html", "decks/exec/e.js"):
             self.assertNotIn("Internal (Corp)", self.read(path))
 
     def test_retired_patterns_accept_current_names_and_labels(self):

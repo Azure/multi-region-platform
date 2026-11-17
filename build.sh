@@ -6,7 +6,7 @@
 #   ./build.sh decks      build both PowerPoint decks in temp/, run decks/qa.py on each (not published)
 #   ./build.sh check      navigation, content drift, summary titles, color tokens, PDFs and PPTX files
 #   ./build.sh art        regenerate the art: city analogy, common-drivers figure, deck backgrounds (not part of "all")
-#   ./build.sh clean      delete build outputs (dist/ PDF, HTML, PPTX and DOCX files, whitepaper/out*, decks/out, assembled HTML)
+#   ./build.sh clean      delete build outputs (dist/ PDF, HTML and PPTX files, whitepaper/out*, decks/out, assembled HTML)
 #   ./build.sh data       refresh the Azure data that the multi-region planner reads: prices, then latency (not part of "all")
 #   ./build.sh latency    refresh only the latency data (needs GitHub, not prices.azure.com)
 set -euo pipefail
@@ -92,7 +92,7 @@ art() {
 # Only generated files go; anything else in dist/ is left alone.
 clean() {
   echo "== clean"
-  rm -f "$DIST"/*.pdf "$DIST"/*.html "$DIST"/*.pptx "$DIST"/*.docx
+  rm -f "$DIST"/*.pdf "$DIST"/*.html "$DIST"/*.pptx
   rm -f "$DECKS/$NAME-Full.pptx" "$DECKS/$NAME-Executive.pptx"
   rm -rf "$ROOT/whitepaper/out" "$ROOT/whitepaper/out-exec" "$ROOT/decks/out"
   rm -f "$ROOT/whitepaper/whitepaper.html" "$ROOT/whitepaper/executive.html"

@@ -60,7 +60,7 @@ module.exports = (pres, L) => {
       ['On-premises', 'Resolvers using the shared zone return the same answer.', 'The answer depends on which regional resolver receives the query.'],
     ];
     s.addTable(rows, { ...tableOptions, colW: [2.2, 4.965, 4.965], rowH: [0.4, 0.65, 0.45, 0.7, 0.7, 0.6, 0.6] });
-    L.decision(s, 'Use regional zones for local endpoints in DR or active/active. A global zone is an alternative if cross-region routing, latency, and record-update time meet the RTO.', 0.6, 6.15, 12.13, 0.7);
+    L.decision(s, 'Use regional zones for local endpoints in DR or active/active. A global zone is an alternative if cross-region routing, latency, and record-update time meet the RTO.', 0.6, 6.05, 12.13, 0.85);
     s.addNotes('DNS design must account for every resource under the chosen zone name. Regional zones require deliberate cross-region record availability and policy targeting. A global-zone design requires DNS updates during both failover and failback.');
   }
 

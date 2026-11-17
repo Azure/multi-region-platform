@@ -15,7 +15,6 @@ See [Building and publishing](../guides/building.md#generate-pdfs-directly) for 
 - `render.py --pdf [--exec]` — renders `out/whitepaper.pdf` (or `out-exec/executive.pdf`; vector, tagged, with bookmarks) and PNG previews with Playwright/Chromium. It is strict: it prints content that overflows a page and layout warnings from `layout.js` (a connector, `data-toc`, or `data-figref` target that does not exist), and exits 1 when either list is not empty. Add `--no-strict` to look at a draft.
 - `art.py` — generates the vector cover, contents, and back-cover artwork (and the Microsoft logo mark; swap in the official brand asset if required).
 - `fonts/` — Open Sans (SIL OFL), used as an openly licensed stand-in for Segoe UI.
-- `assets/` — the five original figures from the source Word document, for reference.
 
 Type and color rules: no text under 8 px in figures, running HTML text at 9 px or more, and 4.5:1 contrast for small text. Mark text that sits on SVG artwork with `data-on-art`, and icon glyph text with `aria-hidden="true"`.
 

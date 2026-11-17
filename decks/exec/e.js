@@ -268,9 +268,9 @@ module.exports = (pres, L) => {
       L.txt(s, d, x + 0.18, y + 0.76, w - 0.36, 1.0, { fontSize: 12, color: C.text });
       L.box(s, x + 0.18, y + 1.8, w - 0.36, 0.008, { fill: C.soft, r: 0 });
       L.txt(s, 'TYPICAL PATTERN', x + 0.18, y + 1.88, 2, 0.2, { fontSize: 9, bold: true, color: C.b600, charSpacing: 1.5 });
-      L.txt(s, p, x + 0.18, y + 2.1, w - 0.36, 0.8, { fontSize: 12, color: C.ink });
-      L.box(s, x, y + 2.95, w, 0.95, { fill: C.wash, r: 0.12 }); L.box(s, x, y + 2.95, w, 0.3, { fill: C.wash, r: 0 });
-      let cx = x + 0.15, cy = y + 3.02;
+      L.txt(s, p, x + 0.18, y + 2.1, w - 0.36, 1.08, { fontSize: 12, color: C.ink });
+      L.box(s, x, y + 3.25, w, 0.65, { fill: C.wash, r: 0.12 }); L.box(s, x, y + 3.25, w, 0.3, { fill: C.wash, r: 0 });
+      let cx = x + 0.15, cy = y + 3.32;
       chips.forEach(ch => { const cw = chipW(ch, 10); if (cx + cw > x + w - 0.1) { cx = x + 0.15; cy += 0.3; } L.chip(s, ch, cx, cy, { w: cw, fill: C.b100, color: C.b700, size: 10 }); cx += cw + 0.06; });
     });
     L.txt(s, 'Each workload or group gets one archetype. Traffic between its regional instances does not change it.', 0.6, 5.66, 12.13, 0.25, { fontSize: 10, color: C.muted, valign: 'middle' });

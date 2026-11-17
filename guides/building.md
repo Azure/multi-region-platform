@@ -45,11 +45,11 @@ Every target stops at the first failing step and exits with a non-zero status. `
 | Full and executive PowerPoint decks | `temp/Adaptable-Multi-Region-Azure-Platform-Full.pptx` and `-Executive.pptx` |
 | CAF-ready articles | `dist/caf/` after `python3 site/tools/export_caf.py` |
 
-`dist/` is git-ignored. The site target copies existing PDFs from `dist/` into `docs/downloads/`; it does not generate them. Run `./build.sh pdf` before `./build.sh site` when PDF content changes. PowerPoint decks stay local and are not published as website downloads. PDF and PPTX are the supported document formats. Word generation and Pandoc are retired; `word/` is historical source, excluded from builds and checks.
+`dist/` is git-ignored. The site target copies existing PDFs from `dist/` into `docs/downloads/`; it does not generate them. Run `./build.sh pdf` before `./build.sh site` when PDF content changes. PowerPoint decks stay local and are not published as website downloads. PDF whitepapers and PPTX presentations are the only supported document formats. Word generators and their source files have been removed; Pandoc is not required.
 
 `.gitattributes` marks PDF and PPTX files as binary so Git does not normalize document bytes or display compressed document streams as text diffs. The published PDFs in `docs/downloads/` are committed; the distribution copies in `dist/` and local decks in `temp/` remain ignored.
 
-`./build.sh clean` removes the PDF, HTML, PPTX, and DOCX files in `dist/`, the two generated decks in `temp/`, `whitepaper/out`, `whitepaper/out-exec`, the two assembled HTML files in `whitepaper/`, and `decks/out`. Other files in `dist/` and `temp/` are left alone.
+`./build.sh clean` removes the PDF, HTML, and PPTX files in `dist/`, the two generated decks in `temp/`, `whitepaper/out`, `whitepaper/out-exec`, the two assembled HTML files in `whitepaper/`, and `decks/out`. Other files in `dist/` and `temp/` are left alone.
 
 ## Generate PDFs directly
 
