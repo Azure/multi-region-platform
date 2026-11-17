@@ -212,6 +212,23 @@
     notice.hidden = !text;
   }
 
+  function loadFrame() {
+    if (frame) return;
+    message('Loading the networking design tool...');
+    frame = document.createElement('iframe');
+    frame.title = 'Advanced Networking Design Tool - Geo Landing Zone Connectivity Explorer';
+    frame.src = 'tools/geolz-explorer/index.html?embed=planner';
+    frame.addEventListener('load', () => {
+      ready = Boolean(frame.contentWindow.GeoLZPlanner);
+      syncTheme();
+      if (ready) {
+        if (M.ui.tab === 'review') preparePrint();
+        else syncWorkbook();
+      } else message('The networking design tool could not be loaded. Reload the page to retry.');
+    });
+    body.appendChild(frame);
+  }
+
   function mount(node) {
     if (!host) {
       host = node;
@@ -242,19 +259,7 @@
         button.textContent = expanded ? 'Hide Advanced Networking Design Tool' : 'Show Advanced Networking Design Tool';
         body.hidden = !expanded;
         syncLayout();
-        if (!frame) {
-          message('Loading the networking design tool...');
-          frame = document.createElement('iframe');
-          frame.title = 'Advanced Networking Design Tool - Geo Landing Zone Connectivity Explorer';
-          frame.src = 'tools/geolz-explorer/index.html?embed=planner';
-          frame.addEventListener('load', () => {
-            ready = Boolean(frame.contentWindow.GeoLZPlanner);
-            syncTheme();
-            if (ready) syncWorkbook();
-            else message('The networking design tool could not be loaded. Reload the page to retry.');
-          });
-          body.appendChild(frame);
-        }
+        loadFrame();
         if (expanded && ready) frame.contentWindow.fit();
         if (expanded) host.scrollIntoView({ block: 'start' });
       });
@@ -263,7 +268,10 @@
     host.dataset.tab = M.ui.tab;
     if (M.ui.tab !== 'design') setFull(false);
     syncLayout();
-    syncWorkbook();
+    if (M.ui.tab === 'review' && M.core.S.regions.length) {
+      loadFrame();
+      if (ready) preparePrint();
+    } else syncWorkbook();
   }
 
   function preparePrint() {

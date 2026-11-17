@@ -140,7 +140,7 @@
       if (t) { K.setQuiet(true); t.focus({ preventScroll: true }); K.setQuiet(false); if (caret && textual(t)) { try { t.setSelectionRange(caret[0], caret[1]); } catch (e) { /* not a text field */ } } }
     }
     root.dataset.ready = '1';
-    if ((ui.tab === 'capability' && ui.capability === 'latency') || (ui.tab === 'design' && ui.desMap)) M.latencyMap.mount();
+    if (el('pl-latency-map')) M.latencyMap.mount();
     if (ui.anchor) { const target = document.getElementById(ui.anchor); if (target) target.scrollIntoView({ block: 'start' }); ui.anchor = ''; }
     M.network.mount(el('pl-network'));
   }

@@ -157,11 +157,11 @@ def main():
 
             failed = browser.new_page()
             failed.route("**/assets/planner-map.json", lambda route: route.fulfill(status=503, body="Unavailable"))
-            failed.goto(url)
+            failed.goto(url.replace("#latency", "#review"))
             failed.wait_for_selector('#planner[data-ready="1"]')
             failed.evaluate("""() => {
               const C=MRP.core, s=C.blank(); s.current=[{id:'westeurope',hub:true}];
-              s.regions=['italynorth'].map(C.newRegion); C.replace(s); MRP.kit.hooks.render();
+              s.regions=['italynorth'].map(C.newRegion); C.replace(s); MRP.ui.tab='review'; MRP.kit.hooks.render();
             }""")
             failed.get_by_text("Geographic boundaries could not be loaded", exact=False).wait_for()
             assert failed.locator(".pl-map-node").count() == 2

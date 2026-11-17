@@ -687,7 +687,9 @@
 
 /* ───────── Review + export */
 #planner #pl-network { display: none; }
-#planner #pl-network[data-tab="design"] { display: block; }
+#planner #pl-network[data-tab="design"],
+#planner #pl-network[data-tab="review"] { display: block; }
+#planner #pl-network[data-tab="review"] .pl-noprint { display: none; }
 #planner .pl-network { padding: 0 32px 32px; }
 #planner .pl-network h2 { margin: 0 0 8px; font-size: 20px; }
 #planner #pl-network-toggle { height: auto; min-height: 32px; white-space: normal; text-align: left; }
@@ -698,6 +700,10 @@ html.network-full, html.network-full body { overflow: hidden; }
 #planner #pl-network-body.is-full { position: fixed; inset: 0; z-index: 1000; margin: 0; padding: 8px 12px 12px; display: flex; flex-direction: column; background: var(--bg, var(--pl-surface)); }
 #planner #pl-network-body.is-full iframe { flex: 1 1 auto; height: auto; min-height: 0; }
 #planner #pl-network-print { display: none; }
+#planner #pl-network[data-tab="review"][data-print-ready="1"] #pl-network-print { display: block; }
+@media screen {
+  #planner #pl-network[data-tab="review"] .pl-network-definitions { display: none; }
+}
 #planner .pl-network-definitions { break-before: page; }
 #planner .pl-network-records { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
 #planner .pl-network-records > section { break-inside: avoid; }
@@ -891,7 +897,7 @@ html.network-full, html.network-full body { overflow: hidden; }
   #planner .pl-note-cell { margin-left: 32px; }
 }
 
-/* ───────── print: the records only */
+/* ───────── print: records, geographic overview, and networking design */
 @page { margin: 16mm 14mm; }
 .pl-print-head { display: none; }
 @media print {
@@ -909,6 +915,9 @@ html.network-full, html.network-full body { overflow: hidden; }
   #planner #pl-network[data-print-error="1"][data-tab="review"],
   #planner #pl-network[data-print-error="1"][data-tab="design"] { display: block; }
   #planner .pl-network { padding: 0; }
+  #planner .pl-review-map { break-before: page; break-after: page; break-inside: avoid; }
+  #planner .pl-review-map .pl-sec { margin-top: 0; }
+  #planner .pl-review-map svg { max-height: 170mm; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   #planner [data-print-ready="1"] #pl-network-print { display: block; break-before: page; }
   #planner #pl-network-print svg { max-width: 100%; max-height: 240mm; break-inside: avoid; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   #planner .pl-panel { padding: 0; min-height: 0; }

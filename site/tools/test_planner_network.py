@@ -74,6 +74,59 @@ def check_workloads_above_platform(frame):
                 assert not (vertical or horizontal), (route, node)
 
 
+def check_review_visuals(browser, url):
+    page = browser.new_page(viewport={"width": 1440, "height": 1100})
+    errors = []
+    page.on("pageerror", lambda error: errors.append(str(error)))
+    page.goto(url.replace("#design", "#review"))
+    page.wait_for_selector('#planner[data-ready="1"]')
+    page.evaluate("""() => {
+      MRP.core.replace(JSON.parse(JSON.stringify(MRP.EXAMPLE)));
+      MRP.kit.hooks.render();
+    }""")
+    page.wait_for_selector(".pl-review-map .pl-map-land")
+    page.wait_for_selector('#pl-network[data-print-ready="1"] #pl-network-print svg')
+    assert page.locator("#pl-network").is_visible()
+    assert page.locator("#pl-network iframe").is_hidden()
+    assert page.locator("#pl-network-toggle").is_hidden()
+    expected_regions = page.evaluate("MRP.core.S.current.length + MRP.core.S.regions.length")
+    assert page.locator(".pl-review-map .pl-map-node.current, .pl-review-map .pl-map-node.candidate").count() == expected_regions
+    expected_peers = page.evaluate("new Set(MRP.core.S.sites.map(s => MRP.core.sitePeering(s)).filter(Boolean)).size")
+    assert page.locator(".pl-review-map .pl-map-node.peering").count() == expected_peers
+    assert "Switzerland North" in page.locator(".pl-review-map").inner_text()
+    frame = page.locator("#pl-network iframe").element_handle().content_frame()
+    assert page.locator("#pl-network-print .region").count() == frame.locator("#diagram .region").count()
+    assert page.locator("#pl-network-print .region").count() > 0
+    assert page.locator("#pl-network-print .pl-network-definitions").is_hidden()
+
+    # Review always fits every location, independently of interactive focus and zoom.
+    overview = page.locator(".pl-review-map .pl-map-svg").inner_html()
+    page.get_by_role("tab", name="Check 4", exact=False).click()
+    page.locator('[data-act="evidence"][data-arg="latency"]').click()
+    page.locator("#pl-map-focus").select_option("r:swedencentral")
+    page.get_by_role("button", name="Zoom map in", exact=True).click()
+    page.get_by_role("tab", name="Review + export", exact=False).click()
+    assert page.locator(".pl-review-map .pl-map-svg").inner_html() == overview
+    assert page.locator(".pl-review-map .pl-map-node.dim").count() == 0
+    page.reload()
+    page.wait_for_selector(".pl-review-map .pl-map-land")
+    page.wait_for_selector('#pl-network[data-print-ready="1"] #pl-network-print svg')
+
+    for theme in ("light", "dark"):
+        page.evaluate("theme => document.documentElement.dataset.theme = theme", theme)
+        for width in (375, 768, 1440):
+            page.set_viewport_size({"width": width, "height": 1100})
+            assert page.evaluate("document.documentElement.scrollWidth <= innerWidth"), (theme, width)
+    page.set_viewport_size({"width": 1440, "height": 1100})
+    page.emulate_media(media="print")
+    assert page.locator(".pl-review-map .pl-map-svg").is_visible()
+    assert page.locator("#pl-network-print svg").is_visible()
+    assert page.locator("#pl-network-print .pl-network-definitions").is_visible()
+    assert page.locator(".pl-review-map").evaluate("e => getComputedStyle(e).breakBefore") == "page"
+    assert not errors, errors
+    page.close()
+
+
 def check_current_profile_and_circuit_inheritance(browser, url):
     page = browser.new_page(viewport={"width": 1440, "height": 1100})
     page.goto(url)
@@ -175,6 +228,7 @@ def main():
     try:
         with sync_playwright() as playwright, tempfile.TemporaryDirectory() as artifacts:
             browser = playwright.chromium.launch()
+            check_review_visuals(browser, url)
             check_remote_spoke_peerings(browser, url)
             check_scope_peering_options(browser, url)
             check_current_profile_and_circuit_inheritance(browser, url)
@@ -330,7 +384,7 @@ def main():
             page.evaluate("MRP.kit.hooks.render()")
             assert explorer.locator("#title").inner_text() == "Custom network print test"
             page.get_by_role("tab", name="Review + export", exact=False).click()
-            assert not page.locator("#pl-network").is_visible()
+            assert page.locator("#pl-network-print svg").is_visible()
             assert not page.locator("body").evaluate("e => e.classList.contains('network-wide')")
             assert not page.locator("#side-nav").is_visible()
             frame.evaluate("spec.title = 'Latest design on review'; onSpecChange(true)")
@@ -491,6 +545,10 @@ def main():
                 lambda route: route.fulfill(status=503, body="Tool unavailable"))
             failed.goto(url)
             failed.wait_for_selector('#planner[data-ready="1"]')
+            failed.evaluate("""() => {
+              MRP.core.replace(JSON.parse(JSON.stringify(MRP.EXAMPLE)));
+              MRP.kit.hooks.render();
+            }""")
             failed.get_by_role("button", name="Enable Advanced Networking Design Tool", exact=True).click()
             failed.get_by_text("The networking design tool could not be loaded.", exact=False).wait_for()
             assert not failed.evaluate("MRP.network.preparePrint()")
@@ -498,6 +556,9 @@ def main():
             failed.emulate_media(media="print")
             assert failed.locator("#pl-network-notice").is_visible()
             assert not failed.locator("#pl-network-print").is_visible()
+            failed.emulate_media(media="screen")
+            assert failed.locator("#pl-network-notice").is_visible()
+            assert failed.locator(".pl-review-map .pl-map-node").count() > 0
             browser.close()
     finally:
         server.shutdown()

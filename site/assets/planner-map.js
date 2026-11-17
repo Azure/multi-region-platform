@@ -61,7 +61,7 @@
   }
 
   // Cut at the largest empty longitude gap, so selections either side of the date line stay together.
-  function projection(points) {
+  function projection(points, mapState) {
     const longitudes = points.map(p => (p.lon + 360) % 360).sort((a, b) => a - b);
     let gap = -1, start = longitudes[0];
     longitudes.forEach((v, i) => {
@@ -76,7 +76,7 @@
     // and a minimum span keeps one or two nearby locations from zooming in to street level.
     const width = Math.max(8, Math.max(...xs) - Math.min(...xs));
     const height = Math.max(5, Math.max(...ys) - Math.min(...ys));
-    const scale = Math.min(680 / (width * correction), 400 / height) * state.zoom;
+    const scale = Math.min(680 / (width * correction), 400 / height) * mapState.zoom;
     const xy = (lon, lat) => [n(500 + (wrap(lon) - midX) * correction * scale), n(270 + (-lat - midY) * scale)];
     return { xy, wrap, scale, correction, midX };
   }
@@ -118,9 +118,9 @@
   // Layout, in viewBox units. Labels are placed in order of importance, each where it collides least:
   // names first (beside their marker), then latency values (on their own line, never far from it).
   // A value that finds no free spot on or right beside its line becomes a small dot that shows the value on hover or focus.
-  function mapBody(data) {
+  function mapBody(data, mapState = state) {
     if (!data.points.length) return '<p class="pl-muted">No selected locations have coordinates. Add reference regions in Scope or locations above.</p>';
-    const project = projection(data.points), boxes = [], marks = [];
+    const project = projection(data.points, mapState), boxes = [], marks = [];
     const W = 1000, H = 540, PAD = 2;
     const hit = (a, b) => a.x < b.x + b.w + PAD && a.x + a.w + PAD > b.x && a.y < b.y + b.h + PAD && a.y + a.h + PAD > b.y;
     const inside = b => b.x >= 4 && b.y >= 4 && b.x + b.w <= W - 4 && b.y + b.h <= H - 4;
@@ -144,7 +144,7 @@
     const cx0 = points.reduce((s, p) => s + p.xy[0], 0) / points.length, cy0 = points.reduce((s, p) => s + p.xy[1], 0) / points.length;
 
     // Lines bow away from the middle of the selection, so they fan out instead of crossing in the centre.
-    const visible = data.links.filter(l => state.layers[l.layer] && (!state.focus || l.a.id === state.focus || l.b.id === state.focus));
+    const visible = data.links.filter(l => mapState.layers[l.layer] && (!mapState.focus || l.a.id === mapState.focus || l.b.id === mapState.focus));
     const curves = visible.map(l => {
       const a = byId.get(l.a.id).xy, b = byId.get(l.b.id).xy;
       const dx = b[0] - a[0], dy = b[1] - a[1], length = Math.max(1, Math.hypot(dx, dy)), nx = -dy / length, ny = dx / length;
@@ -167,7 +167,9 @@
       const moved = Math.hypot(p.at[0] - x, p.at[1] - y) > 3;
       const location = p.region ? C.info(p.region).geo + ' geography' : p.kind === 'peering' ? 'ExpressRoute peering location' : 'Customer city';
       const lx = Math.max(box.x, Math.min(box.x + w, x)), ly = Math.max(box.y, Math.min(box.y + h, y));
-      return `<g class="pl-map-node ${p.kind}${state.focus && state.focus !== p.id ? ' dim' : ''}" role="button" tabindex="0" data-map-act="focus" data-map-arg="${esc(p.id)}" aria-pressed="${state.focus === p.id}" aria-label="${esc(p.name + ', ' + location + '. Focus connections.')}">` +
+      return `<g class="pl-map-node ${p.kind}${mapState.focus && mapState.focus !== p.id ? ' dim' : ''}"` +
+        (mapState === state ? ` role="button" tabindex="0" data-map-act="focus" data-map-arg="${esc(p.id)}" aria-pressed="${state.focus === p.id}"` : '') +
+        ` aria-label="${esc(p.name + ', ' + location + (mapState === state ? '. Focus connections.' : ''))}">` +
         `<title>${esc(p.name + ' · ' + location + ' · approximate metro')}</title>` +
         (moved ? `<line class="pl-map-tether" x1="${p.at[0]}" y1="${p.at[1]}" x2="${x}" y2="${y}"/><circle class="pl-map-true" cx="${p.at[0]}" cy="${p.at[1]}" r="2"/>` : '') +
         (Math.hypot(lx - x, ly - y) > 12 ? `<line class="pl-map-leader" x1="${x}" y1="${y}" x2="${n(lx)}" y2="${n(ly)}"/>` : '') +
@@ -207,14 +209,16 @@
       return `<path class="pl-map-link ${l.layer}${value ? '' : ' unknown'}" d="M${a}Q${n(c[0])},${n(c[1])} ${b}"><title>${esc(title)}</title></path>`;
     }).join('');
     const tip = dots ? ` ${dots} value${dots === 1 ? ' is' : 's are'} shown as a dot where the map is crowded: hover or focus a dot, focus a location, or zoom in.` : '';
-    return `<svg class="pl-map-svg" viewBox="0 0 ${W} ${H}" role="group" aria-label="Selected regions, peering locations and latency connections">` +
+    return `<svg class="pl-map-svg" viewBox="0 0 ${W} ${H}" role="group" aria-label="Plan regions, peering locations and latency connections">` +
       basemap(project) + connections + values.join('') + markers.join('') + '</svg>' +
-      `<p class="pl-cap pl-map-count" role="status">${points.length} locations · ${visible.length} visible comparisons. Select a marker to focus; select it again to clear.${tip}</p>`;
+      `<p class="pl-cap pl-map-count" role="status">${points.length} locations · ${visible.length} visible comparisons.${mapState === state ? ' Select a marker to focus; select it again to clear.' : ''}${tip}</p>`;
   }
 
-  function view() {
+  function view(overview = false) {
     const data = model();
-    return K.section('Geographic view', `<div class="pl-map" id="pl-latency-map"><div class="pl-map-tools">` +
+    const mapState = overview ? { focus: '', zoom: 1, layers: Object.fromEntries(layers.map(([id, , on]) => [id, on])) } : state;
+    return K.section(overview ? 'All regions and peering locations' : 'Geographic view', `<div class="pl-map" id="pl-latency-map">` +
+      (overview ? '' : `<div class="pl-map-tools">` +
       `<label for="pl-map-focus">Focus location</label><select class="pl-sel" id="pl-map-focus"><option value="">All selected locations</option>` +
       data.points.map(p => `<option value="${esc(p.id)}"${state.focus === p.id ? ' selected' : ''}>${esc(p.name)}</option>`).join('') + '</select>' +
       `<button class="pl-btn" type="button" data-map-act="zoom-in" aria-label="Zoom map in">+</button>` +
@@ -222,11 +226,11 @@
       `<button class="pl-btn" type="button" data-map-act="fit">Fit selections</button>` +
       `<button class="pl-btn" type="button" data-map-act="reset">Reset map</button></div>` +
       `<div class="pl-map-layers" role="group" aria-label="Map connection layers">${layers.map(([id, label]) =>
-        `<label class="pl-map-layer ${id}"><input type="checkbox" data-map-layer="${id}"${state.layers[id] ? ' checked' : ''}><span>${label}</span></label>`).join('')}</div>` +
+        `<label class="pl-map-layer ${id}"><input type="checkbox" data-map-layer="${id}"${state.layers[id] ? ' checked' : ''}><span>${label}</span></label>`).join('')}</div>`) +
       `<div class="pl-map-key">${[['current', 'Current region'], ['candidate', 'Candidate region'], ['peering', 'ExpressRoute peering'], ['city', 'Customer city']].map(([kind, label]) =>
         `<span class="${kind}"><i aria-hidden="true"></i>${label}</span>`).join('')}</div>` +
       (failure ? K.mb('warning', esc(failure)) : !geometry ? '<p class="pl-cap" role="status">Loading geographic boundaries…</p>' : '') +
-      `<div class="pl-map-stage">${mapBody(data)}</div>` +
+      `<div class="pl-map-stage">${mapBody(data, mapState)}</div>` +
       (data.missing.length ? K.mb('warning', 'Not plotted: ' + esc(data.missing.join(', ')) + '. These locations have no reference coordinates; their table entries are unchanged.') : '') +
       `<p class="pl-fn">Values use the same evidence as the Latency tables: ~ estimated or derived, * edited. Hover or focus a latency badge for the source, direction and distance. City links show only the provider-network leg, not edited end-to-end totals. Lines are comparisons, not circuits or physical routes; shared metros are visually offset. Boundaries: Natural Earth (public domain), generalized and not legal boundaries. No capital labels.</p></div>`,
       { desc: 'Your Scope regions and Latency locations, mapped without another comparison table. Region tooltips identify the Azure geography.' });
@@ -245,7 +249,7 @@
       failure = 'Geographic boundaries could not be loaded (' + error.message + '). Locations and latency comparisons remain available. Serve the published docs folder over HTTP and reload to retry.';
     } finally {
       loading = false;
-      if (M.ui.tab === 'latency' || M.ui.tab === 'design') K.hooks.render();
+      if (document.getElementById('pl-latency-map')) K.hooks.render();
     }
   }
   function patch(root) {

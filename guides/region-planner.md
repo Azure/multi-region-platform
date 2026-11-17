@@ -121,6 +121,8 @@ Current-to-candidate and peering-to-current links start on; peering-to-candidate
 
 The map fits the selected footprint worldwide, including date-line crossings. It uses a local generalized Natural Earth basemap (public domain; boundaries are not legal boundaries). No external map service, API key, or runtime map request is needed.
 
+**Review + export** always shows a fitted overview of every current and candidate region, including unselected or excluded candidates, and the plan's peering locations and customer cities. It does not inherit focus or zoom from the interactive map. Printing gives this geographic overview its own page.
+
 From the repository root (Python commands also work in PowerShell with backslash paths):
 
 ```bash
@@ -201,8 +203,9 @@ definition change. **Reset from plan** discards them explicitly. They do not mod
 are not saved to the standalone explorer's browser autosave. JSON Export can preserve a refined diagram;
 Excel and JSON exports of the plan continue to contain its authoritative decisions.
 
-Once enabled, printing Regional design
-or using **Print** in Review + export includes its latest full diagram and inherited records on separate pages, in a light theme,
+**Review + export** automatically loads and shows the latest advanced networking design diagram, even if the editor was never enabled in Regional design. The diagram includes current regions and selected regional designs; the geographic overview also retains candidates not selected for design. Tool-only refinements are preserved when moving between these views.
+
+Once enabled, printing Regional design includes the latest full diagram. Using **Print** in Review + export includes the geographic overview, networking diagram, and inherited records on separate pages, in a light theme,
 without the explorer's controls or editor. Zoom and pan do not crop the printed design; selected paths and
 layer visibility are retained. A normal site build publishes the explorer under `docs/tools/geolz-explorer/`.
 
