@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1365 480" width="1365" height="480" font-family="'Segoe UI Variable Text', 'Segoe UI', Aptos, Inter, 'Helvetica Neue', Arial, sans-serif" role="img" aria-labelledby="t d"><title id="t">Platform readiness: advance planning and workload adoption</title><desc id="d">Workload Landing Zone Archetypes describe what applications require; Platform Services profiles describe what the platform provides; Regional Qualification evaluates candidate regions. Together they produce governed regional options, which are revalidated against each application at onboarding.</desc>
+<defs>
+<filter id="sh" x="-10%" y="-10%" width="120%" height="130%" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000" flood-opacity="0.08"/><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0B2340" flood-opacity="0.07"/></filter>
+<marker id="m0" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0.5 0.8L9.5 5L0.5 9.2z" fill="#0B7A75"/></marker>
+<marker id="m1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0.5 0.8L9.5 5L0.5 9.2z" fill="#8A8A8A"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<text x="24.0" y="24.0" font-size="12.5" font-weight="600" fill="#0F6CBD" text-anchor="start" letter-spacing="1.6">PLATFORM READINESS · ADVANCE PLANNING</text>
+<text x="1341.0" y="24.0" font-size="12.5" font-weight="600" fill="#616161" text-anchor="end" letter-spacing="1.6">DEFINE WHAT THE PLATFORM PROVIDES, DESCRIBE REQUIREMENTS, QUALIFY REGIONS</text>
+<path d="M24.0 36.0L1341.0 36.0" fill="none" stroke="#E0E0E0" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="24.0" y="52.0" width="401.7" height="203.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" filter="url(#sh)"/>
+<rect x="44.0" y="70.0" width="40.0" height="40.0" rx="8" fill="#EBF3FC" stroke="none" stroke-width="1"/>
+<g transform="translate(52.0 78.0) scale(1.2000)" fill="none" stroke="#0F6CBD" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="6.5"/><circle cx="10" cy="10" r="2.3" fill="#0F6CBD"/><path d="M10 1.5v2.5M10 16v2.5M1.5 10H4M16 10h2.5"/></g>
+<text x="98.0" y="96.0" font-size="18" font-weight="600" fill="#242424" text-anchor="start">Platform Services profiles</text>
+<text x="44.0" y="136.0" font-size="14.5" font-weight="400" fill="#616161" text-anchor="start">Describe <tspan font-weight="600" fill="#0E4F8F">what</tspan> <tspan font-weight="600" fill="#0E4F8F">the</tspan> <tspan font-weight="600" fill="#0E4F8F">platform</tspan> <tspan font-weight="600" fill="#0E4F8F">provides</tspan> to support</text>
+<text x="44.0" y="157.0" font-size="14.5" font-weight="400" fill="#616161" text-anchor="start">those archetypes in a region.</text>
+<rect x="44.0" y="175.0" width="149.6" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#D1D1D1" stroke-width="1.2"/>
+<circle cx="60.0" cy="188.0" r="4" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="70.0" y="192.7" font-size="13" font-weight="600" fill="#424242" text-anchor="start">Governance-Only</text>
+<rect x="201.6" y="175.0" width="141.9" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#D1D1D1" stroke-width="1.2"/>
+<circle cx="217.6" cy="188.0" r="4" fill="#0F6CBD" stroke="none" stroke-width="1"/>
+<text x="227.6" y="192.7" font-size="13" font-weight="600" fill="#424242" text-anchor="start">Remote platform</text>
+<rect x="44.0" y="209.0" width="143.4" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#D1D1D1" stroke-width="1.2"/>
+<circle cx="60.0" cy="222.0" r="4" fill="#0E4F8F" stroke="none" stroke-width="1"/>
+<text x="70.0" y="226.7" font-size="13" font-weight="600" fill="#424242" text-anchor="start">Minimal platform</text>
+<rect x="195.4" y="209.0" width="116.1" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#D1D1D1" stroke-width="1.2"/>
+<circle cx="211.4" cy="222.0" r="4" fill="#1B2F4E" stroke="none" stroke-width="1"/>
+<text x="221.4" y="226.7" font-size="13" font-weight="600" fill="#424242" text-anchor="start">Full platform</text>
+<rect x="481.7" y="52.0" width="401.7" height="203.0" rx="8" fill="#FFFFFF" stroke="#A6D6D2" stroke-width="1.4" filter="url(#sh)"/>
+<rect x="501.7" y="70.0" width="40.0" height="40.0" rx="8" fill="#E6F3F2" stroke="none" stroke-width="1"/>
+<g transform="translate(509.7 78.0) scale(1.2000)" fill="none" stroke="#0B7A75" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3.5" width="16" height="13" rx="2.5"/><path d="M2 7.5h16M8.3 10.3L6.4 12.2l1.9 1.9M11.7 10.3l1.9 1.9-1.9 1.9"/></g>
+<text x="555.7" y="96.0" font-size="18" font-weight="600" fill="#242424" text-anchor="start">Workload Landing Zone Archetypes</text>
+<text x="501.7" y="136.0" font-size="14.5" font-weight="400" fill="#616161" text-anchor="start">Describe <tspan font-weight="600" fill="#0B7A75">what</tspan> <tspan font-weight="600" fill="#0B7A75">applications</tspan> <tspan font-weight="600" fill="#0B7A75">require</tspan> — recurring</text>
+<text x="501.7" y="157.0" font-size="14.5" font-weight="400" fill="#616161" text-anchor="start">dependency and connectivity characteristics.</text>
+<rect x="501.7" y="175.0" width="117.1" height="26.0" rx="13.0" fill="#E6F3F2" stroke="none" stroke-width="0"/>
+<text x="513.7" y="192.7" font-size="13" font-weight="600" fill="#06605C" text-anchor="start">Self-contained</text>
+<rect x="626.7" y="175.0" width="163.2" height="26.0" rx="13.0" fill="#E6F3F2" stroke="none" stroke-width="0"/>
+<text x="638.7" y="192.7" font-size="13" font-weight="600" fill="#06605C" text-anchor="start">Selectively connected</text>
+<rect x="501.7" y="209.0" width="140.3" height="26.0" rx="13.0" fill="#E6F3F2" stroke="none" stroke-width="0"/>
+<text x="513.7" y="226.7" font-size="13" font-weight="600" fill="#06605C" text-anchor="start">Hybrid-dependent</text>
+<rect x="650.0" y="209.0" width="167.9" height="26.0" rx="13.0" fill="#E6F3F2" stroke="none" stroke-width="0"/>
+<text x="662.0" y="226.7" font-size="13" font-weight="600" fill="#06605C" text-anchor="start">Interdependent groups</text>
+<rect x="939.3" y="52.0" width="401.7" height="203.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" filter="url(#sh)"/>
+<rect x="959.3" y="70.0" width="40.0" height="40.0" rx="8" fill="#EBF3FC" stroke="none" stroke-width="1"/>
+<g transform="translate(967.3 78.0) scale(1.2000)" fill="none" stroke="#0F6CBD" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M12.6 12.6L17.5 17.5"/></g>
+<text x="1013.3" y="96.0" font-size="18" font-weight="600" fill="#242424" text-anchor="start">Regional Qualification</text>
+<text x="959.3" y="136.0" font-size="14.5" font-weight="400" fill="#616161" text-anchor="start">Evaluates candidate regions against four checks for</text>
+<text x="959.3" y="157.0" font-size="14.5" font-weight="400" fill="#616161" text-anchor="start">defined workload requirements.</text>
+<rect x="959.3" y="175.0" width="101.8" height="26.0" rx="13.0" fill="#FDF3F4" stroke="#EEACB2" stroke-width="1.2"/>
+<g transform="translate(969.3 180.0) scale(0.8000)" fill="none" stroke="#B10E1C" stroke-width="2.00" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7.5"/><path d="M7.3 7.3l5.4 5.4M12.7 7.3l-5.4 5.4"/></g>
+<text x="991.3" y="192.7" font-size="13" font-weight="600" fill="#B10E1C" text-anchor="start">Excluded</text>
+<rect x="1069.2" y="175.0" width="108.2" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#0F6CBD" stroke-width="1.2" stroke-dasharray="3 3"/>
+<g transform="translate(1079.2 180.0) scale(0.8000)" fill="none" stroke="#0F6CBD" stroke-width="2.00" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7.5" stroke-dasharray="2.6 2.2"/><path d="M10 6.3V10l2.6 1.7"/></g>
+<text x="1101.2" y="192.7" font-size="13" font-weight="600" fill="#0F6CBD" text-anchor="start">Candidate</text>
+<rect x="1185.4" y="175.0" width="115.7" height="26.0" rx="13.0" fill="#FFF7E3" stroke="#F0CF83" stroke-width="1.2"/>
+<g transform="translate(1195.4 180.0) scale(0.8000)" fill="none" stroke="#8A5600" stroke-width="2.00" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 18V2.8M4.5 3.3h10.2l-2.3 3.6 2.3 3.6H4.5"/></g>
+<text x="1217.4" y="192.7" font-size="13" font-weight="600" fill="#8A5600" text-anchor="start">Conditional</text>
+<rect x="959.3" y="209.0" width="100.6" height="26.0" rx="13.0" fill="#F1FAF1" stroke="#9FD89F" stroke-width="1.2"/>
+<g transform="translate(969.3 214.0) scale(0.8000)" fill="none" stroke="#0E700E" stroke-width="2.00" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7.5"/><path d="M6.6 10.2l2.3 2.3 4.6-4.8"/></g>
+<text x="991.3" y="226.7" font-size="13" font-weight="600" fill="#0E700E" text-anchor="start">Qualified</text>
+<path d="M475.7 116.0L433.7 116.0" fill="none" stroke="#0B7A75" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m0)"/>
+<path d="M889.3 116.0L931.3 116.0" fill="none" stroke="#0B7A75" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m0)"/>
+<path d="M224.8 257.0L224.8 284.0" fill="none" stroke="#8A8A8A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m1)"/>
+<path d="M682.5 257.0L682.5 284.0" fill="none" stroke="#8A8A8A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m1)"/>
+<path d="M1140.2 257.0L1140.2 284.0" fill="none" stroke="#8A8A8A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m1)"/>
+<rect x="24.0" y="287.0" width="1317.0" height="56.0" rx="8" fill="#0F6CBD" stroke="none" stroke-width="1" filter="url(#sh)"/>
+<rect x="44.0" y="295.0" width="40.0" height="40.0" rx="8" fill="#FFFFFF" stroke="none" stroke-width="1" opacity="0.16"/>
+<g transform="translate(53.0 304.0) scale(1.1000)" fill="none" stroke="#FFFFFF" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M10 18s-5.6-5.1-5.6-9.3a5.6 5.6 0 0 1 11.2 0C15.6 12.9 10 18 10 18z"/><circle cx="10" cy="8.7" r="2"/></g>
+<text x="100.0" y="321.0" font-size="18" font-weight="600" fill="#FFFFFF" text-anchor="start">Governed regional options</text>
+<text x="346.0" y="320.0" font-size="14" font-weight="400" fill="#E6F0FA" text-anchor="start">Qualified regions with a known Platform Services profile, documented constraints, ownership, and review triggers — not predetermined placement</text>
+<path d="M682.5 345.0L682.5 398.0" fill="none" stroke="#8A8A8A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m1)"/>
+<text x="24.0" y="380.0" font-size="12.5" font-weight="600" fill="#0B7A75" text-anchor="start" letter-spacing="1.6">WORKLOAD ADOPTION · AT ONBOARDING</text>
+<rect x="24.0" y="401.0" width="1317.0" height="56.0" rx="8" fill="#E6F3F2" stroke="#A6D6D2" stroke-width="1"/>
+<rect x="44.0" y="409.0" width="40.0" height="40.0" rx="8" fill="#FFFFFF" stroke="none" stroke-width="1"/>
+<g transform="translate(53.0 418.0) scale(1.1000)" fill="none" stroke="#0B7A75" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3.5" width="16" height="13" rx="2.5"/><path d="M2 7.5h16M8.3 10.3L6.4 12.2l1.9 1.9M11.7 10.3l1.9 1.9-1.9 1.9"/></g>
+<text x="100.0" y="435.0" font-size="18" font-weight="600" fill="#06605C" text-anchor="start">Revalidate against the application</text>
+<rect x="520.2" y="416.0" width="126.5" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#A6D6D2" stroke-width="1.2"/>
+<text x="532.2" y="433.9" font-size="13.5" font-weight="600" fill="#06605C" text-anchor="start">Remain in place</text>
+<rect x="654.7" y="416.0" width="194.5" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#A6D6D2" stroke-width="1.2"/>
+<text x="666.7" y="433.9" font-size="13.5" font-weight="600" fill="#06605C" text-anchor="start">Net-new in another region</text>
+<rect x="857.3" y="416.0" width="80.7" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#A6D6D2" stroke-width="1.2"/>
+<text x="869.3" y="433.9" font-size="13.5" font-weight="600" fill="#06605C" text-anchor="start">Relocate</text>
+<rect x="946.0" y="416.0" width="148.2" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#A6D6D2" stroke-width="1.2"/>
+<text x="958.0" y="433.9" font-size="13.5" font-weight="600" fill="#06605C" text-anchor="start">Recover elsewhere</text>
+<rect x="1102.2" y="416.0" width="218.8" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#A6D6D2" stroke-width="1.2"/>
+<text x="1114.2" y="433.9" font-size="13.5" font-weight="600" fill="#06605C" text-anchor="start">Operate across active regions</text>
+</svg>

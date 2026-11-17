@@ -1,7 +1,7 @@
 ---
 title: Workload Landing Zone archetypes
 description: Four archetypes that group recurring application connectivity and dependency requirements, so platform teams can plan regional capability before every workload is known.
-ms.date: 11/05/2026
+ms.date: 11/16/2026
 ms.topic: conceptual
 ---
 
@@ -24,7 +24,7 @@ These archetypes describe what a workload depends on. They are separate from the
 
 Use archetypes during regional qualification to anticipate the capabilities a candidate region may need to support. Where future workload requirements aren't yet defined, they give you planning guardrails without constraining later placement, which happens once the workload's current requirements, regional capabilities, and platform readiness are known.
 
-:::image type="content" source="./media/workload-landing-zone-archetypes.png" alt-text="Four archetype cards — Self-Contained Workloads, Selectively Connected Workloads, Hybrid-Dependent Workloads, and Interdependent Workload Groups — each with its defining characteristics and typical Platform Services profiles." lightbox="./media/workload-landing-zone-archetypes.png":::
+:::image type="content" source="./media/workload-landing-zone-archetypes.svg" alt-text="Four archetype cards — Self-Contained Workloads, Selectively Connected Workloads, Hybrid-Dependent Workloads, and Interdependent Workload Groups — each with its defining characteristics and typical Platform Services profiles." lightbox="./media/workload-landing-zone-archetypes.svg":::
 
 *The four archetypes, grouped by the platform connectivity and dependency capabilities each requires.*
 

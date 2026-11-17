@@ -7,8 +7,8 @@ Content is authored once in Microsoft Learn–flavored Markdown (content/*.md + 
 so the same files can later be submitted to the Cloud Adoption Framework repo. This generator
 understands the Learn extensions used there:
 
-  :::image type="content" source="..." alt-text="..." :::   -> live HTML figure (site/figures/<name>.html)
-                                                             or the PNG if no live figure exists
+  :::image type="content" source="..." alt-text="..." :::   -> explicit SVG, live HTML figure (site/figures/<name>.html),
+                                                             or the image if no live figure exists
   *italic paragraph right after an image*                    -> figure caption
   :::row::: / :::column::: ... :::column-end::: / :::row-end::: -> card grid
   > [!NOTE] / [!TIP] / [!IMPORTANT] / [!WARNING]             -> alert
@@ -19,6 +19,7 @@ Website-only tools (TOOLS below) are interactive pages built from an HTML fragme
 header and navigation as the articles, but they aren't part of the CAF article set, so they aren't in toc.yml.
 """
 import html, json, os, re, shutil, textwrap, datetime
+import xml.etree.ElementTree as ET
 import markdown, yaml
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -83,19 +84,28 @@ FIGS = {}
 
 def figure_html(src, alt, caption):
     name = os.path.splitext(os.path.basename(src))[0]
-    png = "media/" + os.path.basename(src)
+    image = "media/" + os.path.basename(src)
     frag_path = os.path.join(SITE, "figures", name + ".html")
     cap = f'<figcaption>{caption}</figcaption>' if caption else ""
     tools = (f'<div class="fig-tools"><button class="fig-zoom" type="button" aria-label="Expand figure" title="Expand">'
              f'<svg viewBox="0 0 16 16"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button>'
-             f'<a class="fig-png" href="{png}" download title="Download image" aria-label="Download image">'
+             f'<a class="fig-png" href="{image}" download title="Download image" aria-label="Download image">'
              f'<svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></div>')
-    if os.path.exists(frag_path):
-        frag = open(frag_path, encoding="utf-8").read()
+    if os.path.splitext(src)[1].lower() == ".svg":
+        root = ET.parse(os.path.join(CONTENT, image)).getroot()
+        _, _, width, height = map(float, root.attrib["viewBox"].split())
+        if width <= 0 or height <= 0:
+            raise ValueError(f"SVG figure {src} must have a positive viewBox")
+        frag = (f'<div class="wpf" data-w="{width:g}" data-h="{height:g}" style="width:{width:g}px">'
+                f'<img src="{image}" width="{width:g}" height="{height:g}" alt="" loading="lazy"></div>')
+    elif os.path.exists(frag_path):
+        with open(frag_path, encoding="utf-8") as source:
+            frag = source.read()
         frag = re.sub(r"^<!--.*?-->\n", "", frag)
-        return (f'<figure class="fig live" data-fig="{name}" role="img" aria-label="{html.escape(alt)}">{tools}'
-                f'<div class="fig-stage"><div class="fig-scale">{frag}</div></div>{cap}</figure>')
-    return (f'<figure class="fig img" data-fig="{name}">{tools}<div class="fig-stage"><img src="{png}" alt="{html.escape(alt)}" loading="lazy"></div>{cap}</figure>')
+    else:
+        return (f'<figure class="fig img" data-fig="{name}">{tools}<div class="fig-stage"><img src="{image}" alt="{html.escape(alt)}" loading="lazy"></div>{cap}</figure>')
+    return (f'<figure class="fig live" data-fig="{name}" role="img" aria-label="{html.escape(alt)}">{tools}'
+            f'<div class="fig-stage"><div class="fig-scale">{frag}</div></div>{cap}</figure>')
 
 
 # ───────────────────────────── Learn-flavored markdown

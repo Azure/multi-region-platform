@@ -102,7 +102,7 @@
   <main id="main">
     <div class="crumbs">Multi-region platform</div>
     <h1 class="title">Framework overview</h1>
-    <p class="meta">November 5, 2026 · 3 min read</p>
+    <p class="meta">November 16, 2026 · 3 min read</p>
     <article class="prose">
 <p>This guidance shows how to reuse the Azure landing-zone foundation you already run so that additional regions become <strong>qualified options that workloads can use selectively</strong>, without creating separate governance models or reproducing an identical platform footprint in every region.</p>
 <p>The objective is not to prebuild every capability everywhere. It is to keep one operating model, qualify regional options against known business and workload requirements, and enable only the platform capabilities that each region needs.</p>
@@ -263,59 +263,7 @@ Workloads on Azure Local run on the customer's own hardware, not in an Azure reg
 <li><strong><a href="workload-landing-zone-archetypes.html">Workload Landing Zone archetypes</a></strong> group recurring dependency and connectivity characteristics so platform teams can plan before every workload is known. The four archetypes are Self-Contained Workloads, Selectively Connected Workloads, Hybrid-Dependent Workloads, and Interdependent Workload Groups.</li>
 <li><strong><a href="regional-qualification.html">Regional qualification</a></strong> provides a repeatable way to assess candidate regions. Four checks lead to an excluded, candidate, conditional, or qualified regional option, backed by current evidence, known constraints, ownership, and review triggers.</li>
 </ul>
-<figure class="fig live" data-fig="three-planning-constructs" role="img" aria-label="Diagram showing the three constructs — Platform Services profiles, Workload Landing Zone archetypes, and regional qualification with its four checks — converging into governed regional options, which workloads revalidate at onboarding to remain in place, deploy net-new, relocate, recover elsewhere, or operate across active regions."><div class="fig-tools"><button class="fig-zoom" type="button" aria-label="Expand figure" title="Expand"><svg viewBox="0 0 16 16"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><a class="fig-png" href="media/three-planning-constructs.png" download title="Download image" aria-label="Download image"><svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></div><div class="fig-stage"><div class="fig-scale"><div class="wpf" data-w="940" data-h="312" style="width:940px"><div class="figure mt12" role="img" aria-label="Diagram showing the three constructs — Platform Services profiles, Workload Landing Zone archetypes, and regional qualification with its four checks — converging into governed regional options, which workloads revalidate at onboarding to remain in place, deploy net-new, relocate, recover elsewhere, or operate across active regions.">
-    <div class="dg f2"><svg class="conn-layer"><defs><marker id="three-planning-constructs--ah-1-plain" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#8A95A5"></path></marker><marker id="three-planning-constructs--ah-1-yes" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#0F6CBD"></path></marker><marker id="three-planning-constructs--ah-1-no" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#A84E1F"></path></marker><marker id="three-planning-constructs--ah-1-dash" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#8A95A5"></path></marker><marker id="three-planning-constructs--ah-1-teal" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#04807A"></path></marker><marker id="three-planning-constructs--ah-1-slate" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#4A5B72"></path></marker><marker id="three-planning-constructs--ah-1-warm" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#A84E1F"></path></marker><marker id="three-planning-constructs--ah-1-blue" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#0F6CBD"></path></marker><marker id="three-planning-constructs--ah-1-green" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#107C41"></path></marker><marker id="three-planning-constructs--ah-1-light" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M1,1.2 L9,5 L1,8.8 Z" fill="#8CC0EE"></path></marker></defs><path d="M605,102.24 L670,102.24" fill="none" stroke="#04807A" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#three-planning-constructs--ah-1-teal)"></path><path d="M335,102.24 L270,102.24" fill="none" stroke="#04807A" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#three-planning-constructs--ah-1-teal)"></path><path d="M805,202 L805,202" fill="none" stroke="#0F6CBD" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#three-planning-constructs--ah-1-blue)"></path><path d="M135,202 L135,202" fill="none" stroke="#0F6CBD" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#three-planning-constructs--ah-1-blue)"></path><path d="M470,240 L470,272" fill="none" stroke="#04807A" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#three-planning-constructs--ah-1-teal)"></path></svg>
-      <div class="zone" style="left:0;width:940px;justify-content:space-between">
-        <span class="cap" style="color:var(--b600)">Platform readiness · advance planning</span>
-        <span class="cap" style="color:var(--faint)">Define what the platform provides, describe requirements, qualify regions</span>
-      </div>
-      <!-- cards -->
-      <div class="card node" id="three-planning-constructs--c1" style="left:670px">
-        <div class="top" style="background:var(--b600)"></div>
-        <div class="hd"><svg style="color:var(--b600)"><use href="#i-search"></use></svg><div class="nm">Regional Qualification</div></div>
-        <div class="role">Evaluates candidate regions against four checks for defined workload requirements.</div>
-        <div class="outs"><span class="chip warm">Excluded</span><span class="chip out">Candidate</span><span class="chip" style="background:var(--a100);color:var(--a700)">Conditional</span><span class="chip green">Qualified</span></div>
-      </div>
-      <div class="card node" id="three-planning-constructs--c2" style="left:335px;border-color:var(--t300)">
-        <div class="top" style="background:var(--t600)"></div>
-        <div class="hd"><svg style="color:var(--t600)"><use href="#i-app"></use></svg><div class="nm">Workload Landing Zone Archetypes</div></div>
-        <div class="role">Describe <b style="color:var(--t700)">what applications require</b> — recurring dependency and connectivity characteristics.</div>
-        <div class="outs"><span class="chip teal">Self-contained</span><span class="chip teal">Selectively connected</span><span class="chip teal">Hybrid-dependent</span><span class="chip teal">Interdependent groups</span></div>
-      </div>
-      <div class="card node" id="three-planning-constructs--c3" style="left:0">
-        <div class="top" style="background:var(--c600)"></div>
-        <div class="hd"><svg style="color:var(--c600)"><use href="#i-hub"></use></svg><div class="nm">Platform Services profiles</div></div>
-        <div class="role">Describe <b style="color:var(--b700)">what the platform provides</b> to support those archetypes in a region.</div>
-        <div class="outs"><span class="chip blue">Governance-Only</span><span class="chip blue">Remote platform</span><span class="chip blue">Minimal platform</span><span class="chip blue">Full platform</span></div>
-      </div>
-      <i class="ln" data-from="c2" data-to="c1" data-s="r@0.42" data-e="l@0.42" data-k="teal"></i>
-      <i class="ln" data-from="c2" data-to="c3" data-s="l@0.42" data-e="r@0.42" data-k="teal"></i>
-
-      <!-- convergence -->
-      <div class="band node" id="three-planning-constructs--bOpt" style="top:202px;height:38px;background:var(--b600);color:#fff">
-        <svg style="width:20px;height:20px;color:#fff"><use href="#i-pin"></use></svg>
-        <span class="bt">Governed regional options</span>
-        <span class="bs" style="color:#fff">Qualified regions with a known Platform Services profile, documented constraints, ownership, and review triggers — not predetermined placement</span>
-      </div>
-      <i class="ln" data-from="c1" data-to="bOpt" data-s="b" data-e="t@0.8564" data-k="blue"></i>
-      <i class="ln" data-from="c3" data-to="bOpt" data-s="b" data-e="t@0.1436" data-k="blue"></i>
-
-      <div class="zone" style="left:0;top:250px"><span class="cap" style="color:var(--t600)">Workload adoption · at onboarding</span></div>
-      <div class="band node" id="three-planning-constructs--bOn" style="top:272px;height:40px;background:var(--t50);border:1px solid var(--t300);color:var(--t700);padding-right:10px">
-        <svg style="width:20px;height:20px;color:var(--t600)"><use href="#i-app"></use></svg>
-        <span class="bt" style="white-space:nowrap">Revalidate against the application</span>
-        <span style="flex:1"></span>
-        <span class="chip teal" style="background:#fff">Remain in place</span>
-        <span class="chip teal" style="background:#fff">Net-new in another region</span>
-        <span class="chip teal" style="background:#fff">Relocate</span>
-        <span class="chip teal" style="background:#fff">Recover elsewhere</span>
-        <span class="chip teal" style="background:#fff">Operate across active regions</span>
-      </div>
-      <i class="ln" data-from="bOpt" data-to="bOn" data-s="b@0.5" data-e="t@0.5" data-k="teal"></i>
-    </div>
-    
-  </div></div>
-</div></div><figcaption>How the three constructs connect. Archetypes (application requirements) and Platform Services profiles (platform capability) stay distinct; together with regional qualification they produce governed options.</figcaption></figure>
+<figure class="fig live" data-fig="three-planning-constructs" role="img" aria-label="Diagram showing the three constructs — Platform Services profiles, Workload Landing Zone archetypes, and regional qualification with its four outcomes — converging into governed regional options during advance platform planning. Workloads revalidate these options at onboarding to remain in place, deploy net-new, relocate, recover elsewhere, or operate across active regions."><div class="fig-tools"><button class="fig-zoom" type="button" aria-label="Expand figure" title="Expand"><svg viewBox="0 0 16 16"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><a class="fig-png" href="media/three-planning-constructs.svg" download title="Download image" aria-label="Download image"><svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></div><div class="fig-stage"><div class="fig-scale"><div class="wpf" data-w="1365" data-h="480" style="width:1365px"><img src="media/three-planning-constructs.svg" width="1365" height="480" alt="" loading="lazy"></div></div></div><figcaption>How the three constructs connect. Archetypes (application requirements) and Platform Services profiles (platform capability) stay distinct; together with regional qualification they produce governed options.</figcaption></figure>
 <p>Together, these constructs create governed regional options without predetermining workload placement. During onboarding, teams revalidate the region against the workload's current dependencies and requirements, then decide whether to stay put, deploy net-new, relocate, recover elsewhere, or operate across regions.</p>
 <h2 id="progressive-adoption-journey">Progressive adoption journey<a class="anchor" href="#progressive-adoption-journey" aria-label="Link to this section">#</a></h2>
 <p>The journey below shows the recommended sequence for adopting regional options. It is not a mandatory maturity path; platform capabilities and workload use evolve only when business and application requirements justify them.</p>

@@ -1,7 +1,7 @@
 <section class="page" data-section="Framework overview">
 <style>
-  .f1 { display: grid; grid-template-columns: 330px 70px 1fr; height: 378px; }
-  .f1 .panel { display: grid; grid-template-rows: 20px 170px 22px 32px 1fr; gap: 5px; border-radius: 12px; padding: 12px 16px; }
+  .f1 { display: grid; grid-template-columns: 330px 70px 1fr; height: 338px; }
+  .f1 .panel { display: grid; grid-template-rows: 20px 160px 20px 28px 1fr; gap: 4px; border-radius: 12px; padding: 10px 16px; }
   .f1 .pl { background: var(--wash); }
   .f1 .pr { background: linear-gradient(180deg, var(--b50), #F6FAFE); }
   .f1 .ph { display: flex; justify-content: space-between; align-items: baseline; }
@@ -11,27 +11,32 @@
   .f1 .regions { display: grid; gap: 8px; align-items: end; position: relative; }
   .f1 .rlabels { display: grid; gap: 8px; }
   .f1 .fixed-regions, .f1 .fixed-labels { grid-template-columns: repeat(2, 1fr); gap: 26px; }
-  .f1 .fixed-regions .rg { height: 170px; }
+  .f1 .fixed-regions .rg { height: 160px; }
   .f1 .option-regions, .f1 .option-labels { grid-template-columns: repeat(6, 1fr); }
-  .f1 .transition { display: flex; flex-direction: column; align-items: center; gap: 6px; padding-top: 112px; }
+  .f1 .transition { display: flex; flex-direction: column; align-items: center; gap: 6px; padding-top: 102px; }
   .rg { border: 1.2px dashed var(--b300); border-radius: 9px; padding: 22px 6px 6px; position: relative; background: #fff; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; }
   .rg .rl { position: absolute; top: 5px; left: 7px; right: 5px; display: flex; gap: 3px; align-items: center; font-size: 9px; font-weight: 700; color: var(--b700); letter-spacing: .02em; white-space: nowrap; }
   .rg .rl svg { width: 10px; height: 10px; color: var(--b600); flex: none; }
   .blk { border-radius: 5px; font-size: 9px; font-weight: 650; text-align: center; padding: 5px 2px; line-height: 1.2; }
   .blk.hub { background: var(--b600); color: #fff; }
   .blk.ss { background: var(--b100); color: var(--b800); }
-  .f1 .platform-services { display: grid; gap: 2px; min-height: 110px; align-content: center; background: var(--b600); color: #fff; }
-  .f1 .pr .ss { min-height: 78px; }
+  .f1 .platform-services { display: grid; gap: 2px; min-height: 100px; align-content: center; background: var(--b600); color: #fff; }
+  .f1 .pr .ss { display: grid; align-content: center; min-height: 68px; }
+  .f1 .remote-services { background: #fff; border: 1px solid var(--b300); color: var(--b700); padding: 4px 2px; }
   .blk.wl { background: var(--t600); color: #fff; }
   .blk.wl2 { background: var(--t100); color: var(--t700); }
   .rg.cand { border-color: var(--b500); background: rgba(255,255,255,.55); justify-content: center; align-items: center; }
-  .f1 .found { display: flex; align-items: center; border-radius: 8px; background: var(--s800); color: #fff; padding: 8px 12px; }
+  .f1 .found { display: flex; align-items: center; border-radius: 8px; background: var(--s800); color: #fff; padding: 6px 12px; }
   .f1 .found .ft { font-size: 10.2px; font-weight: 650; line-height: 1.2; white-space: nowrap; }
-  .f1 .conditions { display: grid; grid-template-rows: 13px 39px auto; gap: 5px; align-content: start; }
-  .f1 .conditions .cap { color: var(--w600); }
-  .f1 .conditions .small { font-size: 10px; line-height: 1.4; }
-  .f1 .press { display: grid; grid-template-columns: repeat(2, max-content); gap: 5px; }
-  .f1 .rlabel { font-size: 9px; color: var(--muted); text-align: center; line-height: 1.2; }
+  .f1 .conditions { display: grid; grid-template-rows: 12px 28px auto; gap: 4px; align-content: start; }
+  .f1 .conditions .cap { font-size: 9px; font-weight: 650; line-height: 1.3; letter-spacing: .01em; text-transform: none; color: var(--w600); }
+  .f1 .pr .conditions .cap { color: var(--t700); }
+  .f1 .conditions .small { font-size: 9.4px; line-height: 1.3; }
+  .f1 .signal-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px 12px; margin: 0; padding: 0; list-style: none; }
+  .f1 .signal-list li { position: relative; margin: 0; padding-left: 9px; font-size: 9.2px; line-height: 1.3; color: var(--text); white-space: nowrap; }
+  .f1 .signal-list li::before { content: ""; position: absolute; left: 0; top: 5px; width: 3px; height: 3px; background: var(--w600); }
+  .f1 .pr .signal-list li::before { background: var(--t600); }
+  .f1 .rlabel { font-size: 9px; color: var(--muted); text-align: center; line-height: 1.1; }
 </style>
 <div class="inner">
   <div class="open-band" id="s1" style="gap:24px;padding-bottom:12px">
@@ -67,10 +72,10 @@
         </div>
         <div class="conditions">
           <div class="cap">Evolving regional conditions</div>
-          <div class="press">
-            <span class="chip warm">Business expansion</span><span class="chip warm">Data boundaries</span>
-            <span class="chip warm">Service &amp; AI availability</span><span class="chip warm">Latency requirements</span>
-          </div>
+          <ul class="signal-list">
+            <li>Business expansion</li><li>Data boundaries</li>
+            <li>Service &amp; AI availability</li><li>Latency requirements</li>
+          </ul>
           <div class="small muted">Works while demand and placement remain predictable; becomes less adaptable as conditions evolve.</div>
         </div>
       </div>
@@ -85,12 +90,12 @@
       <div class="panel pr">
         <div class="ph"><b>An adaptable multi-region platform</b><span class="cap" style="color:var(--b600)">Regions as qualified options</span></div>
         <div class="regions option-regions">
-          <div><div class="rg" style="height:170px"><div class="rl"><svg><use href="#i-pin"/></svg>Region C</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
-          <div><div class="rg" style="height:170px"><div class="rl"><svg><use href="#i-pin"/></svg>Region D</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
-          <div><div class="rg" style="height:140px"><div class="rl"><svg><use href="#i-pin"/></svg>Region E</div><div class="blk wl">Workloads</div><div class="blk ss" style="background:#fff;border:1px solid var(--b300)">Selected<br>Landing Zones<br>Platform<br>Shared Services</div></div></div>
-          <div><div class="rg" style="height:92px"><div class="rl"><svg><use href="#i-pin"/></svg>Region F</div><div class="blk wl">Workloads</div><div class="blk" style="font-size: 9px;color:var(--b700);padding:2px">↔ {{PROFILE_2}}</div></div></div>
-          <div><div class="rg" style="height:70px"><div class="rl"><svg><use href="#i-pin"/></svg>Region G</div><div class="blk wl2">{{PROFILE_1}}</div></div></div>
-          <div><div class="rg cand" style="height:56px"><div class="rl" style="color:var(--b600)"><svg><use href="#i-pin"/></svg>Region H</div><span style="font-size: 9px;font-weight:650;color:var(--b600);margin-top:10px">Candidate</span></div></div>
+          <div><div class="rg" style="height:160px"><div class="rl"><svg><use href="#i-pin"/></svg>Region A</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
+          <div><div class="rg" style="height:160px"><div class="rl"><svg><use href="#i-pin"/></svg>Region B</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
+          <div><div class="rg" style="height:136px"><div class="rl"><svg><use href="#i-pin"/></svg>Region C</div><div class="blk wl">Workloads</div><div class="blk ss" style="background:#fff;border:1px solid var(--b300)">Security<br>Networking</div></div></div>
+          <div><div class="rg" style="height:124px"><div class="rl"><svg><use href="#i-pin"/></svg>Region D</div><div class="blk wl">Workloads</div><div class="blk remote-services">Consumes<br>Shared Services<br>from other<br>regions</div></div></div>
+          <div><div class="rg" style="height:104px"><div class="rl"><svg><use href="#i-pin"/></svg>Region E</div><div class="blk wl">Workloads</div><div class="blk wl2">No access to<br>Shared Services</div></div></div>
+          <div><div class="rg cand" style="height:56px"><div class="rl" style="color:var(--b600)"><svg><use href="#i-pin"/></svg>Region F</div><span style="font-size: 9px;font-weight:650;color:var(--b600);margin-top:10px">Candidate</span></div></div>
         </div>
         <div class="rlabels option-labels">
           <div class="rlabel">Full-Platform<br>region</div><div class="rlabel">Full-Platform<br>region</div><div class="rlabel">{{PROFILE_3}}</div><div class="rlabel">{{PROFILE_2}}</div><div class="rlabel">{{PROFILE_1}}</div><div class="rlabel">Not enabled</div>
@@ -100,10 +105,10 @@
         </div>
         <div class="conditions">
           <div class="cap">Governed response to change</div>
-          <div class="press">
-            <span class="chip warm">Qualified regional options</span><span class="chip warm">Selective platform services</span>
-            <span class="chip warm">Workload-led placement</span><span class="chip warm">Continuous revalidation</span>
-          </div>
+          <ul class="signal-list">
+            <li>Qualified regional options</li><li>Selective platform services</li>
+            <li>Workload-led placement</li><li>Continuous revalidation</li>
+          </ul>
           <div class="small muted">Qualify additional regions and adopt only the platform capabilities each workload needs, while keeping one governed operating model.</div>
         </div>
       </div>

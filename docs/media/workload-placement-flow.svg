@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1387 597" width="1387" height="597" font-family="'Segoe UI Variable Text', 'Segoe UI', Aptos, Inter, 'Helvetica Neue', Arial, sans-serif" role="img" aria-labelledby="t d"><title id="t">Workload placement at onboarding</title><desc id="d">Eight steps in three phases — understand the workload, match to qualified regional options, decide and govern — drawing on governed regional options from regional qualification and feeding new requirements, constraints, or platform gaps back into it.</desc>
+<defs>
+<filter id="sh" x="-10%" y="-10%" width="120%" height="130%" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000" flood-opacity="0.08"/><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0B2340" flood-opacity="0.07"/></filter>
+<marker id="m0" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0.5 0.8L9.5 5L0.5 9.2z" fill="#0B7A75"/></marker>
+<marker id="m1" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0.5 0.8L9.5 5L0.5 9.2z" fill="#0F6CBD"/></marker>
+<marker id="m2" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0.5 0.8L9.5 5L0.5 9.2z" fill="#1B2F4E"/></marker>
+<marker id="m3" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0.5 0.8L9.5 5L0.5 9.2z" fill="#B4D2F0"/></marker>
+<marker id="m4" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0.5 0.8L9.5 5L0.5 9.2z" fill="#A8460A"/></marker>
+<marker id="m5" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0.5 0.8L9.5 5L0.5 9.2z" fill="#0F6CBD"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<text x="24.0" y="20.0" font-size="12.5" font-weight="600" fill="#0B7A75" text-anchor="start" letter-spacing="1.6">UNDERSTAND THE WORKLOAD</text>
+<rect x="24.0" y="29.0" width="489.6" height="3.0" rx="1.5" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="533.6" y="20.0" font-size="12.5" font-weight="600" fill="#0F6CBD" text-anchor="start" letter-spacing="1.6">MATCH TO QUALIFIED REGIONAL OPTIONS</text>
+<rect x="533.6" y="29.0" width="489.6" height="3.0" rx="1.5" fill="#0F6CBD" stroke="none" stroke-width="1"/>
+<text x="1043.2" y="20.0" font-size="12.5" font-weight="600" fill="#1B2F4E" text-anchor="start" letter-spacing="1.6">DECIDE AND GOVERN</text>
+<rect x="1043.2" y="29.0" width="319.8" height="3.0" rx="1.5" fill="#1B2F4E" stroke="none" stroke-width="1"/>
+<rect x="24.0" y="46.0" width="149.9" height="213.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" filter="url(#sh)"/>
+<clipPath id="tb8"><rect x="24.0" y="46" width="149.875" height="4"/></clipPath><rect x="24.0" y="46" width="149.875" height="16" rx="8" fill="#0B7A75" clip-path="url(#tb8)"/>
+<circle cx="51.0" cy="76.0" r="13" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="51.0" y="81.2" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">1</text>
+<text x="38.0" y="108.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">Define the</text>
+<text x="38.0" y="128.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">placement</text>
+<text x="38.0" y="148.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">objective</text>
+<text x="38.0" y="190.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">Net-new, remain in</text>
+<text x="38.0" y="208.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">place, or relocate</text>
+<path d="M176.9 152.5L189.9 152.5" fill="none" stroke="#0B7A75" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m0)"/>
+<rect x="193.9" y="46.0" width="149.9" height="213.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" filter="url(#sh)"/>
+<clipPath id="tb18"><rect x="193.875" y="46" width="149.875" height="4"/></clipPath><rect x="193.875" y="46" width="149.875" height="16" rx="8" fill="#0B7A75" clip-path="url(#tb18)"/>
+<circle cx="220.9" cy="76.0" r="13" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="220.9" y="81.2" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">2</text>
+<text x="207.9" y="108.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">Identify the</text>
+<text x="207.9" y="128.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">Workload</text>
+<text x="207.9" y="148.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">Landing Zone</text>
+<text x="207.9" y="168.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">archetype</text>
+<text x="207.9" y="190.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">Closest fit; record</text>
+<text x="207.9" y="208.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">requirements</text>
+<text x="207.9" y="226.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">beyond it</text>
+<path d="M346.8 152.5L359.8 152.5" fill="none" stroke="#0B7A75" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m0)"/>
+<rect x="363.8" y="46.0" width="149.9" height="213.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" filter="url(#sh)"/>
+<clipPath id="tb30"><rect x="363.75" y="46" width="149.875" height="4"/></clipPath><rect x="363.75" y="46" width="149.875" height="16" rx="8" fill="#0B7A75" clip-path="url(#tb30)"/>
+<circle cx="390.8" cy="76.0" r="13" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="390.8" y="81.2" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">3</text>
+<text x="377.8" y="108.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">Establish</text>
+<text x="377.8" y="128.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">mandatory</text>
+<text x="377.8" y="148.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">requirements</text>
+<text x="377.8" y="190.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">Data location,</text>
+<text x="377.8" y="208.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">services, zones,</text>
+<text x="377.8" y="226.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">latency, scale,</text>
+<text x="377.8" y="244.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">resiliency</text>
+<path d="M516.6 152.5L529.6 152.5" fill="none" stroke="#0F6CBD" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m1)"/>
+<rect x="533.6" y="46.0" width="149.9" height="213.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" filter="url(#sh)"/>
+<clipPath id="tb42"><rect x="533.625" y="46" width="149.875" height="4"/></clipPath><rect x="533.625" y="46" width="149.875" height="16" rx="8" fill="#0F6CBD" clip-path="url(#tb42)"/>
+<circle cx="560.6" cy="76.0" r="13" fill="#0F6CBD" stroke="none" stroke-width="1"/>
+<text x="560.6" y="81.2" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">4</text>
+<text x="547.6" y="108.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">Review the</text>
+<text x="547.6" y="128.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">qualified</text>
+<text x="547.6" y="148.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">regional options</text>
+<text x="547.6" y="190.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">Regions assessed</text>
+<text x="547.6" y="208.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">for the relevant</text>
+<text x="547.6" y="226.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">requirements</text>
+<path d="M686.5 152.5L699.5 152.5" fill="none" stroke="#0F6CBD" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m1)"/>
+<rect x="703.5" y="46.0" width="149.9" height="213.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" filter="url(#sh)"/>
+<clipPath id="tb53"><rect x="703.5" y="46" width="149.875" height="4"/></clipPath><rect x="703.5" y="46" width="149.875" height="16" rx="8" fill="#0F6CBD" clip-path="url(#tb53)"/>
+<circle cx="730.5" cy="76.0" r="13" fill="#0F6CBD" stroke="none" stroke-width="1"/>
+<text x="730.5" y="81.2" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">5</text>
+<text x="717.5" y="108.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">Validate current</text>
+<text x="717.5" y="128.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">regional</text>
+<text x="717.5" y="148.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">suitability</text>
+<text x="717.5" y="190.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">Service, SKU, AI</text>
+<text x="717.5" y="208.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">model, access,</text>
+<text x="717.5" y="226.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">quota</text>
+<path d="M856.4 152.5L869.4 152.5" fill="none" stroke="#0F6CBD" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m1)"/>
+<rect x="873.4" y="46.0" width="149.9" height="213.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" filter="url(#sh)"/>
+<clipPath id="tb64"><rect x="873.375" y="46" width="149.875" height="4"/></clipPath><rect x="873.375" y="46" width="149.875" height="16" rx="8" fill="#0F6CBD" clip-path="url(#tb64)"/>
+<circle cx="900.4" cy="76.0" r="13" fill="#0F6CBD" stroke="none" stroke-width="1"/>
+<text x="900.4" y="81.2" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">6</text>
+<text x="887.4" y="108.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">Confirm the</text>
+<text x="887.4" y="128.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">Platform</text>
+<text x="887.4" y="148.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">Services profile</text>
+<text x="887.4" y="190.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">The region's profile</text>
+<text x="887.4" y="208.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">must support it</text>
+<path d="M1026.2 152.5L1039.2 152.5" fill="none" stroke="#1B2F4E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m2)"/>
+<rect x="1043.2" y="46.0" width="149.9" height="213.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" filter="url(#sh)"/>
+<clipPath id="tb74"><rect x="1043.25" y="46" width="149.875" height="4"/></clipPath><rect x="1043.25" y="46" width="149.875" height="16" rx="8" fill="#1B2F4E" clip-path="url(#tb74)"/>
+<circle cx="1070.2" cy="76.0" r="13" fill="#1B2F4E" stroke="none" stroke-width="1"/>
+<text x="1070.2" y="81.2" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">7</text>
+<text x="1057.2" y="108.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">Determine the</text>
+<text x="1057.2" y="128.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">resiliency role</text>
+<text x="1057.2" y="190.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">Primary, recovery,</text>
+<text x="1057.2" y="208.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">or active location</text>
+<path d="M1196.1 152.5L1209.1 152.5" fill="none" stroke="#1B2F4E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m2)"/>
+<rect x="1213.1" y="46.0" width="149.9" height="213.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" filter="url(#sh)"/>
+<clipPath id="tb83"><rect x="1213.125" y="46" width="149.875" height="4"/></clipPath><rect x="1213.125" y="46" width="149.875" height="16" rx="8" fill="#1B2F4E" clip-path="url(#tb83)"/>
+<circle cx="1240.1" cy="76.0" r="13" fill="#1B2F4E" stroke="none" stroke-width="1"/>
+<text x="1240.1" y="81.2" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">8</text>
+<text x="1227.1" y="108.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">Record and</text>
+<text x="1227.1" y="128.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">govern the</text>
+<text x="1227.1" y="148.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">decision</text>
+<text x="1227.1" y="190.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">Region, archetype,</text>
+<text x="1227.1" y="208.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">profile, owners,</text>
+<text x="1227.1" y="226.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">triggers</text>
+<rect x="697.5" y="299.0" width="161.9" height="120.0" rx="8" fill="#FFFFFF" stroke="#B4D2F0" stroke-width="1.2" stroke-dasharray="4 3"/>
+<text x="711.5" y="325.0" font-size="14" font-weight="600" fill="#0E4F8F" text-anchor="start">Guaranteed</text>
+<text x="711.5" y="344.0" font-size="14" font-weight="600" fill="#0E4F8F" text-anchor="start">capacity?</text>
+<text x="711.5" y="365.0" font-size="13" font-weight="400" fill="#424242" text-anchor="start">Quota isn't capacity;</text>
+<text x="711.5" y="383.0" font-size="13" font-weight="400" fill="#424242" text-anchor="start">decide here whether</text>
+<text x="711.5" y="401.0" font-size="13" font-weight="400" fill="#424242" text-anchor="start">to reserve it.</text>
+<path d="M778.4 261.0L778.4 296.0" fill="none" stroke="#B4D2F0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3" marker-end="url(#m3)"/>
+<rect x="867.4" y="299.0" width="161.9" height="175.0" rx="8" fill="#FDF4EE" stroke="#EBC2A6" stroke-width="1.2"/>
+<text x="881.4" y="325.0" font-size="14" font-weight="600" fill="#A8460A" text-anchor="start">Additional</text>
+<text x="881.4" y="344.0" font-size="14" font-weight="600" fill="#A8460A" text-anchor="start">capabilities</text>
+<text x="881.4" y="363.0" font-size="14" font-weight="600" fill="#A8460A" text-anchor="start">needed?</text>
+<text x="881.4" y="384.0" font-size="13" font-weight="400" fill="#424242" text-anchor="start">A separate governed</text>
+<text x="881.4" y="402.0" font-size="13" font-weight="400" fill="#424242" text-anchor="start">platform decision —</text>
+<text x="881.4" y="420.0" font-size="13" font-weight="400" fill="#424242" text-anchor="start">not a profile</text>
+<text x="881.4" y="438.0" font-size="13" font-weight="400" fill="#424242" text-anchor="start">redefined by the</text>
+<text x="881.4" y="456.0" font-size="13" font-weight="400" fill="#424242" text-anchor="start">workload team.</text>
+<path d="M948.3 261.0L948.3 296.0" fill="none" stroke="#A8460A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m4)"/>
+<rect x="926.3" y="267.0" width="41.4" height="22.0" rx="11.0" fill="#FFFFFF" stroke="#A8460A" stroke-width="1.2"/>
+<text x="935.3" y="282.3" font-size="12" font-weight="600" fill="#A8460A" text-anchor="start">Gap</text>
+<rect x="1043.2" y="299.0" width="319.8" height="66.0" rx="8" fill="#EDF1F6" stroke="#C9D2E0" stroke-width="1.2"/>
+<text x="1057.2" y="325.0" font-size="13.5" font-weight="400" fill="#424242" text-anchor="start"><tspan font-weight="700" fill="#1B2F4E">Valid</tspan> <tspan font-weight="700" fill="#1B2F4E">outcomes</tspan> include retaining the current</text>
+<text x="1057.2" y="344.0" font-size="13.5" font-weight="400" fill="#424242" text-anchor="start">region, or no qualified option today.</text>
+<path d="M1288.1 261.0L1288.1 296.0" fill="none" stroke="#1B2F4E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m2)"/>
+<rect x="24.0" y="526.0" width="1339.0" height="58.0" rx="10" fill="#0F6CBD" stroke="none" stroke-width="1" filter="url(#sh)"/>
+<rect x="42.0" y="535.0" width="40.0" height="40.0" rx="8" fill="#FFFFFF" stroke="none" stroke-width="1" opacity="0.16"/>
+<g transform="translate(51.0 544.0) scale(1.1000)" fill="none" stroke="#FFFFFF" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M5 2.5h6.5L15.5 6.5V17a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V3a.5.5 0 0 1 .5-.5zM11.5 2.5v4h4M7.3 10h5.4M7.3 13h5.4"/></g>
+<text x="96.0" y="552.0" font-size="16" font-weight="600" fill="#FFFFFF" text-anchor="start">Regional qualification</text>
+<text x="96.0" y="572.0" font-size="14" font-weight="400" fill="#E6F0FA" text-anchor="start">Remain qualified, become conditional, add platform capabilities, or remove.</text>
+<text x="1343.0" y="560.0" font-size="12" font-weight="600" fill="#CFE2F6" text-anchor="end" letter-spacing="1.6">PLATFORM READINESS · ADVANCE PLANNING</text>
+<path d="M608.6 524.0L608.6 263.0" fill="none" stroke="#0F6CBD" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m5)"/>
+<rect x="401.0" y="380.5" width="199.6" height="24.0" rx="12.0" fill="#EBF3FC" stroke="#B4D2F0" stroke-width="1.2"/>
+<g transform="translate(409.0 384.5) scale(0.8000)" fill="none" stroke="#0E4F8F" stroke-width="2.00" stroke-linecap="round" stroke-linejoin="round"><path d="M10 18s-5.6-5.1-5.6-9.3a5.6 5.6 0 0 1 11.2 0C15.6 12.9 10 18 10 18z"/><circle cx="10" cy="8.7" r="2"/></g>
+<text x="431.0" y="397.0" font-size="12.5" font-weight="600" fill="#0E4F8F" text-anchor="start">Governed regional options</text>
+<path d="M948.3 476.0L948.3 522.0" fill="none" stroke="#A8460A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 4" marker-end="url(#m4)"/>
+<path d="M1203.1 367.0L1203.1 522.0" fill="none" stroke="#1B2F4E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 4" marker-end="url(#m2)"/>
+<rect x="1047.3" y="433.5" width="311.7" height="24.0" rx="12.0" fill="#FFFFFF" stroke="#C9D2E0" stroke-width="1.2"/>
+<text x="1057.3" y="450.0" font-size="12.5" font-weight="600" fill="#1B2F4E" text-anchor="start">New requirements, constraints, or platform gaps</text>
+</svg>

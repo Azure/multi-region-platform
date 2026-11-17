@@ -1,5 +1,5 @@
 <!-- extracted from whitepaper #fig1; regenerate with site/tools/extract_figures.py -->
-<div class="wpf" data-w="940" data-h="378" style="width:940px"><div class="figure mt12" role="img" aria-label="Side-by-side comparison with aligned regions and matching bars labeled Consistent governance and operating practices. The fixed Region A (Primary) and Region B (DR) pair mirrors Security, Identity, Management, and Networking, but becomes less adaptable as regional conditions evolve. The adaptable platform spans Regions C through H, from Full-Platform regions to selected shared services, remote services, Governance-Only, and a candidate region. Its governed response is qualified regional options, selective platform services, workload-led placement, and continuous revalidation.">
+<div class="wpf" data-w="940" data-h="338" style="width:940px"><div class="figure mt12" role="img" aria-label="Side-by-side comparison with aligned regions and matching bars labeled Consistent governance and operating practices. The fixed Region A (Primary) and Region B (DR) pair mirrors Security, Identity, Management, and Networking. On the adaptable side, Regions A through E have Workloads: A and B provide all four platform service categories, C provides Security and Networking, D consumes Shared Services from other regions, and E has no access to Shared Services. Region F is a candidate. Equal-width regions decrease in height from A and B to F. Unboxed two-column lists contrast evolving regional conditions with governed responses.">
     <div class="dg f1">
       <!-- left: fixed pair -->
       <div class="panel pl">
@@ -19,10 +19,10 @@
         </div>
         <div class="conditions">
           <div class="cap">Evolving regional conditions</div>
-          <div class="press">
-            <span class="chip warm">Business expansion</span><span class="chip warm">Data boundaries</span>
-            <span class="chip warm">Service &amp; AI availability</span><span class="chip warm">Latency requirements</span>
-          </div>
+          <ul class="signal-list">
+            <li>Business expansion</li><li>Data boundaries</li>
+            <li>Service &amp; AI availability</li><li>Latency requirements</li>
+          </ul>
           <div class="small muted">Works while demand and placement remain predictable; becomes less adaptable as conditions evolve.</div>
         </div>
       </div>
@@ -37,12 +37,12 @@
       <div class="panel pr">
         <div class="ph"><b>An adaptable multi-region platform</b><span class="cap" style="color:var(--b600)">Regions as qualified options</span></div>
         <div class="regions option-regions">
-          <div><div class="rg" style="height:170px"><div class="rl"><svg><use href="#i-pin"></use></svg>Region C</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
-          <div><div class="rg" style="height:170px"><div class="rl"><svg><use href="#i-pin"></use></svg>Region D</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
-          <div><div class="rg" style="height:140px"><div class="rl"><svg><use href="#i-pin"></use></svg>Region E</div><div class="blk wl">Workloads</div><div class="blk ss" style="background:#fff;border:1px solid var(--b300)">Selected<br>Landing Zones<br>Platform<br>Shared Services</div></div></div>
-          <div><div class="rg" style="height:92px"><div class="rl"><svg><use href="#i-pin"></use></svg>Region F</div><div class="blk wl">Workloads</div><div class="blk" style="font-size: 9px;color:var(--b700);padding:2px">↔ Remote platform</div></div></div>
-          <div><div class="rg" style="height:70px"><div class="rl"><svg><use href="#i-pin"></use></svg>Region G</div><div class="blk wl2">Governance-Only</div></div></div>
-          <div><div class="rg cand" style="height:56px"><div class="rl" style="color:var(--b600)"><svg><use href="#i-pin"></use></svg>Region H</div><span style="font-size: 9px;font-weight:650;color:var(--b600);margin-top:10px">Candidate</span></div></div>
+          <div><div class="rg" style="height:160px"><div class="rl"><svg><use href="#i-pin"></use></svg>Region A</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
+          <div><div class="rg" style="height:160px"><div class="rl"><svg><use href="#i-pin"></use></svg>Region B</div><div class="blk wl">Workloads</div><div class="blk platform-services" role="group" aria-label="Platform services"><span>Security</span><span>Identity</span><span>Management</span><span>Networking</span></div></div></div>
+          <div><div class="rg" style="height:136px"><div class="rl"><svg><use href="#i-pin"></use></svg>Region C</div><div class="blk wl">Workloads</div><div class="blk ss" style="background:#fff;border:1px solid var(--b300)">Security<br>Networking</div></div></div>
+          <div><div class="rg" style="height:124px"><div class="rl"><svg><use href="#i-pin"></use></svg>Region D</div><div class="blk wl">Workloads</div><div class="blk remote-services">Consumes<br>Shared Services<br>from other<br>regions</div></div></div>
+          <div><div class="rg" style="height:104px"><div class="rl"><svg><use href="#i-pin"></use></svg>Region E</div><div class="blk wl">Workloads</div><div class="blk wl2">No access to<br>Shared Services</div></div></div>
+          <div><div class="rg cand" style="height:56px"><div class="rl" style="color:var(--b600)"><svg><use href="#i-pin"></use></svg>Region F</div><span style="font-size: 9px;font-weight:650;color:var(--b600);margin-top:10px">Candidate</span></div></div>
         </div>
         <div class="rlabels option-labels">
           <div class="rlabel">Full-Platform<br>region</div><div class="rlabel">Full-Platform<br>region</div><div class="rlabel">Minimal platform</div><div class="rlabel">Remote platform</div><div class="rlabel">Governance-Only</div><div class="rlabel">Not enabled</div>
@@ -52,10 +52,10 @@
         </div>
         <div class="conditions">
           <div class="cap">Governed response to change</div>
-          <div class="press">
-            <span class="chip warm">Qualified regional options</span><span class="chip warm">Selective platform services</span>
-            <span class="chip warm">Workload-led placement</span><span class="chip warm">Continuous revalidation</span>
-          </div>
+          <ul class="signal-list">
+            <li>Qualified regional options</li><li>Selective platform services</li>
+            <li>Workload-led placement</li><li>Continuous revalidation</li>
+          </ul>
           <div class="small muted">Qualify additional regions and adopt only the platform capabilities each workload needs, while keeping one governed operating model.</div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 ---
 title: Framework overview
 description: The drivers, principles, planning constructs, and adoption journey behind an adaptable multi-region Azure platform that extends the Azure landing zones you already run.
-ms.date: 11/05/2026
+ms.date: 11/16/2026
 ms.topic: conceptual
 ---
 
@@ -53,7 +53,7 @@ Because platform teams cannot predict every future workload, this guidance uses 
 - **[Workload Landing Zone archetypes](./workload-landing-zone-archetypes.md)** group recurring dependency and connectivity characteristics so platform teams can plan before every workload is known. The four archetypes are Self-Contained Workloads, Selectively Connected Workloads, Hybrid-Dependent Workloads, and Interdependent Workload Groups.
 - **[Regional qualification](./regional-qualification.md)** provides a repeatable way to assess candidate regions. Four checks lead to an excluded, candidate, conditional, or qualified regional option, backed by current evidence, known constraints, ownership, and review triggers.
 
-:::image type="content" source="./media/three-planning-constructs.png" alt-text="Diagram showing the three constructs — Platform Services profiles, Workload Landing Zone archetypes, and regional qualification with its four checks — converging into governed regional options, which workloads revalidate at onboarding to remain in place, deploy net-new, relocate, recover elsewhere, or operate across active regions." lightbox="./media/three-planning-constructs.png":::
+:::image type="content" source="./media/three-planning-constructs.svg" alt-text="Diagram showing the three constructs — Platform Services profiles, Workload Landing Zone archetypes, and regional qualification with its four outcomes — converging into governed regional options during advance platform planning. Workloads revalidate these options at onboarding to remain in place, deploy net-new, relocate, recover elsewhere, or operate across active regions." lightbox="./media/three-planning-constructs.svg":::
 
 *How the three constructs connect. Archetypes (application requirements) and Platform Services profiles (platform capability) stay distinct; together with regional qualification they produce governed options.*
 

@@ -1,7 +1,7 @@
 ---
 title: Place workloads using qualified options
 description: Eight steps to place a workload in a qualified Azure region, with decision-time validation and feedback into regional qualification.
-ms.date: 10/27/2026
+ms.date: 11/16/2026
 ms.topic: conceptual
 ---
 
@@ -19,7 +19,7 @@ Place a workload only after its requirements are understood well enough to make 
 
 Placement ends in one of these outcomes: place the workload in a qualified region, keep it where it is, relocate it, extend it to another region for recovery or active use, or conclude that no qualified option meets its requirements yet.
 
-:::image type="content" source="./media/workload-placement-flow.png" alt-text="Eight-step placement flow grouped into understanding the workload, matching it to qualified regional options, and deciding and governing. Side outcomes cover guaranteed capacity, additional platform capabilities as a separate governed decision, and valid outcomes such as retaining the current region; findings loop back to regional qualification." lightbox="./media/workload-placement-flow.png":::
+:::image type="content" source="./media/workload-placement-flow.svg" alt-text="Eight-step placement flow grouped into understanding the workload, matching it to qualified regional options, and deciding and governing. Side outcomes cover guaranteed capacity, additional platform capabilities as a separate governed decision, and valid outcomes such as retaining the current region; findings loop back to regional qualification." lightbox="./media/workload-placement-flow.svg":::
 
 *Workload placement using qualified options. Onboarding findings return to regional qualification, closing the loop between platform readiness and workload adoption.*
 

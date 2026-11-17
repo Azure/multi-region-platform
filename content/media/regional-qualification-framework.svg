@@ -1,0 +1,163 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1374 729" width="1374" height="729" font-family="'Segoe UI Variable Text', 'Segoe UI', Aptos, Inter, 'Helvetica Neue', Arial, sans-serif" role="img" aria-labelledby="t d"><title id="t">Regional qualification: four checks and outcomes</title><desc id="d">Four checks — business and geography, data and compliance, workload requirements and dependencies, regional capability and availability — each with a decision, leading to an outcome of Excluded, Candidate, Conditional or Qualified.</desc>
+<defs>
+<filter id="sh" x="-10%" y="-10%" width="120%" height="130%" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000" flood-opacity="0.08"/><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0B2340" flood-opacity="0.07"/></filter>
+</defs>
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<rect x="24.0" y="10.0" width="246.0" height="578.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" filter="url(#sh)"/>
+<clipPath id="tb2"><rect x="24" y="10" width="246" height="4"/></clipPath><rect x="24" y="10" width="246" height="16" rx="8" fill="#0F6CBD" clip-path="url(#tb2)"/>
+<circle cx="58.0" cy="48.0" r="14" fill="#0F6CBD" stroke="none" stroke-width="1"/>
+<text x="58.0" y="53.2" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">1</text>
+<text x="84.0" y="54.0" font-size="17" font-weight="600" fill="#242424" text-anchor="start">Business and</text>
+<text x="84.0" y="76.0" font-size="17" font-weight="600" fill="#242424" text-anchor="start">geography</text>
+<text x="44.0" y="103.0" font-size="15" font-weight="600" fill="#0E4F8F" text-anchor="start">Where do we need Azure</text>
+<text x="44.0" y="124.0" font-size="15" font-weight="600" fill="#0E4F8F" text-anchor="start">presence?</text>
+<circle cx="47.0" cy="166.4" r="2.6" fill="#0F6CBD" stroke="none" stroke-width="1"/>
+<text x="58.0" y="171.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Markets and users</text>
+<circle cx="47.0" cy="192.4" r="2.6" fill="#0F6CBD" stroke="none" stroke-width="1"/>
+<text x="58.0" y="197.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Datacenter and partner</text>
+<text x="58.0" y="217.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">locations</text>
+<circle cx="47.0" cy="238.4" r="2.6" fill="#0F6CBD" stroke="none" stroke-width="1"/>
+<text x="58.0" y="243.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Planned launches or</text>
+<text x="58.0" y="263.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">migrations</text>
+<circle cx="47.0" cy="284.4" r="2.6" fill="#0F6CBD" stroke="none" stroke-width="1"/>
+<text x="58.0" y="289.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Anticipated growth and</text>
+<text x="58.0" y="309.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">proximity</text>
+<circle cx="47.0" cy="330.4" r="2.6" fill="#0F6CBD" stroke="none" stroke-width="1"/>
+<text x="58.0" y="335.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Geographic concentration</text>
+<text x="58.0" y="355.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">risk</text>
+<path d="M24 460H270V580Q270 588 262 588H32Q24 588 24 580Z" fill="#EBF3FC"/>
+<text x="44.0" y="484.0" font-size="11.5" font-weight="600" fill="#0E4F8F" text-anchor="start" letter-spacing="1.6">DECISION</text>
+<text x="44.0" y="506.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">Confirm sufficient business</text>
+<text x="44.0" y="527.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">value to justify deeper</text>
+<text x="44.0" y="548.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">assessment.</text>
+<circle cx="283.0" cy="98.0" r="11" fill="#FFFFFF" stroke="#D1D1D1" stroke-width="1"/>
+<path d="M281.0 93l4.5 5-4.5 5" fill="none" stroke="#616161" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="296.0" y="10.0" width="246.0" height="578.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" filter="url(#sh)"/>
+<clipPath id="tb31"><rect x="296" y="10" width="246" height="4"/></clipPath><rect x="296" y="10" width="246" height="16" rx="8" fill="#A8460A" clip-path="url(#tb31)"/>
+<circle cx="330.0" cy="48.0" r="14" fill="#A8460A" stroke="none" stroke-width="1"/>
+<text x="330.0" y="53.2" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">2</text>
+<text x="356.0" y="54.0" font-size="17" font-weight="600" fill="#242424" text-anchor="start">Data and</text>
+<text x="356.0" y="76.0" font-size="17" font-weight="600" fill="#242424" text-anchor="start">compliance</text>
+<text x="316.0" y="103.0" font-size="15" font-weight="600" fill="#A8460A" text-anchor="start">Are we allowed to operate</text>
+<text x="316.0" y="124.0" font-size="15" font-weight="600" fill="#A8460A" text-anchor="start">here?</text>
+<circle cx="319.0" cy="166.4" r="2.6" fill="#A8460A" stroke="none" stroke-width="1"/>
+<text x="330.0" y="171.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Data residency and</text>
+<text x="330.0" y="191.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">sovereignty</text>
+<circle cx="319.0" cy="212.4" r="2.6" fill="#A8460A" stroke="none" stroke-width="1"/>
+<text x="330.0" y="217.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Regulatory and industry</text>
+<text x="330.0" y="237.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">requirements</text>
+<circle cx="319.0" cy="258.4" r="2.6" fill="#A8460A" stroke="none" stroke-width="1"/>
+<text x="330.0" y="263.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Company policy and</text>
+<text x="330.0" y="283.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">customer commitments</text>
+<circle cx="319.0" cy="304.4" r="2.6" fill="#A8460A" stroke="none" stroke-width="1"/>
+<text x="330.0" y="309.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Support access and</text>
+<text x="330.0" y="329.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">encryption</text>
+<circle cx="319.0" cy="350.4" r="2.6" fill="#A8460A" stroke="none" stroke-width="1"/>
+<text x="330.0" y="355.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Restrictions on data</text>
+<text x="330.0" y="375.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">movement or operational</text>
+<text x="330.0" y="395.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">control</text>
+<path d="M296 460H542V580Q542 588 534 588H304Q296 588 296 580Z" fill="#FDF4EE"/>
+<text x="316.0" y="484.0" font-size="11.5" font-weight="600" fill="#A8460A" text-anchor="start" letter-spacing="1.6">DECISION</text>
+<text x="316.0" y="506.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">Exclude the region when it</text>
+<text x="316.0" y="527.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">cannot satisfy a mandatory</text>
+<text x="316.0" y="548.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">requirement.</text>
+<circle cx="555.0" cy="98.0" r="11" fill="#FFFFFF" stroke="#D1D1D1" stroke-width="1"/>
+<path d="M553.0 93l4.5 5-4.5 5" fill="none" stroke="#616161" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="568.0" y="10.0" width="510.0" height="578.0" rx="8" fill="#FFFFFF" stroke="#A6D6D2" stroke-width="1.4" filter="url(#sh)"/>
+<clipPath id="tb62"><rect x="568" y="10" width="510" height="4"/></clipPath><rect x="568" y="10" width="510" height="16" rx="8" fill="#0B7A75" clip-path="url(#tb62)"/>
+<circle cx="602.0" cy="48.0" r="14" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="602.0" y="53.2" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">3</text>
+<text x="628.0" y="54.0" font-size="17" font-weight="600" fill="#242424" text-anchor="start">Workload requirements and dependencies</text>
+<text x="588.0" y="103.0" font-size="15" font-weight="600" fill="#06605C" text-anchor="start">What workload requirements and dependencies must the region</text>
+<text x="588.0" y="124.0" font-size="15" font-weight="600" fill="#06605C" text-anchor="start">support?</text>
+<text x="588.0" y="171.0" font-size="11.5" font-weight="600" fill="#06605C" text-anchor="start" letter-spacing="1.6">FROM THE WORKLOADS</text>
+<text x="837.0" y="171.0" font-size="11.5" font-weight="600" fill="#06605C" text-anchor="start" letter-spacing="1.6">REQUIRED FROM THE PLATFORM</text>
+<circle cx="591.0" cy="192.4" r="2.6" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="602.0" y="197.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Existing and future workloads,</text>
+<text x="602.0" y="217.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">including moves</text>
+<circle cx="591.0" cy="238.4" r="2.6" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="602.0" y="243.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Closest-fitting Workload</text>
+<text x="602.0" y="263.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Landing Zone archetype</text>
+<circle cx="591.0" cy="284.4" r="2.6" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="602.0" y="289.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Data, connectivity, and shared</text>
+<text x="602.0" y="309.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">services</text>
+<circle cx="591.0" cy="330.4" r="2.6" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="602.0" y="335.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Security, resiliency, and scale</text>
+<circle cx="591.0" cy="356.4" r="2.6" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="602.0" y="361.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Required Azure services</text>
+<path d="M823.0 159.0L823.0 446.0" fill="none" stroke="#D1D1D1" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 3"/>
+<text x="837.0" y="197.0" font-size="14" font-weight="600" fill="#06605C" text-anchor="start">Platform enablement</text>
+<text x="837.0" y="217.0" font-size="13.5" font-weight="400" fill="#616161" text-anchor="start">Services needed locally, remotely,</text>
+<text x="837.0" y="236.0" font-size="13.5" font-weight="400" fill="#616161" text-anchor="start">or centrally</text>
+<path d="M837.0 263.0L1058.0 263.0" fill="none" stroke="#E0E0E0" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 3"/>
+<text x="837.0" y="277.0" font-size="14" font-weight="600" fill="#06605C" text-anchor="start">Resilient hybrid connectivity</text>
+<text x="837.0" y="297.0" font-size="13.5" font-weight="400" fill="#616161" text-anchor="start">Reachability and resilience to</text>
+<text x="837.0" y="316.0" font-size="13.5" font-weight="400" fill="#616161" text-anchor="start">Azure</text>
+<path d="M837.0 343.0L1058.0 343.0" fill="none" stroke="#E0E0E0" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="3 3"/>
+<text x="837.0" y="357.0" font-size="14" font-weight="600" fill="#06605C" text-anchor="start">Regional platform connectivity</text>
+<text x="837.0" y="377.0" font-size="13.5" font-weight="400" fill="#616161" text-anchor="start">Access to network hubs and other</text>
+<text x="837.0" y="396.0" font-size="13.5" font-weight="400" fill="#616161" text-anchor="start">shared platform services, and</text>
+<text x="837.0" y="415.0" font-size="13.5" font-weight="400" fill="#616161" text-anchor="start">other regions</text>
+<path d="M568 460H1078V580Q1078 588 1070 588H576Q568 588 568 580Z" fill="#E6F3F2"/>
+<text x="588.0" y="484.0" font-size="11.5" font-weight="600" fill="#06605C" text-anchor="start" letter-spacing="1.6">DECISION</text>
+<text x="588.0" y="506.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">Identify and record the workload-driven platform requirements.</text>
+<circle cx="1091.0" cy="98.0" r="11" fill="#FFFFFF" stroke="#D1D1D1" stroke-width="1"/>
+<path d="M1089.0 93l4.5 5-4.5 5" fill="none" stroke="#616161" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="1104.0" y="10.0" width="246.0" height="578.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" filter="url(#sh)"/>
+<clipPath id="tb102"><rect x="1104" y="10" width="246" height="4"/></clipPath><rect x="1104" y="10" width="246" height="16" rx="8" fill="#1B2F4E" clip-path="url(#tb102)"/>
+<circle cx="1138.0" cy="48.0" r="14" fill="#1B2F4E" stroke="none" stroke-width="1"/>
+<text x="1138.0" y="53.2" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">4</text>
+<text x="1164.0" y="54.0" font-size="17" font-weight="600" fill="#242424" text-anchor="start">Regional capability</text>
+<text x="1164.0" y="76.0" font-size="17" font-weight="600" fill="#242424" text-anchor="start">and availability</text>
+<text x="1124.0" y="103.0" font-size="15" font-weight="600" fill="#1B2F4E" text-anchor="start">Which regions can support</text>
+<text x="1124.0" y="124.0" font-size="15" font-weight="600" fill="#1B2F4E" text-anchor="start">the identified workload</text>
+<text x="1124.0" y="145.0" font-size="15" font-weight="600" fill="#1B2F4E" text-anchor="start">requirements?</text>
+<circle cx="1127.0" cy="166.4" r="2.6" fill="#1B2F4E" stroke="none" stroke-width="1"/>
+<text x="1138.0" y="171.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Services, models, and SKUs</text>
+<circle cx="1127.0" cy="192.4" r="2.6" fill="#1B2F4E" stroke="none" stroke-width="1"/>
+<text x="1138.0" y="197.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Availability zones and</text>
+<text x="1138.0" y="217.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">pairing</text>
+<circle cx="1127.0" cy="238.4" r="2.6" fill="#1B2F4E" stroke="none" stroke-width="1"/>
+<text x="1138.0" y="243.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Latency, pricing, and scale</text>
+<circle cx="1127.0" cy="264.4" r="2.6" fill="#1B2F4E" stroke="none" stroke-width="1"/>
+<text x="1138.0" y="269.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Regional access and quota</text>
+<circle cx="1127.0" cy="290.4" r="2.6" fill="#1B2F4E" stroke="none" stroke-width="1"/>
+<text x="1138.0" y="295.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">Service-specific</text>
+<text x="1138.0" y="315.0" font-size="14" font-weight="400" fill="#424242" text-anchor="start">cross-region behavior</text>
+<path d="M1104 460H1350V580Q1350 588 1342 588H1112Q1104 588 1104 580Z" fill="#EDF1F6"/>
+<text x="1124.0" y="484.0" font-size="11.5" font-weight="600" fill="#1B2F4E" text-anchor="start" letter-spacing="1.6">DECISION</text>
+<text x="1124.0" y="506.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">Qualify candidates,</text>
+<text x="1124.0" y="527.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">documenting conditions,</text>
+<text x="1124.0" y="548.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">constraints, and unresolved</text>
+<text x="1124.0" y="569.0" font-size="15" font-weight="600" fill="#242424" text-anchor="start">validations.</text>
+<rect x="24.0" y="602.0" width="1326.0" height="108.0" rx="10" fill="#F5F7FA" stroke="none" stroke-width="1"/>
+<text x="44.0" y="634.0" font-size="17" font-weight="600" fill="#242424" text-anchor="start">Qualification outcome</text>
+<text x="44.0" y="656.0" font-size="13.5" font-weight="400" fill="#616161" text-anchor="start">Each regional option is classified</text>
+<text x="44.0" y="675.0" font-size="13.5" font-weight="400" fill="#616161" text-anchor="start">against <tspan font-weight="600" fill="#242424">defined</tspan> <tspan font-weight="600" fill="#242424">workload</tspan></text>
+<text x="44.0" y="694.0" font-size="13.5" font-weight="400" fill="#616161" text-anchor="start"><tspan font-weight="600" fill="#242424">requirements</tspan>, with evidence.</text>
+<rect x="304.0" y="610.0" width="249.5" height="92.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1"/>
+<circle cx="334.0" cy="638.0" r="17" fill="#FDF3F4" stroke="none" stroke-width="1"/>
+<g transform="translate(324.0 628.0) scale(1.0000)" fill="none" stroke="#B10E1C" stroke-width="1.60" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7.5"/><path d="M7.3 7.3l5.4 5.4M12.7 7.3l-5.4 5.4"/></g>
+<text x="362.0" y="636.0" font-size="16" font-weight="600" fill="#B10E1C" text-anchor="start">Excluded</text>
+<text x="362.0" y="656.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">A mandatory requirement</text>
+<text x="362.0" y="674.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">cannot be satisfied.</text>
+<rect x="565.5" y="610.0" width="249.5" height="92.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1"/>
+<circle cx="595.5" cy="638.0" r="17" fill="#EBF3FC" stroke="none" stroke-width="1"/>
+<g transform="translate(585.5 628.0) scale(1.0000)" fill="none" stroke="#0F6CBD" stroke-width="1.60" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7.5" stroke-dasharray="2.6 2.2"/><path d="M10 6.3V10l2.6 1.7"/></g>
+<text x="623.5" y="636.0" font-size="16" font-weight="600" fill="#0F6CBD" text-anchor="start">Candidate</text>
+<text x="623.5" y="656.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">Potentially viable; more</text>
+<text x="623.5" y="674.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">discovery or validation first.</text>
+<rect x="827.0" y="610.0" width="249.5" height="92.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1"/>
+<circle cx="857.0" cy="638.0" r="17" fill="#FFF7E3" stroke="none" stroke-width="1"/>
+<g transform="translate(847.0 628.0) scale(1.0000)" fill="none" stroke="#8A5600" stroke-width="1.60" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 18V2.8M4.5 3.3h10.2l-2.3 3.6 2.3 3.6H4.5"/></g>
+<text x="885.0" y="636.0" font-size="16" font-weight="600" fill="#8A5600" text-anchor="start">Conditional</text>
+<text x="885.0" y="656.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">Supported if documented</text>
+<text x="885.0" y="674.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">conditions are resolved.</text>
+<rect x="1088.5" y="610.0" width="249.5" height="92.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1"/>
+<circle cx="1118.5" cy="638.0" r="17" fill="#F1FAF1" stroke="none" stroke-width="1"/>
+<g transform="translate(1108.5 628.0) scale(1.0000)" fill="none" stroke="#0E700E" stroke-width="1.60" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7.5"/><path d="M6.6 10.2l2.3 2.3 4.6-4.8"/></g>
+<text x="1146.5" y="636.0" font-size="16" font-weight="600" fill="#0E700E" text-anchor="start">Qualified</text>
+<text x="1146.5" y="656.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">As of the assessment date;</text>
+<text x="1146.5" y="674.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">onboarding revalidation still</text>
+<text x="1146.5" y="692.0" font-size="13" font-weight="400" fill="#616161" text-anchor="start">required.</text>
+</svg>

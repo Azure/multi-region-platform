@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1370 624" width="1370" height="624" font-family="'Segoe UI Variable Text', 'Segoe UI', Aptos, Inter, 'Helvetica Neue', Arial, sans-serif" role="img" aria-labelledby="t d"><title id="t">Workload Landing Zone Archetypes</title><desc id="d">Four archetypes — self-contained, selectively connected, hybrid-dependent and interdependent workload groups — each with its typical Platform Services profiles.</desc>
+<defs>
+<filter id="sh" x="-10%" y="-10%" width="120%" height="130%" color-interpolation-filters="sRGB"><feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000" flood-opacity="0.08"/><feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0B2340" flood-opacity="0.07"/></filter>
+<marker id="m0" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0.5 0.8L9.5 5L0.5 9.2z" fill="#0B7A75"/></marker>
+</defs>
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<rect x="24.0" y="16.0" width="315.5" height="573.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" filter="url(#sh)"/>
+<circle cx="56.0" cy="52.0" r="14" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="56.0" y="57.2" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">1</text>
+<text x="82.0" y="58.0" font-size="18" font-weight="600" fill="#242424" text-anchor="start">Self-Contained Workloads</text>
+<rect x="42.0" y="103.0" width="279.5" height="100.0" rx="8" fill="#F4F9F9" stroke="none" stroke-width="1"/>
+<rect x="119.8" y="125.0" width="124.0" height="56.0" rx="10" fill="#FFFFFF" stroke="#A6D6D2" stroke-width="1.4" stroke-dasharray="5 4"/>
+<rect x="135.8" y="139.0" width="28.0" height="28.0" rx="5" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<rect x="171.8" y="141.0" width="24.0" height="24.0" rx="5" fill="#4E9F9A" stroke="none" stroke-width="1"/>
+<rect x="203.8" y="151.0" width="16.0" height="16.0" rx="4" fill="#8CC5C0" stroke="none" stroke-width="1"/>
+<text x="42.0" y="233.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">Self-contained workloads with no</text>
+<text x="42.0" y="254.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">persistent private dependency outside</text>
+<text x="42.0" y="275.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">the workload. These can include</text>
+<text x="42.0" y="296.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">cloud-native or AI applications.</text>
+<circle cx="45.0" cy="346.4" r="2.6" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="56.0" y="351.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">No persistent private dependencies</text>
+<circle cx="45.0" cy="374.4" r="2.6" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="56.0" y="379.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">Can often use Governance-Only</text>
+<circle cx="45.0" cy="402.4" r="2.6" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="56.0" y="407.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">Flexible placement across regions</text>
+<path d="M42.0 501.0L321.5 501.0" fill="none" stroke="#E0E0E0" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="42.0" y="527.0" font-size="11.5" font-weight="600" fill="#0E4F8F" text-anchor="start" letter-spacing="1.6">TYPICAL PLATFORM SERVICES PROFILES</text>
+<rect x="42.0" y="541.0" width="139.3" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#D1D1D1" stroke-width="1.2"/>
+<circle cx="55.0" cy="554.0" r="4" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="65.0" y="558.5" font-size="12.5" font-weight="600" fill="#424242" text-anchor="start">Governance-Only</text>
+<rect x="187.3" y="541.0" width="131.9" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#D1D1D1" stroke-width="1.2"/>
+<circle cx="200.3" cy="554.0" r="4" fill="#0F6CBD" stroke="none" stroke-width="1"/>
+<text x="210.3" y="558.5" font-size="12.5" font-weight="600" fill="#424242" text-anchor="start">Remote platform</text>
+<rect x="359.5" y="16.0" width="315.5" height="573.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" filter="url(#sh)"/>
+<circle cx="391.5" cy="52.0" r="14" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="391.5" y="57.2" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">2</text>
+<text x="417.5" y="58.0" font-size="18" font-weight="600" fill="#242424" text-anchor="start">Selectively Connected</text>
+<text x="417.5" y="81.0" font-size="18" font-weight="600" fill="#242424" text-anchor="start">Workloads</text>
+<rect x="377.5" y="103.0" width="279.5" height="100.0" rx="8" fill="#F4F9F9" stroke="none" stroke-width="1"/>
+<rect x="437.2" y="131.0" width="44.0" height="44.0" rx="9" fill="#E6F3F2" stroke="#A6D6D2" stroke-width="1"/>
+<rect x="449.2" y="143.0" width="20.0" height="20.0" rx="4" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<path d="M487.2 153.0L549.2 153.0" fill="none" stroke="#0B7A75" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 4"/>
+<circle cx="575.2" cy="153.0" r="23" fill="#FFFFFF" stroke="#B4D2F0" stroke-width="1"/>
+<g transform="translate(563.2 141.0) scale(1.2000)" fill="none" stroke="#0F6CBD" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="10" cy="4.8" rx="6" ry="2.5"/><path d="M4 4.8v10.4c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5V4.8M4 10c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5"/></g>
+<text x="377.5" y="233.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">Workloads that reach selected services</text>
+<text x="377.5" y="254.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">through private endpoints or specific</text>
+<text x="377.5" y="275.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">private APIs, without routed access to</text>
+<text x="377.5" y="296.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">the enterprise network.</text>
+<circle cx="380.5" cy="346.4" r="2.6" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="391.5" y="351.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">Private access to selected</text>
+<text x="391.5" y="371.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">dependencies</text>
+<circle cx="380.5" cy="394.4" r="2.6" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="391.5" y="399.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">Profile set by latency, traffic, resiliency,</text>
+<text x="391.5" y="419.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">security</text>
+<circle cx="380.5" cy="442.4" r="2.6" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="391.5" y="447.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">Common for data, analytics, and AI</text>
+<text x="391.5" y="467.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">platforms</text>
+<path d="M377.5 501.0L657.0 501.0" fill="none" stroke="#E0E0E0" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="377.5" y="527.0" font-size="11.5" font-weight="600" fill="#0E4F8F" text-anchor="start" letter-spacing="1.6">TYPICAL PLATFORM SERVICES PROFILES</text>
+<rect x="377.5" y="541.0" width="131.9" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#D1D1D1" stroke-width="1.2"/>
+<circle cx="390.5" cy="554.0" r="4" fill="#0F6CBD" stroke="none" stroke-width="1"/>
+<text x="400.5" y="558.5" font-size="12.5" font-weight="600" fill="#424242" text-anchor="start">Remote platform</text>
+<rect x="515.4" y="541.0" width="133.4" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#D1D1D1" stroke-width="1.2"/>
+<circle cx="528.4" cy="554.0" r="4" fill="#0E4F8F" stroke="none" stroke-width="1"/>
+<text x="538.4" y="558.5" font-size="12.5" font-weight="600" fill="#424242" text-anchor="start">Minimal platform</text>
+<rect x="695.0" y="16.0" width="315.5" height="573.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" filter="url(#sh)"/>
+<circle cx="727.0" cy="52.0" r="14" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="727.0" y="57.2" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">3</text>
+<text x="753.0" y="58.0" font-size="18" font-weight="600" fill="#242424" text-anchor="start">Hybrid-Dependent</text>
+<text x="753.0" y="81.0" font-size="18" font-weight="600" fill="#242424" text-anchor="start">Workloads</text>
+<rect x="713.0" y="103.0" width="279.5" height="100.0" rx="8" fill="#F4F9F9" stroke="none" stroke-width="1"/>
+<circle cx="794.8" cy="153.0" r="23" fill="#FFFFFF" stroke="#D1D1D1" stroke-width="1"/>
+<g transform="translate(782.8 141.0) scale(1.2000)" fill="none" stroke="#1B2F4E" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V3.5h9V18M12 8h5v10M1.5 18h17M6 6.5h3M6 9.5h3M6 12.5h3M14.5 11h0M14.5 14h0"/></g>
+<path d="M822.8 153.0L882.8 153.0" fill="none" stroke="#0B7A75" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#m0)" marker-start="url(#m0)"/>
+<rect x="888.8" y="131.0" width="44.0" height="44.0" rx="9" fill="#E6F3F2" stroke="#A6D6D2" stroke-width="1"/>
+<rect x="900.8" y="143.0" width="20.0" height="20.0" rx="4" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="713.0" y="233.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">Workloads that need routed access to</text>
+<text x="713.0" y="254.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">on-premises environments or the</text>
+<text x="713.0" y="275.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">enterprise network, including shared</text>
+<text x="713.0" y="296.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">platform services hosted or connected</text>
+<text x="713.0" y="317.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">to a network hub.</text>
+<circle cx="716.0" cy="346.4" r="2.6" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="727.0" y="351.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">Persistent private connectivity</text>
+<circle cx="716.0" cy="374.4" r="2.6" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="727.0" y="379.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">Profile set by dependency latency,</text>
+<text x="727.0" y="399.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">resiliency, regulation, operations</text>
+<circle cx="716.0" cy="422.4" r="2.6" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="727.0" y="427.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">Common in migrations and hybrid</text>
+<text x="727.0" y="447.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">scenarios</text>
+<path d="M713.0 501.0L992.5 501.0" fill="none" stroke="#E0E0E0" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="713.0" y="527.0" font-size="11.5" font-weight="600" fill="#0E4F8F" text-anchor="start" letter-spacing="1.6">TYPICAL PLATFORM SERVICES PROFILES</text>
+<rect x="713.0" y="541.0" width="133.4" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#D1D1D1" stroke-width="1.2"/>
+<circle cx="726.0" cy="554.0" r="4" fill="#0E4F8F" stroke="none" stroke-width="1"/>
+<text x="736.0" y="558.5" font-size="12.5" font-weight="600" fill="#424242" text-anchor="start">Minimal platform</text>
+<rect x="852.4" y="541.0" width="107.1" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#D1D1D1" stroke-width="1.2"/>
+<circle cx="865.4" cy="554.0" r="4" fill="#1B2F4E" stroke="none" stroke-width="1"/>
+<text x="875.4" y="558.5" font-size="12.5" font-weight="600" fill="#424242" text-anchor="start">Full platform</text>
+<rect x="1030.5" y="16.0" width="315.5" height="573.0" rx="8" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1" filter="url(#sh)"/>
+<circle cx="1062.5" cy="52.0" r="14" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="1062.5" y="57.2" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">4</text>
+<text x="1088.5" y="58.0" font-size="18" font-weight="600" fill="#242424" text-anchor="start">Interdependent Workload</text>
+<text x="1088.5" y="81.0" font-size="18" font-weight="600" fill="#242424" text-anchor="start">Groups</text>
+<rect x="1048.5" y="103.0" width="279.5" height="100.0" rx="8" fill="#F4F9F9" stroke="none" stroke-width="1"/>
+<circle cx="1188.2" cy="153.0" r="27" fill="none" stroke="#A6D6D2" stroke-width="1.6"/>
+<rect x="1177.2" y="115.0" width="22.0" height="22.0" rx="5" fill="#4E9F9A" stroke="#F4F9F9" stroke-width="2"/>
+<rect x="1204.2" y="142.0" width="22.0" height="22.0" rx="5" fill="#0B7A75" stroke="#F4F9F9" stroke-width="2"/>
+<rect x="1177.2" y="169.0" width="22.0" height="22.0" rx="5" fill="#4E9F9A" stroke="#F4F9F9" stroke-width="2"/>
+<rect x="1150.2" y="142.0" width="22.0" height="22.0" rx="5" fill="#0B7A75" stroke="#F4F9F9" stroke-width="2"/>
+<text x="1048.5" y="233.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">Groups of workloads with material</text>
+<text x="1048.5" y="254.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">east-west dependencies: shared data,</text>
+<text x="1048.5" y="275.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">synchronous calls, or private east-west</text>
+<text x="1048.5" y="296.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">traffic. Combine members'</text>
+<text x="1048.5" y="317.0" font-size="14.5" font-weight="400" fill="#424242" text-anchor="start">requirements.</text>
+<circle cx="1051.5" cy="346.4" r="2.6" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="1062.5" y="351.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">Classified at group level</text>
+<circle cx="1051.5" cy="374.4" r="2.6" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="1062.5" y="379.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">Aggregate requirements set the profile</text>
+<circle cx="1051.5" cy="402.4" r="2.6" fill="#0B7A75" stroke="none" stroke-width="1"/>
+<text x="1062.5" y="407.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">Direct spoke-to-spoke or a regional</text>
+<text x="1062.5" y="427.0" font-size="14" font-weight="400" fill="#616161" text-anchor="start">network hub for east-west traffic</text>
+<path d="M1048.5 501.0L1328.0 501.0" fill="none" stroke="#E0E0E0" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1048.5" y="527.0" font-size="11.5" font-weight="600" fill="#0E4F8F" text-anchor="start" letter-spacing="1.6">TYPICAL PLATFORM SERVICES PROFILES</text>
+<rect x="1048.5" y="541.0" width="133.4" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#D1D1D1" stroke-width="1.2"/>
+<circle cx="1061.5" cy="554.0" r="4" fill="#0E4F8F" stroke="none" stroke-width="1"/>
+<text x="1071.5" y="558.5" font-size="12.5" font-weight="600" fill="#424242" text-anchor="start">Minimal platform</text>
+<rect x="1187.9" y="541.0" width="107.1" height="26.0" rx="13.0" fill="#FFFFFF" stroke="#D1D1D1" stroke-width="1.2"/>
+<circle cx="1200.9" cy="554.0" r="4" fill="#1B2F4E" stroke="none" stroke-width="1"/>
+<text x="1210.9" y="558.5" font-size="12.5" font-weight="600" fill="#424242" text-anchor="start">Full platform</text>
+</svg>

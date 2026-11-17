@@ -1,7 +1,7 @@
 ---
 title: Platform Services profiles
 description: Learn the four Platform Services profiles — Governance-Only, Remote platform, Minimal platform, and Full platform — before you qualify a region.
-ms.date: 11/05/2026
+ms.date: 11/16/2026
 ms.topic: conceptual
 ---
 
@@ -13,7 +13,7 @@ These common four profiles form a spectrum: from Governance-Only, with no depend
 
 Profiles describe platform services and capabilities that can be offered, not workload designs; [Workload Landing Zone archetypes](./workload-landing-zone-archetypes.md) describe what workloads need from the Platform.
 
-:::image type="content" source="./media/platform-services-profile-spectrum.png" alt-text="Spectrum of Platform Services profiles from no dedicated regional platform resources to the full required local platform service set. Governance-Only has no dedicated regional platform resources; Remote platform consumes platform services from other more strategic regions through private connectivity; Minimal platform provides selected platform services locally; Full platform provides the full required local platform service set. The Full platform and remote region show the Security, Identity, Management, and Networking categories." lightbox="./media/platform-services-profile-spectrum.png":::
+:::image type="content" source="./media/platform-services-profile-spectrum.svg" alt-text="Spectrum of Platform Services profiles with increasing local capability and independence. Governance-Only needs neither shared platform services nor a private path to a Full-Platform region or on-premises. Remote platform connects privately to an existing Full-Platform region. Minimal platform provides selected services and connectivity locally, illustrated by Private DNS, a virtual network gateway, and Azure Monitor. Full platform provides comprehensive local capabilities. The Full platform and remote region show the Security, Identity, Management, and Networking categories." lightbox="./media/platform-services-profile-spectrum.svg":::
 
 *The spectrum of Platform Services profiles. Moving right adds local capability and independence, and also cost and operational scope. Platform Services span Security, Identity, Management, and Networking. Only required capabilities are deployed locally; any profile can be the right long-term target.*
 

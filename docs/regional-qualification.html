@@ -102,52 +102,10 @@
   <main id="main">
     <div class="crumbs">Multi-region platform <span>/</span> 2. Qualify regions</div>
     <h1 class="title">Regional qualification overview</h1>
-    <p class="meta">October 28, 2026 · 3 min read</p>
+    <p class="meta">November 16, 2026 · 3 min read</p>
     <article class="prose">
 <p>Regional qualification determines which Azure regions should be prepared to support workload requirements. It does not determine whether an individual workload should use multiple regions or define its multi-region architecture. Those are workload-specific design decisions. Use the following four checks to evaluate candidate regions consistently.</p>
-<figure class="fig live" data-fig="regional-qualification-framework" role="img" aria-label="Four check cards in sequence — business and geography, data and compliance, workload requirements and dependencies, and regional capability and availability — each with its key question and decision. The third card is wider and lists what comes from the workloads beside what they require from the platform: platform enablement, resilient hybrid connectivity, and regional platform connectivity. Below the cards are the four qualification outcomes: excluded, candidate, conditional, and qualified."><div class="fig-tools"><button class="fig-zoom" type="button" aria-label="Expand figure" title="Expand"><svg viewBox="0 0 16 16"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><a class="fig-png" href="media/regional-qualification-framework.png" download title="Download image" aria-label="Download image"><svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></div><div class="fig-stage"><div class="fig-scale"><div class="wpf" data-w="940" data-h="438" style="width:940px"><div class="figure mt8" role="img" aria-label="Four check cards in sequence — business and geography, data and compliance, workload requirements and dependencies, and regional capability and availability — each with its key question and decision. The third card is wider and lists what comes from the workloads beside what they require from the platform: platform enablement, resilient hybrid connectivity, and regional platform connectivity. Below the cards are the four qualification outcomes: excluded, candidate, conditional, and qualified.">
-    <div class="f5">
-      <div class="dc"><div class="acc" style="background:var(--b300)"></div><div class="bd">
-        <div class="dh"><span class="dn">1</span><span class="dt">Business and geography</span></div>
-        <div class="dq">Where do we need Azure presence?</div>
-        <ul><li>Markets and users</li><li>Datacenter and partner locations</li><li>Planned launches or migrations</li><li>Anticipated growth and proximity</li><li>Geographic concentration risk</li></ul></div>
-        <div class="dd"><div class="cap">Decision</div><p>Confirm sufficient business value to justify deeper assessment.</p></div>
-        <svg class="chev" height="18" viewBox="0 0 10 18"><path d="M2 2l6 7-6 7" fill="none" stroke="#2B88D8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
-      <div class="dc"><div class="acc" style="background:var(--b500)"></div><div class="bd">
-        <div class="dh"><span class="dn">2</span><span class="dt">Data and compliance</span></div>
-        <div class="dq">Are we allowed to operate here?</div>
-        <ul><li>Data residency and sovereignty</li><li>Regulatory and industry requirements</li><li>Company policy and customer commitments</li><li>Support access and encryption</li><li>Restrictions on data movement or operational control</li></ul></div>
-        <div class="dd" style="background:var(--w50);border-top-color:var(--w100)"><div class="cap" style="color:var(--w600)">Decision</div><p>Exclude the region when it cannot satisfy a mandatory requirement.</p></div>
-        <svg class="chev" height="18" viewBox="0 0 10 18"><path d="M2 2l6 7-6 7" fill="none" stroke="#2B88D8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
-      <div class="dc" style="border-color:var(--t300)"><div class="acc" style="background:var(--t600)"></div><div class="bd">
-        <div class="dh"><span class="dn" style="background:var(--t600)">3</span><span class="dt">Workload requirements and dependencies</span></div>
-        <div class="dq" style="color:var(--t700)">What workload requirements and dependencies must the region support?</div>
-        <div class="two">
-          <div><div class="ch">From the workloads</div>
-            <ul class="teal"><li>Existing and future workloads, including moves</li><li>Closest-fitting Workload Landing Zone archetype</li><li>Data, connectivity, and shared services</li><li>Security, resiliency, and scale</li><li>Required Azure services</li></ul></div>
-          <div><div class="ch">Required from the platform</div>
-            <div class="sub"><b>Platform enablement</b><span>Services needed locally, remotely, or centrally</span></div>
-            <div class="sub"><b>Resilient hybrid connectivity</b><span>Reachability and resilience to Azure</span></div>
-            <div class="sub"><b>Regional platform connectivity</b><span>Access to network hubs and other shared platform services, and other regions</span></div></div>
-        </div></div>
-        <div class="dd" style="background:var(--t50);border-top-color:var(--t100)"><div class="cap" style="color:var(--t700)">Decision</div><p>Identify and record the workload-driven platform requirements.</p></div>
-        <svg class="chev" height="18" viewBox="0 0 10 18"><path d="M2 2l6 7-6 7" fill="none" stroke="#2B88D8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
-      <div class="dc"><div class="acc" style="background:var(--b800)"></div><div class="bd">
-        <div class="dh"><span class="dn" style="background:var(--b800)">4</span><span class="dt">Regional capability and availability</span></div>
-        <div class="dq">Which regions can support the identified workload requirements?</div>
-        <ul><li>Services, models, and SKUs</li><li>Availability zones and pairing</li><li>Latency, pricing, and scale</li><li>Regional access and quota</li><li>Service-specific cross-region behavior</li></ul></div>
-        <div class="dd"><div class="cap">Decision</div><p>Qualify candidates, documenting conditions, constraints, and unresolved validations.</p></div></div>
-    </div>
-    <div class="fout">
-      <div style="display:flex;flex-direction:column;justify-content:center;padding-left:4px"><b style="font-size:11.6px;color:var(--ink)">Qualification outcome</b><span style="font-size:9.6px;color:var(--muted);line-height:1.35">Each regional option is classified against <b style="color:var(--ink)">defined workload requirements</b>, with evidence.</span></div>
-      <div class="oc"><span class="ic" style="background:var(--w100);color:var(--w600)"><svg><use href="#i-x"></use></svg></span><div><b style="color:var(--w600)">Excluded</b><span>A mandatory requirement cannot be satisfied.</span></div></div>
-      <div class="oc"><span class="ic" style="border:1.4px dashed var(--b600);color:var(--b600)"><svg><use href="#i-clock"></use></svg></span><div><b style="color:var(--b700)">Candidate</b><span>Potentially viable; more discovery or validation first.</span></div></div>
-      <div class="oc"><span class="ic" style="background:var(--a100);border:1.4px solid var(--a500);color:var(--a700)"><svg><use href="#i-flag"></use></svg></span><div><b style="color:var(--a700)">Conditional</b><span>Supported if documented conditions are resolved.</span></div></div>
-      <div class="oc"><span class="ic" style="background:var(--g100);color:var(--g600)"><svg><use href="#i-check"></use></svg></span><div><b style="color:var(--g600)">Qualified</b><span>As of the assessment date; onboarding revalidation still required.</span></div></div>
-    </div>
-    
-  </div></div>
-</div></div><figcaption>The qualification checks, in the recommended sequence. Outcomes are specific to defined workload requirements, never a blanket certification.</figcaption></figure>
+<figure class="fig live" data-fig="regional-qualification-framework" role="img" aria-label="Four check cards in sequence — business and geography, data and compliance, workload requirements and dependencies, and regional capability and availability — each with its key question and decision. The third card is wider and lists what comes from the workloads beside what they require from the platform: platform enablement, resilient hybrid connectivity, and regional platform connectivity. Below the cards are the four qualification outcomes: excluded, candidate, conditional, and qualified."><div class="fig-tools"><button class="fig-zoom" type="button" aria-label="Expand figure" title="Expand"><svg viewBox="0 0 16 16"><path d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></button><a class="fig-png" href="media/regional-qualification-framework.svg" download title="Download image" aria-label="Download image"><svg viewBox="0 0 16 16"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M3 13h10" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></a></div><div class="fig-stage"><div class="fig-scale"><div class="wpf" data-w="1374" data-h="729" style="width:1374px"><img src="media/regional-qualification-framework.svg" width="1374" height="729" alt="" loading="lazy"></div></div></div><figcaption>The qualification checks, in the recommended sequence. Outcomes are specific to defined workload requirements, never a blanket certification.</figcaption></figure>
 <div class="table-wrap"><table>
 <thead>
 <tr>

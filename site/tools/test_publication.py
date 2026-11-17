@@ -5,6 +5,7 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -13,9 +14,43 @@ sys.path.insert(0, str(ROOT / "whitepaper"))
 spec = importlib.util.spec_from_file_location("whitepaper_build", ROOT / "whitepaper" / "build.py")
 build = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(build)
+spec = importlib.util.spec_from_file_location("site_build", ROOT / "site" / "build.py")
+site_build = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(site_build)
 
 
 class PublicationTests(unittest.TestCase):
+    def test_explicit_svg_overrides_live_html_without_changing_png_figures(self):
+        with tempfile.TemporaryDirectory() as work:
+            root = Path(work)
+            media = root / "content" / "media"
+            figures = root / "site" / "figures"
+            media.mkdir(parents=True)
+            figures.mkdir(parents=True)
+            (media / "example.svg").write_text(
+                '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640"/>',
+                encoding="utf-8")
+            fragment = figures / "example.html"
+            fragment.write_text('<div class="wpf">Extracted figure</div>', encoding="utf-8")
+            with patch.object(site_build, "CONTENT", str(media.parent)), \
+                    patch.object(site_build, "SITE", str(figures.parent)):
+                svg = site_build.figure_html("./media/example.svg", "A & B", "Caption")
+                png = site_build.figure_html("./media/example.png", "A & B", "")
+                fragment.unlink()
+                fallback = site_build.figure_html("./media/example.png", "A & B", "")
+        self.assertIn('class="fig live"', svg)
+        self.assertIn('aria-label="A &amp; B"', svg)
+        self.assertIn('data-w="1200" data-h="640" style="width:1200px"', svg)
+        self.assertIn('<img src="media/example.svg" width="1200" height="640" alt=""', svg)
+        self.assertIn('href="media/example.svg" download', svg)
+        self.assertIn("<figcaption>Caption</figcaption>", svg)
+        self.assertNotIn("Extracted figure", svg)
+        self.assertIn("Extracted figure", png)
+        self.assertIn('href="media/example.png" download', png)
+        self.assertNotIn("example.svg", png)
+        self.assertIn('class="fig img"', fallback)
+        self.assertIn('<img src="media/example.png" alt="A &amp; B"', fallback)
+
     def test_regional_footprint_figures_show_platform_service_categories(self):
         categories = ["Security", "Identity", "Management", "Networking"]
         for name in ("pages/03-intro.html", "exec/pages/03-reframe.html"):
@@ -26,25 +61,24 @@ class PublicationTests(unittest.TestCase):
                 self.assertEqual(re.findall(r"<span>([^<]+)</span>", group), categories, name)
             self.assertNotIn(">Shared<", source)
             self.assertNotIn(">Shared services<", source)
-            self.assertIn("Selected<br>Landing Zones<br>Platform<br>Shared Services", source)
+            self.assertIn("Security<br>Networking", source)
             labels = [
                 " ".join(re.sub(r"<[^>]+>", " ", label).split())
                 for label in re.findall(r'<div class="rl"[^>]*><svg>.*?</svg>(.*?)</div>', source)
             ]
             self.assertEqual(labels, [
                 "Region A (Primary)", "Region B (DR)",
-                "Region C", "Region D", "Region E", "Region F", "Region G", "Region H",
+                "Region A", "Region B", "Region C", "Region D", "Region E", "Region F",
             ], name)
-            self.assertEqual(source.count('class="blk wl">Workloads</div>'), 6, name)
+            self.assertEqual(source.count('class="blk wl">Workloads</div>'), 7, name)
             self.assertNotIn(">Spokes<", source)
 
     def test_regional_comparison_aligns_both_models(self):
         result = subprocess.run(["node", "-e", """
-            const result = { boxes: [], texts: [], chips: [] };
+            const result = { boxes: [], texts: [] };
             const L = {
                 box(s, x, y, w, h, style) { result.boxes.push({ x, y, w, h, style }); },
                 txt(s, text, x, y, w, h) { result.texts.push({ text, x, y, w, h }); },
-                chip(s, text, x, y) { result.chips.push({ text, x, y }); },
                 icon() {}, line() {},
             };
             require('./decks/regional-comparison')({}, L,
@@ -61,13 +95,33 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual(len({(text["y"], text["h"]) for text in services}), 1)
         workloads = [text for text in drawing["texts"] if text["text"] == "Workloads"]
         self.assertEqual(len({(text["y"], text["h"]) for text in workloads[:4]}), 1)
+        regions = [box for box in drawing["boxes"]
+                   if box["style"].get("dash") == "dash" and box["x"] >= foundations[1]["x"]]
+        self.assertEqual(len(regions), 6)
+        self.assertEqual(len({region["w"] for region in regions}), 1)
+        self.assertEqual(regions[0]["h"], regions[1]["h"])
+        self.assertTrue(all(left["h"] > right["h"] for left, right in zip(regions[1:], regions[2:])))
+        for index, region in enumerate(regions):
+            contained = [text for text in workloads
+                         if region["x"] <= text["x"] and text["x"] + text["w"] <= region["x"] + region["w"]
+                         and region["y"] <= text["y"] and text["y"] + text["h"] <= region["y"] + region["h"]]
+            self.assertEqual(len(contained), 1 if index < 5 else 0)
+        remote = next(text for text in drawing["texts"] if text["text"].startswith("Consumes\n"))
+        remote_boxes = [box for box in drawing["boxes"]
+                        if all(box[key] == remote[key] for key in ("x", "y", "w", "h"))]
+        self.assertEqual(len(remote_boxes), 1)
+        self.assertTrue(remote_boxes[0]["style"].get("line"))
         headings = [text for text in drawing["texts"] if text["text"] in {
-            "EVOLVING REGIONAL CONDITIONS", "GOVERNED RESPONSE TO CHANGE",
+            "Evolving regional conditions", "Governed response to change",
         }]
         self.assertEqual(len(headings), 2)
         self.assertEqual(headings[0]["y"], headings[1]["y"])
-        self.assertEqual([chip["y"] for chip in drawing["chips"][:4]],
-                         [chip["y"] for chip in drawing["chips"][4:]])
+        lists = [drawing["texts"][drawing["texts"].index(heading) + 1:
+                                  drawing["texts"].index(heading) + 5] for heading in headings]
+        for heading, items in zip(headings, lists):
+            self.assertEqual(len(items), 4)
+            self.assertTrue(all(item["y"] > heading["y"] for item in items))
+        self.assertEqual([item["y"] for item in lists[0]], [item["y"] for item in lists[1]])
 
     def test_profile_spectrum_figures_show_all_four_platform_service_categories(self):
         categories = ["Security", "Identity", "Management", "Networking"]

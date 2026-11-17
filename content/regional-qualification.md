@@ -1,7 +1,7 @@
 ---
 title: Regional qualification overview
 description: Use four checks and one decision tree to determine which Azure regions should be prepared to support workload requirements, classify each regional option as excluded, candidate, conditional, or qualified, and record it with evidence, owners, and revalidation triggers.
-ms.date: 10/28/2026
+ms.date: 11/16/2026
 ms.topic: conceptual
 ---
 
@@ -9,7 +9,7 @@ ms.topic: conceptual
 
 Regional qualification determines which Azure regions should be prepared to support workload requirements. It does not determine whether an individual workload should use multiple regions or define its multi-region architecture. Those are workload-specific design decisions. Use the following four checks to evaluate candidate regions consistently.
 
-:::image type="content" source="./media/regional-qualification-framework.png" alt-text="Four check cards in sequence — business and geography, data and compliance, workload requirements and dependencies, and regional capability and availability — each with its key question and decision. The third card is wider and lists what comes from the workloads beside what they require from the platform: platform enablement, resilient hybrid connectivity, and regional platform connectivity. Below the cards are the four qualification outcomes: excluded, candidate, conditional, and qualified." lightbox="./media/regional-qualification-framework.png":::
+:::image type="content" source="./media/regional-qualification-framework.svg" alt-text="Four check cards in sequence — business and geography, data and compliance, workload requirements and dependencies, and regional capability and availability — each with its key question and decision. The third card is wider and lists what comes from the workloads beside what they require from the platform: platform enablement, resilient hybrid connectivity, and regional platform connectivity. Below the cards are the four qualification outcomes: excluded, candidate, conditional, and qualified." lightbox="./media/regional-qualification-framework.svg":::
 
 *The qualification checks, in the recommended sequence. Outcomes are specific to defined workload requirements, never a blanket certification.*
 
