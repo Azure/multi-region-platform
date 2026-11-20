@@ -20,7 +20,7 @@
     if (id === 'latency' || id === 'pricing') return { tab: 'capability', evidence: id };
     if (id.startsWith('check4-')) {
       const step = id.slice(7);
-      return { tab: 'capability', evidence: ['latency', 'pricing', 'questions'].includes(step) ? step : 'latency' };
+      return { tab: 'capability', evidence: ['latency', 'pricing', 'questions', 'annotations'].includes(step) ? step : 'latency' };
     }
     if (id === 'capability' || id === 'check4') return { tab: 'capability', evidence: evidence || (id === 'capability' ? 'questions' : 'latency') };
     return { tab: TABS.some(t => t.id === id) ? id : 'scope' };
@@ -38,7 +38,7 @@
     `<span class="pl-sep" role="separator" aria-orientation="vertical"></span>${K.btn({ act: 'example', label: 'Load example', icon: 'sample', kind: 'subtle', id: 'pl-b-example' })}${K.btn({ act: 'reset', label: 'Clear', icon: 'delete', kind: 'subtle', id: 'pl-b-reset' })}</div>` +
     '<div class="pl-msgslot" id="pl-msg"></div><section class="pl-ess" id="pl-ess" aria-label="Essentials"></section><div class="pl-tabswrap" id="pl-tabs"></div>' +
     '<div class="pl-panel" id="pl-panel" role="tabpanel" tabindex="-1"><p class="pl-muted">Loading the planner</p></div><div id="pl-network"></div><div class="pl-foot-bar" id="pl-foot"></div></div>' +
-    '<div class="pl-layer"><div class="pl-pop" id="pl-pop" role="listbox" hidden></div><div class="pl-tip" role="tooltip" hidden></div></div><input type="file" id="pl-file" accept=".json,application/json" hidden>';
+    '<div class="pl-layer"><div class="pl-pop" id="pl-pop" role="listbox" hidden></div><div class="pl-tip" role="tooltip" hidden></div></div><input type="file" id="pl-file" accept=".json,application/json" hidden><input type="file" id="pl-annotation-file" accept=".json,application/json" hidden>';
   const el = id => document.getElementById(id);
   const ess = el('pl-ess'), tabsEl = el('pl-tabs'), panel = el('pl-panel'), foot = el('pl-foot'), msgEl = el('pl-msg');
 
@@ -89,11 +89,12 @@
   }
   function vFoot() {
     const i = TABS.findIndex(t => t.id === ui.tab), n = C.selected().length, prog = C.progress();
-    let prev = ui.tab === 'outcome' ? { id: 'check4-questions', label: 'Check 4 questions' } : TABS[i - 1], next = TABS[i + 1];
+    let prev = ui.tab === 'outcome' ? { id: 'check4-annotations', label: 'Annotations' } : TABS[i - 1], next = TABS[i + 1];
     if (ui.tab === 'capability') {
       if (ui.capability === 'latency') next = { id: 'check4-pricing', label: 'Pricing' };
       if (ui.capability === 'pricing') { prev = { id: 'check4-latency', label: 'Latency' }; next = { id: 'check4-questions', label: 'Check 4 questions' }; }
-      if (ui.capability === 'questions') prev = { id: 'check4-pricing', label: 'Pricing' };
+      if (ui.capability === 'questions') { prev = { id: 'check4-pricing', label: 'Pricing' }; next = { id: 'check4-annotations', label: 'Annotations' }; }
+      if (ui.capability === 'annotations') prev = { id: 'check4-questions', label: 'Check 4 questions' };
     }
     const locked = next && prog[next.id] === 'lock';
     // A step that needs a selected region is never one click away while nothing is selected: the button says why instead.
@@ -199,7 +200,7 @@
     const b = el(c.id); if (!b) return;
     b.querySelector('span').textContent = c.text; b.classList.remove('danger'); b.classList.add('subtle');
   }
-  const isEmpty = () => { const S = C.S; return !S.regions.length && !S.current.length && !S.services.length && !S.sites.length && !S.meta.name && !S.meta.owner; };
+  const isEmpty = () => { const S = C.S; return !S.regions.length && !S.current.length && !S.services.length && !S.sites.length && !S.meta.name && !S.meta.owner && !S.annotations.fields.length; };
   function download(blob, name) {
     const a = document.createElement('a'), url = URL.createObjectURL(blob);
     a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
@@ -210,6 +211,12 @@
   function setK(key, v) {
     const S = C.S, p = key.split('/'), numeric = x => x === '' ? '' : Number(x);
     if (p[0] === 'meta') S.meta[p[1]] = v;
+    else if (p[0] === 'annotation-export') ui.includeAnnotations = !!v;
+    else if (p[0] === 'annotation-draft') ui.annotationDraft[p[1]] = v;
+    else if (p[0] === 'annotation') {
+      const row = S.annotations.rows.find(row => row.id === p[1]);
+      if (row && S.annotations.fields.some(f => f.id === p[2])) row.values[p[2]] = v;
+    }
     else if (p[0] === 'estate') S.estate[p[1]] = v;
     else if (p[0] === 'baseline') { S.baseline = v; C.loadPricing(v).then(ok => ok && lazyRender()); }
     else if (p[0] === 'current') {
@@ -242,7 +249,7 @@
     }
   }
   function openTab(id) {
-    const next = route(id, id === 'capability' ? ui.capability : '');
+    const next = route(id, id === 'capability' ? 'latency' : '');
     ui.tab = next.tab; ui.anchor = next.anchor || '';
     if (next.evidence) ui.capability = next.evidence;
     const hash = ui.tab === 'capability' ? 'check4-' + ui.capability : next.anchor ? 'services' : ui.tab;
@@ -269,6 +276,32 @@
       case 'mregion': ui.mregion = arg; break;
       case 'workload-regions': S.workload[arg].expanded = !S.workload[arg].expanded; break;
       case 'workload-overrides': { const expanded = !M.CHECKS[2].rows.some(row => S.workload[row.id].expanded); M.CHECKS[2].rows.forEach(row => { S.workload[row.id].expanded = expanded; }); break; }
+      case 'annotation-new': ui.annotationDraft = { label: '', type: 'text', options: '' }; break;
+      case 'annotation-cancel': ui.annotationDraft = null; break;
+      case 'annotation-add': {
+        const draft = ui.annotationDraft;
+        if (!draft) return;
+        try {
+          S.annotations.fields = C.annotationFields([...S.annotations.fields, {
+            id: C.uid('f'), label: draft.label, type: draft.type,
+            options: draft.options.split(/\r?\n/).map(x => x.trim()).filter(Boolean),
+          }]);
+          ui.annotationDraft = null;
+        } catch (error) { say('error', error.message); return; }
+        break;
+      }
+      case 'annotation-remove-field': confirmThen('annotation-field-' + arg, 'pl-rm-field-' + arg, 'Remove field and values?', () => {
+        S.annotations.fields = S.annotations.fields.filter(f => f.id !== arg);
+        S.annotations.rows.forEach(row => { delete row.values[arg]; });
+        if (!S.annotations.fields.length) S.annotations.rows = [];
+        commit();
+      }); return;
+      case 'annotation-remove-row': confirmThen('annotation-row-' + arg, 'pl-rm-row-' + arg, 'Remove row and values?', () => {
+        S.annotations.rows = S.annotations.rows.filter(row => row.id !== arg); commit();
+      }); return;
+      case 'annotation-import': el('pl-annotation-file').click(); return;
+      case 'annotation-template': download(new Blob([JSON.stringify(C.annotationTemplate(), null, 2)], { type: 'application/json' }), 'engagement-field-template.json');
+        say('success', 'Downloaded the field definitions only. No regional annotations are included.'); return;
       case 'accept': { const [rid, id] = arg.split('|'), r = C.reg(rid), v = r && C.suggestAnswer(id, r); if (v && !r.checks[id]) r.checks[id] = v; break; }
       case 'accept-all': C.suggestions(C.active()).forEach(x => { x.r.checks[x.id] = x.v; }); break;
       case 'des-map': ui.desMap = !ui.desMap; render(); return;
@@ -292,18 +325,18 @@
         patchNote(arg);
         const t = root.querySelector(`[data-note="${arg}"]`); if (t) { t.focus(); t.setSelectionRange(t.value.length, t.value.length); }
         return; }
-      case 'export': download(window.XlsxLite.build(M.workbook()), M.fileName('xlsx')); say('success', 'The Excel workbook was downloaded.'); return;
-      case 'save': download(new Blob([JSON.stringify(S, null, 1)], { type: 'application/json' }), M.fileName('json')); say('success', 'Saved. Use Open to load the file again, here or in another browser.'); return;
+      case 'export': download(window.XlsxLite.build(M.workbook(ui.includeAnnotations)), M.fileName('xlsx')); say('success', 'The Excel workbook was downloaded.' + (S.annotations.fields.length ? ui.includeAnnotations ? ' Engagement annotations are included.' : ' Engagement annotations are excluded.' : '')); return;
+      case 'save': download(new Blob([JSON.stringify(C.exportPlan(ui.includeAnnotations), null, 1)], { type: 'application/json' }), M.fileName('json')); say('success', 'Saved.' + (S.annotations.fields.length ? ui.includeAnnotations ? ' Engagement annotations are included.' : ' Engagement annotations are excluded; browser autosave retains them.' : ' Use Open to load the file again.')); return;
       case 'open': el('pl-file').click(); return;
-      case 'copy': { const t = C.recordText();
+      case 'copy': { const t = C.recordText(ui.includeAnnotations);
         (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => say('success', 'The record was copied.'), () => say('error', 'Copying isn’t available in this browser. Use Export to Excel or Print.')); return; }
       case 'print': if (M.network.preparePrint()) window.print(); return;
       case 'example': {
-        const go = () => { const ex = JSON.parse(JSON.stringify(M.EXAMPLE)); ex.meta.date = C.today(); C.replace(ex); ui.tab = 'checks'; ui.region = ''; ui.noteEdit = ''; history.replaceState(null, '', '#checks');
+        const go = () => { const ex = JSON.parse(JSON.stringify(M.EXAMPLE)); ex.meta.date = C.today(); C.replace(ex); ui.includeAnnotations = true; ui.annotationDraft = null; ui.tab = 'checks'; ui.region = ''; ui.noteEdit = ''; history.replaceState(null, '', '#checks');
           C.loadPricing(C.S.baseline).then(ok => ok && lazyRender()); if (C.D.lat) C.loadCities().then(ok => ok && lazyRender()); render(); say('info', 'The example is loaded. Every value in it is illustrative.'); };
         if (isEmpty()) go(); else confirmThen('example', 'pl-b-example', 'Replace with the example?', go);
         return; }
-      case 'reset': confirmThen('reset', 'pl-b-reset', 'Clear everything?', () => { C.replace(C.blank()); ui.tab = 'scope'; ui.region = ''; ui.noteEdit = ''; history.replaceState(null, '', '#scope'); render(); say('info', 'The plan is cleared.'); }); return;
+      case 'reset': confirmThen('reset', 'pl-b-reset', 'Clear everything?', () => { C.replace(C.blank()); ui.includeAnnotations = true; ui.annotationDraft = null; ui.tab = 'scope'; ui.region = ''; ui.noteEdit = ''; history.replaceState(null, '', '#scope'); render(); say('info', 'The plan is cleared.'); }); return;
       default: return;
     }
     commit();
@@ -324,9 +357,19 @@
   });
   root.addEventListener('change', e => {
     if (e.target.id === 'pl-stepsel') { openTab(e.target.value); render(); const s = el('pl-stepsel'); if (s) s.focus(); return; }
+    if (e.target.id === 'pl-annotation-file') {
+      const f = e.target.files[0];
+      if (f) Promise.resolve().then(() => {
+        if (f.size > 256 * 1024) throw new Error('Choose a field template smaller than 256 KB.');
+        return f.text();
+      }).then(text => {
+        C.importAnnotationTemplate(JSON.parse(text)); render(); say('success', 'Field template imported. Existing fields and annotations are retained.');
+      }).catch(error => say('error', 'Template not imported. ' + error.message)).finally(() => { e.target.value = ''; });
+      return;
+    }
     if (e.target.id === 'pl-file') {
       const f = e.target.files[0];
-      if (f) f.text().then(t => { const raw = JSON.parse(t); if (!raw || typeof raw !== 'object' || !Array.isArray(raw.regions)) throw new Error('not a workbook'); C.replace(raw); ui.region = ''; ui.noteEdit = ''; C.loadPricing(C.S.baseline).then(ok => ok && lazyRender()); if (C.D.lat) C.loadCities().then(ok => ok && lazyRender()); render(); say('success', `Opened ${f.name}.`); })
+      if (f) f.text().then(t => { const raw = JSON.parse(t); if (!raw || typeof raw !== 'object' || !Array.isArray(raw.regions)) throw new Error('not a workbook'); C.replace(raw); ui.includeAnnotations = true; ui.annotationDraft = null; ui.region = ''; ui.noteEdit = ''; C.loadPricing(C.S.baseline).then(ok => ok && lazyRender()); if (C.D.lat) C.loadCities().then(ok => ok && lazyRender()); render(); say('success', `Opened ${f.name}.`); })
         .catch(() => say('error', 'That file isn’t a plan saved from this page.')).finally(() => { e.target.value = ''; });
       return;
     }
@@ -345,7 +388,7 @@
       t.value = l ? l.ms : '';
     }
     // An emptied date field shows the default date again once the person has left it (the rule is in planner-core.js).
-    if (t.type === 'date' && t.dataset.k && t.value === '') { C.tidy(); C.save(); t.value = C.today(); patch(); }
+    if (t.type === 'date' && t.dataset.k && !t.dataset.k.startsWith('annotation/') && t.value === '') { C.tidy(); C.save(); t.value = C.today(); patch(); }
     if (t.dataset && t.dataset.note) {
       const id = t.dataset.note, close = () => { if (ui.noteEdit === id) { ui.noteEdit = ''; patchNote(id); } };
       if (down) document.addEventListener('pointerup', () => setTimeout(close, 0), { once: true, capture: true }); else close();

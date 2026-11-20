@@ -16,7 +16,7 @@
   let quiet = false;                    // true while the page puts focus back after a render, so the popup doesn't open by itself
   const setQuiet = v => { quiet = v; };
   // View state that isn't part of the saved workbook.
-  const ui = { tab: 'scope', capability: 'latency', region: '', noteEdit: '', mregion: '', desMap: false };   // view state that isn't saved
+  const ui = { tab: 'scope', capability: 'latency', region: '', noteEdit: '', mregion: '', desMap: false, includeAnnotations: true };   // view state that isn't saved
 
   // ───────────── buttons
   function btn(o) {
@@ -46,8 +46,9 @@
       `<option value="">${esc(o.empty || 'Select')}</option>${options}${extra}</select>${icon('down', { cls: 'pl-sel-caret' })}</span>`;
   }
   const inp = (k, value, o = {}) => `<input class="pl-in${o.cls ? ' ' + o.cls : ''}" type="${o.type || 'text'}" data-k="${esc(k)}"${o.id ? ` id="${o.id}"` : ''} value="${esc(value ?? '')}" placeholder="${esc(o.ph || '')}" aria-label="${esc(o.label || o.ph || '')}"` +
+    `${o.maxLength ? ` maxlength="${o.maxLength}"` : ''}` +
     `${o.list ? ` list="${o.list}"` : ''}${o.type === 'number' ? ` step="${o.step || 'any'}"${o.min !== undefined ? ` min="${o.min}"` : ''}${o.max !== undefined ? ` max="${o.max}"` : ''} inputmode="decimal"` : ''}${o.disabled ? ' disabled' : ''}>`;
-  const area = (k, value, o = {}) => `<textarea class="pl-in pl-area" data-k="${esc(k)}"${o.id ? ` id="${o.id}"` : ''} rows="${o.rows || 2}" placeholder="${esc(o.ph || '')}" aria-label="${esc(o.label || o.ph || '')}">${esc(value || '')}</textarea>`;
+  const area = (k, value, o = {}) => `<textarea class="pl-in pl-area" data-k="${esc(k)}"${o.id ? ` id="${o.id}"` : ''} rows="${o.rows || 2}" placeholder="${esc(o.ph || '')}" aria-label="${esc(o.label || o.ph || '')}"${o.maxLength ? ` maxlength="${o.maxLength}"` : ''}>${esc(value || '')}</textarea>`;
 
   // A labeled row in a sectioned form: label at the left, control at the right.
   function row(label, k, control, hint) {

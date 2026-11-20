@@ -231,11 +231,55 @@
   }
 
   function vCapability() {
-    const steps = [['latency', 'Latency'], ['pricing', 'Pricing'], ['questions', 'Check 4 questions']];
+    const steps = [['latency', 'Latency'], ['pricing', 'Pricing'], ['questions', 'Check 4 questions'], ['annotations', 'Annotations']];
     const tabs = `<div class="pl-evidence-tabs" role="group" aria-label="Check 4 evidence and questions">${steps.map(([id, label], i) =>
       `<button type="button" data-act="evidence" data-arg="${id}" class="${ui.capability === id ? 'on' : ''}" aria-pressed="${ui.capability === id}"><span>${i + 1}</span>${label}</button>`).join('')}</div>`;
     return K.head('Check 4 · Regional capability and availability', CHECKS[3].q) + tabs +
-      (ui.capability === 'pricing' ? vPricing(true) : ui.capability === 'questions' ? capabilityQuestions() : vLatency(true));
+      (ui.capability === 'pricing' ? vPricing(true) : ui.capability === 'questions' ? capabilityQuestions() : ui.capability === 'annotations' ? vAnnotations() : vLatency(true));
+  }
+
+  function annotationExportControl() {
+    return `<div class="pl-annotation-export pl-noprint">${K.rowRaw('Include annotations in saved files and exports',
+      K.toggle('annotation-export', ui.includeAnnotations, 'Include annotations in saved files and exports'),
+      'On by default. Turn off to exclude annotations from Save JSON, Excel, copied text, and the printed Review report. Browser autosave still retains your annotations.')}</div>`;
+  }
+  function annotationReport() {
+    const a = C.S.annotations;
+    if (!a.fields.length) return '';
+    const body = ui.includeAnnotations ? K.scroll(`<table class="pl-dl pl-annotation-table"><thead><tr><th scope="col">Region</th><th scope="col">Scope</th>${a.fields.map(f => `<th scope="col">${esc(f.label)}</th>`).join('')}</tr></thead><tbody>${a.rows.map(row =>
+      `<tr><th scope="row">${esc(C.rname(row.region))}</th><td>${esc(row.zone || 'Region')}</td>${a.fields.map(f => `<td>${esc(row.values[f.id] || K.EM)}</td>`).join('')}</tr>`).join('')}</tbody></table>`, { label: 'Engagement annotation report' })
+      : '<p class="pl-muted pl-noprint">Annotations are excluded from saved files and exports. Enable inclusion above to preview them here.</p>';
+    return `<div class="${ui.includeAnnotations ? '' : 'pl-noprint'}" data-clarity-mask="true">${K.section('Annotations', annotationExportControl() + body, { desc: 'User-entered context, separate from published Azure reference data.' })}</div>`;
+  }
+  function vAnnotations() {
+    const a = C.S.annotations, draft = ui.annotationDraft;
+    const regions = [...new Set([...C.S.current, ...C.S.regions].map(r => r.id))];
+    const actions = `<div class="pl-bar">${K.btn({ act: 'annotation-new', label: 'Add field', icon: 'add', kind: a.fields.length ? 'secondary' : 'primary', disabled: a.fields.length >= 20 })}` +
+      `${K.btn({ act: 'annotation-import', label: 'Import field template', icon: 'open' })}${a.fields.length ? K.btn({ act: 'annotation-template', label: 'Download field template', icon: 'save' }) : ''}</div>`;
+    const editor = draft ? K.section('New custom field',
+      K.row('Field name', 'annotation-draft/label', id => K.inp('annotation-draft/label', draft.label, { id, label: 'Field name', ph: 'Enter a name for your field', maxLength: 100 })) +
+      K.row('Field type', 'annotation-draft/type', id => K.sel('annotation-draft/type', draft.type, [['text', 'Text'], ['select', 'Dropdown'], ['date', 'Date'], ['notes', 'Notes']], { id, label: 'Field type' })) +
+      (draft.type === 'select' ? K.row('Dropdown choices', 'annotation-draft/options', id => K.area('annotation-draft/options', draft.options, { id, rows: 4, label: 'Dropdown choices', ph: 'Enter one choice per line' }), 'No choices are supplied by the planner.') : '') +
+      `<div class="pl-bar">${K.btn({ act: 'annotation-add', label: 'Save field', kind: 'primary' })}${K.btn({ act: 'annotation-cancel', label: 'Cancel', kind: 'subtle' })}</div>`) : '';
+    const fields = a.fields.map(f => `<li><span><b>${esc(f.label)}</b><span class="pl-cap">${esc({ text: 'Text', select: 'Dropdown', date: 'Date', notes: 'Notes' }[f.type])}</span></span>` +
+      K.btn({ act: 'annotation-remove-field', arg: f.id, id: 'pl-rm-field-' + f.id, label: 'Remove', aria: 'Remove field ' + f.label, kind: 'subtle', cls: 'sm' }) + '</li>').join('');
+    const table = regions.length ? K.scroll(`<table class="pl-dl pl-annotation-table"><thead><tr><th scope="col">Region</th><th scope="col">Scope</th>${a.fields.map(f => `<th scope="col">${esc(f.label)}</th>`).join('')}<th scope="col" aria-label="Remove zone row"></th></tr></thead><tbody>${a.rows.map(row => {
+      const name = C.rname(row.region), target = name + (row.zone ? ' / ' + row.zone : ' / Region');
+      return `<tr><th scope="row"><b>${esc(name)}</b><span class="pl-cap">${C.S.current.some(r => r.id === row.region) ? 'Current region' : 'Region to qualify'}</span></th><td>${esc(row.zone || 'Region')}</td>` +
+        a.fields.map(f => {
+          const k = `annotation/${row.id}/${f.id}`, value = row.values[f.id] || '', label = f.label + ' for ' + target;
+          const input = f.type === 'select' ? K.sel(k, value, f.options, { label, empty: 'Not recorded' })
+            : f.type === 'notes' ? K.area(k, value, { label, ph: 'Optional', rows: 2, maxLength: 4000 })
+            : K.inp(k, value, { label, type: f.type === 'date' ? 'date' : 'text', ph: 'Not recorded', maxLength: 4000 });
+          return `<td>${input}</td>`;
+        }).join('') + `<td>${row.zone ? K.btn({ act: 'annotation-remove-row', arg: row.id, id: 'pl-rm-row-' + row.id, label: 'Remove', aria: 'Remove ' + target, kind: 'subtle', cls: 'sm' }) : ''}</td></tr>`;
+    }).join('')}</tbody></table>`, { label: 'Region and zone annotations' }) : K.empty('region', 'Add current regions or regions to qualify in Scope to start recording annotations.', 'scope', 'Go to Scope');
+    return '<div class="pl-annotations pl-noprint" data-clarity-mask="true">' + K.section('Annotations',
+      '<p class="pl-sub">Optional fields for your engagement. Define your own columns or import a field template; no field names or dropdown choices are preloaded.</p>' +
+      actions + (!a.fields.length && !draft ? '<div class="pl-empty"><span class="pl-empty-ic">' + icon('note') + '</span><h3>No custom fields yet</h3><p>Add a field to start, or import a template shared with you.</p></div>' : '') +
+      editor + (fields ? `<ul class="pl-annotation-fields">${fields}</ul>` : '')) +
+      (a.fields.length ? K.section('Region and zone annotations', table, { desc: 'All regions in Scope are included, independently of their qualification outcome.' }) + annotationExportControl() : '') +
+      K.mb('info', 'Annotations are stored in this browser, not a shared workspace. They do not change qualification results or Azure reference data. Only enter information approved for this device and workflow; this is not an access-controlled area.') + '</div>';
   }
 
   // One summary tile for every evidence tab: region, status word with its glyph, the headline number, one line of context.
@@ -496,5 +540,5 @@
   }
 
   M.views = Object.assign(M.views || {}, { scope: vScope, checks: vChecks, capability: vCapability, outcome: vOutcome, services: vServices, pricing: vPricing, latency: vLatency });
-  M.viewTools = { noteCell, patchPricing, patchLatency, MAX_SERVICES, mSwitch, mRegion, foldNote };
+  M.viewTools = { noteCell, patchPricing, patchLatency, MAX_SERVICES, mSwitch, mRegion, foldNote, annotationExportControl, annotationReport };
 })(window);

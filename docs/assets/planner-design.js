@@ -146,6 +146,7 @@
       `${reportMeta ? `<div class="pl-print-meta">${reportMeta}</div>` : ''}<p class="pl-print-count">${K.plural(S.regions.length, 'regional option')} included · ${picked.length} selected for design</p></header>` +
       valid + `<div class="pl-bar pl-noprint">${K.btn({ act: 'export', label: 'Export to Excel', icon: 'export' })}${K.btn({ act: 'copy', label: 'Copy as text', icon: 'copy' })}${K.btn({ act: 'print', label: 'Print', icon: 'print' })}</div>` +
       blocks + K.section('All regions in this plan', K.scroll(`<table class="pl-dl"><thead><tr><th scope="col">Region</th><th scope="col">Outcome</th><th scope="col">Qualification evidence</th><th scope="col">Selected</th><th scope="col">Workload archetype</th><th scope="col">Platform Services profile</th><th scope="col">Documented constraints</th><th scope="col">Ownership</th><th scope="col">Review date</th></tr></thead><tbody>${all}</tbody></table>`, { label: 'All regions' })) +
+      (S.annotations.fields.length ? M.viewTools.annotationReport() : '') +
       `<div class="pl-review-map">${M.latencyMap.view(true)}</div>`;
   }
 

@@ -13,13 +13,55 @@ contain each region's effective answers. Zone resiliency remains a workload requ
 check 4 flags a capability gap rather than weakening the requirement.
 
 The six tabs are **Scope**, **Checks 1 to 3**, **Check 4**, **Outcome**, **Regional design**, and
-**Review + export**. Check 4 has three substeps: **Latency**, **Pricing**, then **Check 4 questions**.
+**Review + export**. Check 4 has four substeps: **Latency**, **Pricing**, **Check 4 questions**, then
+**Annotations** (optional).
+Selecting the **Check 4** tab or its mobile step-menu entry always opens **Latency**.
+Substep links and Previous/Next navigation open their explicit targets without clearing entered data.
 Evidence-based suggestions have dashed outlines and remain unrecorded until accepted.
 Outcome has one row per region and only four classifications: **Excluded**, **Candidate**,
 **Conditional**, and **Qualified**. Regions with no business need are Excluded; older saved
 classifications for that case migrate automatically. Subsequent checks show **Not needed**
 without erasing previously recorded answers. Only Qualified and Conditional regions can be selected
 for regional design; all regions remain in JSON, text, Excel, and the review record.
+
+### Annotations
+
+The optional fourth Check 4 substep supports user-defined Text, Dropdown, Date, and Notes fields.
+No field names or dropdown choices are preloaded. Choose **Add field** to define a column, or
+**Import field template** to append definitions from a JSON template. **Download field template**
+exports definitions only, never regional values. Import rejects invalid or duplicate IDs without
+replacing existing fields. Up to 20 fields and 500 rows are supported.
+
+Each current or candidate region gets a region-level row, including excluded candidates.
+There is no separate region/zone entry form. Previously saved zone-level annotations remain
+editable and retain their labels; those labels do not assert physical zone mappings.
+Removing a region from Scope removes its annotation rows. Removing a field or saved zone
+row requires a second click and deletes the associated values. Annotations never alter check
+answers, qualification outcomes, or Azure reference data.
+
+Browser autosave retains annotations. **Include annotations in saved files and exports**
+is on by default on every page load and after opening or replacing a plan. Turn it off in the
+annotations substep or inside the **Annotations** box in Review + export to exclude annotations
+from saved JSON, Excel, copied text, and the printed Review report.
+The Annotations box follows **All regions in this plan**. With inclusion off, even field definitions are omitted from downloaded plans.
+With inclusion on, JSON retains editable definitions and values; Excel adds an annotation sheet.
+The annotations editor itself is never printed. This is not a CSA-only or access-controlled area:
+only enter information approved for the device and workflow. Annotation editor and report content
+are marked for Clarity masking; masking is not authorization or a guarantee of confidentiality.
+
+Templates use this shape (the example defines a plain text field; dropdown choices must be
+supplied by the template author in an `options` array):
+
+```json
+{
+  "kind": "planner-annotation-template",
+  "version": 1,
+  "fields": [{ "id": "reference", "label": "Reference", "type": "text" }]
+}
+```
+
+After building, run `python site\tools\test_planner_annotations.py` for template import, custom
+fields, saved zone-row compatibility, persistence, export inclusion, and responsive-layout checks.
 
 Scope starts with **Plan**, followed by optional **On-premises datacenters** and
 **ExpressRoute peering locations** side by side, then **Current platform** and **Regions to qualify**.

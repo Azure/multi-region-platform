@@ -9,7 +9,7 @@
   const c = (v, s) => ({ v: v === null || v === undefined ? '' : v, s: s || 'cell' });
   const pad = (row, n, s) => { while (row.length < n) row.push(c('', s || 'cell')); return row; };
 
-  function workbook() {
+  function workbook(includeAnnotations = false) {
     const S = C.S, D = C.D;
     const regs = S.regions.length ? S.regions.map(r => ({ r, name: C.rname(r.id) })) : [1, 2, 3].map(i => ({ r: null, name: 'Region ' + i }));
     const picked = C.selected();
@@ -198,7 +198,15 @@
     function group2(text) { dRows.push(pad([c(text, 'group')], dWidth, 'group')); if (dWidth > 1) dMerges.push(`A${dRows.length}:${dLast}${dRows.length}`); }
     const designSheet = { name: 'Regional design', tabColor: '8661C5', cols: [62, ...des.map(() => 46)], freeze: { x: 1, y: 4 }, rows: dRows, lists: dLists, merges: [...frame(dWidth), ...dMerges] };
 
-    return { sheets: [scope, services, latency, pricing, checks, designSheet, outcome] };
+    const sheets = [scope, services, latency, pricing, checks, designSheet, outcome];
+    if (includeAnnotations && S.annotations.fields.length) {
+      const a = S.annotations;
+      sheets.push({ name: 'Engagement annotations', cols: [28, 24, ...a.fields.map(() => 32)], freeze: { x: 2, y: 3 },
+        rows: [[c('Engagement annotations', 'title')], [c('User-entered context; not Azure reference data. Does not change qualification results.', 'muted')],
+          [c('Region', 'head'), c('Scope', 'head'), ...a.fields.map(f => c(f.label, 'head'))],
+          ...a.rows.map(row => [c(C.rname(row.region), 'label'), c(row.zone || 'Region'), ...a.fields.map(f => c(row.values[f.id], 'input'))])] });
+    }
+    return { sheets };
   }
 
   M.workbook = workbook;

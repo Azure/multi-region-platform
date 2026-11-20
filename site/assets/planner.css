@@ -778,6 +778,15 @@ html.network-full, html.network-full body { overflow: hidden; }
 #planner .pl-evidence-tabs button > span { display: grid; place-items: center; width: 22px; height: 22px; border: 1px solid var(--pl-line); border-radius: 50%; }
 #planner .pl-evidence-tabs button.on { background: var(--pl-brand-t); color: var(--pl-brand-h); }
 #planner .pl-evidence-tabs button.on > span { background: var(--pl-brand); color: var(--pl-on-brand); border-color: var(--pl-brand); }
+
+#planner .pl-annotation-fields { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 16px 0 0; list-style: none; }
+#planner .pl-annotation-fields li { display: flex; align-items: center; gap: 20px; padding: 8px 12px; border: 1px solid var(--pl-line); border-radius: 4px; overflow-wrap: anywhere; }
+#planner .pl-annotation-table { width: 100%; }
+#planner .pl-annotation-table th, #planner .pl-annotation-table td { min-width: 180px; max-width: 340px; vertical-align: top; white-space: pre-wrap; overflow-wrap: anywhere; }
+#planner .pl-annotation-table thead th { white-space: normal; }
+#planner .pl-annotation-table td:last-child:empty { min-width: 0; }
+#planner .pl-annotation-table .pl-in, #planner .pl-annotation-table .pl-sel-wrap { min-width: 170px; width: 100%; }
+#planner .pl-annotation-export { margin: 16px 0; padding: 4px 16px; border: 1px solid var(--pl-line); border-radius: 4px; background: var(--pl-subtle); }
 #planner .pl-price-summary { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 16px; }
 #planner .pl-price-controls { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; flex: 0 1 240px; }
 #planner .pl-price-summary .pl-tiles { flex: 1 1 400px; margin: 0; }

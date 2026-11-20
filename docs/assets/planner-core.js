@@ -10,7 +10,7 @@
 
   // ───────────── state
   const blank = () => ({ v: VERSION, meta: { name: '', owner: '', date: today() }, estate: { topology: '', managed: '', hybrid: '' },
-    current: [], baseline: '', regions: [], workload: {}, notes: {}, sites: [], services: [], ui: { details: false, weighted: false, showOut: false } });
+    current: [], baseline: '', regions: [], workload: {}, notes: {}, sites: [], services: [], annotations: { fields: [], rows: [] }, ui: { details: false, weighted: false, showOut: false } });
   const newRegion = id => ({ id, checks: {}, outcome: '', selected: false, conditions: '', owner: '', review: '', design: null });
   const newDesign = () => ({ q1: '', q2: '', q3: '', profile: '', hub: '', hubConnections: null, topology: '', managed: '', link: '', eastWest: '', ss: {}, custom: [],
     hybrid: '', hybridUse: '', hybridPath: '', hybridReason: '', hybridChange: '', owner: '', date: '', reassess: '', reviewTriggers: [...M.REVIEW_TRIGGERS] });
@@ -116,6 +116,7 @@
     }));
     syncWorkload(s);
     s.notes = { ...(s.notes || {}) };
+    s.annotations = normalizeAnnotations(s.annotations);
     s.sites = (Array.isArray(s.sites) ? s.sites : []).filter(x => x && (x.kind === 'city' || x.kind === 'peering')).map(x =>
       ({ id: x.id || uid('s'), kind: x.kind, city: x.kind === 'city' && x.city ? { ...x.city } : null, peering: x.peering || '', target: num(x.target) ?? '', edits: Object.fromEntries(Object.entries(x.edits || {}).filter(([, v]) => num(v) !== null).map(([k, v]) => [k, Number(v)])) }));
     const serviceIds = new Set();
@@ -140,6 +141,65 @@
   }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* storage can be blocked */ } }
   function replace(raw) { S = normalize(raw); tidy(); save(); return S; }
+
+  // Templates contain definitions only; assessments belong to the browser's planning record.
+  function annotationFields(fields) {
+    if (!Array.isArray(fields) || fields.length > 20) throw new Error('Use up to 20 custom fields.');
+    const ids = new Set();
+    return fields.map(f => {
+      if (!f || typeof f.id !== 'string' || !/^[a-z][a-z0-9_-]{0,63}$/i.test(f.id) ||
+          Object.hasOwn(Object.prototype, f.id) || ids.has(f.id)) throw new Error('Each field needs a unique ID beginning with a letter, using only letters, numbers, hyphens, or underscores.');
+      ids.add(f.id);
+      if (typeof f.label !== 'string' || !f.label.trim() || f.label.length > 100) throw new Error('Each field needs a name of 1 to 100 characters.');
+      if (!['text', 'select', 'date', 'notes'].includes(f.type)) throw new Error('Field types must be text, select, date, or notes.');
+      let options = [];
+      if (f.type === 'select') {
+        if (!Array.isArray(f.options) || !f.options.length || f.options.length > 40 ||
+            f.options.some(o => typeof o !== 'string' || !o.trim() || o.length > 100)) throw new Error('Dropdown fields need 1 to 40 nonempty choices, each up to 100 characters.');
+        options = f.options.map(o => o.trim());
+        if (new Set(options).size !== options.length) throw new Error('Dropdown choices must be unique.');
+      }
+      return { id: f.id, label: f.label.trim(), type: f.type, options };
+    });
+  }
+  function normalizeAnnotations(raw) {
+    if (!raw || typeof raw !== 'object') throw new Error('Invalid engagement annotations.');
+    const fields = annotationFields(raw.fields);
+    if (!Array.isArray(raw.rows) || raw.rows.length > 500) throw new Error('Use up to 500 annotation rows.');
+    const ids = new Set(), targets = new Set();
+    const rows = raw.rows.map(row => {
+      if (!row || typeof row.id !== 'string' || !/^[a-z][a-z0-9_-]{0,63}$/i.test(row.id) || ids.has(row.id) ||
+          typeof row.region !== 'string' || !row.region || row.region.length > 100 ||
+          typeof row.zone !== 'string' || row.zone.length > 100) throw new Error('Each annotation row needs a unique ID, a region, and a zone label of up to 100 characters.');
+      const target = JSON.stringify([row.region, row.zone]);
+      if (targets.has(target)) throw new Error('Use only one annotation row for each region and zone label.');
+      ids.add(row.id); targets.add(target);
+      const values = Object.fromEntries(fields.map(f => {
+        const v = row.values?.[f.id] ?? '';
+        if (typeof v !== 'string' || v.length > 4000) throw new Error('Annotation values must be text of up to 4,000 characters.');
+        if (v && f.type === 'select' && !f.options.includes(v)) throw new Error('An annotation value does not match its dropdown choices.');
+        if (v && f.type === 'date' && (!/^\d{4}-\d{2}-\d{2}$/.test(v) || !Number.isFinite(Date.parse(v)) || new Date(v).toISOString().slice(0, 10) !== v)) throw new Error('Annotation dates must be valid YYYY-MM-DD dates.');
+        return [f.id, v];
+      }));
+      return { id: row.id, region: row.region, zone: row.zone, values };
+    });
+    return { fields, rows };
+  }
+  function importAnnotationTemplate(raw) {
+    if (!raw || raw.kind !== 'planner-annotation-template' || raw.version !== 1) throw new Error('Choose a version 1 planner annotation template.');
+    const fields = annotationFields(raw.fields);
+    if (!fields.length) throw new Error('The template has no fields.');
+    S.annotations.fields = annotationFields([...S.annotations.fields, ...fields]);
+    tidy(); save();
+  }
+  function annotationTemplate() {
+    return { kind: 'planner-annotation-template', version: 1, fields: S.annotations.fields };
+  }
+  function exportPlan(includeAnnotations = false) {
+    const plan = { ...S };
+    if (!includeAnnotations) delete plan.annotations;
+    return plan;
+  }
 
   // ───────────── Azure reference data
   // The build supplies placeholders for missing snapshots. Only latest data is loaded; archives are for maintainer use.
@@ -308,6 +368,11 @@
   // Keep the state consistent after any change.
   const circuitLocations = () => [...new Set(S.sites.filter(s => s.kind === 'peering' && s.peering).map(s => s.peering))];
   function tidy() {
+    const a = S.annotations, regions = [...new Set([...S.current, ...S.regions].map(r => r.id))];
+    a.rows = a.rows.filter(row => regions.includes(row.region));
+    if (a.fields.length) regions.forEach(region => {
+      if (!a.rows.some(row => row.region === region && !row.zone)) a.rows.push({ id: uid('a'), region, zone: '', values: {} });
+    });
     const circuits = circuitLocations();
     S.current = S.current.map(c => {
       const region = currentRegion(c);
@@ -675,7 +740,7 @@
     out.push(['Review triggers', reviewTriggers(r).join('\n')]);
     return out;
   }
-  function recordText() {
+  function recordText(includeAnnotations = false) {
     const head = [S.meta.name || 'Multi-region planner', `Date: ${S.meta.date}` + (S.meta.owner ? ` · Owner: ${S.meta.owner}` : ''), ''];
     const picked = selected();
     const body = S.regions.map(r => (picked.includes(r) ? record(r) : [
@@ -684,7 +749,11 @@
       ['Documented constraints', r.conditions || 'None'], ['Ownership', r.owner || S.meta.owner],
       ['Review triggers', reviewTriggers(r).join('\n')],
     ]).filter(x => x[1]).map(([k, v]) => `${k}: ${v}`).join('\n'));
-    return head.concat(body.join('\n\n')).join('\n');
+    const annotations = includeAnnotations && S.annotations.fields.length
+      ? '\n\nEngagement annotations (user-entered; not Azure reference data)\n' + S.annotations.rows.map(row =>
+        [rname(row.region) + (row.zone ? ' / ' + row.zone : ' / Region'),
+          ...S.annotations.fields.map(f => `${f.label}: ${row.values[f.id] || 'Not recorded'}`)].join('\n')).join('\n\n') : '';
+    return head.concat(body.join('\n\n')).join('\n') + annotations;
   }
 
   // ───────────── progress of each tab, for the step indicators
@@ -713,6 +782,7 @@
   }
 
   M.core = { get S() { return S; }, D, VERSION, load, save, replace, blank, normalize, tidy, newRegion, uid, today, loadData, loadPricing, loadCities, bit,
+    annotationFields, normalizeAnnotations, importAnnotationTemplate, annotationTemplate, exportPlan,
     info, rname, reg, cols, suggest, outcome, selectable, selected, ruledOut, active, folded, fitDone, checkState, checkSkipped, named, serviceSelection, skuOptions, availability, availabilityDetails, zoneText, availSummary, priceRows, priceDiff, priceSummary,
     regionLatency, peeringLatency, cityLatency, peeringChoices, nearestPeering, sitePeering, siteName, siteLatency, latencySummary, srcText, km, estimate, latScale, latPos,
     num, fmtPct, priceTone, evidence, latencyWorst, suggestAnswer, suggestions, circuitLocations, hubRegions, design, suggestProfile, effective, hybridText, reviewTriggers, record, recordText, list, progress };
